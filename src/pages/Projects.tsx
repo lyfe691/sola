@@ -61,6 +61,16 @@ const Projects = () => {
 
   const projects: Project[] = [
     {
+      title: t.projects.list.sola.title,
+      description: t.projects.list.sola.description,
+      image: "/projects/sola.png",
+      link: "https://sola.ysz.life",
+      github: "https://github.com/lyfe691/sola",
+      tags: ["Portfolio", "shadcn/ui", "TypeScript", "React", "Vite", "Tailwind CSS", "SEO"],
+      featured: true,
+      date: "Feb 2025 - Present"
+    },
+    {
       title: t.projects.list.codeExtractor.title,
       description: t.projects.list.codeExtractor.description,
       image: "/projects/website-code-extractor.svg",

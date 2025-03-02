@@ -91,6 +91,10 @@ export const translations = {
         otw: {
           title: "OverTheWire Guide",
           description: "This is a guide on how to solve the OverTheWire wargames."
+        },
+        sola: {
+          title: "Sola",
+          description: "Sola is my personal website, the one youre on right now. It is built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way."
         }
       }
     },
@@ -307,6 +311,10 @@ export const translations = {
         otw: {
           title: "OverTheWire Guide",
           description: "Dies ist ein Leitfaden zur Lösung der OverTheWire Wargames."
+        },
+        sola: {
+          title: "Sola",
+          description: "Sola ist meine persönliche Website, die, auf der du dich gerade befindest. Sie wurde mit React, TypeScript und Tailwind CSS erstellt und ist darauf ausgelegt, meine Projekte, Fähigkeiten und Erfahrungen auf eine saubere und moderne Weise zu präsentieren."
         }
       }
     },
@@ -523,6 +531,10 @@ export const translations = {
         otw: {
           title: "Guía OverTheWire",
           description: "Esta es una guía sobre cómo resolver los wargames de OverTheWire."
+        },
+        sola: {
+          title: "Sola",
+          description: "Sola es mi sitio web personal, la que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna."
         }
       }
     },
@@ -739,6 +751,10 @@ export const translations = {
         otw: {
           title: "OverTheWireガイド",
           description: "OverTheWireウォーゲームの解決方法に関するガイドです。"
+        },
+        sola: {
+          title: "Sola",
+          description: "Solaは私の個人ウェブサイトで、現在ご覧のものです。React、TypeScript、Tailwind CSSで作成され、プロジェクト、スキル、経験をクリーンでモダンな方法で表示することを目的としています。"
         }
       }
     },
@@ -955,6 +971,10 @@ export const translations = {
         otw: {
           title: "OverTheWire指南",
           description: "这是一个关于如何解决OverTheWire战争游戏的指南。"
+        },
+        sola: {
+          title: "Sola",
+          description: "Sola是我的个人网站，您现在正在查看。使用React、TypeScript和Tailwind CSS构建，旨在以干净且现代的方式展示项目、技能和经验。"
         }
       }
     },
