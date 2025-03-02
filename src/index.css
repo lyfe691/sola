@@ -1,0 +1,285 @@
+/* credit vercel for the font, dunno if i have to*/
+
+/* Geist from vercel */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* GeistMono from vercel */
+@font-face {
+  font-family: 'GeistMono';
+  src: url('/fonts/GeistMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GeistMono';
+  src: url('/fonts/GeistMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GeistMono';
+  src: url('/fonts/GeistMono-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GeistMono';
+  src: url('/fonts/GeistMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Inspired by Vercel */
+
+@layer base {
+  /* root is light mode*/
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 5% 96%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+    --scrollbar-track: 240 4.8% 95.9%;
+    --scrollbar-thumb: 240 5.9% 85%;
+    --scrollbar-thumb-hover: 240 5.9% 75%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --radius: 0.5rem;
+    --scrollbar-track: 240 3.7% 15.9%;
+    --scrollbar-thumb: 240 3.7% 25%;
+    --scrollbar-thumb-hover: 240 3.7% 35%;
+  }
+
+  .life {
+    --background: 150 50% 92%; 
+    --foreground: 150 20% 15%; 
+    --card: 150 40% 85%;
+    --card-foreground: 150 25% 20%;
+    --popover: 160 45% 90%; 
+    --popover-foreground: 150 25% 15%;
+    --primary: 150 35% 40%; 
+    --primary-foreground: 150 15% 85%; 
+    --secondary: 160 25% 65%;
+    --secondary-foreground: 150 15% 20%;
+    --muted: 140 20% 75%; 
+    --muted-foreground: 150 15% 35%;
+    --accent: 160 25% 70%; 
+    --accent-foreground: 150 20% 20%;
+    --destructive: 0 50% 35%; 
+    --destructive-foreground: 150 15% 90%;
+    --border: 150 25% 45%;
+    --input: 150 20% 30%;
+    --ring: 160 30% 50%;   
+    --radius: 0.5rem; 
+    --scrollbar-track: 150 40% 85%;
+    --scrollbar-thumb: 150 35% 60%;
+    --scrollbar-thumb-hover: 150 35% 50%;
+  }
+
+  .cyber {
+    --background: 265 30% 7%;
+    --foreground: 0 0% 95%;
+    --card: 265 30% 10%;
+    --card-foreground: 0 0% 96%;
+    --popover: 265 30% 12%;
+    --popover-foreground: 0 0% 90%;
+    --primary: 305 94% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 230 100% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 265 15% 15%;
+    --muted-foreground: 0 0% 80%;
+    --accent: 270 80% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 90% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 265 20% 25%;
+    --input: 265 20% 20%;
+    --ring: 305 100% 60%;
+    --radius: 0.25rem;
+    --scrollbar-track: 265 30% 12%;
+    --scrollbar-thumb: 305 94% 42%;
+    --scrollbar-thumb-hover: 305 94% 52%;
+  }
+  
+  .cloud {
+    --background: 222 100% 95%;
+    --foreground: 222 5% 10%;
+    --card: 222 50% 90%;
+    --card-foreground: 222 5% 15%;
+    --popover: 222 100% 95%;
+    --popover-foreground: 222 100% 10%;
+    --primary: 222 45% 72%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 222 30% 70%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 222 30% 85%;
+    --muted-foreground: 222 5% 35%;
+    --accent: 222 30% 80%;
+    --accent-foreground: 222 5% 15%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 222 5% 90%;
+    --border: 222 30% 50%;
+    --input: 222 30% 26%;
+    --ring: 222 45% 72%;
+    --radius: 1rem;
+    --scrollbar-track: 222 50% 90%;
+    --scrollbar-thumb: 222 45% 62%;
+    --scrollbar-thumb-hover: 222 45% 52%;
+  }
+
+  .sunset {
+    --background: 24 100% 95%;
+    --foreground: 24 5% 10%;
+    --card: 24 50% 90%;
+    --card-foreground: 24 5% 15%;
+    --popover: 24 100% 95%;
+    --popover-foreground: 24 100% 10%;
+    --primary: 24 100% 74.3%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 24 30% 70%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: -14 30% 85%;
+    --muted-foreground: 24 5% 35%;
+    --accent: -14 30% 80%;
+    --accent-foreground: 24 5% 15%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 24 5% 90%;
+    --border: 24 30% 50%;
+    --input: 24 30% 26%;
+    --ring: 24 100% 74.3%;
+    --radius: 0.5rem;
+    --scrollbar-track: 24 50% 90%;
+    --scrollbar-thumb: 24 100% 64.3%;
+    --scrollbar-thumb-hover: 24 100% 54.3%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
+  }
+
+  .nav-link {
+    @apply relative text-sm font-medium tracking-wide transition-colors duration-300
+           text-foreground/70 hover:text-foreground
+           before:absolute before:left-0 before:-bottom-0.5 before:h-0.5 
+           before:w-0 before:bg-foreground/50 before:transition-all before:duration-300
+           before:rounded-full
+           hover:before:w-full;
+  }
+
+  .social-icon {
+    @apply relative text-foreground/60 transition-all duration-300
+           hover:text-foreground hover:scale-110 hover:-translate-y-0.5
+           active:scale-95;
+  }
+
+  .footer-link {
+    @apply relative inline-block transition-all duration-300
+           hover:text-foreground hover:translate-x-1;
+  }
+
+  .border-gradient {
+    @apply border border-transparent bg-clip-padding bg-gradient-to-b from-border/10 to-border/5;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+    font-family: 'Geist', sans-serif;
+  }
+  
+  code, pre, kbd, samp {
+    font-family: 'GeistMono', monospace;
+  }
+  
+  .font-mono {
+    font-family: 'GeistMono', monospace;
+  }
+
+  /* scrollbar styles */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-[hsl(var(--scrollbar-track))];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[hsl(var(--scrollbar-thumb))] 
+           rounded-full 
+           transition-colors 
+           duration-200;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-[hsl(var(--scrollbar-thumb-hover))];
+  }
+}

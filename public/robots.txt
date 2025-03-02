@@ -1,0 +1,12 @@
+# https://sola.ysz.life robots.txt
+
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://sola.ysz.life/sitemap.xml
+
+# Common crawl directories
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/ 
