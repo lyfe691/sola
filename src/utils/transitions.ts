@@ -1,3 +1,12 @@
+﻿/**
+ * Copyright (c) 2025 Sebastian Zürcher
+ * 
+ * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
+ * Please refer to the LICENSE file in the project root for full licensing details.
+ * 
+ * All rights reserved.
+ */
+
 /**
  * common animation variants and transitions used throughout the website
  * these can be importted and used with framer motion components
@@ -41,3 +50,4 @@ export const listItemVariants = {
     }
   })
 };
+
