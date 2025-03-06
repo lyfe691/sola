@@ -132,31 +132,43 @@ const Index = () => {
                     href="https://github.com/lyfe691" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
+                    className="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
                   >
                     <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap">
+                      GitHub
+                    </span>
                   </a>
                   <a 
                     href="mailto:yanis.sebastian.zuercher@gmail.com" 
-                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
+                    className="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
                   >
                     <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap">
+                      Email
+                    </span>
                   </a>
                   <a 
                     href="https://www.linkedin.com/in/yanis-sebastian-zürcher/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
+                    className="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
                   >
                     <Linkedin className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap">
+                      LinkedIn
+                    </span>
                   </a>
                   <a 
                     href="https://chess.com/member/moment_o" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
+                    className="group relative w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-colors"
                   >
                     <SiChessdotcom className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap">
+                      Chess.com
+                    </span>
                   </a>
                 </motion.div>
               </div>
