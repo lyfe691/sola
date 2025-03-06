@@ -36,7 +36,8 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="w-full border-t border-foreground/10">
+    // ambient grid pattern starts off by inset-0
+    <footer className="w-full border-t border-foreground/10 inset-0 z-0 bg-[linear-gradient(rgba(120,120,120,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,0.03)_1px,transparent_1px)] bg-[size:40px_40px]">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
         {/* Footer top section with links and socials */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
