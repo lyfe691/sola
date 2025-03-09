@@ -134,6 +134,7 @@ export const translations = {
     about: {
       title: "About Me",
       backHome: "Back home",
+      viewSkills: "View Skills",
       intro: "I'm a passionate software developer with a focus on building innovative, high-performance web applications. Currently pursuing my education in Computer Science at WISS in Zürich, I combine technical expertise with creative problem-solving to deliver elegant solutions that exceed expectations.",
       hobbies: "Beyond coding, I'm actively involved in the tech community, continuously exploring emerging technologies and contributing to meaningful open-source projects.",
       philosophy: {
@@ -354,6 +355,7 @@ export const translations = {
     about: {
       title: "Über Mich",
       backHome: "Zurück",
+      viewSkills: "Fähigkeiten ansehen",
       intro: "Ich bin ein leidenschaftlicher Softwareentwickler mit Fokus auf innovative, leistungsstarke Webanwendungen. Derzeit absolviere ich meine Ausbildung in Informatik an der WISS in Zürich, wo ich technisches Fachwissen mit kreativem Problemlösen verbinde, um elegante Lösungen zu liefern, die die Erwartungen übertreffen.",
       hobbies: "Neben dem Programmieren bin ich aktiv in der Tech-Community involviert, erforsche kontinuierlich neue Technologien und trage zu bedeutenden Open-Source-Projekten bei.",
       philosophy: {
@@ -574,6 +576,7 @@ export const translations = {
     about: {
       title: "Sobre Mí",
       backHome: "Regresar",
+      viewSkills: "Ver Habilidades",
       intro: "Soy un desarrollador de software apasionado con enfoque en la construcción de aplicaciones web innovadoras y de alto rendimiento. Actualmente cursando mis estudios en Informática en WISS en Zúrich, combino experiencia técnica con resolución creativa de problemas para ofrecer soluciones elegantes que superan las expectativas.",
       hobbies: "Más allá de la programación, estoy activamente involucrado en la comunidad tecnológica, explorando continuamente tecnologías emergentes y contribuyendo a proyectos de código abierto significativos.",
       philosophy: {
@@ -620,46 +623,46 @@ export const translations = {
       title: "Servicios",
       subtitle: "Servicios integrales de desarrollo de software adaptados a sus necesidades, entregados con experiencia y precisión.",
       backHome: "Regresar",
-      pricing: "* Precios son negociables y se ajustarán a sus necesidades específicas y al alcance del proyecto.",
+      pricing: "* Precios negociables y ajustados a sus necesidades específicas y al alcance del proyecto.",
       services: {
         fullstack: {
-          title: "Full Stack Development",
-          description: "End-to-end web application development using modern technologies like React, Spring Boot, and MongoDB.",
+          title: "Desarrollo Full Stack",
+          description: "Desarrollo integral de aplicaciones web utilizando tecnologías modernas como React, Spring Boot y MongoDB.",
           features: [
-            "Responsive web applications",
-            "RESTful API development",
-            "Database design and implementation",
-            "Performance optimization"
+            "Aplicaciones web responsivas",
+            "Desarrollo de API RESTful",
+            "Diseño e implementación de bases de datos",
+            "Optimización de rendimiento"
           ]
         },
         frontend: {
-          title: "Frontend Development",
-          description: "Creating beautiful, responsive, and user-friendly interfaces with modern frameworks and design systems.",
+          title: "Desarrollo Frontend",
+          description: "Creación de interfaces atractivas, responsivas y fáciles de usar con marcos y sistemas de diseño modernos.",
           features: [
-            "React development",
-            "UI/UX implementation",
-            "Animation and interactivity",
-            "Mobile-first design"
+            "Desarrollo con React",
+            "Implementación de UI/UX",
+            "Animación e interactividad",
+            "Diseño mobile-first"
           ]
         },
         backend: {
-          title: "Backend Development",
-          description: "Robust and scalable server-side solutions.",
+          title: "Desarrollo Backend",
+          description: "Soluciones del lado del servidor robustas y escalables.",
           features: [
-            "API architecture",
-            "Database management",
-            "Server optimization",
-            "Security implementation"
+            "Arquitectura de API",
+            "Administración de bases de datos",
+            "Optimización de servidores",
+            "Implementación de seguridad"
           ]
         },
         consulting: {
-          title: "Technical Consulting",
-          description: "Expert guidance for your technical decisions.",
+          title: "Consultoría Técnica",
+          description: "Orientación experta para sus decisiones técnicas.",
           features: [
-            "Architecture planning",
-            "Technology stack selection",
-            "Performance auditing",
-            "Security assessment"
+            "Planificación de arquitectura",
+            "Selección de pila tecnológica",
+            "Auditoría de rendimiento",
+            "Evaluación de seguridad"
           ]
         }
       },
@@ -794,6 +797,7 @@ export const translations = {
     about: {
       title: "私について",
       backHome: "ホームに戻る",
+      viewSkills: "スキルを見る",
       intro: "私は革新的で高性能なウェブアプリケーションの開発に焦点を当てた情熱的なソフトウェア開発者です。現在、チューリッヒのWISSで情報科学を学び、技術的な専門知識と創造的な問題解決を組み合わせて、期待を超える優れたソリューションを提供しています。",
       hobbies: "プログラミング以外では、テクノロジーコミュニティに積極的に参加し、常に新しい技術を探求し、意義のあるオープンソースプロジェクトに貢献しています。",
       philosophy: {
@@ -1014,6 +1018,7 @@ export const translations = {
     about: {
       title: "关于我",
       backHome: "返回首页",
+      viewSkills: "查看技术技能",
       intro: "我是一位专注于开发创新、高性能Web应用的热情软件开发者。目前在苏黎世WISS学习计算机科学，将技术专长与创造性问题解决相结合，提供超越期望的优雅解决方案。",
       hobbies: "除编程外，我积极参与技术社区，不断探索新兴技术，并为有意义的开源项目做出贡献。",
       philosophy: {

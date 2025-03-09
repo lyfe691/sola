@@ -90,6 +90,8 @@
     --scrollbar-track: 240 4.8% 95.9%;
     --scrollbar-thumb: 240 5.9% 85%;
     --scrollbar-thumb-hover: 240 5.9% 75%;
+    --primary-rgb: 219, 39, 119; /* pink-600 */
+    --secondary-rgb: 124, 58, 237; /* violet-600 */
   }
 
   .dark {
@@ -224,8 +226,6 @@
 
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
-    /*dot pattern*/
-    @apply absolute inset-0 z-0 bg-[radial-gradient(circle,rgba(120,120,120,0.05)_1px,transparent_1px)] bg-[size:20px_20px]
   }
 
   .nav-link {

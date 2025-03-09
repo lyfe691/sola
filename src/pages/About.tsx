@@ -10,7 +10,7 @@
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain } from 'lucide-react';
+import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GithubIcon } from 'lucide-react';
 import { useLanguage } from "@/lib/language-provider";
@@ -132,13 +132,13 @@ const About = () => {
               variants={itemVariants}
               className="flex flex-row items-center gap-4"
             >
-              <Button variant="outline" size="sm" asChild>
+              <Button variant="outline" size="sm" className="border-foreground/20" asChild>
                 <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
                   <GithubIcon className="w-4 h-4" />
                   GitHub
                 </a>  
               </Button>
-              <Button variant="outline" size="sm" asChild>
+              <Button variant="outline" size="sm" className="border-foreground/20" asChild>
                 <a href="https://linkedin.com/in/yanis-sebastian-zürcher/" target="_blank" rel="noreferrer" className="flex items-center gap-2">
                   <Linkedin className="w-4 h-4" />
                   LinkedIn
@@ -159,10 +159,10 @@ const About = () => {
               
               {/* link to skills page */}
               <div className="pt-6">
-                <Button variant="default" size="default" asChild>
+                <Button variant="default" size="default" className="border-foreground/20 group">
                   <Link to="/skills" className="flex items-center gap-2">
-                    <Code className="w-4 h-4" />
-                    View My Technical Skills
+                    {t.about.viewSkills}
+                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
                 </Button>
               </div>
