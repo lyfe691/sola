@@ -10,7 +10,11 @@
 import type { RecursivePartial, IOptions } from "tsparticles-engine";
 
 /**
- * config file for the particle background, credits to https://github.com/matteobruni/tsparticles
+ * Configuration options for the particle background
+ * - Transparent background with large hexagon particles
+ * - Dark blue hexagons with bubble effect on hover
+ * - Few particles (6) with large size (100-160px)
+ * - Interactive bubble effect on hover
  */
 export const particlesOptions: RecursivePartial<IOptions> = {
   "autoPlay": true,
@@ -48,7 +52,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
     "detectsOn": "window",
     "events": {
       "onClick": {
-        "enable": true,
+        "enable": false,
         "mode": "push"
       },
       "onDiv": {
@@ -59,10 +63,10 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       },
       "onHover": {
         "enable": true,
-        "mode": "slow",
+        "mode": "bubble",
         "parallax": {
           "enable": false,
-          "force": 60,
+          "force": 2,
           "smooth": 10
         }
       },
@@ -91,8 +95,11 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       "bubble": {
         "distance": 400,
         "duration": 2,
-        "mix": false,
+        "mix": true,
         "opacity": 0.8,
+        "color": {
+          "value": "#ff0000"
+        },
         "size": 40,
         "divs": {
           "distance": 200,
@@ -143,7 +150,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       },
       "slow": {
         "factor": 3,
-        "radius": 100
+        "radius": 200
       },
       "particle": {
         "replaceCursor": false,
@@ -202,7 +209,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       }
     },
     "color": {
-      "value": "#555555",
+      "value": "#1b1e34",
       "animation": {
         "h": {
           "count": 0,
@@ -287,7 +294,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       },
       "random": false,
       "size": false,
-      "speed": 5,
+      "speed": 8,
       "spin": {
         "acceleration": 0,
         "enable": false
@@ -308,10 +315,13 @@ export const particlesOptions: RecursivePartial<IOptions> = {
         "height": 1080
       },
       "limit": 0,
-      "value": 80
+      "value": 6
     },
     "opacity": {
-      "value": 0.5,
+      "value": {
+        "min": 0.3,
+        "max": 0.5
+      },
       "animation": {
         "count": 0,
         "enable": false,
@@ -339,13 +349,17 @@ export const particlesOptions: RecursivePartial<IOptions> = {
     "shape": {
       "close": true,
       "fill": true,
-      "options": {},
-      "type": "circle"
+      "options": {
+        "polygon": {
+          "sides": 6
+        }
+      },
+      "type": "polygon"
     },
     "size": {
       "value": {
-        "min": 1,
-        "max": 5
+        "min": 100,
+        "max": 160
       },
       "animation": {
         "count": 0,
@@ -474,8 +488,8 @@ export const particlesOptions: RecursivePartial<IOptions> = {
         "value": "#777777"
       },
       "consent": false,
-      "distance": 150,
-      "enable": true,
+      "distance": 200,
+      "enable": false,
       "frequency": 1,
       "opacity": 0.7,
       "shadow": {
@@ -489,7 +503,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
         "enable": false,
         "frequency": 1
       },
-      "width": 1,
+      "width": 2,
       "warp": false
     },
     "repulse": {
@@ -508,8 +522,8 @@ export const particlesOptions: RecursivePartial<IOptions> = {
   "style": {},
   "themes": [],
   "zLayers": 100,
-  "key": "slow",
-  "name": "Slow",
+  "key": "bubble",
+  "name": "Bubble",
   "motion": {
     "disable": false,
     "reduce": {

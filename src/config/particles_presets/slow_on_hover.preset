@@ -10,7 +10,11 @@
 import type { RecursivePartial, IOptions } from "tsparticles-engine";
 
 /**
- * config file for the particle background, credits to https://github.com/matteobruni/tsparticles
+ * Configuration options for the particle background
+ * - Transparent background with dark particles and links
+ * - Fast moving particles (speed: 20) that slow down on hover
+ * - Interactive: push on click, slow on hover
+ * - Connected particles with visible links
  */
 export const particlesOptions: RecursivePartial<IOptions> = {
   "autoPlay": true,

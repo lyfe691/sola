@@ -1,28 +1,9 @@
-/**
- * Copyright (c) 2025 Yanis Sebastian Zürcher
- * 
- * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
- * Please refer to the LICENSE file in the project root for full licensing details.
- * 
- * All rights reserved.
- */
-
-import type { RecursivePartial, IOptions } from "tsparticles-engine";
-
-/**
- * config file for the particle background, credits to https://github.com/matteobruni/tsparticles
- */
 export const particlesOptions: RecursivePartial<IOptions> = {
   "autoPlay": true,
   "background": {
     "color": {
       "value": "transparent"
     },
-    "image": "",
-    "position": "",
-    "repeat": "",
-    "size": "",
-    "opacity": 1
   },
   "backgroundMask": {
     "composite": "destination-out",
@@ -49,7 +30,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
     "events": {
       "onClick": {
         "enable": true,
-        "mode": "push"
+        "mode": "repulse"
       },
       "onDiv": {
         "selectors": [],
@@ -59,10 +40,10 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       },
       "onHover": {
         "enable": true,
-        "mode": "slow",
+        "mode": "bubble",
         "parallax": {
           "enable": false,
-          "force": 60,
+          "force": 2,
           "smooth": 10
         }
       },
@@ -89,11 +70,11 @@ export const particlesOptions: RecursivePartial<IOptions> = {
         "distance": 200
       },
       "bubble": {
-        "distance": 400,
+        "distance": 250,
         "duration": 2,
         "mix": false,
-        "opacity": 0.8,
-        "size": 40,
+        "opacity": 0,
+        "size": 0,
         "divs": {
           "distance": 200,
           "duration": 0.4,
@@ -125,7 +106,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
         "quantity": 2
       },
       "repulse": {
-        "distance": 200,
+        "distance": 400,
         "duration": 0.4,
         "factor": 100,
         "speed": 1,
@@ -143,7 +124,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       },
       "slow": {
         "factor": 3,
-        "radius": 100
+        "radius": 200
       },
       "particle": {
         "replaceCursor": false,
@@ -202,7 +183,11 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       }
     },
     "color": {
-      "value": "#555555",
+      "value": [
+        "#777777",
+        "rgba(var(--primary-rgb), 0.5)",
+        "rgba(var(--secondary-rgb), 0.5)"
+      ],
       "animation": {
         "h": {
           "count": 0,
@@ -287,7 +272,10 @@ export const particlesOptions: RecursivePartial<IOptions> = {
       },
       "random": false,
       "size": false,
-      "speed": 5,
+      "speed": {
+        "min": 0.1,
+        "max": 1
+      },
       "spin": {
         "acceleration": 0,
         "enable": false
@@ -308,14 +296,17 @@ export const particlesOptions: RecursivePartial<IOptions> = {
         "height": 1080
       },
       "limit": 0,
-      "value": 80
+      "value": 160
     },
     "opacity": {
-      "value": 0.5,
+      "value": {
+        "min": 0.1,
+        "max": 1
+      },
       "animation": {
         "count": 0,
-        "enable": false,
-        "speed": 2,
+        "enable": true,
+        "speed": 1,
         "decay": 0,
         "delay": 0,
         "sync": false,
@@ -345,7 +336,7 @@ export const particlesOptions: RecursivePartial<IOptions> = {
     "size": {
       "value": {
         "min": 1,
-        "max": 5
+        "max": 3
       },
       "animation": {
         "count": 0,
@@ -471,13 +462,13 @@ export const particlesOptions: RecursivePartial<IOptions> = {
     "links": {
       "blink": false,
       "color": {
-        "value": "#777777"
+        "value": "#fff"
       },
       "consent": false,
-      "distance": 150,
-      "enable": true,
+      "distance": 100,
+      "enable": false,
       "frequency": 1,
-      "opacity": 0.7,
+      "opacity": 1,
       "shadow": {
         "blur": 5,
         "color": {
@@ -508,8 +499,8 @@ export const particlesOptions: RecursivePartial<IOptions> = {
   "style": {},
   "themes": [],
   "zLayers": 100,
-  "key": "slow",
-  "name": "Slow",
+  "key": "nasa",
+  "name": "NASA",
   "motion": {
     "disable": false,
     "reduce": {
