@@ -30,7 +30,9 @@ import { ReactNode } from "react";
 import MainLayout from "./layouts/MainLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
 import { pageTransitionVariants, pageTransition } from "./utils/transitions";
-
+import { SearchToggle } from "./components/search-toggle";
+import { CommandMenu } from "./components/Command";
+import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -169,6 +171,12 @@ const AnimatedRoutes = () => {
   );
 };
 
+// KeyboardShortcuts component to enable global shortcuts
+function KeyboardShortcuts() {
+  useCommandMenuKeyboardShortcut();
+  return null;
+}
+
 // app component
 const App = () => (
   <ThemeProvider defaultTheme="system">
@@ -177,11 +185,14 @@ const App = () => (
         <TooltipProvider>
           <div className="min-h-screen flex flex-col">
             <Toaster />
-            <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
-              <LanguageToggle />
-              <ThemeToggle />
-            </div>
             <BrowserRouter>
+              <KeyboardShortcuts />
+              <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
+                <SearchToggle />
+                <LanguageToggle />
+                <ThemeToggle />
+              </div>
+              <CommandMenu />
               <AnimatedRoutes />
               <ConditionalFooter />
               <ScrollToTop />
