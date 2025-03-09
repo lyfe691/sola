@@ -9,7 +9,6 @@
 
 /* This is the main page, therefore called index */
 
-
 import { Link } from "react-router-dom";
 import { 
   Github,
@@ -25,6 +24,11 @@ import { translations } from "../lib/translations";
 import { SiChessdotcom } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Navigation from "../components/Navigation";
+import Particles from "react-tsparticles";
+import { loadSlim } from "tsparticles-slim";
+import type { Engine } from "tsparticles-engine";
+import ParticleBackground from "../components/ParticleBackground";
+
 
 const Index = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -32,6 +36,10 @@ const Index = () => {
   const [key, setKey] = useState(0);
   const { language } = useLanguage();
   const t = translations[language];
+  
+  const particlesInit = async (engine: Engine) => {
+    await loadSlim(engine);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -55,6 +63,10 @@ const Index = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
+          
+          {/* Particle background */}
+          <ParticleBackground particlesInit={particlesInit}/>
+          
           <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-16 sm:pt-18 md:pt-20 flex flex-col">
             <div className="max-w-7xl mx-auto w-full flex flex-col h-full">
               <div className="mb-8 sm:mb-10 md:mb-14 lg:mb-16">
@@ -103,7 +115,7 @@ const Index = () => {
                           <Button 
                             variant="default"
                             size="default"
-                            className="group h-10"
+                            className="group border-foreground/20"
                           >
                             <span className="flex items-center">
                               {t.index.contactMe}
