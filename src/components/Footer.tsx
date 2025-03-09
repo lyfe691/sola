@@ -20,10 +20,30 @@ const Footer = () => {
   const t = translations[language];
 
   const socialLinks = [
-    { icon: <Github className="w-4 h-4" />, href: "https://github.com/lyfe691", label: "GitHub" },
-    { icon: <Mail className="w-4 h-4" />, href: "mailto:yanis.sebastian.zuercher@gmail.com", label: "Email" },
-    { icon: <Linkedin className="w-4 h-4" />, href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/", label: "LinkedIn" },
-    { icon: <SiChessdotcom className="w-4 h-4" />, href: "https://chess.com/member/moment_o", label: "Chess.com" }
+    { 
+      icon: <Github className="w-4 h-4" />, 
+      href: "https://github.com/lyfe691", 
+      label: "GitHub",
+      hoverClass: "hover:bg-foreground/10" // default hover background
+    },
+    { 
+      icon: <Mail className="w-4 h-4" />, 
+      href: "mailto:yanis.sebastian.zuercher@gmail.com", 
+      label: "Email",
+      hoverClass: "hover:bg-red-400/20 hover:border-red-400/30" // subtle red background
+    },
+    { 
+      icon: <Linkedin className="w-4 h-4" />, 
+      href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/", 
+      label: "LinkedIn",
+      hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30" // subtle cyan background
+    },
+    { 
+      icon: <SiChessdotcom className="w-4 h-4" />, 
+      href: "https://chess.com/member/moment_o", 
+      label: "Chess.com",
+      hoverClass: "hover:bg-green-400/20 hover:border-green-400/30" // subtle green background
+    }
   ];
 
   const navLinks = [
@@ -110,7 +130,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className="p-2 rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition-all"
+                  className={`p-2 rounded-full border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-all ${link.hoverClass}`}
                 >
                   {link.icon}
                 </a>

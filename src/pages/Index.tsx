@@ -150,22 +150,26 @@ const Index = () => {
                         { 
                           href: "https://github.com/lyfe691", 
                           icon: <Github className="w-full h-full" />, 
-                          label: "GitHub"
+                          label: "GitHub",
+                          hoverClass: "hover:border-foreground/30"
                         },
                         { 
                           href: "mailto:yanis.sebastian.zuercher@gmail.com", 
                           icon: <Mail className="w-full h-full" />, 
-                          label: "Email"
+                          label: "Email",
+                          hoverClass: "hover:bg-red-400/20 hover:border-red-400/30"
                         },
                         { 
                           href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/", 
                           icon: <Linkedin className="w-full h-full" />, 
-                          label: "LinkedIn"
+                          label: "LinkedIn",
+                          hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30"
                         },
                         { 
                           href: "https://chess.com/member/moment_o", 
                           icon: <SiChessdotcom className="w-full h-full" />, 
-                          label: "Chess.com"
+                          label: "Chess.com",
+                          hoverClass: "hover:bg-green-400/20 hover:border-green-400/30"
                         }
                       ].map((social, index) => (
                         <a 
@@ -173,7 +177,7 @@ const Index = () => {
                           href={social.href}
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="group relative w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground hover:border-foreground/30 transition-colors duration-300"
+                          className={`group relative w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-colors duration-300 ${social.hoverClass}`}
                         >
                           <div className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center">
                             {social.icon}
