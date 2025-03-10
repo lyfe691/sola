@@ -25,3 +25,4 @@ dist-ssr
 
 # Add-Copyright.ps1
 add-copyright.ps1
+.vercel
