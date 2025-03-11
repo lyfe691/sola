@@ -21,7 +21,7 @@ export const translations = {
     },
     index: {
       greeting: "Hello, I'm Yanis",
-      description: "I'm a 16 year old software developer based in Zürich, Switzerland, focused on building exceptional digital experiences.",
+      description: "I'm a 17 year old software developer based in Zürich, Switzerland, focused on building exceptional digital experiences.",
       contactMe: "Contact me",
       viewProjects: "View projects"
     },
@@ -242,7 +242,7 @@ export const translations = {
     },
     index: {
       greeting: "Hallo, ich bin Yanis",
-      description: "Ich bin ein 16 Jähriger Softwareentwickler aus Zürich, Schweiz, und konzentriere mich darauf, aussergewöhnliche digitale Erlebnisse zu schaffen.",
+      description: "Ich bin ein 17 Jähriger Softwareentwickler aus Zürich, Schweiz, und konzentriere mich darauf, aussergewöhnliche digitale Erlebnisse zu schaffen.",
       contactMe: "Kontakt",
       viewProjects: "Projekte ansehen"
     },
@@ -463,7 +463,7 @@ export const translations = {
     },
     index: {
       greeting: "Hola, soy Yanis",
-      description: "Soy un desarrollador de software de 16 años basado en Zúrich, Suiza, enfocado en crear experiencias digitales excepcionales.",
+      description: "Soy un desarrollador de software de 17 años basado en Zúrich, Suiza, enfocado en crear experiencias digitales excepcionales.",
       contactMe: "Contáctame",
       viewProjects: "Ver proyectos"
     },
@@ -684,7 +684,7 @@ export const translations = {
     },
     index: {
       greeting: "こんにちは、私は Yanis ",
-      description: "私はスイスのチューリッヒ出身の16歳のソフトウェア開発者で、優れたデジタル体験の創造に取り組んでいます。",
+      description: "私はスイスのチューリッヒ出身の17歳のソフトウェア開発者で、優れたデジタル体験の創造に取り組んでいます。",
       contactMe: "お問い合わせ",
       viewProjects: "プロジェクトを見る"
     },
@@ -905,7 +905,7 @@ export const translations = {
     },
     index: {
       greeting: "你好，我是 Yanis",
-      description: "我是一位16岁的软件开发者，来自瑞士苏黎世，致力于创造卓越的数字体验。",
+      description: "我是一位17岁的软件开发者，来自瑞士苏黎世，致力于创造卓越的数字体验。",
       contactMe: "联系我",
       viewProjects: "查看项目"
     },
