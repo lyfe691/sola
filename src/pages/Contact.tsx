@@ -118,7 +118,7 @@ const Contact = () => {
                 name="message"
                 required
                 placeholder={t.contact.messagePlaceholder}
-                className="min-h-42"
+                className="min-h-44"
               />
             </div>
             <Button
