@@ -15,9 +15,9 @@ import { translations } from "../lib/translations";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "@formspree/react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 const Contact = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -25,7 +25,6 @@ const Contact = () => {
   const t = translations[language];
   const [state, handleSubmit] = useForm("xeqydavz");
   const formRef = useRef<HTMLFormElement>(null);
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const containerVariants = {
@@ -54,17 +53,10 @@ const Contact = () => {
     setIsSubmitting(true);
     try {
       await handleSubmit(e);
-      toast({
-        title: "Success!",
-        description: t.contact.successMessage,
-      });
+      toast.success(t.contact.successMessage);
       if (formRef.current) formRef.current.reset();
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -102,10 +94,6 @@ const Contact = () => {
                   type="text"
                   required
                   placeholder={t.contact.namePlaceholder}
-                  className={cn(
-                    "transition-colors focus-visible:ring-foreground/20",
-                    "dark:focus-visible:ring-foreground/20"
-                  )}
                 />
               </div>
               <div className="space-y-2">
@@ -118,10 +106,6 @@ const Contact = () => {
                   type="email"
                   required
                   placeholder={t.contact.emailPlaceholder}
-                  className={cn(
-                    "transition-colors focus-visible:ring-foreground/20",
-                    "dark:focus-visible:ring-foreground/20"
-                  )}
                 />
               </div>
             </div>
@@ -134,10 +118,7 @@ const Contact = () => {
                 name="message"
                 required
                 placeholder={t.contact.messagePlaceholder}
-                className={cn(
-                  "min-h-[200px] resize-y transition-colors focus-visible:ring-foreground/20",
-                  "dark:focus-visible:ring-foreground/20"
-                )}
+                className="min-h-42"
               />
             </div>
             <Button
