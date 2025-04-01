@@ -81,7 +81,7 @@ const Projects = () => {
     },
     {
       title: t.projects.list.codeExtractor.title,
-      description: t.projects.list.codeExtractor.description,
+      description: t.projects.list.codeExtractor.description + " (600+ Users)",
       image: "/projects/website-code-extractor.svg",
       link: "https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm",
       github: "https://github.com/lyfe691/Website-Code-Extractor",
