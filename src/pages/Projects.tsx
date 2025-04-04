@@ -8,10 +8,16 @@
  */
 
 import { useState, useEffect } from "react";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Project {
   title: string;
@@ -27,6 +33,7 @@ interface Project {
 const Projects = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
+  const [tooltipOpen, setTooltipOpen] = useState(false);
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -184,9 +191,24 @@ const Projects = () => {
         >
           <motion.h1 
             variants={titleVariants}
-            className="text-4xl font-bold mb-8 sm:mb-12"
+            className="text-4xl font-bold mb-8 sm:mb-12 flex items-center gap-3"
           >
             {t.projects.title}
+            <TooltipProvider>
+              <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
+                <TooltipTrigger asChild>
+                  <span 
+                    className="cursor-help" 
+                    onClick={() => setTooltipOpen(!tooltipOpen)}
+                  >
+                    <Info className="w-5 h-5 text-foreground/60 hover:text-primary transition-colors" />
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent className="bg-background text-foreground mb-2">
+                  <p className="text-sm">{t.projects.imageTooltip} <a href="https://og-playground.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Vercel OG Image <ExternalLink className="w-4 h-4 pb-1 inline-block" /></a></p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </motion.h1>
           
           {/* featured projects */}

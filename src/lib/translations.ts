@@ -64,6 +64,7 @@ export const translations = {
       viewProject: "View Project",
       viewGithub: "View Code",
       technologies: "Technologies used",
+      imageTooltip: "Some project images created with",
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
@@ -285,6 +286,7 @@ export const translations = {
       viewProject: "View Project",
       viewGithub: "View Code",
       technologies: "Technologies used",
+      imageTooltip: "Paar Projektbilder erstellt mit",
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
@@ -506,6 +508,7 @@ export const translations = {
       viewProject: "Ver Proyecto",
       viewGithub: "Ver Código",
       technologies: "Tecnologías utilizadas",
+      imageTooltip: "Algunas imágenes de proyecto creadas con",
       list: {
         codeExtractor: {
           title: "Extractor de Código Web",
@@ -727,6 +730,7 @@ export const translations = {
       viewProject: "プロジェクトを見る",
       viewGithub: "コードを見る",
       technologies: "使用技術",
+      imageTooltip: "いくつかのプロジェクト画像が作成された",
       list: {
         codeExtractor: {
           title: "ウェブサイトコード抽出ツール",
@@ -948,6 +952,7 @@ export const translations = {
       viewProject: "查看项目",
       viewGithub: "查看代码",
       technologies: "使用的技术",
+      imageTooltip: "一些项目图像创建于",
       list: {
         codeExtractor: {
           title: "网站代码提取器",
