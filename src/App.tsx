@@ -184,7 +184,7 @@ const App = () => (
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <div className="min-h-screen flex flex-col">
-            <Toaster />
+            <Toaster position="top-center"/>
             <BrowserRouter>
               <KeyboardShortcuts />
               <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
