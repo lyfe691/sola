@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import { useState, useEffect, FormEvent, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../lib/language-provider";
@@ -15,18 +15,15 @@ import { translations } from "../lib/translations";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { useForm } from "@formspree/react";
-import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const Contact = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { language } = useLanguage();
   const t = translations[language];
-  const [state, handleSubmit] = useForm("xeqydavz");
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
@@ -47,15 +44,33 @@ const Contact = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
+    
     setIsSubmitting(true);
+    
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    
     try {
-      await handleSubmit(e);
-      toast.success(t.contact.successMessage);
-      if (formRef.current) formRef.current.reset();
+      const response = await fetch('https://formspree.io/f/xeqydavz', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        toast.success(t.contact.successMessage);
+        form.reset();
+      } else {
+        const data = await response.json();
+        throw new Error(data.error || 'Form submission failed');
+      }
     } catch (error) {
+      console.error('Submission error:', error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -79,7 +94,7 @@ const Contact = () => {
           </motion.p>
           <motion.form
             ref={formRef}
-            onSubmit={onSubmit}
+            onSubmit={handleSubmit}
             variants={itemVariants}
             className="space-y-6 sm:space-y-8 max-w-2xl"
           >
