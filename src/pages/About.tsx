@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { GithubIcon } from 'lucide-react';
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { useNavigate } from 'react-router-dom';
 
 type InterestCardProps = {
   title: string;
@@ -22,6 +23,7 @@ type InterestCardProps = {
   icon: React.ElementType;
   image: string;
 };
+
 
 const InterestCard = ({ title, description, icon: Icon, image }: InterestCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -61,6 +63,7 @@ const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const [isLoaded, setIsLoaded] = useState(false);
+  const navigate = useNavigate();
   
   const interestImages = {
     nature: "/about/spring-japan.jpg",
@@ -159,11 +162,11 @@ const About = () => {
               
               {/* link to skills page */}
               <div className="pt-6">
-                <Button variant="default" size="default" className="border-foreground/20 group">
-                  <Link to="/skills" className="flex items-center gap-2">
+                <Button variant="default" size="default" className="border-foreground/20 group" onClick={() => navigate('/skills')}>
+               
                     {t.about.viewSkills}
                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
+         
                 </Button>
               </div>
             </div>

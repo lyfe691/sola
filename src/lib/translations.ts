@@ -183,6 +183,7 @@ export const translations = {
       subtitle: "Comprehensive software development services tailored to your needs.",
       backHome: "Back home",
       pricing: "* Prices are negotiable and will be tailored to your specific needs and project scope.",
+      getStarted: "Get Started",
       services: {
         fullstack: {
           title: "Full Stack Development",
@@ -405,6 +406,7 @@ export const translations = {
       subtitle: "Umfassende Softwareentwicklungsdienste, angepasst an Ihre Bedürfnisse.",
       backHome: "Zurück",
       pricing: "* Preise sind verhandelbar und werden auf Ihre spezifischen Bedürfnisse und den Projektumfang abgestimmt.",
+      getStarted: "Loslegen",
       services: {
         fullstack: {
           title: "Full-Stack-Entwicklung",
@@ -627,6 +629,7 @@ export const translations = {
       subtitle: "Servicios integrales de desarrollo de software adaptados a sus necesidades, entregados con experiencia y precisión.",
       backHome: "Regresar",
       pricing: "* Precios negociables y ajustados a sus necesidades específicas y al alcance del proyecto.",
+      getStarted: "Comenzar",
       services: {
         fullstack: {
           title: "Desarrollo Full Stack",
@@ -849,6 +852,7 @@ export const translations = {
       subtitle: "お客様のニーズに合わせた包括的なソフトウェア開発サービス。",
       backHome: "ホームに戻る",
       pricing: "* 料金は交渉可能で、お客様の具体的なニーズとプロジェクトの規模に応じて調整します。",
+      getStarted: "今すぐ始める",
       services: {
         fullstack: {
           title: "フルスタック開発",
@@ -1071,6 +1075,7 @@ export const translations = {
       subtitle: "根据您的需求定制的全面软件开发服务。",
       backHome: "返回首页",
       pricing: "* 价格可协商，将根据您的具体需求和项目范围进行调整。",
+      getStarted: "开始", 
       services: {
         fullstack: {
           title: "全栈开发",

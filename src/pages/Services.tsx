@@ -9,7 +9,7 @@
 
 import { useState, useEffect } from "react";
 import { Code2, Blocks, Database, Lightbulb, ArrowRight, CheckCircle2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
@@ -20,6 +20,7 @@ const Services = () => {
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const { language } = useLanguage();
   const t = translations[language];
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -119,7 +120,9 @@ const Services = () => {
                          bg-gradient-to-b from-accent/10 to-transparent
                          backdrop-blur-sm transition-all duration-300
                          hover:border-primary/50 hover:shadow-lg hover:-translate-y-0.5
-                         hover:bg-gradient-to-b hover:from-primary/10 hover:to-transparent`}
+                         hover:bg-gradient-to-b hover:from-primary/10 hover:to-transparent
+                         cursor-pointer`}
+                onClick={() => navigate('/contact')}
               >
                 {service.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 
@@ -161,6 +164,19 @@ const Services = () => {
                     </li>
                   ))}
                 </ul>
+
+                {/* Add contact button for each service */}
+                <div className="mt-6">
+                  <Link to="/contact">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
+                    >
+                      {t.services.getStarted || "Get Started"}
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </Button>
+                  </Link>
+                </div>
               </motion.div>
             ))}
           </div>
