@@ -37,9 +37,11 @@ const Index = () => {
   const { language } = useLanguage();
   const t = translations[language];
   
+  /* remove for now
   const particlesInit = async (engine: Engine) => {
     await loadSlim(engine);
   };
+  */
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -64,8 +66,9 @@ const Index = () => {
           transition={{ duration: 0.4 }}
         >
           
-          {/* Particle background */}
+          {/* Particle background, remove for now 
           <ParticleBackground particlesInit={particlesInit}/>
+          */}
           
           <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-16 sm:pt-18 md:pt-20 flex flex-col">
             <div className="max-w-7xl mx-auto w-full flex flex-col h-full">
