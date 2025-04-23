@@ -25,7 +25,7 @@ import { LanguageProvider } from "./lib/language-provider";
 import { LanguageToggle } from "./components/language-toggle";
 import Contact from "./pages/Contact";
 import Services from "./pages/Services";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react"
 import { ReactNode } from "react";
 import MainLayout from "./layouts/MainLayout";
 import SimpleLayout from "./layouts/SimpleLayout";

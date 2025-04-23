@@ -8,7 +8,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain } from 'lucide-react';
 import { Button } from '@/components/ui/button';

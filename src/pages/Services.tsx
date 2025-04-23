@@ -10,7 +10,7 @@
 import { useState, useEffect } from "react";
 import { Code2, Blocks, Database, Lightbulb, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 import { Button } from "@/components/ui/button";

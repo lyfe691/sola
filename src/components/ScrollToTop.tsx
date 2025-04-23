@@ -10,7 +10,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react"
 
 const SCROLL_THRESHOLD = 100; // Pixels scrolled before showing the button
 const SCROLL_DEBOUNCE_DELAY = 100; // ms

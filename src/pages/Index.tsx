@@ -16,7 +16,7 @@ import {
   Linkedin,
   ArrowRight,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { TypeAnimation } from 'react-type-animation';
 import { useEffect, useState } from "react";
 import { useLanguage } from "../lib/language-provider";

@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react"
 import { Link } from "react-router-dom";
 import { Briefcase } from "lucide-react";
 

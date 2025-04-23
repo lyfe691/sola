@@ -9,7 +9,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Home, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react"
 import { useEffect, useState, useRef, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";

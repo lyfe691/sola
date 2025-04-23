@@ -9,7 +9,7 @@
 
 import { useState, useEffect } from "react";
 import { ExternalLink } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 
