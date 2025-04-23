@@ -279,55 +279,72 @@ const Projects = () => {
                             >
                               {project.title}
                             </motion.h3>
-                            <div className="flex items-center gap-2 sm:gap-3 text-foreground/40">
-                              {project.github && (
-                                <motion.a 
-                                  href={project.github}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="hover:text-foreground transition-colors"
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <Github className="w-4 h-4 sm:w-5 sm:h-5" />
-                                </motion.a>
-                              )}
-                              {project.link && (
-                                <motion.a 
-                                  href={project.link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="hover:text-foreground transition-colors"
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.95 }}
-                                >
-                                  <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
-                                </motion.a>
-                              )}
-                            </div>
                           </div>
 
                           <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
                             {project.description}
                           </p>
                           
-                          <motion.div 
-                            className="flex flex-wrap gap-1.5 sm:gap-2"
-                            variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-                          >
-                            {project.tags.map((tag, i) => (
-                              <motion.span 
-                                key={i}
-                                variants={tagVariants}
-                                className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
-                                         text-foreground/60 border border-foreground/10
-                                         transition-colors duration-300
-                                         hover:border-primary/20 hover:text-primary/80"
-                              >
-                                {tag}
-                              </motion.span>
-                            ))}
-                          </motion.div>
+                          <div className="space-y-4">
+                            <motion.div 
+                              className="flex flex-wrap gap-1.5 sm:gap-2"
+                              variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+                            >
+                              {project.tags.map((tag, i) => (
+                                <motion.span 
+                                  key={i}
+                                  variants={tagVariants}
+                                  className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
+                                           text-foreground/60 border border-foreground/10
+                                           transition-colors duration-300
+                                           hover:border-primary/20 hover:text-primary/80"
+                                >
+                                  {tag}
+                                </motion.span>
+                              ))}
+                            </motion.div>
+                            
+                            {/* Links section with separator */}
+                            {(project.github || project.link) && (
+                              <>
+                                <div className="w-full h-px bg-foreground/10"></div>
+                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
+                                  {project.github && (
+                                    <motion.a 
+                                      href={project.github}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
+                                              bg-primary/10 text-primary border border-primary/20
+                                              hover:bg-primary/15 hover:border-primary/30
+                                              transition-colors duration-300"
+                                      whileHover={{ scale: 1.03 }}
+                                      whileTap={{ scale: 0.97 }}
+                                    >
+                                      <Github className="w-4 h-4 sm:w-4 sm:h-4" />
+                                      <span>GitHub</span>
+                                    </motion.a>
+                                  )}
+                                  {project.link && (
+                                    <motion.a 
+                                      href={project.link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
+                                              bg-foreground/10 text-foreground/80 border border-foreground/20
+                                              hover:bg-foreground/15 hover:border-foreground/30 hover:text-foreground
+                                              transition-colors duration-300"
+                                      whileHover={{ scale: 1.03 }}
+                                      whileTap={{ scale: 0.97 }}
+                                    >
+                                      <ExternalLink className="w-4 h-4 sm:w-4 sm:h-4" />
+                                      <span>Visit Project</span>
+                                    </motion.a>
+                                  )}
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -386,55 +403,72 @@ const Projects = () => {
                         <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary transition-colors">
                           {project.title}
                         </h3>
-                        <div className="flex items-center gap-2 text-foreground/40">
-                          {project.github && (
-                            <motion.a 
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-foreground transition-colors"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                            </motion.a>
-                          )}
-                          {project.link && (
-                            <motion.a 
-                              href={project.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hover:text-foreground transition-colors"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.95 }}
-                            >
-                              <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                            </motion.a>
-                          )}
-                        </div>
                       </div>
                       
                       <p className="text-foreground/60 text-sm mb-3">
                         {project.description}
                       </p>
                       
-                      <motion.div 
-                        className="flex flex-wrap gap-1.5 sm:gap-2"
-                        variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-                      >
-                        {project.tags.map((tag, i) => (
-                          <motion.span 
-                            key={i}
-                            variants={tagVariants}
-                            className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
-                                     text-foreground/60 border border-foreground/10
-                                     transition-colors duration-300
-                                     hover:border-primary/20 hover:text-primary/80"
-                          >
-                            {tag}
-                          </motion.span>
-                        ))}
-                      </motion.div>
+                      <div className="space-y-4">
+                        <motion.div 
+                          className="flex flex-wrap gap-1.5 sm:gap-2"
+                          variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+                        >
+                          {project.tags.map((tag, i) => (
+                            <motion.span 
+                              key={i}
+                              variants={tagVariants}
+                              className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
+                                       text-foreground/60 border border-foreground/10
+                                       transition-colors duration-300
+                                       hover:border-primary/20 hover:text-primary/80"
+                            >
+                              {tag}
+                            </motion.span>
+                          ))}
+                        </motion.div>
+                        
+                        {/* Links section with separator */}
+                        {(project.github || project.link) && (
+                          <>
+                            <div className="w-full h-px bg-foreground/10"></div>
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
+                              {project.github && (
+                                <motion.a 
+                                  href={project.github}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
+                                          bg-primary/10 text-primary border border-primary/20
+                                          hover:bg-primary/15 hover:border-primary/30
+                                          transition-colors duration-300"
+                                  whileHover={{ scale: 1.03 }}
+                                  whileTap={{ scale: 0.97 }}
+                                >
+                                  <Github className="w-4 h-4 sm:w-4 sm:h-4" />
+                                  <span>GitHub</span>
+                                </motion.a>
+                              )}
+                              {project.link && (
+                                <motion.a 
+                                  href={project.link}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
+                                          bg-foreground/10 text-foreground/80 border border-foreground/20
+                                          hover:bg-foreground/15 hover:border-foreground/30 hover:text-foreground
+                                          transition-colors duration-300"
+                                  whileHover={{ scale: 1.03 }}
+                                  whileTap={{ scale: 0.97 }}
+                                >
+                                  <ExternalLink className="w-4 h-4 sm:w-4 sm:h-4" />
+                                  <span>Visit Project</span>
+                                </motion.a>
+                              )}
+                            </div>
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </motion.div>
