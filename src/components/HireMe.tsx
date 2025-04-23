@@ -1,9 +1,9 @@
 /**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
- * 
+ *
  * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
  * Please refer to the LICENSE file in the project root for full licensing details.
- * 
+ *
  * All rights reserved.
  */
 
@@ -14,33 +14,33 @@ import { Briefcase } from "lucide-react";
 const HireMe = () => {
   // prefilled message for potential employers
   const prefilledSubject = "Job Opportunity at []";
-  const prefilledMessage = "Hi Yanis,\n\nI'm reaching out regarding a potential job opportunity. I've reviewed your portfolio and I'm impressed with your work.\n\nI'd like to discuss a potential collaboration with our team.\n\nLooking forward to your response.";
-  
-  // create url with subject and message as params
+  const prefilledMessage = `Hi Yanis,\n\nI'm reaching out regarding a potential job opportunity. I've reviewed your portfolio and I'm impressed with your work.\n\nI'd like to discuss a potential collaboration with our team.\n\nLooking forward to your response.`;
+
   const contactUrl = `/contact?subject=${encodeURIComponent(prefilledSubject)}&message=${encodeURIComponent(prefilledMessage)}`;
 
   return (
-    <div className="fixed top-6 left-0 z-30 hidden lg:block">
+    <motion.div
+      className="fixed top-6 left-4 z-50"
+      initial={{ opacity: 0, x: -48 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ type: "spring", stiffness: 190, damping: 22, delay: 0.5 }}
+    >
+      {/* gentle bobbing animation */}
       <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 24 }}
-        transition={{ 
-          type: "spring", 
-          stiffness: 200, 
-          damping: 20,
-          delay: 0.7 
-        }}
+        animate={{ y: [0, -6, 0], x: [0, 6, 0]}}
+        transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
       >
         <Link
           to={contactUrl}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary text-primary-foreground font-medium shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all duration-300 border border-primary/20 group"
+          aria-label="Hire Yanis Sebastian Zürcher"
+          className="group inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-primary/80 px-5 py-3 font-semibold text-primary-foreground shadow-lg shadow-primary/20 ring-1 ring-primary/30 backdrop-blur md:hover:scale-105 md:hover:shadow-xl md:active:scale-95 transition-transform duration-300"
         >
-          <Briefcase className="w-4 h-4 group-hover:animate-pulse" />
-          <span>Hire Me</span>
+          <Briefcase className="h-5 w-5 group-hover:animate-pulse" />
+          <span className="whitespace-nowrap">Hire&nbsp;Me</span>
         </Link>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
-export default HireMe; 
+export default HireMe;
