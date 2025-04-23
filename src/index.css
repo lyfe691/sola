@@ -239,7 +239,7 @@
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
   }
-
+  
   .nav-link {
     @apply relative text-sm font-medium tracking-wide transition-colors duration-300
            text-foreground/70 hover:text-foreground

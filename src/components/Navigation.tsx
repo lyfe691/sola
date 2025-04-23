@@ -80,7 +80,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
         className={`
           ${isMobile 
             ? 'flex items-center justify-between group py-3 px-4 text-lg font-medium rounded-xl transition-all duration-300 border border-border/10' 
-            : 'relative px-4 py-2 text-base rounded-full transition-colors duration-300 z-10'} 
+            : 'relative px-4 py-2 text-base rounded-full transition-all duration-300 z-10 hover:scale-105'} 
           ${activeClass}
         `}
       >
@@ -229,34 +229,38 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40">
+    <nav className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4">
       {/* Desktop Navigation */}
       <div className="flex justify-center items-center">
         <motion.div 
           ref={navRef}
-          className="hidden md:flex items-center justify-center mx-auto gap-x-1 gap-y-2 bg-background/80 backdrop-blur-md py-4 px-6 rounded-full border border-border/30 shadow-sm relative"
+          className="hidden md:flex items-center justify-center mx-auto gap-x-1 gap-y-2 bg-background/80 backdrop-blur-md py-3 px-6 rounded-full border border-border/30 shadow-lg relative overflow-hidden"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
+          whileHover={{ boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
         >
+          {/* Subtle gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-50 pointer-events-none"></div>
+          
           {/* Home Link + Separator */}
           <Link 
             to="/" 
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 mr-1
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 mr-1 relative z-20
                       ${isActive('/') 
-                        ? 'bg-primary/20 text-foreground font-medium' 
+                        ? 'bg-primary/20 text-foreground font-medium shadow-sm' 
                         : 'text-foreground/80 hover:text-foreground hover:bg-foreground/5'}`}
           >
             <Home className="w-4 h-4" />
             <span className="font-medium">Home</span>
           </Link>
           
-          <div className="h-6 w-px bg-foreground/10 mx-1"></div>
+          <div className="h-6 w-px bg-foreground/10 mx-1 relative z-10"></div>
           
           {/* Sliding indicator for active item */}
           {activeItemWidth > 0 && (
             <motion.div 
-              className="absolute rounded-full bg-primary/20 h-[calc(100%-16px)] top-2 z-0"
+              className="absolute rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 h-[calc(100%-16px)] top-2 z-0 pointer-events-none"
               initial={false}
               animate={{
                 width: activeItemWidth,
@@ -335,6 +339,11 @@ const Navigation = () => {
                     onClick={closeMenu}
                   />
                 ))}
+              </div>
+              
+              {/* Clean version number */}
+              <div className="mt-auto mb-6 text-center">
+                <span className="text-xs text-foreground/40">1.0.1</span>
               </div>
             </div>
           </motion.div>
