@@ -168,13 +168,7 @@ const About = () => {
                 </Button>
               </div>
               
-              {/* link to skills page */}
-              <div className="pt-5">
-                <Button variant="default" size="sm" className="group" onClick={() => navigate('/skills')}>
-                  {t.about.viewSkills}
-                  <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform duration-300 group-hover:translate-x-1" />
-                </Button>
-              </div>
+
             </div>
             
             {/* Image container */}
