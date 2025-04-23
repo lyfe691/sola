@@ -33,6 +33,7 @@ import { pageTransitionVariants, pageTransition } from "./utils/transitions";
 import { SearchToggle } from "./components/search-toggle";
 import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
+import HireMe from "./components/HireMe";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -187,6 +188,7 @@ const App = () => (
             <Toaster position="top-center"/>
             <BrowserRouter>
               <KeyboardShortcuts />
+              <HireMe />
               <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
                 <SearchToggle />
                 <LanguageToggle />

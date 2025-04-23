@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Contact = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,6 +24,14 @@ const Contact = () => {
   const t = translations[language];
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formValues, setFormValues] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const navigate = useNavigate();
+  const location = useLocation();
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -44,6 +53,47 @@ const Contact = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const subject = params.get('subject');
+    const message = params.get('message');
+    
+    if (subject || message) {
+      setFormValues(prev => ({
+        ...prev,
+        subject: subject || '',
+        message: message || ''
+      }));
+      
+      setTimeout(() => {
+        if (formRef.current) {
+          const subjectEl = formRef.current.querySelector('[name="subject"]') as HTMLInputElement;
+          const messageEl = formRef.current.querySelector('[name="message"]') as HTMLTextAreaElement;
+          
+          if (subjectEl && subject) subjectEl.value = subject;
+          if (messageEl && message) messageEl.value = message;
+        }
+      }, 200);
+    }
+  }, [location.search]);
+
+  const clearForm = () => {
+    setFormValues({
+      name: '',
+      email: '',
+      subject: '',
+      message: ''
+    });
+    
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+    
+    if (window.location.search) {
+      navigate('/contact', { replace: true });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
@@ -64,7 +114,7 @@ const Contact = () => {
       
       if (response.ok) {
         toast.success(t.contact.successMessage);
-        form.reset();
+        clearForm();
       } else {
         const data = await response.json();
         throw new Error(data.error || 'Form submission failed');
@@ -109,6 +159,8 @@ const Contact = () => {
                   type="text"
                   required
                   placeholder={t.contact.namePlaceholder}
+                  value={formValues.name}
+                  onChange={(e) => setFormValues(prev => ({ ...prev, name: e.target.value }))}
                 />
               </div>
               <div className="space-y-2">
@@ -121,8 +173,24 @@ const Contact = () => {
                   type="email"
                   required
                   placeholder={t.contact.emailPlaceholder}
+                  value={formValues.email}
+                  onChange={(e) => setFormValues(prev => ({ ...prev, email: e.target.value }))}
                 />
               </div>
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="subject" className="text-sm font-medium">
+                Subject
+              </label>
+              <Input
+                id="subject"
+                name="subject"
+                type="text"
+                required
+                placeholder="Enter your subject"
+                value={formValues.subject}
+                onChange={(e) => setFormValues(prev => ({ ...prev, subject: e.target.value }))}
+              />
             </div>
             <div className="space-y-2">
               <label htmlFor="message" className="text-sm font-medium">
@@ -134,6 +202,8 @@ const Contact = () => {
                 required
                 placeholder={t.contact.messagePlaceholder}
                 className="min-h-44"
+                value={formValues.message}
+                onChange={(e) => setFormValues(prev => ({ ...prev, message: e.target.value }))}
               />
             </div>
             <Button
