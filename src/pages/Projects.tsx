@@ -12,6 +12,7 @@ import { ExternalLink, Github, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -307,39 +308,41 @@ const Projects = () => {
                             {/* Links section with separator */}
                             {(project.github || project.link) && (
                               <>
-                                <div className="w-full h-px bg-foreground/10"></div>
-                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
+                                <div className="w-full h-px bg-foreground/10 mb-4"></div>
+                                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
                                   {project.github && (
-                                    <motion.a 
-                                      href={project.github}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
-                                              bg-primary/10 text-primary border border-primary/20
-                                              hover:bg-primary/15 hover:border-primary/30
-                                              transition-colors duration-300"
-                                      whileHover={{ scale: 1.03 }}
-                                      whileTap={{ scale: 0.97 }}
+                                    <Button
+                                      asChild
+                                      variant="default"
+                                      size="lg"
+                                      className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
                                     >
-                                      <Github className="w-4 h-4 sm:w-4 sm:h-4" />
-                                      <span>GitHub</span>
-                                    </motion.a>
+                                      <a 
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <Github className="w-4 h-4 mr-1" />
+                                        GitHub
+                                      </a>
+                                    </Button>
                                   )}
                                   {project.link && (
-                                    <motion.a 
-                                      href={project.link}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
-                                              bg-foreground/10 text-foreground/80 border border-foreground/20
-                                              hover:bg-foreground/15 hover:border-foreground/30 hover:text-foreground
-                                              transition-colors duration-300"
-                                      whileHover={{ scale: 1.03 }}
-                                      whileTap={{ scale: 0.97 }}
+                                    <Button
+                                      asChild
+                                      variant="outline"
+                                      size="lg"
+                                      className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
                                     >
-                                      <ExternalLink className="w-4 h-4 sm:w-4 sm:h-4" />
-                                      <span>Visit Project</span>
-                                    </motion.a>
+                                      <a 
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <ExternalLink className="w-4 h-4 mr-1" />
+                                        Visit Project
+                                      </a>
+                                    </Button>
                                   )}
                                 </div>
                               </>
@@ -431,39 +434,41 @@ const Projects = () => {
                         {/* Links section with separator */}
                         {(project.github || project.link) && (
                           <>
-                            <div className="w-full h-px bg-foreground/10"></div>
-                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
+                            <div className="w-full h-px bg-foreground/10 mb-4"></div>
+                            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
                               {project.github && (
-                                <motion.a 
-                                  href={project.github}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
-                                          bg-primary/10 text-primary border border-primary/20
-                                          hover:bg-primary/15 hover:border-primary/30
-                                          transition-colors duration-300"
-                                  whileHover={{ scale: 1.03 }}
-                                  whileTap={{ scale: 0.97 }}
+                                <Button
+                                  asChild
+                                  variant="default"
+                                  size="lg"
+                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
                                 >
-                                  <Github className="w-4 h-4 sm:w-4 sm:h-4" />
-                                  <span>GitHub</span>
-                                </motion.a>
+                                  <a 
+                                    href={project.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <Github className="w-4 h-4 mr-1" />
+                                    GitHub
+                                  </a>
+                                </Button>
                               )}
                               {project.link && (
-                                <motion.a 
-                                  href={project.link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-sm font-medium px-4 py-2.5 rounded-md w-full sm:w-auto
-                                          bg-foreground/10 text-foreground/80 border border-foreground/20
-                                          hover:bg-foreground/15 hover:border-foreground/30 hover:text-foreground
-                                          transition-colors duration-300"
-                                  whileHover={{ scale: 1.03 }}
-                                  whileTap={{ scale: 0.97 }}
+                                <Button
+                                  asChild
+                                  variant="outline"
+                                  size="lg"
+                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
                                 >
-                                  <ExternalLink className="w-4 h-4 sm:w-4 sm:h-4" />
-                                  <span>Visit Project</span>
-                                </motion.a>
+                                  <a 
+                                    href={project.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <ExternalLink className="w-4 h-4 mr-1" />
+                                    Visit Project
+                                  </a>
+                                </Button>
                               )}
                             </div>
                           </>
