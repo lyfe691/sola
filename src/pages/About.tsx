@@ -16,6 +16,7 @@ import { GithubIcon } from 'lucide-react';
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from "@/components/theme-provider";
 
 type InterestCardProps = {
   title: string;
@@ -34,7 +35,7 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="h-40 overflow-hidden relative">
+      <div className="h-36 overflow-hidden relative">
         <motion.img
           src={image}
           alt={title}
@@ -46,14 +47,14 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
       </div>
       
-      <div className="p-5 space-y-3">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-md bg-primary/10 flex items-center justify-center">
-            <Icon className="w-4 h-4 text-primary" />
+      <div className="p-4 space-y-2">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
+            <Icon className="w-3.5 h-3.5 text-primary" />
           </div>
           <h3 className="font-medium">{title}</h3>
         </div>
-        <p className="text-foreground/70 text-sm">{description}</p>
+        <p className="text-foreground/70 text-sm leading-relaxed">{description}</p>
       </div>
     </motion.div>
   );
@@ -64,6 +65,17 @@ const About = () => {
   const t = translations[language];
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
+  const { theme } = useTheme();
+  
+  // Check if the current theme is dark (including system preference)
+  const isDarkTheme = () => {
+    // Include 'cyber' and check for other potential dark themes
+    if (theme === 'dark' || theme === 'cyber') return true;
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+    return false;
+  };
   
   const interestImages = {
     nature: "/about/spring-japan.jpg",
@@ -86,6 +98,7 @@ const About = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
+        delayChildren: 0.1
       }
     }
   };
@@ -96,8 +109,8 @@ const About = () => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5,
-        ease: [0.215, 0.61, 0.355, 1]
+        duration: 0.6,
+        ease: [0.25, 0.1, 0.25, 1.0]
       }
     }
   };
@@ -109,7 +122,7 @@ const About = () => {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.215, 0.61, 0.355, 1]
+        ease: [0.25, 0.1, 0.25, 1.0]
       }
     }
   };
@@ -123,36 +136,16 @@ const About = () => {
           variants={containerVariants}
           className="flex flex-col w-full"
         >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 sm:mb-12">
-            <motion.h1 
-              variants={titleVariants}
-              className="text-4xl font-bold"
-            >
-              {t.about.title}
-            </motion.h1>
-            
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-row items-center gap-4"
-            >
-              <Button variant="outline" size="sm" className="border-foreground/20" asChild>
-                <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                  <GithubIcon className="w-4 h-4" />
-                  GitHub
-                </a>  
-              </Button>
-              <Button variant="outline" size="sm" className="border-foreground/20" asChild>
-                <a href="https://linkedin.com/in/yanis-sebastian-zürcher/" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                  <Linkedin className="w-4 h-4" />
-                  LinkedIn
-                </a>
-              </Button>
-            </motion.div>
-          </div>
+          <motion.h1 
+            variants={titleVariants}
+            className="text-4xl font-bold mb-8 sm:mb-12"
+          >
+            {t.about.title}
+          </motion.h1>
 
-          {/* hero section | head */}
-          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 mb-16 sm:mb-20 lg:mb-28 w-full">
-            <div className="space-y-6">
+          {/* hero section */}
+          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
+            <div className="md:col-span-3 space-y-5">
               <p className="text-lg text-foreground/80 leading-relaxed">
                 {t.about.intro}
               </p>
@@ -160,38 +153,50 @@ const About = () => {
                 {t.about.hobbies}
               </p>
               
+              <div className="flex flex-row items-center gap-3 pt-5">
+                <Button variant="outline" size="sm" className="border-foreground/20" asChild>
+                  <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                    <GithubIcon className="w-4 h-4" />
+                    GitHub
+                  </a>  
+                </Button>
+                <Button variant="outline" size="sm" className="border-foreground/20" asChild>
+                  <a href="https://linkedin.com/in/yanis-sebastian-zürcher/" target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                    <Linkedin className="w-4 h-4" />
+                    LinkedIn
+                  </a>
+                </Button>
+              </div>
+              
               {/* link to skills page */}
-              <div className="pt-6">
-                <Button variant="default" size="default" className="border-foreground/20 group" onClick={() => navigate('/skills')}>
-               
-                    {t.about.viewSkills}
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-         
+              <div className="pt-5">
+                <Button variant="default" size="sm" className="group" onClick={() => navigate('/skills')}>
+                  {t.about.viewSkills}
+                  <ArrowRight className="w-3.5 h-3.5 ml-1.5 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
               </div>
             </div>
-            <div className="relative w-full max-w-sm mx-auto md:max-w-full">
-              <div className="rounded-2xl overflow-hidden border border-foreground/10 shadow-xl">
-                <div className="pb-[100%] relative">
-                  <motion.img 
-                    src="/about/01.jpg" 
-                    alt="Professional developer portrait"
-                    className="absolute top-0 left-0 w-full h-full object-cover"
-                    whileHover={{ scale: 1.03 }}
-                    transition={{ duration: 0.5 }}
-                  />
-                </div>
+            
+            {/* Image container */}
+            <div className="md:col-span-2 relative">
+              <div className="aspect-square overflow-hidden rounded-xl border border-foreground/10 shadow-sm">
+                <motion.img 
+                  src={isDarkTheme() ? "/ysz-d.png" : "/ysz-l.png"}
+                  alt="Yanis Sebastian Zürcher"
+                  className="w-full h-full object-cover"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.4 }}
+                />
               </div>
-              {/* decorative elements */}
-              <div className="absolute -z-10 -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-2xl" />
-              <div className="absolute -z-10 -top-6 -left-6 w-32 h-32 bg-primary/5 rounded-full" />
+              {/* Minimal decorative element */}
+              <div className="absolute -z-10 -bottom-3 -right-3 w-full h-full bg-primary/5 rounded-xl -rotate-2" />
             </div>
           </motion.div>
 
-          {/* interests sectio */}
-          <motion.div variants={itemVariants} className="mb-16 sm:mb-20 lg:mb-28">
-            <h2 className="text-2xl font-bold mb-6 sm:mb-8 lg:mb-12 border-b pb-4">{t.about.interests.title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+          {/* interests section */}
+          <motion.div variants={itemVariants} className="mb-16 md:mb-20">
+            <h2 className="text-2xl font-bold mb-6 md:mb-8 pb-2 border-b border-foreground/10">{t.about.interests.title}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InterestCard
                 title={t.about.interests.nature.title}
                 description={t.about.interests.nature.description}
@@ -219,32 +224,32 @@ const About = () => {
             </div>
           </motion.div>
 
-          {/* philosophy */}
+          {/* philosophy section */}
           <motion.div 
             variants={itemVariants}
-            className="relative overflow-hidden rounded-2xl border border-foreground/10 
-                     bg-gradient-to-br from-foreground/5 to-transparent backdrop-blur-sm p-6 sm:p-8 lg:p-10"
+            className="relative overflow-hidden rounded-xl border border-foreground/10 
+                     bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10"
           >
             <div className="relative z-10">
-              <h2 className="text-2xl font-bold mb-6 sm:mb-8 lg:mb-10">{t.about.philosophy.title}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 lg:gap-10">
-                <div className="space-y-3 sm:space-y-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 sm:mb-5">
-                    <Code2 className="w-6 h-6 text-primary" />
+              <h2 className="text-xl font-bold mb-6 md:mb-8">{t.about.philosophy.title}</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                    <Code2 className="w-4 h-4 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold">Clean Code</h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.clean}</p>
                 </div>
-                <div className="space-y-3 sm:space-y-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 sm:mb-5">
-                    <Coffee className="w-6 h-6 text-primary" />
+                <div className="space-y-2">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                    <Coffee className="w-4 h-4 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold">Simplicity</h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.simplicity}</p>
                 </div>
-                <div className="space-y-3 sm:space-y-4">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 sm:mb-5">
-                    <Book className="w-6 h-6 text-primary" />
+                <div className="space-y-2">
+                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+                    <Book className="w-4 h-4 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold">Continuous Learning</h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.learning}</p>
