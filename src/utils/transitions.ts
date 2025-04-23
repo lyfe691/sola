@@ -7,6 +7,8 @@
  * All rights reserved.
  */
 
+import { useState, useEffect } from 'react';
+
 /**
  * common animation variants and transitions used throughout the website
  * these can be importted and used with framer motion components
@@ -49,5 +51,58 @@ export const listItemVariants = {
       duration: 0.3
     }
   })
+};
+
+// Title animation variants (for consistent title animations across pages)
+export const titleVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.1, 0.25, 1.0]
+    }
+  }
+};
+
+// Container variants for staggered children animations
+export const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1
+    }
+  }
+};
+
+// Standard item variants for content blocks
+export const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.25, 0.1, 0.25, 1.0]
+    }
+  }
+};
+
+// Page initialize hook utility
+export const usePageInit = (delay = 100) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [delay]);
+  
+  return isLoaded;
 };
 

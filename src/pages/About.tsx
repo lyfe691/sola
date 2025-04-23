@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain } from 'lucide-react';
@@ -17,6 +17,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from "@/components/theme-provider";
+import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 
 type InterestCardProps = {
   title: string;
@@ -40,6 +41,7 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
           src={image}
           alt={title}
           className="w-full h-full object-cover"
+          loading="lazy"
           initial={{ scale: 1 }}
           animate={{ scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.4 }}
@@ -63,7 +65,7 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
 const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = usePageInit(100);
   const navigate = useNavigate();
   const { theme } = useTheme();
   
@@ -82,49 +84,6 @@ const About = () => {
     tech: "/about/16.jpg",
     learning: "/about/12.jpg",
     workspace: "/about/sesh.jpg"
-  };
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.1, 0.25, 1.0]
-      }
-    }
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1.0]
-      }
-    }
   };
 
   return (
@@ -167,8 +126,6 @@ const About = () => {
                   </a>
                 </Button>
               </div>
-              
-
             </div>
             
             {/* Image container */}

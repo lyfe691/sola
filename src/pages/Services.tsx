@@ -7,47 +7,21 @@
  * All rights reserved.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Code2, Blocks, Database, Lightbulb, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 import { Button } from "@/components/ui/button";
+import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 
 const Services = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = usePageInit(100);
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const { language } = useLanguage();
   const t = translations[language];
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.215, 0.61, 0.355, 1]
-      }
-    }
-  };
 
   const servicesList = [
     {
@@ -86,14 +60,14 @@ const Services = () => {
           </motion.h1>
 
           <motion.p 
-            variants={titleVariants}
+            variants={itemVariants}
             className="text-foreground/60 mb-4 max-w-2xl"
           >
             {t.services.subtitle}
           </motion.p>
 
           <motion.p
-            variants={titleVariants}
+            variants={itemVariants}
             className="text-primary/80 text-sm mb-8 sm:mb-12 max-w-2xl italic"
           >
             {t.services.pricing}
@@ -103,17 +77,8 @@ const Services = () => {
             {servicesList.map((service, index) => (
               <motion.div
                 key={service.key}
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.5,
-                      delay: index * 0.1
-                    }
-                  }
-                }}
+                variants={itemVariants}
+                custom={index}
                 onHoverStart={() => setHoveredService(service.key)}
                 onHoverEnd={() => setHoveredService(null)}
                 className={`relative group p-5 sm:p-6 rounded-xl border border-accent/50
@@ -183,7 +148,7 @@ const Services = () => {
 
           {/* custom requirements */}
           <motion.div
-            variants={titleVariants}
+            variants={itemVariants}
             className="relative overflow-hidden rounded-xl p-5 sm:p-6 md:p-8
                      bg-gradient-to-br from-primary/20 via-primary/10 to-background
                      border border-primary/20 backdrop-blur-sm"

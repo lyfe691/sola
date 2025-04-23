@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ExternalLink, Github, Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react"
 import { useLanguage } from "../lib/language-provider";
@@ -19,6 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 
 interface Project {
   title: string;
@@ -32,40 +33,11 @@ interface Project {
 }
 
 const Projects = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = usePageInit(100);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const { language } = useLanguage();
   const t = translations[language];
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5
-      }
-    }
-  };
 
   const tagVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -169,18 +141,6 @@ const Projects = () => {
     }
   ];
 
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.215, 0.61, 0.355, 1]
-      }
-    }
-  };
-
   return (
     <AnimatePresence>
       {isLoaded && (
@@ -256,6 +216,7 @@ const Projects = () => {
                             <motion.img 
                               src={project.image} 
                               alt={project.title}
+                              loading="lazy"
                               className="w-full h-full object-cover"
                               animate={{
                                 scale: hoveredProject === project.title ? 1.05 : 1
@@ -439,9 +400,9 @@ const Projects = () => {
                               {project.github && (
                                 <Button
                                   asChild
-                                  variant="default"
+                                  variant="outline"
                                   size="lg"
-                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
+                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
                                 >
                                   <a 
                                     href={project.github}

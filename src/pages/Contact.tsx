@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
@@ -17,9 +17,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
+import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 
 const Contact = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = usePageInit(100);
   const { language } = useLanguage();
   const t = translations[language];
   const formRef = useRef<HTMLFormElement>(null);
@@ -33,26 +34,6 @@ const Contact = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.215, 0.61, 0.355, 1] } },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.215, 0.61, 0.355, 1] } },
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const subject = params.get('subject');
@@ -201,7 +182,7 @@ const Contact = () => {
                 name="message"
                 required
                 placeholder={t.contact.messagePlaceholder}
-                className="min-h-44"
+                className="min-h-48"
                 value={formValues.message}
                 onChange={(e) => setFormValues(prev => ({ ...prev, message: e.target.value }))}
               />

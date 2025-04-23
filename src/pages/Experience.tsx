@@ -7,59 +7,18 @@
  * All rights reserved.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
+import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 
 const Experience = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = usePageInit(100);
   const [hoveredExp, setHoveredExp] = useState<string | null>(null);
   const { language } = useLanguage();
   const t = translations[language];
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.215, 0.61, 0.355, 1]
-      }
-    }
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.215, 0.61, 0.355, 1]
-      }
-    }
-  };
 
   const experiences = [
     {

@@ -28,10 +28,11 @@ import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
 import ParticleBackground from "../components/ParticleBackground";
+import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 
 
 const Index = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoaded = usePageInit(50);
   const [typingComplete, setTypingComplete] = useState(false);
   const [key, setKey] = useState(0);
   const { language } = useLanguage();
@@ -42,14 +43,6 @@ const Index = () => {
     await loadSlim(engine);
   };
   */
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 50);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     setKey(prev => prev + 1);
@@ -81,9 +74,9 @@ const Index = () => {
                 <div className="flex flex-col">
                   <div className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0">
                     <motion.h1 
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.2 }}
+                      variants={titleVariants}
+                      initial="hidden"
+                      animate="visible"
                       className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
                     >
                       <TypeAnimation
@@ -99,18 +92,18 @@ const Index = () => {
                     </motion.h1>
                     
                     <motion.p 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4, duration: 0.4 }}
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
                       className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
                     >
                       {t.index.description}
                     </motion.p>
 
                     <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.5, duration: 0.4 }}
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
                       className="flex flex-wrap gap-3 mb-6 sm:mb-8"
                     >
                       <div className="flex flex-wrap items-center gap-3">
@@ -144,9 +137,9 @@ const Index = () => {
                     </motion.div>
 
                     <motion.div 
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6, duration: 0.6 }}
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible" 
                       className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0"
                     >
                       {[
