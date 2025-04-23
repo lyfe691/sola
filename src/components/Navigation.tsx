@@ -229,27 +229,30 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12">
+    <nav className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40">
       {/* Desktop Navigation */}
-      <div className="flex justify-between items-center mb-8">
-        <Link 
-          to="/" 
-          className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 
-                      ${isActive('/') 
-                        ? 'bg-primary/20 text-foreground font-medium' 
-                        : 'text-foreground/80 hover:text-foreground hover:bg-foreground/5'}`}
-        >
-          <Home className="w-5 h-5" />
-          <span className="font-medium">Home</span>
-        </Link>
-        
+      <div className="flex justify-center items-center">
         <motion.div 
           ref={navRef}
-          className="hidden md:flex flex-wrap justify-center mx-auto gap-x-1 gap-y-2 bg-background/50 backdrop-blur-md py-4 px-6 rounded-full border border-border/30 shadow-sm relative"
+          className="hidden md:flex items-center justify-center mx-auto gap-x-1 gap-y-2 bg-background/80 backdrop-blur-md py-4 px-6 rounded-full border border-border/30 shadow-sm relative"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
+          {/* Home Link + Separator */}
+          <Link 
+            to="/" 
+            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 mr-1
+                      ${isActive('/') 
+                        ? 'bg-primary/20 text-foreground font-medium' 
+                        : 'text-foreground/80 hover:text-foreground hover:bg-foreground/5'}`}
+          >
+            <Home className="w-4 h-4" />
+            <span className="font-medium">Home</span>
+          </Link>
+          
+          <div className="h-6 w-px bg-foreground/10 mx-1"></div>
+          
           {/* Sliding indicator for active item */}
           {activeItemWidth > 0 && (
             <motion.div 
@@ -277,10 +280,6 @@ const Navigation = () => {
             />
           ))}
         </motion.div>
-        
-        <div className="hidden md:block w-[60px]">
-          {/* Empty div for flex spacing */}
-        </div>
       </div>
 
       {/* Mobile Menu Button */}
