@@ -313,7 +313,7 @@ const Projects = () => {
                                   {project.github && (
                                     <Button
                                       asChild
-                                      variant="default"
+                                      variant="outline"
                                       size="lg"
                                       className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
                                     >

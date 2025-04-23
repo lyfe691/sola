@@ -234,7 +234,7 @@ const Navigation = () => {
       <div className="flex justify-center items-center">
         <motion.div 
           ref={navRef}
-          className="hidden md:flex items-center justify-center mx-auto gap-x-1 gap-y-2 bg-background/80 backdrop-blur-md py-3 px-6 rounded-full border border-border/30 shadow-lg relative overflow-hidden"
+          className="hidden md:flex items-center justify-center mx-auto gap-x-2 gap-y-2 bg-background/75 backdrop-blur-xl py-3.5 px-7 rounded-full border-2 border-border/40 shadow-lg relative overflow-hidden"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
@@ -255,12 +255,12 @@ const Navigation = () => {
             <span className="font-medium">Home</span>
           </Link>
           
-          <div className="h-6 w-px bg-foreground/10 mx-1 relative z-10"></div>
+          <div className="h-6 w-[1.5px] bg-foreground/10 mx-1.5 relative z-10"></div>
           
           {/* Sliding indicator for active item */}
           {activeItemWidth > 0 && (
             <motion.div 
-              className="absolute rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 h-[calc(100%-16px)] top-2 z-0 pointer-events-none"
+              className="absolute rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 h-[calc(100%-18px)] top-[9px] z-0 pointer-events-none"
               initial={false}
               animate={{
                 width: activeItemWidth,
