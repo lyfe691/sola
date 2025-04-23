@@ -211,26 +211,23 @@ const Projects = () => {
             </TooltipProvider>
           </motion.h1>
           
-          {/* Featured Projects */}
-
-          
           {/* Timeline container */}
-          <div className="relative mb-16">
-            {/* Timeline line */}
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
+          <div className="relative mb-12 sm:mb-16">
+            {/* Timeline line - hidden on very small screens */}
+            <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px] max-sm:hidden" />
             
             {/* Featured projects */}
-            <div className="space-y-12">
+            <div className="space-y-8 sm:space-y-12">
               {projects.filter(p => p.featured).map((project, index) => (
                 <motion.div
                   key={project.title}
                   variants={itemVariants}
                   onHoverStart={() => setHoveredProject(project.title)}
                   onHoverEnd={() => setHoveredProject(null)}
-                  className="relative grid grid-cols-[20px_1fr] sm:grid-cols-[25px_1fr] gap-4 sm:gap-6 md:gap-8"
+                  className="relative grid max-sm:grid-cols-1 sm:grid-cols-[25px_1fr] sm:gap-6 md:gap-8"
                 >
-                  {/* Timeline dot */}
-                  <div className="relative">
+                  {/* Timeline dot - hidden on very small screens */}
+                  <div className="relative max-sm:hidden">
                     <motion.div 
                       className="w-[15px] h-[15px] sm:w-[23px] sm:h-[23px] rounded-full border-2 
                                 border-primary/40 bg-background transition-colors duration-300"
@@ -243,7 +240,9 @@ const Projects = () => {
                   
                   {/* Project card with date above */}
                   <div className="flex flex-col">
-                    <div className="mb-2 text-xs font-mono text-foreground/60">
+                    <div className="mb-2 text-xs font-mono text-foreground/60 flex items-center">
+                      {/* Mobile timeline dot - only visible on small screens */}
+                      <div className="w-[10px] h-[10px] rounded-full border-[1.5px] border-primary/40 bg-background mr-2 sm:hidden" />
                       {project.date}
                     </div>
                     <div className="group rounded-lg border border-foreground/10 
@@ -252,7 +251,7 @@ const Projects = () => {
                       <div className="grid md:grid-cols-2 h-full">
                         {/* Image Section */}
                         {project.image && (
-                          <div className="relative h-[240px] md:h-full overflow-hidden bg-foreground/5">
+                          <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
                             <motion.img 
                               src={project.image} 
                               alt={project.title}
@@ -270,17 +269,17 @@ const Projects = () => {
                         )}
                         
                         {/* Content Section */}
-                        <div className="p-5 sm:p-6 md:p-8 flex flex-col h-full">
+                        <div className="p-4 sm:p-5 md:p-6 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-2">
                             <motion.h3 
-                              className="text-xl font-medium text-foreground group-hover:text-primary transition-colors"
+                              className="text-lg sm:text-xl font-medium text-foreground group-hover:text-primary transition-colors"
                               animate={{
                                 color: hoveredProject === project.title ? "hsl(var(--primary))" : "hsl(var(--foreground))"
                               }}
                             >
                               {project.title}
                             </motion.h3>
-                            <div className="flex items-center gap-3 text-foreground/40">
+                            <div className="flex items-center gap-2 sm:gap-3 text-foreground/40">
                               {project.github && (
                                 <motion.a 
                                   href={project.github}
@@ -290,7 +289,7 @@ const Projects = () => {
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.95 }}
                                 >
-                                  <Github className="w-5 h-5" />
+                                  <Github className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </motion.a>
                               )}
                               {project.link && (
@@ -302,25 +301,25 @@ const Projects = () => {
                                   whileHover={{ scale: 1.1 }}
                                   whileTap={{ scale: 0.95 }}
                                 >
-                                  <ExternalLink className="w-5 h-5" />
+                                  <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </motion.a>
                               )}
                             </div>
                           </div>
 
-                          <p className="text-foreground/60 text-sm mb-6 flex-grow">
+                          <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
                             {project.description}
                           </p>
                           
                           <motion.div 
-                            className="flex flex-wrap gap-2"
+                            className="flex flex-wrap gap-1.5 sm:gap-2"
                             variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
                           >
                             {project.tags.map((tag, i) => (
                               <motion.span 
                                 key={i}
                                 variants={tagVariants}
-                                className="text-xs px-2 py-1 rounded-md bg-foreground/5 
+                                className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
                                          text-foreground/60 border border-foreground/10
                                          transition-colors duration-300
                                          hover:border-primary/20 hover:text-primary/80"
@@ -341,28 +340,28 @@ const Projects = () => {
           {/* Other projects */}
           <motion.h2 
             variants={itemVariants} 
-            className="text-2xl font-bold mb-6 sm:mb-8"
+            className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6"
           >
             {t.projects.other}
           </motion.h2>
 
           {/* Timeline for other projects */}
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
+            {/* Timeline line - hidden on very small screens */}
+            <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px] max-sm:hidden" />
             
             {/* Other projects */}
-            <div className="space-y-8">
+            <div className="space-y-5 sm:space-y-8">
               {projects.filter(p => !p.featured).map((project, index) => (
                 <motion.div
                   key={project.title}
                   variants={itemVariants}
                   onHoverStart={() => setHoveredProject(project.title)}
                   onHoverEnd={() => setHoveredProject(null)}
-                  className="relative grid grid-cols-[20px_1fr] sm:grid-cols-[25px_1fr] gap-4 sm:gap-6 md:gap-8"
+                  className="relative grid max-sm:grid-cols-1 sm:grid-cols-[25px_1fr] sm:gap-6 md:gap-8"
                 >
-                  {/* Timeline dot */}
-                  <div className="relative">
+                  {/* Timeline dot - hidden on very small screens */}
+                  <div className="relative max-sm:hidden">
                     <motion.div 
                       className="w-[15px] h-[15px] sm:w-[23px] sm:h-[23px] rounded-full border-2 
                                 border-primary/40 bg-background transition-colors duration-300"
@@ -375,17 +374,19 @@ const Projects = () => {
                   
                   {/* Project card with date above */}
                   <div className="flex flex-col">
-                    <div className="mb-2 text-xs font-mono text-foreground/60">
+                    <div className="mb-2 text-xs font-mono text-foreground/60 flex items-center">
+                      {/* Mobile timeline dot - only visible on small screens */}
+                      <div className="w-[10px] h-[10px] rounded-full border-[1.5px] border-primary/40 bg-background mr-2 sm:hidden" />
                       {project.date}
                     </div>
-                    <div className="group p-5 sm:p-6 rounded-lg border border-foreground/10 
+                    <div className="group p-4 sm:p-5 rounded-lg border border-foreground/10 
                                  bg-foreground/5 backdrop-blur-sm hover:border-primary/20 
                                  transition-all duration-300">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
+                        <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary transition-colors">
                           {project.title}
                         </h3>
-                        <div className="flex items-center gap-3 text-foreground/40">
+                        <div className="flex items-center gap-2 text-foreground/40">
                           {project.github && (
                             <motion.a 
                               href={project.github}
@@ -395,7 +396,7 @@ const Projects = () => {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <Github className="w-4 h-4" />
+                              <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </motion.a>
                           )}
                           {project.link && (
@@ -407,25 +408,25 @@ const Projects = () => {
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.95 }}
                             >
-                              <ExternalLink className="w-4 h-4" />
+                              <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             </motion.a>
                           )}
                         </div>
                       </div>
                       
-                      <p className="text-foreground/60 text-sm mb-3 sm:mb-4">
+                      <p className="text-foreground/60 text-sm mb-3">
                         {project.description}
                       </p>
                       
                       <motion.div 
-                        className="flex flex-wrap gap-2"
+                        className="flex flex-wrap gap-1.5 sm:gap-2"
                         variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
                       >
                         {project.tags.map((tag, i) => (
                           <motion.span 
                             key={i}
                             variants={tagVariants}
-                            className="text-xs px-2 py-1 rounded-md bg-foreground/5 
+                            className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
                                      text-foreground/60 border border-foreground/10
                                      transition-colors duration-300
                                      hover:border-primary/20 hover:text-primary/80"
