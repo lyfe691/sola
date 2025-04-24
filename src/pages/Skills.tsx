@@ -24,10 +24,15 @@ import {
   SiGnubash,
   SiEagle,
   SiScrumalliance,
-  SiLanguagetool
+  SiLanguagetool,
+  SiShadcnui,
+  SiKalilinux,
+  SiZoom,
+  SiOpensourceinitiative
 } from "react-icons/si";
 import { FaJava } from "react-icons/fa";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { ChevronsLeftRightIcon } from "lucide-react";
 
 const Skills = () => {
   const isLoaded = usePageInit(100);
@@ -39,11 +44,13 @@ const Skills = () => {
     {
       title: "Frontend",
       skills: [
-        { name: "HTML", icon: SiHtml5, level: 90},
-        { name: "React", icon: SiReact, level: 75},
-        { name: "Ant Design", icon: SiAntdesign, level: 70 },
-        { name: "CSS", icon: SiCss3, level: 65 },
+        { name: "React", icon: SiReact, level: 80},
+        { name: "Next.js", icon: SiNextdotjs, level: 80 },
+        { name: "shadcn/ui", icon: SiShadcnui, level: 70 },
+        { name: "Tailwind CSS", icon: SiTailwindcss, level: 65 },
+        { name: "Ant Design", icon: SiAntdesign, level: 60 },
         { name: "JavaScript", icon: SiJavascript, level: 60 },  
+        { name: "TypeScript", icon: SiTypescript, level: 50 },
       ]
     },
     {
@@ -54,6 +61,8 @@ const Skills = () => {
         { name: "Java", icon: FaJava, level: 70 },
         { name: "Nginx", icon: SiNginx, level: 61 },
         { name: "Redis", icon: SiRedis, level: 50 },
+        { name: "Node.js", icon: SiNodedotjs, level: 40 },
+        { name: "Bash for automation", icon: SiGnubash, level: 35 },
       ]
     },
     {
@@ -70,7 +79,8 @@ const Skills = () => {
       skills: [
         { name: "Agile Methodologies", icon: SiEagle, level: 80 },
         { name: "CI/CD", icon: SiJenkins, level: 75 },
-        { name: "Bash", icon: SiGnubash, level: 40 },
+        { name: "OSINT", icon: SiOpensourceinitiative, level: 70 },
+        { name: "Kali Linux", icon: SiKalilinux, level: 60 },
       ]
     }
   ];
