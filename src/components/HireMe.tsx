@@ -10,32 +10,35 @@
 import { motion } from "motion/react"
 import { Link } from "react-router-dom";
 import { Briefcase } from "lucide-react";
+import { toast } from "sonner";
+import { translations } from "@/lib/translations";
+import { useLanguage } from "@/lib/language-provider";
 
-/**
- * A dramatically upgraded "Hire Me" call‑to‑action.
- *
- * • Glass‑morphism card with animated rainbow‑glow backdrop.
- * • Subtle entrance, hover parallax & continual slow rotation on the glow.
- * • Hidden on mobile, appears at the lower-left on larger screens (≥ lg).
- * • Message subject + body **unchanged** so existing routing keeps working.
- */
+
 const HireMe = () => {
-  /* --------------------------------------------------------------- */
-  /* ✉️  pre‑filled email                                              */
-  /* --------------------------------------------------------------- */
+   const { language } = useLanguage();
+    const t = translations[language];
+  
+  const isHired = false; // Currently interning
+
   const prefilledSubject = "Job Opportunity at []";
   const prefilledMessage = `Hi Yanis,\n\nI'm reaching out regarding a potential job opportunity. I've reviewed your portfolio and I'm impressed with your work.\n\nI'd like to discuss a potential collaboration with our team.\n\nLooking forward to your response.`;
 
   const contactUrl = `/contact?subject=${encodeURIComponent(prefilledSubject)}&message=${encodeURIComponent(prefilledMessage)}`;
 
-  /* --------------------------------------------------------------- */
-  /* 🖇️  component                                                     */
-  /* --------------------------------------------------------------- */
+
+  const handleHireClick = (e: React.MouseEvent) => {
+    if (isHired) {
+      e.preventDefault();
+      toast.info((t.hire.hireme), {
+        duration: 7000,
+      });
+    }
+  };
+
   return (
-    /* container: hidden on mobile, visible on lg screens */
     <div className="pointer-events-none fixed hidden lg:flex bottom-8 left-8 z-50">
       <motion.div
-        /* re‑enable pointer events for the CTA itself */
         style={{ pointerEvents: "auto" }}
         initial={{ opacity: 0, y: 40, scale: 0.9 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -46,9 +49,7 @@ const HireMe = () => {
         }}
         className="relative isolate"
       >
-        {/* Simplified glow effect */}
         <div className="absolute inset-0 overflow-hidden rounded-xl">
-          {/* Primary glow layer */}
           <motion.div
             className="absolute inset-[-120%] rounded-[50%] blur-2xl opacity-70"
             style={{
@@ -63,9 +64,9 @@ const HireMe = () => {
           />
         </div>
 
-        {/* Button with refined glass effect */}
         <Link
           to={contactUrl}
+          onClick={handleHireClick}
           aria-label="Hire Yanis Sebastian Zürcher"
           className="relative inline-flex items-center gap-3 rounded-xl 
                      bg-background/30 backdrop-blur-md px-6 py-3

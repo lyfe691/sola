@@ -11,6 +11,9 @@
 
 export const translations = {
   en: {
+    hire: {
+      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+    },
     nav: {
       about: "About",
       experience: "Experience",
@@ -234,6 +237,9 @@ export const translations = {
     },
   },
   de: {
+    hire: {
+      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+    },
     nav: {
       about: "Über mich",
       experience: "Erfahrung",
@@ -457,6 +463,9 @@ export const translations = {
     },
   },
   es: {
+    hire: {
+      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+    },
     nav: {
       about: "Sobre mí",
       experience: "Experiencia",
@@ -680,6 +689,9 @@ export const translations = {
     },
   },
   ja: {
+    hire: {
+      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+    },
     nav: {
       about: "私について",
       experience: "経験",
@@ -903,6 +915,9 @@ export const translations = {
     }
   },
   cn: {
+    hire: {
+      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+    },
     nav: {
       about: "关于我",
       experience: "经验",
