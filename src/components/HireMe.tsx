@@ -13,13 +13,16 @@ import { Briefcase } from "lucide-react";
 import { toast } from "sonner";
 import { translations } from "@/lib/translations";
 import { useLanguage } from "@/lib/language-provider";
+import { useNavigate } from "react-router-dom";
+import { constrainedMemory } from "process";
 
 
 const HireMe = () => {
    const { language } = useLanguage();
     const t = translations[language];
   
-  const isHired = false; // Currently interning
+  const isHired = true; // Currently interning
+  const navigate = useNavigate();
 
   const prefilledSubject = "Job Opportunity at []";
   const prefilledMessage = `Hi Yanis,\n\nI'm reaching out regarding a potential job opportunity. I've reviewed your portfolio and I'm impressed with your work.\n\nI'd like to discuss a potential collaboration with our team.\n\nLooking forward to your response.`;
@@ -27,14 +30,25 @@ const HireMe = () => {
   const contactUrl = `/contact?subject=${encodeURIComponent(prefilledSubject)}&message=${encodeURIComponent(prefilledMessage)}`;
 
 
+
   const handleHireClick = (e: React.MouseEvent) => {
-    if (isHired) {
-      e.preventDefault();
-      toast.info((t.hire.hireme), {
+    e.preventDefault();
+    if (isHired === true) {
+      toast.error("Currently Committed", {
         duration: 7000,
+        description: "I'm currently tied to an internship. However, if your offer beats it, I'm open to a conversation. Feel free to explore what I can do.",
+        action: {
+          label: "Contact Me",
+          onClick: () => {
+            navigate(contactUrl);
+            toast.dismiss();
+          },
+        },
       });
     }
   };
+  
+
 
   return (
     <div className="pointer-events-none fixed hidden lg:flex bottom-8 left-8 z-50">
