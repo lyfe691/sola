@@ -404,7 +404,7 @@ const Projects = () => {
                                   asChild
                                   variant="outline"
                                   size="lg"
-                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                                  className="w-full flex items-center justify-center gap-2 shadow-sm  transition-all duration-300 group border-foreground/20"
                                 >
                                   <a 
                                     href={project.github}
@@ -421,7 +421,7 @@ const Projects = () => {
                                   asChild
                                   variant="outline"
                                   size="lg"
-                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
+                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
                                 >
                                   <a 
                                     href={project.link}
