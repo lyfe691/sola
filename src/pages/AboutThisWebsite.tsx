@@ -10,12 +10,21 @@
 /* 這個網站是怎麼造出來的 */
 
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button"
 
 const AboutThisWebsite = () => {
+
+  const n = useNavigate(); 
+
+  const h = () => {
+    n(-1);
+  }
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-background text-foreground">
       <Helmet>
-        <title>about this website</title>
+        <title>這個網站是怎麼造出來的</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
@@ -44,6 +53,8 @@ const AboutThisWebsite = () => {
         <p>
           Thank you for taking a deeper look.
         </p>
+        
+        <Button variant="link" onClick={h}>go back?</Button>
 
         <p className="text-xs text-center text-foreground/50 pt-8">
           © {new Date().getFullYear()} Yanis Sebastian Zürcher
