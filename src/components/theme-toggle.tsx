@@ -7,7 +7,7 @@
  * All rights reserved.
  */
 
-import { Moon, Sun, Check, Cloud, Sunset, Sprout, Slack } from "lucide-react"
+import { Moon, Sun, Check, Cloud, Sunset, Sprout, Slack, Trees } from "lucide-react"
 import { useTheme } from "./theme-provider"
 import {
   DropdownMenu,
@@ -57,7 +57,8 @@ export function ThemeToggle() {
     { value: "life", label: "Solarpunk", icon: Sprout },
     { value: "cyber", label: "Cyberpunk", icon: Slack },
     { value: "cloud", label: "Cloud", icon: Cloud },
-    { value: "sunset", label: "Sunset", icon: Sunset }
+    { value: "sunset", label: "Sunset", icon: Sunset },
+    { value: "forest", label: "Forest", icon: Trees}
   ]
 
   return (
@@ -73,7 +74,8 @@ export function ThemeToggle() {
           <Sprout className={`absolute h-4 w-4 transition-all ${resolvedTheme === "life" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
           <Slack className={`absolute h-4 w-4 transition-all ${resolvedTheme === "cyber" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
           <Cloud className={`absolute h-4 w-4 transition-all ${resolvedTheme === "cloud" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-          <Sunset className={`absolute h-4 w-4 transition-all ${resolvedTheme === "sunset" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} /> 
+          <Sunset className={`absolute h-4 w-4 transition-all ${resolvedTheme === "sunset" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+          <Trees className={`absolute h-4 w-4 transition-all ${resolvedTheme === "forest" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>

@@ -27,14 +27,15 @@ import {
   Cloud, 
   Sunset,
   Search,
-  Laptop
+  Laptop,
+  Trees
 } from "lucide-react"
 import { useCommandMenu } from "@/hooks/use-command-menu"
 import { useTheme } from "./theme-provider"
 import { useLanguage } from "@/lib/language-provider"
 
 // Import the types from their respective files
-type Theme = "dark" | "light" | "system" | "life" | "cyber" | "cloud" | "sunset"
+type Theme = "dark" | "light" | "system" | "life" | "cyber" | "cloud" | "sunset" | "forest"
 type Language = "en" | "de" | "ja" | "es" | "cn"
 
 export function CommandMenu() {
@@ -136,6 +137,11 @@ export function CommandMenu() {
             <Sunset className="mr-2 h-4 w-4" />
             <span>Sunset</span>
             {theme === 'sunset' && <CommandShortcut>✓</CommandShortcut>}
+          </CommandItem>
+          <CommandItem onSelect={() => handleThemeChange('forest')} className="cursor-pointer">
+            <Trees className="mr-2 h-4 w-4" />
+            <span>Forest</span>
+            {theme === 'forest' && <CommandShortcut>✓</CommandShortcut>}
           </CommandItem>
         </CommandGroup>
         
