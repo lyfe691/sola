@@ -28,7 +28,8 @@ import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
 import ParticleBackground from "../components/ParticleBackground";
-import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
+import { Helmet } from "react-helmet-async";
 
 
 const Index = () => {
@@ -58,7 +59,10 @@ const Index = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
         >
-          
+          <Helmet>
+            <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
+          </Helmet>
+
           {/* Particle background, remove for now 
           <ParticleBackground particlesInit={particlesInit}/>
           */}

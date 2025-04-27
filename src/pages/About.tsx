@@ -9,7 +9,6 @@
 
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Link } from 'react-router-dom';
 import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GithubIcon } from 'lucide-react';
@@ -18,6 +17,7 @@ import { translations } from "@/lib/translations";
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from "@/components/theme-provider";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { Helmet } from "react-helmet-async";
 
 type InterestCardProps = {
   title: string;
@@ -95,6 +95,11 @@ const About = () => {
           variants={containerVariants}
           className="flex flex-col w-full"
         >
+
+          <Helmet>
+            <title>About • Yanis Sebastian Zürcher</title>
+          </Helmet>
+
           <motion.h1 
             variants={titleVariants}
             className="text-4xl font-bold mb-8 sm:mb-12"

@@ -239,15 +239,6 @@
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
   }
-  
-  .nav-link {
-    @apply relative text-sm font-medium tracking-wide transition-colors duration-300
-           text-foreground/70 hover:text-foreground
-           before:absolute before:left-0 before:-bottom-0.5 before:h-0.5 
-           before:w-0 before:bg-foreground/50 before:transition-all before:duration-300
-           before:rounded-full
-           hover:before:w-full;
-  }
 
   .social-icon {
     @apply relative text-foreground/60 transition-all duration-300

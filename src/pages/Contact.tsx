@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { Helmet } from "react-helmet-async";
 
 const Contact = () => {
   const isLoaded = usePageInit(100);
@@ -117,6 +118,11 @@ const Contact = () => {
           variants={containerVariants}
           className="flex flex-col w-full"
         >
+
+          <Helmet>
+            <title>Contact • Yanis Sebastian Zürcher</title>
+          </Helmet>
+
           <motion.h1 variants={titleVariants} className="text-4xl font-bold mb-8 sm:mb-12">
             {t.contact.title}
           </motion.h1>

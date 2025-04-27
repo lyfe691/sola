@@ -7,16 +7,16 @@
  * All rights reserved.
  */
 
+import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   SiReact, SiTypescript, SiNextdotjs, SiTailwindcss, SiVuedotjs,
   SiNodedotjs, SiPython, SiPostgresql, SiDocker,
   SiGit, SiGithub, SiLinux, SiNginx, SiSpringboot, SiMongodb,
-  SiJavascript, SiOpenjdk, SiHtml5, SiCss3, SiRedis, SiKubernetes,
+  SiJavascript, SiRedis, SiKubernetes,
   SiJenkins,
   SiVite,
   SiAntdesign,
@@ -94,6 +94,11 @@ const Skills = () => {
           variants={containerVariants}
           className="flex flex-col w-full"
         >
+
+          <Helmet>
+            <title>Skills • Yanis Sebastian Zürcher</title>
+          </Helmet>
+
           <motion.h1 
             variants={titleVariants}
             className="text-4xl font-bold mb-8 sm:mb-12"

@@ -15,6 +15,7 @@ import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 import { Button } from "@/components/ui/button";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { Helmet } from "react-helmet-async";
 
 const Services = () => {
   const isLoaded = usePageInit(100);
@@ -52,6 +53,10 @@ const Services = () => {
           variants={containerVariants}
           className="flex flex-col w-full"
         >
+          <Helmet>
+            <title>Services • Yanis Sebastian Zürcher</title>
+          </Helmet>
+
           <motion.h1 
             variants={titleVariants}
             className="text-4xl font-bold mb-6 sm:mb-6"

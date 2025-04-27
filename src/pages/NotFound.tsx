@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { Helmet } from "react-helmet-async";
 
 const NotFound = () => {
   const isLoaded = usePageInit(100);
@@ -30,6 +31,11 @@ const NotFound = () => {
           variants={containerVariants}
           className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6"
         >
+
+          <Helmet>
+            <title>where are you? 404</title>
+          </Helmet>
+
           <motion.h1 
             variants={titleVariants}
             className="text-4xl sm:text-5xl font-bold mb-4 sm:mb-6"

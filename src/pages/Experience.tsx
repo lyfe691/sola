@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { Helmet } from "react-helmet-async";
 
 const Experience = () => {
   const isLoaded = usePageInit(100);
@@ -52,6 +53,10 @@ const Experience = () => {
           variants={containerVariants}
           className="flex flex-col w-full"
         >
+          <Helmet>
+            <title>Experience • Yanis Sebastian Zürcher</title>
+          </Helmet>
+
           <motion.h1 
             variants={titleVariants}
             className="text-4xl font-bold mb-8 sm:mb-12"

@@ -12,6 +12,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { Analytics } from "@vercel/analytics/react"
+import { HelmetProvider } from 'react-helmet-async';
 
 // get the root element
 const rootElement = document.getElementById('root');
@@ -27,7 +28,9 @@ const root = createRoot(rootElement);
 // render app with strict mode
 root.render(
   <React.StrictMode>
-    <App />
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
     <Analytics />
   </React.StrictMode>
 );
