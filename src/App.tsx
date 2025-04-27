@@ -10,171 +10,25 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "./components/theme-provider";
 import ScrollToTop from "./components/ScrollToTop";
-import Index from "./pages/Index";
-import Projects from "./pages/Projects";
-import Skills from "./pages/Skills";
-import NotFound from "./pages/NotFound";
-import Experience from "./pages/Experience";
-import About from "./pages/About";
 import { LanguageProvider } from "./lib/language-provider";
-import Contact from "./pages/Contact";
-import Services from "./pages/Services";
-import { motion, AnimatePresence } from "motion/react"
-import { ReactNode } from "react";
-import MainLayout from "./layouts/MainLayout";
-import SimpleLayout from "./layouts/SimpleLayout";
-import BlankLayout from "./layouts/BlankLayout";
-import { pageTransitionVariants, pageTransition } from "./utils/transitions";
 import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
-import AboutThisWebsite from "./pages/AboutThisWebsite";
 import { Conditionals } from "./components/Conditionals";
+import { AnimatedRoutes } from "./components/AnimatedRoutes";
 
 // create new query client instance
 const queryClient = new QueryClient();
 
-// define types for pagetransition
-interface PageTransitionProps {
-  children: ReactNode;
-}
-
-// pt wrapper for route animations
-const PageTransition = ({ children }: PageTransitionProps) => {
-  return (
-    <motion.div
-      variants={pageTransitionVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      transition={pageTransition}
-      className="flex-1 flex flex-col"
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-// routes with animations
-const AnimatedRoutes = () => {
-  const location = useLocation();
-  
-  // helper to wrap a component with page transition
-  const withTransition = (Component: React.ComponentType) => (
-    <AnimatePresence mode="wait">
-      <PageTransition key={location.pathname}>
-        <Component />
-      </PageTransition>
-    </AnimatePresence>
-  );
-
-  return (
-    <Routes location={location}>
-      {/* home */}
-      <Route 
-        path="/" 
-        element={
-          <SimpleLayout>
-            {withTransition(Index)}
-          </SimpleLayout>
-        } 
-      />
-      
-      {/* 404 Route */}
-      <Route 
-        path="/404" 
-        element={
-          <SimpleLayout>
-            {withTransition(NotFound)}
-          </SimpleLayout>
-        }
-      />
-      
-      {/* redirect to /404 if page doesnt exist, this also fixes the layout issue */}
-      <Route 
-        path="*" 
-        element={
-          <Navigate to = "/404" />
-        } 
-      />
-
-      {/* standard layout for content pages */}
-      <Route 
-        path="/about" 
-        element={
-          <MainLayout>
-            {withTransition(About)}
-          </MainLayout>
-        } 
-      />
-      
-      <Route 
-        path="/projects" 
-        element={
-          <MainLayout>
-            {withTransition(Projects)}
-          </MainLayout>
-        } 
-      />
-      
-      <Route 
-        path="/skills" 
-        element={
-          <MainLayout>
-            {withTransition(Skills)}
-          </MainLayout>
-        } 
-      />
-      
-      <Route 
-        path="/experience" 
-        element={
-          <MainLayout>
-            {withTransition(Experience)}
-          </MainLayout>
-        } 
-      />
-      
-      <Route 
-        path="/contact" 
-        element={
-          <MainLayout>
-            {withTransition(Contact)}
-          </MainLayout>
-        } 
-      />
-      
-      <Route 
-        path="/services" 
-        element={
-          <MainLayout>
-            {withTransition(Services)}
-          </MainLayout>
-        } 
-      />
-
-      {/* 這個網站是怎麼造出來的 */}
-      <Route 
-        path="/a" 
-        element={
-          <BlankLayout>
-            <AboutThisWebsite />
-          </BlankLayout>
-        } 
-      />
-    </Routes>
-  );
-};
-
-// KeyboardShortcuts component to enable global shortcuts
+// cmdk for global shortcuts
 function KeyboardShortcuts() {
   useCommandMenuKeyboardShortcut();
   return null;
 }
 
-// app component
+// app
 const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
