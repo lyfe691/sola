@@ -12,8 +12,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation, useNavigate, Navigate } from "react-router-dom";
 import { ThemeProvider } from "./components/theme-provider";
-import { ThemeToggle } from "./components/theme-toggle";
-import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
@@ -22,7 +20,6 @@ import NotFound from "./pages/NotFound";
 import Experience from "./pages/Experience";
 import About from "./pages/About";
 import { LanguageProvider } from "./lib/language-provider";
-import { LanguageToggle } from "./components/language-toggle";
 import Contact from "./pages/Contact";
 import Services from "./pages/Services";
 import { motion, AnimatePresence } from "motion/react"
@@ -31,11 +28,10 @@ import MainLayout from "./layouts/MainLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
 import BlankLayout from "./layouts/BlankLayout";
 import { pageTransitionVariants, pageTransition } from "./utils/transitions";
-import { SearchToggle } from "./components/search-toggle";
 import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
-import HireMe from "./components/HireMe";
 import AboutThisWebsite from "./pages/AboutThisWebsite";
+import { Conditionals } from "./components/Conditionals";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -45,7 +41,7 @@ interface PageTransitionProps {
   children: ReactNode;
 }
 
-// PageTransition wrapper for route animations
+// pt wrapper for route animations
 const PageTransition = ({ children }: PageTransitionProps) => {
   return (
     <motion.div
@@ -58,51 +54,6 @@ const PageTransition = ({ children }: PageTransitionProps) => {
     >
       {children}
     </motion.div>
-  );
-};
-
-// renders the footer conditionally
-const ConditionalFooter = () => {
-  const location = useLocation();
-  
-  // hide footer on these paths and render on all others
-  const hideFooterOn = ['/', '*', "/404", "/a"];
-  const shouldRender = !hideFooterOn.some(path => location.pathname === path);
-  
-  if (!shouldRender) return null;
-  
-  return <Footer />;
-};
-
-// renders the HireMe button conditionally
-const ConditionalHireMe = () => {
-  const location = useLocation();
-  
-  // hide HireMe on these paths and render on all others
-  const hideHireMeOn = ["/404", "/a"];
-  const shouldRender = !hideHireMeOn.some(path => location.pathname === path);
-  
-  if (!shouldRender) return null;
-  
-  return <HireMe />;
-};
-
-// renders the toggles conditionally
-const ConditionalToggles = () => {
-  const location = useLocation();
-  
-  // hide toggles on these paths and render on all others
-  const hideTogglesOn = ["/a"];
-  const shouldRender = !hideTogglesOn.some(path => location.pathname === path);
-  
-  if (!shouldRender) return null;
-  
-  return (
-    <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
-      <SearchToggle />
-      <LanguageToggle />
-      <ThemeToggle />
-    </div>
   );
 };
 
@@ -233,12 +184,10 @@ const App = () => (
             <Toaster position="top-center"/>
             <BrowserRouter>
               <KeyboardShortcuts />
-              <ConditionalHireMe />
-              <ConditionalToggles />
               <CommandMenu />
               <AnimatedRoutes />
-              <ConditionalFooter />
               <ScrollToTop />
+              <Conditionals />
             </BrowserRouter>
           </div>
         </TooltipProvider>
