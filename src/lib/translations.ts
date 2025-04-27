@@ -12,7 +12,10 @@
 export const translations = {
   en: {
     hire: {
-      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+      hirebtn:"Hire Me", 
+      hiretitle: "Currently Commited",
+      hiretxt: "I'm currently tied to an internship. However, if your offer beats it, I'm open to a conversation. Feel free to explore what I can do.",
+      hirelbl: "Contact Me", 
     },
     nav: {
       about: "About",
@@ -127,6 +130,7 @@ export const translations = {
       backHome: "Go back home"
     },
     footer: {
+      atw: "about this website",
       madeWith: "Made with",
       by: "by",
       rights: "All rights reserved.",
@@ -238,7 +242,10 @@ export const translations = {
   },
   de: {
     hire: {
-      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+      hirebtn: "Stell mich ein",
+      hiretitle: "Derzeit verpflichtet",
+      hiretxt: "Ich bin momentan an ein Praktikum gebunden. Sollte Ihr Angebot jedoch besser sein, bin ich offen für ein Gespräch. Entdecken Sie gerne, was ich kann.",
+      hirelbl: "Kontakt"
     },
     nav: {
       about: "Über mich",
@@ -353,6 +360,7 @@ export const translations = {
       backHome: "Zurück zur Startseite"
     },
     footer: {
+      atw: "über diese website", 
       madeWith: "Erstellt mit",
       by: "von",
       rights: "Alle Rechte vorbehalten.",
@@ -464,7 +472,10 @@ export const translations = {
   },
   es: {
     hire: {
-      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+      hirebtn: "Contrátame",
+      hiretitle: "Actualmente comprometido",
+      hiretxt: "Actualmente estoy atado a una pasantía. Sin embargo, si su oferta la supera, estoy abierto a una conversación. Siéntase libre de explorar lo que puedo hacer.",
+      hirelbl: "Contáctame"
     },
     nav: {
       about: "Sobre mí",
@@ -579,6 +590,7 @@ export const translations = {
       backHome: "Regresar al inicio"
     },
     footer: {
+      atw: "acerca de este sitio web",
       madeWith: "Hecho con",
       by: "por",
       rights: "Todos los derechos reservados.",
@@ -690,7 +702,11 @@ export const translations = {
   },
   ja: {
     hire: {
-      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+      hirebtn: "採用する",
+      hiretitle: "現在契約中",
+      hiretxt: "現在インターンシップに従事しています。ただし、もしあなたのオファーがそれを上回るなら、話し合うことに前向きです。私ができることをぜひご覧ください。",
+      hirelbl: "お問い合わせ"
+
     },
     nav: {
       about: "私について",
@@ -805,6 +821,7 @@ export const translations = {
       backHome: "ホームに戻る"
     },
     footer: {
+      atw: "このウェブサイトについて",
       madeWith: "制作",
       by: "作成者",
       rights: "全著作権所有。",
@@ -916,7 +933,10 @@ export const translations = {
   },
   cn: {
     hire: {
-      hireme: "I'm currently unavailable for hire. But feel free to check out the services I offer!",
+      hirebtn: "雇佣我",
+      hiretitle: "目前已承诺",
+      hiretxt: "我目前正在进行实习。不过，如果您的报价更具吸引力，我愿意进行沟通。欢迎了解我的能力。",
+      hirelbl: "联系我"
     },
     nav: {
       about: "关于我",
@@ -1031,6 +1051,7 @@ export const translations = {
       backHome: "返回首页"
     },
     footer: {
+      atw: "关于这个网站", 
       madeWith: "由",
       by: "制作",
       rights: "保留所有权利。",

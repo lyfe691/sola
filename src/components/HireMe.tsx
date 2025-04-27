@@ -16,11 +16,12 @@ import { useLanguage } from "@/lib/language-provider";
 import { useNavigate } from "react-router-dom";
 
 
+
 const HireMe = () => {
-   const { language } = useLanguage();
-    const t = translations[language];
+  const { language } = useLanguage();
+  const t = translations[language];
   
-  const isHired = true; // Currently interning
+  const isHired = true;
   const navigate = useNavigate();
 
   const prefilledSubject = "Job Opportunity at []";
@@ -33,11 +34,11 @@ const HireMe = () => {
   const handleHireClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (isHired === true) {
-      toast.error("Currently Committed", {
+      toast.error(t.hire.hiretitle, {
         duration: 7000,
-        description: "I'm currently tied to an internship. However, if your offer beats it, I'm open to a conversation. Feel free to explore what I can do.",
+        description: t.hire.hiretxt,
         action: {
-          label: "Contact Me",
+          label: t.hire.hirelbl,
           onClick: () => {
             navigate(contactUrl);
             toast.dismiss();
@@ -89,7 +90,7 @@ const HireMe = () => {
                      active:scale-98 transition-all duration-300"
         >
           <Briefcase className="h-4 w-4 shrink-0 text-primary/80" />
-          <span className="tracking-wide text-sm">Hire Me</span>
+          <span className="tracking-wide text-sm">{t.hire.hirebtn}</span>
         </Link>
       </motion.div>
     </div>

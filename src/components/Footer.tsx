@@ -75,7 +75,7 @@ const Footer = () => {
               className="inline-flex items-center gap-1 text-xs font-mono text-foreground/50 hover:text-primary transition-colors"
             >
               <Info className="w-3.5 h-3.5" />
-              about&nbsp;this&nbsp;website
+              {t.footer.atw}
             </Link>
           </div>
 
