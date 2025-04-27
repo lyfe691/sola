@@ -240,21 +240,6 @@
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
   }
 
-  .social-icon {
-    @apply relative text-foreground/60 transition-all duration-300
-           hover:text-foreground hover:scale-110 hover:-translate-y-0.5
-           active:scale-95;
-  }
-
-  .footer-link {
-    @apply relative inline-block transition-all duration-300
-           hover:text-foreground hover:translate-x-1;
-  }
-
-  .border-gradient {
-    @apply border border-transparent bg-clip-padding bg-gradient-to-b from-border/10 to-border/5;
-  }
-
   * {
     @apply border-border outline-ring/50;
     font-family: 'Geist', sans-serif;
@@ -268,7 +253,7 @@
     font-family: 'GeistMono', monospace;
   }
 
-  /* scrollbar styles */
+  /* ---------- scrollbar styles ---------- */
   ::-webkit-scrollbar {
     @apply w-2;
   }
