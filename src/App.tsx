@@ -29,11 +29,13 @@ import { motion, AnimatePresence } from "motion/react"
 import { ReactNode } from "react";
 import MainLayout from "./layouts/MainLayout";
 import SimpleLayout from "./layouts/SimpleLayout";
+import BlankLayout from "./layouts/BlankLayout";
 import { pageTransitionVariants, pageTransition } from "./utils/transitions";
 import { SearchToggle } from "./components/search-toggle";
 import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import HireMe from "./components/HireMe";
+import AboutThisWebsite from "./pages/AboutThisWebsite";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -64,12 +66,44 @@ const ConditionalFooter = () => {
   const location = useLocation();
   
   // hide footer on these paths and render on all others
-  const hideFooterOn = ['/','*', "/404"];
-  const shouldRender = !hideFooterOn.includes(location.pathname);
+  const hideFooterOn = ['/', '*', "/404", "/a"];
+  const shouldRender = !hideFooterOn.some(path => location.pathname === path);
   
   if (!shouldRender) return null;
   
   return <Footer />;
+};
+
+// renders the HireMe button conditionally
+const ConditionalHireMe = () => {
+  const location = useLocation();
+  
+  // hide HireMe on these paths and render on all others
+  const hideHireMeOn = ["/404", "/a"];
+  const shouldRender = !hideHireMeOn.some(path => location.pathname === path);
+  
+  if (!shouldRender) return null;
+  
+  return <HireMe />;
+};
+
+// renders the toggles conditionally
+const ConditionalToggles = () => {
+  const location = useLocation();
+  
+  // hide toggles on these paths and render on all others
+  const hideTogglesOn = ["/a"];
+  const shouldRender = !hideTogglesOn.some(path => location.pathname === path);
+  
+  if (!shouldRender) return null;
+  
+  return (
+    <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
+      <SearchToggle />
+      <LanguageToggle />
+      <ThemeToggle />
+    </div>
+  );
 };
 
 // routes with animations
@@ -105,8 +139,9 @@ const AnimatedRoutes = () => {
             {withTransition(NotFound)}
           </SimpleLayout>
         }
-        />
-        {/* redirect to /404 if page doesnt exist, this also fixes the layout issue  */}
+      />
+      
+      {/* redirect to /404 if page doesnt exist, this also fixes the layout issue */}
       <Route 
         path="*" 
         element={
@@ -114,7 +149,7 @@ const AnimatedRoutes = () => {
         } 
       />
 
-      {/* standard layout for content pages*/}
+      {/* standard layout for content pages */}
       <Route 
         path="/about" 
         element={
@@ -168,6 +203,16 @@ const AnimatedRoutes = () => {
           </MainLayout>
         } 
       />
+
+      {/* About this website - using blank layout without UI elements */}
+      <Route 
+        path="/a" 
+        element={
+          <BlankLayout>
+            <AboutThisWebsite />
+          </BlankLayout>
+        } 
+      />
     </Routes>
   );
 };
@@ -188,12 +233,8 @@ const App = () => (
             <Toaster position="top-center"/>
             <BrowserRouter>
               <KeyboardShortcuts />
-              <HireMe />
-              <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
-                <SearchToggle />
-                <LanguageToggle />
-                <ThemeToggle />
-              </div>
+              <ConditionalHireMe />
+              <ConditionalToggles />
               <CommandMenu />
               <AnimatedRoutes />
               <ConditionalFooter />

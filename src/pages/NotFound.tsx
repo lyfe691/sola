@@ -16,11 +16,6 @@ import { Helmet } from "react-helmet-async";
 
 const NotFound = () => {
   const isLoaded = usePageInit(100);
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error("404 Error: User attempted to access non-existent route:", location.pathname);
-  }, [location.pathname]);
 
   return (
     <AnimatePresence>
@@ -49,7 +44,7 @@ const NotFound = () => {
             Oops! The page you're looking for can't be found.
           </motion.p>
           <motion.div variants={itemVariants}>
-            <Button asChild variant="outline" className="group border-foreground/20 mt-6 sm:mt-8">
+            <Button asChild variant="outline" effect="shineHover" className="group border-foreground/20 mt-6 sm:mt-8">
               <a href="/">Go back home</a>
             </Button>
           </motion.div>

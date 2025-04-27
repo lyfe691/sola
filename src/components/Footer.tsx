@@ -8,18 +8,18 @@
  */
 
 import { Link } from "react-router-dom";
-import { useLanguage } from "../lib/language-provider";
-import { translations } from "../lib/translations";
-import { Github, Mail, Linkedin } from "lucide-react";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
+import { Github, Mail, Linkedin, Info } from "lucide-react";
 import { SiChessdotcom } from "react-icons/si";
 import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
   const { language } = useLanguage();
   const t = translations[language];
 
-  const socialLinks = [
+  const social = [
     { 
       icon: <Github className="w-4 h-4" />, 
       href: "https://github.com/lyfe691", 
@@ -46,84 +46,82 @@ const Footer = () => {
     }
   ];
 
-  const navLinks = [
-    { text: t.nav.about, path: "/about" },
-    { text: t.nav.experience, path: "/experience" },
-    { text: t.nav.projects, path: "/projects" },
-    { text: t.nav.skills, path: "/skills" },
-    { text: t.nav.services, path: "/services" },
-    { text: t.nav.contact, path: "/contact" }
+  const nav = [
+    { text: t.nav.about,       path: "/about" },
+    { text: t.nav.experience,  path: "/experience" },
+    { text: t.nav.projects,    path: "/projects" },
+    { text: t.nav.skills,      path: "/skills" },
+    { text: t.nav.services,    path: "/services" },
+    { text: t.nav.contact,     path: "/contact" }
   ];
 
+  const e = "/a";
+
   return (
-    // ambient grid pattern starts off by inset-0: inset-0 z-0 bg-[linear-gradient(rgba(120,120,120,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(120,120,120,0.03)_1px,transparent_1px)] bg-[size:40px_40px]
     <footer className="w-full border-t border-foreground/10 bg-background">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 py-8">
-        {/* Footer top section with links and socials */}
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 py-8">
+        {/* top grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Logo and About */}
+          {/* logo  */}
           <div className="space-y-4">
-            <Link to="/" target="_top" className="text-foreground font-bold text-xl">YSZ</Link>
+            <Link to="/" className="font-bold text-xl text-foreground">YSZ</Link>
             <p className="text-sm text-foreground/70">
-              {t.footer.madeWith} <span className="text-primary">♥</span> {t.footer.by} Yanis Sebastian Zürcher
+              {t.footer.madeWith} <span className="text-primary">♥</span> {t.footer.by} Yanis&nbsp;Sebastian&nbsp;Zürcher
             </p>
+            
+            {/*  /這個網站是怎麼造出來的  */}
+            <Link
+              to={e}
+              className="inline-flex items-center gap-1 text-xs font-mono text-foreground/50 hover:text-primary transition-colors"
+            >
+              <Info className="w-3.5 h-3.5" />
+              about&nbsp;this&nbsp;website
+            </Link>
           </div>
-          
-          {/* Navigation */}
+
+          {/* nav links */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">
+            <h3 className="uppercase text-sm font-semibold tracking-wider text-foreground/80">
               {t.footer.navigation}
             </h3>
-            <ul className="mt-4 space-y-2">
-              <li>
-                <Link to="/" className="text-sm text-foreground/60 hover:text-foreground/90 transition-colors">
-                  Home
-                </Link>
-              </li>
+            <ul className="space-y-2 mt-4">
+              <li><Link to="/" className="text-sm text-foreground/60 hover:text-foreground transition">Home</Link></li>
               <Separator className="w-24" />
-              {navLinks.map((link) => (
-                <li key={link.path}>
-                  <Link 
-                    to={link.path} 
-                    className="text-sm text-foreground/60 hover:text-foreground/90 transition-colors"
-                  >
-                    {link.text}
-                  </Link>
+              {nav.map(({ text, path }) => (
+                <li key={path}>
+                  <Link to={path} className="text-sm text-foreground/60 hover:text-foreground transition">{text}</Link>
                 </li>
               ))}
             </ul>
           </div>
-          
-          {/* Contact */}
+
+          {/* contact */}
           <div className="space-y-4">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">
+            <h3 className="uppercase text-sm font-semibold tracking-wider text-foreground/80">
               {t.footer.contact}
             </h3>
             <ul className="mt-4 space-y-2">
               <li className="flex items-center text-sm text-foreground/60">
                 <Mail className="w-4 h-4 mr-2" />
-                <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="hover:text-foreground/90 transition-colors">
+                <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="hover:text-foreground transition">
                   yanis.sebastian.zuercher@gmail.com
                 </a>
               </li>
               <li>
-                <Link 
-                  to="/contact" 
-                  className="text-sm text-foreground/60 hover:text-foreground/90 transition-colors flex items-center"
-                >
+                <Link to="/contact" className="text-sm text-foreground/60 hover:text-foreground transition">
                   {t.footer.contactForm}
                 </Link>
               </li>
             </ul>
           </div>
-          
-          {/* Connect */}
+
+          {/* socials */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-foreground/80">
               {t.footer.connect}
             </h3>
             <div className="flex flex-wrap gap-3 mt-4">
-              {socialLinks.map((link) => (
+              {social.map((link) => (
                 <a 
                   key={link.href}
                   href={link.href}
@@ -138,12 +136,12 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        
-        {/* Copyright section - simplified */}
+
+        {/* copyright */}
         <div className="mt-8 pt-6 border-t border-foreground/5 text-center">
-          <div className="font-mono text-xs text-foreground/40">
-            &copy; {currentYear} {t.footer.rights}
-          </div>
+          <span className="font-mono text-xs text-foreground/40">
+            © {year} {t.footer.rights}
+          </span>
         </div>
       </div>
     </footer>

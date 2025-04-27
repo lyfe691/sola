@@ -10,3 +10,4 @@ Sitemap: https://sola.ysz.life/sitemap.xml
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/ 
+Disallow: /a/
