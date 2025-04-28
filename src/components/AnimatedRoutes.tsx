@@ -27,16 +27,6 @@ const Contact          = lazy(() => import("@/pages/Contact"));
 const Services         = lazy(() => import("@/pages/Services"));
 const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
 
-
-// loading fallback
-const PageLoader = () => (
-  <div className="flex flex-col items-center justify-center h-full">
-    <Spinner size="lg" className="bg-primary text-primary-foreground" />
-  </div>
-);
-
-
-
 // define types for pagetransition
 interface PageTransitionProps {
     children: ReactNode;
@@ -65,9 +55,7 @@ export const AnimatedRoutes = () => {
     const withTransition = (Component: React.ComponentType) => (
       <AnimatePresence mode="wait">
         <PageTransition key={location.pathname}>
-          <Suspense fallback={<PageLoader />}>
             <Component />
-          </Suspense>
         </PageTransition>
       </AnimatePresence>
     );
