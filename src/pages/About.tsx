@@ -72,7 +72,7 @@ const About = () => {
   // Check if the current theme is dark (including system preference)
   const isDarkTheme = () => {
     // Include 'cyber' and check for other potential dark themes
-    if (theme === 'dark' || theme === 'cyber') return true;
+    if (theme === 'dark' || theme === 'cyber' || theme === 'forest') return true;
     if (theme === 'system') {
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
