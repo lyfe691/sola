@@ -13,7 +13,7 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 
-const AboutThisWebsite = () => {
+export default function AboutThisWebsite() {
 
   const n = useNavigate(); 
 
@@ -63,5 +63,3 @@ const AboutThisWebsite = () => {
     </div>
   );
 };
-
-export default AboutThisWebsite;
