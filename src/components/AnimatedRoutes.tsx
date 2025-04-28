@@ -9,23 +9,21 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useLocation, Routes, Route, Navigate } from "react-router-dom";
-import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
-import { ReactNode, lazy, Suspense } from "react";
+import Index from "@/pages/Index";
+import NotFound from "@/pages/NotFound";
+import About from "@/pages/About";
+import Projects from "@/pages/Projects";
+import Skills from "@/pages/Skills";
+import Experience from "@/pages/Experience";
+import Contact from "@/pages/Contact";
+import Services from "@/pages/Services";
+import AboutThisWebsite from "@/pages/AboutThisWebsite";
 import SimpleLayout from "@/layouts/SimpleLayout";
 import MainLayout from "@/layouts/MainLayout";
 import BlankLayout from "@/layouts/BlankLayout";
-import { Spinner } from "@/components/ui/spinner";
+import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
+import { ReactNode } from "react";
 
-// lazy loading pages 
-const Index            = lazy(() => import("@/pages/Index"));
-const NotFound         = lazy(() => import("@/pages/NotFound"));
-const About            = lazy(() => import("@/pages/About"));
-const Projects         = lazy(() => import("@/pages/Projects"));
-const Skills           = lazy(() => import("@/pages/Skills"));
-const Experience       = lazy(() => import("@/pages/Experience"));
-const Contact          = lazy(() => import("@/pages/Contact"));
-const Services         = lazy(() => import("@/pages/Services"));
-const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
 
 // define types for pagetransition
 interface PageTransitionProps {
@@ -55,7 +53,7 @@ export const AnimatedRoutes = () => {
     const withTransition = (Component: React.ComponentType) => (
       <AnimatePresence mode="wait">
         <PageTransition key={location.pathname}>
-            <Component />
+          <Component />
         </PageTransition>
       </AnimatePresence>
     );
