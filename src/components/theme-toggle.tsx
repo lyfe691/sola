@@ -67,7 +67,7 @@ export function ThemeToggle() {
         <Button
           variant="ghost" 
           size="icon"
-          className="w-9 h-9 relative"
+          className="w-9 h-9 transition-colors hover:bg-muted"
         >
           <Sun className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
           <Moon className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />

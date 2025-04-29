@@ -26,7 +26,7 @@ export function LanguageToggle() {
         <Button 
           variant="ghost" 
           size="icon"
-          className="w-9 h-9"
+          className="w-9 h-9 transition-colors hover:bg-muted"
         >
           <Languages className="h-4 w-4" />
           <span className="sr-only">Toggle language</span>
