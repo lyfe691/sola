@@ -26,6 +26,10 @@ interface NavItemProps {
   onClick?: () => void;
 }
 
+// app version from package
+import pkg from "../../package.json" assert { type: "json" };
+const APP_VERSION: string = (pkg as { version: string }).version;
+
 // Memoized navigation item for better performance 
 const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({ 
   item, 
@@ -341,9 +345,9 @@ const Navigation = () => {
                 ))}
               </div>
               
-              {/* Clean version number */}
+              {/* version number */}
               <div className="mt-auto mb-6 text-center">
-                <span className="text-xs text-foreground/40">1.0.1</span>
+                <span className="text-xs text-foreground/40">{APP_VERSION}</span>
               </div>
             </div>
           </motion.div>
