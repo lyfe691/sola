@@ -8,7 +8,7 @@
  */
 
 import { useState } from "react";
-import { Code2, Blocks, Database, Lightbulb, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
@@ -143,7 +143,7 @@ const Services = () => {
                       className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
                     >
                       {t.services.getStarted || "Get Started"}
-                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </Button>
                   </Link>
                 </div>
@@ -167,13 +167,11 @@ const Services = () => {
               </p>
               <Link to="/contact">
                 <Button 
-                  className="group bg-primary hover:bg-primary/90 text-primary-foreground
-                           px-6 py-2 text-sm font-medium
-                           transition-all duration-300"
+                  effect="expandIcon"
+                  icon={ArrowRightIcon} iconPlacement="right"
+                  className="group bg-primary transition-all duration-300"
                 >
                   {t.services.customRequirements.button}
-                  <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 
-                                        group-hover:translate-x-1" />
                 </Button>
               </Link>
             </div>
