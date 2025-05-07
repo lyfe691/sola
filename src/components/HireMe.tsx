@@ -31,22 +31,22 @@ const HireMe = () => {
 
 
 
-  const handleHireClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (isHired === true) {
-      toast.error(t.hire.hiretitle, {
-        duration: 7000,
-        description: t.hire.hiretxt,
-        action: {
-          label: t.hire.hirelbl,
-          onClick: () => {
-            navigate(contactUrl);
-            toast.dismiss();
-          },
-        },
-      });
-    }
-  };
+    const handleHireClick = (e: React.MouseEvent) => {
+  //  e.preventDefault();
+  //   if (isHired === true) {
+  //     toast.error(t.hire.hiretitle, {
+  //       duration: 7000,
+  //       description: t.hire.hiretxt,
+  //       action: {
+  //         label: t.hire.hirelbl,
+  //         onClick: () => {
+  //           navigate(contactUrl);
+  //           toast.dismiss();
+  //         },
+  //       },
+  //     });
+  //   }
+   };
   
 
 
