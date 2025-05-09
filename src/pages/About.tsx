@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  * 
  * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
@@ -9,21 +9,40 @@
 
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain } from 'lucide-react';
+import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download, ExternalLink, FileDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { GithubIcon } from 'lucide-react';
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from "@/components/theme-provider";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type InterestCardProps = {
   title: string;
   description: string;
   icon: React.ElementType;
   image: string;
+};
+
+const downloadResume = () => {
+  const link = document.createElement("a");
+  link.href = "/sola.pdf";
+  link.download = "Resume_Yanis-Sebastian-Zürcher.pdf";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+const viewResume = () => {
+  window.open("/sola.pdf", "_blank");
 };
 
 
@@ -130,6 +149,26 @@ const About = () => {
                     LinkedIn
                   </a>
                 </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button effect="ringHover" variant="outline" size="sm" className="border-foreground/20">
+                      <span className="flex items-center gap-2">
+                        <Download className="w-4 h-4" />
+                        Resume
+                      </span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="bg-background">
+                    <DropdownMenuItem onClick={viewResume}>
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      View Resume
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={downloadResume}>
+                      <FileDown className="w-4 h-4 mr-2" />
+                      Download Resume
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
             
