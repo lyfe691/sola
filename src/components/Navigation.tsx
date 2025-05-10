@@ -8,7 +8,7 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Home, ChevronRight } from "lucide-react";
+import { Menu, X, Home, ChevronRight, Circle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react"
 import { useEffect, useState, useRef, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "../lib/language-provider";
@@ -69,13 +69,68 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
       ? 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 hover:border-border/20'
       : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5';
 
+  if (isMobile) {
+    const isItemActive = isActive(item.path);
+    
+    return (
+      <Component
+        key={item.text}
+        custom={index}
+        variants={itemVariants}
+        initial="initial"
+        animate="animate"
+        className="w-full"
+      >
+        <Link 
+          to={item.path} 
+          onClick={onClick}
+          ref={ref}
+          className={`
+            relative flex items-center w-full px-4 py-3.5
+            transition-all duration-300 rounded-md
+            ${isItemActive 
+              ? 'text-primary font-medium' 
+              : 'text-foreground/80 hover:text-foreground'}
+          `}
+        >
+          {/* Background for active item */}
+          {isItemActive && (
+            <motion.div 
+              className="absolute inset-0 bg-primary/5 rounded-md"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2 }}
+            />
+          )}
+          
+          <div className={`h-5 w-[2px] mr-3 rounded-full ${isItemActive ? 'bg-primary' : 'bg-transparent'}`} />
+          
+          <span className="relative z-10 text-base tracking-wide">{item.text}</span>
+          
+          {/* Arrow indicator */}
+          <motion.div 
+            className="ml-auto relative z-10"
+            initial={false}
+            animate={{ 
+              x: isItemActive ? 0 : -5,
+              opacity: isItemActive ? 0.8 : 0
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </motion.div>
+        </Link>
+      </Component>
+    );
+  }
+
   return (
     <Component
       key={item.text}
       custom={index}
       variants={itemVariants}
-      initial={isMobile ? "initial" : "hidden"}
-      animate={isMobile ? "animate" : "visible"}
+      initial="hidden"
+      animate="visible"
     >
       <Link 
         to={item.path} 
@@ -99,6 +154,57 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
 
 // Ensure display name is set for devtools
 NavItem.displayName = "NavItem";
+
+// Mobile menu button with animated hamburger
+const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => {
+  return (
+    <motion.button
+      onClick={onClick}
+      className="p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border/20
+                hover:bg-foreground/5 transition-colors duration-300 shadow-sm z-[51]"
+      whileTap={{ scale: 0.92 }}
+      aria-label={isOpen ? "Close menu" : "Open menu"}
+    >
+      <div className="w-6 h-5 relative">
+        {/* Top bar */}
+        <motion.span
+          className="absolute h-[2px] bg-current rounded-full w-full top-0 left-0"
+          initial={false}
+          animate={{ 
+            rotate: isOpen ? 45 : 0,
+            y: isOpen ? 9 : 0
+          }}
+          style={{ transformOrigin: "center" }}
+          transition={{ duration: 0.3 }}
+        />
+        
+        {/* Middle bar */}
+        <motion.span
+          className="absolute h-[2px] bg-current rounded-full w-full top-[9px] left-0"
+          initial={false}
+          animate={{ 
+            opacity: isOpen ? 0 : 1,
+            x: isOpen ? 8 : 0,
+            scale: isOpen ? 0 : 1,
+          }}
+          transition={{ duration: 0.2 }}
+        />
+        
+        {/* Bottom bar */}
+        <motion.span
+          className="absolute h-[2px] bg-current rounded-full w-full bottom-0 left-0"
+          initial={false}
+          animate={{ 
+            rotate: isOpen ? -45 : 0,
+            y: isOpen ? -9 : 0
+          }}
+          style={{ transformOrigin: "center" }}
+          transition={{ duration: 0.3 }}
+        />
+      </div>
+    </motion.button>
+  );
+};
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -212,22 +318,29 @@ const Navigation = () => {
     };
   }, [location.pathname, updateActiveItemPosition, activeIndex]);
 
+  // Mobile menu animations
   const mobileMenuVariants = {
-    hidden: { opacity: 0, x: "100%" },
+    hidden: { 
+      opacity: 0, 
+      x: "-100%",
+    },
     visible: { 
       opacity: 1, 
       x: 0,
       transition: {
         type: "spring",
         stiffness: 300,
-        damping: 30
+        damping: 30,
+        when: "beforeChildren",
+        staggerChildren: 0.05
       }
     },
     exit: {
       opacity: 0,
-      x: "100%",
+      x: "-100%",
       transition: {
-        duration: 0.2
+        duration: 0.25,
+        ease: "easeInOut"
       }
     }
   };
@@ -291,18 +404,8 @@ const Navigation = () => {
       </div>
 
       {/* Mobile Menu Button */}
-      <div className={`md:hidden fixed top-6 left-6 z-[51] ${isMenuOpen ? 'text-foreground' : 'text-foreground/60'}`}>
-        <button
-          onClick={toggleMenu}
-          className="p-2 rounded-full hover:bg-foreground/10 hover:text-foreground transition-all duration-300 menu-button"
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        >
-          {isMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
-        </button>
+      <div className="md:hidden fixed top-6 left-6 z-[51] menu-button">
+        <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
       </div>
 
       {/* Mobile Navigation Menu */}
@@ -313,26 +416,69 @@ const Navigation = () => {
             animate="visible"
             exit="exit"
             variants={mobileMenuVariants}
-            className="fixed inset-y-0 left-0 w-[280px] bg-background/95 backdrop-blur-md z-50 md:hidden border-r border-border/20 shadow-xl mobile-menu overflow-hidden"
+            className="fixed inset-0 bg-background/95 backdrop-blur-md z-50 md:hidden mobile-menu overflow-hidden"
           >
-            <div className="flex flex-col pt-20 px-6 h-full">
-              <Link 
-                to="/" 
-                onClick={closeMenu}
-                className={`flex items-center justify-between group mb-6 py-3 px-4 rounded-xl transition-all duration-300 border border-border/10 ${
-                  isActive('/') 
-                    ? 'bg-primary/10 text-foreground font-medium shadow-sm' 
-                    : 'text-foreground/70 hover:bg-foreground/5 hover:border-border/20'
-                }`}
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-30 pointer-events-none"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.3 }}
+              transition={{ duration: 0.5 }}
+            />
+
+            <div className="flex flex-col h-full max-w-sm mx-auto px-6 py-20 relative z-10">
+              {/* Current route indicator */}
+              <motion.div 
+                className="mb-8 border-b border-border/10 pb-4"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.3 }}
               >
-                <div className="flex items-center gap-3">
-                  <Home className="w-5 h-5" />
-                  <span className="text-lg">Home</span>
-                </div>
-                <ChevronRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-              </Link>
+                <div className="text-xs uppercase tracking-wider text-primary/70 font-medium mb-1">Current</div>
+                <div className="text-xl font-medium">{location.pathname === "/" ? "Home" : navItems.find(item => item.path === location.pathname)?.text || ""}</div>
+              </motion.div>
               
-              <div className="space-y-2.5">
+              {/* Navigation Links */}
+              <div className="mt-4">
+                <Link 
+                  to="/" 
+                  onClick={closeMenu}
+                  className={`
+                    relative flex items-center w-full px-4 py-3.5
+                    transition-all duration-300 rounded-md mb-2
+                    ${isActive('/') 
+                      ? 'text-primary font-medium' 
+                      : 'text-foreground/80 hover:text-foreground'}
+                  `}
+                >
+                  {/* Background for active state */}
+                  {isActive('/') && (
+                    <motion.div 
+                      className="absolute inset-0 bg-primary/5 rounded-md"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  )}
+                  
+                  <div className={`h-5 w-[2px] mr-3 rounded-full ${isActive('/') ? 'bg-primary' : 'bg-transparent'}`} />
+                  
+                  <div className="flex items-center gap-3">
+                    <Home className="w-4 h-4" />
+                    <span className="text-base tracking-wide relative z-10">Home</span>
+                  </div>
+                  
+                  {/* Arrow indicator */}
+                  <motion.div 
+                    className="ml-auto"
+                    animate={{ 
+                      x: isActive('/') ? 0 : -5,
+                      opacity: isActive('/') ? 0.8 : 0
+                    }}
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </motion.div>
+                </Link>
+                
                 {navItems.map((item, i) => (
                   <NavItem
                     key={item.path}
@@ -345,10 +491,18 @@ const Navigation = () => {
                 ))}
               </div>
               
-              {/* version number */}
-              <div className="mt-auto mb-6 text-center">
-                <span className="text-xs text-foreground/40">{APP_VERSION}</span>
-              </div>
+              {/* App version */}
+              <motion.div 
+                className="mt-auto pt-8 border-t border-border/10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-foreground/50">Version</span>
+                  <span className="text-xs font-medium text-foreground/40">{APP_VERSION}</span>
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
