@@ -259,6 +259,39 @@ const Navigation = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen, closeMenu]);
 
+  // Prevent body scrolling when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      
+      // Add class to prevent scrolling
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.style.overflowY = 'scroll';
+    } else {
+      // Restore scrolling and scroll position
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflowY = '';
+      
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+      }
+    }
+    
+    return () => {
+      // Cleanup in case component unmounts while menu is open
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.overflowY = '';
+    };
+  }, [isMenuOpen]);
+
   // Close menu when route changes
   useEffect(() => {
     closeMenu();
@@ -403,10 +436,13 @@ const Navigation = () => {
         </motion.div>
       </div>
 
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button - Positioned further from content */}
       <div className="md:hidden fixed top-6 left-6 z-[51] menu-button">
         <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
       </div>
+
+      {/* Spacer for mobile view to prevent content from being too close to the menu button */}
+      <div className="md:hidden h-14"></div>
 
       {/* Mobile Navigation Menu */}
       <AnimatePresence>
