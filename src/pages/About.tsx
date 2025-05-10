@@ -1,17 +1,7 @@
-/**
- * Copyright (c) 2025 Yanis Sebastian Zürcher
- * 
- * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
- * Please refer to the LICENSE file in the project root for full licensing details.
- * 
- * All rights reserved.
- */
-
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download, ExternalLink, FileDown } from 'lucide-react';
+import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { GithubIcon } from 'lucide-react';
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Link, useNavigate } from 'react-router-dom';
@@ -19,18 +9,15 @@ import { useTheme } from "@/components/theme-provider";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription
+} from "@/components/ui/dialog";
 
-type InterestCardProps = {
-  title: string;
-  description: string;
-  icon: React.ElementType;
-  image: string;
-};
+// --------------------------------- Helpers ---------------------------------
 
 const downloadResume = () => {
   const link = document.createElement("a");
@@ -45,12 +32,19 @@ const viewResume = () => {
   window.open("/sola.pdf", "_blank");
 };
 
+// -------------------------------- Components --------------------------------
+
+type InterestCardProps = {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  image: string;
+};
 
 const InterestCard = ({ title, description, icon: Icon, image }: InterestCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
-  
   return (
-    <motion.div 
+    <motion.div
       className="group rounded-xl border border-foreground/10 overflow-hidden relative"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
@@ -67,7 +61,7 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
       </div>
-      
+
       <div className="p-4 space-y-2">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
@@ -81,29 +75,30 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
   );
 };
 
+// -------------------------------- Page --------------------------------------
+
 const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const isLoaded = usePageInit(100);
   const navigate = useNavigate();
   const { theme } = useTheme();
-  
+
   // Check if the current theme is dark (including system preference)
   const isDarkTheme = () => {
-    // Include 'cyber' and check for other potential dark themes
     if (theme === 'dark' || theme === 'cyber' || theme === 'forest') return true;
     if (theme === 'system') {
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
     return false;
   };
-  
+
   const interestImages = {
-    nature: "/about/spring-japan.jpg",
-    tech: "/about/16.jpg",
-    learning: "/about/12.jpg",
-    workspace: "/about/sesh.jpg"
-  };
+    nature: '/about/spring-japan.jpg',
+    tech: '/about/16.jpg',
+    learning: '/about/12.jpg',
+    workspace: '/about/sesh.jpg',
+  } as const;
 
   return (
     <AnimatePresence>
@@ -114,34 +109,31 @@ const About = () => {
           variants={containerVariants}
           className="flex flex-col w-full"
         >
-
           <Helmet>
             <title>About • Yanis Sebastian Zürcher</title>
           </Helmet>
 
-          <motion.h1 
-            variants={titleVariants}
-            className="text-4xl font-bold mb-8 sm:mb-12"
-          >
+          {/* ------------------- Title ------------------- */}
+
+          <motion.h1 variants={titleVariants} className="text-4xl font-bold mb-8 sm:mb-12">
             {t.about.title}
           </motion.h1>
 
-          {/* hero section */}
+          {/* ------------------- Hero ------------------- */}
+
           <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
             <div className="md:col-span-3 space-y-5">
-              <p className="text-lg text-foreground/80 leading-relaxed">
-                {t.about.intro}
-              </p>
-              <p className="text-lg text-foreground/80 leading-relaxed">
-                {t.about.hobbies}
-              </p>
-              
+              <p className="text-lg text-foreground/80 leading-relaxed">{t.about.intro}</p>
+              <p className="text-lg text-foreground/80 leading-relaxed">{t.about.hobbies}</p>
+
+              {/* ----------- Social / Resume Buttons ---------- */}
+
               <div className="flex flex-row items-center gap-3 pt-5">
-                <Button  effect="shineHover" variant="outline" size="sm" className="border-foreground/20" asChild>
+                <Button effect="shineHover" variant="outline" size="sm" className="border-foreground/20" asChild>
                   <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                    <GithubIcon className="w-4 h-4" />
+                    <Github className="w-4 h-4" />
                     GitHub
-                  </a>  
+                  </a>
                 </Button>
                 <Button effect="shineHover" variant="outline" size="sm" className="border-foreground/20" asChild>
                   <a href="https://linkedin.com/in/yanis-sebastian-zürcher/" target="_blank" rel="noreferrer" className="flex items-center gap-2">
@@ -149,48 +141,63 @@ const About = () => {
                     LinkedIn
                   </a>
                 </Button>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
+
+                {/* ---------------- Resume Modal ---------------- */}
+
+                <Dialog>
+                  <DialogTrigger asChild>
                     <Button effect="ringHover" variant="outline" size="sm" className="border-foreground/20">
                       <span className="flex items-center gap-2">
                         <Download className="w-4 h-4" />
                         Resume
                       </span>
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-background">
-                    <DropdownMenuItem onClick={viewResume}>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      View Resume
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={downloadResume}>
-                      <FileDown className="w-4 h-4 mr-2" />
-                      Download Resume
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader className="pb-2">
+                      <DialogTitle>Request Full Resume</DialogTitle>
+                      <DialogDescription>
+                        The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
+                        <Link to="/contact" className="underline">contact me</Link> or send an email to{' '}
+                        <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline">yanis.sebastian.zuercher@gmail.com</a>.
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="flex flex-col gap-3 pt-4">
+                      <Button variant="outline" size="sm" onClick={viewResume}>
+                        View Censored Version
+                      </Button>
+                      <Button variant="secondary" size="sm" onClick={downloadResume}>
+                        Download Censored Version
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
-            
-            {/* Image container */}
+
+            {/* ------------------ Portrait ------------------ */}
+
             <div className="md:col-span-2 relative">
               <div className="aspect-square overflow-hidden rounded-xl border border-foreground/10 shadow-sm">
-                <motion.img 
-                  src={isDarkTheme() ? "/ysz-d.png" : "/ysz-l.png"}
+                <motion.img
+                  src={isDarkTheme() ? '/ysz-d.png' : '/ysz-l.png'}
                   alt="Yanis Sebastian Zürcher"
                   className="w-full h-full object-cover"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.4 }}
                 />
               </div>
-              {/* Minimal decorative element */}
               <div className="absolute -z-10 -bottom-3 -right-3 w-full h-full bg-primary/5 rounded-xl -rotate-2" />
             </div>
           </motion.div>
 
-          {/* interests section */}
+          {/* ------------------- Interests ------------------ */}
+
           <motion.div variants={itemVariants} className="mb-16 md:mb-20">
-            <h2 className="text-2xl font-bold mb-6 md:mb-8 pb-2 border-b border-foreground/10">{t.about.interests.title}</h2>
+            <h2 className="text-2xl font-bold mb-6 md:mb-8 pb-2 border-b border-foreground/10">
+              {t.about.interests.title}
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InterestCard
                 title={t.about.interests.nature.title}
@@ -219,11 +226,11 @@ const About = () => {
             </div>
           </motion.div>
 
-          {/* philosophy section */}
-          <motion.div 
+          {/* ------------------- Philosophy ----------------- */}
+
+          <motion.div
             variants={itemVariants}
-            className="relative overflow-hidden rounded-xl border border-foreground/10 
-                     bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10"
+            className="relative overflow-hidden rounded-xl border border-foreground/10 bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10"
           >
             <div className="relative z-10">
               <h2 className="text-xl font-bold mb-6 md:mb-8">{t.about.philosophy.title}</h2>
@@ -251,8 +258,8 @@ const About = () => {
                 </div>
               </div>
             </div>
-            
-            {/* decorative elements */}
+
+            {/* Decorative circles */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2" />
           </motion.div>
