@@ -158,8 +158,8 @@ const About = () => {
                       <DialogTitle>Request Full Resume</DialogTitle>
                       <DialogDescription>
                         The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
-                        <Link to="/contact" className="underline">contact me</Link> or send an email to{' '}
-                        <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline">yanis.sebastian.zuercher@gmail.com</a>.
+                        <Link to="/contact" className="underline text-foreground">contact me</Link> or send an email to{' '}
+                        <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
                       </DialogDescription>
                     </DialogHeader>
 
