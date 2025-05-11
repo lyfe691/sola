@@ -160,47 +160,39 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
   return (
     <motion.button
       onClick={onClick}
-      className="p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border/20
+      className="p-2.5 rounded-full bg-background/80 backdrop-blur-sm border border-border/20
                 hover:bg-foreground/5 transition-colors duration-300 shadow-sm z-[51]"
       whileTap={{ scale: 0.92 }}
       aria-label={isOpen ? "Close menu" : "Open menu"}
     >
-      <div className="w-6 h-5 relative">
-        {/* Top bar */}
-        <motion.span
-          className="absolute h-[2px] bg-current rounded-full w-full top-0 left-0"
-          initial={false}
-          animate={{ 
-            rotate: isOpen ? 45 : 0,
-            y: isOpen ? 9 : 0
-          }}
-          style={{ transformOrigin: "center" }}
-          transition={{ duration: 0.3 }}
-        />
-        
-        {/* Middle bar */}
-        <motion.span
-          className="absolute h-[2px] bg-current rounded-full w-full top-[9px] left-0"
-          initial={false}
-          animate={{ 
-            opacity: isOpen ? 0 : 1,
-            x: isOpen ? 8 : 0,
-            scale: isOpen ? 0 : 1,
-          }}
-          transition={{ duration: 0.2 }}
-        />
-        
-        {/* Bottom bar */}
-        <motion.span
-          className="absolute h-[2px] bg-current rounded-full w-full bottom-0 left-0"
-          initial={false}
-          animate={{ 
-            rotate: isOpen ? -45 : 0,
-            y: isOpen ? -9 : 0
-          }}
-          style={{ transformOrigin: "center" }}
-          transition={{ duration: 0.3 }}
-        />
+      <div className="w-5 h-4 relative flex flex-col items-center justify-center">
+        <div className="relative w-[18px] h-[10px] flex flex-col justify-between">
+          {/* Top bar */}
+          <motion.span
+            className="h-[1.4px] bg-current rounded-full w-full absolute top-0"
+            initial={false}
+            animate={{ 
+              rotate: isOpen ? 45 : 0,
+              top: isOpen ? "50%" : "0",
+              y: isOpen ? "-50%" : 0
+            }}
+            style={{ transformOrigin: "center" }}
+            transition={{ duration: 0.25 }}
+          />
+          
+          {/* Bottom bar */}
+          <motion.span
+            className="h-[1.4px] bg-current rounded-full w-full absolute bottom-0"
+            initial={false}
+            animate={{ 
+              rotate: isOpen ? -45 : 0,
+              bottom: isOpen ? "50%" : "0",
+              y: isOpen ? "50%" : 0
+            }}
+            style={{ transformOrigin: "center" }}
+            transition={{ duration: 0.25 }}
+          />
+        </div>
       </div>
     </motion.button>
   );
