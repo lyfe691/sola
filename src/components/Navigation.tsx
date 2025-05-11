@@ -254,33 +254,16 @@ const Navigation = () => {
   // Prevent body scrolling when menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      // Save current scroll position
-      const scrollY = window.scrollY;
-      
-      // Add class to prevent scrolling
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
-      document.body.style.overflowY = 'scroll';
+      // Prevent scrolling on body when menu is open
+      document.body.style.overflow = 'hidden';
     } else {
-      // Restore scrolling and scroll position
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflowY = '';
-      
-      if (scrollY) {
-        window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
-      }
+      // Restore scrolling
+      document.body.style.overflow = '';
     }
     
     return () => {
       // Cleanup in case component unmounts while menu is open
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.overflowY = '';
+      document.body.style.overflow = '';
     };
   }, [isMenuOpen]);
 
