@@ -28,9 +28,12 @@ import {
   SiShadcnui,
   SiKalilinux,
   SiZoom,
-  SiOpensourceinitiative
+  SiOpensourceinitiative,
+
 } from "react-icons/si";
-import { FaJava } from "react-icons/fa";
+
+import {BiLogoVisualStudio} from "react-icons/bi"
+import { FaJava} from "react-icons/fa";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { ChevronsLeftRightIcon } from "lucide-react";
 
@@ -69,7 +72,8 @@ const Skills = () => {
       title: "Tools",
       skills: [
         { name: "Git", icon: SiGit, level: 90 },
-        { name: "Docker", icon: SiDocker, level: 80 },
+        { name: "Visual Studio Code", icon: BiLogoVisualStudio, level: 80},
+        { name: "Docker", icon: SiDocker, level: 75 },
         { name: "Linux", icon: SiLinux, level: 72 },
         { name: "Kubernetes", icon: SiKubernetes, level: 62 }
       ]
@@ -81,6 +85,7 @@ const Skills = () => {
         { name: "CI/CD", icon: SiJenkins, level: 75 },
         { name: "OSINT", icon: SiOpensourceinitiative, level: 70 },
         { name: "Kali Linux", icon: SiKalilinux, level: 60 },
+        { name: "Python", icon: SiPython, level: 45}
       ]
     }
   ];
