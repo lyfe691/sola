@@ -20,7 +20,7 @@ export const Conditionals = () => {
         const location = useLocation();
         
         // hide toggles on these paths and render on all others
-        const hideTogglesOn = ["/a"];
+        const hideTogglesOn = ["/a", "/404"];
         const shouldRender = !hideTogglesOn.some(path => location.pathname === path);
         
         if (!shouldRender) return null;

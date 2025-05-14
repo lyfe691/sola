@@ -74,9 +74,9 @@ export const AnimatedRoutes = () => {
         <Route 
           path="/404" 
           element={
-            <SimpleLayout>
-              {withTransition(NotFound)}
-            </SimpleLayout>
+            <BlankLayout>
+              <NotFound/>
+            </BlankLayout>
           }
         />
         
