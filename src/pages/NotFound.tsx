@@ -19,7 +19,7 @@ const NotFound = () => {
   const location = useLocation();
 
   // only the prompt gets typed out; the response appears instantly once typing finishes
-  const PROMPT = `visitor@site:~$ curl https://sola.ysz.life${location.pathname}`;
+  const PROMPT = `root@~/dev/null$ curl https://sola.ysz.life${location.pathname}`;
   const RESPONSE_LINES = [
     "", // press enter, add new line (simulated)
     "HTTP/1.1 404 Not Found",
