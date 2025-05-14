@@ -14,10 +14,12 @@ import { useLocation } from "react-router-dom";
 
 const TYPING_SPEED = 50;
 const RESPONSE_DELAY = 600;
+const INITIAL_DELAY = 1500;
 
 const NotFound = () => {
   const location = useLocation();
-  const PROMPT = `root@~/dev/null$ curl https://sola.ysz.life${location.pathname}`;
+  const ROOT_PROMPT = "root@~/dev/null$ ";
+  const PROMPT = `curl https://sola.ysz.life${location.pathname}`;
   const RESPONSE_LINES = [
     "",
     "HTTP/1.1 404 Not Found",
@@ -29,8 +31,16 @@ const NotFound = () => {
   const [typedPrompt, setTypedPrompt] = useState("");
   const [typedResponse, setTypedResponse] = useState<string[]>([]);
   const [lineIndex, setLineIndex] = useState(0);
+  const [isInitialDelay, setIsInitialDelay] = useState(true);
 
   useEffect(() => {
+    if (isInitialDelay) {
+      const initialTimeout = setTimeout(() => {
+        setIsInitialDelay(false);
+      }, INITIAL_DELAY);
+      return () => clearTimeout(initialTimeout);
+    }
+
     if (typedPrompt.length < PROMPT.length) {
       const timeout = setTimeout(() => {
         setTypedPrompt((prev) => prev + PROMPT[prev.length]);
@@ -43,7 +53,7 @@ const NotFound = () => {
     }, RESPONSE_DELAY);
 
     return () => clearTimeout(responseTimeout);
-  }, [typedPrompt]);
+  }, [typedPrompt, isInitialDelay]);
 
   const typeResponseLine = (index: number) => {
     if (index < RESPONSE_LINES.length) {
@@ -70,8 +80,9 @@ const NotFound = () => {
 
         {/* Terminal */}
         <pre className="p-6 font-mono text-sm sm:text-base leading-relaxed whitespace-pre-wrap text-muted-foreground">
+          {ROOT_PROMPT}
           {typedPrompt}
-          {typedPrompt.length < PROMPT.length && (
+          {(isInitialDelay || typedPrompt.length < PROMPT.length) && (
             <span className="inline-block animate-pulse w-2">▮</span>
           )}
           {typedResponse.length > 0 &&
