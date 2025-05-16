@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
+import { STANDARD_THEMES, CUSTOM_THEMES, THEMES } from "@/config/themes"
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -46,21 +47,6 @@ export function ThemeToggle() {
 
   const resolvedTheme = theme === "system" ? systemTheme : theme
 
-  // Organized theme options into standard and custom groups
-  const standardThemes = [
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
-    { value: "system", label: "System" }
-  ]
-  
-  const customThemes = [
-    { value: "life", label: "Solarpunk", icon: Sprout },
-    { value: "cyber", label: "Cyberpunk", icon: Slack },
-    { value: "cloud", label: "Cloud", icon: Cloud },
-    { value: "sunset", label: "Sunset", icon: Sunset },
-    { value: "forest", label: "Forest", icon: Trees}
-  ]
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -69,19 +55,31 @@ export function ThemeToggle() {
           size="icon"
           className="w-9 h-9 transition-colors hover:bg-muted"
         >
-          <Sun className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
-          <Moon className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-          <Sprout className={`absolute h-4 w-4 transition-all ${resolvedTheme === "life" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-          <Slack className={`absolute h-4 w-4 transition-all ${resolvedTheme === "cyber" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-          <Cloud className={`absolute h-4 w-4 transition-all ${resolvedTheme === "cloud" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-          <Sunset className={`absolute h-4 w-4 transition-all ${resolvedTheme === "sunset" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-          <Trees className={`absolute h-4 w-4 transition-all ${resolvedTheme === "forest" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+          {/* Dynamically render icons based on theme configuration */}
+          {THEMES.map(t => {
+            const IconComponent = t.icon;
+            // Special handling for system theme to show Sun/Moon based on actual system theme
+            if (t.value === "system") {
+              return (
+                <>
+                  <Sun className={`absolute h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
+                  <Moon className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+                </>
+              )
+            }
+            return (
+              <IconComponent
+                key={t.value}
+                className={`absolute h-4 w-4 transition-all ${resolvedTheme === t.value ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
+              />
+            );
+          })}
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background min-w-[150px]">
         {/* Standard themes */}
-        {standardThemes.map((option) => (
+        {STANDARD_THEMES.map((option) => (
           <DropdownMenuItem
             key={option.value}
             onClick={() => setTheme(option.value as any)}
@@ -96,7 +94,7 @@ export function ThemeToggle() {
         <DropdownMenuSeparator />
 
         {/* Custom themes */}
-        {customThemes.map((option) => (
+        {CUSTOM_THEMES.map((option) => (
           <DropdownMenuItem
             key={option.value}
             onClick={() => setTheme(option.value as any)}

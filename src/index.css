@@ -264,6 +264,53 @@
     --scrollbar-thumb-hover: 140 30% 40%; 
   }
 
+  .amethyst {
+    --background: 250.91 18.64% 11.57%;
+    --foreground: 250.00 36.00% 90.20%;
+    --card: 251.25 20% 15.69%;
+    --card-foreground: 250.00 36.00% 90.20%;
+    --popover: 251.25 20% 15.69%;
+    --popover-foreground: 250.00 36.00% 90.20%;
+    --primary: 263.08 32.50% 68.63%;
+    --primary-foreground: 250.91 18.64% 11.57%;
+    --secondary: 254.48 14.87% 38.24%;
+    --secondary-foreground: 250.00 36.00% 90.20%;
+    --muted: 254.12 20.99% 15.88%;
+    --muted-foreground: 258.95 10.38% 64.12%;
+    --accent: 271.76 15.60% 21.37%;
+    --accent-foreground: 345.52 69.05% 83.53%;
+    --destructive: 0 68.67% 67.45%;
+    --destructive-foreground: 250.91 18.64% 11.57%;
+    --border: 252 18.52% 21.18%;
+    --input: 249.47 19.59% 19.02%;
+    --ring: 263.08 32.50% 68.63%;
+    --chart-1: 263.08 32.50% 68.63%;
+    --chart-2: 345.52 69.05% 83.53%;
+    --chart-3: 158.77 31.40% 59.41%;
+    --chart-4: 35.76 76.74% 74.71%;
+    --chart-5: 215.82 54.47% 75.88%;
+    --sidebar: 252 20.00% 9.80%;
+    --sidebar-foreground: 250.00 36.00% 90.20%;
+    --sidebar-primary: 263.08 32.50% 68.63%;
+    --sidebar-primary-foreground: 250.91 18.64% 11.57%;
+    --sidebar-accent: 271.76 15.60% 21.37%;
+    --sidebar-accent-foreground: 345.52 69.05% 83.53%;
+    --sidebar-border: 249.47 19.59% 19.02%;
+    --sidebar-ring: 263.08 32.50% 68.63%;
+    --font-sans: Geist, sans-serif;
+    --font-serif: "Lora", Georgia, serif;
+    --font-mono: "Fira Code", "Courier New", monospace;
+    --radius: 0.5rem;
+    --shadow-2xs: 1px 2px 5px 1px hsl(0 0% 0% / 0.03);
+    --shadow-xs: 1px 2px 5px 1px hsl(0 0% 0% / 0.03);
+    --shadow-sm: 1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 1px 2px 0px hsl(0 0% 0% / 0.06);
+    --shadow: 1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 1px 2px 0px hsl(0 0% 0% / 0.06);
+    --shadow-md: 1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 2px 4px 0px hsl(0 0% 0% / 0.06);
+    --shadow-lg: 1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 4px 6px 0px hsl(0 0% 0% / 0.06);
+    --shadow-xl: 1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 8px 10px 0px hsl(0 0% 0% / 0.06);
+    --shadow-2xl: 1px 2px 5px 1px hsl(0 0% 0% / 0.15);
+  }
+
   * {
     @apply border-border;
   }

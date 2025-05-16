@@ -1,0 +1,51 @@
+/**
+ * Copyright (c) 2025 Yanis Sebastian Zürcher
+ * 
+ * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
+ * Please refer to the LICENSE file in the project root for full licensing details.
+ * 
+ * All rights reserved.
+ */
+
+import { Moon, Sun, Cloud, Sunset, Sprout, Slack, Trees } from "lucide-react";
+import { FaGem } from "react-icons/fa";
+import { } from "react-icons/si";
+import { } from "react-icons/fa6";
+import { } from "react-icons/cg"
+import { } from "react-icons/bs"
+import { } from "react-icons/md"
+import { } from "react-icons/io5"
+import { } from "react-icons/io"
+import { } from "react-icons/fa"
+import { } from "react-icons/fi"
+import { } from "react-icons/ri"
+import { } from "react-icons/hi2"
+import { } from "react-icons/hi"
+import { } from "react-icons/vsc"
+
+import type { ElementType } from 'react';
+
+export interface ThemeConfig {
+  value: string;
+  label: string;
+  icon: ElementType; // allows more icons rather than just lucide-react
+  isCustom: boolean;
+}
+
+export const THEMES: ThemeConfig[] = [
+  { value: "light", label: "Light", icon: Sun, isCustom: false },
+  { value: "dark", label: "Dark", icon: Moon, isCustom: false },
+  { value: "system", label: "System", icon: Sun, isCustom: false }, // sun/moon based on system
+  { value: "life", label: "Solarpunk", icon: Sprout, isCustom: true },
+  { value: "cyber", label: "Cyberpunk", icon: Slack, isCustom: true },
+  { value: "cloud", label: "Cloud", icon: Cloud, isCustom: true },
+  { value: "sunset", label: "Sunset", icon: Sunset, isCustom: true },
+  { value: "forest", label: "Forest", icon: Trees, isCustom: true },
+  { value: "amethyst", label: "Amethyst", icon: FaGem, isCustom: true },
+];
+
+export const STANDARD_THEMES = THEMES.filter(theme => !theme.isCustom);
+export const CUSTOM_THEMES = THEMES.filter(theme => theme.isCustom);
+
+export const ALL_THEME_VALUES = THEMES.map(theme => theme.value);
+export type Theme = typeof ALL_THEME_VALUES[number]; 

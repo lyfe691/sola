@@ -8,8 +8,7 @@
  */
 
 import { createContext, useContext, useEffect, useState } from "react"
-
-type Theme = "dark" | "light" | "system" | "life" | "cyber" | "cloud" | "sunset" | "forest"
+import { type Theme, ALL_THEME_VALUES } from "@/config/themes";
 
 type ThemeProviderProps = {
   children: React.ReactNode
@@ -41,7 +40,8 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = window.document.documentElement
-    root.classList.remove("light", "dark", "life", "cyber", "cloud", "sunset", "forest")
+     {/* ---------------- add more themes --------------*/}
+    root.classList.remove(...ALL_THEME_VALUES.filter(t => t !== "system"));
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")

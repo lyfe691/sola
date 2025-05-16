@@ -27,23 +27,16 @@ import {
   GraduationCap, 
   Mail, 
   Settings, 
-  Moon, 
-  Sun, 
   Globe, 
-  Sprout, 
-  Slack, 
-  Cloud, 
-  Sunset,
   Search,
   Laptop,
-  Trees
 } from "lucide-react"
 import { useCommandMenu } from "@/hooks/use-command-menu"
 import { useTheme } from "./theme-provider"
 import { useLanguage } from "@/lib/language-provider"
+import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 
 // Import the types from their respective files
-type Theme = "dark" | "light" | "system" | "life" | "cyber" | "cloud" | "sunset" | "forest"
 type Language = "en" | "de" | "ja" | "es" | "cn"
 
 export function CommandMenu() {
@@ -59,7 +52,7 @@ export function CommandMenu() {
   }
 
   // Handle theme change
-  const handleThemeChange = (newTheme: Theme) => {
+  const handleThemeChange = (newTheme: ConfiguredTheme) => {
     setTheme(newTheme)
     closeCommandMenu()
   }
@@ -110,47 +103,27 @@ export function CommandMenu() {
         <CommandSeparator />
         
         <CommandGroup heading="Theme">
-          <CommandItem onSelect={() => handleThemeChange('light')} className="cursor-pointer">
-            <Sun className="mr-2 h-4 w-4" />
-            <span>Light</span>
-            {theme === 'light' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleThemeChange('dark')} className="cursor-pointer">
-            <Moon className="mr-2 h-4 w-4" />
-            <span>Dark</span>
-            {theme === 'dark' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleThemeChange('system')} className="cursor-pointer">
-            <Laptop className="mr-2 h-4 w-4" />
-            <span>System</span>
-            {theme === 'system' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
+          {STANDARD_THEMES.map((themeOption) => {
+            const IconComponent = themeOption.icon;
+            return (
+              <CommandItem key={themeOption.value} onSelect={() => handleThemeChange(themeOption.value as ConfiguredTheme)} className="cursor-pointer">
+                <IconComponent className="mr-2 h-4 w-4" />
+                <span>{themeOption.label}</span>
+                {theme === themeOption.value && <CommandShortcut>✓</CommandShortcut>}
+              </CommandItem>
+            );
+          })}
           <CommandSeparator />
-          <CommandItem onSelect={() => handleThemeChange('life')} className="cursor-pointer">
-            <Sprout className="mr-2 h-4 w-4" />
-            <span>Solarpunk</span>
-            {theme === 'life' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleThemeChange('cyber')} className="cursor-pointer">
-            <Slack className="mr-2 h-4 w-4" />
-            <span>Cyberpunk</span>
-            {theme === 'cyber' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleThemeChange('cloud')} className="cursor-pointer">
-            <Cloud className="mr-2 h-4 w-4" />
-            <span>Cloud</span>
-            {theme === 'cloud' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleThemeChange('sunset')} className="cursor-pointer">
-            <Sunset className="mr-2 h-4 w-4" />
-            <span>Sunset</span>
-            {theme === 'sunset' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleThemeChange('forest')} className="cursor-pointer">
-            <Trees className="mr-2 h-4 w-4" />
-            <span>Forest</span>
-            {theme === 'forest' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
+          {CUSTOM_THEMES.map((themeOption) => {
+            const IconComponent = themeOption.icon;
+            return (
+              <CommandItem key={themeOption.value} onSelect={() => handleThemeChange(themeOption.value as ConfiguredTheme)} className="cursor-pointer">
+                <IconComponent className="mr-2 h-4 w-4" />
+                <span>{themeOption.label}</span>
+                {theme === themeOption.value && <CommandShortcut>✓</CommandShortcut>}
+              </CommandItem>
+            );
+          })}
         </CommandGroup>
         
         <CommandSeparator />
