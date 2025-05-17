@@ -111,6 +111,10 @@ export const translations = {
         sola: {
           title: "Sola",
           description: "Sola is my personal website, the one youre on right now. It is built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way."
+        },
+        self: {
+          title: "Self",
+          description: "Self is a customizable Windows system information display tool inspired by Neofetch, built with Python. It displays system stats alongside image or ASCII art directly in the terminal. With support for block and braille render modes, theme customization, and a simple PowerShell installer, it brings a clean, Unix-style aesthetic to Windows."
         }
       }
     },
@@ -341,6 +345,10 @@ export const translations = {
         sola: {
           title: "Sola",
           description: "Sola ist meine persönliche Website, die, auf der du dich gerade befindest. Sie wurde mit React, TypeScript und Tailwind CSS erstellt und ist darauf ausgelegt, meine Projekte, Fähigkeiten und Erfahrungen auf eine saubere und moderne Weise zu präsentieren."
+        }, 
+        self: {
+          title: "Self",
+          description: "Self ist ein anpassbares Systeminformations-Tool für Windows, inspiriert von Neofetch und mit Python entwickelt. Es zeigt Systeminformationen zusammen mit Bild- oder ASCII-Art direkt im Terminal an. Mit Unterstützung für Block- und Braille-Darstellung, anpassbaren Themes und einem einfachen PowerShell-Installer bringt es eine saubere, Unix-ähnliche Ästhetik auf Windows."
         }
       }
     },
@@ -571,6 +579,10 @@ export const translations = {
         sola: {
           title: "Sola",
           description: "Sola es mi sitio web personal, la que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna."
+        }, 
+        self: {
+          title: "Self",
+          description: "Self es una herramienta personalizable de visualización de información del sistema para Windows, inspirada en Neofetch y construida con Python. Muestra estadísticas del sistema junto a arte ASCII o imágenes directamente en la terminal. Con soporte para modos de renderizado en bloques o braille, temas personalizables y un instalador sencillo por PowerShell, aporta una estética limpia al estilo Unix a Windows."
         }
       }
     },
@@ -802,6 +814,10 @@ export const translations = {
         sola: {
           title: "Sola",
           description: "Solaは私の個人ウェブサイトで、現在ご覧のものです。React、TypeScript、Tailwind CSSで作成され、プロジェクト、スキル、経験をクリーンでモダンな方法で表示することを目的としています。"
+        }, 
+        self: {
+          title: "Self",
+          description: "Self は、Neofetch にインスパイアされたカスタマイズ可能な Windows 用のシステム情報表示ツールで、Python で構築されています。システム情報を画像や ASCII アートと共にターミナル上に表示します。ブロックと点字の描画モード、テーマのカスタマイズ、簡単な PowerShell インストーラーに対応し、Windows にクリーンで Unix ライクな美しさをもたらします。"
         }
       }
     },
@@ -1032,6 +1048,10 @@ export const translations = {
         sola: {
           title: "Sola",
           description: "Sola是我的个人网站，您现在正在查看。使用React、TypeScript和Tailwind CSS构建，旨在以干净且现代的方式展示项目、技能和经验。"
+        },
+        self: {
+          title: "Self",
+          description: "Self 是一个可自定义的 Windows 系统信息显示工具，受 Neofetch 启发，并使用 Python 构建。它可在终端中显示系统信息，并配合图像或 ASCII 艺术显示。支持方块或盲文渲染模式、可定制主题，以及简洁的 PowerShell 安装程序，为 Windows 带来清爽的类 Unix 风格美学。"
         }
       }
     },

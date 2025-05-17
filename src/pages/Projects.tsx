@@ -51,6 +51,15 @@ const Projects = () => {
 
   const projects: Project[] = [
     {
+      title: t.projects.list.self.title,
+      description: t.projects.list.self.description,
+      image: "/projects/self.png",
+      github: "https://github.com/lyfe691/self",
+      tags: ["Neofetch", "Python", "Terminal", "Windows"],
+      featured: true,
+      date: "May 2025"
+    },
+    {
       title: t.projects.list.sola.title,
       description: t.projects.list.sola.description,
       image: "/projects/sola.png",
