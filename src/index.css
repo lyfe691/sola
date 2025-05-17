@@ -213,29 +213,47 @@
   }
 
   .sunset {
-    --background: 24 100% 95%;
-    --foreground: 24 5% 10%;
-    --card: 24 50% 90%;
-    --card-foreground: 24 5% 15%;
-    --popover: 24 100% 95%;
-    --popover-foreground: 24 100% 10%;
-    --primary: 24 100% 74.3%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 24 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: -14 30% 85%;
-    --muted-foreground: 24 5% 35%;
-    --accent: -14 30% 80%;
-    --accent-foreground: 24 5% 15%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 24 5% 90%;
-    --border: 24 30% 50%;
-    --input: 24 30% 26%;
-    --ring: 24 100% 74.3%;
-    --radius: 0.5rem;
-    --scrollbar-track: 24 50% 90%;
-    --scrollbar-thumb: 24 100% 64.3%;
-    --scrollbar-thumb-hover: 24 100% 54.3%;
+  --background: 336 13.51% 14.51%;
+  --foreground: 21.43 35.00% 92.16%;
+  --card: 324 9.62% 20.39%;
+  --card-foreground: 21.43 35.00% 92.16%;
+  --popover: 324 9.62% 20.39%;
+  --popover-foreground: 21.43 35.00% 92.16%;
+  --primary: 11.63 100% 68.63%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 325 9.38% 25.10%;
+  --secondary-foreground: 21.43 35.00% 92.16%;
+  --muted: 324 9.62% 20.39%;
+  --muted-foreground: 22.22 25.23% 79.02%;
+  --accent: 26.11 98.50% 73.92%;
+  --accent-foreground: 336 13.51% 14.51%;
+  --destructive: 355.49 77.58% 56.27%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 325 9.38% 25.10%;
+  --input: 325 9.38% 25.10%;
+  --ring: 11.63 100% 68.63%;
+  --chart-1: 11.63 100% 68.63%;
+  --chart-2: 26.11 98.50% 73.92%;
+  --chart-3: 23.86 100.00% 82.75%;
+  --chart-4: 16.07 100% 78.04%;
+  --chart-5: 9.58 54.84% 57.45%;
+  --sidebar: 336 13.51% 14.51%;
+  --sidebar-foreground: 21.43 35.00% 92.16%;
+  --sidebar-primary: 11.63 100% 68.63%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 26.11 98.50% 73.92%;
+  --sidebar-accent-foreground: 336 13.51% 14.51%;
+  --sidebar-border: 325 9.38% 25.10%;
+  --sidebar-ring: 11.63 100% 68.63%;
+  --radius: 0.625rem;
+  --shadow-2xs: 0px 6px 12px -3px hsl(0 0% 0% / 0.04);
+  --shadow-xs: 0px 6px 12px -3px hsl(0 0% 0% / 0.04);
+  --shadow-sm: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 1px 2px -4px hsl(0 0% 0% / 0.09);
+  --shadow: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 1px 2px -4px hsl(0 0% 0% / 0.09);
+  --shadow-md: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 2px 4px -4px hsl(0 0% 0% / 0.09);
+  --shadow-lg: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 4px 6px -4px hsl(0 0% 0% / 0.09);
+  --shadow-xl: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 8px 10px -4px hsl(0 0% 0% / 0.09);
+  --shadow-2xl: 0px 6px 12px -3px hsl(0 0% 0% / 0.22);
   }
 
   .forest {
