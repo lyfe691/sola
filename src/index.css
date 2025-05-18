@@ -254,6 +254,9 @@
   --shadow-lg: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 4px 6px -4px hsl(0 0% 0% / 0.09);
   --shadow-xl: 0px 6px 12px -3px hsl(0 0% 0% / 0.09), 0px 8px 10px -4px hsl(0 0% 0% / 0.09);
   --shadow-2xl: 0px 6px 12px -3px hsl(0 0% 0% / 0.22);
+  --scrollbar-track: 336 13.51% 14.51%;
+  --scrollbar-thumb: 11.63 100% 68.63%;
+  --scrollbar-thumb-hover: 11.63 100% 68.63%;
   }
 
   .forest {
@@ -327,6 +330,9 @@
     --shadow-lg: 1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 4px 6px 0px hsl(0 0% 0% / 0.06);
     --shadow-xl: 1px 2px 5px 1px hsl(0 0% 0% / 0.06), 1px 8px 10px 0px hsl(0 0% 0% / 0.06);
     --shadow-2xl: 1px 2px 5px 1px hsl(0 0% 0% / 0.15);
+    --scrollbar-track: 250.91 18.64% 11.57%;
+    --scrollbar-thumb: 263.08 32.50% 68.63%;
+    --scrollbar-thumb-hover: 263.08 32.50% 68.63%;
   }
 
   * {

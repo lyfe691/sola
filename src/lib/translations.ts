@@ -26,7 +26,7 @@ export const translations = {
       services: "Services"
     },
     index: {
-      greeting: "Hello, I'm Yanis",
+      greeting: "Hello, I'm",
       description: "I'm a 17 year old software developer based in Zürich, Switzerland, focused on building exceptional digital experiences.",
       contactMe: "Contact me",
       viewProjects: "View projects"
@@ -260,7 +260,7 @@ export const translations = {
       services: "Dienstleistungen"
     },
     index: {
-      greeting: "Hallo, ich bin Yanis",
+      greeting: "Hallo, ich bin",
       description: "Ich bin ein 17 Jähriger Softwareentwickler aus Zürich, Schweiz, und konzentriere mich darauf, aussergewöhnliche digitale Erlebnisse zu schaffen.",
       contactMe: "Kontakt",
       viewProjects: "Projekte ansehen"
@@ -494,7 +494,7 @@ export const translations = {
       services: "Servicios"
     },
     index: {
-      greeting: "Hola, soy Yanis",
+      greeting: "Hola, soy",
       description: "Soy un desarrollador de software de 17 años basado en Zúrich, Suiza, enfocado en crear experiencias digitales excepcionales.",
       contactMe: "Contáctame",
       viewProjects: "Ver proyectos"
@@ -729,7 +729,7 @@ export const translations = {
       services: "サービス"
     },
     index: {
-      greeting: "こんにちは、私は Yanis ",
+      greeting: "こんにちは、私は",
       description: "私はスイスのチューリッヒ出身の17歳のソフトウェア開発者で、優れたデジタル体験の創造に取り組んでいます。",
       contactMe: "お問い合わせ",
       viewProjects: "プロジェクトを見る"
@@ -963,7 +963,7 @@ export const translations = {
       services: "服务"
     },
     index: {
-      greeting: "你好，我是 Yanis",
+      greeting: "你好，我是",
       description: "我是一位17岁的软件开发者，来自瑞士苏黎世，致力于创造卓越的数字体验。",
       contactMe: "联系我",
       viewProjects: "查看项目"

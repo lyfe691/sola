@@ -86,8 +86,8 @@ const Index = () => {
                       <TypeAnimation
                         key={key}
                         sequence={[
-                          t.index.greeting,
-                          500,
+                          t.index.greeting + " " + "Yanis",
+                          0,
                           () => setTypingComplete(true)
                         ]}
                         speed={65}
