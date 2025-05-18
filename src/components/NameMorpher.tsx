@@ -26,7 +26,7 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
   
   return (
     <>
-      <span className="text-foreground inline-block">{greeting} </span>
+      <span className="text-foreground inline-block">{greeting}&nbsp;</span>
       <motion.span 
         className="relative inline-block overflow-hidden"
         initial={false}
