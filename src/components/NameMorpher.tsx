@@ -17,26 +17,33 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentNameIndex((prev) => (prev + 1) % names.length);
-    }, 4000);
+    }, 2500);
     
     return () => clearInterval(interval);
   }, []);
   
   const currentName = names[currentNameIndex];
   
-  // find the longest name to set a fixed width
-  const longestName = names.reduce((a, b) => a.length > b.length ? a : b, "");
-  
   return (
     <div className="relative inline-flex items-baseline">
       <span className="text-foreground">{greeting}</span>
       <span className="text-foreground">&nbsp;</span>
-      <div 
-        className="relative inline-block overflow-hidden" 
+      <motion.div 
+        className="relative inline-block overflow-hidden"
+        initial={false}
+        animate={{ 
+          width: `${currentName.length * 0.6}em`,
+        }}
+        transition={{
+          duration: 0.5,
+          ease: [0.22, 1, 0.36, 1]
+        }}
         style={{ 
-          minWidth: `${longestName.length * 0.6}em`,
           display: "inline-flex", 
-          justifyContent: "flex-start" 
+          justifyContent: "flex-start",
+          padding: "0.05em 0.1em",
+          borderRadius: "0.1em",
+          backgroundColor: "hsl(var(--muted) / 0.5)",
         }}
       >
         <AnimatePresence mode="popLayout">
@@ -46,16 +53,16 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
           >
             {currentName.split('').map((letter, index) => (
               <motion.span
                 key={`${currentName}-${index}`}
                 initial={{ 
                   opacity: 0, 
-                  filter: "blur(8px)",
-                  y: -15,
-                  scale: 0.9
+                  filter: "blur(6px)",
+                  y: -10,
+                  scale: 0.95
                 }}
                 animate={{ 
                   opacity: 1, 
@@ -65,22 +72,22 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
                 }}
                 exit={{ 
                   opacity: 0, 
-                  filter: "blur(8px)",
-                  y: 15,
-                  scale: 0.9,
+                  filter: "blur(6px)",
+                  y: 10,
+                  scale: 0.95,
                   transition: {
-                    duration: 0.4,
-                    delay: 0.02 * (currentName.length - index - 1)
+                    duration: 0.3,
+                    delay: 0.015 * (currentName.length - index - 1)
                   }
                 }}
                 transition={{
-                  duration: 0.5,
-                  delay: index * 0.05,
+                  duration: 0.4,
+                  delay: index * 0.03,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground/80 inline-block"
+                className="text-primary inline-block"
                 style={{
-                  textShadow: "0 0 20px rgba(255,255,255,0.1)",
+                  textShadow: "0 0 8px hsl(var(--primary) / 0.2)",
                   willChange: "transform, opacity, filter"
                 }}
               >
@@ -89,7 +96,7 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
             ))}
           </motion.div>
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 };
