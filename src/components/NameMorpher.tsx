@@ -25,9 +25,8 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
   const currentName = names[currentNameIndex];
   
   return (
-    <span className="inline whitespace-nowrap">
-      <span className="text-foreground">{greeting}</span>
-      <span className="text-foreground">&nbsp;</span>
+    <>
+      <span className="text-foreground inline-block">{greeting} </span>
       <motion.span 
         className="relative inline-block overflow-hidden"
         initial={false}
@@ -98,6 +97,6 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
           </motion.div>
         </AnimatePresence>
       </motion.span>
-    </span>
+    </>
   );
 };
