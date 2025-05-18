@@ -25,10 +25,10 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
   const currentName = names[currentNameIndex];
   
   return (
-    <div className="relative inline-flex items-baseline">
+    <span className="inline whitespace-nowrap">
       <span className="text-foreground">{greeting}</span>
       <span className="text-foreground">&nbsp;</span>
-      <motion.div 
+      <motion.span 
         className="relative inline-block overflow-hidden"
         initial={false}
         animate={{ 
@@ -44,6 +44,7 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
           padding: "0.05em 0.1em",
           borderRadius: "0.1em",
           backgroundColor: "hsl(var(--muted) / 0.5)",
+          verticalAlign: "baseline"
         }}
       >
         <AnimatePresence mode="popLayout">
@@ -96,7 +97,7 @@ export const NameMorpher = ({ greeting }: { greeting: string }) => {
             ))}
           </motion.div>
         </AnimatePresence>
-      </motion.div>
-    </div>
+      </motion.span>
+    </span>
   );
 };
