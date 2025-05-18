@@ -30,6 +30,7 @@ import type { Engine } from "tsparticles-engine";
 import ParticleBackground from "../components/ParticleBackground";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
 import { Helmet } from "react-helmet-async";
+import { NameMorpher } from "../components/NameMorpher";
 
 
 const Index = () => {
@@ -81,18 +82,9 @@ const Index = () => {
                       variants={titleVariants}
                       initial="hidden"
                       animate="visible"
-                      className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70"
+                      className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
                     >
-                      <TypeAnimation
-                        key={key}
-                        sequence={[
-                          t.index.greeting + " " + "Yanis",
-                          0,
-                          () => setTypingComplete(true)
-                        ]}
-                        speed={65}
-                        className="text-foreground"
-                      />
+                      <NameMorpher greeting={t.index.greeting} />
                     </motion.h1>
                     
                     <motion.p 
