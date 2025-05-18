@@ -84,7 +84,7 @@ const Index = () => {
                       animate="visible"
                       className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
                     >
-                      <NameMorpher greeting={t.index.greeting} />
+                      <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
                     </motion.h1>
                     
                     <motion.p 
