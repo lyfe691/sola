@@ -9,7 +9,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react"
 
-type Language = "en" | "de" | "ja" | "es" | "cn"
+type Language = "en" | "de" | "ja" | "es" | "cn" | "ru"
 
 type LanguageProviderProps = {
   children: React.ReactNode
