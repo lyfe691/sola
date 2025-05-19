@@ -37,7 +37,7 @@ import { useLanguage } from "@/lib/language-provider"
 import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 
 // Import the types from their respective files
-type Language = "en" | "de" | "ja" | "es" | "cn"
+type Language = "en" | "de" | "ja" | "es" | "cn" | "ru"
 
 export function CommandMenu() {
   const navigate = useNavigate()
@@ -153,6 +153,11 @@ export function CommandMenu() {
             <Globe className="mr-2 h-4 w-4" />
             <span>中文</span>
             {language === 'cn' && <CommandShortcut>✓</CommandShortcut>}
+          </CommandItem>
+          <CommandItem onSelect={() => handleLanguageChange('ru')} className="cursor-pointer">
+            <Globe className="mr-2 h-4 w-4" />
+            <span>Русский</span>
+            {language === 'ru' && <CommandShortcut>✓</CommandShortcut>}
           </CommandItem>
         </CommandGroup>
         
