@@ -382,7 +382,55 @@
     --scrollbar-thumb-hover: 30.0000 33.8710% 48.6275%;
   }
 
-
+  .bubblegum {
+    --background: 330 47.0588% 93.3333%;
+    --foreground: 0 0% 35.6863%;
+    --card: 41.5385 92.8571% 89.0196%;
+    --card-foreground: 0 0% 35.6863%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 35.6863%;
+    --primary: 325.5814 57.8475% 56.2745%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 181.6901 43.5583% 68.0392%;
+    --secondary-foreground: 0 0% 20%;
+    --muted: 190.5263 58.7629% 80.9804%;
+    --muted-foreground: 0 0% 47.8431%;
+    --accent: 42.1429 91.3043% 81.9608%;
+    --accent-foreground: 0 0% 20%;
+    --destructive: 359.5652 92.0000% 70.5882%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 325.5814 57.8475% 56.2745%;
+    --input: 0 0% 89.4118%;
+    --ring: 330 70.2381% 67.0588%;
+    --chart-1: 330 70.2381% 67.0588%;
+    --chart-2: 190.2128 61.8421% 70.1961%;
+    --chart-3: 42.1429 91.3043% 81.9608%;
+    --chart-4: 329.6386 77.5701% 79.0196%;
+    --chart-5: 330.6294 64.1256% 56.2745%;
+    --sidebar: 326.2500 69.5652% 90.9804%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 330.3659 81.1881% 60.3922%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 327.4074 87.0968% 81.7647%;
+    --sidebar-accent-foreground: 0 0% 20%;
+    --sidebar-border: 268.6957 100.0000% 95.4902%;
+    --sidebar-ring: 330.3659 81.1881% 60.3922%;
+    --font-sans: Poppins, sans-serif;
+    --font-serif: Lora, serif;
+    --font-mono: Fira Code, monospace;
+    --radius: 0.4rem;
+    --shadow-2xs: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 0.50);
+    --shadow-xs: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 0.50);
+    --shadow-sm: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 1px 2px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+    --shadow: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 1px 2px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+    --shadow-md: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 2px 4px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+    --shadow-lg: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 4px 6px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+    --shadow-xl: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 1.00), 3px 8px 10px -1px hsl(325.7800 58.1800% 56.8600% / 1.00);
+    --shadow-2xl: 3px 3px 0px 0px hsl(325.7800 58.1800% 56.8600% / 2.50);
+    --scrollbar-track: 41.5385 92.8571% 89.0196%;
+    --scrollbar-thumb: 325.5814 57.8475% 56.2745%;
+    --scrollbar-thumb-hover: 325.5814 57.8475% 56.2745%;
+  }
   * {
     @apply border-border;
   }

@@ -8,11 +8,11 @@
  */
 
 import { Moon, Sun, Cloud, Sunset, Sprout, Slack, Trees } from "lucide-react";
-import { FaGem, FaMoneyBillAlt } from "react-icons/fa";
+import { FaCube, FaGem, FaMoneyBillAlt } from "react-icons/fa";
 import { } from "react-icons/si";
 import { } from "react-icons/fa6";
 import { } from "react-icons/cg"
-import { } from "react-icons/bs"
+import { BsBalloon } from "react-icons/bs"
 import { } from "react-icons/io5"
 import { } from "react-icons/io"
 import { } from "react-icons/fa"
@@ -42,6 +42,7 @@ export const THEMES: ThemeConfig[] = [
   { value: "forest", label: "Forest", icon: Trees, isCustom: true },
   { value: "amethyst", label: "Amethyst", icon: FaGem, isCustom: true },
   { value: "vintage", label: "Vintage", icon: FaMoneyBillAlt, isCustom: true },
+  { value: "bubblegum", label: "Bubblegum", icon: BsBalloon, isCustom: true },
 ];
 
 export const STANDARD_THEMES = THEMES.filter(theme => !theme.isCustom);
