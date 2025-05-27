@@ -431,6 +431,58 @@
     --scrollbar-thumb: 325.5814 57.8475% 56.2745%;
     --scrollbar-thumb-hover: 325.5814 57.8475% 56.2745%;
   }
+
+  .perpetuity {
+    --background: 196.3636 52.3810% 8.2353%;
+  --foreground: 180 77.1144% 60.5882%;
+  --card: 192 51.0204% 9.6078%;
+  --card-foreground: 180 77.1144% 60.5882%;
+  --popover: 192 51.0204% 9.6078%;
+  --popover-foreground: 180 77.1144% 60.5882%;
+  --primary: 180 77.1144% 60.5882%;
+  --primary-foreground: 196.3636 52.3810% 8.2353%;
+  --secondary: 191.4286 58.8785% 20.9804%;
+  --secondary-foreground: 180 77.1144% 60.5882%;
+  --muted: 192.8571 58.3333% 14.1176%;
+  --muted-foreground: 180 50.6849% 42.9412%;
+  --accent: 191.4286 58.8785% 20.9804%;
+  --accent-foreground: 180 77.1144% 60.5882%;
+  --destructive: 0 78.8991% 57.2549%;
+  --destructive-foreground: 0 0% 94.9020%;
+  --border: 191.4286 58.8785% 20.9804%;
+  --input: 191.4286 58.8785% 20.9804%;
+  --ring: 180 77.1144% 60.5882%;
+  --chart-1: 180 77.1144% 60.5882%;
+  --chart-2: 180 50.6849% 42.9412%;
+  --chart-3: 180 50.8197% 35.8824%;
+  --chart-4: 184.3478 57.9832% 23.3333%;
+  --chart-5: 185.2174 62.1622% 14.5098%;
+  --sidebar: 196.3636 52.3810% 8.2353%;
+  --sidebar-foreground: 180 77.1144% 60.5882%;
+  --sidebar-primary: 180 77.1144% 60.5882%;
+  --sidebar-primary-foreground: 196.3636 52.3810% 8.2353%;
+  --sidebar-accent: 191.4286 58.8785% 20.9804%;
+  --sidebar-accent-foreground: 180 77.1144% 60.5882%;
+  --sidebar-border: 191.4286 58.8785% 20.9804%;
+  --sidebar-ring: 180 77.1144% 60.5882%;
+  --font-sans: Source Code Pro, monospace;
+  --font-serif: Source Code Pro, monospace;
+  --font-mono: Source Code Pro, monospace;
+  --radius: 0.125rem;
+  --shadow-2xs: 1px 1px 2px 0px hsl(180 70% 60% / 0.10);
+  --shadow-xs: 1px 1px 2px 0px hsl(180 70% 60% / 0.10);
+  --shadow-sm: 1px 1px 2px 0px hsl(180 70% 60% / 0.20), 1px 1px 2px -1px hsl(180 70% 60% / 0.20);
+  --shadow: 1px 1px 2px 0px hsl(180 70% 60% / 0.20), 1px 1px 2px -1px hsl(180 70% 60% / 0.20);
+  --shadow-md: 1px 1px 2px 0px hsl(180 70% 60% / 0.20), 1px 2px 4px -1px hsl(180 70% 60% / 0.20);
+  --shadow-lg: 1px 1px 2px 0px hsl(180 70% 60% / 0.20), 1px 4px 6px -1px hsl(180 70% 60% / 0.20);
+  --shadow-xl: 1px 1px 2px 0px hsl(180 70% 60% / 0.20), 1px 8px 10px -1px hsl(180 70% 60% / 0.20);
+  --shadow-2xl: 1px 1px 2px 0px hsl(180 70% 60% / 0.50);
+    --scrollbar-track: 180 23.8095% 95.8824%;
+    --scrollbar-thumb: 183.9706 91.8919% 29.0196%;
+    --scrollbar-thumb-hover: 183.9706 91.8919% 29.0196%;
+  }
+
+
   * {
     @apply border-border;
   }
