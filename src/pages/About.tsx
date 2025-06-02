@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download, Github } from 'lucide-react';
+import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download } from 'lucide-react';
+import { FaGithubAlt } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -131,7 +132,7 @@ const About = () => {
               <div className="flex flex-row items-center gap-3 pt-5">
                 <Button effect="shineHover" variant="outline" size="sm" className="border-foreground/20" asChild>
                   <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                    <Github className="w-4 h-4" />
+                    <FaGithubAlt className="w-4 h-4" />
                     GitHub
                   </a>
                 </Button>

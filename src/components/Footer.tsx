@@ -10,7 +10,8 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { Github, Mail, Linkedin, Info } from "lucide-react";
+import { Mail, Linkedin, Info } from "lucide-react";
+import { FaGithubAlt } from "react-icons/fa";
 import { SiChessdotcom } from "react-icons/si";
 import { Separator } from "@/components/ui/separator";
 
@@ -21,7 +22,7 @@ const Footer = () => {
 
   const social = [
     { 
-      icon: <Github className="w-4 h-4" />, 
+      icon: <FaGithubAlt className="w-4 h-4" />, 
       href: "https://github.com/lyfe691", 
       label: "GitHub",
       hoverClass: "hover:bg-foreground/10" // default hover background

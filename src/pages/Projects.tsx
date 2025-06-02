@@ -8,7 +8,8 @@
  */
 
 import { useState } from "react";
-import { ExternalLink, Github, Info, ChevronRight } from "lucide-react";
+import { ExternalLink, Info, ChevronRight } from "lucide-react";
+import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react"
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
@@ -298,7 +299,7 @@ const Projects = () => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                       >
-                                        <Github className="w-4 h-4 mr-1" />
+                                        <FaGithubAlt className="w-4 h-4 mr-1" />
                                         GitHub
                                       </a>
                                     </Button>
@@ -425,7 +426,7 @@ const Projects = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                   >
-                                    <Github className="w-4 h-4 mr-1" />
+                                    <FaGithubAlt className="w-4 h-4 mr-1" />
                                     GitHub
                                   </a>
                                 </Button>

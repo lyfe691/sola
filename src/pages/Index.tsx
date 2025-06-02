@@ -11,11 +11,11 @@
 
 import { Link } from "react-router-dom";
 import { 
-  Github,
   Mail,
   Linkedin,
   ArrowRight,
 } from "lucide-react";
+import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
 import { TypeAnimation } from 'react-type-animation';
 import { useEffect, useState } from "react";
@@ -141,7 +141,7 @@ const Index = () => {
                       {[
                         { 
                           href: "https://github.com/lyfe691", 
-                          icon: <Github className="w-full h-full" />, 
+                          icon: <FaGithubAlt className="w-full h-full" />, 
                           label: "GitHub",
                           hoverClass: "hover:border-foreground/30"
                         },
