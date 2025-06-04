@@ -85,19 +85,29 @@ const Index = () => {
                       className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
                     >
                       <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
-                      <Link to="/now" className="text-base ml-2 underline">
-                        now
-                      </Link>
                     </motion.h1>
                     
-                    <motion.p 
+                    <motion.p
                       variants={itemVariants}
                       initial="hidden"
                       animate="visible"
-                      className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
+                      className="text-foreground/70 leading-relaxed mb-2 sm:mb-3 md:mb-4 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
                     >
                       {t.index.description}
                     </motion.p>
+                    <motion.div
+                      variants={itemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className="mb-4 sm:mb-5 md:mb-8"
+                    >
+                      <Link
+                        to="/now"
+                        className="text-base text-primary underline-offset-4 hover:underline"
+                      >
+                        What I'm doing now →
+                      </Link>
+                    </motion.div>
 
                     <motion.div 
                       variants={itemVariants}
