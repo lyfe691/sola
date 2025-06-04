@@ -18,6 +18,7 @@ import Experience from "@/pages/Experience";
 import Contact from "@/pages/Contact";
 import Services from "@/pages/Services";
 import AboutThisWebsite from "@/pages/AboutThisWebsite";
+import Now from "@/pages/Now";
 import SimpleLayout from "@/layouts/SimpleLayout";
 import MainLayout from "@/layouts/MainLayout";
 import BlankLayout from "@/layouts/BlankLayout";
@@ -134,18 +135,28 @@ export const AnimatedRoutes = () => {
           } 
         />
         
-        <Route 
-          path="/services" 
+        <Route
+          path="/services"
           element={
             <MainLayout>
               {withTransition(Services)}
             </MainLayout>
-          } 
+          }
         />
-  
+
+        {/* now page */}
+        <Route
+          path="/now"
+          element={
+            <BlankLayout>
+              <Now />
+            </BlankLayout>
+          }
+        />
+
         {/* 這個網站是怎麼造出來的 */}
-        <Route 
-          path="/a" 
+        <Route
+          path="/a"
           element={
             <BlankLayout>
               <AboutThisWebsite />

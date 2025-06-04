@@ -78,13 +78,16 @@ const Index = () => {
               <div className="flex-1 flex flex-col justify-center items-start">
                 <div className="flex flex-col">
                   <div className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0">
-                    <motion.h1 
+                    <motion.h1
                       variants={titleVariants}
                       initial="hidden"
                       animate="visible"
                       className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
                     >
                       <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
+                      <Link to="/now" className="text-base ml-2 underline">
+                        now
+                      </Link>
                     </motion.h1>
                     
                     <motion.p 
