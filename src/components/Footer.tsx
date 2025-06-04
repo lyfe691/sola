@@ -12,7 +12,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Mail, Linkedin, Info } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { SiChessdotcom } from "react-icons/si";
+import { SiChessdotcom, SiHackthebox } from "react-icons/si";
 import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
@@ -31,20 +31,28 @@ const Footer = () => {
       icon: <Mail className="w-4 h-4" />, 
       href: "mailto:yanis.sebastian.zuercher@gmail.com", 
       label: "Email",
-      hoverClass: "hover:bg-red-400/20 hover:border-red-400/30" // subtle red background
+      hoverClass: "hover:bg-red-400/20 hover:border-red-400/30" 
     },
     { 
       icon: <Linkedin className="w-4 h-4" />, 
       href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/", 
       label: "LinkedIn",
-      hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30" // subtle cyan background
+      hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30" 
+    },
+    {
+      icon: <SiHackthebox className="w-4 h-4" />,
+      href: "https://app.hackthebox.com/profile/2350832",
+      label: "Hack The Box",
+      hoverClass: "hover:bg-emerald-300/20 hover:border-emerald-400/30"
     },
     { 
       icon: <SiChessdotcom className="w-4 h-4" />, 
       href: "https://chess.com/member/moment_o", 
       label: "Chess.com",
-      hoverClass: "hover:bg-green-400/20 hover:border-green-400/30" // subtle green background
-    }
+      hoverClass: "hover:bg-green-400/20 hover:border-green-400/30" 
+    }, 
+
+    
   ];
 
   const nav = [

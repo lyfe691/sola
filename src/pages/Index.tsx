@@ -21,7 +21,7 @@ import { TypeAnimation } from 'react-type-animation';
 import { useEffect, useState } from "react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
-import { SiChessdotcom } from "react-icons/si";
+import { SiChessdotcom, SiHackthebox } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Navigation from "../components/Navigation";
 import Particles from "react-tsparticles";
@@ -157,6 +157,12 @@ const Index = () => {
                           label: "LinkedIn",
                           hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30"
                         },
+                        {
+                          icon: <SiHackthebox className="w-full h-full" />,
+                          href: "https://app.hackthebox.com/profile/2350832",
+                          label: "Hack The Box",
+                          hoverClass: "hover:bg-emerald-300/20 hover:border-emerald-400/30"
+                        },
                         { 
                           href: "https://chess.com/member/moment_o", 
                           icon: <SiChessdotcom className="w-full h-full" />, 
@@ -174,7 +180,8 @@ const Index = () => {
                             ${social.label.length <= 5 ? 'md:hover:[width:6.3rem] lg:hover:[width:6.3rem]' : 
                               social.label.length <= 7 ? 'md:hover:[width:6.8rem] lg:hover:[width:6.8rem]' : 
                               social.label.length <= 8 ? 'md:hover:[width:7.5rem] lg:hover:[width:7.5rem]' : 
-                              'md:hover:[width:8.5rem] lg:hover:[width:8.5rem]'}
+                              social.label.length <= 10 ? 'md:hover:[width:8.5rem] lg:hover:[width:8.5rem]' : 
+                              'md:hover:[width:9.5rem] lg:hover:[width:9.5rem]'}
                           `}
                         >
                           {/* fuckass css to center PIXEL PERFECT INSIDE A CONTAINER CAUSE IT WONT LET ME DO IT NORMALLY. */}
