@@ -169,31 +169,28 @@ const Index = () => {
                           href={social.href}
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className={`group relative inline-flex items-center overflow-hidden rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out ${social.hoverClass}
-                            w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12
-                            ${social.label.length <= 5 ? 'md:hover:[width:5rem] lg:hover:[width:6.3rem]' : 
-                              social.label.length <= 7 ? 'md:hover:[width:6rem] lg:hover:[width:6.8rem]' : 
-                              social.label.length <= 8 ? 'md:hover:[width:6.5rem] lg:hover:[width:7.5rem]' : 
-                              'md:hover:[width:7rem] lg:hover:[width:8.5rem]'}
-                             
+                          className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden ${social.hoverClass}
+                            w-12 h-12 sm:w-12 sm:h-12 md:w-12 md:h-12
+                            ${social.label.length <= 5 ? 'md:hover:[width:6.3rem] lg:hover:[width:6.3rem]' : 
+                              social.label.length <= 7 ? 'md:hover:[width:6.8rem] lg:hover:[width:6.8rem]' : 
+                              social.label.length <= 8 ? 'md:hover:[width:7.5rem] lg:hover:[width:7.5rem]' : 
+                              'md:hover:[width:8.5rem] lg:hover:[width:8.5rem]'}
                           `}
                         >
-                          {/* Icon - stays centered in its fixed space */}
-                          <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 flex items-center justify-center flex-shrink-0 relative z-10">
-                            <div className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 flex items-center justify-center">
-                              {social.icon}
-                            </div>
+                          {/* fuckass css to center PIXEL PERFECT INSIDE A CONTAINER CAUSE IT WONT LET ME DO IT NORMALLY. */}
+                          <div className="absolute left-[11.47px] top-[0.7rem] w-6 h-6 flex items-center justify-center z-10">
+                            {social.icon}
                           </div>
                           
-                          {/* Label with glassmorphism effect */}
-                          <div className="hidden md:block absolute left-10 sm:left-11 md:left-12 right-1 top-1/2 -translate-y-1/2 flex items-center overflow-hidden">
+                          {/* fuckass glassmorphism effect */}
+                          <div className="hidden md:block absolute left-12 right-1 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
                             <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
                               {social.label}
                             </span>
                           </div>
                           
-                          {/* Mobile tooltip */}
-                          <span className="md:hidden absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap">
+                          {/*  */}
+                          <span className="md:hidden absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap pointer-events-none">
                             {social.label}
                           </span>
                         </a>
