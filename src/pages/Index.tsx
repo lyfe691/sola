@@ -21,7 +21,7 @@ import { TypeAnimation } from 'react-type-animation';
 import { useEffect, useState } from "react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
-import { SiChessdotcom, SiHackthebox } from "react-icons/si";
+import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Navigation from "../components/Navigation";
 import Particles from "react-tsparticles";
@@ -158,6 +158,12 @@ const Index = () => {
                           hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30"
                         },
                         {
+                          icon: <SiLeetcode className="w-full h-full" />,
+                          href: "https://leetcode.com/u/lyfe691/",
+                          label: "LeetCode",
+                          hoverClass: "hover:bg-orange-400/20 hover:border-orange-400/30"
+                        },
+                        {
                           icon: <SiHackthebox className="w-full h-full" />,
                           href: "https://app.hackthebox.com/profile/2350832",
                           label: "Hack The Box",
@@ -176,8 +182,9 @@ const Index = () => {
                           target="_blank" 
                           rel="noopener noreferrer"
                           className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden ${social.hoverClass}
-                            w-12 h-12 sm:w-12 sm:h-12 md:w-12 md:h-12
-                            ${social.label.length <= 5 ? 'md:hover:[width:6.3rem] lg:hover:[width:6.3rem]' : 
+                            w-10 h-10 sm:w-12 sm:h-12 md:w-12 md:h-12
+                            ${social.label === "LeetCode" ? 'md:hover:[width:8rem] lg:hover:[width:8rem]' :
+                              social.label.length <= 5 ? 'md:hover:[width:6.3rem] lg:hover:[width:6.3rem] ' : 
                               social.label.length <= 7 ? 'md:hover:[width:6.8rem] lg:hover:[width:6.8rem]' : 
                               social.label.length <= 8 ? 'md:hover:[width:7.5rem] lg:hover:[width:7.5rem]' : 
                               social.label.length <= 10 ? 'md:hover:[width:8.5rem] lg:hover:[width:8.5rem]' : 
@@ -185,7 +192,7 @@ const Index = () => {
                           `}
                         >
                           {/* fuckass css to center PIXEL PERFECT INSIDE A CONTAINER CAUSE IT WONT LET ME DO IT NORMALLY. */}
-                          <div className="absolute left-[11.47px] top-[0.7rem] w-6 h-6 flex items-center justify-center z-10">
+                          <div className="absolute left-[9.47px] sm:left-[11.47px] top-[0.6rem] sm:top-[0.7rem] w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center z-10">
                             {social.icon}
                           </div>
                           

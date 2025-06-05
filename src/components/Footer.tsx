@@ -12,7 +12,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Mail, Linkedin, Info } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { SiChessdotcom, SiHackthebox } from "react-icons/si";
+import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Separator } from "@/components/ui/separator";
 
 const Footer = () => {
@@ -38,6 +38,12 @@ const Footer = () => {
       href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/", 
       label: "LinkedIn",
       hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30" 
+    },
+    {
+      icon: <SiLeetcode className="w-4 h-4" />,
+      href: "https://leetcode.com/u/lyfe691/",
+      label: "LeetCode",
+      hoverClass: "hover:bg-orange-400/20 hover:border-orange-400/30"
     },
     {
       icon: <SiHackthebox className="w-4 h-4" />,
