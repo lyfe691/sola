@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
-import { STANDARD_THEMES, CUSTOM_THEMES, THEMES } from "@/config/themes"
+import { STANDARD_THEMES, CUSTOM_THEMES, THEMES, type Theme } from "@/config/themes"
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -82,7 +82,7 @@ export function ThemeToggle() {
         {STANDARD_THEMES.map((option) => (
           <DropdownMenuItem
             key={option.value}
-            onClick={() => setTheme(option.value as any)}
+            onClick={() => setTheme(option.value as Theme)}
             className="flex justify-between cursor-pointer"
           >
             {option.label}
@@ -97,7 +97,7 @@ export function ThemeToggle() {
         {CUSTOM_THEMES.map((option) => (
           <DropdownMenuItem
             key={option.value}
-            onClick={() => setTheme(option.value as any)}
+            onClick={() => setTheme(option.value as Theme)}
             className="flex justify-between cursor-pointer"
           >
             {option.label}

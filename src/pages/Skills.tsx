@@ -18,6 +18,7 @@ import {
   SiGit, SiGithub, SiLinux, SiNginx, SiSpringboot, SiMongodb,
   SiJavascript, SiRedis, SiKubernetes,
   SiJenkins,
+  SiGrafana,
   SiVite,
   SiAntdesign,
   SiMysql,
@@ -75,9 +76,10 @@ const Skills = () => {
         { name: "Visual Studio Code", icon: BiLogoVisualStudio, level: 80},
         { name: "Docker", icon: SiDocker, level: 75 },
         { name: "Linux", icon: SiLinux, level: 72 },
-        { name: "Kubernetes", icon: SiKubernetes, level: 62 }
+        { name: "Kubernetes", icon: SiKubernetes, level: 62 },
+        { name: "Grafana", icon: SiGrafana, level: 60 }
       ]
-    }, 
+    },
     {
       title: "Other",
       skills: [
