@@ -7,7 +7,16 @@
  * All rights reserved.
  */
 
-import { Moon, Sun, Cloud, Sunset, Sprout, Slack, Trees, Infinity } from "lucide-react";
+import {
+  Moon,
+  Sun,
+  Cloud,
+  Sunset,
+  Sprout,
+  Slack,
+  Trees,
+  Infinity as InfinityIcon,
+} from "lucide-react";
 import { FaCube, FaGem, FaMoneyBillAlt } from "react-icons/fa";
 import { } from "react-icons/si";
 import { } from "react-icons/fa6";
@@ -43,7 +52,7 @@ export const THEMES: ThemeConfig[] = [
   { value: "amethyst", label: "Amethyst", icon: FaGem, isCustom: true },
   { value: "vintage", label: "Vintage", icon: FaMoneyBillAlt, isCustom: true },
   { value: "bubblegum", label: "Bubblegum", icon: BsBalloon, isCustom: true },
-  { value: "perpetuity", label: "Perpetuity", icon: Infinity, isCustom: true },
+  { value: "perpetuity", label: "Perpetuity", icon: InfinityIcon, isCustom: true },
 ];
 
 export const STANDARD_THEMES = THEMES.filter(theme => !theme.isCustom);
