@@ -83,7 +83,7 @@ const Projects = () => {
     {
       title: t.projects.list.applicare.title,
       description: t.projects.list.applicare.description,
-      image: "/projects/applicare.jpg",
+      image: "/projects/applicare.svg",
       link: "https://applicare.app",
       github: "https://github.com/lyfe691/AppliCare",
       tags: ["React (Vite)", "Spring Boot", "Ant Design", "MongoDB", "Java", "JavaScript", "Docker", "SEO"],
