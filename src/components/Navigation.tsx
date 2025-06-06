@@ -8,9 +8,9 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Home, ChevronRight, Circle } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react"
-import { useEffect, useState, useRef, useCallback, memo, forwardRef } from "react";
+import { Menu, X, Home, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence, LayoutGroup } from "motion/react";
+import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 
@@ -132,18 +132,25 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
       initial="hidden"
       animate="visible"
     >
-      <Link 
-        to={item.path} 
+      <Link
+        to={item.path}
         onClick={onClick}
         ref={ref}
         className={`
-          ${isMobile 
-            ? 'flex items-center justify-between group py-3 px-4 text-lg font-medium rounded-xl transition-all duration-300 border border-border/10' 
-            : 'relative px-4 py-2 text-base rounded-full transition-all duration-300 z-10 hover:scale-105'} 
+          ${isMobile
+            ? 'flex items-center justify-between group py-3 px-4 text-lg font-medium rounded-xl transition-all duration-300 border border-border/10'
+            : 'relative px-4 py-2 text-base rounded-full transition-all duration-300 z-10 hover:scale-105'}
           ${activeClass}
         `}
       >
-        <span>{item.text}</span>
+        {!isMobile && isActive(item.path) && (
+          <motion.div
+            layoutId="nav-active"
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20"
+            transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+          />
+        )}
+        <span className="relative z-10">{item.text}</span>
         {isMobile && (
           <ChevronRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
         )}
@@ -203,12 +210,6 @@ const Navigation = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const location = useLocation();
-  const [activeItemWidth, setActiveItemWidth] = useState(0);
-  const [activeItemLeft, setActiveItemLeft] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const navRef = useRef<HTMLDivElement>(null);
-  const navItemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-  const isInitialRender = useRef(true);
 
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
   const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
@@ -228,9 +229,6 @@ const Navigation = () => {
     return location.pathname === path;
   }, [location.pathname]);
 
-  const getPathFromIndex = useCallback((index: number) => {
-    return navItems[index]?.path || '';
-  }, [navItems]);
 
   // Effect to handle clicks outside the menu
   useEffect(() => {
@@ -272,59 +270,6 @@ const Navigation = () => {
     closeMenu();
   }, [location.pathname, closeMenu]);
 
-  // Find the active index whenever path or navItems change
-  useEffect(() => {
-    const newActiveIndex = navItems.findIndex(item => item.path === location.pathname);
-    setActiveIndex(newActiveIndex);
-  }, [location.pathname, navItems]);
-
-  // Update the active item position for the sliding effect
-  const updateActiveItemPosition = useCallback(() => {
-    if (activeIndex !== -1 && navItemRefs.current[activeIndex] && navRef.current) {
-      const activeItem = navItemRefs.current[activeIndex];
-      const navRect = navRef.current.getBoundingClientRect();
-      const activeRect = activeItem.getBoundingClientRect();
-      
-      if (!isInitialRender.current) {
-        setActiveItemWidth(activeRect.width);
-        setActiveItemLeft(activeRect.left - navRect.left);
-      } else {
-        // On initial render, set with no animation by directly setting values
-        setActiveItemWidth(activeRect.width);
-        setActiveItemLeft(activeRect.left - navRect.left);
-        isInitialRender.current = false;
-      }
-    }
-  }, [activeIndex]);
-
-  // Use ResizeObserver for more reliable size/position measurement
-  useEffect(() => {
-    const observer = new ResizeObserver(() => {
-      updateActiveItemPosition();
-    });
-    
-    if (navRef.current) {
-      observer.observe(navRef.current);
-    }
-    
-    return () => {
-      observer.disconnect();
-    };
-  }, [updateActiveItemPosition]);
-
-  useEffect(() => {
-    // Delay measurement to ensure DOM is updated
-    const timerId = setTimeout(() => {
-      updateActiveItemPosition();
-    }, 50);
-
-    window.addEventListener('resize', updateActiveItemPosition);
-    
-    return () => {
-      clearTimeout(timerId);
-      window.removeEventListener('resize', updateActiveItemPosition);
-    };
-  }, [location.pathname, updateActiveItemPosition, activeIndex]);
 
   // Mobile menu animations
   const mobileMenuVariants = {
@@ -357,8 +302,7 @@ const Navigation = () => {
     <nav className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4">
       {/* Desktop Navigation */}
       <div className="flex justify-center items-center">
-        <motion.div 
-          ref={navRef}
+        <motion.div
           className="hidden md:flex items-center justify-center mx-auto gap-x-2 gap-y-2 bg-background/75 backdrop-blur-xl py-3.5 px-7 rounded-full border-2 border-border/40 shadow-lg relative overflow-hidden"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -382,32 +326,16 @@ const Navigation = () => {
           
           <div className="h-6 w-[1.5px] bg-foreground/10 mx-1.5 relative z-10"></div>
           
-          {/* Sliding indicator for active item */}
-          {activeItemWidth > 0 && (
-            <motion.div 
-              className="absolute rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 h-[calc(100%-18px)] top-[9px] z-0 pointer-events-none"
-              initial={false}
-              animate={{
-                width: activeItemWidth,
-                left: activeItemLeft,
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 350,
-                damping: 30
-              }}
-            />
-          )}
-
-          {navItems.map((item, i) => (
-            <NavItem
-              key={item.path}
-              item={item}
-              index={i}
-              isActive={isActive}
-              ref={el => navItemRefs.current[i] = el}
-            />
-          ))}
+          <LayoutGroup>
+            {navItems.map((item, i) => (
+              <NavItem
+                key={item.path}
+                item={item}
+                index={i}
+                isActive={isActive}
+              />
+            ))}
+          </LayoutGroup>
         </motion.div>
       </div>
 
