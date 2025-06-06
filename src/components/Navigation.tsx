@@ -74,6 +74,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
     
     return (
       <Component
+        layout
         key={item.text}
         custom={index}
         variants={itemVariants}
@@ -126,6 +127,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
 
   return (
     <Component
+      layout
       key={item.text}
       custom={index}
       variants={itemVariants}
@@ -146,8 +148,10 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
         {!isMobile && isActive(item.path) && (
           <motion.div
             layoutId="nav-active"
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20"
-            transition={{ type: 'spring', stiffness: 500, damping: 40 }}
+            layout
+            className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 pointer-events-none"
+            initial={false}
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           />
         )}
         <span className="relative z-10">{item.text}</span>
@@ -326,7 +330,7 @@ const Navigation = () => {
           
           <div className="h-6 w-[1.5px] bg-foreground/10 mx-1.5 relative z-10"></div>
           
-          <LayoutGroup>
+          <LayoutGroup id="desktop-nav">
             {navItems.map((item, i) => (
               <NavItem
                 key={item.path}
