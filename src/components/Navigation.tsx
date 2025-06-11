@@ -9,16 +9,17 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Home, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence, LayoutGroup } from "motion/react";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 
-// Define types for the NavItem component
+// define types for the navitem component
 interface NavItemProps {
   item: {
     text: string;
     path: string;
+    icon?: React.ElementType;
   };
   index: number;
   isActive: (path: string) => boolean;
@@ -30,7 +31,7 @@ interface NavItemProps {
 import pkg from "../../package.json" assert { type: "json" };
 const APP_VERSION: string = (pkg as { version: string }).version;
 
-// Memoized navigation item for better performance 
+// memoized navigation item for better performance
 const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({ 
   item, 
   index, 
@@ -40,11 +41,11 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
 }, ref) => {
   const itemVariants = isMobile 
     ? {
-        initial: { opacity: 0, x: -20 },
+        initial: { opacity: 0, y: 20 },
         animate: { 
           opacity: 1, 
-          x: 0, 
-          transition: { delay: index * 0.1 }
+          y: 0, 
+          transition: { delay: index * 0.05, duration: 0.3, ease: "easeOut" }
         }
       }
     : {
@@ -53,28 +54,24 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
           opacity: 1,
           y: 0,
           transition: {
-            delay: index * 0.1,
-            duration: 0.4,
-            ease: [0.215, 0.61, 0.355, 1]
+            delay: index * 0.05,
+            duration: 0.3,
+            ease: "easeOut"
           }
         }
       };
 
   const Component = motion.div;
   const activeClass = isActive(item.path) 
-    ? isMobile 
-      ? 'bg-primary/10 text-foreground shadow-sm' 
-      : 'text-foreground font-medium'
-    : isMobile
-      ? 'text-foreground/70 hover:text-foreground hover:bg-foreground/5 hover:border-border/20'
-      : 'text-foreground/70 hover:text-foreground hover:bg-foreground/5';
+    ? 'text-foreground font-medium'
+    : 'text-foreground/60 hover:text-foreground';
 
   if (isMobile) {
     const isItemActive = isActive(item.path);
     
     return (
       <Component
-        layout="position"
+        layout
         key={item.text}
         custom={index}
         variants={itemVariants}
@@ -87,39 +84,16 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
           onClick={onClick}
           ref={ref}
           className={`
-            relative flex items-center w-full px-4 py-3.5
-            transition-all duration-300 rounded-md
+            relative flex items-center w-full p-2
+            transition-colors duration-300 rounded-md
+            text-2xl font-medium tracking-tight
             ${isItemActive 
-              ? 'text-primary font-medium' 
-              : 'text-foreground/80 hover:text-foreground'}
+              ? 'text-primary' 
+              : 'text-foreground/60 hover:text-foreground'}
           `}
         >
-          {/* Background for active item */}
-          {isItemActive && (
-            <motion.div 
-              className="absolute inset-0 bg-primary/5 rounded-md"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            />
-          )}
-          
-          <div className={`h-5 w-[2px] mr-3 rounded-full ${isItemActive ? 'bg-primary' : 'bg-transparent'}`} />
-          
-          <span className="relative z-10 text-base tracking-wide">{item.text}</span>
-          
-          {/* Arrow indicator */}
-          <motion.div 
-            className="ml-auto relative z-10"
-            initial={false}
-            animate={{ 
-              x: isItemActive ? 0 : -5,
-              opacity: isItemActive ? 0.8 : 0
-            }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          >
-            <ChevronRight className="w-4 h-4" />
-          </motion.div>
+          {item.icon && <item.icon className="w-6 h-6 mr-3" />}
+          {item.text}
         </Link>
       </Component>
     );
@@ -127,7 +101,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
 
   return (
     <Component
-      layout="position"
+      layout
       key={item.text}
       custom={index}
       variants={itemVariants}
@@ -138,40 +112,32 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
         to={item.path}
         onClick={onClick}
         ref={ref}
-        className={`
-          ${isMobile
-            ? 'flex items-center justify-between group py-3 px-4 text-lg font-medium rounded-xl transition-all duration-300 border border-border/10'
-            : 'relative px-4 py-2 text-base rounded-full transition-all duration-300 z-10 hover:scale-105'}
-          ${activeClass}
-        `}
+        className={`relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2 ${activeClass}`}
       >
-        {!isMobile && isActive(item.path) && (
+        {isActive(item.path) && (
           <motion.div
             layoutId="nav-active"
-            layout="position"
-            className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 pointer-events-none"
+            className="absolute inset-0 rounded-full bg-foreground/10"
             initial={false}
-            transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 35, mass: 0.8 }}
           />
         )}
+        {item.icon && <item.icon className="w-4 h-4" />}
         <span className="relative z-10">{item.text}</span>
-        {isMobile && (
-          <ChevronRight className="w-4 h-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
-        )}
       </Link>
     </Component>
   );
 }));
 
-// Ensure display name is set for devtools
-NavItem.displayName = "NavItem";
+// ensure display name is set for devtools
+NavItem.displayName = "navitem";
 
-// Mobile menu button with animated hamburger
+// mobile menu button with animated hamburger
 const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => {
   return (
     <motion.button
       onClick={onClick}
-      className="p-2.5 rounded-full bg-background/80 backdrop-blur-sm border border-border/20
+      className="p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border/20
                 hover:bg-foreground/5 transition-colors duration-300 shadow-sm z-[51]"
       whileTap={{ scale: 0.92 }}
       aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -184,11 +150,12 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
             initial={false}
             animate={{ 
               rotate: isOpen ? 45 : 0,
-              top: isOpen ? "50%" : "0",
-              y: isOpen ? "-50%" : 0
+              y: isOpen ? 0 : -3,
+              top: "50%",
+              marginTop: "-0.7px"
             }}
             style={{ transformOrigin: "center" }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
           />
           
           {/* Bottom bar */}
@@ -197,11 +164,12 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
             initial={false}
             animate={{ 
               rotate: isOpen ? -45 : 0,
-              bottom: isOpen ? "50%" : "0",
-              y: isOpen ? "50%" : 0
+              y: isOpen ? 0 : 3,
+              bottom: "50%",
+              marginBottom: "-0.7px"
             }}
             style={{ transformOrigin: "center" }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
           />
         </div>
       </div>
@@ -218,7 +186,8 @@ const Navigation = () => {
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
   const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
 
-  // Memoized navigation items
+  // memoized navigation items
+  const homeItem = { text: "Home", path: "/", icon: Home };
   const navItems = [
     { text: t.nav.about, path: "/about" },
     { text: t.nav.experience, path: "/experience" },
@@ -228,13 +197,13 @@ const Navigation = () => {
     { text: t.nav.contact, path: "/contact" }
   ];
 
-  // Memoized isActive check
+  // memoized isactive check
   const isActive = useCallback((path: string) => {
     return location.pathname === path;
   }, [location.pathname]);
 
 
-  // Effect to handle clicks outside the menu
+  // effect to handle clicks outside the menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isMenuOpen) {
@@ -253,84 +222,89 @@ const Navigation = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen, closeMenu]);
 
-  // Prevent body scrolling when menu is open
+  // prevent body scrolling when menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      // Prevent scrolling on body when menu is open
+      // prevent scrolling on body when menu is open
       document.body.style.overflow = 'hidden';
     } else {
-      // Restore scrolling
+      // restore scrolling
       document.body.style.overflow = '';
     }
     
     return () => {
-      // Cleanup in case component unmounts while menu is open
+      // cleanup in case component unmounts while menu is open
       document.body.style.overflow = '';
     };
   }, [isMenuOpen]);
 
-  // Close menu when route changes
+  // close menu when route changes
   useEffect(() => {
     closeMenu();
   }, [location.pathname, closeMenu]);
 
 
-  // Mobile menu animations
+  // mobile menu animations
   const mobileMenuVariants = {
     hidden: { 
-      opacity: 0, 
-      x: "-100%",
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeIn",
+        when: "afterChildren"
+      }
     },
     visible: { 
-      opacity: 1, 
-      x: 0,
+      opacity: 1,
       transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 30,
+        duration: 0.3,
+        ease: "easeOut",
         when: "beforeChildren",
-        staggerChildren: 0.05
       }
     },
-    exit: {
-      opacity: 0,
-      x: "-100%",
-      transition: {
-        duration: 0.25,
-        ease: "easeInOut"
-      }
-    }
   };
 
+  const mobileNavContainer = {
+    hidden: {
+      opacity: 0,
+    },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      }
+    }
+  }
+
   return (
-    <nav className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4">
-      {/* Desktop Navigation */}
+    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4">
+      
+      {/* desktop navigation */}
       <div className="flex justify-center items-center">
         <motion.div
-          className="hidden md:flex items-center justify-center mx-auto gap-x-2 gap-y-2 bg-background/75 backdrop-blur-xl py-3.5 px-7 rounded-full border-2 border-border/40 shadow-lg relative overflow-hidden"
+          className="hidden md:flex items-center justify-center mx-auto gap-x-1 bg-background/60 backdrop-blur-2xl py-4 px-4 rounded-full border-2 border-border/20 shadow-lg shadow-black/5"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          whileHover={{ boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+          style={{
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          }}
         >
-          {/* Subtle gradient background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5 opacity-50 pointer-events-none"></div>
+          {/* home navigation - simple layout*/}
+          <LayoutGroup id="home-nav">
+            <NavItem
+              item={homeItem}
+              index={0}
+              isActive={isActive}
+            />  
+          </LayoutGroup>
           
-          {/* Home Link + Separator */}
-          <Link 
-            to="/" 
-            className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 mr-1 relative z-20
-                      ${isActive('/') 
-                        ? 'bg-primary/20 text-foreground font-medium shadow-sm' 
-                        : 'text-foreground/80 hover:text-foreground hover:bg-foreground/5'}`}
-          >
-            <Home className="w-4 h-4" />
-            <span className="font-medium">Home</span>
-          </Link>
+          <div className="h-8 w-px bg-border/30 mx-3" />
           
-          <div className="h-6 w-[1.5px] bg-foreground/10 mx-1.5 relative z-10"></div>
-          
-          <LayoutGroup id="desktop-nav">
+          {/* main navigation - main layout */}
+          <LayoutGroup id="main-nav">
             {navItems.map((item, i) => (
               <NavItem
                 key={item.path}
@@ -343,114 +317,54 @@ const Navigation = () => {
         </motion.div>
       </div>
 
-      {/* Mobile Menu Button - Positioned further from content */}
-      <div className="md:hidden fixed top-6 left-6 z-[51] menu-button">
+      {/* mobile menu button */}
+      <div className="md:hidden fixed top-5 left-5 z-[51] menu-button">
         <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
       </div>
 
-      {/* Spacer for mobile view to prevent content from being too close to the menu button */}
-      <div className="md:hidden h-14"></div>
-
-      {/* Mobile Navigation Menu */}
+      {/* mobile navigation menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
             initial="hidden"
             animate="visible"
-            exit="exit"
+            exit="hidden"
             variants={mobileMenuVariants}
-            className="fixed inset-0 bg-background/95 backdrop-blur-md z-50 md:hidden mobile-menu overflow-hidden"
+            className="fixed inset-0 bg-background/80 backdrop-blur-xl z-50 md:hidden mobile-menu"
           >
-            <motion.div 
-              className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-30 pointer-events-none"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 0.3 }}
-              transition={{ duration: 0.5 }}
-            />
-
-            <div className="flex flex-col h-full max-w-sm mx-auto px-6 py-20 relative z-10">
-              {/* Current route indicator */}
-              <motion.div 
-                className="mb-8 border-b border-border/10 pb-4"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.3 }}
-              >
-                <div className="text-xs uppercase tracking-wider text-primary/70 font-medium mb-1">Current</div>
-                <div className="text-xl font-medium">{location.pathname === "/" ? "Home" : navItems.find(item => item.path === location.pathname)?.text || ""}</div>
-              </motion.div>
-              
-              {/* Navigation Links */}
-              <div className="mt-4">
-                <Link 
-                  to="/" 
+            <motion.nav 
+              variants={mobileNavContainer}
+              initial="hidden"
+              animate="visible"
+              className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10"
+            >
+              <div className="flex-grow">
+                <NavItem
+                  item={homeItem}
+                  index={0}
+                  isActive={isActive}
+                  isMobile={true}
                   onClick={closeMenu}
-                  className={`
-                    relative flex items-center w-full px-4 py-3.5
-                    transition-all duration-300 rounded-md mb-2
-                    ${isActive('/') 
-                      ? 'text-primary font-medium' 
-                      : 'text-foreground/80 hover:text-foreground'}
-                  `}
-                >
-                  {/* Background for active state */}
-                  {isActive('/') && (
-                    <motion.div 
-                      className="absolute inset-0 bg-primary/5 rounded-md"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.2 }}
+                />
+                <div className="my-4 h-px w-full bg-border" />
+                <div className="space-y-2">
+                  {navItems.map((item, i) => (
+                    <NavItem
+                      key={item.path}
+                      item={item}
+                      index={i + 1}
+                      isActive={isActive}
+                      isMobile={true}
+                      onClick={closeMenu}
                     />
-                  )}
-                  
-                  <div className={`h-5 w-[2px] mr-3 rounded-full ${isActive('/') ? 'bg-primary' : 'bg-transparent'}`} />
-                  
-                  <div className="flex items-center gap-3">
-                    <Home className="w-4 h-4" />
-                    <span className="text-base tracking-wide relative z-10">Home</span>
-                  </div>
-                  
-                  {/* Arrow indicator */}
-                  <motion.div 
-                    className="ml-auto"
-                    animate={{ 
-                      x: isActive('/') ? 0 : -5,
-                      opacity: isActive('/') ? 0.8 : 0
-                    }}
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </motion.div>
-                </Link>
-                
-                {navItems.map((item, i) => (
-                  <NavItem
-                    key={item.path}
-                    item={item}
-                    index={i}
-                    isActive={isActive}
-                    isMobile={true}
-                    onClick={closeMenu}
-                  />
-                ))}
-              </div>
-              
-              {/* App version */}
-              <motion.div 
-                className="mt-auto pt-8 border-t border-border/10"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-foreground/50">Version</span>
-                  <span className="text-xs font-medium text-foreground/40">{APP_VERSION}</span>
+                  ))}
                 </div>
-              </motion.div>
-            </div>
+              </div>
+            </motion.nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </header>
   );
 };
 
