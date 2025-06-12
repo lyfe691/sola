@@ -9,6 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from "@/components/theme-provider";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Dialog,
   DialogTrigger,
@@ -17,6 +18,14 @@ import {
   DialogTitle,
   DialogDescription
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerTrigger,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerDescription
+} from "@/components/ui/drawer";
 
 // --------------------------------- Helpers ---------------------------------
 
@@ -76,6 +85,99 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
   );
 };
 
+// resume modal, use drawer for mobile
+const ResumeModal = () => {
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+
+  const content = (
+    <>
+      <div className="pb-2">
+        <h3 className="text-lg font-semibold mb-2">Request Full Resume</h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
+          <Link to="/contact" className="underline text-foreground" onClick={() => setOpen(false)}>contact me</Link> or send an email to{' '}
+          <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-3 pt-4">
+        <Button variant="outline" size="sm" onClick={() => { viewResume(); setOpen(false); }}>
+          View Censored Version
+        </Button>
+        <Button variant="secondary" size="sm" onClick={() => { downloadResume(); setOpen(false); }}>
+          Download Censored Version
+        </Button>
+      </div>
+    </>
+  );
+
+  if (isMobile) {
+    return (
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <Button effect="ringHover" variant="outline" size="sm" className="border-foreground/20">
+            <span className="flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Resume
+            </span>
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent className="px-4 pb-4">
+          <DrawerHeader className="text-left px-0">
+            <DrawerTitle>Request Full Resume</DrawerTitle>
+            <DrawerDescription>
+              The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
+              <Link to="/contact" className="underline text-foreground" onClick={() => setOpen(false)}>contact me</Link> or send an email to{' '}
+              <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="flex flex-col gap-3">
+            <Button variant="outline" size="sm" onClick={() => { viewResume(); setOpen(false); }}>
+              View Censored Version
+            </Button>
+            <Button variant="secondary" size="sm" onClick={() => { downloadResume(); setOpen(false); }}>
+              Download Censored Version
+            </Button>
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button effect="ringHover" variant="outline" size="sm" className="border-foreground/20">
+          <span className="flex items-center gap-2">
+            <Download className="w-4 h-4" />
+            Resume
+          </span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-md">
+        <DialogHeader className="pb-2">
+          <DialogTitle>Request Full Resume</DialogTitle>
+          <DialogDescription>
+            The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
+            <Link to="/contact" className="underline text-foreground" onClick={() => setOpen(false)}>contact me</Link> or send an email to{' '}
+            <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="flex flex-col gap-3 pt-4">
+          <Button variant="outline" size="sm" onClick={() => { viewResume(); setOpen(false); }}>
+            View Censored Version
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => { downloadResume(); setOpen(false); }}>
+            Download Censored Version
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 // -------------------------------- Page --------------------------------------
 
 const About = () => {
@@ -85,9 +187,9 @@ const About = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
 
-  // Check if the current theme is dark (including system preference)
+  // check if the current theme is dark (including system preference)
   const isDarkTheme = () => {
-    if (theme === 'dark' || theme === 'cyber' || theme === 'forest' || theme === 'amethyst' || theme === "sunset") return true;
+    if (theme === 'dark' || theme === 'cyber' || theme === 'forest' || theme === 'amethyst' || theme === "sunset" || theme === "perpetuity") return true;
     if (theme === 'system') {
       return window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
@@ -144,36 +246,7 @@ const About = () => {
                 </Button>
 
                 {/* ---------------- Resume Modal ---------------- */}
-
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button effect="ringHover" variant="outline" size="sm" className="border-foreground/20">
-                      <span className="flex items-center gap-2">
-                        <Download className="w-4 h-4" />
-                        Resume
-                      </span>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-md">
-                    <DialogHeader className="pb-2">
-                      <DialogTitle>Request Full Resume</DialogTitle>
-                      <DialogDescription>
-                        The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
-                        <Link to="/contact" className="underline text-foreground">contact me</Link> or send an email to{' '}
-                        <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <div className="flex flex-col gap-3 pt-4">
-                      <Button variant="outline" size="sm" onClick={viewResume}>
-                        View Censored Version
-                      </Button>
-                      <Button variant="secondary" size="sm" onClick={downloadResume}>
-                        Download Censored Version
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <ResumeModal />
               </div>
             </div>
 

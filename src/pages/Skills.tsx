@@ -31,7 +31,7 @@ import {
   SiZoom,
   SiOpensourceinitiative,
   SiEslint,
-
+  SiBun,
 } from "react-icons/si";
 
 import {BiLogoVisualStudio} from "react-icons/bi"
@@ -77,6 +77,7 @@ const Skills = () => {
         { name: "Visual Studio Code", icon: BiLogoVisualStudio, level: 80},
         { name: "Docker", icon: SiDocker, level: 75 },
         { name: "Linux", icon: SiLinux, level: 72 },
+        { name: "Bun", icon: SiBun, level: 71 },
         { name: "ESLint", icon: SiEslint, level: 70 },
         { name: "Kubernetes", icon: SiKubernetes, level: 62 },
         { name: "Grafana", icon: SiGrafana, level: 60 }
