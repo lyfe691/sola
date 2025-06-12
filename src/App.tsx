@@ -17,6 +17,7 @@ import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
+import  ClickSpark from "./components/ClickSpark";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -33,16 +34,24 @@ const App = () => (
     <LanguageProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <div className="min-h-screen flex flex-col">
-            <Toaster position="top-center"/>
-            <BrowserRouter>
-              <KeyboardShortcuts />
-              <CommandMenu />
-              <AnimatedRoutes />
-              <ScrollToTop />
-              <Conditionals />
-            </BrowserRouter>
-          </div>
+          <ClickSpark
+              sparkColor='hsl(var(--primary))'
+              sparkSize={8}
+              sparkRadius={15}
+              sparkCount={8}
+              duration={400}
+            >
+            <div className="min-h-screen flex flex-col">
+              <Toaster position="top-center"/>
+              <BrowserRouter>
+                <KeyboardShortcuts />
+                <CommandMenu />
+                <AnimatedRoutes />
+                <ScrollToTop />
+                <Conditionals />
+              </BrowserRouter>
+            </div>
+          </ClickSpark>
         </TooltipProvider>
       </QueryClientProvider>
     </LanguageProvider>
