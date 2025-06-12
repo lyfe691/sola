@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download } from 'lucide-react';
 import { FaGithubAlt } from 'react-icons/fa';
@@ -27,8 +27,10 @@ import {
   DrawerDescription
 } from "@/components/ui/drawer";
 
-// --------------------------------- Helpers ---------------------------------
 
+const VercelBand = React.lazy(() => import('@/components/vercel-band'))
+
+// --------------------------------- Helpers ---------------------------------
 const downloadResume = () => {
   const link = document.createElement("a");
   link.href = "/sola.pdf";
@@ -252,17 +254,11 @@ const About = () => {
 
             {/* ------------------ Portrait ------------------ */}
 
-            <div className="md:col-span-2 relative">
-              <div className="aspect-square overflow-hidden rounded-xl border border-foreground/10 shadow-sm">
-                <motion.img
-                  src={isDarkTheme() ? '/ysz-d.png' : '/ysz-l.png'}
-                  alt="Yanis Sebastian Zürcher"
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.4 }}
-                />
-              </div>
-              <div className="absolute -z-10 -bottom-3 -right-3 w-full h-full bg-primary/5 rounded-xl -rotate-2" />
+            {/* RIGHT: 3D Canvas */}
+            <div className="relative h-[500px] w-full">
+              <Suspense fallback={null}>
+                <VercelBand />
+              </Suspense>
             </div>
           </motion.div>
 

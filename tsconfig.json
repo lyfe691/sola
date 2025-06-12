@@ -13,6 +13,7 @@
     "noUnusedParameters": false,
     "skipLibCheck": true,
     "allowJs": true,
+    "checkJs": false,
     "noUnusedLocals": false,
     "strictNullChecks": false
   }
