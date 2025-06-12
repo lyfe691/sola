@@ -26,6 +26,8 @@ import {
   DrawerTitle,
   DrawerDescription
 } from "@/components/ui/drawer";
+import { Canvas } from '@react-three/fiber';
+import { Environment, Lightformer } from '@react-three/drei';
 
 
 const VercelBand = React.lazy(() => import('@/components/vercel-band'))
@@ -226,7 +228,7 @@ const About = () => {
 
           {/* ------------------- Hero ------------------- */}
 
-          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
+          <motion.div variants={itemVariants} className="relative grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
             <div className="md:col-span-3 space-y-5">
               <p className="text-lg text-foreground/80 leading-relaxed">{t.about.intro}</p>
               <p className="text-lg text-foreground/80 leading-relaxed">{t.about.hobbies}</p>
@@ -252,13 +254,25 @@ const About = () => {
               </div>
             </div>
 
-            {/* ------------------ Portrait ------------------ */}
-
-            {/* RIGHT: 3D Canvas */}
-            <div className="relative h-[500px] w-full">
-              <Suspense fallback={null}>
-                <VercelBand />
-              </Suspense>
+            {/* Floating Badge - Positioned to float freely on the page */}
+            <div className="md:col-span-2 relative h-[500px] overflow-visible">
+              <Canvas 
+                camera={{ position: [0, 0, 13], fov: 25 }} 
+                className="absolute inset-0 w-full h-full overflow-visible"
+                style={{ background: 'transparent' }}
+                gl={{ alpha: true, antialias: true }}
+              >
+                <ambientLight intensity={Math.PI} />
+                <Suspense fallback={null}>
+                  <VercelBand />
+                </Suspense>
+                <Environment background={false} blur={0.75}>
+                  <Lightformer intensity={2} color="white" position={[0, -1, 5]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+                  <Lightformer intensity={3} color="white" position={[-1, -1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+                  <Lightformer intensity={3} color="white" position={[1, 1, 1]} rotation={[0, 0, Math.PI / 3]} scale={[100, 0.1, 1]} />
+                  <Lightformer intensity={10} color="white" position={[-10, 0, 14]} rotation={[0, Math.PI / 2, Math.PI / 3]} scale={[100, 10, 1]} />
+                </Environment>
+              </Canvas>
             </div>
           </motion.div>
 
