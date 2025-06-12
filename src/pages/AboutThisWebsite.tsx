@@ -53,7 +53,7 @@ export default function AboutThisWebsite() {
           Thank you for taking a deeper look.
         </p>
         
-        <Button variant="link" effect="underline" onClick={h}>go back?</Button>
+        <Button variant="link" className="hover:underline hover:text-foreground/80 " onClick={h}>go back?</Button>
 
         <p className="text-xs text-center text-foreground/50 pt-8">
           © {new Date().getFullYear()} Yanis Sebastian Zürcher

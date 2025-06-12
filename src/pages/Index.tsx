@@ -13,6 +13,7 @@ import {
   Mail,
   Linkedin,
   ArrowRight,
+  ChevronRight,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
@@ -128,7 +129,7 @@ const Index = () => {
                           >
                             <span className="flex items-center">
                               {t.index.contactMe}
-                              <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 
+                              <ChevronRight className="w-4 h-4 ml-2 transition-transform duration-300 
                                                 group-hover:translate-x-1" />
                             </span>
                           </Button>
@@ -141,7 +142,7 @@ const Index = () => {
                           >
                             <span className="flex items-center">
                               {t.index.viewProjects}
-                              <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-300 
+                              <ChevronRight className="w-4 h-4 ml-2 transition-transform duration-300 
                                                 group-hover:translate-x-1" />
                             </span>
                           </Button>

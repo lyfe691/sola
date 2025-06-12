@@ -288,7 +288,6 @@ const Projects = () => {
                                   {project.github && (
                                     <Button
                                       asChild
-                                      effect="gooeyLeft"
                                       variant="outline"
                                       size="lg"
                                       className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
@@ -306,7 +305,6 @@ const Projects = () => {
                                   {project.link && (
                                     <Button
                                       asChild
-                                      effect="gooeyRight"
                                       variant="outline"
                                       size="lg"
                                       className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
@@ -464,9 +462,6 @@ const Projects = () => {
             className="flex justify-center mt-12 sm:mt-16"
           >
             <Button
-              effect="expandIcon"
-              icon={ChevronRight}
-              iconPlacement="right"
               variant="outline"
               size="lg"
               className="rounded-full px-6 py-3 bg-gradient-to-r from-foreground/5 to-foreground/10 
@@ -474,7 +469,10 @@ const Projects = () => {
                          shadow-lg hover:shadow-xl transition-all duration-300
                          text-foreground hover:text-primary font-medium"
             >
-              <a href="https://github.com/lyfe691?tab=repositories" target="_blank" rel="noopener noreferrer">{t.projects.viewAll}</a>
+              <a href="https://github.com/lyfe691?tab=repositories" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                {t.projects.viewAll}
+                <ChevronRight className="w-4 h-4" />
+              </a>
             </Button>
           </motion.div>
         </motion.div>

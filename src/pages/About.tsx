@@ -124,7 +124,7 @@ const ResumeModal = () => {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button effect="ringHover" variant="outline" size="sm" className="border-foreground/20">
+          <Button variant="outline" size="sm" className="border-foreground/20">
             <span className="flex items-center gap-2">
               <Download className="w-4 h-4" />
               Resume
@@ -156,7 +156,7 @@ const ResumeModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button effect="ringHover" variant="outline" size="sm" className="border-foreground/20">
+        <Button variant="outline" size="sm" className="border-foreground/20">
           <span className="flex items-center gap-2">
             <Download className="w-4 h-4" />
             Resume
@@ -240,13 +240,13 @@ const About = () => {
               {/* ----------- Social / Resume Buttons ---------- */}
 
               <div className="flex flex-row items-center gap-3 pt-5">
-                <Button effect="shineHover" variant="outline" size="sm" className="border-foreground/20" asChild>
+                <Button variant="outline" size="sm" className="border-foreground/20" asChild>
                   <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
                     <FaGithubAlt className="w-4 h-4" />
                     GitHub
                   </a>
                 </Button>
-                <Button effect="shineHover" variant="outline" size="sm" className="border-foreground/20" asChild>
+                <Button variant="outline" size="sm" className="border-foreground/20" asChild>
                   <a href="https://linkedin.com/in/yanis-sebastian-zürcher/" target="_blank" rel="noreferrer" className="flex items-center gap-2">
                     <Linkedin className="w-4 h-4" />
                     LinkedIn

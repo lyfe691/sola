@@ -194,7 +194,6 @@ const Contact = () => {
             </div>
             <Button
               type="submit"
-              effect="gooeyLeft"
               disabled={isSubmitting}
               variant="outline"
               className="group border-foreground/20"
