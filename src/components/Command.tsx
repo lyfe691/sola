@@ -19,6 +19,12 @@ import {
     CommandSeparator,
     CommandShortcut,
   } from "@/components/ui/command"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer"
 import { 
   Home, 
   User, 
@@ -34,9 +40,10 @@ import {
 import { useCommandMenu } from "@/hooks/use-command-menu"
 import { useTheme } from "./theme-provider"
 import { useLanguage } from "@/lib/language-provider"
+import { useIsMobile } from "@/hooks/use-mobile"
 import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 
-// Import the types from their respective files
+// import types
 type Language = "en" | "de" | "ja" | "es" | "cn" | "ru"
 
 export function CommandMenu() {
@@ -44,28 +51,33 @@ export function CommandMenu() {
   const { theme, setTheme } = useTheme()
   const { language, setLanguage } = useLanguage()
   const { isOpen, closeCommandMenu } = useCommandMenu()
+  const isMobile = useIsMobile()
 
-  // Handle navigation
+  // handle navigation
   const handleNavigation = (path: string) => {
     navigate(path)
     closeCommandMenu()
   }
 
-  // Handle theme change
+  // handle theme change
   const handleThemeChange = (newTheme: ConfiguredTheme) => {
     setTheme(newTheme)
     closeCommandMenu()
   }
 
-  // Handle language change
+  // handle language change
   const handleLanguageChange = (newLanguage: Language) => {
     setLanguage(newLanguage)
     closeCommandMenu()
   }
 
-  return (
-    <CommandDialog open={isOpen} onOpenChange={closeCommandMenu}>
-      <CommandInput placeholder="Type a command or search..." />
+  // command content that's shared between both mobile and desktop versions
+  const commandContent = (
+    <>
+      <CommandInput 
+        placeholder="Type a command or search..." 
+        className={isMobile ? "text-base" : undefined}
+      />
       <CommandList className="max-h-[60vh] overflow-y-auto">
         <CommandEmpty>No results found.</CommandEmpty>
         
@@ -171,6 +183,25 @@ export function CommandMenu() {
           </CommandItem>
         </CommandGroup>
       </CommandList>
+    </>
+  )
+
+  // render drawer for mobile, dialog for desktop
+  if (isMobile) {
+    return (
+      <Drawer open={isOpen} onOpenChange={closeCommandMenu}>
+        <DrawerContent className="px-4 pb-4">
+          <Command>
+            {commandContent}
+          </Command>
+        </DrawerContent>
+      </Drawer>
+    )
+  }
+
+  return (
+    <CommandDialog open={isOpen} onOpenChange={closeCommandMenu}>
+      {commandContent}
     </CommandDialog>
   )
 }

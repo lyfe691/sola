@@ -1,3 +1,12 @@
+/**
+ * Copyright (c) 2025 Yanis Sebastian Zürcher
+ * 
+ * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
+ * Please refer to the LICENSE file in the project root for full licensing details.
+ * 
+ * All rights reserved.
+ */
+
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download } from 'lucide-react';
