@@ -26,7 +26,10 @@ export const translations = {
     },
     index: {
       greeting: "Hello, I'm ",
-      description: "I'm a 17 year old software developer based in Zürich, Switzerland, focused on building exceptional digital experiences.",
+      description1: "17-year-old software developer based in Zurich, Switzerland.",
+      description2: "I build scalable, fast, and thoughtfully designed systems.",
+      description3: "Working across infrastructure, identity, and interfaces.",
+      description4: "Focused on structure, clarity, and precision.",
       contactMe: "Contact me",
       viewProjects: "View projects"
     },
@@ -261,7 +264,10 @@ export const translations = {
     },
     index: {
       greeting: "Hallo, ich bin ",
-      description: "Ich bin ein 17 Jähriger Softwareentwickler aus Zürich, Schweiz, und konzentriere mich darauf, aussergewöhnliche digitale Erlebnisse zu schaffen.",
+      description1: "17-jähriger Softwareentwickler aus Zürich, Schweiz.",
+      description2: "Ich entwickle skalierbare, schnelle und durchdachte Systeme.",
+      description3: "Tätig in Infrastruktur, Identitätsmanagement und Benutzeroberflächen.",
+      description4: "Fokus auf Struktur, Klarheit und Präzision.",
       contactMe: "Kontakt",
       viewProjects: "Projekte ansehen"
     },
@@ -496,7 +502,10 @@ export const translations = {
     },
     index: {
       greeting: "Hola, soy ",
-      description: "Soy un desarrollador de software de 17 años basado en Zúrich, Suiza, enfocado en crear experiencias digitales excepcionales.",
+      description1: "Desarrollador de software de 17 años con base en Zúrich, Suiza.",
+      description2: "Construyo sistemas escalables, rápidos y cuidadosamente diseñados.",
+      description3: "Trabajo en infraestructura, identidad y diseño de interfaces.",
+      description4: "Enfocado en estructura, claridad y precisión.",
       contactMe: "Contáctame",
       viewProjects: "Ver proyectos"
     },
@@ -732,7 +741,10 @@ export const translations = {
     },
     index: {
       greeting: "こんにちは、私は ",
-      description: "私はスイスのチューリッヒ出身の17歳のソフトウェア開発者で、優れたデジタル体験の創造に取り組んでいます。",
+      description1: "スイス・チューリッヒ在住、17歳のソフトウェア開発者。",
+      description2: "スケーラブルで高速、考え抜かれたシステムを構築します。",
+      description3: "インフラ、認証、インターフェースに取り組んでいます。",
+      description4: "構造・明瞭さ・精度に重点を置いています。",
       contactMe: "お問い合わせ",
       viewProjects: "プロジェクトを見る"
     },
@@ -967,7 +979,10 @@ export const translations = {
     },
     index: {
       greeting: "你好，我是 ",
-      description: "我是一位17岁的软件开发者，来自瑞士苏黎世，致力于创造卓越的数字体验。",
+      description1: "来自瑞士苏黎世的17岁软件开发者。",
+      description2: "构建可扩展、高速、结构清晰的系统。",
+      description3: "涉及基础设施、身份管理和界面设计。",
+      description4: "注重结构、清晰性和精确性。",
       contactMe: "联系我",
       viewProjects: "查看项目"
     },
@@ -1202,6 +1217,10 @@ export const translations = {
     },
     index: {
       greeting: "Привет, я ",
+      description1: "17-летний разработчик программного обеспечения из Цюриха, Швейцария.",
+      description2: "Создаю масштабируемые, быстрые и продуманные системы.",
+      description3: "Работаю с инфраструктурой, идентификацией и пользовательскими интерфейсами.",
+      description4: "Сфокусирован на структуре, ясности и точности.",
       description: "Я 17-летний разработчик программного обеспечения из Цюриха (Швейцария), сосредоточенный на создании выдающихся цифровых решений.",
       contactMe: "Связаться со мной",
       viewProjects: "Смотреть проекты"

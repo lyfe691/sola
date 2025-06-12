@@ -80,7 +80,7 @@ const containerVariants: Variants = {
 
 export const NameMorpher = ({ 
   greeting, 
-  names = ["Yanis", "Sebastian", "lyfe691"],
+  names = ["Yanis", "Sebi", "lyfe691"],
   cycleInterval = ANIMATION_CONFIG.CYCLE_INTERVAL 
 }: NameMorpherProps) => {
   const [currentNameIndex, setCurrentNameIndex] = useState(0);

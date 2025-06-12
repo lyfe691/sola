@@ -92,7 +92,25 @@ const Index = () => {
                       animate="visible"
                       className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
                     >
-                      {t.index.description}
+                      <TypeAnimation
+                        key={key}
+                        sequence={[
+                          (t.index as any).description1,
+                          2000,
+                          (t.index as any).description2,
+                          2000,
+                          (t.index as any).description3,
+                          2000,
+                          (t.index as any).description4,
+                          2000,
+                        ]}                        
+                        wrapper="span"
+                        speed={60}
+                        deletionSpeed={80}
+                        repeat={Infinity}
+                        cursor={true}
+                        style={{ display: 'inline-block' }}
+                      />
                     </motion.p>
 
                     <motion.div 
