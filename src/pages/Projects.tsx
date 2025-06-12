@@ -7,9 +7,10 @@
  */
 
 import { useState } from "react";
-import { ExternalLink, Info, ChevronRight } from "lucide-react";
+import { ExternalLink, Info, ChevronRight, ArrowRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { motion, AnimatePresence } from "motion/react"
+import { motion, AnimatePresence } from "motion/react";
+import { Link } from "react-router-dom";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,7 @@ interface Project {
   tags: string[];
   featured: boolean;
   date: string;
+  slug?: string; // For internal project pages
 }
 
 const Projects = () => {
@@ -45,7 +47,7 @@ const Projects = () => {
     visible: { 
       opacity: 1, 
       scale: 1,
-      transition: { type: "spring", stiffness: 300, damping: 20 }
+      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
     }
   };
 
@@ -57,7 +59,8 @@ const Projects = () => {
       github: "https://github.com/lyfe691/self",
       tags: ["Neofetch", "Python", "Terminal", "Windows"],
       featured: true,
-      date: "May 2025"
+      date: "May 2025",
+      slug: "self"
     },
     {
       title: t.projects.list.sola.title,
@@ -67,17 +70,8 @@ const Projects = () => {
       github: "https://github.com/lyfe691/sola",
       tags: ["Portfolio", "shadcn/ui", "TypeScript", "React", "Vite", "Tailwind CSS", "SEO"],
       featured: true,
-      date: "Feb 2025 - Present"
-    },
-    {
-      title: t.projects.list.codeExtractor.title,
-      description: t.projects.list.codeExtractor.description + " (600+ Users)",
-      image: "/projects/website-code-extractor.svg",
-      link: "https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm",
-      github: "https://github.com/lyfe691/Website-Code-Extractor",
-      tags: ["Chrome Extension", "JSZip", "HTML", "CSS", "JavaScript"],
-      featured: true,
-      date: "Aug 2024"
+      date: "Feb 2025 - Present",
+      slug: "sola"
     },
     {
       title: t.projects.list.applicare.title,
@@ -87,7 +81,19 @@ const Projects = () => {
       github: "https://github.com/lyfe691/AppliCare",
       tags: ["React (Vite)", "Spring Boot", "Ant Design", "MongoDB", "Java", "JavaScript", "Docker", "SEO"],
       featured: true,
-      date: "Dec 2024 - Feb 2025"
+      date: "Dec 2024 - Feb 2025",
+      slug: "applicare"
+    },
+    {
+      title: t.projects.list.codeExtractor.title,
+      description: t.projects.list.codeExtractor.description + " (600+ Users)",
+      image: "/projects/website-code-extractor.svg",
+      link: "https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm",
+      github: "https://github.com/lyfe691/Website-Code-Extractor",
+      tags: ["Chrome Extension", "JSZip", "HTML", "CSS", "JavaScript"],
+      featured: true,
+      date: "Aug 2024",
+      slug: "code-extractor"
     },
     {
       title: t.projects.list.osint.title,
@@ -281,43 +287,62 @@ const Projects = () => {
                             </motion.div>
                             
                             {/* Links section with separator */}
-                            {(project.github || project.link) && (
+                            {(project.slug || project.github || project.link) && (
                               <>
                                 <div className="w-full h-px bg-foreground/10 mb-4"></div>
                                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-                                  {project.github && (
+                                  {project.slug ? (
+                                    // Show "View Details" button for projects with dedicated pages
                                     <Button
                                       asChild
                                       variant="outline"
                                       size="lg"
                                       className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
                                     >
-                                      <a 
-                                        href={project.github}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        <FaGithubAlt className="w-4 h-4 mr-1" />
-                                        GitHub
-                                      </a>
+                                      <Link to={`/projects/${project.slug}`}>
+                                        
+                                        View Details
+                                        <ChevronRight className="w-4 h-4 mr-1" />
+                                      </Link>
                                     </Button>
-                                  )}
-                                  {project.link && (
-                                    <Button
-                                      asChild
-                                      variant="outline"
-                                      size="lg"
-                                      className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
-                                    >
-                                      <a 
-                                        href={project.link}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        <ExternalLink className="w-4 h-4 mr-1" />
-                                        Visit Project
-                                      </a>
-                                    </Button>
+                                  ) : (
+                                    // Show external links for projects without dedicated pages
+                                    <>
+                                      {project.github && (
+                                        <Button
+                                          asChild
+                                          variant="outline"
+                                          size="lg"
+                                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                                        >
+                                          <a 
+                                            href={project.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            <FaGithubAlt className="w-4 h-4 mr-1" />
+                                            GitHub
+                                          </a>
+                                        </Button>
+                                      )}
+                                      {project.link && (
+                                        <Button
+                                          asChild
+                                          variant="outline"
+                                          size="lg"
+                                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                                        >
+                                          <a 
+                                            href={project.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                          >
+                                            <ExternalLink className="w-4 h-4 mr-1" />
+                                            Visit Project
+                                          </a>
+                                        </Button>
+                                      )}
+                                    </>
                                   )}
                                 </div>
                               </>
@@ -407,43 +432,61 @@ const Projects = () => {
                         </motion.div>
                         
                         {/* Links section with separator */}
-                        {(project.github || project.link) && (
+                        {(project.slug || project.github || project.link) && (
                           <>
                             <div className="w-full h-px bg-foreground/10 mb-4"></div>
                             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-                              {project.github && (
+                              {project.slug ? (
+                                // Show "View Details" button for projects with dedicated pages
                                 <Button
                                   asChild
-                                  variant="outline"
+                                  variant="default"
                                   size="lg"
-                                  className="w-full flex items-center justify-center gap-2 shadow-sm  transition-all duration-300 group border-foreground/20"
+                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group"
                                 >
-                                  <a 
-                                    href={project.github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    <FaGithubAlt className="w-4 h-4 mr-1" />
-                                    GitHub
-                                  </a>
+                                  <Link to={`/projects/${project.slug}`}>
+                                    <ArrowRight className="w-4 h-4 mr-1" />
+                                    View Details
+                                  </Link>
                                 </Button>
-                              )}
-                              {project.link && (
-                                <Button
-                                  asChild
-                                  variant="outline"
-                                  size="lg"
-                                  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
-                                >
-                                  <a 
-                                    href={project.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    <ExternalLink className="w-4 h-4 mr-1" />
-                                    Visit Project
-                                  </a>
-                                </Button>
+                              ) : (
+                                // Show external links for projects without dedicated pages
+                                <>
+                                  {project.github && (
+                                    <Button
+                                      asChild
+                                      variant="outline"
+                                      size="lg"
+                                      className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300 group border-foreground/20"
+                                    >
+                                      <a 
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <FaGithubAlt className="w-4 h-4 mr-1" />
+                                        GitHub
+                                      </a>
+                                    </Button>
+                                  )}
+                                  {project.link && (
+                                    <Button
+                                      asChild
+                                      variant="outline"
+                                      size="lg"
+                                      className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
+                                    >
+                                      <a 
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        <ExternalLink className="w-4 h-4 mr-1" />
+                                        Visit Project
+                                      </a>
+                                    </Button>
+                                  )}
+                                </>
                               )}
                             </div>
                           </>

@@ -17,9 +17,11 @@ import Experience from "@/pages/Experience";
 import Contact from "@/pages/Contact";
 import Services from "@/pages/Services";
 import AboutThisWebsite from "@/pages/AboutThisWebsite";
+import ProjectPageRenderer from "@/pages/projects/ProjectPageRenderer";
 import SimpleLayout from "@/layouts/SimpleLayout";
 import MainLayout from "@/layouts/MainLayout";
 import BlankLayout from "@/layouts/BlankLayout";
+import ProjectLayout from "@/layouts/ProjectLayout";
 import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
 import { ReactNode } from "react";
 
@@ -103,6 +105,16 @@ export const AnimatedRoutes = () => {
             <MainLayout>
               {withTransition(Projects)}
             </MainLayout>
+          } 
+        />
+        
+        {/* Individual project pages */}
+        <Route 
+          path="/projects/:slug" 
+          element={
+            <ProjectLayout>
+              {withTransition(ProjectPageRenderer)}
+            </ProjectLayout>
           } 
         />
         

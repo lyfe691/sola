@@ -20,7 +20,8 @@ export const Conditionals = () => {
         
         // hide toggles on these paths and render on all others
         const hideTogglesOn = ["/a", "/404"];
-        const shouldRender = !hideTogglesOn.some(path => location.pathname === path);
+        const isProjectPage = location.pathname.startsWith("/projects/") && location.pathname !== "/projects";
+        const shouldRender = !hideTogglesOn.some(path => location.pathname === path) && !isProjectPage;
         
         if (!shouldRender) return null;
         
@@ -38,7 +39,8 @@ export const Conditionals = () => {
         
         // hide HireMe on these paths and render on all others
         const hideHireMeOn = ["/404", "/a"];
-        const shouldRender = !hideHireMeOn.some(path => location.pathname === path);
+        const isProjectPage = location.pathname.startsWith("/projects/") && location.pathname !== "/projects";
+        const shouldRender = !hideHireMeOn.some(path => location.pathname === path) && !isProjectPage;
         
         if (!shouldRender) return null;
         
@@ -51,7 +53,8 @@ export const Conditionals = () => {
         
         // hide footer on these paths and render on all others
         const hideFooterOn = ['/', '*', "/404", "/a"];
-        const shouldRender = !hideFooterOn.some(path => location.pathname === path);
+        const isProjectPage = location.pathname.startsWith("/projects/") && location.pathname !== "/projects";
+        const shouldRender = !hideFooterOn.some(path => location.pathname === path) && !isProjectPage;
         
         if (!shouldRender) return null;
         

@@ -1,0 +1,58 @@
+import { ProjectImage, ProjectGallery, TechStack } from '@/components/MDXComponents';
+
+# Bringing Neofetch to Windows
+
+**Self** is a customizable Windows system information display tool that brings the beloved Unix/Linux Neofetch experience to Windows users. Built entirely with PowerShell, it provides a clean, customizable way to display system information alongside ASCII art or images.
+
+> "Why should Linux users have all the fun?" - The motivation behind Self
+
+The goal was to create a native Windows solution that feels familiar to Neofetch users while leveraging PowerShell's capabilities.
+
+<ProjectImage 
+  src="https://raw.githubusercontent.com/lyfe691/self/refs/heads/main/docs/images/self.png" 
+  alt="Self system information display" 
+  caption="Self displaying system information with image rendering"
+  size="large"
+/>
+
+## Technical Architecture
+
+Self is built with **Python** as the core language, utilizing Windows APIs and system calls for accurate information gathering.
+
+## Installation & Distribution
+
+The installation process is designed to be **simple and user-friendly**:
+
+### Installation via PowerShell
+
+```powershell
+iwr -Uri "https://raw.githubusercontent.com/lyfe691/self/main/install.ps1" -UseBasicParsing | iex
+```
+
+## Usage & Configuration
+
+### Command Line Interface
+
+Self provides a comprehensive CLI with multiple options:
+
+```bash
+# Basic usage
+self                 # Run with default settings
+self --setup         # Interactive setup wizard
+self --update        # Update to latest version
+
+# Customization options
+self --image <file>  # Use specific image
+self --ascii <file>  # Use ASCII art instead
+self --height <n>    # Set image height
+self --width <n>     # Set image width
+
+# Advanced options
+self --config <path> # Use custom config file
+self --no-cache      # Skip cached system info
+self --debug         # Run in simplified debug mode
+self --version       # Show version information
+```
+---
+
+*Self represents the intersection of system administration, creative coding, and community building—bringing beloved Unix tools to the Windows ecosystem.* 

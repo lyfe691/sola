@@ -1,5 +1,8 @@
 /* credit vercel for the font, dunno if i have to*/
 
+/* syntax highlighting for code blocks */
+@import 'highlight.js/styles/github-dark.css';
+
 /* Geist from vercel */
 @font-face {
   font-family: 'Geist';
