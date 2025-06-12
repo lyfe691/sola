@@ -8,6 +8,7 @@
 
 import React from 'react';
 import { motion } from 'motion/react';
+import { AdvancedCodeBlock } from '@/components/ui/code/advanced-code-block/advanced-code-block';
 
 // Custom components for MDX content that match the design system
 
@@ -108,17 +109,35 @@ export const MDXComponents = {
   ),
   
   // Code blocks
-  pre: ({ children, ...props }: any) => (
-    <motion.pre 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="bg-muted/50 border border-border/50 rounded-lg p-4 overflow-x-auto text-xs mb-4" 
-      {...props}
-    >
-      {children}
-    </motion.pre>
-  ),
+  pre: ({ children, ...props }: any) => {
+    // Check if this is a code block with language info
+    const codeElement = React.Children.toArray(children)[0] as any;
+    if (codeElement?.props?.className?.startsWith('language-')) {
+      const language = codeElement.props.className.replace('language-', '');
+      const code = codeElement.props.children;
+      
+      return (
+        <AdvancedCodeBlock
+          code={typeof code === 'string' ? code : String(code)}
+          lang={language as any}
+          {...props}
+        />
+      );
+    }
+    
+    // Fallback for regular pre blocks
+    return (
+      <motion.pre 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="bg-muted/50 border border-border/50 rounded-lg p-4 overflow-x-auto text-xs mb-4" 
+        {...props}
+      >
+        {children}
+      </motion.pre>
+    );
+  },
   
   code: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
     <code 
@@ -314,4 +333,18 @@ export const TechStack: React.FC<{
       </span>
     ))}
   </motion.div>
+);
+
+export const CodeBlock: React.FC<{
+  code: string;
+  fileName?: string;
+  lang?: string;
+  theme?: string;
+}> = ({ code, fileName, lang = "typescript", theme }) => (
+  <AdvancedCodeBlock
+    code={code}
+    fileName={fileName}
+    lang={lang as any}
+    theme={theme as any}
+  />
 ); 

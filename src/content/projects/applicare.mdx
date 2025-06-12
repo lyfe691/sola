@@ -1,4 +1,4 @@
-import { ProjectImage, ProjectGallery, TechStack } from '@/components/MDXComponents';
+import { ProjectImage, ProjectGallery, TechStack, CodeBlock } from '@/components/MDXComponents';
 
 # Building AppliCare
 
@@ -183,8 +183,8 @@ The backend was built with Spring Boot and MongoDB for flexible data storage.
 
 ### Docker Configuration
 
-```dockerfile
-# Backend Dockerfile
+<CodeBlock
+  code={`# Backend Dockerfile
 FROM eclipse-temurin:21-jdk-alpine as build
 WORKDIR /workspace/app
 
@@ -203,8 +203,10 @@ ARG DEPENDENCY=/workspace/app/target/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.applicare.applicare.ApplicareApplication"] 
-```
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.applicare.applicare.ApplicareApplication"]`}
+  fileName="Dockerfile"
+  lang="dockerfile"
+/>
 
 ## Results & Impact
 

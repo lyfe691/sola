@@ -1,4 +1,4 @@
-import { ProjectImage, ProjectGallery, TechStack } from '@/components/MDXComponents';
+import { ProjectImage, ProjectGallery, TechStack, CodeBlock } from '@/components/MDXComponents';
 
 # Design Philosophy
 
@@ -163,9 +163,8 @@ Performance was a **key priority** from the start. Here's what I implemented:
 
 ### Optimization Techniques
 
-```typescript
-
-// image optimization with lazy loading
+<CodeBlock
+  code={`// image optimization with lazy loading
 const OptimizedImage = ({ src, alt, ...props }: { src: string, alt: string, [key: string]: any }) => {
   return (
     <img 
@@ -188,8 +187,10 @@ const ExpensiveComponent = memo(({ data }: { data: any[] }) => {
   }, [data]);
 
   return <div>{/* render */}</div>;
-});
-```
+});`}
+  fileName="optimization-techniques.tsx"
+  lang="typescript"
+/>
 
 The result? A portfolio that loads quickly and feels responsive on all devices.
 
