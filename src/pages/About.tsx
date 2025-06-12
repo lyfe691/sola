@@ -1,15 +1,14 @@
 /**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
- * 
- * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
- * Please refer to the LICENSE file in the project root for full licensing details.
- * 
- * All rights reserved.
+ *
+ * This file is part of a proprietary project and is governed by the terms in LICENSE.
+ * Unauthorized use, modification, or distribution is prohibited. All rights reserved.
+ * For permissions, contact yanis.sebastian.zuercher@gmail.com
  */
 
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { ArrowRight, Book, Code, Code2, Coffee, Laptop, Linkedin, Mountain, Download } from 'lucide-react';
+import { Book, Code2, Coffee, Laptop, Linkedin, Mountain, Download } from 'lucide-react';
 import { FaGithubAlt } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from "@/lib/language-provider";

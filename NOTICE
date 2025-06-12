@@ -1,19 +1,14 @@
-NOTICE
+Copyright (c) 2025 Yanis Sebastian Zürcher. All rights reserved.
 
-Copyright © 2025 Yanis Sebastian Zürcher
+This software is proprietary and is published for transparency and educational review only.
+No license is granted to use, copy, modify, or distribute this software without prior written consent.
 
-This project is licensed under the GNU General Public License, Version 3.0.
-You may not use this file except in compliance with the License.
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+This project contains original work authored by Yanis Sebastian Zürcher.
 
-Notices
+For licensing or commercial use inquiries, contact: yanis.sebastian.zuercher@gmail.com
 
-1. This software was developed by Yanis Sebastian Zürcher.
-2. For a copy of the License, see LICENSE or visit https://www.gnu.org/licenses/gpl-3.0.html.
-3. Additional third-party code may be distributed with this project. Please review their respective licenses and copyright notices, which may be found in the applicable files or documentation.
+Additional Notices:
 
-All trademarks are the property of their respective owners.
+- This software may include references to third-party tools, libraries, or assets.
+  Any such materials remain the property of their respective owners and are governed by their own licenses.
+- All trademarks, service marks, and brand names used in this project are the property of their respective owners.

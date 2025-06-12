@@ -1,10 +1,9 @@
 /**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
- * 
- * This file is part of the project and is subject to the terms of the project's LICENSE (GNU GPL v3).
- * Please refer to the LICENSE file in the project root for full licensing details.
- * 
- * All rights reserved.
+ *
+ * This file is part of a proprietary project and is governed by the terms in LICENSE.
+ * Unauthorized use, modification, or distribution is prohibited. All rights reserved.
+ * For permissions, contact yanis.sebastian.zuercher@gmail.com
  */
 
 import type { RecursivePartial, IOptions } from "tsparticles-engine";
