@@ -8,7 +8,7 @@
 
 import { useLocation } from "react-router-dom";
 import Footer from "./Footer";
-import HireMe from "./HireMe";
+// import HireMe from "./HireMe";
 import { SearchToggle } from "./search-toggle";
 import { LanguageToggle } from "./language-toggle";
 import { ThemeToggle } from "./theme-toggle";
@@ -34,18 +34,18 @@ export const Conditionals = () => {
         );
     };
     
-    const ConditionalHireMe = () => {
-        const location = useLocation();
+    // const ConditionalHireMe = () => {
+    //     const location = useLocation();
         
-        // hide HireMe on these paths and render on all others
-        const hideHireMeOn = ["/404", "/a"];
-        const isProjectPage = location.pathname.startsWith("/projects/") && location.pathname !== "/projects";
-        const shouldRender = !hideHireMeOn.some(path => location.pathname === path) && !isProjectPage;
+    //     // hide HireMe on these paths and render on all others
+    //     const hideHireMeOn = ["/404", "/a"];
+    //     const isProjectPage = location.pathname.startsWith("/projects/") && location.pathname !== "/projects";
+    //     const shouldRender = !hideHireMeOn.some(path => location.pathname === path) && !isProjectPage;
         
-        if (!shouldRender) return null;
+    //     if (!shouldRender) return null;
         
-        return <HireMe />;
-    };
+    //     return <HireMe />;
+    // };
     
 
     const ConditionalFooter = () => {
@@ -63,7 +63,7 @@ export const Conditionals = () => {
     return (
         <>
             <ConditionalFooter />
-            <ConditionalHireMe />
+            {/* <ConditionalHireMe /> */}
             <ConditionalToggles />
         </>
     );
