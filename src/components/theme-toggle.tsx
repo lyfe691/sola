@@ -54,25 +54,27 @@ export function ThemeToggle() {
           size="icon"
           className="w-9 h-9 transition-colors hover:bg-muted"
         >
-          {/* Dynamically render icons based on theme configuration */}
-          {THEMES.map(t => {
-            const IconComponent = t.icon;
-            // Special handling for system theme to show Sun/Moon based on actual system theme
-            if (t.value === "system") {
-              return (
-                <div key="system-theme-icons" className="relative">
-                  <Sun className={`absolute h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
-                  <Moon className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-                </div>
-              )
-            }
-            return (
-              <IconComponent
-                key={t.value}
-                className={`absolute h-4 w-4 transition-all ${resolvedTheme === t.value ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
-              />
-            );
-          })}
+          {/* Show icon with smooth animation */}
+          {theme === "system" ? (
+            <>
+              <Sun className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
+              <Moon className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+            </>
+          ) : (
+            <>
+              <Sun className={`h-4 w-4 transition-all ${theme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
+              <Moon className={`absolute h-4 w-4 transition-all ${theme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+              {CUSTOM_THEMES.map(t => {
+                const IconComponent = t.icon;
+                return (
+                  <IconComponent
+                    key={t.value}
+                    className={`absolute h-4 w-4 transition-all ${theme === t.value ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
+                  />
+                );
+              })}
+            </>
+          )}
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
