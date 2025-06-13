@@ -81,19 +81,19 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center px-6 max-w-4xl">
                 <motion.h1 
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
+                  initial={{ opacity: 0, y: 25, skewY: 3 }}
+                  animate={{ opacity: 1, y: 0, skewY: 0 }}
+                  transition={{ duration: 0.7, ease: "easeInOut", delay: 0.2 }}
                   className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6"
                 >
                   {title}
                 </motion.h1>
                 {description && (
                   <motion.p 
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 25 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="text-lg sm:text-xl md:text-2xl text-white/90 font-light"
+                    transition={{ duration: 0.7, ease: "easeInOut", delay: 0.3 }}
+                    className="text-base sm:text-lg md:text-xl text-white/90 font-light"
                   >
                     {description}
                   </motion.p>
