@@ -60,10 +60,10 @@ export function ThemeToggle() {
             // Special handling for system theme to show Sun/Moon based on actual system theme
             if (t.value === "system") {
               return (
-                <>
+                <div key="system-theme-icons" className="relative">
                   <Sun className={`absolute h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
                   <Moon className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-                </>
+                </div>
               )
             }
             return (
