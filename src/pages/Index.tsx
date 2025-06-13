@@ -17,10 +17,10 @@ import {
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
-import { TypeAnimation } from 'react-type-animation';
 import { useEffect, useState } from "react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
+import { CyclingTextEffect } from "../components/ui/text-effect-wrapper";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Navigation from "../components/Navigation";
@@ -35,10 +35,16 @@ import { NameMorpher } from "../components/NameMorpher";
 
 const Index = () => {
   const isLoaded = usePageInit(50);
-  const [typingComplete, setTypingComplete] = useState(false);
   const [key, setKey] = useState(0);
   const { language } = useLanguage();
   const t = translations[language];
+  
+  const descriptions = [
+    (t.index as any).description1,
+    (t.index as any).description2,
+    (t.index as any).description3,
+    (t.index as any).description4,
+  ];
   
   /* remove for now
   const particlesInit = async (engine: Engine) => {
@@ -48,7 +54,6 @@ const Index = () => {
 
   useEffect(() => {
     setKey(prev => prev + 1);
-    setTypingComplete(false);
   }, [language]);
 
   return (
@@ -87,32 +92,21 @@ const Index = () => {
                       <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
                     </motion.h1>
                     
-                    <motion.p 
+                    <motion.div 
                       variants={itemVariants}
                       initial="hidden"
                       animate="visible"
                       className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
                     >
-                      <TypeAnimation
-                        key={key}
-                        sequence={[
-                          (t.index as any).description1,
-                          2000,
-                          (t.index as any).description2,
-                          2000,
-                          (t.index as any).description3,
-                          2000,
-                          (t.index as any).description4,
-                          2000,
-                        ]}                        
-                        wrapper="span"
-                        speed={60}
-                        deletionSpeed={80}
-                        repeat={Infinity}
-                        cursor={true}
-                        style={{ display: 'inline-block' }}
+                      <CyclingTextEffect
+                        texts={descriptions}
+                        per="char"
+                        preset="blur"
+                        delay={0.1}
+                        speedReveal={4}
+                        displayDuration={3000}
                       />
-                    </motion.p>
+                    </motion.div>
 
                     <motion.div 
                       variants={itemVariants}
