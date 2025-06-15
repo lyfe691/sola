@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- =====================================
+         BASIC PAGE SET-UP
+    ====================================== -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
 
-    <!-- Primary Meta Tags -->
-    <meta name="description" content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies." />
+    <!-- =====================================
+         PRIMARY META TAGS
+    ====================================== -->
+    <meta
+      name="description"
+      content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies."
+    />
     <meta name="author" content="Yanis Sebastian Zürcher" />
-    <meta name="keywords" content="Yanis Sebastian Zürcher,Zuercher,Zürcher,Sebi, Yanis Sebastian Zuercher, Sebi Zürcher, Sebastian Zürcher, Software Developer, Web Developer, Full Stack Developer, JavaScript, TypeScript, React, Node.js, HTML, CSS, Python, SQL, Database, Software Engineering, Computer Science, Switzerland, Zurich, Spring Boot, MongoDB" />
+
+    <!-- keywords are long discontinued by Google and other search engines. However, I'll keep them here in case they are still used by others. -->
+    <meta
+      name="keywords"
+      content="Yanis Sebastian Zürcher,Zuercher,Zürcher,Sebi, Yanis Sebastian Zuercher, Sebi Zürcher, Sebastian Zürcher, Software Developer, Web Developer, Full Stack Developer, JavaScript, TypeScript, React, Node.js, HTML, CSS, Python, SQL, Database, Software Engineering, Computer Science, Switzerland, Zurich, Spring Boot, MongoDB"
+    />
+
+    <!-- PWA HINTS -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="YSZ" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- =====================================
+         OPEN GRAPH / FACEBOOK
+    ====================================== -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://sola.ysz.life" />
-    <meta property="og:title" content="Yanis Sebastian Zürcher | Software Developer in Zürich" />
-    <meta property="og:description" content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies." />
+    <meta property="og:url" content="https://sola.ysz.life/" />
+    <meta property="og:title" content="Yanis Sebastian Zürcher • Software Developer in Zürich" />
+    <meta
+      property="og:description"
+      content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies."
+    />
     <meta property="og:image" content="https://sola.ysz.life/og-image.png" />
     <meta property="og:site_name" content="Yanis Sebastian Zürcher" />
     <meta property="og:locale" content="en_US" />
@@ -28,31 +49,57 @@
     <meta property="og:locale:alternate" content="zh_CN" />
     <meta property="og:locale:alternate" content="ru_RU" />
 
-    <!-- Twitter -->
+    <!-- =====================================
+         TWITTER CARDS
+    ====================================== -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://sola.ysz.life" />
-    <meta name="twitter:title" content="Yanis Sebastian Zürcher | Software Developer in Zürich" />
-    <meta name="twitter:description" content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies." />
+    <meta name="twitter:url" content="https://sola.ysz.life/" />
+    <meta name="twitter:title" content="Yanis Sebastian Zürcher • Software Developer in Zürich" />
+    <meta
+      name="twitter:description"
+      content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies."
+    />
     <meta name="twitter:image" content="https://sola.ysz.life/og-image.png" />
 
-    <!-- Links -->
-    <link rel="canonical" href="https://sola.ysz.life" />
+    <!-- =====================================
+         LINKS & FAVICON
+    ====================================== -->
+    <link rel="canonical" href="https://sola.ysz.life/" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
-    <!-- Robots -->
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <!-- =====================================
+         ROBOTS
+    ====================================== -->
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
     <meta name="googlebot" content="index, follow" />
     <meta name="bingbot" content="index, follow" />
-    
-    <!-- JSON-LD -->
+
+    <!-- =====================================
+         STRUCTURED DATA
+    ====================================== -->
+    <!-- 1) Entity: WebSite -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Yanis Sebastian Zürcher",
+        "alternateName": ["Yanis Zürcher", "Sebi Zürcher", "Sebastian Zürcher"],
+        "url": "https://sola.ysz.life/"
+      }
+      </script>
+
+    <!-- 2) Entity: Person -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Yanis Sebastian Zürcher",
         "alternateName": ["Yanis Zürcher", "Sebastian Zürcher", "Sebi Zürcher"],
-        "url": "https://sola.ysz.life",
+        "url": "https://sola.ysz.life/",
         "image": "https://sola.ysz.life/og-image.png",
         "sameAs": [
           "https://github.com/lyfe691",
@@ -65,7 +112,7 @@
           "name": "WISS",
           "url": "https://www.wiss.ch"
         },
-        "description": "Software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies.",
+        "description": "Software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies.",
         "knowsAbout": [
           "Full Stack Development",
           "React",
@@ -74,13 +121,16 @@
           "MongoDB",
           "Java",
           "JavaScript",
-          "Web Development", 
+          "Web Development",
           "Everything"
         ]
       }
     </script>
   </head>
 
+  <!-- =====================================
+       PAGE CONTENT
+  ====================================== -->
   <body>
     <noscript>Please enable JavaScript to view this website.</noscript>
     <div id="root"></div>
