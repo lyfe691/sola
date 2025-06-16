@@ -75,7 +75,7 @@ const Index = () => {
           {/* Aurora Background */}
           <div className="absolute inset-0 z-[1] hidden sm:block">
             <Aurora
-              colorStops={["#6AD3B0", "#8FDBE2", "#C4A8FF"]} // hm: olorStops={["#A8D8EA", "#D4E7ED", "#A8D8EA"]}
+              colorStops={["#A8D8EA", "#D4E7ED", "#A8D8EA"]} // hm: #6AD3B0", "#8FDBE2", "#C4A8FF"
               blend={0.5}
               amplitude={0.9}
               speed={0.5}
