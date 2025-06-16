@@ -11,7 +11,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
-import { ReactOriginal, TypescriptOriginal, DockerOriginal, JavascriptOriginal, AntdesignOriginal, TailwindcssOriginal, NextjsOriginal, MongodbOriginal, SpringOriginal, NginxOriginal, RedisOriginal, NodejsOriginal, BashOriginal, GitOriginal, VisualstudioOriginal, VscodeOriginal, LinuxOriginal, BunOriginal, EslintLineWordmark, EslintOriginal, KubernetesOriginal, GrafanaOriginal, JenkinsOriginal, PythonOriginal } from "devicons-react";
+import { ReactOriginal, TypescriptOriginal, DockerOriginal, JavascriptOriginal, AntdesignOriginal, TailwindcssOriginal, NextjsOriginal, MongodbOriginal, SpringOriginal, NginxOriginal, RedisOriginal, NodejsOriginal, BashOriginal, GitOriginal, VisualstudioOriginal, VscodeOriginal, LinuxOriginal, BunOriginal, EslintLineWordmark, EslintOriginal, KubernetesOriginal, GrafanaOriginal, JenkinsOriginal, PythonOriginal, JavaOriginal } from "devicons-react";
 import { 
   SiEagle,
   SiShadcnui,
@@ -44,7 +44,7 @@ const Skills = () => {
       skills: [
         { name: "MongoDB", icon: MongodbOriginal, level: 80 },
         { name: "Spring Boot", icon: SpringOriginal, level: 75 },
-        { name: "Java", icon: JavascriptOriginal, level: 70 },
+        { name: "Java", icon: JavaOriginal, level: 70 },
         { name: "Nginx", icon: NginxOriginal, level: 61 },
         { name: "Redis", icon: RedisOriginal, level: 50 },
         { name: "Node.js", icon: NodejsOriginal, level: 40 },
