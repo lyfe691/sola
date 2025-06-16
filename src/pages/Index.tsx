@@ -73,7 +73,7 @@ const Index = () => {
           </Helmet>
 
           {/* Aurora Background */}
-          <div className="absolute inset-0 z-[1]">
+          <div className="absolute inset-0 z-[1] hidden sm:block">
             <Aurora
               colorStops={["#6AD3B0", "#8FDBE2", "#C4A8FF"]} // hm: olorStops={["#A8D8EA", "#D4E7ED", "#A8D8EA"]}
               blend={0.5}
