@@ -11,32 +11,14 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../lib/language-provider";
 import { translations } from "../lib/translations";
+import { ReactOriginal, TypescriptOriginal, DockerOriginal, JavascriptOriginal, AntdesignOriginal, TailwindcssOriginal, NextjsOriginal, MongodbOriginal, SpringOriginal, NginxOriginal, RedisOriginal, NodejsOriginal, BashOriginal, GitOriginal, VisualstudioOriginal, VscodeOriginal, LinuxOriginal, BunOriginal, EslintLineWordmark, EslintOriginal, KubernetesOriginal, GrafanaOriginal, JenkinsOriginal, PythonOriginal } from "devicons-react";
 import { 
-  SiReact, SiTypescript, SiNextdotjs, SiTailwindcss, SiVuedotjs,
-  SiNodedotjs, SiPython, SiPostgresql, SiDocker,
-  SiGit, SiGithub, SiLinux, SiNginx, SiSpringboot, SiMongodb,
-  SiJavascript, SiRedis, SiKubernetes,
-  SiJenkins,
-  SiGrafana,
-  SiVite,
-  SiAntdesign,
-  SiMysql,
-  SiGnubash,
   SiEagle,
-  SiScrumalliance,
-  SiLanguagetool,
   SiShadcnui,
   SiKalilinux,
-  SiZoom,
   SiOpensourceinitiative,
-  SiEslint,
-  SiBun,
 } from "react-icons/si";
-
-import {BiLogoVisualStudio} from "react-icons/bi"
-import { FaJava} from "react-icons/fa";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
-import { ChevronsLeftRightIcon } from "lucide-react";
 
 const Skills = () => {
   const isLoaded = usePageInit(100);
@@ -48,48 +30,48 @@ const Skills = () => {
     {
       title: "Frontend",
       skills: [
-        { name: "React", icon: SiReact, level: 80},
-        { name: "Next.js", icon: SiNextdotjs, level: 80 },
+        { name: "React", icon: ReactOriginal, level: 80},
+        { name: "Next.js", icon: NextjsOriginal, level: 80 },
         { name: "shadcn/ui", icon: SiShadcnui, level: 70 },
-        { name: "Tailwind CSS", icon: SiTailwindcss, level: 65 },
-        { name: "Ant Design", icon: SiAntdesign, level: 60 },
-        { name: "JavaScript", icon: SiJavascript, level: 60 },  
-        { name: "TypeScript", icon: SiTypescript, level: 50 },
+        { name: "Tailwind CSS", icon: TailwindcssOriginal, level: 65 },
+        { name: "Ant Design", icon: AntdesignOriginal, level: 60 },
+        { name: "JavaScript", icon: JavascriptOriginal, level: 60 },  
+        { name: "TypeScript", icon: TypescriptOriginal, level: 50 },
       ]
     },
     {
       title: "Backend",
       skills: [
-        { name: "MongoDB", icon: SiMongodb, level: 80 },
-        { name: "Spring Boot", icon: SiSpringboot, level: 75 },
-        { name: "Java", icon: FaJava, level: 70 },
-        { name: "Nginx", icon: SiNginx, level: 61 },
-        { name: "Redis", icon: SiRedis, level: 50 },
-        { name: "Node.js", icon: SiNodedotjs, level: 40 },
-        { name: "Bash for automation", icon: SiGnubash, level: 35 },
+        { name: "MongoDB", icon: MongodbOriginal, level: 80 },
+        { name: "Spring Boot", icon: SpringOriginal, level: 75 },
+        { name: "Java", icon: JavascriptOriginal, level: 70 },
+        { name: "Nginx", icon: NginxOriginal, level: 61 },
+        { name: "Redis", icon: RedisOriginal, level: 50 },
+        { name: "Node.js", icon: NodejsOriginal, level: 40 },
+        { name: "Bash for automation", icon: BashOriginal, level: 35 },
       ]
     },
     {
       title: "Tools",
       skills: [
-        { name: "Git", icon: SiGit, level: 90 },
-        { name: "Visual Studio Code", icon: BiLogoVisualStudio, level: 80},
-        { name: "Docker", icon: SiDocker, level: 75 },
-        { name: "Linux", icon: SiLinux, level: 72 },
-        { name: "Bun", icon: SiBun, level: 71 },
-        { name: "ESLint", icon: SiEslint, level: 70 },
-        { name: "Kubernetes", icon: SiKubernetes, level: 62 },
-        { name: "Grafana", icon: SiGrafana, level: 60 }
+        { name: "Git", icon: GitOriginal, level: 90 },
+        { name: "Visual Studio Code", icon: VscodeOriginal, level: 80},
+        { name: "Docker", icon: DockerOriginal, level: 75 },
+        { name: "Linux", icon: LinuxOriginal, level: 72 },
+        { name: "Bun", icon: BunOriginal, level: 71 },
+        { name: "ESLint", icon: EslintOriginal, level: 70 },
+        { name: "Kubernetes", icon: KubernetesOriginal, level: 62 },
+        { name: "Grafana", icon: GrafanaOriginal, level: 60 }
       ]
     },
     {
       title: "Other",
       skills: [
         { name: "Agile Methodologies", icon: SiEagle, level: 80 },
-        { name: "CI/CD", icon: SiJenkins, level: 75 },
+        { name: "CI/CD", icon: JenkinsOriginal, level: 75 },
         { name: "OSINT", icon: SiOpensourceinitiative, level: 70 },
         { name: "Kali Linux", icon: SiKalilinux, level: 60 },
-        { name: "Python", icon: SiPython, level: 45}
+        { name: "Python", icon: PythonOriginal, level: 45}
       ]
     }
   ];
@@ -143,10 +125,7 @@ const Skills = () => {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <skill.icon 
-                            className={`w-5 h-5 transition-colors duration-300
-                                      ${hoveredSkill === skill.name 
-                                        ? 'text-primary' 
-                                        : 'text-foreground/60'}`}
+                            className={" transition-colors duration-300"}
                           />
                           <span className="text-sm font-medium">{skill.name}</span>
                         </div>

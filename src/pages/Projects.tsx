@@ -237,6 +237,7 @@ const Projects = () => {
                               src={project.image} 
                               alt={project.title}
                               loading="lazy"
+                              decoding="async"
                               className="w-full h-full object-cover"
                               animate={{
                                 scale: hoveredProject === project.title ? 1.05 : 1
