@@ -31,6 +31,7 @@ import ParticleBackground from "../components/ParticleBackground";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "../components/NameMorpher";
+import Threads from "../components/Threads";
 
 
 const Index = () => {
@@ -69,11 +70,23 @@ const Index = () => {
             <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
           </Helmet>
 
+          {/* Threads background, remove for now 
+          <div className="absolute inset-0 z-[1] pointer-events-none">
+            <div className="w-full h-full pointer-events-auto">
+              <Threads
+                amplitude={1.5}
+                distance={0.1}
+                enableMouseInteraction={true}
+              />
+            </div>
+          </div>
+          */}
+          
           {/* Particle background, remove for now 
           <ParticleBackground particlesInit={particlesInit}/>
           */}
           
-          <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-16 sm:pt-18 md:pt-20 flex flex-col">
+          <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-16 sm:pt-18 md:pt-20 flex flex-col relative z-20">
             <div className="max-w-7xl mx-auto w-full flex flex-col h-full">
               <div className="mb-8 sm:mb-10 md:mb-14 lg:mb-16">
                 <Navigation />
