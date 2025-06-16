@@ -33,6 +33,7 @@ import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "../components/NameMorpher";
 import Threads from "../components/Threads";
 import Squares from "../components/Squares";
+import Aurora from "../components/Aurora";
 
 
 const Index = () => {
@@ -71,7 +72,18 @@ const Index = () => {
             <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
           </Helmet>
 
-          {/* Squares Background, remove for now 
+          {/* Aurora Background */}
+          <div className="absolute inset-0 z-[1]">
+            <Aurora
+              colorStops={["#6AD3B0", "#8FDBE2", "#C4A8FF"]} // hm: olorStops={["#A8D8EA", "#D4E7ED", "#A8D8EA"]}
+              blend={0.5}
+              amplitude={0.9}
+              speed={0.5}
+            />
+          </div>
+
+
+          {/* Squares background, remove for now 
           <div className="absolute inset-0 z-[1]">
             <Squares 
               speed={0.5} 
