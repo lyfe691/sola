@@ -32,6 +32,7 @@ import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/u
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "../components/NameMorpher";
 import Threads from "../components/Threads";
+import Squares from "../components/Squares";
 
 
 const Index = () => {
@@ -70,6 +71,16 @@ const Index = () => {
             <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
           </Helmet>
 
+          {/* Squares Background, remove for now 
+          <div className="absolute inset-0 z-[1]">
+            <Squares 
+              speed={0.5} 
+              squareSize={40}
+              direction="diagonal"
+            />
+          </div>
+          */}
+          
           {/* Threads background, remove for now 
           <div className="absolute inset-0 z-[1] pointer-events-none">
             <div className="w-full h-full pointer-events-auto">
