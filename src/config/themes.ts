@@ -46,12 +46,9 @@ export const THEMES: ThemeConfig[] = [
   { value: "life", label: "Solarpunk", icon: Sprout, isCustom: true },
   { value: "cyber", label: "Cyberpunk", icon: Slack, isCustom: true },
   { value: "cloud", label: "Cloud", icon: Cloud, isCustom: true },
-  { value: "sunset", label: "Sunset", icon: Sunset, isCustom: true },
   { value: "forest", label: "Forest", icon: Trees, isCustom: true },
   { value: "amethyst", label: "Amethyst", icon: FaGem, isCustom: true },
   { value: "vintage", label: "Vintage", icon: FaMoneyBillAlt, isCustom: true },
-  { value: "bubblegum", label: "Bubblegum", icon: BsBalloon, isCustom: true },
-  { value: "perpetuity", label: "Perpetuity", icon: InfinityIcon, isCustom: true },
 ];
 
 export const STANDARD_THEMES = THEMES.filter(theme => !theme.isCustom);
