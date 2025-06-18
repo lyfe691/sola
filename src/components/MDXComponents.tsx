@@ -12,9 +12,15 @@ import { AdvancedCodeBlock } from '@/components/ui/code/advanced-code-block/adva
 
 // Custom components for MDX content that match the design system
 
+interface MDXComponentProps {
+  children?: React.ReactNode;
+  className?: string;
+  id?: string;
+}
+
 export const MDXComponents = {
   // Headings
-  h1: ({ children, ...props }: any) => (
+  h1: ({ children, ...props }: MDXComponentProps) => (
     <motion.h1 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -26,7 +32,7 @@ export const MDXComponents = {
     </motion.h1>
   ),
   
-  h2: ({ children, ...props }: any) => (
+  h2: ({ children, ...props }: MDXComponentProps) => (
     <motion.h2 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -38,7 +44,7 @@ export const MDXComponents = {
     </motion.h2>
   ),
   
-  h3: ({ children, ...props }: any) => (
+  h3: ({ children, ...props }: MDXComponentProps) => (
     <motion.h3 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -51,7 +57,7 @@ export const MDXComponents = {
   ),
   
   // Paragraphs
-  p: ({ children, ...props }: any) => (
+  p: ({ children, ...props }: MDXComponentProps) => (
     <motion.p 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -64,7 +70,7 @@ export const MDXComponents = {
   ),
   
   // Lists
-  ul: ({ children, ...props }: any) => (
+  ul: ({ children, ...props }: MDXComponentProps) => (
     <motion.ul 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -76,7 +82,7 @@ export const MDXComponents = {
     </motion.ul>
   ),
   
-  ol: ({ children, ...props }: any) => (
+  ol: ({ children, ...props }: MDXComponentProps) => (
     <motion.ol 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -96,7 +102,7 @@ export const MDXComponents = {
   ),
   
   // Blockquotes
-  blockquote: ({ children, ...props }: any) => (
+  blockquote: ({ children, ...props }: MDXComponentProps) => (
     <motion.blockquote 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -109,9 +115,12 @@ export const MDXComponents = {
   ),
   
   // Code blocks
-  pre: ({ children, ...props }: any) => {
+  pre: ({ children, ...props }: MDXComponentProps) => {
     // Check if this is a code block with language info
-    const codeElement = React.Children.toArray(children)[0] as any;
+    const codeElement = React.Children.toArray(children)[0] as React.ReactElement<{
+      className?: string;
+      children?: React.ReactNode;
+    }>;
     if (codeElement?.props?.className?.startsWith('language-')) {
       const language = codeElement.props.className.replace('language-', '');
       const code = codeElement.props.children;
@@ -119,7 +128,7 @@ export const MDXComponents = {
       return (
         <AdvancedCodeBlock
           code={typeof code === 'string' ? code : String(code)}
-          lang={language as any}
+          lang={language as 'typescript' | 'javascript' | 'html' | 'css' | 'json' | 'bash'}
           {...props}
         />
       );
@@ -185,7 +194,7 @@ export const MDXComponents = {
   ),
   
   // Horizontal rule
-  hr: ({ ...props }: any) => (
+  hr: ({ ...props }: MDXComponentProps) => (
     <motion.hr 
       initial={{ opacity: 0, scaleX: 0 }}
       animate={{ opacity: 1, scaleX: 1 }}
@@ -344,7 +353,7 @@ export const CodeBlock: React.FC<{
   <AdvancedCodeBlock
     code={code}
     fileName={fileName}
-    lang={lang as any}
-    theme={theme as any}
+    lang={lang as 'typescript' | 'javascript' | 'html' | 'css' | 'json' | 'bash'}
+    theme={theme as 'github-light' | 'github-dark'}
   />
 ); 

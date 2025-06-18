@@ -43,10 +43,10 @@ const Index = () => {
   const t = translations[language];
   
   const descriptions = [
-    (t.index as any).description1,
-    (t.index as any).description2,
-    (t.index as any).description3,
-    (t.index as any).description4,
+    t.index.description1,
+    t.index.description2,
+    t.index.description3,
+    t.index.description4,
   ];
   
   /* remove for now

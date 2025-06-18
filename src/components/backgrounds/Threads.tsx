@@ -215,7 +215,9 @@ const Threads: React.FC<ThreadsProps> = ({
     window.addEventListener("resize", resize);
     resize();
 
+    // eslint-disable-next-line prefer-const
     let currentMouse = [0.5, 0.5];
+    // eslint-disable-next-line prefer-const
     let targetMouse = [0.5, 0.5];
 
     function handleMouseMove(e: MouseEvent) {
