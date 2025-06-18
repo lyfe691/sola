@@ -8,14 +8,13 @@
 
 import { Search } from "lucide-react"
 import { Button } from "./ui/button"
-import { useCommandMenu } from "../hooks/use-command-menu"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
+import { useCommandMenu } from "@/hooks/use-command-menu"
+import { Tooltip, TooltipContent,TooltipTrigger } from "@/components/ui/tooltip"
 
 export function SearchToggle() {
   const { toggleCommandMenu } = useCommandMenu()
   
   return (
-    <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button 
@@ -33,6 +32,5 @@ export function SearchToggle() {
           <p>Search (Ctrl+K)</p>
         </TooltipContent>
       </Tooltip>
-    </TooltipProvider>
   )
 } 

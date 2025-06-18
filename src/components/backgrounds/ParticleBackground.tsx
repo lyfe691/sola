@@ -8,7 +8,7 @@
 
 import Particles from "react-tsparticles";
 import type { Engine } from "tsparticles-engine";
-import { particlesOptions } from "../config/particlesConfig";
+import { particlesOptions } from "@/config/particlesConfig";
 
 interface ParticleBackgroundProps {
   /**

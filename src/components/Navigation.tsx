@@ -10,8 +10,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Home, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
-import { useLanguage } from "../lib/language-provider";
-import { translations } from "../lib/translations";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 
 // define types for the navitem component
 interface NavItemProps {

@@ -11,8 +11,8 @@ import { ExternalLink, Info, ChevronRight, ArrowRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
 import { Link } from "react-router-dom";
-import { useLanguage } from "../lib/language-provider";
-import { translations } from "../lib/translations";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import {

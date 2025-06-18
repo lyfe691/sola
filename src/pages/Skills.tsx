@@ -9,8 +9,8 @@
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { useLanguage } from "../lib/language-provider";
-import { translations } from "../lib/translations";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 import { ReactOriginal, TypescriptOriginal, DockerOriginal, JavascriptOriginal, AntdesignOriginal, TailwindcssOriginal, NextjsOriginal, MongodbOriginal, SpringOriginal, NginxOriginal, RedisOriginal, NodejsOriginal, BashOriginal, GitOriginal, VisualstudioOriginal, VscodeOriginal, LinuxOriginal, BunOriginal, EslintLineWordmark, EslintOriginal, KubernetesOriginal, GrafanaOriginal, JenkinsOriginal, PythonOriginal, JavaOriginal } from "devicons-react";
 import { 
   SiEagle,

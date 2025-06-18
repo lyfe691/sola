@@ -9,8 +9,8 @@
 import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useLanguage } from "../lib/language-provider";
-import { translations } from "../lib/translations";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 

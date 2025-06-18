@@ -18,22 +18,22 @@ import {
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
-import { useLanguage } from "../lib/language-provider";
-import { translations } from "../lib/translations";
-import { CyclingTextEffect } from "../components/ui/text-effect-wrapper";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
+import { CyclingTextEffect } from "@/components/ui/text-effect-wrapper";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Button } from "@/components/ui/button";
-import Navigation from "../components/Navigation";
+import Navigation from "@/components/Navigation";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Engine } from "tsparticles-engine";
-import ParticleBackground from "../components/ParticleBackground";
+import ParticleBackground from "@/components/backgrounds/ParticleBackground";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
 import { Helmet } from "react-helmet-async";
-import { NameMorpher } from "../components/NameMorpher";
-import Threads from "../components/Threads";
-import Squares from "../components/Squares";
-import Aurora from "../components/Aurora";
+import { NameMorpher } from "@/components/NameMorpher";
+import Threads from "@/components/backgrounds/Threads";
+import Squares from "@/components/backgrounds/Squares";
+import Aurora from "@/components/backgrounds/Aurora";
 
 
 const Index = () => {

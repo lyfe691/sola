@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { usePageInit, containerVariants } from "@/utils/transitions";
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import Silk from './Silk';
+import Silk from "@/components/backgrounds/Silk";
 import {
   Breadcrumb,
   BreadcrumbList,

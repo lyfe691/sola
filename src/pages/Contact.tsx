@@ -9,8 +9,8 @@
 import { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { useLanguage } from "../lib/language-provider";
-import { translations } from "../lib/translations";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
