@@ -7,7 +7,7 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Home, ChevronRight } from "lucide-react";
+import { Menu, X, Home, MoveRight } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "@/lib/language-provider";

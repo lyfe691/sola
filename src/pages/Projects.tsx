@@ -7,7 +7,7 @@
  */
 
 import { useState } from "react";
-import { ExternalLink, Info, ChevronRight, ArrowRight } from "lucide-react";
+import { ExternalLink, Info, MoveRight, ArrowRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
 import { Link } from "react-router-dom";
@@ -303,7 +303,7 @@ const Projects = () => {
                                       <Link to={`/projects/${project.slug}`}>
                                         
                                         View Details
-                                        <ChevronRight className="w-4 h-4 mr-1" />
+                                        <MoveRight className="w-4 h-4 mr-1" />
                                       </Link>
                                     </Button>
                                   ) : (
@@ -515,7 +515,7 @@ const Projects = () => {
             >
               <a href="https://github.com/lyfe691?tab=repositories" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                 {t.projects.viewAll}
-                <ChevronRight className="w-4 h-4" />
+                <MoveRight className="w-4 h-4" />
               </a>
             </Button>
           </motion.div>

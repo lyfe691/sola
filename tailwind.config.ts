@@ -60,10 +60,14 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		keyframes: {
-			shine: {
-				'0%': { 'background-position': '100%' },
-				'100%': { 'background-position': '-100%' },
-			},
+  			shine: {
+  				'0%': {
+  					'background-position': '100%'
+  				},
+  				'100%': {
+  					'background-position': '-100%'
+  				}
+  			},
   			'accordion-down': {
   				from: {
   					height: '0'

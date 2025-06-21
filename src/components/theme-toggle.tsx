@@ -6,7 +6,7 @@
  * For permissions, contact yanis.sebastian.zuercher@gmail.com
  */
 
-import { Moon, Sun, Check, Cloud, Sunset, Sprout, Slack, Trees } from "lucide-react"
+import { MoonStar, Sun, Check } from "lucide-react"
 import { useTheme } from "./theme-provider"
 import {
   DropdownMenu,
@@ -58,12 +58,12 @@ export function ThemeToggle() {
           {theme === "system" ? (
             <>
               <Sun className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
-              <Moon className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+              <MoonStar className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
             </>
           ) : (
             <>
               <Sun className={`h-4 w-4 transition-all ${theme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
-              <Moon className={`absolute h-4 w-4 transition-all ${theme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+              <MoonStar className={`absolute h-4 w-4 transition-all ${theme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
               {CUSTOM_THEMES.map(t => {
                 const IconComponent = t.icon;
                 return (

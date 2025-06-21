@@ -7,7 +7,7 @@
  */
 
 import { useState } from "react";
-import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2, ChevronRight } from "lucide-react";
+import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2, MoveRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
@@ -169,7 +169,7 @@ const Services = () => {
                   className="group bg-primary transition-all duration-300"
                 >
                   {t.services.customRequirements.button}
-                  <ChevronRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  <MoveRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Button>
               </Link>
             </div>

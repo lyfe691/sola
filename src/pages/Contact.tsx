@@ -7,7 +7,7 @@
  */
 
 import { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
+import { Send, Info } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
+import { cn } from "@/lib/utils";
 
 const Contact = () => {
   const isLoaded = usePageInit(100);
@@ -210,6 +211,21 @@ const Contact = () => {
                 </span>
               )}
             </Button>
+            {/* Credit Formspree */}
+              <div className="flex items-center justify-start gap-2 text-xs text-muted-foreground/60 mt-2">
+                <Info className="w-3 h-3" />
+                <span>
+                  Powered by{" "}
+                  <a 
+                    href="https://formspree.io" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-muted-foreground transition-colors duration-200 underline underline-offset-2"
+                  >
+                    Formspree
+                  </a>
+                </span>
+              </div>
           </motion.form>
         </motion.div>
       )}

@@ -7,14 +7,13 @@
  */
 
 import {
-  Moon,
+  MoonStar,
   Sun,
   Cloud,
   Sunset,
   Sprout,
   Slack,
   Trees,
-  Infinity as InfinityIcon,
 } from "lucide-react";
 import { FaCube, FaGem, FaMoneyBillAlt } from "react-icons/fa";
 import { } from "react-icons/si";
@@ -41,8 +40,8 @@ export interface ThemeConfig {
 
 export const THEMES: ThemeConfig[] = [
   { value: "light", label: "Light", icon: Sun, isCustom: false },
-  { value: "dark", label: "Dark", icon: Moon, isCustom: false },
-  { value: "system", label: "System", icon: Sun, isCustom: false }, // sun/moon based on system
+  { value: "dark", label: "Dark", icon: MoonStar, isCustom: false },
+  { value: "system", label: "System", icon: Sun, isCustom: false }, // sun/MoonStar based on system
   { value: "life", label: "Solarpunk", icon: Sprout, isCustom: true },
   { value: "cyber", label: "Cyberpunk", icon: Slack, isCustom: true },
   { value: "cloud", label: "Cloud", icon: Cloud, isCustom: true },
