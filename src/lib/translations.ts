@@ -191,6 +191,7 @@ export const translations = {
       send: "Send Message",
       sending: "Sending...",
       successMessage: "Thanks for your message! I'll get back to you soon.",
+      recaptchaError: "Please complete the reCAPTCHA verification."
     },
     services: {
       title: "Services",
@@ -429,6 +430,7 @@ export const translations = {
       send: "Nachricht senden",
       sending: "Wird gesendet...",
       successMessage: "Danke für Ihre Nachricht! Ich melde mich bald bei Ihnen.",
+      recaptchaError: "Bitte bestätigen Sie die reCAPTCHA-Verifizierung."
     },
     services: {
       title: "Dienstleistungen",
@@ -667,6 +669,7 @@ export const translations = {
       send: "Enviar mensaje",
       sending: "Enviando...",
       successMessage: "¡Gracias por tu mensaje! Me pondré en contacto contigo pronto.",
+      recaptchaError: "Por favor, complete la verificación de reCAPTCHA."
     },
     services: {
       title: "Servicios",
@@ -906,6 +909,7 @@ export const translations = {
       send: "送信",
       sending: "送信中...",
       successMessage: "メッセージをお送りいただき、ありがとうございます。近日中にご連絡させていただきます。",
+      recaptchaError: "reCAPTCHAの検証を完了してください。"
     },
     services: {
       title: "サービス",
@@ -1144,6 +1148,7 @@ export const translations = {
       send: "发送消息",
       sending: "发送中...",
       successMessage: "感谢您的消息！我会尽快回复您。",
+      recaptchaError: "请完成 reCAPTCHA 验证。"
     },
     services: {
       title: "服务",
@@ -1382,7 +1387,8 @@ export const translations = {
       messagePlaceholder: "Ваше сообщение...",
       send: "Отправить сообщение",
       sending: "Отправка...",
-      successMessage: "Спасибо за ваше сообщение! Я скоро отвечу."
+      successMessage: "Спасибо за ваше сообщение! Я скоро отвечу.",
+      recaptchaError: "Пожалуйста, завершите проверку reCAPTCHA."
     },
     services: {
       title: "Услуги",

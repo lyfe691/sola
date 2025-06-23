@@ -80,6 +80,12 @@ const Contact = () => {
     e.preventDefault();
     if (isSubmitting) return;
     
+    const recaptchaResponse = (window as any).grecaptcha?.getResponse();
+    if (!recaptchaResponse) {
+      toast.error(t.contact.recaptchaError);
+      return;
+    }
+    
     setIsSubmitting(true);
     
     const form = e.currentTarget;
@@ -103,7 +109,7 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Submission error:', error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again."); // not translating--only fallback
     } finally {
       setIsSubmitting(false);
     }
