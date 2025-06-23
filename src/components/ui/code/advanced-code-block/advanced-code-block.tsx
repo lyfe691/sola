@@ -9,7 +9,8 @@
 import type { HTMLAttributes } from "react";
 import type { BundledLanguage, BundledTheme } from "shiki";
 import { motion } from "motion/react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/components/theme-provider";
+import { getThemeType } from "@/config/themes";
 import ShikiCode from "./code-highlighter";
 import CopyToClipboard from "./copy-to-clipboard";
 import { cn } from "@/lib/utils";
@@ -32,8 +33,8 @@ export const AdvancedCodeBlock = ({
 }: AdvancedBlockProps & Omit<HTMLAttributes<HTMLDivElement>, 'className'>) => {
   const { theme: currentTheme } = useTheme();
   
-  // Auto-select theme based on current theme if not provided
-  const selectedTheme = theme || (currentTheme === 'dark' ? 'github-dark' : 'github-light');
+  // Automatically determine the appropriate Shiki theme - handles ALL themes dynamically  
+  const selectedTheme = theme || (getThemeType(currentTheme) === 'dark' ? 'github-dark' : 'github-light');
   
   return (
     <motion.figure

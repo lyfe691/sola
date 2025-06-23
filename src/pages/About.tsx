@@ -15,6 +15,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from "@/components/theme-provider";
+import { getThemeType } from "@/config/themes";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -195,14 +196,8 @@ const About = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
 
-  // check if the current theme is dark (including system preference)
-  const isDarkTheme = () => {
-    if (theme === 'dark' || theme === 'cyber' || theme === 'forest' || theme === 'amethyst' || theme === "sunset" || theme === "perpetuity") return true;
-    if (theme === 'system') {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-    return false;
-  };
+  // Automatically determine if current theme is dark - handles ALL themes dynamically
+  const isDarkTheme = () => getThemeType(theme) === 'dark';
 
   const interestImages = {
     nature: '/about/spring-japan.jpg',
