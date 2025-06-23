@@ -24,10 +24,7 @@ export default function CopyToClipboard({ code, className }: CopyToClipboardProp
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      toast.success("Code copied to clipboard!");
-      
-      // Reset the copied state after 2 seconds
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 5000); // 5s
     } catch (error) {
       console.error("Failed to copy code:", error);
       toast.error("Failed to copy code");
@@ -46,7 +43,7 @@ export default function CopyToClipboard({ code, className }: CopyToClipboardProp
       aria-label={copied ? "Copied!" : "Copy code"}
     >
       {copied ? (
-        <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
+        <Check className="h-4 w-4" />
       ) : (
         <Copy className="h-4 w-4" />
       )}
