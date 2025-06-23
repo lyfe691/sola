@@ -121,6 +121,7 @@ const Contact = () => {
 
           <Helmet>
             <title>Contact • Yanis Sebastian Zürcher</title>
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
           </Helmet>
 
           <motion.h1 variants={titleVariants} className="text-4xl font-bold mb-8 sm:mb-12">
@@ -193,6 +194,15 @@ const Contact = () => {
                 onChange={(e) => setFormValues(prev => ({ ...prev, message: e.target.value }))}
               />
             </div>
+            
+            {/* reCAPTCHA */}
+            <div className="flex justify-start">
+              <div 
+                className="g-recaptcha" 
+                data-sitekey="6Lc2gGorAAAAAFIQ_9x58ZfCKpvUlx7jR5Qj5kqG"
+              ></div>
+            </div>
+            
             <Button
               type="submit"
               disabled={isSubmitting}
