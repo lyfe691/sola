@@ -6,7 +6,7 @@
  * For permissions, contact yanis.sebastian.zuercher@gmail.com
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Book, Code2, Coffee, Laptop, Linkedin, Mountain, Download } from 'lucide-react';
 import { FaGithubAlt } from 'react-icons/fa';
@@ -35,6 +35,10 @@ import {
   DrawerTitle,
   DrawerDescription
 } from "@/components/ui/drawer";
+import GitHubCalendar from 'react-github-calendar';
+import type { GitHubEvent } from '@/lib/github';
+import { getUserActivity } from '@/lib/github';
+import ContributionActivityFeed from '@/components/ContributionActivityFeed';
 
 // --------------------------------- Helpers ---------------------------------
 
@@ -195,6 +199,22 @@ const About = () => {
   const isLoaded = usePageInit(100);
   const navigate = useNavigate();
   const { theme } = useTheme();
+  const [selectedYear, setSelectedYear] = useState<number | 'last'>('last');
+  const [activity, setActivity] = useState<GitHubEvent[]>([]);
+  const [loadingActivity, setLoadingActivity] = useState(true);
+
+  const years = [2025, 2024];
+
+  useEffect(() => {
+    const fetchAllData = async () => {
+        setLoadingActivity(true);
+        const activityResult = await getUserActivity("lyfe691");
+        setActivity(activityResult);
+        setLoadingActivity(false);
+    };
+
+    fetchAllData();
+  }, []);
 
   // Automatically determine if current theme is dark - handles ALL themes dynamically
   const isDarkTheme = () => getThemeType(theme) === 'dark';
@@ -267,6 +287,56 @@ const About = () => {
               </div>
               <div className="absolute -z-10 -bottom-3 -right-3 w-full h-full bg-primary/5 rounded-xl -rotate-2" />
             </div>
+          </motion.div>
+
+          {/* ------------------- GitHub Activity ------------------ */}
+          <motion.div variants={itemVariants} className="mb-16 md:mb-20">
+            <div className="flex items-center justify-between mb-6 md:mb-8 pb-2 border-b border-foreground/10">
+                <h2 className="text-2xl font-bold">
+                GitHub Activity
+                </h2>
+                <a href="https://github.com/lyfe691" target='_blank' rel='noopener noreferrer' className='text-sm text-foreground/70 hover:text-primary transition-colors'>
+                    @lyfe691
+                </a>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6">
+                <div className='flex flex-col gap-2'>
+                    <Button 
+                        variant={selectedYear === 'last' ? 'default' : 'ghost'}
+                        size='sm'
+                        onClick={() => setSelectedYear('last')}
+                        className='text-sm w-full justify-start'
+                    >
+                        Overview
+                    </Button>
+                    {years.map(year => (
+                        <Button 
+                            key={year}
+                            variant={selectedYear === year ? 'default' : 'ghost'}
+                            size='sm'
+                            onClick={() => setSelectedYear(year)}
+                            className='text-sm w-full justify-start'
+                        >
+                            {year}
+                        </Button>
+                    ))}
+                </div>
+                <div className="rounded-xl border border-foreground/10 p-4">
+                    <GitHubCalendar
+                        username="lyfe691"
+                        colorScheme={getThemeType(theme)}
+                        fontSize={14}
+                        year={selectedYear}
+                    />
+                </div>
+            </div>
+
+            {loadingActivity ? (
+                <div className="border border-foreground/10 rounded-xl p-4 h-48 animate-pulse mt-6" />
+            ) : (
+                <ContributionActivityFeed events={activity} />
+            )}
           </motion.div>
 
           {/* ------------------- Interests ------------------ */}

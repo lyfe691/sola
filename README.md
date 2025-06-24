@@ -2,9 +2,9 @@
 
 ---
 
-![image](https://github.com/user-attachments/assets/2fc974c9-79e4-424f-814b-15852259f054)
-
----
+```powershell
+'VITE_GITHUB_TOKEN="https://github.com/settings/tokens > classic > public_repo"' | Out-File -Encoding UTF8 -NoNewline .env.local
+```
 
 ## License
 
