@@ -62,7 +62,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
           </Helmet>
 
           {/* hero section */}
-          <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6">
+          <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6 border-4 border-border/50 shadow-lg shadow-black/5">
             {/* silk background */}
             <div className="absolute inset-0">
               <Silk
