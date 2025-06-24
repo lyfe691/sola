@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
+    "react-contribution-calendar": "^2.0.4",
     "@mdx-js/react": "^3.1.0",
     "@mdx-js/rollup": "^3.1.0",
     "@radix-ui/react-accordion": "^1.2.11",
