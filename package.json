@@ -1,9 +1,9 @@
 {
   "name": "sola",
   "private": true,
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "Yanis Sebastian Zürcher",
-  "license": "GNU GPL v3",
+  "license": "Custom",
   "repository": {
     "type": "git",
     "url": "https://github.com/lyfe691/sola"
