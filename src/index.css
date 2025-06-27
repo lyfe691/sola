@@ -290,7 +290,31 @@
     --scrollbar-thumb-hover: 30.0000 33.8710% 48.6275%;
   }
 
-
+  .coffee {
+    --background: 35 25% 92%;
+    --foreground: 25 30% 20%;
+    --card: 40 30% 88%;
+    --card-foreground: 25 30% 20%;
+    --popover: 40 30% 88%;
+    --popover-foreground: 25 30% 20%;
+    --primary: 25 60% 35%;
+    --primary-foreground: 35 25% 92%;
+    --secondary: 30 35% 70%;
+    --secondary-foreground: 25 30% 20%;
+    --muted: 35 20% 82%;
+    --muted-foreground: 25 20% 45%;
+    --accent: 45 45% 75%;
+    --accent-foreground: 25 30% 20%;
+    --destructive: 10 70% 45%;
+    --destructive-foreground: 35 25% 92%;
+    --border: 30 25% 65%;
+    --input: 30 25% 65%;
+    --ring: 25 60% 35%;
+    --radius: 0.375rem;
+    --scrollbar-track: 40 30% 88%;
+    --scrollbar-thumb: 25 60% 25%;
+    --scrollbar-thumb-hover: 25 60% 15%;
+  }
 
   * {
     @apply border-border;

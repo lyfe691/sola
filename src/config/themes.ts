@@ -13,6 +13,7 @@ import {
   Sprout,
   Slack,
   Trees,
+  Coffee,
 } from "lucide-react";
 import { FaGem, FaMoneyBillAlt } from "react-icons/fa";
 import { } from "react-icons/si";
@@ -48,6 +49,7 @@ export const THEMES: ThemeConfig[] = [
   { value: "forest", label: "Forest", icon: Trees, isCustom: true, type: "dark" },
   { value: "amethyst", label: "Amethyst", icon: FaGem, isCustom: true, type: "dark" },
   { value: "vintage", label: "Vintage", icon: FaMoneyBillAlt, isCustom: true, type: "light" },
+  { value: "coffee", label: "Coffee", icon: Coffee, isCustom: true, type: "light" },
 ];
 
 export const STANDARD_THEMES = THEMES.filter(theme => !theme.isCustom);
