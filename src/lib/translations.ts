@@ -176,6 +176,10 @@ export const translations = {
           title: "Optimized Environment",
           description: "My workspace is carefully designed to maximize productivity and creativity. I use a minimalist dual-monitor setup with custom mechanical keyboard and ergonomic solutions that enable long, focused development sessions."
         }
+      },
+      testimonials: {
+        title: "What People Say",
+        link: "Work with me"
       }
     },
     contact: {
@@ -415,6 +419,10 @@ export const translations = {
           title: "Optimierte Umgebung",
           description: "Mein Arbeitsbereich ist sorgfältig gestaltet, um Produktivität und Kreativität zu maximieren. Ich verwende ein minimalistisches Dual-Monitor-Setup mit individueller mechanischer Tastatur und ergonomischen Lösungen, die lange, fokussierte Entwicklungssessions ermöglichen."
         }
+      },
+      testimonials: {
+        title: "Was Leute sagen",
+        link: "Arbeite mit mir"
       }
     },
     contact: {
@@ -654,6 +662,10 @@ export const translations = {
           title: "Espacio Creativo",
           description: "Mi espacio de trabajo es donde las ideas cobran vida. Con una configuración minimalista y las herramientas adecuadas, creo un entorno que fomenta la productividad y la creatividad."
         }
+      },
+      testimonials: {
+        title: "Lo que la gente dice",
+        link: "Trabajar conmigo"
       }
     },
     contact: {
@@ -894,6 +906,10 @@ export const translations = {
           title: "最適化された環境",
           description: "私の作業環境は生産性と創造性を最大化するために慎重に設計されています。カスタムメカニカルキーボードと人間工学に基づいたソリューションを備えたミニマリストなデュアルモニターセットアップを使用し、長時間の集中した開発セッションを可能にしています。"
         }
+      },
+      testimonials: {
+        title: "人々の声",
+        link: "私と働く"
       }
     },
     contact: {
@@ -1133,6 +1149,10 @@ export const translations = {
           title: "创意空间",
           description: "我的工作空间是想法成真的地方。通过极简的设置和合适的工具，我创造了一个促进生产力和创造力的环境。"
         }
+      },
+      testimonials: {
+        title: "人們的聲音",
+        link: "與我合作"
       }
     },
     contact: {
@@ -1373,6 +1393,10 @@ export const translations = {
           title: "Оптимизированное рабочее место",
           description: "Моё рабочее место спроектировано для максимальной продуктивности и креативности: минималистичный двухмониторный сетап, кастомная механическая клавиатура и эргономичные решения позволяют работать долго и сосредоточенно."
         }
+      },
+      testimonials: {
+        title: "Что люди говорят",
+        link: "работать с мне"
       }
     },
     contact: {

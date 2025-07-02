@@ -8,7 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Book, Code2, Coffee, Laptop, Linkedin, Mountain, Download } from 'lucide-react';
+import { Book, Code2, Coffee, Laptop, Linkedin, Mountain, Download, Quote, Star, Globe, MoveRight } from 'lucide-react';
 import { FaGithubAlt } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from "@/lib/language-provider";
@@ -95,6 +95,234 @@ const InterestCard = ({ title, description, icon: Icon, image }: InterestCardPro
         <p className="text-foreground/70 text-sm leading-relaxed">{description}</p>
       </div>
     </motion.div>
+  );
+};
+
+type TestimonialProps = {
+  quote: string;
+  author: string;
+  role: string;
+  company?: string;
+  avatar?: string;
+  rating?: number;
+  website?: string;
+  linkedin?: string;
+};
+
+const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, website, linkedin }: TestimonialProps) => {
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
+  
+  const MAX_QUOTE_LENGTH = 120;
+  const isLongQuote = quote.length > MAX_QUOTE_LENGTH;
+  const truncatedQuote = isLongQuote ? quote.slice(0, MAX_QUOTE_LENGTH) + '...' : quote;
+  
+  const fullTestimonialContent = (
+    <div className="space-y-4">
+      {/* stars */}
+      <div className="flex gap-1">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            className={`w-4 h-4 ${
+              i < rating ? 'text-yellow-500 fill-yellow-500' : 'text-foreground/20'
+            }`}
+          />
+        ))}
+      </div>
+      
+      {/* full quote */}
+      <blockquote className="text-foreground/80 leading-relaxed italic text-base">
+        "{quote}"
+      </blockquote>
+      
+      {/* author info */}
+      <div className="pt-4 border-t border-foreground/10 space-y-4">
+        <div className="flex items-start gap-4">
+          {avatar ? (
+            <img
+              src={avatar}
+              alt={author}
+              className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+            />
+          ) : (
+            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <span className="text-lg font-medium text-primary">
+                {author.split(' ').map(n => n[0]).join('')}
+              </span>
+            </div>
+          )}
+          <div className="flex-1">
+            <p className="font-medium text-base">{author}</p>
+            <p className="text-sm text-foreground/60 mb-3">
+              {role}{company && ` at ${company}`}
+            </p>
+            
+            {/* links */}
+            {(website || linkedin) && (
+              <div className="flex flex-wrap gap-2">
+                {website && (
+                  <a
+                    href={website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
+                  >
+                    <Globe className="w-3.5 h-3.5" />
+                    Visit Website
+                  </a>
+                )}
+                {linkedin && (
+                  <a
+                    href={linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
+                  >
+                    <Linkedin className="w-3.5 h-3.5" />
+                    View LinkedIn
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const cardContent = (
+    <motion.div
+      className="group rounded-xl border border-foreground/10 bg-background/50 backdrop-blur-sm p-6 space-y-4 relative overflow-hidden h-full flex flex-col"
+    >
+      {/* quote icon */}
+      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+        <Quote className="w-4 h-4 text-primary" />
+      </div>
+      
+      {/* stars */}
+      <div className="flex gap-1">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            className={`w-4 h-4 ${
+              i < rating ? 'text-yellow-500 fill-yellow-500' : 'text-foreground/20'
+            }`}
+          />
+        ))}
+      </div>
+      
+      {/* quote with truncation */}
+      <div className="flex-1">
+        <blockquote className="text-foreground/80 leading-relaxed italic">
+          "{truncatedQuote}"
+        </blockquote>
+        {isLongQuote && (
+          <button
+            onClick={() => setOpen(true)}
+            className="text-primary hover:text-primary/80 text-sm mt-2 transition-colors"
+          >
+            View more
+          </button>
+        )}
+      </div>
+      
+      {/* author - always at bottom */}
+      <div className="pt-3 border-t border-foreground/10 mt-auto space-y-3">
+        <div className="flex items-start gap-3">
+          {avatar ? (
+            <img
+              src={avatar}
+              alt={author}
+              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <span className="text-sm font-medium text-primary">
+                {author.split(' ').map(n => n[0]).join('')}
+              </span>
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="font-medium text-sm">{author}</p>
+            <p className="text-xs text-foreground/60">
+              {role}{company && ` at ${company}`}
+            </p>
+            
+            {/* social links */}
+            {(website || linkedin) && (
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {website && (
+                  <a
+                    href={website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-foreground/5 hover:bg-foreground/10 rounded transition-colors"
+                  >
+                    <Globe className="w-2.5 h-2.5" />
+                    Website
+                  </a>
+                )}
+                {linkedin && (
+                  <a
+                    href={linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-foreground/5 hover:bg-foreground/10 rounded transition-colors"
+                  >
+                    <Linkedin className="w-2.5 h-2.5" />
+                    LinkedIn
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      
+      {/* subtle background decoration */}
+      <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
+    </motion.div>
+  );
+
+  if (!isLongQuote) {
+    return cardContent;
+  }
+
+  if (isMobile) {
+    return (
+      <>
+        {cardContent}
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerContent className="px-4 pb-4">
+            <DrawerHeader className="text-left px-0">
+              <DrawerTitle>Testimonial</DrawerTitle>
+              <DrawerDescription>
+                Full testimonial from {author}
+              </DrawerDescription>
+            </DrawerHeader>
+            {fullTestimonialContent}
+          </DrawerContent>
+        </Drawer>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {cardContent}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader className="pb-2">
+            <DialogTitle>Testimonial</DialogTitle>
+            <DialogDescription>
+              Full testimonial from {author}
+            </DialogDescription>
+          </DialogHeader>
+          {fullTestimonialContent}
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
@@ -204,6 +432,36 @@ const About = () => {
   const [loadingActivity, setLoadingActivity] = useState(true);
 
   const years = [2025, 2024];
+
+  // testimonials - untranslatable due to respective copyrights
+  const testimonials = [
+    {
+      quote: "Yanis carried me through every subject—I genuinely did next to nothing. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
+      author: "Dominik Könitzer",
+      role: "Intern",
+      company: "mpa international ag",
+      rating: 5,
+      website: "https://dominikkoenitzer.ch",
+      linkedin: "https://linkedin.com/in/dominikkoenitzer"
+    },
+    {
+      quote: "Working with Yanis was a fantastic experience. He carried me through every subject, consistently bringing creative solutions to complex problems and delivering everything on time. Truly an exceptional developer.",
+      author: "Jason Bichsel",
+      role: "Student",
+      company: "WISS",
+      rating: 5,
+      website: "https://jasonbichsel.com",
+      linkedin: "https://linkedin.com/in/jason-bichsel"
+    },
+    {
+      quote: "Yanis has a rare combination of technical skill and design sensibility. The WISS Forum he created for us exceeded all expectations and has significantly improved our online presence.",
+      author: "Patrick Venzin",
+      role: "Teacher",
+      company: "WISS",
+      rating: 5,
+      linkedin: "https://linkedin.com/in/patrick-venzin-68314a100"
+    }
+  ];
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -370,6 +628,36 @@ const About = () => {
                 icon={Laptop}
                 image={interestImages.workspace}
               />
+            </div>
+          </motion.div>
+
+          {/* ------------------- Testimonials ------------------ */}
+          <motion.div variants={itemVariants} className="mb-16 md:mb-20">
+            <div className="flex items-center justify-between mb-6 md:mb-8 pb-2 border-b border-foreground/10">
+              <h2 className="text-2xl font-bold">
+                {t.about.testimonials.title}
+              </h2>
+              <Link 
+                to="/contact" 
+                className="text-sm text-foreground/70 hover:text-primary transition-colors"
+              >
+                {t.about.testimonials.link} <MoveRight className="w-4 h-4 inline-block" />  
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {testimonials.map((testimonial, index) => (
+                <TestimonialCard
+                  key={index}
+                  quote={testimonial.quote}
+                  author={testimonial.author}
+                  role={testimonial.role}
+                  company={testimonial.company}
+                  rating={testimonial.rating}
+                  website={testimonial.website}
+                  linkedin={testimonial.linkedin}
+                />
+              ))}
             </div>
           </motion.div>
 
