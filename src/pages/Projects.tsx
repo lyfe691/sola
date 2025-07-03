@@ -571,15 +571,23 @@ const Projects = () => {
             <TooltipProvider>
               <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
                 <TooltipTrigger asChild>
-                  <span 
-                    className="cursor-help" 
+                  <Info 
+                    className="w-5 h-5 text-foreground/60 hover:text-primary transition-colors cursor-help" 
                     onClick={() => setTooltipOpen(!tooltipOpen)}
-                  >
-                    <Info className="w-5 h-5 text-foreground/60 hover:text-primary transition-colors" />
-                  </span>
+                  />
                 </TooltipTrigger>
-                <TooltipContent className="bg-background text-foreground mb-2">
-                  <p className="text-sm">{t.projects.imageTooltip} <a href="https://og-playground.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Vercel OG Image <ExternalLink className="w-4 h-4 pb-1 inline-block" /></a></p>
+                <TooltipContent side="right" className="max-w-xs sm:max-w-none bg-background text-foreground">
+                  <p className="text-sm">
+                    {t.projects.imageTooltip}{' '}
+                    <a 
+                      href="https://og-playground.vercel.app/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-primary hover:underline inline-flex items-center gap-1"
+                    >
+                      Vercel OG Image <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
