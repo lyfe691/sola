@@ -7,7 +7,18 @@
  */
 
 import { useState, useMemo } from "react";
-import { ExternalLink, Info, MoveRight, ArrowRight } from "lucide-react";
+import { 
+  ExternalLink, 
+  Info, 
+  MoveRight, 
+  ArrowRight, 
+  SortAsc, 
+  Star, 
+  Calendar, 
+  CalendarClock,
+  ArrowDownAZ,
+  ArrowUpAZ
+} from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
 import { Link } from "react-router-dom";
@@ -15,6 +26,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
+import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
   Tooltip,
   TooltipContent,
@@ -40,6 +52,37 @@ interface Project {
   priority: number; // Lower number = higher priority (appears first)
   slug?: string;
 }
+
+type SortOption = 'priority' | 'date-newest' | 'date-oldest' | 'name-asc' | 'name-desc';
+
+//  sort options
+const sortOptions: ComboboxOption[] = [
+  {
+    value: 'priority',
+    label: 'Priority',
+    icon: <Star className="w-4 h-4" />
+  },
+  {
+    value: 'date-newest',
+    label: 'Date (Newest)',
+    icon: <Calendar className="w-4 h-4" />
+  },
+  {
+    value: 'date-oldest',
+    label: 'Date (Oldest)',
+    icon: <CalendarClock className="w-4 h-4" />
+  },
+  {
+    value: 'name-asc',
+    label: 'Name (A-Z)',
+    icon: <ArrowDownAZ className="w-4 h-4" />
+  },
+  {
+    value: 'name-desc',
+    label: 'Name (Z-A)',
+    icon: <ArrowUpAZ className="w-4 h-4" />
+  }
+];
 
 // Project configuration - easier to maintain
 const createProjectsData = (t: any): Project[] => [
@@ -210,6 +253,7 @@ const Projects = () => {
   const isLoaded = usePageInit(100);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>('priority');
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -217,14 +261,29 @@ const Projects = () => {
   const { featuredProjects, otherProjects } = useMemo(() => {
     const projects = createProjectsData(t);
     
-    // Sort by priority (lower number = higher priority)
-    const sortedProjects = projects.sort((a, b) => a.priority - b.priority);
+    // Apply sorting based on selected option
+    const sortedProjects = [...projects].sort((a, b) => {
+      switch (sortBy) {
+        case 'priority':
+          return a.priority - b.priority;
+        case 'date-newest':
+          return new Date(b.date.start).getTime() - new Date(a.date.start).getTime();
+        case 'date-oldest':
+          return new Date(a.date.start).getTime() - new Date(b.date.start).getTime();
+        case 'name-asc':
+          return a.title.localeCompare(b.title);
+        case 'name-desc':
+          return b.title.localeCompare(a.title);
+        default:
+          return a.priority - b.priority;
+      }
+    });
     
     return {
       featuredProjects: sortedProjects.filter(p => p.featured),
       otherProjects: sortedProjects.filter(p => !p.featured)
     };
-  }, [t]);
+  }, [t, sortBy]);
 
   const tagVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -525,6 +584,26 @@ const Projects = () => {
               </Tooltip>
             </TooltipProvider>
           </motion.h1>
+
+          {/* Sort Controls */}
+          <motion.div 
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12"
+          >
+            <div className="flex items-center gap-3">
+              <SortAsc className="w-4 h-4 text-foreground/60" />
+              <span className="text-sm text-foreground/60 font-medium">{t.projects.sortBy}:</span>
+              <Combobox
+                options={sortOptions}
+                value={sortBy}
+                onValueChange={(value: string) => setSortBy(value as SortOption)}
+                placeholder="Select sorting..."
+                searchPlaceholder="Search options..."
+                emptyMessage="No option found."
+                className="w-[160px] sm:w-[180px]"
+              />
+            </div>
+          </motion.div>
           
           {/* featured projects */}
           <div className="relative mb-12 sm:mb-16">

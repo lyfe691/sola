@@ -74,6 +74,7 @@ export const translations = {
       viewGithub: "View Code",
       technologies: "Technologies used",
       imageTooltip: "Some project images created with",
+      sortBy: "Sort by",
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
@@ -317,6 +318,7 @@ export const translations = {
       viewGithub: "View Code",
       technologies: "Technologies used",
       imageTooltip: "Paar Projektbilder erstellt mit",
+      sortBy: "Sortieren nach",
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
@@ -560,6 +562,7 @@ export const translations = {
       viewGithub: "Ver Código",
       technologies: "Tecnologías utilizadas",
       imageTooltip: "Algunas imágenes de proyecto creadas con",
+      sortBy: "Ordenar por",
       list: {
         codeExtractor: {
           title: "Extractor de Código Web",
@@ -804,6 +807,7 @@ export const translations = {
       viewGithub: "コードを見る",
       technologies: "使用技術",
       imageTooltip: "いくつかのプロジェクト画像が作成された",
+      sortBy: "並べ替え",
       list: {
         codeExtractor: {
           title: "ウェブサイトコード抽出ツール",
@@ -1047,6 +1051,7 @@ export const translations = {
       viewGithub: "查看代码",
       technologies: "使用的技术",
       imageTooltip: "一些项目图像创建于",
+      sortBy: "排序",
       list: {
         codeExtractor: {
           title: "网站代码提取器",
@@ -1291,6 +1296,7 @@ export const translations = {
       viewGithub: "Посмотреть код",
       technologies: "Используемые технологии",
       imageTooltip: "Некоторые изображения проекта созданы с помощью",
+      sortBy: "Сортировать по",
       list: {
         codeExtractor: {
           title: "Экстрактор кода сайта",
