@@ -98,7 +98,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-05",
       display: "May 2025"
     },
-    priority: 1,
+    priority: 3,
     slug: "self"
   },
   {
@@ -114,7 +114,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-02",
       display: "Feb 2025 - Present"
     },
-    priority: 2,
+    priority: 1,
     slug: "sola"
   },
   {
@@ -131,7 +131,7 @@ const createProjectsData = (t: any): Project[] => [
       end: "2025-02",
       display: "Dec 2024 - Feb 2025"
     },
-    priority: 3,
+    priority: 2,
     slug: "applicare"
   },
   {
