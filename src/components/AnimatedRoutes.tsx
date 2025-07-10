@@ -17,6 +17,7 @@ import Experience from "@/pages/Experience";
 import Contact from "@/pages/Contact";
 import Services from "@/pages/Services";
 import AboutThisWebsite from "@/pages/AboutThisWebsite";
+import Privacy from "@/pages/Privacy";
 import ProjectPageRenderer from "@/pages/projects/ProjectPageRenderer";
 import SimpleLayout from "@/layouts/SimpleLayout";
 import MainLayout from "@/layouts/MainLayout";
@@ -161,6 +162,16 @@ export const AnimatedRoutes = () => {
             <BlankLayout>
               <AboutThisWebsite />
             </BlankLayout>
+          } 
+        />
+        
+        {/* Privacy Policy */}
+        <Route 
+          path="/privacy" 
+          element={
+            <SimpleLayout>
+              {withTransition(Privacy)}
+            </SimpleLayout>
           } 
         />
       </Routes>

@@ -109,6 +109,10 @@ export function CommandMenu() {
             <Mail className="mr-2 h-4 w-4" />
             <span>Contact</span>
           </CommandItem>
+          <CommandItem onSelect={() => handleNavigation('/privacy')} className="cursor-pointer">
+            <Settings className="mr-2 h-4 w-4" />
+            <span>Privacy Policy</span>
+          </CommandItem>
         </CommandGroup>
         
         <CommandSeparator />

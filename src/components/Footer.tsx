@@ -9,15 +9,17 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { Mail, Linkedin, Info } from "lucide-react";
+import { Mail, Linkedin, Info, ChevronDown, ChevronRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 
 const Footer = () => {
   const year = new Date().getFullYear();
   const { language } = useLanguage();
   const t = translations[language];
+  const [isLegalExpanded, setIsLegalExpanded] = useState(false);
 
   const social = [
     { 
@@ -86,11 +88,37 @@ const Footer = () => {
             {/*  /這個網站是怎麼造出來的  */}
             <Link
               to={e}
-              className="inline-flex items-center gap-1 text-xs font-mono text-foreground/50 hover:text-primary transition-colors"
+              className="inline-flex items-center gap-1 text-xs text-foreground/50 hover:text-primary transition-colors"
             >
               <Info className="w-3.5 h-3.5" />
               {t.footer.atw}
             </Link>
+            
+            {/* legal expandable section */}
+            <div className="mt-4">
+              <button
+                onClick={() => setIsLegalExpanded(!isLegalExpanded)}
+                className="inline-flex items-center gap-1 text-xs  text-foreground/50 hover:text-primary transition-colors"
+              >
+                {isLegalExpanded ? (
+                  <ChevronDown className="w-3.5 h-3.5" />
+                ) : (
+                  <ChevronRight className="w-3.5 h-3.5" />
+                )}
+                Legal
+              </button>
+              
+              {isLegalExpanded && (
+                <div className="mt-2 ml-4 space-y-1">
+                  <Link
+                    to="/privacy"
+                    className="block text-xs text-foreground/50 hover:text-primary transition-colors"
+                  >
+                    Privacy Policy
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* nav links */}
@@ -153,8 +181,8 @@ const Footer = () => {
 
         {/* copyright */}
         <div className="mt-8 pt-6 border-t border-foreground/5 text-center">
-          <span className="font-mono text-xs text-foreground/40">
-            © {year} {t.footer.rights}
+          <span className="text-xs text-foreground/40">
+            © {year} Yanis Sebastian Zürcher. {t.footer.rights}
           </span>
         </div>
       </div>
