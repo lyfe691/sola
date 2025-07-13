@@ -22,6 +22,7 @@ import {
 import {
   containerVariants,
   itemVariants,
+  titleVariants,
   usePageInit,
 } from "@/utils/transitions";
 import { Button } from "@/components/ui/button";
@@ -59,7 +60,9 @@ const Privacy = () => {
                   <BreadcrumbList>
                     <BreadcrumbItem>
                       <BreadcrumbLink asChild>
-                        <Link to="/">Home</Link>
+                        <Link to="/">
+                          <span className="text-muted-foreground">Home</span>
+                        </Link>
                       </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
@@ -71,8 +74,8 @@ const Privacy = () => {
               </motion.div>
             </div>
 
-            <motion.div variants={itemVariants} className="mb-16 text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight mt-20">
+            <motion.div variants={titleVariants} className="mb-16 text-center">
+              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-20">
                 Privacy Policy
               </h1>
               <p className="text-muted-foreground leading-relaxed text-base mt-10">
