@@ -42,17 +42,27 @@ import ContributionActivityFeed from '@/components/ContributionActivityFeed';
 
 // --------------------------------- Helpers ---------------------------------
 
-const downloadResume = () => {
+const getResumePath = (language: string) => {
+  return language === 'de' ? '/sola_de.pdf' : '/sola_en.pdf';
+};
+
+const downloadResume = (language: string) => {
+  const resumePath = getResumePath(language);
+  const fileName = language === 'de' 
+    ? 'Lebenslauf_Yanis-Sebastian-Zürcher.pdf' 
+    : 'Resume_Yanis-Sebastian-Zürcher.pdf';
+  
   const link = document.createElement("a");
-  link.href = "/sola.pdf";
-  link.download = "Resume_Yanis-Sebastian-Zürcher.pdf";
+  link.href = resumePath;
+  link.download = fileName;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 };
 
-const viewResume = () => {
-  window.open("/sola.pdf", "_blank");
+const viewResume = (language: string) => {
+  const resumePath = getResumePath(language);
+  window.open(resumePath, "_blank");
 };
 
 // -------------------------------- Components --------------------------------
@@ -330,6 +340,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
 const ResumeModal = () => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
+  const { language } = useLanguage();
 
   const content = (
     <>
@@ -343,10 +354,10 @@ const ResumeModal = () => {
       </div>
 
       <div className="flex flex-col gap-3 pt-4">
-        <Button variant="outline" size="sm" onClick={() => { viewResume(); setOpen(false); }}>
+        <Button variant="outline" size="sm" onClick={() => { viewResume(language); setOpen(false); }}>
           View Censored Version
         </Button>
-        <Button variant="secondary" size="sm" onClick={() => { downloadResume(); setOpen(false); }}>
+        <Button variant="secondary" size="sm" onClick={() => { downloadResume(language); setOpen(false); }}>
           Download Censored Version
         </Button>
       </div>
@@ -374,10 +385,10 @@ const ResumeModal = () => {
             </DrawerDescription>
           </DrawerHeader>
           <div className="flex flex-col gap-3">
-            <Button variant="outline" size="sm" onClick={() => { viewResume(); setOpen(false); }}>
+            <Button variant="outline" size="sm" onClick={() => { viewResume(language); setOpen(false); }}>
               View Censored Version
             </Button>
-            <Button variant="secondary" size="sm" onClick={() => { downloadResume(); setOpen(false); }}>
+            <Button variant="secondary" size="sm" onClick={() => { downloadResume(language); setOpen(false); }}>
               Download Censored Version
             </Button>
           </div>
@@ -407,10 +418,10 @@ const ResumeModal = () => {
         </DialogHeader>
 
         <div className="flex flex-col gap-3 pt-4">
-          <Button variant="outline" size="sm" onClick={() => { viewResume(); setOpen(false); }}>
+          <Button variant="outline" size="sm" onClick={() => { viewResume(language); setOpen(false); }}>
             View Censored Version
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => { downloadResume(); setOpen(false); }}>
+          <Button variant="secondary" size="sm" onClick={() => { downloadResume(language); setOpen(false); }}>
             Download Censored Version
           </Button>
         </div>
