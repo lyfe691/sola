@@ -11,6 +11,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Book, Code2, Coffee, Laptop, Linkedin, Mountain, Download, Quote, Star, Globe, MoveRight } from 'lucide-react';
 import { FaGithubAlt } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Link, useNavigate } from 'react-router-dom';
@@ -341,24 +342,45 @@ const ResumeModal = () => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const { language } = useLanguage();
+  const t = translations[language];
+  const [selectedLang, setSelectedLang] = useState<'en' | 'de'>(language === 'de' ? 'de' : 'en');
 
   const content = (
     <>
       <div className="pb-2">
-        <h3 className="text-lg font-semibold mb-2">Request Full Resume</h3>
+        <h3 className="text-lg font-semibold mb-2">{t.about.resume.title}</h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
-          <Link to="/contact" className="underline text-foreground" onClick={() => setOpen(false)}>contact me</Link> or send an email to{' '}
-          <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
+          {t.about.resume.description}
         </p>
       </div>
 
+        {/* language selection */}
+        <div className="py-4 border-y border-foreground/10">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">{t.about.resume.languageLabel}</span>
+          <ToggleGroup
+            type="single"
+            value={selectedLang}
+            onValueChange={(value) => value && setSelectedLang(value as 'en' | 'de')}
+            variant="outline"
+            size="sm"
+          >
+            <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
+              EN
+            </ToggleGroupItem>
+            <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
+              DE
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-3 pt-4">
-        <Button variant="outline" size="sm" onClick={() => { viewResume(language); setOpen(false); }}>
-          View Censored Version
+        <Button variant="outline" size="sm" onClick={() => { viewResume(selectedLang); setOpen(false); }}>
+          {t.about.resume.viewButton}
         </Button>
-        <Button variant="secondary" size="sm" onClick={() => { downloadResume(language); setOpen(false); }}>
-          Download Censored Version
+        <Button variant="secondary" size="sm" onClick={() => { downloadResume(selectedLang); setOpen(false); }}>
+          {t.about.resume.downloadButton}
         </Button>
       </div>
     </>
@@ -377,19 +399,39 @@ const ResumeModal = () => {
         </DrawerTrigger>
         <DrawerContent className="px-4 pb-4">
           <DrawerHeader className="text-left px-0">
-            <DrawerTitle>Request Full Resume</DrawerTitle>
+            <DrawerTitle>{t.about.resume.title}</DrawerTitle>
             <DrawerDescription>
-              The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
-              <Link to="/contact" className="underline text-foreground" onClick={() => setOpen(false)}>contact me</Link> or send an email to{' '}
-              <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
+              {t.about.resume.description}
             </DrawerDescription>
           </DrawerHeader>
+          
+          {/* language selection */}
+          <div className="py-4 border-y border-foreground/10 mb-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">{t.about.resume.languageLabel}</span>
+              <ToggleGroup
+                type="single"
+                value={selectedLang}
+                onValueChange={(value) => value && setSelectedLang(value as 'en' | 'de')}
+                variant="outline"
+                size="sm"
+              >
+                <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
+                  EN
+                </ToggleGroupItem>
+                <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
+                  DE
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </div>
+
           <div className="flex flex-col gap-3">
-            <Button variant="outline" size="sm" onClick={() => { viewResume(language); setOpen(false); }}>
-              View Censored Version
+            <Button variant="outline" size="sm" onClick={() => { viewResume(selectedLang); setOpen(false); }}>
+              {t.about.resume.viewButton}
             </Button>
-            <Button variant="secondary" size="sm" onClick={() => { downloadResume(language); setOpen(false); }}>
-              Download Censored Version
+            <Button variant="secondary" size="sm" onClick={() => { downloadResume(selectedLang); setOpen(false); }}>
+              {t.about.resume.downloadButton}
             </Button>
           </div>
         </DrawerContent>
@@ -407,22 +449,41 @@ const ResumeModal = () => {
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md">
-        <DialogHeader className="pb-2">
-          <DialogTitle>Request Full Resume</DialogTitle>
-          <DialogDescription>
-            The public version of my resume has some sensitive information censored. If you need the full version, please{' '}
-            <Link to="/contact" className="underline text-foreground" onClick={() => setOpen(false)}>contact me</Link> or send an email to{' '}
-            <a href="mailto:yanis.sebastian.zuercher@gmail.com" className="underline text-foreground">yanis.sebastian.zuercher@gmail.com</a>.
-          </DialogDescription>
-        </DialogHeader>
+              <DialogContent className="max-w-md">
+          <DialogHeader className="pb-2">
+            <DialogTitle>{t.about.resume.title}</DialogTitle>
+            <DialogDescription>
+              {t.about.resume.description}
+            </DialogDescription>
+          </DialogHeader>
+
+        {/* language selection */}
+        <div className="py-4 border-y border-foreground/10">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-medium">{t.about.resume.languageLabel}</span>
+            <ToggleGroup
+              type="single"
+              value={selectedLang}
+              onValueChange={(value) => value && setSelectedLang(value as 'en' | 'de')}
+              variant="outline"
+              size="sm"
+            >
+              <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
+                EN
+              </ToggleGroupItem>
+              <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
+                DE
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+        </div>
 
         <div className="flex flex-col gap-3 pt-4">
-          <Button variant="outline" size="sm" onClick={() => { viewResume(language); setOpen(false); }}>
-            View Censored Version
+          <Button variant="outline" size="sm" onClick={() => { viewResume(selectedLang); setOpen(false); }}>
+            {t.about.resume.viewButton}
           </Button>
-          <Button variant="secondary" size="sm" onClick={() => { downloadResume(language); setOpen(false); }}>
-            Download Censored Version
+          <Button variant="secondary" size="sm" onClick={() => { downloadResume(selectedLang); setOpen(false); }}>
+            {t.about.resume.downloadButton}
           </Button>
         </div>
       </DialogContent>
@@ -430,7 +491,7 @@ const ResumeModal = () => {
   );
 };
 
-// -------------------------------- Page --------------------------------------
+// render
 
 const About = () => {
   const { language } = useLanguage();
@@ -485,7 +546,7 @@ const About = () => {
     fetchAllData();
   }, []);
 
-  // Automatically determine if current theme is dark - handles ALL themes dynamically
+  // automatically determine if current theme is dark - handles ALL themes dynamically
   const isDarkTheme = () => getThemeType(theme) === 'dark';
 
   const interestImages = {

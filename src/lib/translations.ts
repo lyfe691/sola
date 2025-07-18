@@ -152,7 +152,7 @@ export const translations = {
       backHome: "Back home",
       viewSkills: "View Skills",
       intro: "I'm Yanis Sebastian Zürcher, a 17-year-old software developer based in Zürich, Switzerland. I study Computer Science at WISS, but most of what I know comes from building my own projects—not from school.",
-      hobbies: "I focus on creating fast, clean, and minimal web applications. Whether it's full-stack platforms or sharp frontends, I care about clarity, performance, and a refined user experience. I’m always pushing my own ideas forward—building things that feel as good as they function.",
+      hobbies: "I focus on creating fast, clean, and minimal web applications. Whether it's full-stack platforms or sharp frontends, I care about clarity, performance, and a refined user experience. I'm always pushing my own ideas forward—building things that feel as good as they function.",
       philosophy: {
         title: "My Approach",
         clean: "I believe that clean, maintainable code is the foundation of sustainable software development. Every line I write reflects my commitment to excellence.",
@@ -181,6 +181,13 @@ export const translations = {
       testimonials: {
         title: "What People Say",
         link: "Work with me"
+      },
+      resume: {
+        title: "Request Full Resume",
+        description: "The public version of my resume has some sensitive information censored. If you need the full version, please contact me or send an email to yanis.sebastian.zuercher@gmail.com.",
+        viewButton: "View Censored Version",
+        downloadButton: "Download Censored Version",
+        languageLabel: "Language:"
       }
     },
     contact: {
@@ -425,6 +432,13 @@ export const translations = {
       testimonials: {
         title: "Was Leute sagen",
         link: "Arbeite mit mir"
+      },
+      resume: {
+        title: "Vollständigen Lebenslauf anfordern",
+        description: "Die öffentliche Version meines Lebenslaufs hat einige sensible Informationen zensiert. Wenn Sie die vollständige Version benötigen, kontaktieren Sie mich bitte oder senden Sie eine E-Mail an yanis.sebastian.zuercher@gmail.com.",
+        viewButton: "Zensierte Version ansehen",
+        downloadButton: "Zensierte Version herunterladen",
+        languageLabel: "Sprache:"
       }
     },
     contact: {
@@ -669,6 +683,13 @@ export const translations = {
       testimonials: {
         title: "Lo que la gente dice",
         link: "Trabajar conmigo"
+      },
+      resume: {
+        title: "Solicitar currículum completo",
+        description: "La versión pública de mi currículum tiene información sensible censurada. Si necesitas la versión completa, por favor contáctame o envía un email a yanis.sebastian.zuercher@gmail.com.",
+        viewButton: "Ver versión censurada",
+                downloadButton: "Descargar versión censurada",
+        languageLabel: "Idioma:"
       }
     },
     contact: {
@@ -739,7 +760,7 @@ export const translations = {
         description: "¿Tienes un proyecto específico en mente? Te puedo ayudar a hacer tu visión realidad. Hagamos una reunión para discutir tus requisitos y crear una solución personalizada para tus necesidades.",
         button: "Contáctame"
       }
-    },
+    }
   },
   ja: {
     hire: {
@@ -914,6 +935,13 @@ export const translations = {
       testimonials: {
         title: "人々の声",
         link: "私と働く"
+      },
+      resume: {
+        title: "完全版履歴書のリクエスト",
+        description: "公開版の履歴書には、機密情報の一部が検閲されています。完全版が必要な場合は、お問い合わせいただくか、yanis.sebastian.zuercher@gmail.comまでメールをお送りください。",
+        viewButton: "検閲版を表示",
+                downloadButton: "検閲版をダウンロード",
+        languageLabel: "言語:"
       }
     },
     contact: {
@@ -1158,6 +1186,13 @@ export const translations = {
       testimonials: {
         title: "人們的聲音",
         link: "與我合作"
+      },
+      resume: {
+        title: "申请完整简历",
+        description: "我的简历公开版本审查了一些敏感信息。如果您需要完整版本，请联系我或发送邮件至yanis.sebastian.zuercher@gmail.com。",
+        viewButton: "查看审查版本",
+                downloadButton: "下载审查版本",
+        languageLabel: "语言:"
       }
     },
     contact: {
@@ -1403,6 +1438,13 @@ export const translations = {
       testimonials: {
         title: "Что люди говорят",
         link: "работать с мне"
+      },
+      resume: {
+        title: "Запросить полное резюме",
+        description: "В публичной версии моего резюме скрыта конфиденциальная информация. Если вам нужна полная версия, пожалуйста свяжитесь со мной или отправьте письмо на yanis.sebastian.zuercher@gmail.com.",
+        viewButton: "Посмотреть урезанную версию",
+                downloadButton: "Скачать урезанную версию",
+        languageLabel: "Язык:"
       }
     },
     contact: {
