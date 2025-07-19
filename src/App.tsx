@@ -50,7 +50,7 @@ const App = () => (
         <TooltipProvider>
           <TargetCursor 
             targetSelector={tailwindCursorTargets}
-            spinDuration={2}
+            spinDuration={4}
           />
           <ClickSpark
               sparkColor='hsl(var(--primary))'
