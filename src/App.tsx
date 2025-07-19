@@ -18,6 +18,7 @@ import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
+import TargetCursor from "./components/TargetCursor";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -28,12 +29,29 @@ function KeyboardShortcuts() {
   return null;
 }
 
+// for the target cursor
+const tailwindCursorTargets = [
+  '[class*="cursor-pointer"]',
+  '[class*="cursor-grab"]', 
+  '[class*="cursor-move"]',
+  'button',
+  'a[href]',
+  'select',
+  'input',
+  'textarea',
+  'label',
+].join(', ');
+
 // app
 const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
+          <TargetCursor 
+            targetSelector={tailwindCursorTargets}
+            spinDuration={2}
+          />
           <ClickSpark
               sparkColor='hsl(var(--primary))'
               sparkSize={8}

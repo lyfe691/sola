@@ -32,28 +32,28 @@ export function LanguageToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background"> {/* bg-background makes it not be transparent */}
-        <DropdownMenuItem onClick={() => setLanguage("en")} className="flex justify-between">
+        <DropdownMenuItem onClick={() => setLanguage("en")} className="flex justify-between cursor-pointer">
           English
           {language === "en" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("de")} className="flex justify-between">
+        <DropdownMenuItem onClick={() => setLanguage("de")} className="flex justify-between cursor-pointer">
           Deutsch
           {language === "de" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() => setLanguage("es")} className="flex justify-between">
+        <DropdownMenuItem onClick={() => setLanguage("es")} className="flex justify-between cursor-pointer">
           Español
           {language === "es" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("ja")} className="flex justify-between">
+        <DropdownMenuItem onClick={() => setLanguage("ja")} className="flex justify-between cursor-pointer">
           日本語
           {language === "ja" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("cn")} className="flex justify-between">
+        <DropdownMenuItem onClick={() => setLanguage("cn")} className="flex justify-between cursor-pointer">
           中文
           {language === "cn" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage("ru")} className="flex justify-between">
+        <DropdownMenuItem onClick={() => setLanguage("ru")} className="flex justify-between cursor-pointer">
           Русский
           {language === "ru" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>

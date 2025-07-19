@@ -317,7 +317,15 @@
   }
 
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
+    font-family: 'Geist', sans-serif;
+  }
+  
+  /* TargetCursor.tsx: it overrides the cursor and hides it if active.
+  If its not shown eg. mobile breakpoint, it shows the default cursor
+  */
+  .custom-cursor-active * {
+    cursor: none !important;
   }
   
   html {
@@ -327,11 +335,6 @@
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
   }
-
-  * {
-    @apply border-border outline-ring/50;
-    font-family: 'Geist', sans-serif;
-  }
   
   code, pre, kbd, samp {
     font-family: 'GeistMono', monospace;
@@ -339,8 +342,8 @@
   
   .font-mono {
     font-family: 'GeistMono', monospace;
-  }
-
+  } 
+  
   /* ---------- scrollbar styles ---------- */
   ::-webkit-scrollbar {
     @apply w-2;
