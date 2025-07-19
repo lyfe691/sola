@@ -53,15 +53,15 @@ const App = () => (
             spinDuration={4}
           />
           <ClickSpark
-              sparkColor='hsl(var(--primary))'
-              sparkSize={8}
-              sparkRadius={15}
-              sparkCount={8}
-              duration={400}
-            >
+            sparkColor="hsl(var(--primary) / 0.4)"  
+            sparkSize={3}
+            sparkRadius={12}
+            sparkCount={4}
+            duration={500}
+          >
             <div className="min-h-screen flex flex-col">
               <Toaster position="bottom-right" richColors/>
-              <BrowserRouter>
+                <BrowserRouter>
                 <KeyboardShortcuts />
                 <CommandMenu />
                 <AnimatedRoutes />
