@@ -1,19 +1,8 @@
-Optional (Experiments):
+### todo: 
 
-1. /now page, inspired from `<a href="https://nownownow.com/about">`nownownow.com `</a>`
-2. Use `<a href="https://vercel.com/docs/og-image-generation">`@vercel/og `</a>` for dynamic OG images.
-3. Create Testimonals in /about or a new /references
-4. blog
-5. Case Studies & Deepdives in /projects, eg. /projects/applicare
-6. legal: Update copyright headersin all files to:
+1. cleaner theme palette, see: [ui.shadcn.com/colors](https://ui.shadcn.com/colors).
+2. refactor the [Projects](https://sola.ysz.life/projects) page to not use a timeline. 
+3. implement some primitives from [shsfui.com](https://www.shsfui.com/primitives).
 
-```
-/**
- * Copyright (c) 2025 Yanis Sebastian Zürcher
- *
- * This file is part of a proprietary software project.
- * Unauthorized copying, modification, or distribution is strictly prohibited.
- * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
- */
-
-```
+unlikely but we'll see: 
+4. refactor from react 19 to next.js 15, update shadcn/ui & taiwind to latest versions.
