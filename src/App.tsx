@@ -18,7 +18,7 @@ import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
-import TargetCursor from "./components/TargetCursor";
+import Cursor from "./components/Cursor";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -48,7 +48,7 @@ const App = () => (
     <LanguageProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <TargetCursor 
+          <Cursor 
             targetSelector={tailwindCursorTargets}
             spinDuration={4}
           />

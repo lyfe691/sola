@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // Types
-export interface TargetCursorProps {
+export interface CursorProps {
   targetSelector?: string;
   spinDuration?: number;
   hideDefaultCursor?: boolean;
@@ -299,7 +299,7 @@ const useResizeObserver = (
 };
 
 // Main component
-const TargetCursor: React.FC<TargetCursorProps> = ({
+const Cursor: React.FC<CursorProps> = ({
   targetSelector = ".cursor-target",
   spinDuration = 2,
   hideDefaultCursor = true,
@@ -468,4 +468,4 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   );
 };
 
-export default TargetCursor;
+export default Cursor;
