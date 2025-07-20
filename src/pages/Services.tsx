@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
+import { EnhancedButton } from "@/components/EnhancedButton";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 
@@ -137,13 +138,7 @@ const Services = () => {
                 {/* Add contact button for each service */}
                 <div className="mt-6">
                   <Link to="/contact">
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
-                    >
-                      {t.services.getStarted || "Get Started"}
-                      <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Button>
+                    <EnhancedButton className="w-full border-accent/50 group-hover:border-primary/50 text-sm" />
                   </Link>
                 </div>
               </motion.div>

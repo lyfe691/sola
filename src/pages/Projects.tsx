@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
+import { EnhancedButton } from "@/components/EnhancedButton";
 import { Helmet } from "react-helmet-async";
 import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import {
@@ -371,7 +372,7 @@ const Projects = () => {
                     <div className="w-full h-px bg-foreground/10 mb-4"></div>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
                       {project.slug ? (
-                        <Button
+                        <EnhancedButton
                           asChild
                           variant="outline"
                           size="lg"
@@ -381,7 +382,7 @@ const Projects = () => {
                             View Details
                             <MoveRight className="w-4 h-4 ml-1" />
                           </Link>
-                        </Button>
+                        </EnhancedButton>
                       ) : (
                         <>
                           {project.github && (
@@ -469,7 +470,7 @@ const Projects = () => {
                 <div className="w-full h-px bg-foreground/10 mb-4"></div>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
                   {project.slug ? (
-                    <Button
+                    <EnhancedButton
                       asChild
                       variant="default"
                       size="lg"
@@ -479,7 +480,7 @@ const Projects = () => {
                         <ArrowRight className="w-4 h-4 mr-1" />
                         View Details
                       </Link>
-                    </Button>
+                    </EnhancedButton>
                   ) : (
                     <>
                       {project.github && (
@@ -612,10 +613,11 @@ const Projects = () => {
             variants={itemVariants}
             className="flex justify-center mt-12 sm:mt-16"
           >
-            <Button
+            <EnhancedButton
+              asChild
               variant="outline"
               size="lg"
-              className="rounded-full px-6 py-3 bg-gradient-to-r from-foreground/5 to-foreground/10 
+              className="rounded-full px-6 py-3 bg-gradient-to-r from-foreground/5 to-foreground/10
                          border-foreground/20 hover:border-primary/40 backdrop-blur-sm
                          shadow-lg hover:shadow-xl transition-all duration-300
                          text-foreground hover:text-primary font-medium"
@@ -624,7 +626,7 @@ const Projects = () => {
                 {t.projects.viewAll}
                 <MoveRight className="w-4 h-4" />
               </a>
-            </Button>
+            </EnhancedButton>
           </motion.div>
         </motion.div>
       )}
