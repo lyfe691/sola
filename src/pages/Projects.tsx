@@ -49,13 +49,12 @@ interface Project {
     end?: string;
     display: string;
   };
-  priority: number; // Lower number = higher priority (appears first)
+  priority: number;
   slug?: string;
 }
 
 type SortOption = 'priority' | 'date-newest' | 'date-oldest' | 'name-asc' | 'name-desc';
 
-//  sort options
 const sortOptions: ComboboxOption[] = [
   {
     value: 'priority',
@@ -84,7 +83,6 @@ const sortOptions: ComboboxOption[] = [
   }
 ];
 
-// Project configuration - easier to maintain
 const createProjectsData = (t: any): Project[] => [
   {
     id: "self",
@@ -181,7 +179,9 @@ const createProjectsData = (t: any): Project[] => [
     },
     priority: 6
   },
-  // Non-featured projects
+
+  // non-featured projects
+
   {
     id: "vm-detector",
     title: t.projects.list.vmDetector.title,
@@ -257,11 +257,9 @@ const Projects = () => {
   const { language } = useLanguage();
   const t = translations[language];
 
-  // Memoized and sorted projects
   const { featuredProjects, otherProjects } = useMemo(() => {
     const projects = createProjectsData(t);
     
-    // Apply sorting based on selected option
     const sortedProjects = [...projects].sort((a, b) => {
       switch (sortBy) {
         case 'priority':
@@ -300,253 +298,232 @@ const Projects = () => {
       variants={itemVariants}
       onHoverStart={() => setHoveredProject(project.id)}
       onHoverEnd={() => setHoveredProject(null)}
-      className="relative grid max-sm:grid-cols-1 sm:grid-cols-[25px_1fr] sm:gap-6 md:gap-8"
+      className="relative"
     >
-      {/* Timeline dot - hidden on very small screens */}
-      <div className="relative max-sm:hidden">
-        <motion.div 
-          className="w-[15px] h-[15px] sm:w-[23px] sm:h-[23px] rounded-full border-2 
-                    border-primary/40 bg-background transition-colors duration-300"
-          animate={{
-            borderColor: hoveredProject === project.id ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.4)",
-            scale: hoveredProject === project.id ? 1.1 : 1
-          }}
-        />
-      </div>
-      
-      {/* Project card with date above */}
-      <div className="flex flex-col">
-        <div className="mb-2 text-xs font-mono text-foreground/60 flex items-center">
-          {/* Mobile timeline dot - only visible on small screens */}
-          <div className="w-[10px] h-[10px] rounded-full border-[1.5px] border-primary/40 bg-background mr-2 sm:hidden" />
-          {project.date.display}
-        </div>
-        
-        {isFeatured ? (
-          // Featured project layout
-          <div className="group rounded-lg border border-foreground/10 
-                   bg-foreground/5 backdrop-blur-sm hover:border-primary/20 
-                   transition-all duration-300 overflow-hidden">
-            <div className="grid md:grid-cols-2 h-full">
-              {/* Image Section */}
-              {project.image && (
-                <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
-                  <motion.img 
-                    src={project.image} 
-                    alt={project.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                    animate={{
-                      scale: hoveredProject === project.id ? 1.05 : 1
-                    }}
-                    transition={{
-                      duration: 0.3,
-                      ease: "easeOut"
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
-                </div>
-              )}
-              
-              {/* Content Section */}
-              <div className="p-4 sm:p-5 md:p-6 flex flex-col h-full">
-                <div className="flex items-start justify-between mb-2">
-                  <motion.h3 
-                    className="text-lg sm:text-xl font-medium text-foreground group-hover:text-primary transition-colors"
-                    animate={{
-                      color: hoveredProject === project.id ? "hsl(var(--primary))" : "hsl(var(--foreground))"
-                    }}
-                  >
-                    {project.title}
-                  </motion.h3>
-                </div>
+      {isFeatured ? (
+        <div className="group rounded-lg border border-foreground/10 
+                 bg-foreground/5 backdrop-blur-sm hover:border-primary/20 
+                 transition-all duration-300 overflow-hidden">
+          <div className="grid md:grid-cols-2 h-full">
+            {/* Image Section */}
+            {project.image && (
+              <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
+                <motion.img 
+                  src={project.image} 
+                  alt={project.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-cover"
+                  animate={{
+                    scale: hoveredProject === project.id ? 1.05 : 1
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    ease: "easeOut"
+                  }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
+              </div>
+            )}
+            
+            {/* Content Section */}
+            <div className="p-4 sm:p-5 md:p-6 flex flex-col h-full">
+              <div className="flex items-start justify-between mb-2">
+                <motion.h3 
+                  className="text-lg sm:text-xl font-medium text-foreground group-hover:text-primary transition-colors"
+                  animate={{
+                    color: hoveredProject === project.id ? "hsl(var(--primary))" : "hsl(var(--foreground))"
+                  }}
+                >
+                  {project.title}
+                </motion.h3>
+              </div>
 
-                <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
-                  {project.description}
-                </p>
+              <div className="mb-3 text-xs font-mono text-foreground/60">
+                {project.date.display}
+              </div>
+
+              <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
+                {project.description}
+              </p>
+              
+              <div className="space-y-4">
+                <motion.div 
+                  className="flex flex-wrap gap-1.5 sm:gap-2"
+                  variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+                >
+                  {project.tags.map((tag, i) => (
+                    <motion.span 
+                      key={i}
+                      variants={tagVariants}
+                      className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
+                               text-foreground/60 border border-foreground/10
+                               transition-colors duration-300
+                               hover:border-primary/20 hover:text-primary/80"
+                    >
+                      {tag}
+                    </motion.span>
+                  ))}
+                </motion.div>
                 
-                <div className="space-y-4">
-                  <motion.div 
-                    className="flex flex-wrap gap-1.5 sm:gap-2"
-                    variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-                  >
-                    {project.tags.map((tag, i) => (
-                      <motion.span 
-                        key={i}
-                        variants={tagVariants}
-                        className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
-                                 text-foreground/60 border border-foreground/10
-                                 transition-colors duration-300
-                                 hover:border-primary/20 hover:text-primary/80"
-                      >
-                        {tag}
-                      </motion.span>
-                    ))}
-                  </motion.div>
-                  
-                  {/* Links section with separator */}
-                  {(project.slug || project.github || project.link) && (
-                    <>
-                      <div className="w-full h-px bg-foreground/10 mb-4"></div>
-                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-                        {project.slug ? (
-                          // Show "View Details" button for projects with dedicated pages
-                          <Button
-                            asChild
-                            variant="outline"
-                            size="lg"
-                            className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
-                          >
-                            <Link to={`/projects/${project.slug}`}>
-                              View Details
-                              <MoveRight className="w-4 h-4 mr-1" />
-                            </Link>
-                          </Button>
-                        ) : (
-                          // Show external links for projects without dedicated pages
-                          <>
-                            {project.github && (
-                              <Button
-                                asChild
-                                variant="outline"
-                                size="lg"
-                                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                {(project.slug || project.github || project.link) && (
+                  <>
+                    <div className="w-full h-px bg-foreground/10 mb-4"></div>
+                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+                      {project.slug ? (
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="lg"
+                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                        >
+                          <Link to={`/projects/${project.slug}`}>
+                            View Details
+                            <MoveRight className="w-4 h-4 ml-1" />
+                          </Link>
+                        </Button>
+                      ) : (
+                        <>
+                          {project.github && (
+                            <Button
+                              asChild
+                              variant="outline"
+                              size="lg"
+                              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                            >
+                              <a 
+                                href={project.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
                               >
-                                <a 
-                                  href={project.github}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <FaGithubAlt className="w-4 h-4 mr-1" />
-                                  GitHub
-                                </a>
-                              </Button>
-                            )}
-                            {project.link && (
-                              <Button
-                                asChild
-                                variant="outline"
-                                size="lg"
-                                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                                <FaGithubAlt className="w-4 h-4 mr-1" />
+                                GitHub
+                              </a>
+                            </Button>
+                          )}
+                          {project.link && (
+                            <Button
+                              asChild
+                              variant="outline"
+                              size="lg"
+                              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                            >
+                              <a 
+                                href={project.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
                               >
-                                <a 
-                                  href={project.link}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <ExternalLink className="w-4 h-4 mr-1" />
-                                  Visit Project
-                                </a>
-                              </Button>
-                            )}
-                          </>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
+                                <ExternalLink className="w-4 h-4 mr-1" />
+                                Visit Project
+                              </a>
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
-        ) : (
-          // non featured project layout
-          <div className="group p-4 sm:p-5 rounded-lg border border-foreground/10 
-                       bg-foreground/5 backdrop-blur-sm hover:border-primary/20 
-                       transition-all duration-300">
-            <div className="flex items-start justify-between mb-2">
-              <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary transition-colors">
-                {project.title}
-              </h3>
-            </div>
-            
-            <p className="text-foreground/60 text-sm mb-3">
-              {project.description}
-            </p>
-            
-            <div className="space-y-4">
-              <motion.div 
-                className="flex flex-wrap gap-1.5 sm:gap-2"
-                variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-              >
-                {project.tags.map((tag, i) => (
-                  <motion.span 
-                    key={i}
-                    variants={tagVariants}
-                    className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
-                             text-foreground/60 border border-foreground/10
-                             transition-colors duration-300
-                             hover:border-primary/20 hover:text-primary/80"
-                  >
-                    {tag}
-                  </motion.span>
-                ))}
-              </motion.div>
-              
-              {/* Links section with separator */}
-              {(project.slug || project.github || project.link) && (
-                <>
-                  <div className="w-full h-px bg-foreground/10 mb-4"></div>
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-                    {project.slug ? (
-                      // Show "View Details" button for projects with dedicated pages
-                      <Button
-                        asChild
-                        variant="default"
-                        size="lg"
-                        className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group"
-                      >
-                        <Link to={`/projects/${project.slug}`}>
-                          <ArrowRight className="w-4 h-4 mr-1" />
-                          View Details
-                        </Link>
-                      </Button>
-                    ) : (
-                      // Show external links for projects without dedicated pages
-                      <>
-                        {project.github && (
-                          <Button
-                            asChild
-                            variant="outline"
-                            size="lg"
-                            className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300 group border-foreground/20"
-                          >
-                            <a 
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <FaGithubAlt className="w-4 h-4 mr-1" />
-                              GitHub
-                            </a>
-                          </Button>
-                        )}
-                        {project.link && (
-                          <Button
-                            asChild
-                            variant="outline"
-                            size="lg"
-                            className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
-                          >
-                            <a 
-                              href={project.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <ExternalLink className="w-4 h-4 mr-1" />
-                              Visit Project
-                            </a>
-                          </Button>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </>
-              )}
-            </div>
+        </div>
+      ) : (
+        <div className="group p-4 sm:p-5 rounded-lg border border-foreground/10 
+                     bg-foreground/5 backdrop-blur-sm hover:border-primary/20 
+                     transition-all duration-300">
+          <div className="flex items-start justify-between mb-2">
+            <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary transition-colors">
+              {project.title}
+            </h3>
           </div>
-        )}
-      </div>
+
+          <div className="mb-3 text-xs font-mono text-foreground/60">
+            {project.date.display}
+          </div>
+          
+          <p className="text-foreground/60 text-sm mb-3">
+            {project.description}
+          </p>
+          
+          <div className="space-y-4">
+            <motion.div 
+              className="flex flex-wrap gap-1.5 sm:gap-2"
+              variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+            >
+              {project.tags.map((tag, i) => (
+                <motion.span 
+                  key={i}
+                  variants={tagVariants}
+                  className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
+                           text-foreground/60 border border-foreground/10
+                           transition-colors duration-300
+                           hover:border-primary/20 hover:text-primary/80"
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </motion.div>
+            
+            {(project.slug || project.github || project.link) && (
+              <>
+                <div className="w-full h-px bg-foreground/10 mb-4"></div>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+                  {project.slug ? (
+                    <Button
+                      asChild
+                      variant="default"
+                      size="lg"
+                      className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group"
+                    >
+                      <Link to={`/projects/${project.slug}`}>
+                        <ArrowRight className="w-4 h-4 mr-1" />
+                        View Details
+                      </Link>
+                    </Button>
+                  ) : (
+                    <>
+                      {project.github && (
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="lg"
+                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300 group border-foreground/20"
+                        >
+                          <a 
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FaGithubAlt className="w-4 h-4 mr-1" />
+                            GitHub
+                          </a>
+                        </Button>
+                      )}
+                      {project.link && (
+                        <Button
+                          asChild
+                          variant="outline"
+                          size="lg"
+                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
+                        >
+                          <a 
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <ExternalLink className="w-4 h-4 mr-1" />
+                            Visit Project
+                          </a>
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 
@@ -613,34 +590,24 @@ const Projects = () => {
             </div>
           </motion.div>
           
-          {/* featured projects */}
-          <div className="relative mb-12 sm:mb-16">
-            {/* Timeline line - hidden on very small screens */}
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px] max-sm:hidden" />
-            
-            <div className="space-y-8 sm:space-y-12">
-              {featuredProjects.map((project) => renderProjectCard(project, true))}
-            </div>
+          {/* Featured Projects */}
+          <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
+            {featuredProjects.map((project) => renderProjectCard(project, true))}
           </div>
 
-          {/* other projects */}
+          {/* Other Projects */}
           <motion.h2 
             variants={itemVariants} 
-            className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6"
+            className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8"
           >
             {t.projects.other}
           </motion.h2>
 
-          <div className="relative">
-            {/* Timeline line - hidden on very small screens */}
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px] max-sm:hidden" />
-            
-            <div className="space-y-5 sm:space-y-8">
-              {otherProjects.map((project) => renderProjectCard(project, false))}
-            </div>
+          <div className="grid gap-4 sm:gap-6">
+            {otherProjects.map((project) => renderProjectCard(project, false))}
           </div>
 
-          {/* view all projects button */}
+          {/* View All Projects Button */}
           <motion.div 
             variants={itemVariants}
             className="flex justify-center mt-12 sm:mt-16"
@@ -666,4 +633,3 @@ const Projects = () => {
 };
 
 export default Projects;
-
