@@ -35,12 +35,11 @@ const App = () => (
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <ClickSpark
-              sparkColor='hsl(var(--primary))'
-              sparkSize={8}
-              sparkRadius={15}
-              sparkCount={8}
-              duration={400}
-            >
+            sparkColor="hsl(var(--primary) / 0.30)"
+            sparkSize={4}
+            sparkCount={7}
+            duration={450}
+          >
             <div className="min-h-screen flex flex-col">
               <Toaster position="bottom-right" richColors/>
               <BrowserRouter>
