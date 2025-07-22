@@ -15,6 +15,7 @@ import { translations } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
+import { IconButton } from "@/components/ui/custom/IconButton";
 
 const Services = () => {
   const isLoaded = usePageInit(100);
@@ -165,12 +166,11 @@ const Services = () => {
                 {t.services.customRequirements.description}
               </p>
               <Link to="/contact">
-                <Button 
+                <IconButton
                   className="group bg-primary transition-all duration-300"
                 >
                   {t.services.customRequirements.button}
-                  <MoveRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Button>
+                </IconButton>
               </Link>
             </div>
             

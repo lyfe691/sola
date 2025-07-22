@@ -146,32 +146,30 @@ const Index = () => {
                         displayDuration={3000}
                       />
                     </motion.div>
-
                     <motion.div 
                       variants={itemVariants}
                       initial="hidden"
                       animate="visible"
                       className="flex flex-wrap gap-3 mb-6 sm:mb-8"
                     >
-                      <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                         <Link to="/contact">
                           <IconButton
                             variant="default"
+                            className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5 font-medium"
                             label={t.index.contactMe}
-                            icon={<MoveRight />}
                           />
                         </Link>
 
                         <Link to="/projects">
                           <IconButton
                             variant="outline"
+                            className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
                             label={t.index.viewProjects}
-                            icon={<MoveRight />}
                           />
                         </Link>
                       </div>
                     </motion.div>
-
                     <motion.div 
                       variants={itemVariants}
                       initial="hidden"

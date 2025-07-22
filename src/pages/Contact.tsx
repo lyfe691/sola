@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
-import { cn } from "@/lib/utils";
+import { IconButton } from "@/components/ui/custom/IconButton";
 
 const Contact = () => {
   const isLoaded = usePageInit(100);
@@ -209,24 +209,25 @@ const Contact = () => {
               ></div>
             </div>
             
-            <Button
+            <IconButton
               type="submit"
               disabled={isSubmitting}
+              iconPosition="left"
+              icon={
+                isSubmitting ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-foreground/20 border-t-foreground" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )
+              }
               variant="outline"
               className="group border-foreground/20"
             >
-              {isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-foreground/20 border-t-foreground" />
-                  {t.contact.sending}
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  <Send className="w-4 h-4" />
-                  {t.contact.send}
-                </span>
-              )}
-            </Button>
+              <span className="flex items-center gap-2">
+                {isSubmitting ? t.contact.sending : t.contact.send}
+              </span>
+            </IconButton>
+
             {/* Credit Formspree */}
               <div className="flex items-center justify-start gap-2 text-xs text-muted-foreground/60 mt-2">
                 <Info className="w-3 h-3" />

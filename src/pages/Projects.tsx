@@ -11,7 +11,6 @@ import {
   ExternalLink, 
   Info, 
   MoveRight, 
-  ArrowRight, 
   SortAsc, 
   Star, 
   Calendar, 
@@ -34,6 +33,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { IconButton } from "@/components/ui/custom/IconButton";
 
 interface Project {
   id: string;
@@ -179,9 +179,7 @@ const createProjectsData = (t: any): Project[] => [
     },
     priority: 6
   },
-
   // non-featured projects
-
   {
     id: "vm-detector",
     title: t.projects.list.vmDetector.title,
@@ -249,6 +247,191 @@ const createProjectsData = (t: any): Project[] => [
   }
 ];
 
+// Extracted components for better organization
+const ProjectImage = ({ project, hoveredProject }: { project: Project; hoveredProject: string | null }) => {
+  if (!project.image) return null;
+  
+  return (
+    <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
+      <motion.img 
+        src={project.image} 
+        alt={project.title}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover"
+        animate={{
+          scale: hoveredProject === project.id ? 1.05 : 1
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeOut"
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
+    </div>
+  );
+};
+
+const ProjectHeader = ({ project, hoveredProject }: { project: Project; hoveredProject: string | null }) => (
+  <div className="flex items-start justify-between mb-2">
+    <motion.h3 
+      className="text-lg sm:text-xl font-medium text-foreground group-hover:text-primary transition-colors"
+      animate={{
+        color: hoveredProject === project.id ? "hsl(var(--primary))" : "hsl(var(--foreground))"
+      }}
+    >
+      {project.title}
+    </motion.h3>
+  </div>
+);
+
+const ProjectDate = ({ date }: { date: Project['date'] }) => (
+  <div className="mb-3 text-xs font-mono text-foreground/60">
+    {date.display}
+  </div>
+);
+
+const ProjectDescription = ({ description }: { description: string }) => (
+  <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
+    {description}
+  </p>
+);
+
+const ProjectTags = ({ tags }: { tags: string[] }) => {
+  const tagVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
+    }
+  };
+
+  return (
+    <motion.div 
+      className="flex flex-wrap gap-1.5 sm:gap-2"
+      variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
+    >
+      {tags.map((tag, i) => (
+        <motion.span 
+          key={i}
+          variants={tagVariants}
+          className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
+                   text-foreground/60 border border-foreground/10
+                   transition-colors duration-300
+                   hover:border-primary/20 hover:text-primary/80"
+        >
+          {tag}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+};
+
+const ProjectActions = ({ project }: { project: Project }) => {
+  if (!project.slug && !project.github && !project.link) return null;
+
+  return (
+    <>
+      <div className="w-full h-px bg-foreground/10 mb-4"></div>
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+        {project.slug ? (
+          <Link to={`/projects/${project.slug}`} className="w-full">
+            <IconButton
+              label="View Details"
+              variant="outline"  
+              size="lg"
+              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+            />
+          </Link>
+        ) : (
+          <>
+            {project.github && (
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+              >
+                <a 
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaGithubAlt className="w-4 h-4 mr-1" />
+                  GitHub
+                </a>
+              </Button>
+            )}
+            {project.link && (
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+              >
+                <a 
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="w-4 h-4 mr-1" />
+                  Visit Project
+                </a>
+              </Button>
+            )}
+          </>
+        )}
+      </div>
+    </>
+  );
+};
+
+const ProjectContent = ({ project }: { project: Project }) => (
+  <div className="p-4 sm:p-5 md:p-6 flex flex-col h-full">
+    <ProjectHeader project={project} hoveredProject={null} />
+    <ProjectDate date={project.date} />
+    <ProjectDescription description={project.description} />
+    
+    <div className="space-y-4">
+      <ProjectTags tags={project.tags} />
+      <ProjectActions project={project} />
+    </div>
+  </div>
+);
+
+const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd }: {
+  project: Project;
+  hoveredProject: string | null;
+  onHover: () => void;
+  onHoverEnd: () => void;
+}) => {
+  const cardClassName = "group rounded-lg border border-foreground/10 bg-foreground/5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300";
+  
+  return (
+    <motion.div
+      key={project.id}
+      variants={itemVariants}
+      onHoverStart={onHover}
+      onHoverEnd={onHoverEnd}
+      className="relative"
+    >
+      {project.featured ? (
+        <div className={`${cardClassName} overflow-hidden`}>
+          <div className="grid md:grid-cols-2 h-full">
+            <ProjectImage project={project} hoveredProject={hoveredProject} />
+            <ProjectContent project={project} />
+          </div>
+        </div>
+      ) : (
+        <div className={cardClassName}>
+          <ProjectContent project={project} />
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
 const Projects = () => {
   const isLoaded = usePageInit(100);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
@@ -282,250 +465,6 @@ const Projects = () => {
       otherProjects: sortedProjects.filter(p => !p.featured)
     };
   }, [t, sortBy]);
-
-  const tagVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
-    }
-  };
-
-  const renderProjectCard = (project: Project, isFeatured: boolean = true) => (
-    <motion.div
-      key={project.id}
-      variants={itemVariants}
-      onHoverStart={() => setHoveredProject(project.id)}
-      onHoverEnd={() => setHoveredProject(null)}
-      className="relative"
-    >
-      {isFeatured ? (
-        <div className="group rounded-lg border border-foreground/10 
-                 bg-foreground/5 backdrop-blur-sm hover:border-primary/20 
-                 transition-all duration-300 overflow-hidden">
-          <div className="grid md:grid-cols-2 h-full">
-            {/* Image Section */}
-            {project.image && (
-              <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
-                <motion.img 
-                  src={project.image} 
-                  alt={project.title}
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-full object-cover"
-                  animate={{
-                    scale: hoveredProject === project.id ? 1.05 : 1
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    ease: "easeOut"
-                  }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
-              </div>
-            )}
-            
-            {/* Content Section */}
-            <div className="p-4 sm:p-5 md:p-6 flex flex-col h-full">
-              <div className="flex items-start justify-between mb-2">
-                <motion.h3 
-                  className="text-lg sm:text-xl font-medium text-foreground group-hover:text-primary transition-colors"
-                  animate={{
-                    color: hoveredProject === project.id ? "hsl(var(--primary))" : "hsl(var(--foreground))"
-                  }}
-                >
-                  {project.title}
-                </motion.h3>
-              </div>
-
-              <div className="mb-3 text-xs font-mono text-foreground/60">
-                {project.date.display}
-              </div>
-
-              <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
-                {project.description}
-              </p>
-              
-              <div className="space-y-4">
-                <motion.div 
-                  className="flex flex-wrap gap-1.5 sm:gap-2"
-                  variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-                >
-                  {project.tags.map((tag, i) => (
-                    <motion.span 
-                      key={i}
-                      variants={tagVariants}
-                      className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
-                               text-foreground/60 border border-foreground/10
-                               transition-colors duration-300
-                               hover:border-primary/20 hover:text-primary/80"
-                    >
-                      {tag}
-                    </motion.span>
-                  ))}
-                </motion.div>
-                
-                {(project.slug || project.github || project.link) && (
-                  <>
-                    <div className="w-full h-px bg-foreground/10 mb-4"></div>
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-                      {project.slug ? (
-                        <Button
-                          asChild
-                          variant="outline"
-                          size="lg"
-                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
-                        >
-                          <Link to={`/projects/${project.slug}`}>
-                            View Details
-                            <MoveRight className="w-4 h-4 ml-1" />
-                          </Link>
-                        </Button>
-                      ) : (
-                        <>
-                          {project.github && (
-                            <Button
-                              asChild
-                              variant="outline"
-                              size="lg"
-                              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
-                            >
-                              <a 
-                                href={project.github}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <FaGithubAlt className="w-4 h-4 mr-1" />
-                                GitHub
-                              </a>
-                            </Button>
-                          )}
-                          {project.link && (
-                            <Button
-                              asChild
-                              variant="outline"
-                              size="lg"
-                              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
-                            >
-                              <a 
-                                href={project.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <ExternalLink className="w-4 h-4 mr-1" />
-                                Visit Project
-                              </a>
-                            </Button>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="group p-4 sm:p-5 rounded-lg border border-foreground/10 
-                     bg-foreground/5 backdrop-blur-sm hover:border-primary/20 
-                     transition-all duration-300">
-          <div className="flex items-start justify-between mb-2">
-            <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary transition-colors">
-              {project.title}
-            </h3>
-          </div>
-
-          <div className="mb-3 text-xs font-mono text-foreground/60">
-            {project.date.display}
-          </div>
-          
-          <p className="text-foreground/60 text-sm mb-3">
-            {project.description}
-          </p>
-          
-          <div className="space-y-4">
-            <motion.div 
-              className="flex flex-wrap gap-1.5 sm:gap-2"
-              variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-            >
-              {project.tags.map((tag, i) => (
-                <motion.span 
-                  key={i}
-                  variants={tagVariants}
-                  className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
-                           text-foreground/60 border border-foreground/10
-                           transition-colors duration-300
-                           hover:border-primary/20 hover:text-primary/80"
-                >
-                  {tag}
-                </motion.span>
-              ))}
-            </motion.div>
-            
-            {(project.slug || project.github || project.link) && (
-              <>
-                <div className="w-full h-px bg-foreground/10 mb-4"></div>
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-                  {project.slug ? (
-                    <Button
-                      asChild
-                      variant="default"
-                      size="lg"
-                      className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group"
-                    >
-                      <Link to={`/projects/${project.slug}`}>
-                        <ArrowRight className="w-4 h-4 mr-1" />
-                        View Details
-                      </Link>
-                    </Button>
-                  ) : (
-                    <>
-                      {project.github && (
-                        <Button
-                          asChild
-                          variant="outline"
-                          size="lg"
-                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300 group border-foreground/20"
-                        >
-                          <a 
-                            href={project.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FaGithubAlt className="w-4 h-4 mr-1" />
-                            GitHub
-                          </a>
-                        </Button>
-                      )}
-                      {project.link && (
-                        <Button
-                          asChild
-                          variant="outline"
-                          size="lg"
-                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all duration-300"
-                        >
-                          <a 
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <ExternalLink className="w-4 h-4 mr-1" />
-                            Visit Project
-                          </a>
-                        </Button>
-                      )}
-                    </>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </motion.div>
-  );
 
   return (
     <AnimatePresence>
@@ -592,7 +531,15 @@ const Projects = () => {
           
           {/* Featured Projects */}
           <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
-            {featuredProjects.map((project) => renderProjectCard(project, true))}
+            {featuredProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                hoveredProject={hoveredProject}
+                onHover={() => setHoveredProject(project.id)}
+                onHoverEnd={() => setHoveredProject(null)}
+              />
+            ))}
           </div>
 
           {/* Other Projects */}
@@ -604,7 +551,15 @@ const Projects = () => {
           </motion.h2>
 
           <div className="grid gap-4 sm:gap-6">
-            {otherProjects.map((project) => renderProjectCard(project, false))}
+            {otherProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                hoveredProject={hoveredProject}
+                onHover={() => setHoveredProject(project.id)}
+                onHoverEnd={() => setHoveredProject(null)}
+              />
+            ))}
           </div>
 
           {/* View All Projects Button */}
