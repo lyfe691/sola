@@ -26,14 +26,7 @@ export const pageTransition = {
   ease: "easeInOut" as const
 };
 
-// button hover animations
-export const buttonHoverVariants = {
-  rest: { scale: 1 },
-  hover: { scale: 1.05 },
-  tap: { scale: 0.95 }
-};
-
-// fad ein animations for elements
+// fade in animations for elements
 export const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.3 } }

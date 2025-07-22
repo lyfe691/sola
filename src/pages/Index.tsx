@@ -16,7 +16,7 @@ import {
   MoveRight,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, AnimationGeneratorType } from "motion/react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -31,6 +31,7 @@ import ParticleBackground from "@/components/backgrounds/ParticleBackground";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/NameMorpher";
+import { IconButton } from "@/components/ui/custom/IconButton";
 import Threads from "@/components/backgrounds/Threads";
 import Squares from "@/components/backgrounds/Squares";
 import Aurora from "@/components/backgrounds/Aurora";
@@ -48,7 +49,7 @@ const Index = () => {
     t.index.description3,
     t.index.description4,
   ];
-  
+
   /* remove for now
   const particlesInit = async (engine: Engine) => {
     await loadSlim(engine);
@@ -154,30 +155,19 @@ const Index = () => {
                     >
                       <div className="flex flex-wrap items-center gap-3">
                         <Link to="/contact">
-                          <Button 
+                          <IconButton
                             variant="default"
-                            size="default"
-                            className="group border-foreground/20"
-                          >
-                            <span className="flex items-center">
-                              {t.index.contactMe}
-                              <MoveRight className="w-4 h-4 ml-2 transition-transform duration-300 
-                                                group-hover:translate-x-1" />
-                            </span>
-                          </Button>
+                            label={t.index.contactMe}
+                            icon={<MoveRight />}
+                          />
                         </Link>
+
                         <Link to="/projects">
-                          <Button 
+                          <IconButton
                             variant="outline"
-                            size="default"
-                            className="group border-foreground/20"
-                          >
-                            <span className="flex items-center">
-                              {t.index.viewProjects}
-                              <MoveRight className="w-4 h-4 ml-2 transition-transform duration-300 
-                                                group-hover:translate-x-1" />
-                            </span>
-                          </Button>
+                            label={t.index.viewProjects}
+                            icon={<MoveRight />}
+                          />
                         </Link>
                       </div>
                     </motion.div>
