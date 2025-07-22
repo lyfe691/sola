@@ -40,6 +40,7 @@ import GitHubCalendar from 'react-github-calendar';
 import type { GitHubEvent } from '@/lib/github';
 import { getUserActivity } from '@/lib/github';
 import ContributionActivityFeed from '@/components/ContributionActivityFeed';
+import { IconButton } from '@/components/ui/custom/IconButton';
 
 // --------------------------------- Helpers ---------------------------------
 
@@ -390,12 +391,9 @@ const ResumeModal = () => {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <Button variant="outline" size="sm" className="border-foreground/20">
-            <span className="flex items-center gap-2">
-              <Download className="w-4 h-4" />
-              Resume
-            </span>
-          </Button>
+          <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<Download className="w-4 h-4" />} iconPosition='left'>
+            Resume
+          </IconButton>
         </DrawerTrigger>
         <DrawerContent className="px-4 pb-4">
           <DrawerHeader className="text-left px-0">
@@ -442,12 +440,9 @@ const ResumeModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="border-foreground/20">
-          <span className="flex items-center gap-2">
-            <Download className="w-4 h-4" />
-            Resume
-          </span>
-        </Button>
+        <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<Download className="w-4 h-4" />} iconPosition='left'>
+          Resume
+        </IconButton>
       </DialogTrigger>
               <DialogContent className="max-w-md">
           <DialogHeader className="pb-2">
@@ -585,18 +580,16 @@ const About = () => {
               {/* ----------- Social / Resume Buttons ---------- */}
 
               <div className="flex flex-row items-center gap-3 pt-5">
-                <Button variant="outline" size="sm" className="border-foreground/20" asChild>
+                <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<FaGithubAlt className="w-4 h-4" />} iconPosition='left'>
                   <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                    <FaGithubAlt className="w-4 h-4" />
                     GitHub
                   </a>
-                </Button>
-                <Button variant="outline" size="sm" className="border-foreground/20" asChild>
+                </IconButton>
+                <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<Linkedin className="w-4 h-4" />} iconPosition='left'>
                   <a href="https://linkedin.com/in/yanis-sebastian-zürcher/" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                    <Linkedin className="w-4 h-4" />
                     LinkedIn
                   </a>
-                </Button>
+                </IconButton>
 
                 {/* ---------------- Resume Modal ---------------- */}
                 <ResumeModal />

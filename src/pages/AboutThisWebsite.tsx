@@ -10,12 +10,14 @@
 
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import { IconButton } from "@/components/ui/custom/IconButton";
+import { ArrowLeft } from "lucide-react";
 
 export default function AboutThisWebsite() {
 
   const n = useNavigate(); 
 
+  // o-O
   const h = () => {
     n(-1);
   }
@@ -53,7 +55,7 @@ export default function AboutThisWebsite() {
           Thank you for taking a deeper look.
         </p>
         
-        <Button variant="link" className="hover:underline hover:text-foreground/80 " onClick={h}>go back?</Button>
+        <IconButton variant="ghost" size="sm" icon={<ArrowLeft className="w-4 h-4" />} iconPosition='left' onClick={h}>go back?</IconButton>
 
         <p className="text-xs text-center text-foreground/50 pt-8">
           © {new Date().getFullYear()} Yanis Sebastian Zürcher
