@@ -18,6 +18,7 @@ import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
+import Cursor  from "./components/ui/custom/Cursor";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
     <LanguageProvider>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
+          <Cursor />
           <ClickSpark
             sparkColor="hsl(var(--primary) / 0.30)"
             sparkSize={4}
@@ -51,10 +53,10 @@ const App = () => (
               </BrowserRouter>
             </div>
           </ClickSpark>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </LanguageProvider>
-  </ThemeProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </LanguageProvider>
+</ThemeProvider>
 );
 
 export default App;
