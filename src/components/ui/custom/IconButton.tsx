@@ -32,12 +32,20 @@ const labelMargins = {
   xl: "mr-8",
 } as const;
 
+const labelMarginsLeft = {
+  sm: "ml-5",
+  default: "ml-6",
+  lg: "ml-7", 
+  xl: "ml-8",
+} as const;
+
 export interface IconButtonProps extends ButtonProps {
   icon?: React.ReactElement;
   iconSize?: number;
   iconStrokeWidth?: number;
   label?: string;
   hideLabel?: boolean;
+  iconPosition?: "left" | "right";
 }
 
 export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
@@ -51,6 +59,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       icon = <MoveRight />,
       iconSize,
       iconStrokeWidth = 2,
+      iconPosition = "right",
       children,
       ...props
     },
@@ -92,7 +101,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         {!hideLabel && (
           <span className={cn(
             "transition-opacity duration-300 group-hover/icon:opacity-0",
-            labelMargins[buttonSize]
+            iconPosition === "right" ? labelMargins[buttonSize] : labelMarginsLeft[buttonSize]
           )}>
             {children || label}
           </span>
@@ -100,10 +109,11 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         
         <span
           className={cn(
-            "absolute right-1 inset-y-1 rounded-[calc(var(--radius)-2px)]",
+            "absolute inset-y-1 rounded-[calc(var(--radius)-2px)]",
             "flex items-center justify-center transition-all duration-300 ease-out",
             "group-hover/icon:w-[calc(100%-0.5rem)] group-active/icon:scale-95",
             iconContainerSizes[buttonSize],
+            iconPosition === "right" ? "right-1" : "left-1",
             getIconBg()
           )}
           aria-hidden="true"

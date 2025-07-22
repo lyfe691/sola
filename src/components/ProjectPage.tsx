@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Helmet } from 'react-helmet-async';
+import { IconButton } from './ui/custom/IconButton';
 
 interface ProjectPageProps {
   title: string;
@@ -121,16 +122,17 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
                     </BreadcrumbItem>
                   </BreadcrumbList>
                 </Breadcrumb>
-                
-                <Button
+
+                <IconButton
                   variant="ghost"
+                  icon={<ArrowLeft/>}
+                  iconPosition='left'
                   size="sm"
                   onClick={() => navigate('/projects')}
-                  className="text-xs h-8 px-3"
+                  className="text-xs h-8 px-3 gap-2"
                 >
-                  <ArrowLeft className="w-3 h-3 mr-1.5" />
                   Back
-                </Button>
+                </IconButton>
               </div>
             </div>
           </div>
