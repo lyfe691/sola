@@ -328,7 +328,7 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
   );
 };
 
-const ProjectActions = ({ project }: { project: Project }) => {
+const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
   if (!project.slug && !project.github && !project.link) return null;
 
   return (
@@ -338,7 +338,7 @@ const ProjectActions = ({ project }: { project: Project }) => {
         {project.slug ? (
           <Link to={`/projects/${project.slug}`} className="w-full">
             <IconButton
-              label="View Details"
+              label={t.projects.viewDetails}
               variant="outline"  
               size="lg"
               className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
@@ -387,7 +387,7 @@ const ProjectActions = ({ project }: { project: Project }) => {
   );
 };
 
-const ProjectContent = ({ project }: { project: Project }) => (
+const ProjectContent = ({ project, t }: { project: Project; t: any }) => (
   <div className="p-4 sm:p-5 md:p-6 flex flex-col h-full">
     <ProjectHeader project={project} hoveredProject={null} />
     <ProjectDate date={project.date} />
@@ -395,16 +395,17 @@ const ProjectContent = ({ project }: { project: Project }) => (
     
     <div className="space-y-4">
       <ProjectTags tags={project.tags} />
-      <ProjectActions project={project} />
+      <ProjectActions project={project} t={t} />
     </div>
   </div>
 );
 
-const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd }: {
+const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
   project: Project;
   hoveredProject: string | null;
   onHover: () => void;
   onHoverEnd: () => void;
+  t: any;
 }) => {
   const cardClassName = "group rounded-lg border border-foreground/10 bg-foreground/5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300";
   
@@ -420,12 +421,12 @@ const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd }: {
         <div className={`${cardClassName} overflow-hidden`}>
           <div className="grid md:grid-cols-2 h-full">
             <ProjectImage project={project} hoveredProject={hoveredProject} />
-            <ProjectContent project={project} />
+            <ProjectContent project={project} t={t} />
           </div>
         </div>
       ) : (
         <div className={cardClassName}>
-          <ProjectContent project={project} />
+          <ProjectContent project={project} t={t} />
         </div>
       )}
     </motion.div>
@@ -538,6 +539,7 @@ const Projects = () => {
                 hoveredProject={hoveredProject}
                 onHover={() => setHoveredProject(project.id)}
                 onHoverEnd={() => setHoveredProject(null)}
+                t={t}
               />
             ))}
           </div>
@@ -558,6 +560,7 @@ const Projects = () => {
                 hoveredProject={hoveredProject}
                 onHover={() => setHoveredProject(project.id)}
                 onHoverEnd={() => setHoveredProject(null)}
+                t={t}
               />
             ))}
           </div>
