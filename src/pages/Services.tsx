@@ -7,7 +7,7 @@
  */
 
 import { useState } from "react";
-import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2, MoveRight } from "lucide-react";
+import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";

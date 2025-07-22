@@ -43,7 +43,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 
 // import types
-type Language = "en" | "de" | "ja" | "es" | "cn" | "ru"
+type Language = "en" | "de" | "ja" | "es" | "cn" 
 
 export function CommandMenu() {
   const navigate = useNavigate()
@@ -168,11 +168,6 @@ export function CommandMenu() {
             <Globe className="mr-2 h-4 w-4" />
             <span>中文</span>
             {language === 'cn' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleLanguageChange('ru')} className="cursor-pointer">
-            <Globe className="mr-2 h-4 w-4" />
-            <span>Русский</span>
-            {language === 'ru' && <CommandShortcut>✓</CommandShortcut>}
           </CommandItem>
         </CommandGroup>
         

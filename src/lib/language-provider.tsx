@@ -8,7 +8,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react"
 
-type Language = "en" | "de" | "ja" | "es" | "cn" | "ru"
+type Language = "en" | "de" | "ja" | "es" | "cn"
 
 type LanguageProviderProps = {
   children: React.ReactNode

@@ -53,10 +53,6 @@ export function LanguageToggle() {
           中文
           {language === "cn" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage("ru")} className="flex justify-between">
-          Русский
-          {language === "ru" && <Check className="h-4 w-4" />}
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
