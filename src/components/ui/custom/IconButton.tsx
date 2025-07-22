@@ -18,27 +18,6 @@ const iconSizes = {
   xl: 20,
 } as const;
 
-const iconContainerSizes = {
-  sm: "w-6 h-[calc(100%-0.5rem)]",
-  default: "w-7 h-[calc(100%-0.5rem)]", 
-  lg: "w-8 h-[calc(100%-0.5rem)]",
-  xl: "w-9 h-[calc(100%-0.5rem)]",
-} as const;
-
-const labelMargins = {
-  sm: "mr-5",
-  default: "mr-6",
-  lg: "mr-7", 
-  xl: "mr-8",
-} as const;
-
-const labelMarginsLeft = {
-  sm: "ml-5",
-  default: "ml-6",
-  lg: "ml-7", 
-  xl: "ml-8",
-} as const;
-
 export interface IconButtonProps extends ButtonProps {
   icon?: React.ReactElement;
   iconSize?: number;
@@ -68,7 +47,14 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     const buttonSize = (size as keyof typeof iconSizes) || "default";
     const finalIconSize = iconSize ?? iconSizes[buttonSize];
     
-    // get background color based on variant
+    // define the dynamic width for the icon background.
+    const iconAreaWidth = "max(28%, 2.25rem)";
+    // define the visual gap between the text and the icon area.
+    const gap = "0.5rem"; // 8px
+
+    // calculate the total padding needed for the label to reserve space.
+    const totalPadding = `calc(${iconAreaWidth} + ${gap})`;
+
     const getIconBg = () => {
       switch (variant) {
         case "outline":
@@ -92,28 +78,33 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         size={size}
         variant={variant}
         className={cn(
-          // only add what we need - let shadcn button handle the rest
-          "group/icon relative overflow-hidden",
+          "group/icon relative justify-center overflow-hidden",
           className
         )}
         {...props}
       >
         {!hideLabel && (
-          <span className={cn(
-            "transition-opacity duration-300 group-hover/icon:opacity-0",
-            iconPosition === "right" ? labelMargins[buttonSize] : labelMarginsLeft[buttonSize]
-          )}>
+          <span
+            className={cn(
+              "block w-full text-center transition-opacity duration-300",
+              "group-hover/icon:opacity-0"
+            )}
+            style={{
+              paddingRight: iconPosition === 'right' ? totalPadding : undefined,
+              paddingLeft: iconPosition === 'left' ? totalPadding : undefined,
+            }}
+          >
             {children || label}
           </span>
         )}
         
         <span
           className={cn(
-            "absolute inset-y-1 rounded-[calc(var(--radius)-2px)]",
-            "flex items-center justify-center transition-all duration-300 ease-out",
+            "absolute inset-y-1 flex items-center justify-center rounded-[calc(var(--radius)-2px)]",
+            "transition-all duration-300 ease-out",
             "group-hover/icon:w-[calc(100%-0.5rem)] group-active/icon:scale-95",
-            iconContainerSizes[buttonSize],
             iconPosition === "right" ? "right-1" : "left-1",
+            "w-[max(28%,_2.25rem)]",
             getIconBg()
           )}
           aria-hidden="true"
