@@ -1,3 +1,18 @@
+/**
+ * Copyright (c) 2025 Yanis Sebastian Zürcher
+ *
+ * This file is part of a proprietary software project.
+ * Unauthorized copying, modification, or distribution is strictly prohibited.
+ * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ */
+
+
+// IMPORTANT: 
+// I do not recommend using the 
+// "link" variant here. All other variants are fine.
+// Why? The link variant does not have a background color, 
+// which means you'll only see the icon with motion, looks dull.
+
 import * as React from "react";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { MoveRight } from "lucide-react";
@@ -43,15 +58,8 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         <span
           className={cn(
             "absolute inset-y-1 right-1 rounded flex items-center justify-center",
-            // super annoying to do this, but if we don't handle the different variants - 
-            // they will have different contrasts. 
-            // dependent on: @components/ui/button.tsx
-            variant === "default" && "bg-primary-foreground/15",
-            variant === "outline" && "bg-primary/10", 
-            variant === "secondary" && "bg-primary/10",
-            variant === "ghost" && "bg-muted",
-            
-            // add other variants as needed
+            // here we use contrasting colors based on variant
+            variant === "outline" ? "bg-foreground/10" : "bg-primary-foreground/15",
             "group-hover:w-[calc(100%-0.5rem)] w-8",
             "transition-all duration-300 ease-out group-active:scale-95",
             "rounded-[var(--radius)]"
