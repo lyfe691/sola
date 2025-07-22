@@ -8,9 +8,9 @@
 
 
 // IMPORTANT: 
-// I do not recommend using the 
-// "link" variant here. All other variants are fine.
-// Why? The link variant does not have a background color, 
+// I do not recommend using the "link" variant here."
+// All other variants are fine.
+// Why? The "link" variant does not have a background color, 
 // which means you'll only see the icon with motion, looks dull.
 
 import * as React from "react";
