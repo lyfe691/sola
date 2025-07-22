@@ -43,8 +43,17 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         <span
           className={cn(
             "absolute inset-y-1 right-1 rounded flex items-center justify-center",
-            "bg-primary-foreground/10 group-hover:w-[calc(100%-0.5rem)] w-8",
-            "transition-all duration-300 ease-out group-active:scale-95", 
+            // super annoying to do this, but if we don't handle the different variants - 
+            // they will have different contrasts. 
+            // dependent on: @components/ui/button.tsx
+            variant === "default" && "bg-primary-foreground/15",
+            variant === "outline" && "bg-primary/10", 
+            variant === "secondary" && "bg-primary/10",
+            variant === "ghost" && "bg-muted",
+            
+            // add other variants as needed
+            "group-hover:w-[calc(100%-0.5rem)] w-8",
+            "transition-all duration-300 ease-out group-active:scale-95",
             "rounded-[var(--radius)]"
           )}
           aria-hidden="true"
