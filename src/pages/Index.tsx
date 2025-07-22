@@ -158,7 +158,6 @@ const Index = () => {
                           <IconButton
                             variant="default"
                             label={t.index.contactMe}
-                            icon={<MoveRight />}
                           />
                         </Link>
 
@@ -166,7 +165,6 @@ const Index = () => {
                           <IconButton
                             variant="outline"
                             label={t.index.viewProjects}
-                            icon={<MoveRight />}
                           />
                         </Link>
                       </div>

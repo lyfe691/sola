@@ -34,6 +34,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import { IconButton } from "@/components/ui/custom/IconButton";
 
 interface Project {
   id: string;
@@ -371,17 +372,14 @@ const Projects = () => {
                     <div className="w-full h-px bg-foreground/10 mb-4"></div>
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
                       {project.slug ? (
-                        <Button
-                          asChild
-                          variant="outline"
-                          size="lg"
-                          className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
-                        >
                           <Link to={`/projects/${project.slug}`}>
-                            View Details
-                            <MoveRight className="w-4 h-4 ml-1" />
+<IconButton
+  label="View Details"
+  variant="outline"  
+  size="lg"
+  className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+/>
                           </Link>
-                        </Button>
                       ) : (
                         <>
                           {project.github && (
