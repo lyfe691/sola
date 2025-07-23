@@ -36,7 +36,7 @@ import {
   DrawerDescription
 } from "@/components/ui/drawer";
 import GitHubCalendar from 'react-github-calendar';
-import type { GitHubEvent } from '@/lib/github';
+import type { ProcessedActivity } from '@/lib/github';
 import { getUserActivity } from '@/lib/github';
 import ContributionActivityFeed from '@/components/ContributionActivityFeed';
 import { IconButton } from '@/components/ui/custom/IconButton';
@@ -494,7 +494,7 @@ const About = () => {
   const navigate = useNavigate();
   const { theme } = useTheme();
   const [selectedYear, setSelectedYear] = useState<number | 'last'>('last');
-  const [activity, setActivity] = useState<GitHubEvent[]>([]);
+  const [activity, setActivity] = useState<ProcessedActivity[]>([]);
   const [loadingActivity, setLoadingActivity] = useState(true);
 
   const years = [2025, 2024];

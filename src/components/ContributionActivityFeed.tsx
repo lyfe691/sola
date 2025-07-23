@@ -7,115 +7,272 @@
  */
 
 import React from 'react';
-import type { GitHubEvent } from '@/lib/github';
-import { GitCommit, GitPullRequest, GitBranchPlus, MoveRight } from 'lucide-react';
+import { motion } from 'motion/react';
+import type { ProcessedActivity } from '@/lib/github';
+import { 
+  GitCommit, 
+  GitPullRequest, 
+  GitBranch, 
+  GitMerge,
+  Plus,
+  Trash2,
+  Star,
+  GitFork,
+  AlertCircle,
+  CheckCircle2,
+  Tag,
+  Users,
+  Eye,
+  ExternalLink,
+  Clock,
+  MoveRight
+} from 'lucide-react';
+import { IconButton } from './ui/custom/IconButton';
+
+// TODO: 
+// - add translation
+
+
 
 interface ContributionActivityFeedProps {
-  events: GitHubEvent[];
+  events: ProcessedActivity[];
 }
 
-const EventIcon = ({ eventType }: { eventType: string }) => {
-    switch (eventType) {
-        case 'PushEvent':
-            return <GitCommit className="w-4 h-4 text-foreground/60" />;
-        case 'PullRequestEvent':
-            return <GitPullRequest className="w-4 h-4 text-foreground/60" />;
-        case 'CreateEvent':
-            return <GitBranchPlus className="w-4 h-4 text-foreground/60" />;
-        default:
-            return null;
-    }
+// refined mapping with subtle colors
+const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
+  const iconClass = "w-3.5 h-3.5 flex-shrink-0";
+  
+  switch (activity.type) {
+    case 'push':
+      return <GitCommit className={`${iconClass} text-foreground/60`} />;
+    
+    case 'pull_request':
+      if (activity.action === 'opened') {
+        return <GitPullRequest className={`${iconClass} text-emerald-600 dark:text-emerald-400`} />;
+      } else if (activity.action === 'closed') {
+        return <GitMerge className={`${iconClass} text-violet-600 dark:text-violet-400`} />;
+      }
+      return <GitPullRequest className={`${iconClass} text-foreground/60`} />;
+    
+    case 'issues':
+      if (activity.action === 'opened') {
+        return <AlertCircle className={`${iconClass} text-red-600 dark:text-red-400`} />;
+      } else if (activity.action === 'closed') {
+        return <CheckCircle2 className={`${iconClass} text-emerald-600 dark:text-emerald-400`} />;
+      }
+      return <AlertCircle className={`${iconClass} text-foreground/60`} />;
+    
+    case 'create':
+      if (activity.metadata?.branch) {
+        return <GitBranch className={`${iconClass} text-emerald-600 dark:text-emerald-400`} />;
+      } else if (activity.metadata?.tag) {
+        return <Tag className={`${iconClass} text-blue-600 dark:text-blue-400`} />;
+      }
+      return <Plus className={`${iconClass} text-emerald-600 dark:text-emerald-400`} />;
+    
+    case 'delete':
+      return <Trash2 className={`${iconClass} text-red-600 dark:text-red-400`} />;
+    
+    case 'fork':
+      return <GitFork className={`${iconClass} text-amber-600 dark:text-amber-400`} />;
+    
+    case 'star':
+      return <Star className={`${iconClass} text-amber-600 dark:text-amber-400`} />;
+    
+    case 'release':
+      return <Tag className={`${iconClass} text-blue-600 dark:text-blue-400`} />;
+    
+    case 'member':
+      return <Users className={`${iconClass} text-violet-600 dark:text-violet-400`} />;
+    
+    case 'watch':
+      return <Eye className={`${iconClass} text-foreground/60`} />;
+    
+    default:
+      return <GitCommit className={`${iconClass} text-foreground/60`} />;
+  }
+};
+
+// cleaner, more subtle metadata display
+const ActivityMetadata = ({ activity }: { activity: ProcessedActivity }) => {
+  if (!activity.metadata) return null;
+
+  const items = [];
+
+  if (activity.metadata.commits) {
+    items.push(`${activity.metadata.commits} commit${activity.metadata.commits !== 1 ? 's' : ''}`);
+  }
+  
+  if (activity.metadata.branch) {
+    items.push(activity.metadata.branch);
+  }
+  
+  if (activity.metadata.tag) {
+    items.push(activity.metadata.tag);
+  }
+  
+  if (activity.metadata.additions || activity.metadata.deletions) {
+    const changes = [];
+    if (activity.metadata.additions) changes.push(`+${activity.metadata.additions}`);
+    if (activity.metadata.deletions) changes.push(`-${activity.metadata.deletions}`);
+    items.push(changes.join(' '));
+  }
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="flex items-center gap-2 mt-2">
+      {items.slice(0, 2).map((item, index) => (
+        <span 
+          key={index}
+          className="text-[11px] text-foreground/50 bg-foreground/[0.05] px-2 py-0.5 rounded-md font-medium"
+        >
+          {item}
+        </span>
+      ))}
+      {items.length > 2 && (
+        <span className="text-[11px] text-foreground/40">
+          +{items.length - 2} more
+        </span>
+      )}
+    </div>
+  );
+};
+
+// clean, refined activity item
+const ActivityItem = ({ activity, index }: { activity: ProcessedActivity; index: number }) => {
+  const formatDate = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours}h ago`;
+    if (diffInHours < 48) return 'Yesterday';
+    
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    });
+  };
+
+  const repoName = activity.repo.split('/')[1];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03, duration: 0.4, ease: "easeOut" }}
+      className="group px-4 py-3 hover:bg-foreground/[0.02] transition-all duration-300"
+    >
+      <div className="flex items-start gap-3">
+        <div className="mt-1 p-1.5 rounded-lg bg-foreground/[0.04] group-hover:bg-foreground/[0.08] transition-colors duration-300">
+          <ActivityIcon activity={activity} />
+        </div>
+        
+        <div className="flex-1 min-w-0 space-y-1">
+          {/* Title */}
+          <p className="text-sm font-medium text-foreground leading-snug">
+            {activity.title}
+          </p>
+          
+          {/* Description */}
+          <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">
+            {activity.description}
+          </p>
+          
+          {/* Metadata */}
+          <ActivityMetadata activity={activity} />
+          
+          {/* Footer with time and repo */}
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-2 text-xs text-foreground/50">
+              <Clock className="w-3 h-3" />
+              <span>{formatDate(activity.timestamp)}</span>
+              <span>•</span>
+              <a 
+                href={activity.repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 hover:text-foreground/70 transition-colors"
+              >
+                {repoName}
+                <ExternalLink className="w-2.5 h-2.5" />
+              </a>
+            </div>
+            
+            {activity.url && (
+              <a
+                href={activity.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-primary hover:text-primary/80 transition-colors opacity-0 group-hover:opacity-100"
+              >
+                View
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
 };
 
 const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ events }) => {
-
-    const renderEvent = (event: GitHubEvent) => {
-        const repoUrl = `https://github.com/${event.repo.name}`;
-        switch (event.type) {
-            case 'PushEvent':
-                return (
-                    <span>
-                        Pushed {event.payload.commits?.length} commit(s) to{' '}
-                        <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{event.repo.name}</a>
-                    </span>
-                );
-            case 'PullRequestEvent':
-                if (event.payload.action === 'opened') {
-                    return (
-                        <span>
-                            Opened pull request in{' '}
-                            <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{event.repo.name}</a>
-                        </span>
-                    );
-                }
-                return null;
-            case 'CreateEvent':
-                 if (event.payload.ref_type === 'repository') {
-                    return (
-                        <span>
-                            Created new repository{' '}
-                            <a href={repoUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{event.repo.name}</a>
-                        </span>
-                    );
-                }
-                return null;
-            default:
-                return null;
-        }
-    };
-    
-    const filteredEvents = events.filter(event => 
-        (event.type === 'PushEvent' && event.payload.commits && event.payload.commits.length > 0) ||
-        (event.type === 'PullRequestEvent' && event.payload.action === 'opened') ||
-        (event.type === 'CreateEvent' && event.payload.ref_type === 'repository')
-    );
-    
-    const eventsToShow = filteredEvents.slice(0, 4);
+  const eventsToShow = events.slice(0, 6);
 
   return (
-    <div className='mt-6'>
-        <h3 className="text-base font-medium mb-4">Contribution activity</h3>
-        <div className="relative">
-            <div className="border border-foreground/10 rounded-xl p-4 space-y-4">
-                {eventsToShow.length > 0 ? (
-                    eventsToShow.map((event, index) => {
-                        const eventContent = renderEvent(event);
-                        if (!eventContent) return null;
-                        
-                        return (
-                            <div key={`${event.created_at}-${index}`} className="flex items-start gap-3 text-sm">
-                               <EventIcon eventType={event.type} />
-                               <div>
-                                 {eventContent}
-                                 <p className='text-xs text-foreground/50 mt-1'>
-                                    {new Date(event.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                                 </p>
-                               </div>
-                            </div>
-                        );
-                    })
-                ) : (
-                    <p className="text-sm text-foreground/70">No recent activity to display.</p>
-                )}
+    <div className="mt-8">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-foreground">Recent Activity</h3>
+        <span className="text-xs text-foreground/40 bg-foreground/[0.04] px-2.5 py-1 rounded-full">
+          Last 20 events
+        </span>
+      </div>
+      
+      <div className="relative">
+        <div className="border border-foreground/[0.08] rounded-2xl bg-gradient-to-b from-foreground/[0.02] to-foreground/[0.01] backdrop-blur-sm overflow-hidden">
+          {eventsToShow.length > 0 ? (
+            <div className="divide-y divide-foreground/[0.06]">
+              {eventsToShow.map((activity, index) => (
+                <ActivityItem 
+                  key={activity.id} 
+                  activity={activity} 
+                  index={index}
+                />
+              ))}
             </div>
-            {filteredEvents.length > 4 && (
-                <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none rounded-b-xl" />
-            )}
+          ) : (
+            <div className="p-12 text-center">
+              <div className="w-12 h-12 rounded-2xl bg-foreground/[0.04] flex items-center justify-center mx-auto mb-4">
+                <GitCommit className="w-6 h-6 text-foreground/30" />
+              </div>
+              <p className="text-sm text-foreground/70 mb-1">No recent activity</p>
+              <p className="text-xs text-foreground/50">Check back later for updates</p>
+            </div>
+          )}
         </div>
-
-        {filteredEvents.length > 4 && (
-            <div className="mt-4 flex justify-center">
-                 <a 
-                    href="https://github.com/lyfe691"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors group"
-                 >
-                    View all activity on GitHub
-                    <MoveRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </a>
-            </div>
+        
+        {/* Subtle fade effect */}
+        {events.length > 6 && (
+          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-background to-transparent pointer-events-none rounded-b-2xl" />
         )}
+      </div>
+
+      {/* refined view all link */}
+      {events.length > 0 && (
+        <div className="mt-6 flex justify-center">
+          <IconButton
+            variant="outline"
+            icon={<ExternalLink className="w-3.5 h-3.5" />}
+            size="lg"
+            className="transition-all duration-300 group border-foreground/20 rounded-full"
+            label="More on GitHub"
+            onClick={() => window.open("https://github.com/lyfe691?tab=repositories", "_blank")}
+          />
+        </div>
+      )}
     </div>
   );
 };
