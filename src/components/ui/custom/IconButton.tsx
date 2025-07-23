@@ -60,6 +60,8 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     const isIconRight = iconPosition === "right";
     const labelContent = children || label;
 
+
+
     return (
       <Button
         ref={ref}
@@ -91,13 +93,15 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         <div
           className={cn(
             "absolute inset-y-1 flex items-center justify-center",
-            "rounded-[calc(var(--radius)-2px)]",
             "transition-all duration-300 ease-out",
             "w-[max(28%,2.25rem)] group-hover/btn:w-[calc(100%-0.5rem)]",
             "group-active/btn:scale-95",
             isIconRight ? "right-1" : "left-1",
             iconBg
           )}
+          style={{
+            borderRadius: 'inherit'
+          }}
           aria-hidden="true"
         >
           <div className="transition-transform duration-300 ease-out group-hover/btn:scale-110">

@@ -567,7 +567,7 @@ const Projects = () => {
           <IconButton
             variant="outline"
             size="lg"
-            className="transition-all duration-300 group border-foreground/20"
+            className="transition-all duration-300 group border-foreground/20 rounded-full"
             label={t.projects.viewAll}
             onClick={() => window.open("https://github.com/lyfe691?tab=repositories", "_blank")}
           />
