@@ -64,7 +64,7 @@ const Experience = () => {
         <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
         
         {experiences.map((exp, index) => (
-          <ScrollReveal key={index} variant="default" delay={index * 100}>
+          <ScrollReveal key={index} variant="default" delay={index * 160}>
             <motion.div
               onHoverStart={() => setHoveredExp(exp.role)}
               onHoverEnd={() => setHoveredExp(null)}

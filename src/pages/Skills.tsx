@@ -89,16 +89,16 @@ const Skills = () => {
           
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         {skillGroups.map((group, groupIndex) => (
-          <ScrollReveal key={groupIndex} variant="default" delay={groupIndex * 80}>
+          <ScrollReveal key={groupIndex} variant="default" delay={groupIndex * 150}>
             <div className="p-5 sm:p-6 rounded-lg border border-foreground/10 
-                           bg-foreground/5 backdrop-blur-sm">
+                           bg-foreground/5 backdrop-blur-sm min-h-[280px] flex flex-col">
                 <h2 className="text-xl font-medium mb-4 sm:mb-6">
                   {group.title === "Frontend" && t.skills.groups.frontend}
                   {group.title === "Backend" && t.skills.groups.backend}
                   {group.title === "Tools" && t.skills.groups.tools}
                   {group.title === "Other" && t.skills.groups.other}
                 </h2>
-                <div className="space-y-4 sm:space-y-5">
+                <div className="space-y-4 sm:space-y-5 flex-1">
                   {group.skills.map((skill, skillIndex) => (
                     <motion.div
                       key={skillIndex}
@@ -129,12 +129,12 @@ const Skills = () => {
                         />
                       </div>
                     </motion.div>
-                                  ))}
+                  ))}
                 </div>
-              </div>
-            </ScrollReveal>
-          ))}
-        </div>
+            </div>
+          </ScrollReveal>
+        ))}
+      </div>
     </div>
   );
 };

@@ -10,139 +10,146 @@ import { useState, useEffect, useRef } from 'react';
 import { useInView } from 'motion/react';
 
 /**
- * Smooth scroll-based animation system with consistent timing and easing
+ * Smooth and polished scroll animation system
+ * Balanced timing for elegant user experience
  */
 
-// Page transition variants (for route changes) - optimized for smoother scroll animations
+// CONSISTENT ANIMATION FOUNDATION
+const STANDARD_EASING = [0.25, 0.1, 0.25, 1] as const; // Perfect cubic-bezier
+const STANDARD_THRESHOLD = 0.15; // Trigger when 15% visible - optimal balance
+const FAST_DURATION = 0.6;
+const STANDARD_DURATION = 0.8;
+const SMOOTH_DURATION = 1.0;
+
+// Page transition variants - restored smooth transitions
 export const pageTransitionVariants = {
-  initial: { opacity: 0, y: 4 },
+  initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -4 }
+  exit: { opacity: 0, y: -8 }
 };
 
 export const pageTransition = { 
-  duration: 0.2,
-  ease: [0.25, 0.1, 0.25, 1] as const
+  duration: 0.5, // Much smoother page transitions
+  ease: STANDARD_EASING
 };
 
-// SMOOTH SCROLL ANIMATION VARIANTS
-// Using consistent timing and smooth easing for all animations
+// SCROLL ANIMATION VARIANTS - Balanced and Polished
 
-const smoothTransition = {
-  duration: 0.7,
-  ease: [0.25, 0.1, 0.25, 1] as const, // Custom cubic-bezier for smooth motion
-};
-
-const fastTransition = {
-  duration: 0.5,
-  ease: [0.25, 0.1, 0.25, 1] as const,
-};
-
-const dramaticTransition = {
-  duration: 0.9,
-  ease: [0.25, 0.1, 0.25, 1] as const,
-};
-
-// Main scroll animation variant - smooth and consistent
+// Main scroll animation - smooth and elegant
 export const scrollRevealVariants = {
   hidden: { 
     opacity: 0, 
-    y: 20,
-    scale: 0.98
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: smoothTransition
-  }
-};
-
-// For page titles - clean fade with subtle scale
-export const scrollPageTitleVariants = {
-  hidden: { 
-    opacity: 0,
-    scale: 0.98
-  },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.8,
-      ease: [0.25, 0.1, 0.25, 1] as const,
-    }
-  }
-};
-
-// For regular titles - slightly more dramatic than default
-export const scrollTitleVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 28,
+    y: 24,
     scale: 0.97
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: smoothTransition
+    transition: {
+      duration: STANDARD_DURATION,
+      ease: STANDARD_EASING
+    }
   }
 };
 
-// For subtle animations - faster and lighter
-export const scrollSubtleVariants = {
+// For page titles - clean slide from left (truly different!)
+export const scrollPageTitleVariants = {
+  hidden: { 
+    opacity: 0,
+    x: -20,
+    filter: "blur(2px)"
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: SMOOTH_DURATION,
+      ease: STANDARD_EASING
+    }
+  }
+};
+
+// For section titles - subtle upward reveal
+export const scrollTitleVariants = {
   hidden: { 
     opacity: 0, 
-    y: 12
+    y: 28,
+    scale: 0.96
   },
   visible: {
     opacity: 1,
     y: 0,
-    transition: fastTransition
+    scale: 1,
+    transition: {
+      duration: STANDARD_DURATION,
+      ease: STANDARD_EASING
+    }
   }
 };
 
-// For containers with staggered children
+// For subtle elements - still fast but not rushed
+export const scrollSubtleVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 16
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: FAST_DURATION,
+      ease: STANDARD_EASING
+    }
+  }
+};
+
+// For containers - elegant staggering
 export const scrollContainerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-      duration: 0.3
+      staggerChildren: 0.1, // More elegant staggering
+      delayChildren: 0.15,
+      duration: 0.4,
+      ease: STANDARD_EASING
     }
   }
 };
 
-// For items within staggered containers
+// For container children - smooth reveals
 export const scrollChildVariants = {
   hidden: { 
     opacity: 0, 
-    y: 16 
+    y: 20 
   },
   visible: {
     opacity: 1,
     y: 0,
-    transition: fastTransition
+    transition: {
+      duration: FAST_DURATION,
+      ease: STANDARD_EASING
+    }
   }
 };
 
-// OPTIMIZED SCROLL ANIMATION HOOK - More responsive
+// PERFECTED SCROLL HOOKS - Optimized for elegance
 export const useScrollAnimation = (options?: {
   threshold?: number;
   once?: boolean;
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
-    amount: options?.threshold || 0.2, // Trigger when 20% is visible - more responsive
+    amount: options?.threshold || STANDARD_THRESHOLD,
     once: options?.once ?? true
   });
 
   return { ref, isInView };
 };
 
-// Hook with delay for staggered animations
+// Hook with delay - perfectly synchronized
 export const useScrollAnimationWithDelay = (
   delay: number = 0,
   options?: {
@@ -152,7 +159,7 @@ export const useScrollAnimationWithDelay = (
 ) => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
-    amount: options?.threshold || 0.2, // More responsive threshold
+    amount: options?.threshold || STANDARD_THRESHOLD,
     once: options?.once ?? true
   });
 
@@ -171,7 +178,7 @@ export const useScrollAnimationWithDelay = (
   return { ref, isInView: shouldAnimate };
 };
 
-// LEGACY VARIANTS (keeping for compatibility)
+// LEGACY VARIANTS (maintaining compatibility)
 export const fadeIn = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.3 } }

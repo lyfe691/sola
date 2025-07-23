@@ -23,10 +23,16 @@ interface ScrollRevealProps {
   children: React.ReactNode;
   /**
    * Animation variant to use
+   * - default: Standard content reveal (20px up, scale 0.98)
+   * - pageTitle: Page headers with left slide + blur effect
+   * - title: Section titles with subtle upward movement
+   * - subtle: Fast, light animations for small elements
+   * - container: For sections with staggered children
+   * - child: For items within staggered containers
    */
   variant?: 'default' | 'pageTitle' | 'title' | 'subtle' | 'container' | 'child';
   /**
-   * Custom animation variants
+   * Custom animation variants (overrides variant)
    */
   customVariants?: Variants;
   /**
@@ -34,14 +40,16 @@ interface ScrollRevealProps {
    */
   className?: string;
   /**
-   * Animation options
+   * Scroll trigger options
    */
   options?: {
+    /** Visibility threshold (0-1) - defaults to 0.15 */
     threshold?: number;
+    /** Whether animation runs only once - defaults to true */
     once?: boolean;
   };
   /**
-   * Delay before animation starts (in milliseconds)
+   * Stagger delay in milliseconds (0 for immediate)
    */
   delay?: number;
   /**
@@ -50,18 +58,21 @@ interface ScrollRevealProps {
   as?: keyof React.JSX.IntrinsicElements;
 }
 
-const variantMap = {
+// Variant mapping - perfectly organized
+const ANIMATION_VARIANTS = {
   default: scrollRevealVariants,
   pageTitle: scrollPageTitleVariants,
   title: scrollTitleVariants,
   subtle: scrollSubtleVariants,
   container: scrollContainerVariants,
   child: scrollChildVariants,
-};
+} as const;
 
 /**
- * ScrollReveal component that smoothly animates content when it comes into view
- * Uses optimized intersection observer settings for smooth performance
+ * ScrollReveal - The foundation of smooth scroll animations
+ * 
+ * Perfectly tuned for consistency across the entire application.
+ * Uses standardized timing, easing, and intersection observer settings.
  */
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
@@ -72,12 +83,15 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   delay = 0,
   as: Component = 'div'
 }) => {
-  // Use delay hook if delay is specified, otherwise use regular hook
+  // Optimized hook selection for performance
   const { ref, isInView } = delay > 0 
     ? useScrollAnimationWithDelay(delay, options)
     : useScrollAnimation(options);
 
-  const variants = customVariants || variantMap[variant];
+  // Get animation variants
+  const variants = customVariants || ANIMATION_VARIANTS[variant];
+  
+  // Create motion component
   const MotionComponent = motion[Component] as any;
 
   return (

@@ -465,6 +465,12 @@ const Projects = () => {
     };
   }, [t, sortBy]);
 
+  const handleProjectClick = (slug: string | undefined) => {
+    if (slug) {
+      window.location.href = `/projects/${slug}`;
+    }
+  };
+
   return (
     <div className="flex flex-col w-full">
       <Helmet>
@@ -522,7 +528,7 @@ const Projects = () => {
       {/* Featured Projects */}
       <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
-          <ScrollReveal key={project.id} variant="default" delay={index * 40}>
+          <ScrollReveal key={project.id} variant="default" delay={index * 120}>
             <ProjectCard
               project={project}
               hoveredProject={hoveredProject}
@@ -534,16 +540,16 @@ const Projects = () => {
         ))}
       </div>
 
-      {/* Other Projects */}
-      <ScrollReveal variant="title">
-        <h2 className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8">
-          {t.projects.other}
-        </h2>
+      <ScrollReveal variant="title" delay={200}>
+        <div className="flex items-center gap-3 mb-6 sm:mb-8">
+                     <h2 className="text-2xl font-semibold">{t.projects.other}</h2>
+        </div>
       </ScrollReveal>
 
+      {/* Other Projects */}
       <div className="grid gap-4 sm:gap-6">
         {otherProjects.map((project, index) => (
-          <ScrollReveal key={project.id} variant="default" delay={index * 80}>
+          <ScrollReveal key={project.id} variant="default" delay={index * 150}>
             <ProjectCard
               project={project}
               hoveredProject={hoveredProject}

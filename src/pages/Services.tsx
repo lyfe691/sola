@@ -69,17 +69,13 @@ const Services = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
         {servicesList.map((service, index) => (
-          <ScrollReveal key={service.key} variant="default" delay={index * 80}>
+          <ScrollReveal key={service.key} variant="default" delay={index * 140}>
             <motion.div
               onHoverStart={() => setHoveredService(service.key)}
               onHoverEnd={() => setHoveredService(null)}
-              className={`relative group p-5 sm:p-6 rounded-xl border border-accent/50
-                         bg-gradient-to-b from-accent/10 to-transparent
-                         backdrop-blur-sm transition-all duration-300
-                         hover:border-primary/50 hover:shadow-lg hover:-translate-y-0.5
-                         hover:bg-gradient-to-b hover:from-primary/10 hover:to-transparent
-                         cursor-pointer`}
-              onClick={() => navigate('/contact')}
+              className="p-5 sm:p-6 rounded-lg border border-foreground/10 
+                         bg-foreground/5 backdrop-blur-sm transition-all duration-300 
+                         hover:border-primary/20 hover:bg-primary/5 cursor-default"
             >
                 {service.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 
@@ -125,15 +121,13 @@ const Services = () => {
                 {/* Add contact button for each service */}
                 <div className="mt-6">
                   <Link to="/contact">
-                    <Button 
+                    <IconButton 
                       variant="outline" 
                       className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
-                    >
-                      {t.services.getStarted || "Get Started"}
-                      <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Button>
-                </Link>
-            </div>
+                      label={t.services.getStarted || "Get Started"}
+                    />
+                  </Link>
+                </div>
             </motion.div>
           </ScrollReveal>
         ))}
