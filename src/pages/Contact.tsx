@@ -21,14 +21,13 @@ import { IconButton } from "@/components/ui/custom/IconButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import { useTheme } from "@/components/theme-provider";
 
-
-
 const Contact = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { theme } = useTheme()
+  const { theme } = useTheme();
+  const [recaptchaKey, setRecaptchaKey] = useState(0);
   const [formValues, setFormValues] = useState({
     name: '',
     email: '',
@@ -61,6 +60,11 @@ const Contact = () => {
       }, 200);
     }
   }, [location.search]);
+
+  // force reCAPTCHA to re-render when theme changes
+  useEffect(() => {
+    setRecaptchaKey(prev => prev + 1);
+  }, [theme]);
 
   const clearForm = () => {
     setFormValues({
@@ -106,13 +110,17 @@ const Contact = () => {
       if (response.ok) {
         toast.success(t.contact.successMessage);
         clearForm();
+        // reset reCAPTCHA after successful submission
+        if ((window as any).grecaptcha) {
+          (window as any).grecaptcha.reset();
+        }
       } else {
         const data = await response.json();
         throw new Error(data.error || 'Form submission failed');
       }
     } catch (error) {
       console.error('Submission error:', error);
-      toast.error("Something went wrong. Please try again."); // not translating--only fallback
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -205,9 +213,10 @@ const Contact = () => {
             {/* reCAPTCHA */}
             <div className="flex justify-start">
               <div
+                key={recaptchaKey}
                 className="g-recaptcha"
                 data-sitekey="6Lc2gGorAAAAAFIQ_9x58ZfCKpvUlx7jR5Qj5kqG"
-                {...(theme === "dark" ? { "data-theme": "dark" } : {})}
+                data-theme={theme === "dark" ? "dark" : "light"}
               />
             </div>
             
@@ -252,4 +261,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
