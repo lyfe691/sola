@@ -391,9 +391,15 @@ const ResumeModal = () => {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
-          <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<Download className="w-4 h-4" />} iconPosition='left'>
-            Resume
-          </IconButton>
+          <IconButton
+           variant="outline"
+           size="lg" 
+           className="border-foreground/20 w-full" 
+           icon={<Download className="w-4 h-4" />} 
+           iconPosition='left' 
+           label="Resume" 
+           onClick={() => setOpen(true)}
+           />
         </DrawerTrigger>
         <DrawerContent className="px-4 pb-4">
           <DrawerHeader className="text-left px-0">
@@ -440,9 +446,15 @@ const ResumeModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<Download className="w-4 h-4" />} iconPosition='left'>
-          Resume
-        </IconButton>
+        <IconButton 
+          variant="outline" 
+          size="lg" 
+          className="border-foreground/20 w-1/3"
+          icon={<Download className="w-4 h-4" />} 
+          iconPosition='left' 
+          label="Resume" 
+          onClick={() => setOpen(true)}
+        />
       </DialogTrigger>
               <DialogContent className="max-w-md">
           <DialogHeader className="pb-2">
@@ -572,21 +584,9 @@ const About = () => {
               <p className="text-lg text-foreground/80 leading-relaxed">{t.about.intro}</p>
               <p className="text-lg text-foreground/80 leading-relaxed">{t.about.hobbies}</p>
 
-              {/* ----------- Social / Resume Buttons ---------- */}
+              {/* ----------- Resume Button ---------- */}
 
               <div className="flex flex-row items-center gap-3 pt-5">
-                <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<FaGithubAlt className="w-4 h-4" />} iconPosition='left'>
-                  <a href="https://github.com/lyfe691" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                    GitHub
-                  </a>
-                </IconButton>
-                <IconButton variant="outline" size="sm" className="border-foreground/20" icon={<Linkedin className="w-4 h-4" />} iconPosition='left'>
-                  <a href="https://linkedin.com/in/yanis-sebastian-zürcher/" target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                    LinkedIn
-                  </a>
-                </IconButton>
-
-                {/* ---------------- Resume Modal ---------------- */}
                 <ResumeModal />
               </div>
             </div>
