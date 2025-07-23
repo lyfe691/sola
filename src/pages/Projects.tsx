@@ -564,19 +564,13 @@ const Projects = () => {
       {/* View All Projects Button */}
       <ScrollReveal variant="default">
         <div className="flex justify-center mt-12 sm:mt-16">
-          <Button
+          <IconButton
             variant="outline"
             size="lg"
-            className="rounded-full px-6 py-3 bg-gradient-to-r from-foreground/5 to-foreground/10 
-                       border-foreground/20 hover:border-primary/40 backdrop-blur-sm
-                       shadow-lg hover:shadow-xl transition-all duration-300
-                       text-foreground hover:text-primary font-medium"
-          >
-            <a href="https://github.com/lyfe691?tab=repositories" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-              {t.projects.viewAll}
-              <MoveRight className="w-4 h-4" />
-            </a>
-          </Button>
+            className="transition-all duration-300 group border-foreground/20"
+            label={t.projects.viewAll}
+            onClick={() => window.open("https://github.com/lyfe691?tab=repositories", "_blank")}
+          />
         </div>
       </ScrollReveal>
     </div>
