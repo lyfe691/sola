@@ -19,7 +19,7 @@ import {
   ArrowUpAZ
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -32,8 +32,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { IconButton } from "@/components/ui/custom/IconButton";
+import ScrollReveal from "@/components/ScrollReveal";
 
 interface Project {
   id: string;
@@ -412,7 +412,6 @@ const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
   return (
     <motion.div
       key={project.id}
-      variants={itemVariants}
       onHoverStart={onHover}
       onHoverEnd={onHoverEnd}
       className="relative"
@@ -434,7 +433,6 @@ const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
 };
 
 const Projects = () => {
-  const isLoaded = usePageInit(100);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('priority');
@@ -467,54 +465,50 @@ const Projects = () => {
     };
   }, [t, sortBy]);
 
+  const handleProjectClick = (slug: string | undefined) => {
+    if (slug) {
+      window.location.href = `/projects/${slug}`;
+    }
+  };
+
   return (
-    <AnimatePresence>
-      {isLoaded && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="flex flex-col w-full"
-        >
-          <Helmet>
-            <title>Projects • Yanis Sebastian Zürcher</title>
-          </Helmet>
+    <div className="flex flex-col w-full">
+      <Helmet>
+        <title>Projects • Yanis Sebastian Zürcher</title>
+      </Helmet>
 
-          <motion.h1 
-            variants={titleVariants}
-            className="text-4xl font-bold mb-8 sm:mb-12 flex items-center gap-3"
-          >
-            {t.projects.title}
-            <TooltipProvider>
-              <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
-                <TooltipTrigger asChild>
-                  <Info 
-                    className="w-5 h-5 text-foreground/60 hover:text-primary transition-colors cursor-help" 
-                    onClick={() => setTooltipOpen(!tooltipOpen)}
-                  />
-                </TooltipTrigger>
-                <TooltipContent side="right" className="max-w-xs sm:max-w-none bg-background text-foreground">
-                  <p className="text-sm">
-                    {t.projects.imageTooltip}{' '}
-                    <a 
-                      href="https://og-playground.vercel.app/" 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="text-primary hover:underline inline-flex items-center gap-1"
-                    >
-                      Vercel OG Image <ExternalLink className="w-3 h-3" />
-                    </a>
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </motion.h1>
+      <ScrollReveal variant="pageTitle">
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12 flex items-center gap-3">
+          {t.projects.title}
+          <TooltipProvider>
+            <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
+              <TooltipTrigger asChild>
+                <Info 
+                  className="w-5 h-5 text-foreground/60 hover:text-primary transition-colors cursor-help" 
+                  onClick={() => setTooltipOpen(!tooltipOpen)}
+                />
+              </TooltipTrigger>
+              <TooltipContent side="right" className="max-w-xs sm:max-w-none bg-background text-foreground">
+                <p className="text-sm">
+                  {t.projects.imageTooltip}{' '}
+                  <a 
+                    href="https://og-playground.vercel.app/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-primary hover:underline inline-flex items-center gap-1"
+                  >
+                    Vercel OG Image <ExternalLink className="w-3 h-3" />
+                  </a>
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </h1>
+      </ScrollReveal>
 
-          {/* Sort Controls */}
-          <motion.div 
-            variants={itemVariants}
-            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12"
-          >
+      {/* Sort Controls */}
+      <ScrollReveal variant="default">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12">
             <div className="flex items-center gap-3">
               <SortAsc className="w-4 h-4 text-foreground/60" />
               <span className="text-sm text-foreground/60 font-medium">{t.projects.sortBy}:</span>
@@ -528,65 +522,58 @@ const Projects = () => {
                 className="w-[160px] sm:w-[180px]"
               />
             </div>
-          </motion.div>
+          </div>
+        </ScrollReveal>
           
-          {/* Featured Projects */}
-          <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
-            {featuredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                hoveredProject={hoveredProject}
-                onHover={() => setHoveredProject(project.id)}
-                onHoverEnd={() => setHoveredProject(null)}
-                t={t}
-              />
-            ))}
-          </div>
+      {/* Featured Projects */}
+      <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
+        {featuredProjects.map((project, index) => (
+          <ScrollReveal key={project.id} variant="default" delay={index * 50}>
+            <ProjectCard
+              project={project}
+              hoveredProject={hoveredProject}
+              onHover={() => setHoveredProject(project.id)}
+              onHoverEnd={() => setHoveredProject(null)}
+              t={t}
+            />
+          </ScrollReveal>
+        ))}
+      </div>
 
-          {/* Other Projects */}
-          <motion.h2 
-            variants={itemVariants} 
-            className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8"
-          >
-            {t.projects.other}
-          </motion.h2>
+      <ScrollReveal variant="title" delay={50}>
+        <div className="flex items-center gap-3 mb-6 sm:mb-8">
+                     <h2 className="text-2xl font-semibold">{t.projects.other}</h2>
+        </div>
+      </ScrollReveal>
 
-          <div className="grid gap-4 sm:gap-6">
-            {otherProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                hoveredProject={hoveredProject}
-                onHover={() => setHoveredProject(project.id)}
-                onHoverEnd={() => setHoveredProject(null)}
-                t={t}
-              />
-            ))}
-          </div>
+      {/* Other Projects */}
+      <div className="grid gap-4 sm:gap-6">
+        {otherProjects.map((project, index) => (
+          <ScrollReveal key={project.id} variant="default" delay={index * 60}>
+            <ProjectCard
+              project={project}
+              hoveredProject={hoveredProject}
+              onHover={() => setHoveredProject(project.id)}
+              onHoverEnd={() => setHoveredProject(null)}
+              t={t}
+            />
+          </ScrollReveal>
+        ))}
+      </div>
 
-          {/* View All Projects Button */}
-          <motion.div 
-            variants={itemVariants}
-            className="flex justify-center mt-12 sm:mt-16"
-          >
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-full px-6 py-3 bg-gradient-to-r from-foreground/5 to-foreground/10 
-                         border-foreground/20 hover:border-primary/40 backdrop-blur-sm
-                         shadow-lg hover:shadow-xl transition-all duration-300
-                         text-foreground hover:text-primary font-medium"
-            >
-              <a href="https://github.com/lyfe691?tab=repositories" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                {t.projects.viewAll}
-                <MoveRight className="w-4 h-4" />
-              </a>
-            </Button>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* View All Projects Button */}
+      <ScrollReveal variant="default">
+        <div className="flex justify-center mt-12 sm:mt-16">
+          <IconButton
+            variant="outline"
+            size="lg"
+            className="transition-all duration-300 group border-foreground/20"
+            label={t.projects.viewAll}
+            onClick={() => window.open("https://github.com/lyfe691?tab=repositories", "_blank")}
+          />
+        </div>
+      </ScrollReveal>
+    </div>
   );
 };
 

@@ -9,16 +9,15 @@
 import { useState } from "react";
 import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
-import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/IconButton";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Services = () => {
-  const isLoaded = usePageInit(100);
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const { language } = useLanguage();
   const t = translations[language];
@@ -45,55 +44,39 @@ const Services = () => {
   ];
 
   return (
-    <AnimatePresence>
-      {isLoaded && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="flex flex-col w-full"
-        >
-          <Helmet>
-            <title>Services • Yanis Sebastian Zürcher</title>
-          </Helmet>
+    <div className="flex flex-col w-full">
+      <Helmet>
+        <title>Services • Yanis Sebastian Zürcher</title>
+      </Helmet>
 
-          <motion.h1 
-            variants={titleVariants}
-            className="text-4xl font-bold mb-6 sm:mb-6"
-          >
-            {t.services.title}
-          </motion.h1>
+      <ScrollReveal variant="pageTitle">
+        <h1 className="text-4xl font-bold mb-6 sm:mb-6">
+          {t.services.title}
+        </h1>
+      </ScrollReveal>
 
-          <motion.p 
-            variants={itemVariants}
-            className="text-foreground/60 mb-4 max-w-2xl"
-          >
-            {t.services.subtitle}
-          </motion.p>
+      <ScrollReveal variant="default">
+        <p className="text-foreground/60 mb-4 max-w-2xl">
+          {t.services.subtitle}
+        </p>
+      </ScrollReveal>
 
-          <motion.p
-            variants={itemVariants}
-            className="text-primary/80 text-sm mb-8 sm:mb-12 max-w-2xl italic"
-          >
-            {t.services.pricing}
-          </motion.p>
+      <ScrollReveal variant="default">
+        <p className="text-primary/80 text-sm mb-8 sm:mb-12 max-w-2xl italic">
+          {t.services.pricing}
+        </p>
+      </ScrollReveal>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
-            {servicesList.map((service, index) => (
-              <motion.div
-                key={service.key}
-                variants={itemVariants}
-                custom={index}
-                onHoverStart={() => setHoveredService(service.key)}
-                onHoverEnd={() => setHoveredService(null)}
-                className={`relative group p-5 sm:p-6 rounded-xl border border-accent/50
-                         bg-gradient-to-b from-accent/10 to-transparent
-                         backdrop-blur-sm transition-all duration-300
-                         hover:border-primary/50 hover:shadow-lg hover:-translate-y-0.5
-                         hover:bg-gradient-to-b hover:from-primary/10 hover:to-transparent
-                         cursor-pointer`}
-                onClick={() => navigate('/contact')}
-              >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+        {servicesList.map((service, index) => (
+          <ScrollReveal key={service.key} variant="default" delay={index * 140}>
+            <motion.div
+              onHoverStart={() => setHoveredService(service.key)}
+              onHoverEnd={() => setHoveredService(null)}
+              className="p-5 sm:p-6 rounded-lg border border-foreground/10 
+                         bg-foreground/5 backdrop-blur-sm transition-all duration-300 
+                         hover:border-primary/20 hover:bg-primary/5 cursor-default"
+            >
                 {service.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 
                                bg-primary text-primary-foreground text-xs rounded-full
@@ -138,49 +121,45 @@ const Services = () => {
                 {/* Add contact button for each service */}
                 <div className="mt-6">
                   <Link to="/contact">
-                    <Button 
+                    <IconButton 
                       variant="outline" 
                       className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
-                    >
-                      {t.services.getStarted || "Get Started"}
-                      <ArrowRightIcon className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </Button>
+                      label={t.services.getStarted || "Get Started"}
+                    />
                   </Link>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+            </motion.div>
+          </ScrollReveal>
+        ))}
+      </div>
 
-          {/* custom requirements */}
-          <motion.div
-            variants={itemVariants}
-            className="relative overflow-hidden rounded-xl p-5 sm:p-6 md:p-8
-                     bg-gradient-to-br from-primary/20 via-primary/10 to-background
-                     border border-primary/20 backdrop-blur-sm"
-          >
-            <div className="relative z-10">
-              <h2 className="text-xl font-medium mb-3 text-foreground">
-                {t.services.customRequirements.title}
-              </h2>
-              <p className="text-sm text-foreground/70 mb-6 max-w-2xl">
-                {t.services.customRequirements.description}
-              </p>
-              <Link to="/contact">
-                <IconButton
-                  className="group bg-primary transition-all duration-300"
-                >
-                  {t.services.customRequirements.button}
-                </IconButton>
-              </Link>
-            </div>
-            
-            {/* decorative elemets */}
-            <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      {/* custom requirements */}
+      <ScrollReveal variant="default">
+        <div className="relative overflow-hidden rounded-xl p-5 sm:p-6 md:p-8
+                       bg-gradient-to-br from-primary/20 via-primary/10 to-background
+                       border border-primary/20 backdrop-blur-sm">
+          <div className="relative z-10">
+            <h2 className="text-xl font-medium mb-3 text-foreground">
+              {t.services.customRequirements.title}
+            </h2>
+            <p className="text-sm text-foreground/70 mb-6 max-w-2xl">
+              {t.services.customRequirements.description}
+            </p>
+            <Link to="/contact">
+              <IconButton
+                className="group bg-primary transition-all duration-300"
+              >
+                {t.services.customRequirements.button}
+              </IconButton>
+            </Link>
+          </div>
+          
+          {/* decorative elemets */}
+          <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+        </div>
+      </ScrollReveal>
+    </div>
   );
 };
 

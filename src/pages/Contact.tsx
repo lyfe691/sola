@@ -8,7 +8,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Send, Info } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Input } from "@/components/ui/input";
@@ -16,12 +16,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
-import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/IconButton";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Contact = () => {
-  const isLoaded = usePageInit(100);
   const { language } = useLanguage();
   const t = translations[language];
   const formRef = useRef<HTMLFormElement>(null);
@@ -116,32 +115,30 @@ const Contact = () => {
   };
 
   return (
-    <AnimatePresence>
-      {isLoaded && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="flex flex-col w-full"
+    <div className="flex flex-col w-full">
+      <Helmet>
+        <title>Contact • Yanis Sebastian Zürcher</title>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      </Helmet>
+
+      <ScrollReveal variant="pageTitle">
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12">
+          {t.contact.title}
+        </h1>
+      </ScrollReveal>
+      
+      <ScrollReveal variant="default">
+        <p className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
+          {t.contact.description}
+        </p>
+      </ScrollReveal>
+      
+      <ScrollReveal variant="default">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="space-y-6 sm:space-y-8 max-w-2xl"
         >
-
-          <Helmet>
-            <title>Contact • Yanis Sebastian Zürcher</title>
-            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-          </Helmet>
-
-          <motion.h1 variants={titleVariants} className="text-4xl font-bold mb-8 sm:mb-12">
-            {t.contact.title}
-          </motion.h1>
-          <motion.p variants={itemVariants} className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
-            {t.contact.description}
-          </motion.p>
-          <motion.form
-            ref={formRef}
-            onSubmit={handleSubmit}
-            variants={itemVariants}
-            className="space-y-6 sm:space-y-8 max-w-2xl"
-          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">
@@ -243,10 +240,9 @@ const Contact = () => {
                   </a>
                 </span>
               </div>
-          </motion.form>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </form>
+      </ScrollReveal>
+    </div>
   );
 };
 
