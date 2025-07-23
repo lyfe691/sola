@@ -43,6 +43,32 @@ const Services = () => {
     }
   ];
 
+  // create service contact url
+  // TODO: use intl
+  const getServiceContactUrl = (serviceKey: string) => {
+    const serviceNames = {
+      fullstack: "Full-Stack Development",
+      frontend: "Frontend Development", 
+      backend: "Backend Development",
+      consulting: "Technical Consulting"
+    };
+
+    const serviceMessages = {
+      fullstack: `Hi Yanis,\n\nI'm interested in your Full-Stack Development services. I need help building a complete web application from frontend to backend.\n\nI'd like to discuss:\n- Project requirements and timeline\n- Technology stack recommendations\n- Development approach and best practices\n\nLooking forward to hearing from you!`,
+      
+      frontend: `Hi Yanis,\n\nI'm interested in your Frontend Development services. I need help creating a modern, responsive user interface.\n\nI'd like to discuss:\n- UI/UX implementation\n- React/Next.js development\n- Performance optimization\n- Mobile responsiveness\n\nLooking forward to your response!`,
+      
+      backend: `Hi Yanis,\n\nI'm interested in your Backend Development services. I need help building robust server-side solutions.\n\nI'd like to discuss:\n- API development and design\n- Database architecture\n- Server infrastructure\n- Security implementation\n\nLooking forward to hearing from you!`,
+      
+      consulting: `Hi Yanis,\n\nI'm interested in your Technical Consulting services. I need guidance on technical decisions and architecture.\n\nI'd like to discuss:\n- Technology stack evaluation\n- Architecture review and recommendations\n- Code review and best practices\n- Performance optimization strategies\n\nLooking forward to your expertise!`
+    };
+
+    const subject = `${serviceNames[serviceKey as keyof typeof serviceNames]} Inquiry`;
+    const message = serviceMessages[serviceKey as keyof typeof serviceMessages];
+
+    return `/contact?subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}`;
+  };
+
   return (
     <div className="flex flex-col w-full">
       <Helmet>
@@ -118,9 +144,9 @@ const Services = () => {
                   ))}
                 </ul>
 
-                {/* Add contact button for each service */}
+                {/* service contact button */}
                 <div className="mt-6">
-                  <Link to="/contact">
+                  <Link to={getServiceContactUrl(service.key)}>
                     <IconButton 
                       variant="outline" 
                       className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
@@ -145,7 +171,7 @@ const Services = () => {
             <p className="text-sm text-foreground/70 mb-6 max-w-2xl">
               {t.services.customRequirements.description}
             </p>
-            <Link to="/contact">
+            <Link to="/contact?subject=Custom%20Development%20Requirements&message=Hi%20Yanis%2C%0A%0AI%20have%20specific%20requirements%20that%20don%27t%20fit%20standard%20service%20categories.%20I%27d%20like%20to%20discuss%20a%20custom%20solution.%0A%0AProject%20details%3A%0A-%20%0A-%20%0A-%20%0A%0ALooking%20forward%20to%20discussing%20this%20further%21">
               <IconButton
                 className="group bg-primary transition-all duration-300"
               >
