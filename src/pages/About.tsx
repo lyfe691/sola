@@ -7,7 +7,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import { Book, Code2, Coffee, Laptop, Linkedin, Mountain, Download, Quote, Star, Globe, MoveRight } from 'lucide-react';
 import { FaGithubAlt } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
@@ -17,7 +17,6 @@ import { translations } from "@/lib/translations";
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
-import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
@@ -41,6 +40,7 @@ import type { GitHubEvent } from '@/lib/github';
 import { getUserActivity } from '@/lib/github';
 import ContributionActivityFeed from '@/components/ContributionActivityFeed';
 import { IconButton } from '@/components/ui/custom/IconButton';
+import ScrollReveal from '@/components/ScrollReveal';
 
 // --------------------------------- Helpers ---------------------------------
 
@@ -491,7 +491,6 @@ const ResumeModal = () => {
 const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
-  const isLoaded = usePageInit(100);
   const navigate = useNavigate();
   const { theme } = useTheme();
   const [selectedYear, setSelectedYear] = useState<number | 'last'>('last');
@@ -552,27 +551,23 @@ const About = () => {
   } as const;
 
   return (
-    <AnimatePresence>
-      {isLoaded && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="flex flex-col w-full"
-        >
-          <Helmet>
-            <title>About • Yanis Sebastian Zürcher</title>
-          </Helmet>
+    <div className="flex flex-col w-full">
+      <Helmet>
+        <title>About • Yanis Sebastian Zürcher</title>
+      </Helmet>
 
-          {/* ------------------- Title ------------------- */}
+      {/* ------------------- Title ------------------- */}
 
-          <motion.h1 variants={titleVariants} className="text-4xl font-bold mb-8 sm:mb-12">
-            {t.about.title}
-          </motion.h1>
+      <ScrollReveal variant="title">
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12">
+          {t.about.title}
+        </h1>
+      </ScrollReveal>
 
-          {/* ------------------- Hero ------------------- */}
+      {/* ------------------- Hero ------------------- */}
 
-          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
+      <ScrollReveal variant="default">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
             <div className="md:col-span-3 space-y-5">
               <p className="text-lg text-foreground/80 leading-relaxed">{t.about.intro}</p>
               <p className="text-lg text-foreground/80 leading-relaxed">{t.about.hobbies}</p>
@@ -610,10 +605,12 @@ const About = () => {
               </div>
               <div className="absolute -z-10 -bottom-3 -right-3 w-full h-full bg-primary/5 rounded-xl -rotate-2" />
             </div>
-          </motion.div>
+          </div>
+        </ScrollReveal>
 
-          {/* ------------------- GitHub Activity ------------------ */}
-          <motion.div variants={itemVariants} className="mb-16 md:mb-20">
+      {/* ------------------- GitHub Activity ------------------ */}
+      <ScrollReveal variant="default">
+        <div className="mb-16 md:mb-20">
             <div className="flex items-center justify-between mb-6 md:mb-8 pb-2 border-b border-foreground/10">
                 <h2 className="text-2xl font-bold">
                 GitHub Activity
@@ -660,11 +657,13 @@ const About = () => {
             ) : (
                 <ContributionActivityFeed events={activity} />
             )}
-          </motion.div>
+          </div>
+        </ScrollReveal>
 
-          {/* ------------------- Interests ------------------ */}
+      {/* ------------------- Interests ------------------ */}
 
-          <motion.div variants={itemVariants} className="mb-16 md:mb-20">
+      <ScrollReveal variant="default">
+        <div className="mb-16 md:mb-20">
             <h2 className="text-2xl font-bold mb-6 md:mb-8 pb-2 border-b border-foreground/10">
               {t.about.interests.title}
             </h2>
@@ -694,10 +693,12 @@ const About = () => {
                 image={interestImages.workspace}
               />
             </div>
-          </motion.div>
+          </div>
+        </ScrollReveal>
 
-          {/* ------------------- Testimonials ------------------ */}
-          <motion.div variants={itemVariants} className="mb-16 md:mb-20">
+      {/* ------------------- Testimonials ------------------ */}
+      <ScrollReveal variant="default">
+        <div className="mb-16 md:mb-20">
             <div className="flex items-center justify-between mb-6 md:mb-8 pb-2 border-b border-foreground/10">
               <h2 className="text-2xl font-bold">
                 {t.about.testimonials.title}
@@ -724,14 +725,13 @@ const About = () => {
                 />
               ))}
             </div>
-          </motion.div>
+          </div>
+        </ScrollReveal>
 
-          {/* ------------------- Philosophy ----------------- */}
+      {/* ------------------- Philosophy ----------------- */}
 
-          <motion.div
-            variants={itemVariants}
-            className="relative overflow-hidden rounded-xl border border-foreground/10 bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10"
-          >
+      <ScrollReveal variant="default">
+        <div className="relative overflow-hidden rounded-xl border border-foreground/10 bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
             <div className="relative z-10">
               <h2 className="text-xl font-bold mb-6 md:mb-8">{t.about.philosophy.title}</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -759,13 +759,12 @@ const About = () => {
               </div>
             </div>
 
-            {/* Decorative circles */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          {/* Decorative circles */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+        </div>
+      </ScrollReveal>
+    </div>
   );
 };
 

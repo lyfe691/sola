@@ -8,7 +8,7 @@
 
 import { Helmet } from "react-helmet-async";
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { ReactOriginal, TypescriptOriginal, DockerOriginal, JavascriptOriginal, AntdesignOriginal, TailwindcssOriginal, NextjsOriginal, MongodbOriginal, SpringOriginal, NginxOriginal, RedisOriginal, NodejsOriginal, BashOriginal, GitOriginal, VisualstudioOriginal, VscodeOriginal, LinuxOriginal, BunOriginal, EslintLineWordmark, EslintOriginal, KubernetesOriginal, GrafanaOriginal, JenkinsOriginal, PythonOriginal, JavaOriginal } from "devicons-react";
@@ -18,10 +18,9 @@ import {
   SiKalilinux,
   SiOpensourceinitiative,
 } from "react-icons/si";
-import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Skills = () => {
-  const isLoaded = usePageInit(100);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const { language } = useLanguage();
   const t = translations[language];
@@ -77,34 +76,22 @@ const Skills = () => {
   ];
 
   return (
-    <AnimatePresence>
-      {isLoaded && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="flex flex-col w-full"
-        >
+    <div className="flex flex-col w-full">
+      <Helmet>
+        <title>Skills • Yanis Sebastian Zürcher</title>
+      </Helmet>
 
-          <Helmet>
-            <title>Skills • Yanis Sebastian Zürcher</title>
-          </Helmet>
-
-          <motion.h1 
-            variants={titleVariants}
-            className="text-4xl font-bold mb-8 sm:mb-12"
-          >
-            {t.skills.title}
-          </motion.h1>
+      <ScrollReveal variant="title">
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12">
+          {t.skills.title}
+        </h1>
+      </ScrollReveal>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-            {skillGroups.map((group, groupIndex) => (
-              <motion.div
-                key={groupIndex}
-                variants={itemVariants}
-                className="p-5 sm:p-6 rounded-lg border border-foreground/10 
-                         bg-foreground/5 backdrop-blur-sm"
-              >
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+        {skillGroups.map((group, groupIndex) => (
+          <ScrollReveal key={groupIndex} variant="default" delay={groupIndex * 120}>
+            <div className="p-5 sm:p-6 rounded-lg border border-foreground/10 
+                           bg-foreground/5 backdrop-blur-sm">
                 <h2 className="text-xl font-medium mb-4 sm:mb-6">
                   {group.title === "Frontend" && t.skills.groups.frontend}
                   {group.title === "Backend" && t.skills.groups.backend}
@@ -142,14 +129,13 @@ const Skills = () => {
                         />
                       </div>
                     </motion.div>
-                  ))}
+                                  ))}
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+    </div>
   );
 };
 

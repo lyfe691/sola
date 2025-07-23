@@ -8,14 +8,13 @@
 
 import { useState } from "react";
 import { ExternalLink } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const Experience = () => {
-  const isLoaded = usePageInit(100);
   const [hoveredExp, setHoveredExp] = useState<string | null>(null);
   const { language } = useLanguage();
   const t = translations[language];
@@ -44,43 +43,33 @@ const Experience = () => {
   ];
 
   return (
-    <AnimatePresence>
-      {isLoaded && (
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-          className="flex flex-col w-full"
-        >
-          <Helmet>
-            <title>Experience • Yanis Sebastian Zürcher</title>
-          </Helmet>
+    <div className="flex flex-col w-full">
+      <Helmet>
+        <title>Experience • Yanis Sebastian Zürcher</title>
+      </Helmet>
 
-          <motion.h1 
-            variants={titleVariants}
-            className="text-4xl font-bold mb-8 sm:mb-12"
-          >
-            {t.experience.title}
-          </motion.h1>
+      <ScrollReveal variant="title">
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12">
+          {t.experience.title}
+        </h1>
+      </ScrollReveal>
+      
+      <ScrollReveal variant="default">
+        <p className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
+          {t.experience.subtitle}
+        </p>
+      </ScrollReveal>
           
-          <motion.p 
-            variants={itemVariants}
-            className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl"
-          >
-            {t.experience.subtitle}
-          </motion.p>
-          
-          <div className="relative space-y-8 sm:space-y-12">
-            <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
-            
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                onHoverStart={() => setHoveredExp(exp.role)}
-                onHoverEnd={() => setHoveredExp(null)}
-                className="relative grid grid-cols-[20px_1fr] sm:grid-cols-[25px_1fr] gap-4 sm:gap-6 md:gap-8"
-              >
+      <div className="relative space-y-8 sm:space-y-12">
+        <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
+        
+        {experiences.map((exp, index) => (
+          <ScrollReveal key={index} variant="default" delay={index * 150}>
+            <motion.div
+              onHoverStart={() => setHoveredExp(exp.role)}
+              onHoverEnd={() => setHoveredExp(null)}
+              className="relative grid grid-cols-[20px_1fr] sm:grid-cols-[25px_1fr] gap-4 sm:gap-6 md:gap-8"
+            >
                 <div>
                   <motion.div 
                     className="w-[15px] h-[15px] sm:w-[23px] sm:h-[23px] rounded-full border-2 
@@ -141,14 +130,13 @@ const Experience = () => {
                         {tech}
                       </span>
                     ))}
-                  </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+              </div>
+            </motion.div>
+          </ScrollReveal>
+        ))}
+      </div>
+    </div>
   );
 };
 
