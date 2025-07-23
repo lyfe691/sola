@@ -58,18 +58,19 @@ export const scrollRevealVariants = {
   }
 };
 
-// For page titles - more dramatic and impactful
+// For page titles - clean fade with subtle scale
 export const scrollPageTitleVariants = {
   hidden: { 
-    opacity: 0, 
-    y: 40,
-    scale: 0.95
+    opacity: 0,
+    scale: 0.98
   },
   visible: {
     opacity: 1,
-    y: 0,
     scale: 1,
-    transition: dramaticTransition
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.1, 0.25, 1] as const,
+    }
   }
 };
 
