@@ -471,7 +471,7 @@ const Projects = () => {
         <title>Projects • Yanis Sebastian Zürcher</title>
       </Helmet>
 
-      <ScrollReveal variant="title">
+      <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12 flex items-center gap-3">
           {t.projects.title}
           <TooltipProvider>
@@ -522,7 +522,7 @@ const Projects = () => {
       {/* Featured Projects */}
       <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
-          <ScrollReveal key={project.id} variant="default" delay={index * 100}>
+          <ScrollReveal key={project.id} variant="default" delay={index * 40}>
             <ProjectCard
               project={project}
               hoveredProject={hoveredProject}

@@ -121,7 +121,7 @@ const Contact = () => {
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
       </Helmet>
 
-      <ScrollReveal variant="title">
+      <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12">
           {t.contact.title}
         </h1>

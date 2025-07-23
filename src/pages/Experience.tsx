@@ -48,7 +48,7 @@ const Experience = () => {
         <title>Experience • Yanis Sebastian Zürcher</title>
       </Helmet>
 
-      <ScrollReveal variant="title">
+      <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12">
           {t.experience.title}
         </h1>
@@ -64,7 +64,7 @@ const Experience = () => {
         <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
         
         {experiences.map((exp, index) => (
-          <ScrollReveal key={index} variant="default" delay={index * 150}>
+          <ScrollReveal key={index} variant="default" delay={index * 100}>
             <motion.div
               onHoverStart={() => setHoveredExp(exp.role)}
               onHoverEnd={() => setHoveredExp(null)}

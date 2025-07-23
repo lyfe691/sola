@@ -12,6 +12,7 @@ import {
   useScrollAnimation,
   useScrollAnimationWithDelay,
   scrollRevealVariants,
+  scrollPageTitleVariants,
   scrollTitleVariants,
   scrollSubtleVariants,
   scrollContainerVariants,
@@ -23,7 +24,7 @@ interface ScrollRevealProps {
   /**
    * Animation variant to use
    */
-  variant?: 'default' | 'title' | 'subtle' | 'container' | 'child';
+  variant?: 'default' | 'pageTitle' | 'title' | 'subtle' | 'container' | 'child';
   /**
    * Custom animation variants
    */
@@ -51,6 +52,7 @@ interface ScrollRevealProps {
 
 const variantMap = {
   default: scrollRevealVariants,
+  pageTitle: scrollPageTitleVariants,
   title: scrollTitleVariants,
   subtle: scrollSubtleVariants,
   container: scrollContainerVariants,

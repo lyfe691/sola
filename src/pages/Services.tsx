@@ -49,7 +49,7 @@ const Services = () => {
         <title>Services • Yanis Sebastian Zürcher</title>
       </Helmet>
 
-      <ScrollReveal variant="title">
+      <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-6 sm:mb-6">
           {t.services.title}
         </h1>
@@ -69,7 +69,7 @@ const Services = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
         {servicesList.map((service, index) => (
-          <ScrollReveal key={service.key} variant="default" delay={index * 120}>
+          <ScrollReveal key={service.key} variant="default" delay={index * 80}>
             <motion.div
               onHoverStart={() => setHoveredService(service.key)}
               onHoverEnd={() => setHoveredService(null)}

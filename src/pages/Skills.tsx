@@ -81,7 +81,7 @@ const Skills = () => {
         <title>Skills • Yanis Sebastian Zürcher</title>
       </Helmet>
 
-      <ScrollReveal variant="title">
+      <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12">
           {t.skills.title}
         </h1>
@@ -89,7 +89,7 @@ const Skills = () => {
           
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
         {skillGroups.map((group, groupIndex) => (
-          <ScrollReveal key={groupIndex} variant="default" delay={groupIndex * 120}>
+          <ScrollReveal key={groupIndex} variant="default" delay={groupIndex * 80}>
             <div className="p-5 sm:p-6 rounded-lg border border-foreground/10 
                            bg-foreground/5 backdrop-blur-sm">
                 <h2 className="text-xl font-medium mb-4 sm:mb-6">

@@ -29,12 +29,17 @@ export const pageTransition = {
 // Using consistent timing and smooth easing for all animations
 
 const smoothTransition = {
-  duration: 0.8,
+  duration: 0.7,
   ease: [0.25, 0.1, 0.25, 1] as const, // Custom cubic-bezier for smooth motion
 };
 
 const fastTransition = {
-  duration: 0.6,
+  duration: 0.5,
+  ease: [0.25, 0.1, 0.25, 1] as const,
+};
+
+const dramaticTransition = {
+  duration: 0.9,
   ease: [0.25, 0.1, 0.25, 1] as const,
 };
 
@@ -42,7 +47,7 @@ const fastTransition = {
 export const scrollRevealVariants = {
   hidden: { 
     opacity: 0, 
-    y: 24,
+    y: 20,
     scale: 0.98
   },
   visible: {
@@ -53,12 +58,27 @@ export const scrollRevealVariants = {
   }
 };
 
-// For titles - slightly more dramatic
+// For page titles - more dramatic and impactful
+export const scrollPageTitleVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 40,
+    scale: 0.95
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: dramaticTransition
+  }
+};
+
+// For regular titles - slightly more dramatic than default
 export const scrollTitleVariants = {
   hidden: { 
     opacity: 0, 
-    y: 32,
-    scale: 0.96
+    y: 28,
+    scale: 0.97
   },
   visible: {
     opacity: 1,
@@ -72,7 +92,7 @@ export const scrollTitleVariants = {
 export const scrollSubtleVariants = {
   hidden: { 
     opacity: 0, 
-    y: 16
+    y: 12
   },
   visible: {
     opacity: 1,
@@ -87,7 +107,7 @@ export const scrollContainerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
       delayChildren: 0.1,
       duration: 0.3
     }
@@ -98,7 +118,7 @@ export const scrollContainerVariants = {
 export const scrollChildVariants = {
   hidden: { 
     opacity: 0, 
-    y: 20 
+    y: 16 
   },
   visible: {
     opacity: 1,
@@ -107,14 +127,14 @@ export const scrollChildVariants = {
   }
 };
 
-// OPTIMIZED SCROLL ANIMATION HOOK
+// OPTIMIZED SCROLL ANIMATION HOOK - More responsive
 export const useScrollAnimation = (options?: {
   threshold?: number;
   once?: boolean;
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
-    amount: options?.threshold || 0.3, // Trigger when 30% is visible
+    amount: options?.threshold || 0.2, // Trigger when 20% is visible - more responsive
     once: options?.once ?? true
   });
 
@@ -131,7 +151,7 @@ export const useScrollAnimationWithDelay = (
 ) => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
-    amount: options?.threshold || 0.3,
+    amount: options?.threshold || 0.2, // More responsive threshold
     once: options?.once ?? true
   });
 

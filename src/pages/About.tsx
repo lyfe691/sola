@@ -558,7 +558,7 @@ const About = () => {
 
       {/* ------------------- Title ------------------- */}
 
-      <ScrollReveal variant="title">
+      <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12">
           {t.about.title}
         </h1>
