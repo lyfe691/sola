@@ -9,8 +9,7 @@
 import React from 'react';
 import { motion, Variants } from 'motion/react';
 import { 
-  useScrollAnimation,
-  useScrollAnimationWithDelay,
+  useScrollReveal,
   scrollRevealVariants,
   scrollPageTitleVariants,
   scrollTitleVariants,
@@ -84,9 +83,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   as: Component = 'div'
 }) => {
   // Optimized hook selection for performance
-  const { ref, isInView } = delay > 0 
-    ? useScrollAnimationWithDelay(delay, options)
-    : useScrollAnimation(options);
+  const { ref, isInView } = useScrollReveal(delay, options);
 
   // Get animation variants
   const variants = customVariants || ANIMATION_VARIANTS[variant];

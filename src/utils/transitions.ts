@@ -136,21 +136,8 @@ export const scrollChildVariants = {
 };
 
 // PERFECTED SCROLL HOOKS - Optimized for elegance
-export const useScrollAnimation = (options?: {
-  threshold?: number;
-  once?: boolean;
-}) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, {
-    amount: options?.threshold || STANDARD_THRESHOLD,
-    once: options?.once ?? true
-  });
-
-  return { ref, isInView };
-};
-
-// Hook with delay - perfectly synchronized
-export const useScrollAnimationWithDelay = (
+// Unified hook to rule them all
+export const useScrollReveal = (
   delay: number = 0,
   options?: {
     threshold?: number;
@@ -166,17 +153,21 @@ export const useScrollAnimationWithDelay = (
   const [shouldAnimate, setShouldAnimate] = useState(false);
 
   useEffect(() => {
-    if (isInView && !shouldAnimate) {
-      const timer = setTimeout(() => {
-        setShouldAnimate(true);
-      }, delay);
-
-      return () => clearTimeout(timer);
+    if (delay > 0) {
+      if (isInView && !shouldAnimate) {
+        const timer = setTimeout(() => {
+          setShouldAnimate(true);
+        }, delay);
+        return () => clearTimeout(timer);
+      }
+    } else {
+      setShouldAnimate(isInView);
     }
   }, [isInView, shouldAnimate, delay]);
 
   return { ref, isInView: shouldAnimate };
 };
+
 
 // LEGACY VARIANTS (maintaining compatibility)
 export const fadeIn = {
