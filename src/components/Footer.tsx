@@ -75,9 +75,14 @@ const Footer = () => {
     <footer className="relative w-full border-t border-foreground/5 bg-background">
       {/* Bottom glow effect */}
       <div 
-        className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
+        className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"
         style={{
-          background: `linear-gradient(to top, hsl(var(--primary) / 0.08) 0%, hsl(var(--primary) / 0.04) 25%, hsl(var(--primary) / 0.02) 50%, transparent 100%)`
+          background: `linear-gradient(to top, 
+            hsl(var(--foreground) / 0.12) 0%, 
+            hsl(var(--foreground) / 0.08) 25%, 
+            hsl(var(--foreground) / 0.04) 50%, 
+            hsl(var(--foreground) / 0.02) 75%, 
+            transparent 100%)`
         }}
       />
 
