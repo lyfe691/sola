@@ -87,10 +87,10 @@ const Footer = () => {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 sm:px-8 py-12">
-        {/* Main Content */}
+        {/* main content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           
-          {/* Brand Section */}
+          {/* brand section */}
           <div className="space-y-6 lg:col-span-1">
             <div className="space-y-4">
               <Link 
@@ -101,12 +101,12 @@ const Footer = () => {
                 <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
               <p className="text-sm text-foreground/70 leading-relaxed">
-                {t.footer.madeWith} <span className="text-primary animate-pulse">♥</span> {t.footer.by}<br />
+                {t.footer.madeWith} <span className="text-primary animate-pulse">♥</span> {t.footer.by} {" "} {/* or <br />*/}
                 <span className="font-medium">Yanis Sebastian Zürcher</span>
               </p>
             </div>
             
-            {/* About this website link */}
+            {/* 這個網站是怎麼造出來的 */}
             <Link
               to={e}
               className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-all duration-300"
@@ -117,7 +117,7 @@ const Footer = () => {
               </span>
             </Link>
             
-            {/* Legal Section */}
+            {/* legal section */}
             <div className="space-y-2">
               <button
                 onClick={() => setIsLegalExpanded(!isLegalExpanded)}
@@ -142,7 +142,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Navigation */}
+          {/* navigation */}
           <div className="space-y-6">
             <h3 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
               {t.footer.navigation}
@@ -167,7 +167,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Contact */}
+          {/* contact */}
           <div className="space-y-6">
             <h3 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
               {t.footer.contact}
@@ -192,12 +192,12 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Social Links */}
+          {/* social links */}
           <div className="space-y-6">
             <h3 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
               {t.footer.connect}
             </h3>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="flex flex-wrap gap-2">
               {social.map((link) => (
                 <a 
                   key={link.href}
@@ -205,19 +205,19 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className={`group relative p-3 rounded-xl border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-all duration-300 ${link.hoverClass}`}
+                  className={`group relative p-2.5 rounded-lg border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-all duration-300 ${link.hoverClass}`}
                 >
                   <div className="relative z-10">
                     {link.icon}
                   </div>
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </a>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Bottom Section */}
+        {/* bottom section */}
         <div className="relative">
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
           <div className="pt-8 text-center">
