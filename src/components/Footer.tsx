@@ -73,7 +73,7 @@ const Footer = () => {
 
   return (
     <footer className="relative w-full border-t border-foreground/5 bg-background">
-      {/* Bottom glow effect */}
+      {/* bottom glow effect */}
       <div 
         className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"
         style={{
@@ -108,38 +108,41 @@ const Footer = () => {
             
             {/* 這個網站是怎麼造出來的 */}
             <Link
-              to={e}
-              className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-all duration-300"
-            >
-              <Info className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
-              <span className="border-b border-dotted border-foreground/20 group-hover:border-primary">
-                {t.footer.atw}
-              </span>
-            </Link>
+               to={e}
+               className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-all duration-300"
+             >
+               <Info className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform duration-300" />
+               <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
+                 {t.footer.atw}
+               </span>
+             </Link>
             
-            {/* legal section */}
-            <div className="space-y-2">
-              <button
-                onClick={() => setIsLegalExpanded(!isLegalExpanded)}
-                className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-all duration-300"
-              >
-                <div className={`transition-transform duration-300 ${isLegalExpanded ? 'rotate-90' : ''}`}>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </div>
-                <span className="font-medium">Legal</span>
-              </button>
-              
-              <div className={`overflow-hidden transition-all duration-300 ${isLegalExpanded ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
-                <div className="ml-5 pt-2">
-                  <Link
-                    to="/privacy"
-                    className="block text-xs text-foreground/50 hover:text-primary transition-colors border-b border-dotted border-foreground/20 hover:border-primary w-fit"
-                  >
-                    Privacy Policy
-                  </Link>
-                </div>
-              </div>
-            </div>
+              {/* legal section */}
+             <div className="space-y-2">
+               <button
+                 onClick={() => setIsLegalExpanded(!isLegalExpanded)}
+                 className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-all duration-300"
+               >
+                 <div className={`transition-transform duration-300 ${isLegalExpanded ? 'rotate-90' : ''}`}>
+                   <ChevronRight className="w-3.5 h-3.5" />
+                 </div>
+                 <span className="font-medium">Legal</span>
+               </button>
+               
+               <div className={`overflow-hidden transition-all duration-300 ${isLegalExpanded ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
+                 <div className="ml-5 pt-2">
+                   <Link
+                     to="/privacy"
+                     className="group flex items-center gap-1 text-xs text-foreground/50 hover:text-primary transition-all duration-300 w-fit"
+                   >
+                     <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
+                       Privacy Policy
+                     </span>
+                     <ArrowUpRight className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                   </Link>
+                 </div>
+               </div>
+             </div>
           </div>
 
           {/* navigation */}
