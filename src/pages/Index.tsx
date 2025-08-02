@@ -163,7 +163,7 @@ const Index = () => {
 
                         <Link to="/projects">
                           <IconButton
-                            variant="outline"
+                            variant="secondary"
                             className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
                             label={t.index.viewProjects}
                           />
