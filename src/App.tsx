@@ -41,7 +41,7 @@ const App = () => (
             duration={450}
           >
             <div className="min-h-screen flex flex-col">
-              <Toaster position="bottom-right" richColors/>
+              <Toaster position="bottom-right"/>
               <BrowserRouter>
                 <KeyboardShortcuts />
                 <CommandMenu />
