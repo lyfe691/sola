@@ -9,11 +9,11 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { Mail, Linkedin, Info, ChevronDown, ChevronRight, ArrowUpRight } from "lucide-react";
+import { Mail, Linkedin, Info, ChevronRight, ArrowUpRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
-import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -176,15 +176,18 @@ const Footer = () => {
               {t.footer.contact}
             </h3>
             <div className="space-y-4">
-              <a 
-                href="mailto:yanis.sebastian.zuercher@gmail.com" 
-                className="group flex items-start gap-3 text-sm text-foreground/60 hover:text-foreground transition-all duration-300"
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText("yanis.sebastian.zuercher@gmail.com");
+                  toast.success("Copied.");
+                }}
+                className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-all duration-300 hover:cursor-copy"
               >
-                <Mail className="w-4 h-4 mt-0.5 group-hover:scale-110 transition-transform" />
-                <span className="leading-relaxed break-all">
+                <Mail className="w-4 h-4 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="leading-relaxed break-words">
                   yanis.sebastian.zuercher@gmail.com
                 </span>
-              </a>
+              </button>
               <Link 
                 to="/contact" 
                 className="inline-flex items-center gap-1 text-sm text-foreground/60 hover:text-foreground hover:translate-x-1 transition-all duration-300"
