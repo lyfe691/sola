@@ -21,6 +21,16 @@ const Experience = () => {
 
   const experiences = [
     {
+      period: t.experience.period.gz,
+      role: t.experience.gz.role,
+      company: t.experience.gz.company,
+      companyLink: "https://www.gesundheitswelt-zollikerberg.ch/",
+      location: t.experience.gz.location,
+      description: t.experience.gz.description,
+      achievements: t.experience.gz.achievements,
+      technologies: ["Identity & Access Management (IAM)", "Python", "Powershell", "Git", "Automation", "Active Directory", "Teamwork"]
+    },
+    {
       period: t.experience.period.wiss,
       role: t.experience.wiss.role,
       company: t.experience.wiss.company,
