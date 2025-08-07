@@ -39,8 +39,21 @@ export const translations = {
       subtitle: "My professional journey and educational experiences that have shaped my technical expertise.",
       period: {
         present: "Present",
+        gz: "Aug 2025 - Present",
         wiss: "Aug 2023 - Present",
         sek: "2020 - 2023"
+      },
+      gz: {
+        role: "IAM Engineering Intern",
+        company: "Gesundheitswelt Zollikerberg",
+        location: "Zollikon, Switzerland",
+        description: "As an IAM Engineering Intern, I contribute to the maintenance and optimization of IT infrastructure, with a focus on automating identity and access management processes. The company delivers healthcare services to residents of Zollikon.",
+        achievements: [
+          "Assisted in automating identity and access management (IAM) workflows using PowerShell and Python.",
+          "Participated in the implementation of internal IT infrastructure improvements.",
+          "Contributed to Active Directory maintenance and user provisioning tasks.",
+          "More achievements to be added as internship progresses."
+        ]
       },
       wiss: {
         role: "Student - Computer Science",
@@ -291,8 +304,21 @@ export const translations = {
       subtitle: "Mein beruflicher Werdegang und meine Ausbildung, die meine technische Expertise geprägt haben.",
       period: {
         present: "Heute",
+        gz: "Aug 2025 - Heute",
         wiss: "Aug 2023 - Heute",
         sek: "2020 - 2023"
+      },
+      gz: {
+        role: "Praktikant IAM Engineering",
+        company: "Gesundheitswelt Zollikerberg",
+        location: "Zollikon, Schweiz",
+        description: "Als Praktikant im Bereich IAM Engineering unterstütze ich die Wartung und Optimierung der IT-Infrastruktur mit Schwerpunkt auf der Automatisierung von Identity- und Access-Management-Prozessen. Das Unternehmen bietet Gesundheitsdienstleistungen für die Einwohner von Zollikon an.",
+        achievements: [
+          "Unterstützung bei der Automatisierung von Identity- und Access-Management (IAM)-Abläufen mit PowerShell und Python.",
+          "Mitarbeit bei der Umsetzung interner Verbesserungen der IT-Infrastruktur.",
+          "Beitrag zur Pflege von Active Directory und zur Benutzerverwaltung.",
+          "Weitere Leistungen folgen im Verlauf des Praktikums."
+        ]
       },
       wiss: {
         role: "Student - Informatik",
@@ -543,8 +569,21 @@ export const translations = {
       subtitle: "Mi trayectoria profesional y experiencias educativas que han formado mi experiencia técnica.",
       period: {
         present: "Presente",
+        gz: "Ago 2025 - Presente",
         wiss: "Ago 2023 - Presente",
         sek: "2020 - 2023"
+      },
+      gz: {
+        role: "Practicante de Ingeniería IAM",
+        company: "Gesundheitswelt Zollikerberg",
+        location: "Zollikon, Suiza",
+        description: "Como practicante de ingeniería IAM, contribuyo al mantenimiento y la optimización de la infraestructura de TI, enfocándome en la automatización de procesos de gestión de identidad y acceso. La empresa ofrece servicios de salud a los residentes de Zollikon.",
+        achievements: [
+          "Apoyé en la automatización de flujos de trabajo de gestión de identidad y acceso (IAM) utilizando PowerShell y Python.",
+          "Participé en la implementación de mejoras internas en la infraestructura de TI.",
+          "Colaboré en el mantenimiento de Active Directory y en tareas de aprovisionamiento de usuarios.",
+          "Se agregarán más logros a medida que avance la pasantía."
+        ]
       },
       wiss: {
         role: "Estudiante - Informática",
@@ -796,8 +835,21 @@ export const translations = {
       subtitle: "私の技術的専門知識を形成してきた職業経験と教育経験です。",
       period: {
         present: "現在",
+        gz: "2025年8月 - 現在",
         wiss: "2023年8月 - 現在",
         sek: "2020年 - 2023年"
+      },
+      gz: {
+        role: "IAMエンジニアリング・インターン",
+        company: "Gesundheitswelt Zollikerberg",
+        location: "スイス、ツォリコン",
+        description: "IAMエンジニアリングのインターンとして、ITインフラの保守・最適化に取り組み、特にIDおよびアクセス管理（IAM）プロセスの自動化に焦点を当てています。この企業はツォリコンの住民に医療サービスを提供しています。",
+        achievements: [
+          "PowerShellとPythonを使用してIAMワークフローの自動化を支援。",
+          "社内のITインフラ改善の導入に参加。",
+          "Active Directoryの保守やユーザー管理業務をサポート。",
+          "インターン期間中に実績を随時追加予定。"
+        ]
       },
       wiss: {
         role: "学生 - コンピュータサイエンス",
@@ -1048,8 +1100,21 @@ export const translations = {
       subtitle: "塑造我技术专长的职业历程和教育经历。",
       period: {
         present: "至今",
+        gz: "2025年8月 - 至今",
         wiss: "2023年8月 - 至今",
         sek: "2020年 - 2023年"
+      },
+      gz: {
+        role: "IAM工程实习生",
+        company: "Gesundheitswelt Zollikerberg",
+        location: "瑞士，佐利孔",
+        description: "作为IAM工程实习生，我协助维护和优化公司的IT基础设施，重点在于自动化身份与访问管理流程。该公司为佐利孔居民提供医疗服务。",
+        achievements: [
+          "使用PowerShell和Python协助自动化IAM工作流程。",
+          "参与公司内部IT基础设施优化的实施。",
+          "协助维护Active Directory并处理用户管理任务。",
+          "实习过程中将持续添加更多成果。"
+        ]
       },
       wiss: {
         role: "学生 - 计算机科学",
