@@ -337,8 +337,8 @@ export const translations = {
         description: "Erwarb grundlegendes Wissen für meinen technischen Werdegang. Als Abschlussprojekt erstellte ich eine Unreal Engine Umgebung.",
         achievements: [
           "Erstellung einer immersiven 3D-Umgebung mit Unreal Engine",
-          "Desarrollo de fuertes habilidades de resolución de problemas y análisis",
-          "Participación en proyectos y actividades enfocadas en MINT"
+          "Entwicklung starker Problemlösungs- und Analysefähigkeiten",
+          "Teilnahme an MINT-orientierten Projekten und Aktivitäten"
         ]
       }
     },
@@ -381,7 +381,7 @@ export const translations = {
         },
         dockerService: {
           title: "Docker Service Deployment",
-          description: "Dieses Docker Compose-Projekt implementiert MediaWiki, Nextcloud, und Gogs, enfocándose en el trabajo en equipo, la containerización y la documentación. Entwickelt mit Benicio Von Felten."
+          description: "Dieses Docker-Compose-Projekt setzt MediaWiki, Nextcloud und Gogs auf und legt den Fokus auf Teamarbeit, Containerisierung und Dokumentation. Entwickelt mit Benicio Von Felten."
         },
         phishing: {
           title: "Phishing Website Tutorial",

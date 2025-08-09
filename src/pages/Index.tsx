@@ -219,6 +219,7 @@ const Index = () => {
                           href={social.href}
                           target="_blank" 
                           rel="noopener noreferrer"
+                          aria-label={social.label}
                           className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden ${social.hoverClass}
                             w-10 h-10 sm:w-12 sm:h-12 md:w-12 md:h-12
                             ${social.label === "LeetCode" ? 'md:hover:[width:8rem] lg:hover:[width:8rem]' :
@@ -229,19 +230,19 @@ const Index = () => {
                               'md:hover:[width:9.5rem] lg:hover:[width:9.5rem]'}
                           `}
                         >
-                          {/* fuckass css to center PIXEL PERFECT INSIDE A CONTAINER CAUSE IT WONT LET ME DO IT NORMALLY. */}
+                          {/* center icon container */}
                           <div className="absolute left-[9.47px] sm:left-[11.47px] top-[0.6rem] sm:top-[0.7rem] w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center z-10">
                             {social.icon}
                           </div>
                           
-                          {/* fuckass glassmorphism effect */}
-                          <div className="hidden md:block absolute left-12 right-1 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
+                          {/* label reveal */}
+                          <div className="hidden md:flex absolute left-12 right-1 top-1/2 -translate-y-1/2 items-center pointer-events-none">
                             <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
                               {social.label}
                             </span>
                           </div>
                           
-                          {/*  */}
+                          {/* mobile tooltip */}
                           <span className="md:hidden absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap pointer-events-none">
                             {social.label}
                           </span>
