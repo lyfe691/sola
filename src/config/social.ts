@@ -59,6 +59,7 @@ export const SOCIAL_ORDER_HERO: SocialId[] = [
   'chess',
 ];
 
+// estimated to add more to footer rather than hero.
 export const SOCIAL_ORDER_FOOTER: SocialId[] = [
   'github',
   'email',
