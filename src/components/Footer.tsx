@@ -12,6 +12,7 @@ import { translations } from "@/lib/translations";
 import { Mail, Linkedin, Info, ChevronRight, ArrowUpRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
+import { SOCIAL_LINKS, SOCIAL_ORDER_FOOTER } from "@/config/social";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -21,44 +22,32 @@ const Footer = () => {
   const t = translations[language];
   const [isLegalExpanded, setIsLegalExpanded] = useState(false);
 
-  const social = [
-    { 
-      icon: <FaGithubAlt className="w-4 h-4" />, 
-      href: "https://github.com/lyfe691", 
-      label: "GitHub",
-      hoverClass: "hover:bg-foreground/10 hover:scale-110"
-    },
-    { 
-      icon: <Mail className="w-4 h-4" />, 
-      href: "mailto:yanis.sebastian.zuercher@gmail.com", 
-      label: "Email",
-      hoverClass: "hover:bg-red-400/20 hover:border-red-400/30 hover:scale-110" 
-    },
-    { 
-      icon: <Linkedin className="w-4 h-4" />, 
-      href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/", 
-      label: "LinkedIn",
-      hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30 hover:scale-110" 
-    },
-    {
-      icon: <SiLeetcode className="w-4 h-4" />,
-      href: "https://leetcode.com/u/lyfe691/",
-      label: "LeetCode",
-      hoverClass: "hover:bg-orange-400/20 hover:border-orange-400/30 hover:scale-110"
-    },
-    {
-      icon: <SiHackthebox className="w-4 h-4" />,
-      href: "https://app.hackthebox.com/profile/2350832",
-      label: "Hack The Box",
-      hoverClass: "hover:bg-emerald-300/20 hover:border-emerald-400/30 hover:scale-110"
-    },
-    { 
-      icon: <SiChessdotcom className="w-4 h-4" />, 
-      href: "https://chess.com/member/moment_o", 
-      label: "Chess.com",
-      hoverClass: "hover:bg-green-400/20 hover:border-green-400/30 hover:scale-110" 
-    }, 
-  ];
+  const social = SOCIAL_ORDER_FOOTER.map(id => {
+    const s = SOCIAL_LINKS[id];
+    const icon = id === 'github'
+      ? <FaGithubAlt className="w-4 h-4" />
+      : id === 'email'
+      ? <Mail className="w-4 h-4" />
+      : id === 'linkedin'
+      ? <Linkedin className="w-4 h-4" />
+      : id === 'leetcode'
+      ? <SiLeetcode className="w-4 h-4" />
+      : id === 'hackthebox'
+      ? <SiHackthebox className="w-4 h-4" />
+      : <SiChessdotcom className="w-4 h-4" />;
+    const hoverClass = id === 'github'
+      ? 'hover:bg-foreground/10 hover:scale-110'
+      : id === 'email'
+      ? 'hover:bg-red-400/20 hover:border-red-400/30 hover:scale-110'
+      : id === 'linkedin'
+      ? 'hover:bg-cyan-400/20 hover:border-cyan-400/30 hover:scale-110'
+      : id === 'leetcode'
+      ? 'hover:bg-orange-400/20 hover:border-orange-400/30 hover:scale-110'
+      : id === 'hackthebox'
+      ? 'hover:bg-emerald-300/20 hover:border-emerald-400/30 hover:scale-110'
+      : 'hover:bg-green-400/20 hover:border-green-400/30 hover:scale-110';
+    return { icon, href: s.href, label: s.label, hoverClass };
+  });
 
   const nav = [
     { text: t.nav.about,       path: "/about" },
