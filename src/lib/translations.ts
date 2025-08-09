@@ -10,6 +10,27 @@
 
 export const translations = {
   en: {
+    common: {
+      home: "Home",
+      projects: "Projects",
+      back: "Back",
+      overview: "Overview",
+      techStack: "Tech Stack",
+      links: "Links",
+      chromeStore: "Chrome Store",
+      visitSite: "Visit Site",
+      sourceCode: "Source Code",
+      demo: "Demo",
+      moreProjects: "More Projects",
+      moreOnGithub: "More on GitHub",
+      view: "View",
+    },
+    feed: {
+      recentActivity: "Recent Activity",
+      lastEvents: "Last 20 events",
+      noActivity: "No recent activity",
+      checkBack: "Check back later for updates"
+    },
     hire: {
       hirebtn:"Hire Me", 
       hiretitle: "Currently Commited",
@@ -89,6 +110,18 @@ export const translations = {
       technologies: "Technologies used",
       imageTooltip: "Some project images created with",
       sortBy: "Sort by",
+      sortOptions: {
+        priority: "Priority",
+        dateNewest: "Date (Newest)",
+        dateOldest: "Date (Oldest)",
+        nameAsc: "Name (A-Z)",
+        nameDesc: "Name (Z-A)"
+      },
+      selectSorting: "Select sorting...",
+      searchPlaceholder: "Search options...",
+      emptyMessage: "No option found.",
+      visitProject: "Visit Project",
+      moreProjects: "More Projects",
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
@@ -159,7 +192,8 @@ export const translations = {
       navigation: "Navigation",
       connect: "Connect",
       contact: "Contact",
-      contactForm: "Contact Form"
+      contactForm: "Contact Form",
+      privacy: "Privacy Policy"
     },
     about: {
       title: "About Me",
@@ -194,14 +228,30 @@ export const translations = {
       },
       testimonials: {
         title: "What People Say",
-        link: "Work with me"
+        link: "Work with me",
+        viewMore: "View more",
+        visitWebsite: "Visit Website",
+        viewLinkedIn: "View LinkedIn",
+        websiteChip: "Website",
+        modalTitle: "Testimonial",
+        modalDescription: "Full testimonial from {author}"
       },
       resume: {
         title: "Request Full Resume",
         description: "The public version of my resume has some sensitive information censored. If you need the full version, please contact me or send an email to yanis.sebastian.zuercher@gmail.com.",
         viewButton: "View Censored Version",
         downloadButton: "Download Censored Version",
-        languageLabel: "Language:"
+        languageLabel: "Language:",
+        buttonLabel: "Resume"
+      },
+      github: {
+        title: "GitHub Activity",
+        overview: "Overview"
+      },
+      philosophyLabels: {
+        clean: "Clean Code",
+        simplicity: "Simplicity",
+        learning: "Continuous Learning"
       }
     },
     contact: {
@@ -217,7 +267,9 @@ export const translations = {
       send: "Send Message",
       sending: "Sending...",
       successMessage: "Thanks for your message! I'll get back to you soon.",
-      recaptchaError: "Please complete the reCAPTCHA verification."
+      recaptchaError: "Please complete the reCAPTCHA verification.",
+      subjectLabel: "Subject",
+      subjectPlaceholder: "Enter your subject",
     },
     services: {
       title: "Services",
@@ -275,6 +327,27 @@ export const translations = {
     },
   },
   de: {
+    common: {
+      home: "Startseite",
+      projects: "Projekte",
+      back: "Zurück",
+      overview: "Überblick",
+      techStack: "Technologie-Stack",
+      links: "Links",
+      chromeStore: "Chrome Store",
+      visitSite: "Website besuchen",
+      sourceCode: "Quellcode",
+      demo: "Demo",
+      moreProjects: "Weitere Projekte",
+      moreOnGithub: "Mehr auf GitHub",
+      view: "Ansehen",
+    },
+    feed: {
+      recentActivity: "Aktuelle Aktivitäten",
+      lastEvents: "Letzte 20 Ereignisse",
+      noActivity: "Keine aktuellen Aktivitäten",
+      checkBack: "Schau später noch einmal vorbei"
+    },
     hire: {
       hirebtn: "Stell mich ein",
       hiretitle: "Derzeit verpflichtet",
@@ -352,8 +425,20 @@ export const translations = {
       viewProject: "View Project",
       viewGithub: "View Code",
       technologies: "Technologies used",
-      imageTooltip: "Paar Projektbilder erstellt mit",
+      imageTooltip: "Einige Projektbilder erstellt mit",
       sortBy: "Sortieren nach",
+      sortOptions: {
+        priority: "Priorität",
+        dateNewest: "Datum (neueste)",
+        dateOldest: "Datum (älteste)",
+        nameAsc: "Name (A–Z)",
+        nameDesc: "Name (Z–A)"
+      },
+      selectSorting: "Sortierung wählen...",
+      searchPlaceholder: "Optionen suchen...",
+      emptyMessage: "Keine Option gefunden.",
+      visitProject: "Projekt besuchen",
+      moreProjects: "Weitere Projekte",
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
@@ -424,7 +509,8 @@ export const translations = {
       navigation: "Navigation",
       connect: "Verbinden",
       contact: "Kontakt",
-      contactForm: "Kontaktformular"
+      contactForm: "Kontaktformular",
+      privacy: "Datenschutzerklärung"
     },
     about: {
       title: "Über Mich",
@@ -459,14 +545,30 @@ export const translations = {
       },
       testimonials: {
         title: "Was Leute sagen",
-        link: "Arbeite mit mir"
+        link: "Arbeite mit mir",
+        viewMore: "Mehr anzeigen",
+        visitWebsite: "Webseite besuchen",
+        viewLinkedIn: "LinkedIn ansehen",
+        websiteChip: "Webseite",
+        modalTitle: "Referenz",
+        modalDescription: "Vollständige Referenz von {author}"
       },
       resume: {
         title: "Vollständigen Lebenslauf anfordern",
         description: "Die öffentliche Version meines Lebenslaufs hat einige sensible Informationen zensiert. Wenn Sie die vollständige Version benötigen, kontaktieren Sie mich bitte oder senden Sie eine E-Mail an yanis.sebastian.zuercher@gmail.com.",
         viewButton: "Zensierte Version ansehen",
         downloadButton: "Zensierte Version herunterladen",
-        languageLabel: "Sprache:"
+        languageLabel: "Sprache:",
+        buttonLabel: "Lebenslauf"
+      },
+      github: {
+        title: "GitHub-Aktivität",
+        overview: "Übersicht"
+      },
+      philosophyLabels: {
+        clean: "Sauberer Code",
+        simplicity: "Einfachheit",
+        learning: "Kontinuierliches Lernen"
       }
     },
     contact: {
@@ -482,7 +584,9 @@ export const translations = {
       send: "Nachricht senden",
       sending: "Wird gesendet...",
       successMessage: "Danke für Ihre Nachricht! Ich melde mich bald bei Ihnen.",
-      recaptchaError: "Bitte bestätigen Sie die reCAPTCHA-Verifizierung."
+      recaptchaError: "Bitte bestätigen Sie die reCAPTCHA-Verifizierung.",
+      subjectLabel: "Betreff",
+      subjectPlaceholder: "Betreff eingeben",
     },
     services: {
       title: "Dienstleistungen",
@@ -540,6 +644,27 @@ export const translations = {
     },
   },
   es: {
+    common: {
+      home: "Inicio",
+      projects: "Proyectos",
+      back: "Volver",
+      overview: "Resumen",
+      techStack: "Tecnologías",
+      links: "Enlaces",
+      chromeStore: "Chrome Web Store",
+      visitSite: "Visitar sitio",
+      sourceCode: "Código fuente",
+      demo: "Demo",
+      moreProjects: "Más proyectos",
+      moreOnGithub: "Más en GitHub",
+      view: "Ver",
+    },
+    feed: {
+      recentActivity: "Actividad reciente",
+      lastEvents: "Últimos 20 eventos",
+      noActivity: "No hay actividad reciente",
+      checkBack: "Vuelve más tarde para ver novedades"
+    },
     hire: {
       hirebtn: "Contrátame",
       hiretitle: "Actualmente comprometido",
@@ -619,6 +744,18 @@ export const translations = {
       technologies: "Tecnologías utilizadas",
       imageTooltip: "Algunas imágenes de proyecto creadas con",
       sortBy: "Ordenar por",
+      sortOptions: {
+        priority: "Prioridad",
+        dateNewest: "Fecha (más reciente)",
+        dateOldest: "Fecha (más antigua)",
+        nameAsc: "Nombre (A–Z)",
+        nameDesc: "Nombre (Z–A)"
+      },
+      selectSorting: "Seleccionar orden...",
+      searchPlaceholder: "Buscar opciones...",
+      emptyMessage: "Sin resultados.",
+      visitProject: "Visitar proyecto",
+      moreProjects: "Más proyectos",
       list: {
         codeExtractor: {
           title: "Extractor de Código Web",
@@ -689,7 +826,8 @@ export const translations = {
       navigation: "Navegación",
       connect: "Conectarse",
       contact: "Contacto",
-      contactForm: "Formulario de contacto"
+      contactForm: "Formulario de contacto",
+      privacy: "Política de privacidad"
     },
     about: {
       title: "Sobre Mí",
@@ -724,14 +862,30 @@ export const translations = {
       },
       testimonials: {
         title: "Lo que la gente dice",
-        link: "Trabajar conmigo"
+        link: "Trabajar conmigo",
+        viewMore: "Ver más",
+        visitWebsite: "Visitar sitio web",
+        viewLinkedIn: "Ver LinkedIn",
+        websiteChip: "Sitio web",
+        modalTitle: "Testimonio",
+        modalDescription: "Testimonio completo de {author}"
       },
       resume: {
         title: "Solicitar currículum completo",
         description: "La versión pública de mi currículum tiene información sensible censurada. Si necesitas la versión completa, por favor contáctame o envía un email a yanis.sebastian.zuercher@gmail.com.",
         viewButton: "Ver versión censurada",
-                downloadButton: "Descargar versión censurada",
-        languageLabel: "Idioma:"
+        downloadButton: "Descargar versión censurada",
+        languageLabel: "Idioma:",
+        buttonLabel: "Currículum"
+      },
+      github: {
+        title: "Actividad de GitHub",
+        overview: "Resumen"
+      },
+      philosophyLabels: {
+        clean: "Código limpio",
+        simplicity: "Simplicidad",
+        learning: "Aprendizaje continuo"
       }
     },
     contact: {
@@ -747,7 +901,9 @@ export const translations = {
       send: "Enviar mensaje",
       sending: "Enviando...",
       successMessage: "¡Gracias por tu mensaje! Me pondré en contacto contigo pronto.",
-      recaptchaError: "Por favor, complete la verificación de reCAPTCHA."
+      recaptchaError: "Por favor, complete la verificación de reCAPTCHA.",
+      subjectLabel: "Asunto",
+      subjectPlaceholder: "Ingresa el asunto",
     },
     services: {
       title: "Servicios",
@@ -805,6 +961,27 @@ export const translations = {
     }
   },
   ja: {
+    common: {
+      home: "ホーム",
+      projects: "プロジェクト",
+      back: "戻る",
+      overview: "概要",
+      techStack: "技術スタック",
+      links: "リンク",
+      chromeStore: "Chrome ストア",
+      visitSite: "サイトを見る",
+      sourceCode: "ソースコード",
+      demo: "デモ",
+      moreProjects: "他のプロジェクト",
+      moreOnGithub: "GitHub で見る",
+      view: "表示",
+    },
+    feed: {
+      recentActivity: "最近のアクティビティ",
+      lastEvents: "直近20件",
+      noActivity: "最近のアクティビティはありません",
+      checkBack: "後でもう一度ご確認ください"
+    },
     hire: {
       hirebtn: "採用する",
       hiretitle: "現在契約中",
@@ -885,6 +1062,18 @@ export const translations = {
       technologies: "使用技術",
       imageTooltip: "いくつかのプロジェクト画像が作成された",
       sortBy: "並べ替え",
+      sortOptions: {
+        priority: "優先度",
+        dateNewest: "日付（新しい順）",
+        dateOldest: "日付（古い順）",
+        nameAsc: "名前（A–Z）",
+        nameDesc: "名前（Z–A）"
+      },
+      selectSorting: "並べ替えを選択...",
+      searchPlaceholder: "オプションを検索...",
+      emptyMessage: "該当なし",
+      visitProject: "プロジェクトを見る",
+      moreProjects: "他のプロジェクト",
       list: {
         codeExtractor: {
           title: "ウェブサイトコード抽出ツール",
@@ -955,7 +1144,8 @@ export const translations = {
       navigation: "ナビゲーション",
       connect: "接続",
       contact: "連絡先",
-      contactForm: "フォームを介して"
+      contactForm: "フォームを介して",
+      privacy: "プライバシーポリシー"
     },
     about: {
       title: "私について",
@@ -990,14 +1180,30 @@ export const translations = {
       },
       testimonials: {
         title: "人々の声",
-        link: "私と働く"
+        link: "私と働く",
+        viewMore: "もっと見る",
+        visitWebsite: "ウェブサイトを見る",
+        viewLinkedIn: "LinkedIn を見る",
+        websiteChip: "ウェブサイト",
+        modalTitle: "推薦文",
+        modalDescription: "{author} からの全文推薦"
       },
       resume: {
         title: "完全版履歴書のリクエスト",
         description: "公開版の履歴書には、機密情報の一部が検閲されています。完全版が必要な場合は、お問い合わせいただくか、yanis.sebastian.zuercher@gmail.comまでメールをお送りください。",
         viewButton: "検閲版を表示",
-                downloadButton: "検閲版をダウンロード",
-        languageLabel: "言語:"
+        downloadButton: "検閲版をダウンロード",
+        languageLabel: "言語:",
+        buttonLabel: "履歴書"
+      },
+      github: {
+        title: "GitHub アクティビティ",
+        overview: "概要"
+      },
+      philosophyLabels: {
+        clean: "クリーンコード",
+        simplicity: "シンプルさ",
+        learning: "継続的な学習"
       }
     },
     contact: {
@@ -1013,7 +1219,9 @@ export const translations = {
       send: "送信",
       sending: "送信中...",
       successMessage: "メッセージをお送りいただき、ありがとうございます。近日中にご連絡させていただきます。",
-      recaptchaError: "reCAPTCHAの検証を完了してください。"
+      recaptchaError: "reCAPTCHAの検証を完了してください。",
+      subjectLabel: "件名",
+      subjectPlaceholder: "件名を入力",
     },
     services: {
       title: "サービス",
@@ -1071,6 +1279,27 @@ export const translations = {
     }
   },
   cn: {
+    common: {
+      home: "首页",
+      projects: "项目",
+      back: "返回",
+      overview: "概览",
+      techStack: "技术栈",
+      links: "链接",
+      chromeStore: "Chrome 商店",
+      visitSite: "访问网站",
+      sourceCode: "源代码",
+      demo: "演示",
+      moreProjects: "更多项目",
+      moreOnGithub: "在 GitHub 上查看更多",
+      view: "查看",
+    },
+    feed: {
+      recentActivity: "最新活动",
+      lastEvents: "最近 20 条",
+      noActivity: "暂无活动",
+      checkBack: "请稍后再查看"
+    },
     hire: {
       hirebtn: "雇佣我",
       hiretitle: "目前已承诺",
@@ -1150,6 +1379,18 @@ export const translations = {
       technologies: "使用的技术",
       imageTooltip: "一些项目图像创建于",
       sortBy: "排序",
+      sortOptions: {
+        priority: "优先级",
+        dateNewest: "日期（最新）",
+        dateOldest: "日期（最旧）",
+        nameAsc: "名称（A–Z）",
+        nameDesc: "名称（Z–A）"
+      },
+      selectSorting: "选择排序...",
+      searchPlaceholder: "搜索选项...",
+      emptyMessage: "没有结果",
+      visitProject: "访问项目",
+      moreProjects: "更多项目",
       list: {
         codeExtractor: {
           title: "网站代码提取器",
@@ -1220,7 +1461,8 @@ export const translations = {
       navigation: "导航",
       connect: "连接",
       contact: "联系",
-      contactForm: "通过表单"
+      contactForm: "通过表单",
+      privacy: "隐私政策"
     },
     about: {
       title: "关于我",
@@ -1255,14 +1497,30 @@ export const translations = {
       },
       testimonials: {
         title: "人們的聲音",
-        link: "與我合作"
+        link: "與我合作",
+        viewMore: "查看更多",
+        visitWebsite: "访问网站",
+        viewLinkedIn: "查看 LinkedIn",
+        websiteChip: "网站",
+        modalTitle: "推荐",
+        modalDescription: "来自 {author} 的完整推荐"
       },
       resume: {
         title: "申请完整简历",
         description: "我的简历公开版本审查了一些敏感信息。如果您需要完整版本，请联系我或发送邮件至yanis.sebastian.zuercher@gmail.com。",
         viewButton: "查看审查版本",
-                downloadButton: "下载审查版本",
-        languageLabel: "语言:"
+        downloadButton: "下载审查版本",
+        languageLabel: "语言:",
+        buttonLabel: "简历"
+      },
+      github: {
+        title: "GitHub 活动",
+        overview: "概览"
+      },
+      philosophyLabels: {
+        clean: "干净代码",
+        simplicity: "简洁",
+        learning: "持续学习"
       }
     },
     contact: {
@@ -1278,7 +1536,9 @@ export const translations = {
       send: "发送消息",
       sending: "发送中...",
       successMessage: "感谢您的消息！我会尽快回复您。",
-      recaptchaError: "请完成 reCAPTCHA 验证。"
+      recaptchaError: "请完成 reCAPTCHA 验证。",
+      subjectLabel: "主题",
+      subjectPlaceholder: "输入主题",
     },
     services: {
       title: "服务",

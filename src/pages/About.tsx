@@ -124,7 +124,8 @@ type TestimonialProps = {
 const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, website, linkedin }: TestimonialProps) => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
-  
+  const { language } = useLanguage();
+  const t = translations[language];
   const MAX_QUOTE_LENGTH = 120;
   const isLongQuote = quote.length > MAX_QUOTE_LENGTH;
   const truncatedQuote = isLongQuote ? quote.slice(0, MAX_QUOTE_LENGTH) + '...' : quote;
@@ -181,7 +182,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
                     className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
                   >
                     <Globe className="w-3.5 h-3.5" />
-                    Visit Website
+                    {t.about.testimonials.visitWebsite}
                   </a>
                 )}
                 {linkedin && (
@@ -192,7 +193,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
                     className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
                   >
                     <Linkedin className="w-3.5 h-3.5" />
-                    View LinkedIn
+                    {t.about.testimonials.viewLinkedIn}
                   </a>
                 )}
               </div>
@@ -234,7 +235,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
             onClick={() => setOpen(true)}
             className="text-primary hover:text-primary/80 text-sm mt-2 transition-colors"
           >
-            View more
+            {t.about.testimonials.viewMore}
           </button>
         )}
       </div>
@@ -308,9 +309,9 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerContent className="px-4 pb-4">
             <DrawerHeader className="text-left px-0">
-              <DrawerTitle>Testimonial</DrawerTitle>
+              <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
               <DrawerDescription>
-                Full testimonial from {author}
+                {t.about.testimonials.modalDescription.replace('{author}', author)}
               </DrawerDescription>
             </DrawerHeader>
             {fullTestimonialContent}
@@ -326,9 +327,9 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader className="pb-2">
-            <DialogTitle>Testimonial</DialogTitle>
+            <DialogTitle>{t.about.testimonials.modalTitle}</DialogTitle>
             <DialogDescription>
-              Full testimonial from {author}
+              {t.about.testimonials.modalDescription.replace('{author}', author)}
             </DialogDescription>
           </DialogHeader>
           {fullTestimonialContent}
@@ -397,7 +398,7 @@ const ResumeModal = () => {
            className="border-foreground/20 w-full" 
            icon={<Download className="w-4 h-4" />} 
            iconPosition='left' 
-           label="Resume" 
+            label={t.about.resume.buttonLabel}
            onClick={() => setOpen(true)}
            />
         </DrawerTrigger>
@@ -446,13 +447,13 @@ const ResumeModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <IconButton 
+          <IconButton 
           variant="outline" 
           size="lg" 
           className="border-foreground/20 w-1/3"
           icon={<Download className="w-4 h-4" />} 
           iconPosition='left' 
-          label="Resume" 
+          label={t.about.resume.buttonLabel}
           onClick={() => setOpen(true)}
         />
       </DialogTrigger>
@@ -613,7 +614,7 @@ const About = () => {
         <div className="mb-16 md:mb-20">
             <div className="flex items-center justify-between mb-6 md:mb-8 pb-2 border-b border-foreground/10">
                 <h2 className="text-2xl font-bold">
-                GitHub Activity
+                {t.about.github.title}
                 </h2>
                 <a href="https://github.com/lyfe691" target='_blank' rel='noopener noreferrer' className='text-sm text-foreground/70 hover:text-primary transition-colors'>
                     @lyfe691
@@ -628,7 +629,7 @@ const About = () => {
                         onClick={() => setSelectedYear('last')}
                         className='text-sm w-full justify-start'
                     >
-                        Overview
+                        {t.about.github.overview}
                     </Button>
                     {years.map(year => (
                         <Button 
@@ -739,21 +740,21 @@ const About = () => {
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                     <Code2 className="w-4 h-4 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold">Clean Code</h3>
+                  <h3 className="text-lg font-semibold">{t.about.philosophyLabels.clean}</h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.clean}</p>
                 </div>
                 <div className="space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                     <Coffee className="w-4 h-4 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold">Simplicity</h3>
+                  <h3 className="text-lg font-semibold">{t.about.philosophyLabels.simplicity}</h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.simplicity}</p>
                 </div>
                 <div className="space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                     <Book className="w-4 h-4 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold">Continuous Learning</h3>
+                  <h3 className="text-lg font-semibold">{t.about.philosophyLabels.learning}</h3>
                   <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.learning}</p>
                 </div>
               </div>

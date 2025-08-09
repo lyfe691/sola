@@ -55,30 +55,30 @@ interface Project {
 
 type SortOption = 'priority' | 'date-newest' | 'date-oldest' | 'name-asc' | 'name-desc';
 
-const sortOptions: ComboboxOption[] = [
+const buildSortOptions = (t: any): ComboboxOption[] => [
   {
     value: 'priority',
-    label: 'Priority',
+    label: t.projects.sortOptions.priority,
     icon: <Star className="w-4 h-4" />
   },
   {
     value: 'date-newest',
-    label: 'Date (Newest)',
+    label: t.projects.sortOptions.dateNewest,
     icon: <Calendar className="w-4 h-4" />
   },
   {
     value: 'date-oldest',
-    label: 'Date (Oldest)',
+    label: t.projects.sortOptions.dateOldest,
     icon: <CalendarClock className="w-4 h-4" />
   },
   {
     value: 'name-asc',
-    label: 'Name (A-Z)',
+    label: t.projects.sortOptions.nameAsc,
     icon: <ArrowDownAZ className="w-4 h-4" />
   },
   {
     value: 'name-desc',
-    label: 'Name (Z-A)',
+    label: t.projects.sortOptions.nameDesc,
     icon: <ArrowUpAZ className="w-4 h-4" />
   }
 ];
@@ -359,7 +359,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
                   rel="noopener noreferrer"
                 >
                   <FaGithubAlt className="w-4 h-4 mr-1" />
-                  GitHub
+                  {t.projects.viewGithub}
                 </a>
               </Button>
             )}
@@ -376,7 +376,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
                   rel="noopener noreferrer"
                 >
                   <ExternalLink className="w-4 h-4 mr-1" />
-                  Visit Project
+                  {t.projects.visitProject}
                 </a>
               </Button>
             )}
@@ -439,8 +439,9 @@ const Projects = () => {
   const { language } = useLanguage();
   const t = translations[language];
 
-  const { featuredProjects, otherProjects } = useMemo(() => {
+  const { featuredProjects, otherProjects, sortOptions } = useMemo(() => {
     const projects = createProjectsData(t);
+    const sortOptions = buildSortOptions(t);
     
     const sortedProjects = [...projects].sort((a, b) => {
       switch (sortBy) {
@@ -461,7 +462,8 @@ const Projects = () => {
     
     return {
       featuredProjects: sortedProjects.filter(p => p.featured),
-      otherProjects: sortedProjects.filter(p => !p.featured)
+      otherProjects: sortedProjects.filter(p => !p.featured),
+      sortOptions
     };
   }, [t, sortBy]);
 
@@ -516,9 +518,9 @@ const Projects = () => {
                 options={sortOptions}
                 value={sortBy}
                 onValueChange={(value: string) => setSortBy(value as SortOption)}
-                placeholder="Select sorting..."
-                searchPlaceholder="Search options..."
-                emptyMessage="No option found."
+                placeholder={t.projects.selectSorting}
+                searchPlaceholder={t.projects.searchPlaceholder}
+                emptyMessage={t.projects.emptyMessage}
                 className="w-[160px] sm:w-[180px]"
               />
             </div>

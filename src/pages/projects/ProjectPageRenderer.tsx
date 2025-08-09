@@ -16,6 +16,8 @@ import { ExternalLink, Globe, ArrowRight } from 'lucide-react';
 import { FaGithubAlt } from 'react-icons/fa';
 import { getProjectConfig, getAllProjectSlugs, projectPagesConfig } from '@/config/projects';
 import { MDXComponents } from '@/components/MDXComponents';
+import { useLanguage } from '@/lib/language-provider';
+import { translations } from '@/lib/translations';
 
 // dynamic mdx component
 const getMDXComponent = (mdxPath: string) => {
@@ -24,6 +26,8 @@ const getMDXComponent = (mdxPath: string) => {
 
 const ProjectPageRenderer: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { language } = useLanguage();
+  const t = translations[language];
   
   if (!slug) {
     return <Navigate to="/projects" replace />;
@@ -66,7 +70,7 @@ const ProjectPageRenderer: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <h2 className="text-lg font-semibold mb-4 text-foreground">Overview</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">{t.common.overview}</h2>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
             {config.overview}
           </p>
@@ -78,7 +82,7 @@ const ProjectPageRenderer: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <h2 className="text-lg font-semibold mb-4 text-foreground">Tech Stack</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">{t.common.techStack}</h2>
           <div className="flex flex-wrap gap-2.5">
             {config.techStack.map((tech) => (
               <span 
@@ -99,7 +103,7 @@ const ProjectPageRenderer: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
         >
-          <h2 className="text-lg font-semibold mb-4 text-foreground">Links</h2>
+          <h2 className="text-lg font-semibold mb-4 text-foreground">{t.common.links}</h2>
           <div className="flex flex-col sm:flex-row gap-3">
             {config.links.live && (
               <Button
@@ -117,7 +121,7 @@ const ProjectPageRenderer: React.FC = () => {
                   ) : (
                     <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
                   )}
-                  {config.links.live.includes('chromewebstore') ? 'Chrome Store' : 'Visit Site'}
+                  {config.links.live.includes('chromewebstore') ? t.common.chromeStore : t.common.visitSite}
                 </a>
               </Button>
             )}
@@ -134,7 +138,7 @@ const ProjectPageRenderer: React.FC = () => {
                   rel="noopener noreferrer"
                 >
                   <FaGithubAlt className="w-3.5 h-3.5 mr-1.5" />
-                  Source Code
+                  {t.common.sourceCode}
                 </a>
               </Button>
             )}
@@ -151,7 +155,7 @@ const ProjectPageRenderer: React.FC = () => {
                   rel="noopener noreferrer"
                 >
                   <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                  Demo
+                  {t.common.demo}
                 </a>
               </Button>
             )}
@@ -183,7 +187,7 @@ const ProjectPageRenderer: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="border-t border-border/30 pt-12"
         >
-          <h2 className="text-lg font-semibold mb-6 text-foreground">More Projects</h2>
+          <h2 className="text-lg font-semibold mb-6 text-foreground">{t.common.moreProjects}</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             {getAllProjectSlugs()
               .filter(projectSlug => projectSlug !== slug)

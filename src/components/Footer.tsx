@@ -126,7 +126,7 @@ const Footer = () => {
                  <div className={`transition-transform duration-300 ${isLegalExpanded ? 'rotate-90' : ''}`}>
                    <ChevronRight className="w-3.5 h-3.5" />
                  </div>
-                 <span className="font-medium">Legal</span>
+                  <span className="font-medium">{t.footer.navigation}</span>
                </button>
                
                <div className={`overflow-hidden transition-all duration-300 ${isLegalExpanded ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
@@ -135,9 +135,9 @@ const Footer = () => {
                      to="/privacy"
                      className="group flex items-center gap-1 text-xs text-foreground/50 hover:text-primary transition-all duration-300 w-fit"
                    >
-                     <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
-                       Privacy Policy
-                     </span>
+                      <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
+                        {t.footer.privacy}
+                      </span>
                      <ArrowUpRight className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                    </Link>
                  </div>
@@ -155,7 +155,7 @@ const Footer = () => {
                 to="/" 
                 className="block text-sm text-foreground/60 hover:text-foreground hover:translate-x-1 transition-all duration-300"
               >
-                Home
+                {t.common.home}
               </Link>
               <div className="w-8 h-px bg-gradient-to-r from-foreground/20 to-transparent" />
               {nav.map(({ text, path }) => (

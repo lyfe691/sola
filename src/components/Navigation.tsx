@@ -186,7 +186,7 @@ const Navigation = () => {
   const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
 
   // memoized navigation items
-  const homeItem = { text: "Home", path: "/", icon: Home };
+  const homeItem = { text: t.common.home, path: "/", icon: Home };
   const navItems = [
     { text: t.nav.about, path: "/about" },
     { text: t.nav.experience, path: "/experience" },
