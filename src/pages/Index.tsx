@@ -73,18 +73,9 @@ const Index = () => {
 
           {/* Aurora Background */}
           <div className="absolute inset-0 z-[1]">
-            <Aurora
-              amplitude={0.6}
-              speed={0.28}
-              scale={0.9}      // lower = wider, smoother
-              feather={0.24}   // edge softness
-              alphaGamma={1.25}
-              colorStops={["#DCEBFF","#B7D2FF","#EEF6FF"]}
-            />
+            <Aurora amplitude={0.6} speed={0.28} />
           </div>
           
-
-
           {/* Squares background, remove for now 
           <div className="absolute inset-0 z-[1]">
             <Squares 

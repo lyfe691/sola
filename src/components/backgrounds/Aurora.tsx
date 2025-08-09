@@ -1,24 +1,31 @@
 import { useEffect, useRef } from "react";
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
+import {
+  getAuroraPreset,
+  AURORA_THEME_CLASS_KEYS,
+  type Theme,
+  type AuroraPreset,
+} from "@/config/themes";
 
 const VERT = `#version 300 es
 in vec2 position;
 void main(){ gl_Position = vec4(position, 0.0, 1.0); }
 `;
 
-// Softer aurora: low-freq noise, wider feather, gamma on alpha
 const FRAG = `#version 300 es
 precision highp float;
 
 uniform float uTime;
 uniform float uAmplitude;
 uniform vec3  uColorStops[3];
-uniform vec2  uResolution;   // MUST be drawingBuffer size
-uniform float uBlend;        // extra band width
-uniform float uIntensity;    // theme-based visibility
-uniform float uScale;        // noise frequency
-uniform float uFeather;      // edge softness
-uniform float uAlphaGamma;   // alpha curve
+uniform vec2  uResolution;
+uniform float uBlend;
+uniform float uIntensity;
+uniform float uScale;
+uniform float uFeather;
+uniform float uAlphaGamma;
+uniform float uSaturation;
+uniform float uMinAlpha;
 
 out vec4 fragColor;
 
@@ -61,7 +68,6 @@ struct ColorStop { vec3 color; float position; };
 }
 
 void main(){
-  // Normalized coordinates with aspect correction so shapes don't "shrink" on tall screens
   vec2 uv = gl_FragCoord.xy / uResolution;
   float aspect = uResolution.x / max(uResolution.y, 1.0);
   vec2 suv = vec2(uv.x * aspect, uv.y);
@@ -73,58 +79,53 @@ void main(){
 
   vec3 rampColor; COLOR_RAMP(colors, uv.x, rampColor);
 
-  // Low-frequency noise for smooth bands (no spikes)
   float n = snoise(vec2(suv.x * uScale + uTime*0.06, uTime*0.12));
-  n = 0.5 + 0.5 * n; // 0..1
+  n = 0.5 + 0.5 * n;
 
-  // Band height (keep modest amplitude)
   float wave = 0.35 + n * 0.35 * uAmplitude;
-
-  // Distance from band; wider feather + blend for visibility
   float d = uv.y - wave;
-  float alpha = smoothstep(-(uFeather + uBlend), (uFeather + uBlend), -d);
-  alpha = pow(alpha, uAlphaGamma); // soften even more
 
-  vec3 col = rampColor * (0.6 + 0.4*n) * uIntensity; // slight brightness from noise
+  float alpha = smoothstep(-(uFeather+uBlend), (uFeather+uBlend), -d);
+  alpha = max(alpha, uMinAlpha);
+  alpha = pow(alpha, uAlphaGamma);
+
+  float gray = dot(rampColor, vec3(0.2126, 0.7152, 0.0722));
+  vec3 satCol = mix(vec3(gray), rampColor, uSaturation);
+
+  vec3 col = satCol * (0.6 + 0.4*n) * uIntensity;
   fragColor = vec4(col * alpha, alpha * uIntensity);
 }
 `;
 
 export interface AuroraProps {
-  colorStops?: string[];  // optional manual override
-  amplitude?: number;     // 0.0–1.5 typical
-  blend?: number;         // extra band width
+  // You can override any of these; omit them to use the theme preset.
+  colorStops?: string[];
+  amplitude?: number;
+  blend?: number;
   time?: number;
   speed?: number;
-  scale?: number;         // noise frequency (default ~0.9)
-  feather?: number;       // edge softness  (default ~0.22)
-  alphaGamma?: number;    // 1.0–1.6 (higher = softer)
+  scale?: number;
+  feather?: number;
+  alphaGamma?: number;
+  saturation?: number;
+  minAlpha?: number;
 }
 
-const isDark = () =>
-  typeof document !== "undefined" &&
-  document.documentElement.classList.contains("dark");
+const detectThemeFromHtml = (): Exclude<Theme, "system"> => {
+  const cls = document.documentElement.classList;
+  for (const key of AURORA_THEME_CLASS_KEYS) if (cls.contains(key)) return key;
+  // Fallback: if .dark present use dark else light based on media query
+  if (cls.contains("dark")) return "dark";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+};
 
-// Pure celestial blues (no teal/green)
-const themeStops = () =>
-  isDark()
-    ? ["#9FC9FF", "#7FB8FF", "#BFDFFF"] // deeper for dark
-    : ["#D6ECFF", "#BFDFFF", "#EAF4FF"]; // brighter for light
-
-const themeIntensity = () => (isDark() ? 0.65 : 0.9);
-const themeBlend     = () => (isDark() ? 0.50 : 0.70);
-
-export default function Aurora(props: AuroraProps) {
-  const {
-    amplitude = 0.6,
-    speed = 1.0,
-    scale = 0.9,       // lower = smoother / wider waves
-    feather = 0.22,    // edge softness
-    alphaGamma = 1.2,
-  } = props;
-
-  const propsRef = useRef(props);
-  propsRef.current = props;
+export default function Aurora({
+  amplitude = 0.6,
+  speed = 1.0,
+  ...over
+}: AuroraProps) {
+  const propsRef = useRef({ amplitude, speed, ...over });
+  propsRef.current = { amplitude, speed, ...over };
 
   const ctnDom = useRef<HTMLDivElement>(null);
 
@@ -136,7 +137,7 @@ export default function Aurora(props: AuroraProps) {
       alpha: true,
       premultipliedAlpha: true,
       antialias: true,
-      dpr: Math.min(window.devicePixelRatio || 1, 2), // crisp, stable on mobile
+      dpr: Math.min(window.devicePixelRatio || 1, 2),
     });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -151,18 +152,16 @@ export default function Aurora(props: AuroraProps) {
       return [c.r, c.g, c.b] as [number, number, number];
     };
 
-    const setResolutionUniform = () => {
-      if (program) {
-        // Use drawingBuffer size (physical pixels) to match gl_FragCoord
-        program.uniforms.uResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight];
-      }
+    const preset = getAuroraPreset(detectThemeFromHtml());
+    gl.canvas.style.mixBlendMode = preset.blendMode as any;
+
+    const setRes = () => {
+      if (program) program.uniforms.uResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight];
     };
 
     const resize = () => {
-      const width = ctn.offsetWidth;
-      const height = ctn.offsetHeight;
-      renderer.setSize(width, height);
-      setResolutionUniform();
+      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+      setRes();
     };
     window.addEventListener("resize", resize);
 
@@ -174,14 +173,16 @@ export default function Aurora(props: AuroraProps) {
       fragment: FRAG,
       uniforms: {
         uTime:        { value: 0 },
-        uAmplitude:   { value: amplitude },
-        uColorStops:  { value: (props.colorStops ?? themeStops()).map(toRGB) },
+        uAmplitude:   { value: propsRef.current.amplitude },
+        uColorStops:  { value: (propsRef.current.colorStops ?? preset.colorStops).map(toRGB) },
         uResolution:  { value: [gl.drawingBufferWidth, gl.drawingBufferHeight] },
-        uBlend:       { value: props.blend ?? themeBlend() },
-        uIntensity:   { value: themeIntensity() },
-        uScale:       { value: scale },
-        uFeather:     { value: feather },
-        uAlphaGamma:  { value: alphaGamma },
+        uBlend:       { value: propsRef.current.blend ?? preset.blend },
+        uIntensity:   { value: preset.intensity },
+        uScale:       { value: propsRef.current.scale ?? preset.scale },
+        uFeather:     { value: propsRef.current.feather ?? preset.feather },
+        uAlphaGamma:  { value: propsRef.current.alphaGamma ?? preset.alphaGamma },
+        uSaturation:  { value: propsRef.current.saturation ?? preset.saturation },
+        uMinAlpha:    { value: propsRef.current.minAlpha ?? preset.minAlpha },
       },
     });
 
@@ -190,12 +191,17 @@ export default function Aurora(props: AuroraProps) {
 
     const applyTheme = () => {
       if (!program) return;
-      if (!propsRef.current.colorStops) {
-        program.uniforms.uColorStops.value = themeStops().map(toRGB);
-        program.uniforms.uBlend.value = propsRef.current.blend ?? themeBlend();
-      }
-      program.uniforms.uIntensity.value = themeIntensity();
-      setResolutionUniform();
+      const p = getAuroraPreset(detectThemeFromHtml());
+      gl.canvas.style.mixBlendMode = p.blendMode as any;
+      program.uniforms.uIntensity.value = p.intensity;
+      if (!propsRef.current.colorStops) program.uniforms.uColorStops.value = p.colorStops.map(toRGB);
+      if (propsRef.current.blend == null) program.uniforms.uBlend.value = p.blend;
+      if (propsRef.current.scale == null) program.uniforms.uScale.value = p.scale;
+      if (propsRef.current.feather == null) program.uniforms.uFeather.value = p.feather;
+      if (propsRef.current.alphaGamma == null) program.uniforms.uAlphaGamma.value = p.alphaGamma;
+      if (propsRef.current.saturation == null) program.uniforms.uSaturation.value = p.saturation;
+      if (propsRef.current.minAlpha == null) program.uniforms.uMinAlpha.value = p.minAlpha;
+      setRes();
     };
 
     const observer = new MutationObserver(applyTheme);
@@ -206,13 +212,10 @@ export default function Aurora(props: AuroraProps) {
       raf = requestAnimationFrame(loop);
       if (!program) return;
       const { time = t * 0.01 } = propsRef.current;
-
       program.uniforms.uTime.value = (time * (propsRef.current.speed ?? speed)) * 0.1;
-      program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? amplitude;
-      program.uniforms.uScale.value = propsRef.current.scale ?? scale;
-      program.uniforms.uFeather.value = propsRef.current.feather ?? feather;
-      program.uniforms.uAlphaGamma.value = propsRef.current.alphaGamma ?? alphaGamma;
+      program.uniforms.uAmplitude.value = propsRef.current.amplitude;
 
+      // live overrides
       if (propsRef.current.colorStops) {
         program.uniforms.uColorStops.value = propsRef.current.colorStops.map(toRGB);
       }
@@ -234,7 +237,7 @@ export default function Aurora(props: AuroraProps) {
       if (gl.canvas.parentNode === ctn) ctn.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [amplitude, speed, scale, feather, alphaGamma, props.blend, props.colorStops]);
+  }, []);
 
   return <div ref={ctnDom} className="w-full h-full" />;
 }
