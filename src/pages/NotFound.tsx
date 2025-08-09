@@ -9,6 +9,8 @@
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 import { useLocation } from "react-router-dom";
 
 const TYPING_SPEED = 50;
@@ -17,6 +19,8 @@ const INITIAL_DELAY = 1500;
 
 const NotFound = () => {
   const location = useLocation();
+  const { language } = useLanguage();
+  const t = translations[language];
   const ROOT_PROMPT = "root@~/dev/null$ ";
   const PROMPT = `curl https://sola.ysz.life${location.pathname}`;
   const RESPONSE_LINES = [
@@ -98,7 +102,7 @@ const NotFound = () => {
         variant="outline"
         className="mt-6 text-sm border-border hover:bg-muted/70 transition-colors"
       >
-        <a href="/">Return Home</a>
+        <a href="/">{t.notFound.backHome}</a>
       </Button>
     </div>
   );

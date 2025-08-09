@@ -7,6 +7,8 @@
  */
 
 import React from 'react';
+import { useLanguage } from '@/lib/language-provider';
+import { translations } from '@/lib/translations';
 import { motion } from 'motion/react';
 import type { ProcessedActivity } from '@/lib/github';
 import { 
@@ -28,11 +30,6 @@ import {
   MoveRight
 } from 'lucide-react';
 import { IconButton } from './ui/custom/IconButton';
-
-// TODO: 
-// - add translation
-
-
 
 interface ContributionActivityFeedProps {
   events: ProcessedActivity[];
@@ -140,17 +137,17 @@ const ActivityMetadata = ({ activity }: { activity: ProcessedActivity }) => {
 };
 
 // clean, refined activity item
-const ActivityItem = ({ activity, index }: { activity: ProcessedActivity; index: number }) => {
-  const formatDate = (timestamp: string) => {
+const ActivityItem = ({ activity, index, locale, t }: { activity: ProcessedActivity; index: number; locale: string; t: any }) => {
+  const formatDate = (timestamp: string, locale: string) => {
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     
-    if (diffInHours < 1) return 'Just now';
-    if (diffInHours < 24) return `${diffInHours}h ago`;
-    if (diffInHours < 48) return 'Yesterday';
+    if (diffInHours < 1) return new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(-1, 'hour');
+    if (diffInHours < 24) return new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(-diffInHours, 'hour');
+    if (diffInHours < 48) return new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(-1, 'day');
     
-    return date.toLocaleDateString('en-US', { 
+    return date.toLocaleDateString(locale, { 
       month: 'short', 
       day: 'numeric',
       year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
@@ -189,7 +186,7 @@ const ActivityItem = ({ activity, index }: { activity: ProcessedActivity; index:
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2 text-xs text-foreground/50">
               <Clock className="w-3 h-3" />
-              <span>{formatDate(activity.timestamp)}</span>
+              <span>{formatDate(activity.timestamp, locale)}</span>
               <span>•</span>
               <a 
                 href={activity.repoUrl}
@@ -209,7 +206,7 @@ const ActivityItem = ({ activity, index }: { activity: ProcessedActivity; index:
                 rel="noopener noreferrer"
                 className="text-xs text-primary hover:text-primary/80 transition-colors opacity-0 group-hover:opacity-100"
               >
-                View
+                {t.common.view}
               </a>
             )}
           </div>
@@ -220,14 +217,18 @@ const ActivityItem = ({ activity, index }: { activity: ProcessedActivity; index:
 };
 
 const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ events }) => {
+  const { language } = useLanguage();
+  const t = translations[language];
+  const localeMap: Record<string, string> = { en: 'en', de: 'de', es: 'es', ja: 'ja', cn: 'zh-CN' };
+  const locale = localeMap[language] || 'en';
   const eventsToShow = events.slice(0, 6);
 
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-foreground">Recent Activity</h3>
+        <h3 className="text-lg font-semibold text-foreground">{t.feed.recentActivity}</h3>
         <span className="text-xs text-foreground/40 bg-foreground/[0.04] px-2.5 py-1 rounded-full">
-          Last 20 events
+          {t.feed.lastEvents}
         </span>
       </div>
       
@@ -240,6 +241,8 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ eve
                   key={activity.id} 
                   activity={activity} 
                   index={index}
+                  locale={locale}
+                  t={t}
                 />
               ))}
             </div>
@@ -248,8 +251,8 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ eve
               <div className="w-12 h-12 rounded-2xl bg-foreground/[0.04] flex items-center justify-center mx-auto mb-4">
                 <GitCommit className="w-6 h-6 text-foreground/30" />
               </div>
-              <p className="text-sm text-foreground/70 mb-1">No recent activity</p>
-              <p className="text-xs text-foreground/50">Check back later for updates</p>
+              <p className="text-sm text-foreground/70 mb-1">{t.feed.noActivity}</p>
+              <p className="text-xs text-foreground/50">{t.feed.checkBack}</p>
             </div>
           )}
         </div>

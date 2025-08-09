@@ -24,10 +24,7 @@ import { CyclingTextEffect } from "@/components/ui/text-effect-wrapper";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
-import Particles from "react-tsparticles";
-import { loadSlim } from "tsparticles-slim";
-import type { Engine } from "tsparticles-engine";
-import ParticleBackground from "@/components/backgrounds/ParticleBackground";
+// removed particles to reduce bundle; can be re-added via dynamic import if needed
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/NameMorpher";
@@ -35,6 +32,7 @@ import { IconButton } from "@/components/ui/custom/IconButton";
 import Threads from "@/components/backgrounds/Threads";
 import Squares from "@/components/backgrounds/Squares";
 import Aurora from "@/components/backgrounds/Aurora";
+import { SOCIAL_LINKS, SOCIAL_ORDER_HERO } from "@/config/social";
 
 
 const Index = () => {
@@ -73,7 +71,7 @@ const Index = () => {
             <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
           </Helmet>
 
-          {/* Aurora Background, remove for now
+          {/* Aurora Background */}
           <div className="absolute inset-0 z-[1]">
             <Aurora
               colorStops={["#6AD3B0", "#8FDBE2", "#C4A8FF"]} // hm: 
@@ -82,7 +80,7 @@ const Index = () => {
               speed={0.3}
             />
           </div>
-          */}
+          
           
 
 
@@ -176,77 +174,70 @@ const Index = () => {
                       animate="visible" 
                       className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0"
                     >
-                      {[
-                        { 
-                          href: "https://github.com/lyfe691", 
-                          icon: <FaGithubAlt className="w-full h-full" />, 
-                          label: "GitHub",
-                          hoverClass: "hover:border-foreground/30"
-                        },
-                        { 
-                          href: "mailto:yanis.sebastian.zuercher@gmail.com", 
-                          icon: <Mail className="w-full h-full" />, 
-                          label: "Email",
-                          hoverClass: "hover:bg-red-400/20 hover:border-red-400/30"
-                        },
-                        { 
-                          href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/", 
-                          icon: <Linkedin className="w-full h-full" />, 
-                          label: "LinkedIn",
-                          hoverClass: "hover:bg-cyan-400/20 hover:border-cyan-400/30"
-                        },
-                        {
-                          icon: <SiLeetcode className="w-full h-full" />,
-                          href: "https://leetcode.com/u/lyfe691/",
-                          label: "LeetCode",
-                          hoverClass: "hover:bg-orange-400/20 hover:border-orange-400/30"
-                        },
-                        {
-                          icon: <SiHackthebox className="w-full h-full" />,
-                          href: "https://app.hackthebox.com/profile/2350832",
-                          label: "Hack The Box",
-                          hoverClass: "hover:bg-emerald-300/20 hover:border-emerald-400/30"
-                        },
-                        { 
-                          href: "https://chess.com/member/moment_o", 
-                          icon: <SiChessdotcom className="w-full h-full" />, 
-                          label: "Chess.com",
-                          hoverClass: "hover:bg-green-400/20 hover:border-green-400/30"
-                        }
-                      ].map((social, index) => (
+                      {SOCIAL_ORDER_HERO.map((id) => {
+                        const s = SOCIAL_LINKS[id];
+                        const icon = id === 'github' ? (
+                          <FaGithubAlt className="w-full h-full" />
+                        ) : id === 'email' ? (
+                          <Mail className="w-full h-full" />
+                        ) : id === 'linkedin' ? (
+                          <Linkedin className="w-full h-full" />
+                        ) : id === 'leetcode' ? (
+                          <SiLeetcode className="w-full h-full" />
+                        ) : id === 'hackthebox' ? (
+                          <SiHackthebox className="w-full h-full" />
+                        ) : (
+                          <SiChessdotcom className="w-full h-full" />
+                        );
+                        const hoverClass = id === 'github'
+                          ? 'hover:border-foreground/30'
+                          : id === 'email'
+                          ? 'hover:bg-red-400/20 hover:border-red-400/30'
+                          : id === 'linkedin'
+                          ? 'hover:bg-cyan-400/20 hover:border-cyan-400/30'
+                          : id === 'leetcode'
+                          ? 'hover:bg-orange-400/20 hover:border-orange-400/30'
+                          : id === 'hackthebox'
+                          ? 'hover:bg-emerald-300/20 hover:border-emerald-400/30'
+                          : 'hover:bg-green-400/20 hover:border-green-400/30';
+                        const label = s.label;
+                        const href = s.href;
+                        return (
                         <a 
-                          key={social.label}
-                          href={social.href}
+                          key={label}
+                          href={href}
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden ${social.hoverClass}
+                          aria-label={label}
+                          className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden ${hoverClass}
                             w-10 h-10 sm:w-12 sm:h-12 md:w-12 md:h-12
-                            ${social.label === "LeetCode" ? 'md:hover:[width:8rem] lg:hover:[width:8rem]' :
-                              social.label.length <= 5 ? 'md:hover:[width:6.3rem] lg:hover:[width:6.3rem] ' : 
-                              social.label.length <= 7 ? 'md:hover:[width:6.8rem] lg:hover:[width:6.8rem]' : 
-                              social.label.length <= 8 ? 'md:hover:[width:7.5rem] lg:hover:[width:7.5rem]' : 
-                              social.label.length <= 10 ? 'md:hover:[width:8.5rem] lg:hover:[width:8.5rem]' : 
+                            ${label === "LeetCode" ? 'md:hover:[width:8rem] lg:hover:[width:8rem]' :
+                              label.length <= 5 ? 'md:hover:[width:6.3rem] lg:hover:[width:6.3rem] ' : 
+                              label.length <= 7 ? 'md:hover:[width:6.8rem] lg:hover:[width:6.8rem]' : 
+                              label.length <= 8 ? 'md:hover:[width:7.5rem] lg:hover:[width:7.5rem]' : 
+                              label.length <= 10 ? 'md:hover:[width:8.5rem] lg:hover:[width:8.5rem]' : 
                               'md:hover:[width:9.5rem] lg:hover:[width:9.5rem]'}
                           `}
                         >
-                          {/* fuckass css to center PIXEL PERFECT INSIDE A CONTAINER CAUSE IT WONT LET ME DO IT NORMALLY. */}
+                          {/* center icon container */}
                           <div className="absolute left-[9.47px] sm:left-[11.47px] top-[0.6rem] sm:top-[0.7rem] w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center z-10">
-                            {social.icon}
+                            {icon}
                           </div>
                           
-                          {/* fuckass glassmorphism effect */}
-                          <div className="hidden md:block absolute left-12 right-1 top-1/2 -translate-y-1/2 flex items-center pointer-events-none">
+                          {/* label reveal */}
+                          <div className="hidden md:flex absolute left-12 right-1 top-1/2 -translate-y-1/2 items-center pointer-events-none">
                             <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
-                              {social.label}
+                              {label}
                             </span>
                           </div>
                           
-                          {/*  */}
+                          {/* mobile tooltip */}
                           <span className="md:hidden absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap pointer-events-none">
-                            {social.label}
+                            {label}
                           </span>
                         </a>
-                      ))}
+                        );
+                      })}
                     </motion.div>
                   </div>
                 </div>

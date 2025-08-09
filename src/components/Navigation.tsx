@@ -8,7 +8,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Home, MoveRight } from "lucide-react";
-import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -44,7 +44,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
         animate: { 
           opacity: 1, 
           y: 0, 
-          transition: { delay: index * 0.05, duration: 0.3, ease: "easeOut" }
+          transition: { delay: index * 0.05, duration: 0.3 }
         }
       }
     : {
@@ -54,8 +54,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
           y: 0,
           transition: {
             delay: index * 0.05,
-            duration: 0.3,
-            ease: "easeOut"
+            duration: 0.3
           }
         }
       };
@@ -186,7 +185,7 @@ const Navigation = () => {
   const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
 
   // memoized navigation items
-  const homeItem = { text: "Home", path: "/", icon: Home };
+  const homeItem = { text: t.common.home, path: "/", icon: Home };
   const navItems = [
     { text: t.nav.about, path: "/about" },
     { text: t.nav.experience, path: "/experience" },
@@ -249,7 +248,6 @@ const Navigation = () => {
       opacity: 0,
       transition: {
         duration: 0.3,
-        ease: "easeIn",
         when: "afterChildren"
       }
     },
@@ -257,7 +255,6 @@ const Navigation = () => {
       opacity: 1,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
         when: "beforeChildren",
       }
     },
@@ -292,27 +289,23 @@ const Navigation = () => {
           }}
         >
           {/* home navigation - simple layout*/}
-          <LayoutGroup id="home-nav">
-            <NavItem
-              item={homeItem}
-              index={0}
-              isActive={isActive}
-            />  
-          </LayoutGroup>
+          <NavItem
+            item={homeItem}
+            index={0}
+            isActive={isActive}
+          />  
           
           <div className="h-8 w-px bg-border/30 mx-3" />
           
           {/* main navigation - main layout */}
-          <LayoutGroup id="main-nav">
-            {navItems.map((item, i) => (
-              <NavItem
-                key={item.path}
-                item={item}
-                index={i}
-                isActive={isActive}
-              />
-            ))}
-          </LayoutGroup>
+          {navItems.map((item, i) => (
+            <NavItem
+              key={item.path}
+              item={item}
+              index={i}
+              isActive={isActive}
+            />
+          ))}
         </motion.div>
       </div>
 

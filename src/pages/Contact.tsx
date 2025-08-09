@@ -171,14 +171,14 @@ const Contact = () => {
             </div>
             <div className="space-y-2">
               <label htmlFor="subject" className="text-sm font-medium">
-                Subject
+                {t.contact.subjectLabel}
               </label>
               <Input
                 id="subject"
                 name="subject"
                 type="text"
                 required
-                placeholder="Enter your subject"
+                placeholder={t.contact.subjectPlaceholder}
                 value={formValues.subject}
                 onChange={(e) => setFormValues(prev => ({ ...prev, subject: e.target.value }))}
               />
