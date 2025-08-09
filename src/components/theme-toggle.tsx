@@ -78,13 +78,13 @@ export function ThemeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background min-w-[150px]">
+      <DropdownMenuContent align="end" className="bg-background/75 min-w-[150px]">
         {/* Standard themes */}
         {STANDARD_THEMES.map((option) => (
           <DropdownMenuItem
             key={option.value}
             onClick={() => setTheme(option.value as Theme)}
-            className="flex justify-between cursor-pointer"
+            className="flex justify-between"
           >
             {option.label}
             {theme === option.value && <Check className="h-4 w-4 ml-2" />}
@@ -99,7 +99,7 @@ export function ThemeToggle() {
           <DropdownMenuItem
             key={option.value}
             onClick={() => setTheme(option.value as Theme)}
-            className="flex justify-between cursor-pointer"
+            className="flex justify-between"
           >
             {option.label}
             {theme === option.value && <Check className="h-4 w-4 ml-2" />}

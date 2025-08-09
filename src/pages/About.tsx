@@ -393,7 +393,7 @@ const ResumeModal = () => {
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <IconButton
-           variant="outline"
+           variant="default"
            size="lg" 
            className="border-foreground/20 w-full" 
            icon={<Download className="w-4 h-4" />} 
@@ -447,8 +447,8 @@ const ResumeModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-          <IconButton 
-          variant="outline" 
+        <IconButton 
+          variant="default" 
           size="lg" 
           className="border-foreground/20 w-1/3"
           icon={<Download className="w-4 h-4" />} 

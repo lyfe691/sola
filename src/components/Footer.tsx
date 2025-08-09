@@ -61,7 +61,7 @@ const Footer = () => {
   const e = "/a";
 
   return (
-    <footer className="relative w-full border-t border-foreground/5 bg-background">
+    <footer className="relative w-full border-t border-foreground/5 bg-background/5 backdrop-blur-sm">
       {/* bottom glow effect */}
       <div 
         className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"

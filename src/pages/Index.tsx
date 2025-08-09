@@ -70,11 +70,6 @@ const Index = () => {
           <Helmet>
             <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
           </Helmet>
-
-          {/* Aurora Background */}
-          <div className="absolute inset-0 z-[1]">
-            <Aurora amplitude={0.6} speed={0.28} />
-          </div>
           
           {/* Squares background, remove for now 
           <div className="absolute inset-0 z-[1]">

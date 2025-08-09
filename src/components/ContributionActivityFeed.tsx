@@ -259,7 +259,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ eve
         
         {/* Subtle fade effect */}
         {events.length > 6 && (
-          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-background to-transparent pointer-events-none rounded-b-2xl" />
+          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-background/30 to-transparent pointer-events-none rounded-b-2xl" />
         )}
       </div>
 
