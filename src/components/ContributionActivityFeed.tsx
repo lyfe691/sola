@@ -267,7 +267,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ eve
       {events.length > 0 && (
         <div className="mt-6 flex justify-center">
           <IconButton
-            variant="outline"
+            variant="default"
             icon={<ExternalLink className="w-3.5 h-3.5" />}
             size="lg"
             className="transition-all duration-300 group border-foreground/20 rounded-full"

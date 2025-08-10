@@ -37,27 +37,13 @@ const desktopItemVariants = {
   }),
 };
 
-const mobileItemVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring" as const,
-      stiffness: 320,
-      damping: 30,
-      mass: 0.85,
-      delay: i * 0.05,
-    },
-  }),
-  closing: { opacity: 0, x: -12, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const } },
-};
+// mobile items will use per-instance variants defined inline to allow simple index-based delay
 
 const DESKTOP_CONTAINER_CLASSES =
   "hidden md:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/20 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
 
 const MOBILE_OVERLAY_CLASSES =
-  "fixed inset-0 bg-background/65 backdrop-blur-2xl z-50 md:hidden mobile-menu";
+  "fixed inset-0 bg-background/80 backdrop-blur-xl z-50 md:hidden mobile-menu";
 
 // memoized navigation item for better performance
 const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({ 
@@ -67,7 +53,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
   isMobile = false, 
   onClick = () => {} 
 }, ref) => {
-  const itemVariants = isMobile ? mobileItemVariants : desktopItemVariants;
+  const itemVariants = desktopItemVariants;
 
   const Component = motion.div;
   const isItemActive = isActive(item.path);
@@ -80,15 +66,24 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
   );
 
   if (isMobile) {
+    const mobileVariants = {
+      initial: { opacity: 0, y: 20 },
+      animate: {
+        opacity: 1,
+        y: 0,
+        transition: { delay: index * 0.05, duration: 0.3 },
+      },
+      exit: { opacity: 0, x: -12, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const } },
+    } as const;
     return (
       <Component
         layout
         key={item.text}
         custom={index}
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-        exit="closing"
+        variants={mobileVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
         className="w-full"
       >
         <Link 
@@ -113,7 +108,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
       variants={itemVariants}
       initial="hidden"
       animate="visible"
-      exit="closing"
+      exit="hidden"
     >
       <Link
         to={item.path}
@@ -256,15 +251,22 @@ const Navigation = () => {
 
   // mobile menu animations
   const mobileMenuVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const, when: "beforeChildren" } },
-    closing: { opacity: 0, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const, when: "afterChildren" } },
+    hidden: { 
+      opacity: 0,
+      transition: { duration: 0.3, when: "afterChildren" },
+    },
+    visible: { 
+      opacity: 1,
+      transition: { duration: 0.3, when: "beforeChildren" },
+    },
   };
 
   const mobileNavContainer = {
-    hidden: { opacity: 0, y: 4 },
-    visible: { opacity: 1, y: 0 },
-    closing: { opacity: 1, x: -24, transition: { staggerChildren: 0.05, staggerDirection: -1 } },
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    },
   }
 
   return (
@@ -314,22 +316,21 @@ const Navigation = () => {
           <motion.div
             initial="hidden"
             animate="visible"
-            exit="closing"
+            exit="hidden"
             variants={mobileMenuVariants}
-            className={MOBILE_OVERLAY_CLASSES + ' transform-gpu'}
+            className={MOBILE_OVERLAY_CLASSES}
           style={{
-            backdropFilter: 'blur(18px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(18px) saturate(160%)',
-            willChange: 'opacity',
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
           }}
           >
             <motion.nav 
               variants={mobileNavContainer}
               initial="hidden"
               animate="visible"
-              exit="closing"
+              exit="hidden"
               id="mobile-nav-menu"
-              className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10 transform-gpu"
+              className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10"
             >
               <div className="flex-grow">
                 <NavItem
