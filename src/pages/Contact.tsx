@@ -229,7 +229,7 @@ const Contact = () => {
                   <Send className="w-4 h-4" />
                 )
               }
-              variant="outline"
+              variant="secondary"
               className="group border-foreground/20"
             >
               <span className="flex items-center gap-2">
