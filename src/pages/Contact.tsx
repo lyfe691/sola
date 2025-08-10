@@ -149,6 +149,9 @@ const Contact = () => {
                   name="name"
                   type="text"
                   required
+                  appearance="glass"
+                  radius="lg"
+                  inputSize="lg"
                   placeholder={t.contact.namePlaceholder}
                   value={formValues.name}
                   onChange={(e) => setFormValues(prev => ({ ...prev, name: e.target.value }))}
@@ -163,6 +166,9 @@ const Contact = () => {
                   name="email"
                   type="email"
                   required
+                  appearance="glass"
+                  radius="lg"
+                  inputSize="lg"
                   placeholder={t.contact.emailPlaceholder}
                   value={formValues.email}
                   onChange={(e) => setFormValues(prev => ({ ...prev, email: e.target.value }))}
@@ -178,6 +184,9 @@ const Contact = () => {
                 name="subject"
                 type="text"
                 required
+                appearance="glass"
+                radius="lg"
+                inputSize="lg"
                 placeholder={t.contact.subjectPlaceholder}
                 value={formValues.subject}
                 onChange={(e) => setFormValues(prev => ({ ...prev, subject: e.target.value }))}
@@ -192,7 +201,10 @@ const Contact = () => {
                 name="message"
                 required
                 placeholder={t.contact.messagePlaceholder}
-                className="min-h-48"
+                appearance="glass"
+                radius="lg"
+                minHeight="md"
+                resizable={true}
                 value={formValues.message}
                 onChange={(e) => setFormValues(prev => ({ ...prev, message: e.target.value }))}
               />
