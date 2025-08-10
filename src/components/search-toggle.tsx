@@ -29,7 +29,8 @@ export function SearchToggle() {
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Search (Ctrl+K)</p>
+          <span>Search</span>
+          <span className="ml-2 text-xs text-muted-foreground">⌘K</span>
         </TooltipContent>
       </Tooltip>
   )

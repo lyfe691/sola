@@ -18,7 +18,8 @@ import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
-import Aurora from "./components/backgrounds/Aurora";
+import { AuroraProvider } from "./lib/aurora-provider";
+import AuroraBackground from "./components/backgrounds/AuroraBackground";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -33,33 +34,30 @@ function KeyboardShortcuts() {
 const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <div
-            className="fixed inset-0 -z-10 pointer-events-none select-none"
-            aria-hidden="true"
-          >
-            <Aurora amplitude={0.6} speed={0.28} />
-          </div>
-          <ClickSpark
-            sparkColor="hsl(var(--primary) / 0.30)"
-            sparkSize={4}
-            sparkCount={7}
-            duration={450}
-          >
-            <div className="min-h-screen flex flex-col relative">
-              <Toaster position="bottom-right" />
-              <BrowserRouter>
-                <KeyboardShortcuts />
-                <CommandMenu />
-                <AnimatedRoutes />
-                <ScrollToTop />
-                <Conditionals />
-              </BrowserRouter>
-            </div>
-          </ClickSpark>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <AuroraProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <AuroraBackground />
+            <ClickSpark
+              sparkColor="hsl(var(--primary) / 0.30)"
+              sparkSize={4}
+              sparkCount={7}
+              duration={450}
+            >
+              <div className="min-h-screen flex flex-col relative">
+                <Toaster position="bottom-right" />
+                <BrowserRouter>
+                  <KeyboardShortcuts />
+                  <CommandMenu />
+                  <AnimatedRoutes />
+                  <ScrollToTop />
+                  <Conditionals />
+                </BrowserRouter>
+              </div>
+            </ClickSpark>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </AuroraProvider>
     </LanguageProvider>
   </ThemeProvider>
 );
