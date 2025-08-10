@@ -339,9 +339,9 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
           <Link to={`/projects/${project.slug}`} className="w-full">
             <IconButton
               label={t.projects.viewDetails}
-              variant="outline"  
+              variant="default"  
               size="lg"
-              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
             />
           </Link>
         ) : (
@@ -349,9 +349,9 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
             {project.github && (
               <Button
                 asChild
-                variant="outline"
+                variant="default"
                 size="lg"
-                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
               >
                 <a 
                   href={project.github}
@@ -366,9 +366,9 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
             {project.link && (
               <Button
                 asChild
-                variant="outline"
+                variant="default"
                 size="lg"
-                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all group border-foreground/20"
+                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
               >
                 <a 
                   href={project.link}
@@ -567,7 +567,7 @@ const Projects = () => {
       <ScrollReveal variant="default">
         <div className="flex justify-center mt-12 sm:mt-16">
           <IconButton
-            variant="outline"
+            variant="default"
             size="lg"
             className="transition-all duration-300 group border-foreground/20 rounded-full"
             label={t.projects.viewAll}

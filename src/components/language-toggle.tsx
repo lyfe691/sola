@@ -31,7 +31,7 @@ export function LanguageToggle() {
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background"> {/* bg-background makes it not be transparent */}
+      <DropdownMenuContent align="end" className="bg-background/35 backdrop-blur-sm">
         <DropdownMenuItem onClick={() => setLanguage("en")} className="flex justify-between">
           English
           {language === "en" && <Check className="h-4 w-4" />}

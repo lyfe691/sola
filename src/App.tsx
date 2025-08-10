@@ -18,6 +18,8 @@ import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
+import { AuroraProvider } from "./lib/aurora-provider";
+import AuroraBackground from "./components/backgrounds/AuroraBackground";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -32,27 +34,30 @@ function KeyboardShortcuts() {
 const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <ClickSpark
-            sparkColor="hsl(var(--primary) / 0.30)"
-            sparkSize={4}
-            sparkCount={7}
-            duration={450}
-          >
-            <div className="min-h-screen flex flex-col">
-              <Toaster position="bottom-right"/>
-              <BrowserRouter>
-                <KeyboardShortcuts />
-                <CommandMenu />
-                <AnimatedRoutes />
-                <ScrollToTop />
-                <Conditionals />
-              </BrowserRouter>
-            </div>
-          </ClickSpark>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <AuroraProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <AuroraBackground />
+            <ClickSpark
+              sparkColor="hsl(var(--primary) / 0.30)"
+              sparkSize={4}
+              sparkCount={7}
+              duration={450}
+            >
+              <div className="min-h-screen flex flex-col relative">
+                <Toaster position="bottom-right" />
+                <BrowserRouter>
+                  <KeyboardShortcuts />
+                  <CommandMenu />
+                  <AnimatedRoutes />
+                  <ScrollToTop />
+                  <Conditionals />
+                </BrowserRouter>
+              </div>
+            </ClickSpark>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </AuroraProvider>
     </LanguageProvider>
   </ThemeProvider>
 );

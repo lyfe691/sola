@@ -35,12 +35,14 @@ import {
   Globe, 
   Search,
   Laptop,
+  Sparkles,
 } from "lucide-react"
 import { useCommandMenu } from "@/hooks/use-command-menu"
 import { useTheme } from "./theme-provider"
 import { useLanguage } from "@/lib/language-provider"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
+import { useAurora } from "@/lib/aurora-provider";
 
 // import types
 type Language = "en" | "de" | "ja" | "es" | "cn" 
@@ -51,6 +53,7 @@ export function CommandMenu() {
   const { language, setLanguage } = useLanguage()
   const { isOpen, closeCommandMenu } = useCommandMenu()
   const isMobile = useIsMobile()
+  const { enabled: auroraEnabled, toggle: toggleAurora } = useAurora()
 
   // handle navigation
   const handleNavigation = (path: string) => {
@@ -178,6 +181,11 @@ export function CommandMenu() {
             <Search className="mr-2 h-4 w-4" />
             <span>Search</span>
             <CommandShortcut>⌘K</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={() => toggleAurora()} className="cursor-pointer">
+            <Sparkles className="mr-2 h-4 w-4" />
+            <span>Aurora</span>
+            <CommandShortcut>{auroraEnabled ? "On" : "Off"}</CommandShortcut>
           </CommandItem>
         </CommandGroup>
       </CommandList>

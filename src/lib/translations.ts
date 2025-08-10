@@ -193,7 +193,8 @@ export const translations = {
       connect: "Connect",
       contact: "Contact",
       contactForm: "Contact Form",
-      privacy: "Privacy Policy"
+      privacy: "Privacy Policy", 
+      legal: "Legal"
     },
     about: {
       title: "About Me",
@@ -510,7 +511,8 @@ export const translations = {
       connect: "Verbinden",
       contact: "Kontakt",
       contactForm: "Kontaktformular",
-      privacy: "Datenschutzerklärung"
+      privacy: "Datenschutzerklärung",
+      legal: "Rechtliches"
     },
     about: {
       title: "Über Mich",
@@ -827,7 +829,8 @@ export const translations = {
       connect: "Conectarse",
       contact: "Contacto",
       contactForm: "Formulario de contacto",
-      privacy: "Política de privacidad"
+      privacy: "Política de privacidad",
+      legal: "Legal"
     },
     about: {
       title: "Sobre Mí",
@@ -1145,7 +1148,8 @@ export const translations = {
       connect: "接続",
       contact: "連絡先",
       contactForm: "フォームを介して",
-      privacy: "プライバシーポリシー"
+      privacy: "プライバシーポリシー",
+      legal: "法的"
     },
     about: {
       title: "私について",
@@ -1462,7 +1466,8 @@ export const translations = {
       connect: "连接",
       contact: "联系",
       contactForm: "通过表单",
-      privacy: "隐私政策"
+      privacy: "隐私政策",
+      legal: "法律的"
     },
     about: {
       title: "关于我",

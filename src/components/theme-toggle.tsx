@@ -18,13 +18,16 @@ import {
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { STANDARD_THEMES, CUSTOM_THEMES, THEMES, type Theme } from "@/config/themes"
+import { useAurora } from "@/lib/aurora-provider"
+import { Switch } from "@/components/ui/switch"
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light")
   const [mounted, setMounted] = useState(false)
+  const { enabled: auroraEnabled, setEnabled: setAuroraEnabled } = useAurora()
 
-  // Monitor system theme changes
+  // monitor system theme changes
   useEffect(() => {
     setMounted(true)
     
@@ -39,7 +42,7 @@ export function ThemeToggle() {
     return () => mediaQuery.removeEventListener("change", handler)
   }, [])
 
-  // Don't render anything until mounted to prevent hydration mismatch
+  // don't render anything until mounted to prevent hydration mismatch
   if (!mounted) {
     return null
   }
@@ -54,7 +57,7 @@ export function ThemeToggle() {
           size="icon"
           className="w-9 h-9 transition-colors hover:bg-muted"
         >
-          {/* Show icon with smooth animation */}
+          {/* show icon with smooth animation */}
           {theme === "system" ? (
             <>
               <Sun className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
@@ -78,33 +81,53 @@ export function ThemeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background min-w-[150px]">
-        {/* Standard themes */}
+      <DropdownMenuContent align="end" className="bg-background/35 backdrop-blur-sm min-w-[180px]">
+        {/* standard themes */}
         {STANDARD_THEMES.map((option) => (
           <DropdownMenuItem
             key={option.value}
             onClick={() => setTheme(option.value as Theme)}
-            className="flex justify-between cursor-pointer"
+            className="flex justify-between"
           >
             {option.label}
             {theme === option.value && <Check className="h-4 w-4 ml-2" />}
           </DropdownMenuItem>
         ))}
 
-        {/* Separator */}
+        {/* separator */}
         <DropdownMenuSeparator />
 
-        {/* Custom themes */}
+        {/* custom themes */}
         {CUSTOM_THEMES.map((option) => (
           <DropdownMenuItem
             key={option.value}
             onClick={() => setTheme(option.value as Theme)}
-            className="flex justify-between cursor-pointer"
+            className="flex justify-between"
           >
             {option.label}
             {theme === option.value && <Check className="h-4 w-4 ml-2" />}
           </DropdownMenuItem>
         ))}
+
+        {/* effects */}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            setAuroraEnabled(!auroraEnabled);
+          }}
+          className="flex items-center justify-between py-1.5"
+        >
+          <div className="flex items-center gap-2">
+            <span>Aurora</span>
+          </div>
+          <Switch
+            checked={auroraEnabled}
+            onCheckedChange={(v) => setAuroraEnabled(Boolean(v))}
+            onClick={(e) => e.stopPropagation()}
+            aria-label="toggle aurora"
+          />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

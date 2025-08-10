@@ -61,7 +61,7 @@ const Footer = () => {
   const e = "/a";
 
   return (
-    <footer className="relative w-full border-t border-foreground/5 bg-background">
+    <footer className="relative w-full border-t border-foreground/5 bg-background/5 backdrop-blur-sm">
       {/* bottom glow effect */}
       <div 
         className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"
@@ -115,7 +115,7 @@ const Footer = () => {
                  <div className={`transition-transform duration-300 ${isLegalExpanded ? 'rotate-90' : ''}`}>
                    <ChevronRight className="w-3.5 h-3.5" />
                  </div>
-                  <span className="font-medium">{t.footer.navigation}</span>
+                  <span className="font-medium">{t.footer.legal}</span>
                </button>
                
                <div className={`overflow-hidden transition-all duration-300 ${isLegalExpanded ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>

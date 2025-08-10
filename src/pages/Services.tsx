@@ -148,7 +148,7 @@ const Services = () => {
                 <div className="mt-6">
                   <Link to={getServiceContactUrl(service.key)}>
                     <IconButton 
-                      variant="outline" 
+                      variant="default" 
                       className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
                       label={t.services.getStarted || "Get Started"}
                     />
