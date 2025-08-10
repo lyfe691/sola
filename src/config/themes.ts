@@ -47,7 +47,7 @@ export const CUSTOM_THEMES = THEMES.filter((t) => t.isCustom);
 export const ALL_THEME_VALUES = THEMES.map((t) => t.value);
 export type Theme = (typeof ALL_THEME_VALUES)[number];
 
-/** Resolve light/dark “type” for a given theme (handles `system`). */
+/** resolve light/dark "type" for a given theme (handles "system"). */
 export const getThemeType = (currentTheme: Theme): "light" | "dark" => {
   if (currentTheme === "system") {
     return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -56,7 +56,7 @@ export const getThemeType = (currentTheme: Theme): "light" | "dark" => {
   return cfg?.type || "light";
 };
 
-// ---------------- Aurora presets (new) ----------------
+// ---------------- Aurora presets ----------------
 
 type BlendMode =
   | "normal" | "multiply" | "screen" | "overlay" | "darken" | "lighten"
@@ -77,28 +77,28 @@ export type AuroraPreset = {
 
 /** aurora presets */
 export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
-  light: { // clean celestial w/ contrast everywhere
+  light: {
     colorStops: ["#B0CFFF", "#C8E0FF", "#EAF3FF"],
     blendMode: "normal",
-    intensity: 1.15,
-    blend: 0.85,
+    intensity: 0.85,
+    blend: 0.65,
     scale: 0.82,
-    feather: 0.32,
-    alphaGamma: 1.05,
-    saturation: 1.25,
-    minAlpha: 0.12,
-  },
-  dark: { // deep celestial
-    colorStops: ["#7FB8FF", "#9FC9FF", "#BFDFFF"],
+    feather: 0.45,
+    alphaGamma: 1.02,
+    saturation: 1.08,
+    minAlpha: 0.18,
+   },
+  dark: {
+    colorStops: ["#A8CCFF", "#C2E0FF", "#DCF2FF"],
     blendMode: "screen",
-    intensity: 0.65,
-    blend: 0.50,
-    scale: 0.90,
-    feather: 0.24,
-    alphaGamma: 1.20,
-    saturation: 1.00,
-    minAlpha: 0.00,
-  },
+    intensity: 0.75,
+    blend: 0.60,
+    scale: 0.88,
+    feather: 0.35,
+    alphaGamma: 1.12,
+    saturation: 1.15,
+    minAlpha: 0.08,
+   },
   cloud: { // ultra-airy blue-white
     colorStops: ["#F2F7FF", "#E6F1FF", "#FFFFFF"],
     blendMode: "lighten",
