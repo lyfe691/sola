@@ -7,11 +7,12 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Home, MoveRight } from "lucide-react";
+import { Home } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { cn } from "@/lib/utils";
 
 // define types for the navitem component
 interface NavItemProps {
@@ -26,9 +27,37 @@ interface NavItemProps {
   onClick?: () => void;
 }
 
-// app version from package
-import pkg from "../../package.json" assert { type: "json" };
-const APP_VERSION: string = (pkg as { version: string }).version;
+// motion variants and class constants
+const desktopItemVariants = {
+  hidden: { opacity: 0, y: -10 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] as const, delay: i * 0.05 },
+  }),
+};
+
+const mobileItemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 320,
+      damping: 30,
+      mass: 0.85,
+      delay: i * 0.05,
+    },
+  }),
+  closing: { opacity: 0, x: -12, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const } },
+};
+
+const DESKTOP_CONTAINER_CLASSES =
+  "hidden md:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/20 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
+
+const MOBILE_OVERLAY_CLASSES =
+  "fixed inset-0 bg-background/65 backdrop-blur-2xl z-50 md:hidden mobile-menu";
 
 // memoized navigation item for better performance
 const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({ 
@@ -38,57 +67,36 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
   isMobile = false, 
   onClick = () => {} 
 }, ref) => {
-  const itemVariants = isMobile 
-    ? {
-        initial: { opacity: 0, y: 20 },
-        animate: { 
-          opacity: 1, 
-          y: 0, 
-          transition: { delay: index * 0.05, duration: 0.3 }
-        }
-      }
-    : {
-        hidden: { opacity: 0, y: -10 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: {
-            delay: index * 0.05,
-            duration: 0.3
-          }
-        }
-      };
+  const itemVariants = isMobile ? mobileItemVariants : desktopItemVariants;
 
   const Component = motion.div;
-  const activeClass = isActive(item.path) 
-    ? 'text-foreground font-medium'
-    : 'text-foreground/60 hover:text-foreground';
+  const isItemActive = isActive(item.path);
+  const linkBaseClass = isMobile
+    ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
+    : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2";
+  const linkClassName = cn(
+    linkBaseClass,
+    isItemActive ? "text-primary" : "text-foreground/60 hover:text-foreground"
+  );
 
   if (isMobile) {
-    const isItemActive = isActive(item.path);
-    
     return (
       <Component
         layout
         key={item.text}
         custom={index}
         variants={itemVariants}
-        initial="initial"
-        animate="animate"
+        initial="hidden"
+        animate="visible"
+        exit="closing"
         className="w-full"
       >
         <Link 
           to={item.path} 
           onClick={onClick}
           ref={ref}
-          className={`
-            relative flex items-center w-full p-2
-            transition-colors duration-300 rounded-md
-            text-2xl font-medium tracking-tight
-            ${isItemActive 
-              ? 'text-primary' 
-              : 'text-foreground/60 hover:text-foreground'}
-          `}
+          className={linkClassName}
+          aria-current={isItemActive ? "page" : undefined}
         >
           {item.icon && <item.icon className="w-6 h-6 mr-3" />}
           {item.text}
@@ -105,19 +113,21 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
       variants={itemVariants}
       initial="hidden"
       animate="visible"
+      exit="closing"
     >
       <Link
         to={item.path}
         onClick={onClick}
         ref={ref}
-        className={`relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2 ${activeClass}`}
+        className={linkClassName}
+        aria-current={isItemActive ? "page" : undefined}
       >
-        {isActive(item.path) && (
+        {isItemActive && (
           <motion.div
             layoutId="nav-active"
             className="absolute inset-0 rounded-full bg-foreground/10"
             initial={false}
-            transition={{ type: 'spring', stiffness: 400, damping: 35, mass: 0.8 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 30, mass: 0.85 }}
           />
         )}
         {item.icon && <item.icon className="w-4 h-4" />}
@@ -128,7 +138,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
 }));
 
 // ensure display name is set for devtools
-NavItem.displayName = "navitem";
+NavItem.displayName = "NavItem";
 
 // mobile menu button with animated hamburger
 const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => {
@@ -139,6 +149,8 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
                 hover:bg-foreground/5 transition-colors duration-300 shadow-sm z-[51]"
       whileTap={{ scale: 0.92 }}
       aria-label={isOpen ? "Close menu" : "Open menu"}
+      aria-expanded={isOpen}
+      aria-controls="mobile-nav-menu"
     >
       <div className="w-5 h-4 relative flex flex-col items-center justify-center">
         <div className="relative w-[18px] h-[10px] flex flex-col justify-between">
@@ -244,48 +256,30 @@ const Navigation = () => {
 
   // mobile menu animations
   const mobileMenuVariants = {
-    hidden: { 
-      opacity: 0,
-      transition: {
-        duration: 0.3,
-        when: "afterChildren"
-      }
-    },
-    visible: { 
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-        when: "beforeChildren",
-      }
-    },
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const, when: "beforeChildren" } },
+    closing: { opacity: 0, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const, when: "afterChildren" } },
   };
 
   const mobileNavContainer = {
-    hidden: {
-      opacity: 0,
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      }
-    }
+    hidden: { opacity: 0, y: 4 },
+    visible: { opacity: 1, y: 0 },
+    closing: { opacity: 1, x: -24, transition: { staggerChildren: 0.05, staggerDirection: -1 } },
   }
 
   return (
-    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4">
+    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4" role="navigation" aria-label="Main navigation">
       
       {/* desktop navigation */}
       <div className="flex justify-center items-center">
         <motion.div
-          className="hidden md:flex items-center justify-center mx-auto gap-x-1 bg-background/60 backdrop-blur-2xl py-4 px-4 rounded-full border-2 border-border/20 shadow-lg shadow-black/5"
+          className={DESKTOP_CONTAINER_CLASSES}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           style={{
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            backdropFilter: 'blur(28px) saturate(160%)',
+            WebkitBackdropFilter: 'blur(28px) saturate(160%)',
           }}
         >
           {/* home navigation - simple layout*/}
@@ -315,20 +309,27 @@ const Navigation = () => {
       </div>
 
       {/* mobile navigation menu */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {isMenuOpen && (
           <motion.div
             initial="hidden"
             animate="visible"
-            exit="hidden"
+            exit="closing"
             variants={mobileMenuVariants}
-            className="fixed inset-0 bg-background/80 backdrop-blur-xl z-50 md:hidden mobile-menu"
+            className={MOBILE_OVERLAY_CLASSES + ' transform-gpu'}
+          style={{
+            backdropFilter: 'blur(18px) saturate(160%)',
+            WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+            willChange: 'opacity',
+          }}
           >
             <motion.nav 
               variants={mobileNavContainer}
               initial="hidden"
               animate="visible"
-              className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10"
+              exit="closing"
+              id="mobile-nav-menu"
+              className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10 transform-gpu"
             >
               <div className="flex-grow">
                 <NavItem
