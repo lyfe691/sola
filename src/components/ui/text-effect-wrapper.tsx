@@ -9,7 +9,7 @@ import {
   type Variant,
   type Variants,
 } from "motion/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
 
@@ -71,17 +71,17 @@ const presetVariants: Record<
   blur: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, filter: "blur(12px)" },
-      visible: { opacity: 1, filter: "blur(0px)" },
-      exit: { opacity: 0, filter: "blur(12px)" },
+      hidden: { opacity: 0, filter: "blur(12px)", y: 8 },
+      visible: { opacity: 1, filter: "blur(0px)", y: 0 },
+      exit: { opacity: 0, filter: "blur(12px)", y: 8 },
     },
   },
   "fade-in-blur": {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, y: 20, filter: "blur(12px)" },
+      hidden: { opacity: 0, y: 15, filter: "blur(12px)" },
       visible: { opacity: 1, y: 0, filter: "blur(0px)" },
-      exit: { opacity: 0, y: 20, filter: "blur(12px)" },
+      exit: { opacity: 0, y: 15, filter: "blur(12px)" },
     },
   },
   scale: {
@@ -103,9 +103,9 @@ const presetVariants: Record<
   slide: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, y: 20 },
+      hidden: { opacity: 0, y: 25 },
       visible: { opacity: 1, y: 0 },
-      exit: { opacity: 0, y: 20 },
+      exit: { opacity: 0, y: -25 },
     },
   },
 };
@@ -116,6 +116,17 @@ const AnimationComponent: React.FC<{
   per: "line" | "word" | "char";
   segmentWrapperClassName?: string;
 }> = React.memo(({ segment, variants, per, segmentWrapperClassName }) => {
+  // Render plain whitespace segments without motion to avoid spacing glitches
+  if (segment.trim() === "") {
+    const WrapperTag = per === "line" ? "span" : "span";
+    const plainClass = per === "line" ? "block" : "inline whitespace-pre select-none";
+    return (
+      <span aria-hidden="true" className={plainClass}>
+        {segment}
+      </span>
+    );
+  }
+
   const content =
     per === "line" ? (
       <motion.span variants={variants} className="block">
@@ -132,15 +143,27 @@ const AnimationComponent: React.FC<{
     ) : (
       <motion.span className="inline-block whitespace-pre">
         {segment.split("").map((char, charIndex) => (
-          <motion.span
-            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-            key={`char-${charIndex}`}
-            aria-hidden="true"
-            variants={variants}
-            className="inline-block whitespace-pre"
-          >
-            {char}
-          </motion.span>
+          char === " " ? (
+            // render raw space without motion to prevent layout jitter
+            <span
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              key={`space-${charIndex}`}
+              aria-hidden="true"
+              className="inline whitespace-pre select-none"
+            >
+              {char}
+            </span>
+          ) : (
+            <motion.span
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+              key={`char-${charIndex}`}
+              aria-hidden="true"
+              variants={variants}
+              className="inline-block"
+            >
+              {char}
+            </motion.span>
+          )
         ))}
       </motion.span>
     );
@@ -223,16 +246,27 @@ export function TextEffectWrapper({
   segmentTransition,
   style,
 }: TextEffectProps) {
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || !("matchMedia" in window)) return;
+    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handler = () => setPrefersReducedMotion(mql.matches);
+    handler();
+    mql.addEventListener?.("change", handler);
+    return () => mql.removeEventListener?.("change", handler);
+  }, []);
   const segments = splitText(children, per);
   const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
 
-  const baseVariants = preset
-    ? presetVariants[preset]
+  const chosenPreset: PresetType = prefersReducedMotion ? "fade" : preset;
+
+  const baseVariants = chosenPreset
+    ? presetVariants[chosenPreset]
     : { container: defaultContainerVariants, item: defaultItemVariants };
 
   const stagger = defaultStaggerTimes[per] / speedReveal;
 
-  const baseDuration = 0.3 / speedSegment;
+  const baseDuration = (prefersReducedMotion ? 0.15 : 0.35) / speedSegment;
 
   const customStagger = hasTransition(variants?.container?.visible ?? {})
     ? (variants?.container?.visible as TargetAndTransition).transition
@@ -248,11 +282,11 @@ export function TextEffectWrapper({
     container: createVariantsWithTransition(
       variants?.container || baseVariants.container,
       {
-        staggerChildren: customStagger ?? stagger,
-        delayChildren: customDelay ?? delay,
+        staggerChildren: prefersReducedMotion ? 0 : (customStagger ?? stagger),
+        delayChildren: prefersReducedMotion ? 0 : (customDelay ?? delay),
         ...containerTransition,
         exit: {
-          staggerChildren: customStagger ?? stagger,
+          staggerChildren: prefersReducedMotion ? 0 : (customStagger ?? stagger),
           staggerDirection: -1,
         },
       },
@@ -299,6 +333,7 @@ export function CyclingTextEffect({
   speedSegment = 1,
   displayDuration = 2000,
   style,
+  useCurve = true,
 }: {
   texts: string[];
   per?: PerType;
@@ -310,6 +345,7 @@ export function CyclingTextEffect({
   speedSegment?: number;
   displayDuration?: number;
   style?: React.CSSProperties;
+  useCurve?: boolean;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -326,17 +362,21 @@ export function CyclingTextEffect({
   if (texts.length === 0) return null;
 
   return (
-    <div style={style} className={className}>
+    <div 
+      style={style}
+      className={className}
+    >
       <AnimatePresence mode="wait">
         <TextEffectWrapper
           key={currentIndex}
           per={per}
           preset={preset}
-          as={as}
+          as={as || "span"}
           delay={delay}
           speedReveal={speedReveal}
           speedSegment={speedSegment}
           trigger={true}
+          style={{ display: 'block' }}
         >
           {texts[currentIndex]}
         </TextEffectWrapper>

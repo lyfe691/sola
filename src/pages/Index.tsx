@@ -119,8 +119,16 @@ const Index = () => {
                         delay={0.1}
                         speedReveal={4}
                         displayDuration={3000}
+                        useCurve={true}
                       />
                     </motion.div>
+                  </div>
+                  
+                  <motion.div 
+                    className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0"
+                    layout
+                    transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  >
                     <motion.div 
                       variants={itemVariants}
                       initial="hidden"
@@ -216,7 +224,7 @@ const Index = () => {
                         );
                       })}
                     </motion.div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             </div>
