@@ -8,6 +8,14 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useLocation, Routes, Route, Navigate } from "react-router-dom";
+import { ReactNode } from "react";
+import SimpleLayout from "@/layouts/SimpleLayout";
+import MainLayout from "@/layouts/MainLayout";
+import BlankLayout from "@/layouts/BlankLayout";
+import ProjectLayout from "@/layouts/ProjectLayout";
+import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
+
+// eager imports
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound";
 import About from "@/pages/About";
@@ -19,12 +27,6 @@ import Services from "@/pages/Services";
 import AboutThisWebsite from "@/pages/AboutThisWebsite";
 import Privacy from "@/pages/Privacy";
 import ProjectPageRenderer from "@/pages/projects/ProjectPageRenderer";
-import SimpleLayout from "@/layouts/SimpleLayout";
-import MainLayout from "@/layouts/MainLayout";
-import BlankLayout from "@/layouts/BlankLayout";
-import ProjectLayout from "@/layouts/ProjectLayout";
-import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
-import { ReactNode } from "react";
 
 
 // define types for pagetransition
@@ -34,7 +36,7 @@ interface PageTransitionProps {
   
   // pt wrapper for route animations
   const PageTransition = ({ children }: PageTransitionProps) => {
-    return (
+    return (  
       <motion.div
         variants={pageTransitionVariants}
         initial="initial"

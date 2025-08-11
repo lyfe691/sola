@@ -21,7 +21,7 @@ type AuroraProviderState = {
 };
 
 const initialState: AuroraProviderState = {
-  enabled: true,
+  enabled: false,
   setEnabled: () => undefined,
   toggle: () => undefined,
 };
@@ -31,7 +31,7 @@ const AuroraContext = createContext<AuroraProviderState>(initialState);
 export function AuroraProvider({
   children,
   storageKey = "aurora-enabled",
-  defaultEnabled = true,
+  defaultEnabled = false,
 }: AuroraProviderProps) {
   const [enabled, setEnabled] = useState<boolean>(() => {
     try {

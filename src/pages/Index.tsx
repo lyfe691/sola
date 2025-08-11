@@ -24,19 +24,19 @@ import { CyclingTextEffect } from "@/components/ui/text-effect-wrapper";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
-// removed particles to reduce bundle; can be re-added via dynamic import if needed
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/NameMorpher";
 import { IconButton } from "@/components/ui/custom/IconButton";
-import Threads from "@/components/backgrounds/Threads";
-import Squares from "@/components/backgrounds/Squares";
-import Aurora from "@/components/backgrounds/Aurora";
+// defer heavy background imports until needed
+// import Threads from "@/components/backgrounds/Threads";
+// import Squares from "@/components/backgrounds/Squares";
+// import Aurora from "@/components/backgrounds/Aurora";
 import { SOCIAL_LINKS, SOCIAL_ORDER_HERO } from "@/config/social";
 
 
 const Index = () => {
-  const isLoaded = usePageInit(50);
+  const isLoaded = usePageInit(0);
   const [key, setKey] = useState(0);
   const { language } = useLanguage();
   const t = translations[language];
@@ -47,12 +47,6 @@ const Index = () => {
     t.index.description3,
     t.index.description4,
   ];
-
-  /* remove for now
-  const particlesInit = async (engine: Engine) => {
-    await loadSlim(engine);
-  };
-  */
 
   useEffect(() => {
     setKey(prev => prev + 1);
@@ -65,7 +59,7 @@ const Index = () => {
           className="flex flex-col h-screen relative overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.4 }}
+          transition={{ duration: 0.3 }}
         >
           <Helmet>
             <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
@@ -91,10 +85,6 @@ const Index = () => {
               />
             </div>
           </div>
-          */}
-          
-          {/* Particle background, remove for now 
-          <ParticleBackground particlesInit={particlesInit}/>
           */}
           
           <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-16 sm:pt-18 md:pt-20 flex flex-col relative z-20">

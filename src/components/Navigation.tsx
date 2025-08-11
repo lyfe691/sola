@@ -302,19 +302,20 @@ const Navigation = () => {
   }
 
   return (
-    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4" role="navigation" aria-label="Main navigation">
+    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4">
       
       {/* desktop navigation */}
       <div className="flex justify-center items-center">
-        <motion.div
+        <motion.nav
           className={DESKTOP_CONTAINER_CLASSES}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
+          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
           style={{
             backdropFilter: 'blur(28px) saturate(160%)',
             WebkitBackdropFilter: 'blur(28px) saturate(160%)',
           }}
+          aria-label="Primary"
         >
           {/* home navigation - simple layout*/}
           <NavItem
@@ -334,7 +335,7 @@ const Navigation = () => {
               isActive={isActive}
             />
           ))}
-        </motion.div>
+        </motion.nav>
       </div>
 
       {/* mobile menu button */}
@@ -362,6 +363,7 @@ const Navigation = () => {
               animate="visible"
               exit="hidden"
               id="mobile-nav-menu"
+              aria-label="Primary"
               className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10"
             >
               <div className="flex-grow">
