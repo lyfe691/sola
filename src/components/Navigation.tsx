@@ -71,9 +71,20 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
       animate: {
         opacity: 1,
         y: 0,
-        transition: { delay: index * 0.05, duration: 0.3 },
+        transition: { 
+          delay: index * 0.04, 
+          duration: 0.4,
+          ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
+        },
       },
-      exit: { opacity: 0, x: -12, transition: { duration: 0.22, ease: [0.22, 1, 0.36, 1] as const } },
+      exit: { 
+        opacity: 0, 
+        y: -15,
+        transition: { 
+          duration: 0.3,
+          ease: [0.4, 0, 0.2, 1] as [number, number, number, number]
+        } 
+      },
     } as const;
     return (
       <Component
@@ -160,7 +171,7 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
               marginTop: "-0.7px"
             }}
             style={{ transformOrigin: "center" }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           />
           
           {/* Bottom bar */}
@@ -174,7 +185,7 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
               marginBottom: "-0.7px"
             }}
             style={{ transformOrigin: "center" }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           />
         </div>
       </div>
@@ -188,7 +199,10 @@ const Navigation = () => {
   const t = translations[language];
   const location = useLocation();
 
-  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+  const closeMenu = useCallback(() => {
+    // Allow animations to play out smoothly
+    setTimeout(() => setIsMenuOpen(false), 100);
+  }, []);
   const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
 
   // memoized navigation items
@@ -245,27 +259,45 @@ const Navigation = () => {
 
   // close menu when route changes
   useEffect(() => {
-    closeMenu();
-  }, [location.pathname, closeMenu]);
+    // Don't close immediately - let the Link onClick handle it
+    // This effect is just for cleanup if needed
+  }, [location.pathname]);
 
 
   // mobile menu animations
-  const mobileMenuVariants = {
+  const mobileMenuVariants: Record<string, any> = {
     hidden: { 
       opacity: 0,
-      transition: { duration: 0.3, when: "afterChildren" },
+      transition: { 
+        duration: 0.5, 
+        ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
+        when: "afterChildren" 
+      },
     },
     visible: { 
       opacity: 1,
-      transition: { duration: 0.3, when: "beforeChildren" },
+      transition: { 
+        duration: 0.4, 
+        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+        when: "beforeChildren" 
+      },
     },
   };
 
-  const mobileNavContainer = {
-    hidden: { opacity: 0 },
+  const mobileNavContainer: Record<string, any> = {
+    hidden: { 
+      opacity: 0,
+      transition: {
+        staggerChildren: 0.03,
+        staggerDirection: -1,
+      }
+    },
     visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+      transition: { 
+        staggerChildren: 0.06, 
+        delayChildren: 0.08 
+      },
     },
   }
 
@@ -278,7 +310,7 @@ const Navigation = () => {
           className={DESKTOP_CONTAINER_CLASSES}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
           style={{
             backdropFilter: 'blur(28px) saturate(160%)',
             WebkitBackdropFilter: 'blur(28px) saturate(160%)',
@@ -311,7 +343,7 @@ const Navigation = () => {
       </div>
 
       {/* mobile navigation menu */}
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         {isMenuOpen && (
           <motion.div
             initial="hidden"
