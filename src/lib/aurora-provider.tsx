@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 type AuroraProviderProps = {
   children: React.ReactNode;
@@ -51,7 +51,10 @@ export function AuroraProvider({
   }, [enabled, storageKey]);
 
   const value = useMemo<AuroraProviderState>(
-    () => ({ enabled, setEnabled, toggle: () => setEnabled((v) => !v) }),
+    () => {
+      const toggle = () => setEnabled((v) => !v);
+      return { enabled, setEnabled, toggle };
+    },
     [enabled]
   );
 

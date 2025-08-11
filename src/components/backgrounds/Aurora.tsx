@@ -26,6 +26,7 @@ uniform float uFeather;
 uniform float uAlphaGamma;
 uniform float uSaturation;
 uniform float uMinAlpha;
+uniform float uBase;
 
 out vec4 fragColor;
 
@@ -82,7 +83,7 @@ void main(){
   float n = snoise(vec2(suv.x * uScale + uTime*0.06, uTime*0.12));
   n = 0.5 + 0.5 * n;
 
-  float wave = 0.35 + n * 0.35 * uAmplitude;
+  float wave = uBase + n * 0.35 * uAmplitude;
   float d = uv.y - wave;
 
   float alpha = smoothstep(-(uFeather+uBlend), (uFeather+uBlend), -d);
@@ -109,6 +110,7 @@ export interface AuroraProps {
   alphaGamma?: number;
   saturation?: number;
   minAlpha?: number;
+  base?: number;
 }
 
 const detectThemeFromHtml = (): Exclude<Theme, "system"> => {
@@ -120,7 +122,7 @@ const detectThemeFromHtml = (): Exclude<Theme, "system"> => {
 };
 
 export default function Aurora({
-  amplitude = 0.6,
+  amplitude = 0.45,
   speed = 1.0,
   ...over
 }: AuroraProps) {
@@ -185,6 +187,7 @@ export default function Aurora({
         uAlphaGamma:  { value: propsRef.current.alphaGamma ?? preset.alphaGamma },
         uSaturation:  { value: propsRef.current.saturation ?? preset.saturation },
         uMinAlpha:    { value: propsRef.current.minAlpha ?? preset.minAlpha },
+        uBase:        { value: propsRef.current.base ?? preset.base },
       },
     });
 
@@ -203,6 +206,7 @@ export default function Aurora({
       if (propsRef.current.alphaGamma == null) program.uniforms.uAlphaGamma.value = p.alphaGamma;
       if (propsRef.current.saturation == null) program.uniforms.uSaturation.value = p.saturation;
       if (propsRef.current.minAlpha == null) program.uniforms.uMinAlpha.value = p.minAlpha;
+      if (propsRef.current.base == null) program.uniforms.uBase.value = p.base;
       setRes();
     };
 
@@ -223,6 +227,9 @@ export default function Aurora({
       }
       if (typeof propsRef.current.blend === "number") {
         program.uniforms.uBlend.value = propsRef.current.blend;
+      }
+      if (typeof propsRef.current.base === "number") {
+        program.uniforms.uBase.value = propsRef.current.base;
       }
 
       renderer.render({ scene: mesh });

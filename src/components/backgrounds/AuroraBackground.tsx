@@ -13,8 +13,8 @@ export default function AuroraBackground() {
   const { enabled } = useAurora();
   if (!enabled) return null;
   return (
-    <div className="fixed inset-0 -z-10 pointer-events-none select-none" aria-hidden="true">
-      <Aurora amplitude={0.6} speed={0.28} />
+    <div className="fixed inset-0 -z-10 pointer-events-none select-none" aria-hidden>
+      <Aurora />
     </div>
   );
 }
