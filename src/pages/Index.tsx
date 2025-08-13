@@ -55,11 +55,8 @@ const Index = () => {
   return (
     <AnimatePresence>
       {isLoaded && (
-        <motion.div 
+        <div 
           className="flex flex-col h-screen relative overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
         >
           <Helmet>
             <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
@@ -229,7 +226,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

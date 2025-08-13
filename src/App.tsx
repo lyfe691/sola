@@ -17,9 +17,10 @@ import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
-import  ClickSpark from "./components/ClickSpark";
-import { AuroraProvider } from "./lib/aurora-provider";
-import AuroraBackground from "./components/backgrounds/AuroraBackground";
+import { lazy, Suspense, useEffect, useState, PropsWithChildren } from "react";
+const ClickSpark = lazy(() => import("./components/ClickSpark"));
+import { AuroraProvider, useAurora } from "./lib/aurora-provider";
+const AuroraBackground = lazy(() => import("./components/backgrounds/AuroraBackground"));
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -30,6 +31,45 @@ function KeyboardShortcuts() {
   return null;
 }
 
+// mount aurora lazily only when enabled to avoid fetching its chunk otherwise
+const AuroraMount = () => {
+  const { enabled } = useAurora();
+  if (!enabled) return null;
+  return (
+    <Suspense fallback={null}>
+      <AuroraBackground />
+    </Suspense>
+  );
+};
+
+// defer click spark until browser is idle
+const DeferredClickSpark = ({ children }: PropsWithChildren) => {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const fallback = (cb: () => void) => setTimeout(cb, 150);
+    const ric: (
+      cb: () => void
+    ) => number = (window as any).requestIdleCallback || (fallback as any);
+    const id = ric(() => setReady(true));
+    return () => {
+      // no-op cleanup; best-effort only
+    };
+  }, []);
+  if (!ready) return <>{children}</>;
+  return (
+    <Suspense fallback={<>{children}</>}>
+      <ClickSpark
+        sparkColor="hsl(var(--primary) / 0.30)"
+        sparkSize={4}
+        sparkCount={7}
+        duration={450}
+      >
+        {children}
+      </ClickSpark>
+    </Suspense>
+  );
+};
+
 // app
 const App = () => (
   <ThemeProvider defaultTheme="system">
@@ -37,13 +77,8 @@ const App = () => (
       <AuroraProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
-            <AuroraBackground />
-            <ClickSpark
-              sparkColor="hsl(var(--primary) / 0.30)"
-              sparkSize={4}
-              sparkCount={7}
-              duration={450}
-            >
+            <AuroraMount />
+            <DeferredClickSpark>
               <div className="min-h-screen flex flex-col relative">
                 <Toaster position="bottom-right" />
                 <BrowserRouter>
@@ -54,7 +89,7 @@ const App = () => (
                   <Conditionals />
                 </BrowserRouter>
               </div>
-            </ClickSpark>
+            </DeferredClickSpark>
           </TooltipProvider>
         </QueryClientProvider>
       </AuroraProvider>

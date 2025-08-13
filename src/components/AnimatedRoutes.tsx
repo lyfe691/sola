@@ -8,25 +8,25 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useLocation, Routes, Route, Navigate } from "react-router-dom";
-import { ReactNode } from "react";
+import { ReactNode, lazy, Suspense } from "react";
+import Index from "@/pages/Index";
 import SimpleLayout from "@/layouts/SimpleLayout";
 import MainLayout from "@/layouts/MainLayout";
 import BlankLayout from "@/layouts/BlankLayout";
 import ProjectLayout from "@/layouts/ProjectLayout";
 import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
 
-// eager imports
-import Index from "@/pages/Index";
-import NotFound from "@/pages/NotFound";
-import About from "@/pages/About";
-import Projects from "@/pages/Projects";
-import Skills from "@/pages/Skills";
-import Experience from "@/pages/Experience";
-import Contact from "@/pages/Contact";
-import Services from "@/pages/Services";
-import AboutThisWebsite from "@/pages/AboutThisWebsite";
-import Privacy from "@/pages/Privacy";
-import ProjectPageRenderer from "@/pages/projects/ProjectPageRenderer";
+// lazy route chunks to cut initial JS
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const About = lazy(() => import("@/pages/About"));
+const Projects = lazy(() => import("@/pages/Projects"));
+const Skills = lazy(() => import("@/pages/Skills"));
+const Experience = lazy(() => import("@/pages/Experience"));
+const Contact = lazy(() => import("@/pages/Contact"));
+const Services = lazy(() => import("@/pages/Services"));
+const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
+const Privacy = lazy(() => import("@/pages/Privacy"));
+const ProjectPageRenderer = lazy(() => import("@/pages/projects/ProjectPageRenderer"));
 
 
 // define types for pagetransition
@@ -63,13 +63,14 @@ export const AnimatedRoutes = () => {
     );
   
     return (
+      <Suspense fallback={null}>
       <Routes location={location}>
         {/* home */}
         <Route 
           path="/" 
           element={
             <SimpleLayout>
-              {withTransition(Index)}
+              <Index />
             </SimpleLayout>
           } 
         />
@@ -177,5 +178,6 @@ export const AnimatedRoutes = () => {
           } 
         />
       </Routes>
+      </Suspense>
     );
   };

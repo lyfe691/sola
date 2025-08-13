@@ -224,9 +224,11 @@ export const itemVariants = {
 
 // Page initialize hook utility (legacy)
 export const usePageInit = (delay = 100) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  
+  // If delay is 0 or negative, render synchronously on first paint to avoid blank frames
+  const [isLoaded, setIsLoaded] = useState(delay <= 0);
+
   useEffect(() => {
+    if (delay <= 0) return; // already loaded, avoid extra tick
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, delay);
