@@ -1,0 +1,100 @@
+/**
+ * Copyright (c) 2025 Yanis Sebastian Zürcher
+ *
+ * This file is part of a proprietary software project.
+ * Unauthorized copying, modification, or distribution is strictly prohibited.
+ * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ */
+
+import React, { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
+import { useAurora } from "@/lib/aurora-provider";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
+
+const STORAGE_KEY = "aurora-intro-seen";
+const AURORA_STORAGE_KEY = "aurora-enabled";
+
+interface AuroraIntroModalProps {
+  imageSrc?: string;
+}
+
+const AuroraIntroModal: React.FC<AuroraIntroModalProps> = ({ imageSrc = "/other/aurora.jpg" }) => {
+  const { enabled, setEnabled } = useAurora();
+  const [open, setOpen] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language]?.auroraIntro as any;
+
+  useEffect(() => {
+    try {
+      // if user has ever enabled Aurora (now or in the past), don't show the intro again
+      const everEnabled = localStorage.getItem(AURORA_STORAGE_KEY) === "true";
+      if (everEnabled) {
+        try { localStorage.setItem(STORAGE_KEY, "true"); } catch {}
+      }
+
+      if (enabled) {
+        setOpen(false);
+        return;
+      }
+
+      const seen = localStorage.getItem(STORAGE_KEY) === "true";
+      setOpen(!seen && !enabled);
+    } catch {
+      if (!enabled) setOpen(true);
+    }
+  }, [enabled]);
+
+  const onClose = useMemo(
+    () => () => {
+      setOpen(false);
+      try { localStorage.setItem(STORAGE_KEY, "true"); } catch { /* ignore */ }
+    },
+    []
+  );
+
+  const onEnable = () => {
+    setEnabled(true);
+    try { localStorage.setItem(STORAGE_KEY, "true"); } catch { /* ignore */ }
+    onClose();
+  };
+
+  if (!open) return null;
+
+  return createPortal(
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} aria-hidden />
+      <div role="dialog" aria-modal="true" aria-labelledby="aurora-intro-title" className="relative w-full max-w-lg rounded-2xl bg-background border border-foreground/10 shadow-xl overflow-hidden">
+        <button aria-label="Close" onClick={onClose} className="absolute right-3 top-3 z-10 rounded-full p-1.5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+
+        <div className="relative h-40 sm:h-48">
+          <img src={imageSrc} alt="Aurora preview" className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none" />
+        </div>
+
+        <div className="p-5 sm:p-6">
+          <div className="mb-2 text-xs font-medium tracking-wide text-foreground/60">{t?.newLabel ?? "New"}</div>
+          <h2 id="aurora-intro-title" className="text-xl sm:text-2xl font-semibold mb-2">{t?.title ?? "Introducing Aurora background"}</h2>
+          <p className="text-foreground/70 text-sm sm:text-base mb-5">
+            {(t?.description ?? "A subtle, animated background that adapts to your theme.") + " " + (t?.instruction ?? "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora background'.")}
+          </p>
+
+          <div className="flex flex-wrap gap-2 sm:gap-3 justify-end">
+            <button onClick={onEnable} className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-4 py-2 text-sm font-medium hover:opacity-90 transition">
+              {t?.enableButton ?? "Enable Aurora"}
+            </button>
+            <button onClick={onClose} className="inline-flex items-center justify-center rounded-full border border-foreground/20 px-4 py-2 text-sm font-medium text-foreground/80 hover:bg-foreground/10 transition">
+              {t?.notNowButton ?? "Not now"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+};
+
+export default AuroraIntroModal;
+
+

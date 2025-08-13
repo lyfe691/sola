@@ -79,11 +79,12 @@ const Contact = () => {
     e.preventDefault();
     if (isSubmitting) return;
     
-    const recaptchaResponse = (window as any).grecaptcha?.getResponse();
-    if (!recaptchaResponse) {
-      toast.error(t.contact.recaptchaError);
-      return;
-    }
+    // reCAPTCHA validation disabled for now
+    // const recaptchaResponse = (window as any).grecaptcha?.getResponse();
+    // if (!recaptchaResponse) {
+    //   toast.error(t.contact.recaptchaError);
+    //   return;
+    // }
     
     setIsSubmitting(true);
     
@@ -118,7 +119,9 @@ const Contact = () => {
     <div className="flex flex-col w-full">
       <Helmet>
         <title>Contact • Yanis Sebastian Zürcher</title>
+        {/** reCAPTCHA removed for now
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        */}
       </Helmet>
 
       <ScrollReveal variant="pageTitle">
@@ -210,13 +213,14 @@ const Contact = () => {
               />
             </div>
             
-            {/* reCAPTCHA */}
+            {/** reCAPTCHA removed for now
             <div className="flex justify-start">
               <div 
                 className="g-recaptcha" 
                 data-sitekey="6Lc2gGorAAAAAFIQ_9x58ZfCKpvUlx7jR5Qj5kqG"
               ></div>
             </div>
+            */}
             
             <IconButton
               type="submit"
@@ -236,22 +240,6 @@ const Contact = () => {
                 {isSubmitting ? t.contact.sending : t.contact.send}
               </span>
             </IconButton>
-
-            {/* Credit Formspree */}
-              <div className="flex items-center justify-start gap-2 text-xs text-muted-foreground/60 mt-2">
-                <Info className="w-3 h-3" />
-                <span>
-                  Powered by{" "}
-                  <a 
-                    href="https://formspree.io" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="hover:text-muted-foreground transition-colors duration-200 underline underline-offset-2"
-                  >
-                    Formspree
-                  </a>
-                </span>
-              </div>
         </form>
       </ScrollReveal>
     </div>

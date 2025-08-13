@@ -54,6 +54,14 @@ export const translations = {
       contactMe: "Contact me",
       viewProjects: "View projects"
     },
+    auroraIntro: {
+      newLabel: "New",
+      title: "Introducing Aurora background",
+      description: "A subtle, animated background that adapts to your theme.",
+      instruction: "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora background'.",
+      enableButton: "Enable Aurora",
+      notNowButton: "Not now"
+    },
     experience: {
       title: "Experience",
       backHome: "Back home",
@@ -372,6 +380,14 @@ export const translations = {
       contactMe: "Kontakt",
       viewProjects: "Projekte ansehen"
     },
+    auroraIntro: {
+      newLabel: "Neu",
+      title: "Aurora-Hintergrund",
+      description: "Ein dezenter, animierter Hintergrund, der sich deinem Theme anpasst.",
+      instruction: "Du kannst ihn jederzeit aktivieren oder deaktivieren: Klicke oben rechts auf den Theme-Umschalter und schalte 'Aurora-Hintergrund' um.",
+      enableButton: "Aurora aktivieren",
+      notNowButton: "Nicht jetzt"
+    },
     experience: {
       title: "Erfahrung",
       backHome: "Zurück",
@@ -689,6 +705,14 @@ export const translations = {
       description4: "Enfocado en estructura, claridad y precisión.",
       contactMe: "Contáctame",
       viewProjects: "Ver proyectos"
+    },
+    auroraIntro: {
+      newLabel: "Nuevo",
+      title: "Fondo Aurora",
+      description: "Un fondo sutil y animado que se adapta a tu tema.",
+      instruction: "Puedes activarlo o desactivarlo en cualquier momento: abre el selector de tema arriba a la derecha y cambia 'Fondo Aurora'.",
+      enableButton: "Activar Aurora",
+      notNowButton: "Ahora no"
     },
     experience: {
       title: "Experiencia",
@@ -1009,6 +1033,14 @@ export const translations = {
       contactMe: "お問い合わせ",
       viewProjects: "プロジェクトを見る"
     },
+    auroraIntro: {
+      newLabel: "新機能",
+      title: "オーロラ背景",
+      description: "テーマに合わせて変化する、さりげないアニメーション背景です。",
+      instruction: "いつでも有効 / 無効を切り替えられます。右上のテーマ切替を開き『Aurora background』を切り替えてください。",
+      enableButton: "Aurora を有効化",
+      notNowButton: "後で"
+    },
     experience: {
       title: "経験",
       backHome: "ホームに戻る",
@@ -1326,6 +1358,14 @@ export const translations = {
       description4: "注重结构、清晰性和精确性。",
       contactMe: "联系我",
       viewProjects: "查看项目"
+    },
+    auroraIntro: {
+      newLabel: "新",
+      title: "极光背景",
+      description: "一个会随主题变化的细腻动态背景。",
+      instruction: "你可随时开启或关闭：点击右上角主题开关，切换『Aurora background』即可。",
+      enableButton: "开启 Aurora",
+      notNowButton: "稍后"
     },
     experience: {
       title: "经验",

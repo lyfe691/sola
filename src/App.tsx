@@ -20,6 +20,7 @@ import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
 import { AuroraProvider } from "./lib/aurora-provider";
 import AuroraBackground from "./components/backgrounds/AuroraBackground";
+import AuroraIntroModal from "./components/AuroraIntroModal";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => (
             >
               <div className="min-h-screen flex flex-col relative">
                 <Toaster position="bottom-right" />
+                <AuroraIntroModal/>
                 <BrowserRouter>
                   <KeyboardShortcuts />
                   <CommandMenu />
