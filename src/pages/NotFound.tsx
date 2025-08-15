@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { useLocation } from "react-router-dom";
 
 const TYPING_SPEED = 50;
@@ -20,7 +20,7 @@ const INITIAL_DELAY = 1500;
 const NotFound = () => {
   const location = useLocation();
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
   const ROOT_PROMPT = "root@~/dev/null$ ";
   const PROMPT = `curl https://sola.ysz.life${location.pathname}`;
   const RESPONSE_LINES = [
@@ -70,7 +70,9 @@ const NotFound = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 bg-background text-foreground">
       <Helmet>
-        <title>404 • Not Found</title>
+        <title>{t.seo.notFound.title}</title>
+        <meta name="description" content={t.seo.notFound.description} />
+        <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       <div className="w-full max-w-2xl bg-muted border border-border rounded-xl shadow-2xl overflow-hidden">

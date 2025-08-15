@@ -19,7 +19,7 @@ import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence, AnimationGeneratorType } from "motion/react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { CyclingTextEffect } from "@/components/ui/text-effect-wrapper";
 import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,7 @@ const Index = () => {
   const isLoaded = usePageInit(0);
   const [key, setKey] = useState(0);
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
   
   const descriptions = [
     t.index.description1,
@@ -62,7 +62,8 @@ const Index = () => {
           transition={{ duration: 0.3 }}
         >
           <Helmet>
-            <title>Yanis Sebastian Zürcher • Software Developer in Zürich</title>
+            <title>{t.seo.home.title}</title>
+            <meta name="description" content={t.seo.home.description} />
           </Helmet>
           
           {/* Squares background, remove for now 

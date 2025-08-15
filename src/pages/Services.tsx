@@ -11,7 +11,7 @@ import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2} from 
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/IconButton";
@@ -20,7 +20,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 const Services = () => {
   const [hoveredService, setHoveredService] = useState<string | null>(null);
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
   const navigate = useNavigate();
 
   const servicesList = [
@@ -72,7 +72,8 @@ const Services = () => {
   return (
     <div className="flex flex-col w-full">
       <Helmet>
-        <title>Services • Yanis Sebastian Zürcher</title>
+        <title>{t.seo.services.title}</title>
+        <meta name="description" content={t.seo.services.description} />
       </Helmet>
 
       <ScrollReveal variant="pageTitle">

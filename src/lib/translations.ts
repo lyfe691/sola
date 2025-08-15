@@ -10,6 +10,44 @@
 
 export const translations = {
   en: {
+    seo: {
+      home: {
+        title: "Yanis Sebastian Zürcher • Software Developer in Zürich",
+        description: "Software developer based in Zürich, focusing on scalable, fast, and thoughtfully designed systems across infrastructure, identity, and interfaces.",
+      },
+      about: {
+        title: "About • Yanis Sebastian Zürcher",
+        description: "Learn more about my background, values, and tools I use to build fast, clean, and minimal software.",
+      },
+      projects: {
+        title: "Projects • Yanis Sebastian Zürcher",
+        description: "A curated selection of my projects across full‑stack, frontend, backend, and tooling.",
+      },
+      skills: {
+        title: "Skills • Yanis Sebastian Zürcher",
+        description: "Technologies and tools I use, from React and TypeScript to Spring Boot and Docker.",
+      },
+      experience: {
+        title: "Experience • Yanis Sebastian Zürcher",
+        description: "Timeline of education and roles, highlighting responsibilities, achievements, and technologies.",
+      },
+      contact: {
+        title: "Contact • Yanis Sebastian Zürcher",
+        description: "Get in touch about projects, collaboration, or opportunities.",
+      },
+      services: {
+        title: "Services • Yanis Sebastian Zürcher",
+        description: "Full‑stack, frontend, backend development and technical consulting tailored to your needs.",
+      },
+      privacy: {
+        title: "Privacy Policy • sola.ysz.life",
+        description: "Privacy details for sola.ysz.life, covering hosting, analytics, processors, and your rights.",
+      },
+      notFound: {
+        title: "404 • Not Found",
+        description: "The requested resource could not be found.",
+      }
+    },
     common: {
       home: "Home",
       projects: "Projects",
@@ -336,6 +374,44 @@ export const translations = {
     },
   },
   de: {
+    seo: {
+      home: {
+        title: "Yanis Sebastian Zürcher • Softwareentwickler in Zürich",
+        description: "Softwareentwickler aus Zürich – Fokus auf skalierbare, schnelle und durchdachte Systeme in Infrastruktur, Identity und Interfaces.",
+      },
+      about: {
+        title: "Über mich • Yanis Sebastian Zürcher",
+        description: "Mehr über meinen Hintergrund, meine Werte und die Tools, mit denen ich schnelle, saubere und minimale Software baue.",
+      },
+      projects: {
+        title: "Projekte • Yanis Sebastian Zürcher",
+        description: "Eine kuratierte Auswahl meiner Projekte – Full‑Stack, Frontend, Backend und Tools.",
+      },
+      skills: {
+        title: "Fähigkeiten • Yanis Sebastian Zürcher",
+        description: "Technologien und Tools – von React und TypeScript bis Spring Boot und Docker.",
+      },
+      experience: {
+        title: "Erfahrung • Yanis Sebastian Zürcher",
+        description: "Zeitleiste von Ausbildung und Rollen mit Verantwortlichkeiten, Erfolgen und Technologien.",
+      },
+      contact: {
+        title: "Kontakt • Yanis Sebastian Zürcher",
+        description: "Kontakt für Projekte, Zusammenarbeit oder Möglichkeiten.",
+      },
+      services: {
+        title: "Dienstleistungen • Yanis Sebastian Zürcher",
+        description: "Full‑Stack‑, Frontend‑, Backend‑Entwicklung sowie technologische Beratung nach Bedarf.",
+      },
+      privacy: {
+        title: "Datenschutzerklärung • sola.ysz.life",
+        description: "Datenschutzhinweise zu sola.ysz.life – Hosting, Analytics, Auftragsverarbeiter und Ihre Rechte.",
+      },
+      notFound: {
+        title: "404 • Nicht gefunden",
+        description: "Die angeforderte Ressource wurde nicht gefunden.",
+      }
+    },
     common: {
       home: "Startseite",
       projects: "Projekte",
@@ -662,6 +738,44 @@ export const translations = {
     },
   },
   es: {
+    seo: {
+      home: {
+        title: "Yanis Sebastian Zürcher • Desarrollador de software en Zúrich",
+        description: "Desarrollador de software con enfoque en sistemas escalables, rápidos y bien diseñados: infraestructura, identidad e interfaces.",
+      },
+      about: {
+        title: "Sobre mí • Yanis Sebastian Zürcher",
+        description: "Conoce mi trayectoria, valores y herramientas con las que construyo software rápido, limpio y minimalista.",
+      },
+      projects: {
+        title: "Proyectos • Yanis Sebastian Zürcher",
+        description: "Selección de proyectos: full‑stack, frontend, backend y herramientas.",
+      },
+      skills: {
+        title: "Habilidades • Yanis Sebastian Zürcher",
+        description: "Tecnologías y herramientas: React, TypeScript, Spring Boot, Docker y más.",
+      },
+      experience: {
+        title: "Experiencia • Yanis Sebastian Zürcher",
+        description: "Cronología de educación y roles con responsabilidades, logros y tecnologías.",
+      },
+      contact: {
+        title: "Contacto • Yanis Sebastian Zürcher",
+        description: "Ponte en contacto para proyectos, colaboración u oportunidades.",
+      },
+      services: {
+        title: "Servicios • Yanis Sebastian Zürcher",
+        description: "Desarrollo full‑stack, frontend, backend y consultoría técnica a medida.",
+      },
+      privacy: {
+        title: "Política de privacidad • sola.ysz.life",
+        description: "Detalles de privacidad: alojamiento, analíticas, encargados del tratamiento y tus derechos.",
+      },
+      notFound: {
+        title: "404 • No encontrado",
+        description: "El recurso solicitado no se encontró.",
+      }
+    },
     common: {
       home: "Inicio",
       projects: "Proyectos",
@@ -988,6 +1102,44 @@ export const translations = {
     }
   },
   ja: {
+    seo: {
+      home: {
+        title: "ヤニス・セバスチャン・ツェルヒャー • チューリッヒのソフトウェア開発者",
+        description: "スケーラブルで高速、丁寧に設計されたシステムに注力。インフラ、アイデンティティ、インターフェース領域で活動。",
+      },
+      about: {
+        title: "概要 • ヤニス・セバスチャン・ツェルヒャー",
+        description: "背景、価値観、使用ツールなど、私について詳しく紹介します。",
+      },
+      projects: {
+        title: "プロジェクト • ヤニス・セバスチャン・ツェルヒャー",
+        description: "フルスタック、フロントエンド、バックエンド、ツールなどの制作物。",
+      },
+      skills: {
+        title: "スキル • ヤニス・セバスチャン・ツェルヒャー",
+        description: "React、TypeScript、Spring Boot、Docker などの技術スタック。",
+      },
+      experience: {
+        title: "経験 • ヤニス・セバスチャン・ツェルヒャー",
+        description: "学歴と職歴のタイムライン。責務、実績、使用技術を記載。",
+      },
+      contact: {
+        title: "お問い合わせ • ヤニス・セバスチャン・ツェルヒャー",
+        description: "案件、コラボレーション等のご連絡はこちらから。",
+      },
+      services: {
+        title: "サービス • ヤニス・セバスチャン・ツェルヒャー",
+        description: "フルスタック/フロントエンド/バックエンド開発、技術コンサルティング。",
+      },
+      privacy: {
+        title: "プライバシーポリシー • sola.ysz.life",
+        description: "ホスティング、分析、処理者、ユーザーの権利に関する詳細。",
+      },
+      notFound: {
+        title: "404 • 見つかりません",
+        description: "要求されたリソースは見つかりませんでした。",
+      }
+    },
     common: {
       home: "ホーム",
       projects: "プロジェクト",
@@ -1315,6 +1467,44 @@ export const translations = {
     }
   },
   cn: {
+    seo: {
+      home: {
+        title: "Yanis Sebastian Zürcher • 苏黎世软件开发者",
+        description: "专注于可扩展、快速且精心设计的系统，涉及基础设施、身份与访问和界面。",
+      },
+      about: {
+        title: "关于我 • Yanis Sebastian Zürcher",
+        description: "了解我的背景、价值观，以及用于构建快速、干净、极简软件的工具。",
+      },
+      projects: {
+        title: "项目 • Yanis Sebastian Zürcher",
+        description: "精选项目合集：全栈、前端、后端与工具。",
+      },
+      skills: {
+        title: "技能 • Yanis Sebastian Zürcher",
+        description: "技术与工具：React、TypeScript、Spring Boot、Docker 等。",
+      },
+      experience: {
+        title: "经历 • Yanis Sebastian Zürcher",
+        description: "教育与岗位时间线，包含职责、成就与使用技术。",
+      },
+      contact: {
+        title: "联系 • Yanis Sebastian Zürcher",
+        description: "关于项目、合作或机会，欢迎联系。",
+      },
+      services: {
+        title: "服务 • Yanis Sebastian Zürcher",
+        description: "按需提供全栈、前端、后端开发与技术咨询。",
+      },
+      privacy: {
+        title: "隐私政策 • sola.ysz.life",
+        description: "关于托管、分析、数据处理方与您的权利的隐私信息。",
+      },
+      notFound: {
+        title: "404 • 未找到",
+        description: "未找到请求的资源。",
+      }
+    },
     common: {
       home: "首页",
       projects: "项目",
@@ -1640,6 +1830,7 @@ export const translations = {
       }
     }
   } 
-}
+} as const;
 
+export type Translation = typeof translations["en"];
 export type Language = keyof typeof translations;

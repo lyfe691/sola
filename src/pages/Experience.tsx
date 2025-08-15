@@ -10,14 +10,14 @@ import { useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { Helmet } from "react-helmet-async";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const Experience = () => {
   const [hoveredExp, setHoveredExp] = useState<string | null>(null);
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
 
   const experiences = [
     {
@@ -55,7 +55,8 @@ const Experience = () => {
   return (
     <div className="flex flex-col w-full">
       <Helmet>
-        <title>Experience • Yanis Sebastian Zürcher</title>
+        <title>{t.seo.experience.title}</title>
+        <meta name="description" content={t.seo.experience.description} />
       </Helmet>
 
       <ScrollReveal variant="pageTitle">

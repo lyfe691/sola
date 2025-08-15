@@ -22,7 +22,7 @@ import { FaGithubAlt } from "react-icons/fa";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
@@ -437,7 +437,7 @@ const Projects = () => {
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('priority');
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
 
   const { featuredProjects, otherProjects, sortOptions } = useMemo(() => {
     const projects = createProjectsData(t);
@@ -476,7 +476,8 @@ const Projects = () => {
   return (
     <div className="flex flex-col w-full">
       <Helmet>
-        <title>Projects • Yanis Sebastian Zürcher</title>
+        <title>{t.seo.projects.title}</title>
+        <meta name="description" content={t.seo.projects.description} />
       </Helmet>
 
       <ScrollReveal variant="pageTitle">

@@ -13,7 +13,7 @@ import { FaGithubAlt } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
@@ -125,7 +125,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
   const MAX_QUOTE_LENGTH = 120;
   const isLongQuote = quote.length > MAX_QUOTE_LENGTH;
   const truncatedQuote = isLongQuote ? quote.slice(0, MAX_QUOTE_LENGTH) + '...' : quote;
@@ -566,7 +566,8 @@ const About = () => {
   return (
     <div className="flex flex-col w-full">
       <Helmet>
-        <title>About • Yanis Sebastian Zürcher</title>
+        <title>{t.seo.about.title}</title>
+        <meta name="description" content={t.seo.about.description} />
       </Helmet>
 
       {/* ------------------- Title ------------------- */}

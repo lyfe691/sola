@@ -10,7 +10,7 @@ import { Helmet } from "react-helmet-async";
 import { useState } from "react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { ReactOriginal, TypescriptOriginal, DockerOriginal, JavascriptOriginal, AntdesignOriginal, TailwindcssOriginal, NextjsOriginal, MongodbOriginal, SpringOriginal, NginxOriginal, RedisOriginal, NodejsOriginal, BashOriginal, GitOriginal, VisualstudioOriginal, VscodeOriginal, LinuxOriginal, BunOriginal, EslintLineWordmark, EslintOriginal, KubernetesOriginal, GrafanaOriginal, JenkinsOriginal, PythonOriginal, JavaOriginal } from "devicons-react";
 import { 
   SiEagle,
@@ -23,7 +23,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 const Skills = () => {
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
 
   const skillGroups = [
     {
@@ -88,7 +88,8 @@ const Skills = () => {
   return (
     <div className="flex flex-col w-full">
       <Helmet>
-        <title>Skills • Yanis Sebastian Zürcher</title>
+        <title>{t.seo.skills.title}</title>
+        <meta name="description" content={t.seo.skills.description} />
       </Helmet>
 
       <ScrollReveal variant="pageTitle">

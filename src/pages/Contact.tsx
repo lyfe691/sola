@@ -10,7 +10,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Info } from "lucide-react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type Translation } from "@/lib/translations";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 
 const Contact = () => {
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language] as Translation;
   const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formValues, setFormValues] = useState({
@@ -118,7 +118,8 @@ const Contact = () => {
   return (
     <div className="flex flex-col w-full">
       <Helmet>
-        <title>Contact • Yanis Sebastian Zürcher</title>
+        <title>{t.seo.contact.title}</title>
+        <meta name="description" content={t.seo.contact.description} />
         {/** reCAPTCHA removed for now
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         */}
