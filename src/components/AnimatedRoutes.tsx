@@ -8,25 +8,25 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useLocation, Routes, Route, Navigate } from "react-router-dom";
-import { ReactNode } from "react";
+import { ReactNode, Suspense, lazy } from "react";
 import SimpleLayout from "@/layouts/SimpleLayout";
 import MainLayout from "@/layouts/MainLayout";
 import BlankLayout from "@/layouts/BlankLayout";
 import ProjectLayout from "@/layouts/ProjectLayout";
 import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
 
-// eager imports
-import Index from "@/pages/Index";
-import NotFound from "@/pages/NotFound";
-import About from "@/pages/About";
-import Projects from "@/pages/Projects";
-import Skills from "@/pages/Skills";
-import Experience from "@/pages/Experience";
-import Contact from "@/pages/Contact";
-import Services from "@/pages/Services";
-import AboutThisWebsite from "@/pages/AboutThisWebsite";
-import Privacy from "@/pages/Privacy";
-import ProjectPageRenderer from "@/pages/projects/ProjectPageRenderer";
+// lazy
+const Index = lazy(() => import("@/pages/Index"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const About = lazy(() => import("@/pages/About"));
+const Projects = lazy(() => import("@/pages/Projects"));
+const Skills = lazy(() => import("@/pages/Skills"));
+const Experience = lazy(() => import("@/pages/Experience"));
+const Contact = lazy(() => import("@/pages/Contact"));
+const Services = lazy(() => import("@/pages/Services"));
+const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
+const Privacy = lazy(() => import("@/pages/Privacy"));
+const ProjectPageRenderer = lazy(() => import("@/pages/projects/ProjectPageRenderer"));
 
 
 // define types for pagetransition
@@ -53,11 +53,13 @@ interface PageTransitionProps {
 export const AnimatedRoutes = () => {
     const location = useLocation();
     
-    // helper to wrap a component with page transition
+    // helper to wrap a component with page transition and suspense fallback
     const withTransition = (Component: React.ComponentType) => (
       <AnimatePresence mode="wait">
         <PageTransition key={location.pathname}>
-          <Component />
+          <Suspense fallback={<div className="flex-1" />}> 
+            <Component />
+          </Suspense>
         </PageTransition>
       </AnimatePresence>
     );
@@ -79,7 +81,7 @@ export const AnimatedRoutes = () => {
           path="/404" 
           element={
             <BlankLayout>
-              <NotFound/>
+              {withTransition(NotFound)}
             </BlankLayout>
           }
         />
@@ -162,7 +164,7 @@ export const AnimatedRoutes = () => {
           path="/a" 
           element={
             <BlankLayout>
-              <AboutThisWebsite />
+              {withTransition(AboutThisWebsite)}
             </BlankLayout>
           } 
         />
