@@ -76,9 +76,18 @@ const AuroraIntroModal: React.FC<AuroraIntroModalProps> = ({ imageSrc = "/other/
         <div className="p-5 sm:p-6">
           <div className="mb-2 text-xs font-medium tracking-wide text-foreground/60">{t?.newLabel ?? "New"}</div>
           <h2 id="aurora-intro-title" className="text-xl sm:text-2xl font-semibold mb-2">{t?.title ?? "Introducing Aurora background"}</h2>
-          <p className="text-foreground/70 text-sm sm:text-base mb-5">
+          <p className="text-foreground/70 text-sm sm:text-base mb-3">
             {(t?.description ?? "A subtle, animated background that adapts to your theme.") + " " + (t?.instruction ?? "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora background'.")}
           </p>
+          
+          <div className="flex items-start gap-2 p-3 rounded-lg bg-foreground/5 border border-foreground/10 mb-5">
+            <svg className="w-4 h-4 text-foreground/60 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+            <p className="text-foreground/70 text-xs leading-relaxed">
+              {t?.performanceWarning ?? "Aurora uses smooth animations that may impact performance on older devices or slower browsers. You can disable it anytime if you experience lag."}
+            </p>
+          </div>
 
           <div className="flex flex-wrap gap-2 sm:gap-3 justify-end">
             <button onClick={onEnable} className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-4 py-2 text-sm font-medium hover:opacity-90 transition">

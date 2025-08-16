@@ -97,6 +97,7 @@ export const translations = {
       title: "Introducing Aurora background",
       description: "A subtle, animated background that adapts to your theme.",
       instruction: "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora background'.",
+      performanceWarning: "Note: May impact performance on older devices or slower browsers.",
       enableButton: "Enable Aurora",
       notNowButton: "Not now"
     },
@@ -461,6 +462,7 @@ export const translations = {
       title: "Aurora-Hintergrund",
       description: "Ein dezenter, animierter Hintergrund, der sich deinem Theme anpasst.",
       instruction: "Du kannst ihn jederzeit aktivieren oder deaktivieren: Klicke oben rechts auf den Theme-Umschalter und schalte 'Aurora-Hintergrund' um.",
+      performanceWarning: "Hinweis: Kann die Leistung auf älteren Geräten oder langsameren Browsern beeinträchtigen.",
       enableButton: "Aurora aktivieren",
       notNowButton: "Nicht jetzt"
     },
@@ -825,6 +827,7 @@ export const translations = {
       title: "Fondo Aurora",
       description: "Un fondo sutil y animado que se adapta a tu tema.",
       instruction: "Puedes activarlo o desactivarlo en cualquier momento: abre el selector de tema arriba a la derecha y cambia 'Fondo Aurora'.",
+      performanceWarning: "Nota: Puede afectar el rendimiento en dispositivos más antiguos o navegadores más lentos.",
       enableButton: "Activar Aurora",
       notNowButton: "Ahora no"
     },
@@ -1190,6 +1193,7 @@ export const translations = {
       title: "オーロラ背景",
       description: "テーマに合わせて変化する、さりげないアニメーション背景です。",
       instruction: "いつでも有効 / 無効を切り替えられます。右上のテーマ切替を開き『Aurora background』を切り替えてください。",
+      performanceWarning: "注意：古いデバイスや遅いブラウザではパフォーマンスに影響する可能性があります。",
       enableButton: "Aurora を有効化",
       notNowButton: "後で"
     },
@@ -1554,6 +1558,7 @@ export const translations = {
       title: "极光背景",
       description: "一个会随主题变化的细腻动态背景。",
       instruction: "你可随时开启或关闭：点击右上角主题开关，切换『Aurora background』即可。",
+      performanceWarning: "注意：在较旧设备或较慢浏览器上可能影响性能。",
       enableButton: "开启 Aurora",
       notNowButton: "稍后"
     },
