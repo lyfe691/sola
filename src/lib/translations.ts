@@ -323,6 +323,9 @@ export const translations = {
       attachmentPlaceholder: "Click to choose or drag & drop a file",
       uploadedLabel: "Uploaded",
       cloudinaryLinkLabel: "Cloudinary link",
+      dropOverlay: "Drop to attach",
+      fileTooLarge: "File is too large (max {max}).",
+      unsupportedFileType: "Unsupported file type. Allowed: PNG, JPG, WEBP, PDF, DOC, DOCX.",
     },
     services: {
       title: "Services",
@@ -693,6 +696,9 @@ export const translations = {
       attachmentPlaceholder: "Klicken oder Datei hierher ziehen",
       uploadedLabel: "Hochgeladen",
       cloudinaryLinkLabel: "Cloudinary‑Link",
+      dropOverlay: "Zum Anhängen ablegen",
+      fileTooLarge: "Datei ist zu groß (max. {max}).",
+      unsupportedFileType: "Nicht unterstützter Dateityp. Erlaubt: PNG, JPG, WEBP, PDF, DOC, DOCX.",
     },
     services: {
       title: "Dienstleistungen",
@@ -1063,6 +1069,9 @@ export const translations = {
       attachmentPlaceholder: "Haz clic para elegir o arrastra un archivo",
       uploadedLabel: "Subido",
       cloudinaryLinkLabel: "Enlace de Cloudinary",
+      dropOverlay: "Suelta para adjuntar",
+      fileTooLarge: "El archivo es demasiado grande (máx. {max}).",
+      unsupportedFileType: "Tipo de archivo no soportado. Permitidos: PNG, JPG, WEBP, PDF, DOC, DOCX.",
     },
     services: {
       title: "Servicios",
@@ -1434,6 +1443,9 @@ export const translations = {
       attachmentPlaceholder: "クリックして選択、またはファイルをドロップ",
       uploadedLabel: "アップロード済み",
       cloudinaryLinkLabel: "Cloudinary リンク",
+      dropOverlay: "ここにドロップして添付",
+      fileTooLarge: "ファイルサイズが大きすぎます（最大 {max}）。",
+      unsupportedFileType: "未対応のファイル形式です。PNG, JPG, WEBP, PDF, DOC, DOCX が使用できます。",
     },
     services: {
       title: "サービス",
@@ -1804,6 +1816,9 @@ export const translations = {
       attachmentPlaceholder: "点击选择或拖拽文件",
       uploadedLabel: "已上传",
       cloudinaryLinkLabel: "Cloudinary 链接",
+      dropOverlay: "拖放到此处以附加",
+      fileTooLarge: "文件过大（最大 {max}）。",
+      unsupportedFileType: "不支持的文件类型。允许：PNG、JPG、WEBP、PDF、DOC、DOCX。",
     },
     services: {
       title: "服务",

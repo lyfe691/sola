@@ -18,6 +18,43 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/IconButton";
 import ScrollReveal from "@/components/ScrollReveal";
+import { createPortal } from "react-dom";
+
+// file constraints
+const ACCEPTED_MIME = new Set<string>([
+  "image/png",
+  "image/jpeg",
+  "image/webp",
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+]);
+const ACCEPTED_EXT = ".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx";
+const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
+
+function formatBytes(bytes: number): string {
+  if (!Number.isFinite(bytes)) return "";
+  const units = ["B", "KB", "MB", "GB"] as const;
+  let size = bytes;
+  let unitIndex = 0;
+  while (size >= 1024 && unitIndex < units.length - 1) {
+    size /= 1024;
+    unitIndex += 1;
+  }
+  const rounded = Math.round(size * 10) / 10;
+  return `${Number.isInteger(rounded) ? rounded : rounded.toFixed(1)} ${units[unitIndex]}`;
+}
+
+type FileValidationResult = { ok: true } | { ok: false; code: "too_large" | "unsupported_type" };
+
+function validateFile(file: File): FileValidationResult {
+  if (file.size > MAX_FILE_BYTES) return { ok: false, code: "too_large" };
+  const mimeOk = file.type ? ACCEPTED_MIME.has(file.type) : true;
+  const ext = file.name.toLowerCase().split(".").pop() ?? "";
+  const extOk = ["png", "jpg", "jpeg", "webp", "pdf", "doc", "docx"].includes(ext);
+  if (!mimeOk && !extOk) return { ok: false, code: "unsupported_type" };
+  return { ok: true };
+}
 
 const Contact = () => {
   const { language } = useLanguage();
@@ -153,6 +190,17 @@ const Contact = () => {
     // if a file is selected, upload to Cloudinary first, then include URL only
     try {
       if (selectedFile) {
+        // validate before uploading
+        const v = validateFile(selectedFile);
+        if ("code" in v) {
+          const message = v.code === "too_large"
+            ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
+            : t.contact.unsupportedFileType;
+          toast.error(message);
+          setIsSubmitting(false);
+          return;
+        }
+
         setIsUploading(true);
         setUploadProgress(0);
         const url = await uploadToCloudinary(selectedFile, (p) => setUploadProgress(p));
@@ -224,6 +272,20 @@ const Contact = () => {
   }
 
   const onSelectFile = (file: File | null) => {
+    if (file) {
+      const v = validateFile(file);
+      if ("code" in v) {
+        const message = v.code === "too_large"
+          ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
+          : t.contact.unsupportedFileType;
+        toast.error(message);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        setSelectedFile(null);
+        setUploadedUrl(null);
+        setUploadProgress(null);
+        return;
+      }
+    }
     setSelectedFile(file);
     setUploadedUrl(null);
     setUploadProgress(null);
@@ -360,12 +422,13 @@ const Contact = () => {
                   name="attachment"
                   type="file"
                   className="hidden"
+                  accept={ACCEPTED_EXT}
                   onChange={(e) => onSelectFile(e.target.files?.[0] ?? null)}
                 />
                 <div className="flex items-center gap-2 text-foreground/70">
                   <UploadCloud className="w-4 h-4" />
                   <span className="text-sm">
-                    {selectedFile ? selectedFile.name : t.contact.attachmentPlaceholder}
+                    {selectedFile ? `${selectedFile.name}${selectedFile.size ? ` • ${formatBytes(selectedFile.size)}` : ''}` : t.contact.attachmentPlaceholder}
                   </span>
                 </div>
                 {(isUploading || uploadProgress !== null) && (
@@ -428,39 +491,42 @@ const Contact = () => {
             </IconButton>
         </form>
       </ScrollReveal>
-      <AnimatePresence>
-        {isPageDragActive && (
-          <motion.div
-            className="fixed inset-0 z-[100] pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+      {createPortal(
+        <AnimatePresence>
+          {isPageDragActive && (
             <motion.div
-              className="absolute inset-0 bg-foreground/5 backdrop-blur-[2px]"
+              className="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-            />
-            <motion.div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-              initial={{ scale: 0.96, opacity: 0, filter: 'blur(6px)' }}
-              animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
-              exit={{ scale: 0.98, opacity: 0, filter: 'blur(6px)' }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
             >
-              <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 sm:px-6 sm:py-4 shadow-xl ring-1 ring-foreground/10">
-                <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-foreground/10 to-transparent blur-xl" />
-                <div className="relative flex items-center gap-2 text-foreground/80">
-                  <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <div className="h-2 w-2 rounded-full bg-foreground/50 animate-pulse" />
-                  <span className="text-sm sm:text-base">Drop to attach</span>
+              <motion.div
+                className="absolute inset-0 bg-foreground/5 backdrop-blur-[2px]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              />
+              <motion.div
+                className="relative"
+                initial={{ scale: 0.96, opacity: 0, filter: 'blur(6px)' }}
+                animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
+                exit={{ scale: 0.98, opacity: 0, filter: 'blur(6px)' }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              >
+                <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 sm:px-6 sm:py-4 shadow-xl ring-1 ring-foreground/10">
+                  <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-foreground/10 to-transparent blur-xl" />
+                  <div className="relative flex items-center gap-2 text-foreground/80">
+                    <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <div className="h-2 w-2 rounded-full bg-foreground/50 animate-pulse" />
+                    <span className="text-sm sm:text-base">{t.contact.dropOverlay}</span>
+                  </div>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 };
