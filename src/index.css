@@ -330,6 +330,9 @@
   
   html {
     scroll-behavior: smooth;
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--scrollbar-thumb)) transparent;
   }
   
   body {
@@ -351,17 +354,17 @@
 
   /* ---------- scrollbar styles ---------- */
   ::-webkit-scrollbar {
-    @apply w-2;
+    @apply w-1.5 h-1.5;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-[hsl(var(--scrollbar-track))];
+    @apply bg-transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-[hsl(var(--scrollbar-thumb))] 
-           rounded-full 
-           transition-colors 
+    @apply bg-[hsl(var(--scrollbar-thumb))]
+           rounded-full
+           transition-colors
            duration-200;
   }
 
