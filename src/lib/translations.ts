@@ -83,6 +83,9 @@ export const translations = {
       contact: "Contact",
       services: "Services"
     },
+    i18n: {
+      detectedNote: "Detected: {lang}",
+    },
     index: {
       greeting: "Hello, I'm ",
       description1: "17-year-old software developer based in Zurich, Switzerland.",
@@ -456,6 +459,9 @@ export const translations = {
       contact: "Kontakt",
       services: "Dienstleistungen"
     },
+    i18n: {
+      detectedNote: "Erkannt: {lang}",
+    },
     index: {
       greeting: "Hallo, ich bin ",
       description1: "17-jähriger Softwareentwickler aus Zürich, Schweiz.",
@@ -828,6 +834,9 @@ export const translations = {
       skills: "Habilidades",
       contact: "Contacto",
       services: "Servicios"
+    },
+    i18n: {
+      detectedNote: "Detectado: {lang}",
     },
     index: {
       greeting: "Hola, soy ",
@@ -1203,6 +1212,9 @@ export const translations = {
       contact: "お問い合わせ",
       services: "サービス"
     },
+    i18n: {
+      detectedNote: "検出: {lang}",
+    },
     index: {
       greeting: "こんにちは、私は ",
       description1: "スイス・チューリッヒ在住、17歳のソフトウェア開発者。",
@@ -1502,7 +1514,7 @@ export const translations = {
       }
     }
   },
-  cn: {
+  zh: {
     seo: {
       home: {
         title: "Yanis Sebastian Zürcher • 苏黎世软件开发者",
@@ -1575,6 +1587,9 @@ export const translations = {
       skills: "技能",
       contact: "联系",
       services: "服务"
+    },
+    i18n: {
+      detectedNote: "检测到: {lang}",
     },
     index: {
       greeting: "你好，我是 ",

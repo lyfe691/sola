@@ -8,6 +8,7 @@
 
 import { Check, Languages } from "lucide-react"
 import { useLanguage } from "@/lib/language-provider"
+import { translations } from "@/lib/translations"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +18,8 @@ import {
 import { Button } from "@/components/ui/button"
 
 export function LanguageToggle() {
-  const { language, setLanguage } = useLanguage()
+  const { language, setLanguage, detectedLanguage, detectedLanguageCode } = useLanguage()
+  const t = translations[language]
 
   return (
     <DropdownMenu>
@@ -49,10 +51,13 @@ export function LanguageToggle() {
           日本語
           {language === "ja" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("cn")} className="flex justify-between">
+        <DropdownMenuItem onClick={() => setLanguage("zh")} className="flex justify-between">
           中文
-          {language === "cn" && <Check className="h-4 w-4" />}
+          {language === "zh" && <Check className="h-4 w-4" />}
         </DropdownMenuItem>
+        <div className="px-2 py-1.5 text-xs text-foreground/50 border-t border-foreground/10 mt-1">
+          {t.i18n?.detectedNote.replace("{lang}", detectedLanguageCode || detectedLanguage)}
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   )

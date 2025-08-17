@@ -219,7 +219,7 @@ const ActivityItem = ({ activity, index, locale, t }: { activity: ProcessedActiv
 const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ events }) => {
   const { language } = useLanguage();
   const t = translations[language];
-  const localeMap: Record<string, string> = { en: 'en', de: 'de', es: 'es', ja: 'ja', cn: 'zh-CN' };
+  const localeMap: Record<string, string> = { en: 'en', de: 'de', es: 'es', ja: 'ja', zh: 'zh-CN' };
   const locale = localeMap[language] || 'en';
   const eventsToShow = events.slice(0, 6);
 

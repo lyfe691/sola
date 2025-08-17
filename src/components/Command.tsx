@@ -45,7 +45,7 @@ import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme }
 import { useAurora } from "@/lib/aurora-provider";
 
 // import types
-type Language = "en" | "de" | "ja" | "es" | "cn" 
+type Language = "en" | "de" | "ja" | "es" | "zh" 
 
 export function CommandMenu() {
   const navigate = useNavigate()
@@ -167,10 +167,10 @@ export function CommandMenu() {
             <span>日本語</span>
             {language === 'ja' && <CommandShortcut>✓</CommandShortcut>}
           </CommandItem>
-          <CommandItem onSelect={() => handleLanguageChange('cn')} className="cursor-pointer">
+          <CommandItem onSelect={() => handleLanguageChange('zh')} className="cursor-pointer">
             <Globe className="mr-2 h-4 w-4" />
             <span>中文</span>
-            {language === 'cn' && <CommandShortcut>✓</CommandShortcut>}
+            {language === 'zh' && <CommandShortcut>✓</CommandShortcut>}
           </CommandItem>
         </CommandGroup>
         
