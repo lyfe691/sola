@@ -329,6 +329,14 @@ export const translations = {
       dropOverlay: "Drop to attach",
       fileTooLarge: "File is too large (max {max}).",
       unsupportedFileType: "Unsupported file type. Allowed: PNG, JPG, WEBP, PDF, DOC, DOCX.",
+      validation: {
+        nameRequired: "Please enter your name.",
+        emailRequired: "Please enter your email.",
+        emailInvalid: "Please enter a valid email address.",
+        subjectRequired: "Please enter a subject.",
+        messageRequired: "Please enter a message.",
+        fixErrors: "Please fix the errors above.",
+      },
     },
     services: {
       title: "Services",
@@ -705,6 +713,14 @@ export const translations = {
       dropOverlay: "Zum Anhängen ablegen",
       fileTooLarge: "Datei ist zu groß (max. {max}).",
       unsupportedFileType: "Nicht unterstützter Dateityp. Erlaubt: PNG, JPG, WEBP, PDF, DOC, DOCX.",
+      validation: {
+        nameRequired: "Bitte geben Sie Ihren Namen ein.",
+        emailRequired: "Bitte geben Sie Ihre E-Mail ein.",
+        emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        subjectRequired: "Bitte geben Sie einen Betreff ein.",
+        messageRequired: "Bitte geben Sie eine Nachricht ein.",
+        fixErrors: "Bitte korrigieren Sie die Fehler oben.",
+      },
     },
     services: {
       title: "Dienstleistungen",
@@ -1081,6 +1097,14 @@ export const translations = {
       dropOverlay: "Suelta para adjuntar",
       fileTooLarge: "El archivo es demasiado grande (máx. {max}).",
       unsupportedFileType: "Tipo de archivo no soportado. Permitidos: PNG, JPG, WEBP, PDF, DOC, DOCX.",
+      validation: {
+        nameRequired: "Por favor, escribe tu nombre.",
+        emailRequired: "Por favor, escribe tu correo electrónico.",
+        emailInvalid: "Por favor, escribe un correo electrónico válido.",
+        subjectRequired: "Por favor, escribe un asunto.",
+        messageRequired: "Por favor, escribe un mensaje.",
+        fixErrors: "Por favor, corrige los errores arriba.",
+      },
     },
     services: {
       title: "Servicios",
@@ -1458,6 +1482,14 @@ export const translations = {
       dropOverlay: "ここにドロップして添付",
       fileTooLarge: "ファイルサイズが大きすぎます（最大 {max}）。",
       unsupportedFileType: "未対応のファイル形式です。PNG, JPG, WEBP, PDF, DOC, DOCX が使用できます。",
+      validation: {
+        nameRequired: "お名前を入力してください。",
+        emailRequired: "メールアドレスを入力してください。",
+        emailInvalid: "有効なメールアドレスを入力してください。",
+        subjectRequired: "件名を入力してください。",
+        messageRequired: "メッセージを入力してください。",
+        fixErrors: "上記のエラーを修正してください。",
+      },
     },
     services: {
       title: "サービス",
@@ -1834,6 +1866,14 @@ export const translations = {
       dropOverlay: "拖放到此处以附加",
       fileTooLarge: "文件过大（最大 {max}）。",
       unsupportedFileType: "不支持的文件类型。允许：PNG、JPG、WEBP、PDF、DOC、DOCX。",
+      validation: {
+        nameRequired: "请输入您的姓名。",
+        emailRequired: "请输入您的电子邮件。",
+        emailInvalid: "请输入有效的电子邮件地址。",
+        subjectRequired: "请输入主题。",
+        messageRequired: "请输入消息。",
+        fixErrors: "请修正上面的错误。",
+      },
     },
     services: {
       title: "服务",

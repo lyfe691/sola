@@ -74,6 +74,11 @@ const Contact = () => {
     subject: '',
     message: ''
   });
+  const [errors, setErrors] = useState<Partial<Record<'name' | 'email' | 'subject' | 'message', string>>>({});
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const emailRef = useRef<HTMLInputElement | null>(null);
+  const subjectRef = useRef<HTMLInputElement | null>(null);
+  const messageRef = useRef<HTMLTextAreaElement | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -174,6 +179,24 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || isUploading) return;
+    // validate before any async work
+    const newErrors: Partial<Record<'name' | 'email' | 'subject' | 'message', string>> = {};
+    const trim = (v: string) => v.trim();
+    const isEmail = (v: string) => /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
+    if (!trim(formValues.name)) newErrors.name = t.contact.validation.nameRequired;
+    if (!trim(formValues.email)) newErrors.email = t.contact.validation.emailRequired;
+    else if (!isEmail(formValues.email)) newErrors.email = t.contact.validation.emailInvalid;
+    if (!trim(formValues.subject)) newErrors.subject = t.contact.validation.subjectRequired;
+    if (!trim(formValues.message)) newErrors.message = t.contact.validation.messageRequired;
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      // focus first invalid field
+      if (newErrors.name) nameRef.current?.focus();
+      else if (newErrors.email) emailRef.current?.focus();
+      else if (newErrors.subject) subjectRef.current?.focus();
+      else if (newErrors.message) messageRef.current?.focus();
+      return;
+    }
     
     // reCAPTCHA validation disabled for now
     // const recaptchaResponse = (window as any).grecaptcha?.getResponse();
@@ -331,6 +354,7 @@ const Contact = () => {
         <form
           ref={formRef}
           onSubmit={handleSubmit}
+          noValidate
           className="space-y-6 sm:space-y-8 max-w-2xl"
         >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -348,8 +372,33 @@ const Contact = () => {
                   inputSize="lg"
                   placeholder={t.contact.namePlaceholder}
                   value={formValues.name}
-                  onChange={(e) => setFormValues(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={(e) => {
+                    setFormValues(prev => ({ ...prev, name: e.target.value }));
+                    if (errors.name) setErrors(prev => ({ ...prev, name: undefined }));
+                  }}
+                  onBlur={() => {
+                    const v = formValues.name.trim();
+                    setErrors(prev => ({ ...prev, name: v ? undefined : t.contact.validation.nameRequired }));
+                  }}
+                  ref={nameRef}
+                  invalid={!!errors.name}
                 />
+                <AnimatePresence initial={false} mode="wait">
+                  {errors.name && (
+                    <motion.p
+                      key="name-error"
+                      className="text-sm text-destructive/90 mt-1"
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.18, ease: 'easeOut' }}
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {errors.name}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">
@@ -365,8 +414,34 @@ const Contact = () => {
                   inputSize="lg"
                   placeholder={t.contact.emailPlaceholder}
                   value={formValues.email}
-                  onChange={(e) => setFormValues(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={(e) => {
+                    setFormValues(prev => ({ ...prev, email: e.target.value }));
+                    if (errors.email) setErrors(prev => ({ ...prev, email: undefined }));
+                  }}
+                  onBlur={() => {
+                    const v = formValues.email.trim();
+                    const ok = /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
+                    setErrors(prev => ({ ...prev, email: v ? (ok ? undefined : t.contact.validation.emailInvalid) : t.contact.validation.emailRequired }));
+                  }}
+                  ref={emailRef}
+                  invalid={!!errors.email}
                 />
+                <AnimatePresence initial={false} mode="wait">
+                  {errors.email && (
+                    <motion.p
+                      key="email-error"
+                      className="text-sm text-destructive/90 mt-1"
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.18, ease: 'easeOut' }}
+                      role="alert"
+                      aria-live="polite"
+                    >
+                      {errors.email}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
             <div className="space-y-2">
@@ -383,8 +458,33 @@ const Contact = () => {
                 inputSize="lg"
                 placeholder={t.contact.subjectPlaceholder}
                 value={formValues.subject}
-                onChange={(e) => setFormValues(prev => ({ ...prev, subject: e.target.value }))}
+                onChange={(e) => {
+                  setFormValues(prev => ({ ...prev, subject: e.target.value }));
+                  if (errors.subject) setErrors(prev => ({ ...prev, subject: undefined }));
+                }}
+                onBlur={() => {
+                  const v = formValues.subject.trim();
+                  setErrors(prev => ({ ...prev, subject: v ? undefined : t.contact.validation.subjectRequired }));
+                }}
+                ref={subjectRef}
+                invalid={!!errors.subject}
               />
+              <AnimatePresence initial={false} mode="wait">
+                {errors.subject && (
+                  <motion.p
+                    key="subject-error"
+                    className="text-sm text-destructive/90 mt-1"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    {errors.subject}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
             <div className="space-y-2">
               <label htmlFor="message" className="text-sm font-medium">
@@ -400,8 +500,33 @@ const Contact = () => {
                 minHeight="md"
                 resizable={true}
                 value={formValues.message}
-                onChange={(e) => setFormValues(prev => ({ ...prev, message: e.target.value }))}
+                onChange={(e) => {
+                  setFormValues(prev => ({ ...prev, message: e.target.value }));
+                  if (errors.message) setErrors(prev => ({ ...prev, message: undefined }));
+                }}
+                onBlur={() => {
+                  const v = formValues.message.trim();
+                  setErrors(prev => ({ ...prev, message: v ? undefined : t.contact.validation.messageRequired }));
+                }}
+                ref={messageRef}
+                invalid={!!errors.message}
               />
+              <AnimatePresence initial={false} mode="wait">
+                {errors.message && (
+                  <motion.p
+                    key="message-error"
+                    className="text-sm text-destructive/90 mt-1"
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    role="alert"
+                    aria-live="polite"
+                  >
+                    {errors.message}
+                  </motion.p>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* attachment */}
