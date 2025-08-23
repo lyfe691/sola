@@ -23,9 +23,9 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
 
-  // Scroll to top on route change
+  // Smooth scroll to top on route change
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pathname]);
 
   // Debounced scroll handler

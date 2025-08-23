@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { usePageInit, containerVariants } from "@/utils/transitions";
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import React, { lazy, useEffect, useState } from 'react';
+import React, { lazy } from 'react';
 const Silk = lazy(() => import("@/components/backgrounds/Silk"));
 import {
   Breadcrumb,
@@ -49,14 +49,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
   const isLoaded = usePageInit(100);
   const navigate = useNavigate();
 
-  const [reducedMotion, setReducedMotion] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const onChange = () => setReducedMotion(mq.matches);
-    onChange();
-    mq.addEventListener?.('change', onChange);
-    return () => mq.removeEventListener?.('change', onChange);
-  }, []);
+  // Always show motion effects regardless of user reduced-motion preference
 
   return (
     <AnimatePresence>
@@ -75,19 +68,17 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
           {/* hero section */}
           <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6 border-4 border-border/50 shadow-lg shadow-black/5">
             {/* silk background */}
-            {!reducedMotion && (
-              <div className="absolute inset-0">
-                <React.Suspense fallback={<div className="w-full h-full bg-foreground/5" /> }>
-                  <Silk
-                    color={silkColor}
-                    speed={silkSpeed}
-                    scale={silkScale}
-                    noiseIntensity={silkNoiseIntensity}
-                    rotation={silkRotation}
-                  />
-                </React.Suspense>
-              </div>
-            )}
+            <div className="absolute inset-0">
+              <React.Suspense fallback={<div className="w-full h-full bg-foreground/5" /> }>
+                <Silk
+                  color={silkColor}
+                  speed={silkSpeed}
+                  scale={silkScale}
+                  noiseIntensity={silkNoiseIntensity}
+                  rotation={silkRotation}
+                />
+              </React.Suspense>
+            </div>
             
             {/* overlay */}
             <div className="absolute inset-0 bg-black/20" />

@@ -246,19 +246,12 @@ export function TextEffectWrapper({
   segmentTransition,
   style,
 }: TextEffectProps) {
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined" || !("matchMedia" in window)) return;
-    const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const handler = () => setPrefersReducedMotion(mql.matches);
-    handler();
-    mql.addEventListener?.("change", handler);
-    return () => mql.removeEventListener?.("change", handler);
-  }, []);
+  // force motion
+  const prefersReducedMotion = false;
   const segments = splitText(children, per);
   const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
 
-  const chosenPreset: PresetType = prefersReducedMotion ? "fade" : preset;
+  const chosenPreset: PresetType = preset;
 
   const baseVariants = chosenPreset
     ? presetVariants[chosenPreset]
@@ -266,7 +259,7 @@ export function TextEffectWrapper({
 
   const stagger = defaultStaggerTimes[per] / speedReveal;
 
-  const baseDuration = (prefersReducedMotion ? 0.15 : 0.35) / speedSegment;
+  const baseDuration = 0.35 / speedSegment;
 
   const customStagger = hasTransition(variants?.container?.visible ?? {})
     ? (variants?.container?.visible as TargetAndTransition).transition
@@ -282,11 +275,11 @@ export function TextEffectWrapper({
     container: createVariantsWithTransition(
       variants?.container || baseVariants.container,
       {
-        staggerChildren: prefersReducedMotion ? 0 : (customStagger ?? stagger),
-        delayChildren: prefersReducedMotion ? 0 : (customDelay ?? delay),
+        staggerChildren: customStagger ?? stagger,
+        delayChildren: customDelay ?? delay,
         ...containerTransition,
         exit: {
-          staggerChildren: prefersReducedMotion ? 0 : (customStagger ?? stagger),
+          staggerChildren: customStagger ?? stagger,
           staggerDirection: -1,
         },
       },
