@@ -531,7 +531,7 @@ const Projects = () => {
       {/* Featured Projects */}
       <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
-          <ScrollReveal key={project.id} variant="default" delay={index * 50}>
+          <ScrollReveal key={project.id} variant="default" delay={index * 70}>
             <ProjectCard
               project={project}
               hoveredProject={hoveredProject}
@@ -543,7 +543,7 @@ const Projects = () => {
         ))}
       </div>
 
-      <ScrollReveal variant="title" delay={50}>
+      <ScrollReveal variant="title">
         <div className="flex items-center gap-3 mb-6 sm:mb-8">
                      <h2 className="text-2xl font-semibold">{t.projects.other}</h2>
         </div>
@@ -552,7 +552,7 @@ const Projects = () => {
       {/* Other Projects */}
       <div className="grid gap-4 sm:gap-6">
         {otherProjects.map((project, index) => (
-          <ScrollReveal key={project.id} variant="default" delay={index * 60}>
+          <ScrollReveal key={project.id} variant="default">
             <ProjectCard
               project={project}
               hoveredProject={hoveredProject}

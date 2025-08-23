@@ -46,7 +46,7 @@ const AuroraIntroModal: React.FC<AuroraIntroModalProps> = ({ imageSrc = "/other/
         // delay to ensure app is loaded
         const timer = setTimeout(() => {
           setOpen(true);
-        }, 500);
+        }, 3000);
         
         return () => clearTimeout(timer);
       }
@@ -54,7 +54,7 @@ const AuroraIntroModal: React.FC<AuroraIntroModalProps> = ({ imageSrc = "/other/
       if (!enabled) {
         const timer = setTimeout(() => {
           setOpen(true);
-        }, 500);
+        }, 3000);
         
         return () => clearTimeout(timer);
       }
