@@ -65,6 +65,11 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
     isItemActive ? "text-primary" : "text-foreground/60 hover:text-foreground"
   );
 
+  const handleClick = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    onClick();
+  }, [onClick]);
+
   if (isMobile) {
     const mobileVariants = {
       initial: { opacity: 0, y: 20 },
@@ -97,9 +102,9 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
         exit="exit"
         className="w-full"
       >
-        <Link 
-          to={item.path} 
-          onClick={onClick}
+        <Link
+          to={item.path}
+          onClick={handleClick}
           ref={ref}
           className={linkClassName}
           aria-current={isItemActive ? "page" : undefined}
@@ -123,7 +128,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
     >
       <Link
         to={item.path}
-        onClick={onClick}
+        onClick={handleClick}
         ref={ref}
         className={linkClassName}
         aria-current={isItemActive ? "page" : undefined}
