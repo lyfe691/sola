@@ -7,7 +7,15 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { Home } from "lucide-react";
+import {
+  Home,
+  User,
+  Briefcase,
+  FolderGit2,
+  Sparkles,
+  Wrench,
+  Mail,
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "@/lib/language-provider";
@@ -58,8 +66,8 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
   const Component = motion.div;
   const isItemActive = isActive(item.path);
   const linkBaseClass = isMobile
-    ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
-    : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2";
+    ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+    : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40";
   const linkClassName = cn(
     linkBaseClass,
     isItemActive ? "text-primary" : "text-foreground/60 hover:text-foreground"
@@ -97,15 +105,23 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
         exit="exit"
         className="w-full"
       >
-        <Link 
-          to={item.path} 
+        <Link
+          to={item.path}
           onClick={onClick}
           ref={ref}
           className={linkClassName}
           aria-current={isItemActive ? "page" : undefined}
         >
-          {item.icon && <item.icon className="w-6 h-6 mr-3" />}
-          {item.text}
+          {isItemActive && (
+            <motion.div
+              layoutId="mobile-nav-active"
+              className="absolute inset-0 rounded-md bg-foreground/10"
+              initial={false}
+              transition={{ type: 'spring', stiffness: 320, damping: 30, mass: 0.85 }}
+            />
+          )}
+          {item.icon && <item.icon className="w-6 h-6 mr-3 relative z-10" />}
+          <span className="relative z-10">{item.text}</span>
         </Link>
       </Component>
     );
@@ -136,7 +152,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
             transition={{ type: 'spring', stiffness: 320, damping: 30, mass: 0.85 }}
           />
         )}
-        {item.icon && <item.icon className="w-4 h-4" />}
+        {item.icon && <item.icon className="w-4 h-4 relative z-10" />}
         <span className="relative z-10">{item.text}</span>
       </Link>
     </Component>
@@ -208,17 +224,20 @@ const Navigation = () => {
   // memoized navigation items
   const homeItem = { text: t.common.home, path: "/", icon: Home };
   const navItems = [
-    { text: t.nav.about, path: "/about" },
-    { text: t.nav.experience, path: "/experience" },
-    { text: t.nav.projects, path: "/projects" },
-    { text: t.nav.skills, path: "/skills" },
-    { text: t.nav.services, path: "/services" },
-    { text: t.nav.contact, path: "/contact" }
+    { text: t.nav.about, path: "/about", icon: User },
+    { text: t.nav.experience, path: "/experience", icon: Briefcase },
+    { text: t.nav.projects, path: "/projects", icon: FolderGit2 },
+    { text: t.nav.skills, path: "/skills", icon: Sparkles },
+    { text: t.nav.services, path: "/services", icon: Wrench },
+    { text: t.nav.contact, path: "/contact", icon: Mail }
   ];
 
   // memoized isactive check
   const isActive = useCallback((path: string) => {
-    return location.pathname === path;
+    return (
+      location.pathname === path ||
+      location.pathname.startsWith(`${path}/`)
+    );
   }, [location.pathname]);
 
 
@@ -240,6 +259,26 @@ const Navigation = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen, closeMenu]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isMenuOpen) {
+        closeMenu();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isMenuOpen, closeMenu]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // prevent body scrolling when menu is open
   useEffect(() => {
@@ -265,7 +304,7 @@ const Navigation = () => {
 
 
   // mobile menu animations
-  const mobileMenuVariants: Record<string, any> = {
+  const mobileMenuVariants = {
     hidden: { 
       opacity: 0,
       transition: { 
@@ -284,7 +323,7 @@ const Navigation = () => {
     },
   };
 
-  const mobileNavContainer: Record<string, any> = {
+  const mobileNavContainer = {
     hidden: { 
       opacity: 0,
       transition: {
@@ -352,10 +391,13 @@ const Navigation = () => {
             exit="hidden"
             variants={mobileMenuVariants}
             className={MOBILE_OVERLAY_CLASSES}
-          style={{
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-          }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile navigation"
+            style={{
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            }}
           >
             <motion.nav 
               variants={mobileNavContainer}
