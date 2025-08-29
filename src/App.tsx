@@ -19,8 +19,10 @@ import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
 import { AuroraProvider } from "./lib/aurora-provider";
+import { GalaxyProvider } from "./lib/galaxy-provider";
 import AuroraBackground from "./components/backgrounds/AuroraBackground";
-import AuroraIntroModal from "./components/AuroraIntroModal";
+import GalaxyBackground from "./components/backgrounds/GalaxyBackground";
+import FeatureModal from "./components/FeatureModal";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -36,29 +38,32 @@ const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
       <AuroraProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <AuroraBackground />
-            <ClickSpark
-              sparkColor="hsl(var(--primary) / 0.30)"
-              sparkSize={4}
-              sparkCount={7}
-              duration={450}
-            >
-              <div className="min-h-screen flex flex-col relative">
-                <Toaster position="bottom-right" />
-                <AuroraIntroModal/>
-                <BrowserRouter>
-                  <KeyboardShortcuts />
-                  <CommandMenu />
-                  <AnimatedRoutes />
-                  <ScrollToTop />
-                  <Conditionals />
-                </BrowserRouter>
-              </div>
-            </ClickSpark>
-          </TooltipProvider>
-        </QueryClientProvider>
+        <GalaxyProvider>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <AuroraBackground />
+              <GalaxyBackground />
+              <ClickSpark
+                sparkColor="hsl(var(--primary) / 0.30)"
+                sparkSize={4}
+                sparkCount={7}
+                duration={450}
+              >
+                <div className="min-h-screen flex flex-col relative">
+                  <Toaster position="bottom-right" />
+                  <FeatureModal />
+                  <BrowserRouter>
+                    <KeyboardShortcuts />
+                    <CommandMenu />
+                    <AnimatedRoutes />
+                    <ScrollToTop />
+                    <Conditionals />
+                  </BrowserRouter>
+                </div>
+              </ClickSpark>
+            </TooltipProvider>
+          </QueryClientProvider>
+        </GalaxyProvider>
       </AuroraProvider>
     </LanguageProvider>
   </ThemeProvider>
