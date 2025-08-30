@@ -67,7 +67,8 @@ export const translations = {
       recentActivity: "Recent Activity",
       lastEvents: "Last 20 events",
       noActivity: "No recent activity",
-      checkBack: "Check back later for updates"
+      checkBack: "Check back later for updates",
+      moreSuffix: "more"
     },
     hire: {
       hirebtn:"Hire Me", 
@@ -451,7 +452,8 @@ export const translations = {
       recentActivity: "Aktuelle Aktivitäten",
       lastEvents: "Letzte 20 Ereignisse",
       noActivity: "Keine aktuellen Aktivitäten",
-      checkBack: "Schau später noch einmal vorbei"
+      checkBack: "Schau später noch einmal vorbei",
+      moreSuffix: "mehr"
     },
     hire: {
       hirebtn: "Stell mich ein",
@@ -835,7 +837,8 @@ export const translations = {
       recentActivity: "Actividad reciente",
       lastEvents: "Últimos 20 eventos",
       noActivity: "No hay actividad reciente",
-      checkBack: "Vuelve más tarde para ver novedades"
+      checkBack: "Vuelve más tarde para ver novedades",
+      moreSuffix: "más"
     },
     hire: {
       hirebtn: "Contrátame",
@@ -1164,35 +1167,35 @@ export const translations = {
   ja: {
     seo: {
       home: {
-        title: "ヤニス・セバスチャン・ツェルヒャー • チューリッヒのソフトウェア開発者",
+        title: "Yanis Sebastian Zürcher • チューリッヒのソフトウェア開発者",
         description: "スケーラブルで高速、丁寧に設計されたシステムに注力。インフラ、アイデンティティ、インターフェース領域で活動。",
       },
       about: {
-        title: "概要 • ヤニス・セバスチャン・ツェルヒャー",
+        title: "概要 • Yanis Sebastian Zürcher",
         description: "背景、価値観、使用ツールなど、私について詳しく紹介します。",
       },
       projects: {
-        title: "プロジェクト • ヤニス・セバスチャン・ツェルヒャー",
+        title: "プロジェクト • Yanis Sebastian Zürcher",
         description: "フルスタック、フロントエンド、バックエンド、ツールなどの制作物。",
       },
       skills: {
-        title: "スキル • ヤニス・セバスチャン・ツェルヒャー",
+        title: "スキル • Yanis Sebastian Zürcher",
         description: "React、TypeScript、Spring Boot、Docker などの技術スタック。",
       },
       experience: {
-        title: "経験 • ヤニス・セバスチャン・ツェルヒャー",
+        title: "経験 • Yanis Sebastian Zürcher",
         description: "学歴と職歴のタイムライン。責務、実績、使用技術を記載。",
       },
       contact: {
-        title: "お問い合わせ • ヤニス・セバスチャン・ツェルヒャー",
+        title: "お問い合わせ • Yanis Sebastian Zürcher",
         description: "案件、コラボレーション等のご連絡はこちらから。",
       },
       services: {
-        title: "サービス • ヤニス・セバスチャン・ツェルヒャー",
+        title: "サービス • Yanis Sebastian Zürcher",
         description: "フルスタック/フロントエンド/バックエンド開発、技術コンサルティング。",
       },
       privacy: {
-        title: "プライバシーポリシー • sola.ysz.life",
+        title: "プライバシーポリシー",
         description: "ホスティング、分析、処理者、ユーザーの権利に関する詳細。",
       },
       notFound: {
@@ -1219,7 +1222,8 @@ export const translations = {
       recentActivity: "最近のアクティビティ",
       lastEvents: "直近20件",
       noActivity: "最近のアクティビティはありません",
-      checkBack: "後でもう一度ご確認ください"
+      checkBack: "後でもう一度ご確認ください",
+      moreSuffix: "件"
     },
     hire: {
       hirebtn: "採用する",
@@ -1604,7 +1608,8 @@ export const translations = {
       recentActivity: "最新活动",
       lastEvents: "最近 20 条",
       noActivity: "暂无活动",
-      checkBack: "请稍后再查看"
+      checkBack: "请稍后再查看",
+      moreSuffix: "条"
     },
     hire: {
       hirebtn: "雇佣我",

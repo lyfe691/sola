@@ -91,7 +91,7 @@ const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
 };
 
 // cleaner, more subtle metadata display
-const ActivityMetadata = ({ activity }: { activity: ProcessedActivity }) => {
+const ActivityMetadata = ({ activity, t }: { activity: ProcessedActivity; t: any }) => {
   if (!activity.metadata) return null;
 
   const items = [];
@@ -129,7 +129,7 @@ const ActivityMetadata = ({ activity }: { activity: ProcessedActivity }) => {
       ))}
       {items.length > 2 && (
         <span className="text-[11px] text-foreground/40">
-          +{items.length - 2} more
+          +{items.length - 2} {t.feed.moreSuffix}
         </span>
       )}
     </div>
@@ -180,7 +180,7 @@ const ActivityItem = ({ activity, index, locale, t }: { activity: ProcessedActiv
           </p>
           
           {/* Metadata */}
-          <ActivityMetadata activity={activity} />
+          <ActivityMetadata activity={activity} t={t} />
           
           {/* Footer with time and repo */}
           <div className="flex items-center justify-between pt-1">
@@ -271,7 +271,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ eve
             icon={<ExternalLink className="w-3.5 h-3.5" />}
             size="lg"
             className="transition-all duration-300 group border-foreground/20 rounded-full"
-            label="More on GitHub"
+            label={t.common.moreOnGithub}
             onClick={() => window.open("https://github.com/lyfe691?tab=repositories", "_blank")}
           />
         </div>

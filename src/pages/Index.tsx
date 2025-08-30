@@ -14,6 +14,8 @@ import {
   Linkedin,
   ArrowRight,
   MoveRight,
+  FolderGit2,
+  Contact,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence, AnimationGeneratorType } from "motion/react";
@@ -139,6 +141,7 @@ const Index = () => {
                       <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                         <Link to="/contact">
                           <IconButton
+                            icon={<Contact className="w-4 h-4" />}
                             variant="default"
                             className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5 font-medium"
                             label={t.index.contactMe}
@@ -147,6 +150,7 @@ const Index = () => {
 
                         <Link to="/projects">
                           <IconButton
+                            icon={<FolderGit2 className="w-4 h-4" />}
                             variant="secondary"
                             className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
                             label={t.index.viewProjects}
