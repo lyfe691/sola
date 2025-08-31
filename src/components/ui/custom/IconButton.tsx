@@ -8,7 +8,7 @@
 
 import * as React from "react";
 import { Button, type ButtonProps } from "@/components/ui/button";
-import { MoveRight } from "lucide-react";
+import { ChevronRight, MoveRight, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ICON_SIZES = {
@@ -44,7 +44,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       variant = "default",
       label = "Click",
       hideLabel = false,
-      icon = <MoveRight />,
+      icon = <ChevronRight />,
       iconSize,
       iconStrokeWidth = 2,
       iconPosition = "right",

@@ -8,7 +8,7 @@
 
 import { useState, useMemo } from "react";
 import { 
-  ExternalLink, 
+  ArrowUpRight, 
   Info, 
   MoveRight, 
   SortAsc, 
@@ -16,7 +16,8 @@ import {
   Calendar, 
   CalendarClock,
   ArrowDownAZ,
-  ArrowUpAZ
+  ArrowUpAZ,
+  FileSearch
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion } from "motion/react";
@@ -339,6 +340,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
           <Link to={`/projects/${project.slug}`} className="w-full">
             <IconButton
               label={t.projects.viewDetails}
+              icon={<FileSearch className="w-4 h-4" />}
               variant="default"  
               size="lg"
               className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
@@ -375,7 +377,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <ExternalLink className="w-4 h-4 mr-1" />
+                  <ArrowUpRight className="w-4 h-4 mr-1" />
                   {t.projects.visitProject}
                 </a>
               </Button>
@@ -500,7 +502,7 @@ const Projects = () => {
                     rel="noopener noreferrer" 
                     className="text-primary hover:underline inline-flex items-center gap-1"
                   >
-                    Vercel OG Image <ExternalLink className="w-3 h-3" />
+                    Vercel OG Image <ArrowUpRight className="w-3 h-3" />
                   </a>
                 </p>
               </TooltipContent>
@@ -570,6 +572,7 @@ const Projects = () => {
           <IconButton
             variant="default"
             size="lg"
+            icon={<ArrowUpRight className="w-4 h-4" />}
             className="transition-all duration-300 group border-foreground/20 rounded-full"
             label={t.projects.viewAll}
             onClick={() => window.open("https://github.com/lyfe691?tab=repositories", "_blank")}

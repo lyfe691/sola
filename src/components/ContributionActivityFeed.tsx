@@ -25,7 +25,7 @@ import {
   Tag,
   Users,
   Eye,
-  ExternalLink,
+  ArrowUpRight,
   Clock,
   MoveRight
 } from 'lucide-react';
@@ -195,7 +195,7 @@ const ActivityItem = ({ activity, index, locale, t }: { activity: ProcessedActiv
                 className="inline-flex items-center gap-1 hover:text-foreground/70 transition-colors"
               >
                 {repoName}
-                <ExternalLink className="w-2.5 h-2.5" />
+                <ArrowUpRight className="w-2.5 h-2.5" />
               </a>
             </div>
             
@@ -268,7 +268,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({ eve
         <div className="mt-6 flex justify-center">
           <IconButton
             variant="default"
-            icon={<ExternalLink className="w-3.5 h-3.5" />}
+            icon={<ArrowUpRight className="w-3.5 h-3.5" />}
             size="lg"
             className="transition-all duration-300 group border-foreground/20 rounded-full"
             label={t.common.moreOnGithub}
