@@ -199,3 +199,33 @@ export const getAuroraPreset = (theme: Theme): AuroraPreset => {
   const resolved = theme === "system" ? getThemeType("system") : (theme as Exclude<Theme, "system">);
   return AURORA_PRESETS[resolved as Exclude<Theme, "system">];
 };
+
+// ---------------- Galaxy presets ----------------
+
+export type GalaxyPreset = {
+  hueShift: number;
+  glowIntensity: number;
+  saturation: number;
+  density: number;
+};
+
+const GALAXY_BASE_PRESETS: Record<"light" | "dark", GalaxyPreset> = {
+  light: {
+    hueShift: 200,
+    glowIntensity: 0.2,
+    saturation: 0.0,
+    density: 1,
+  },
+  dark: {
+    hueShift: 140,
+    glowIntensity: 0.3,
+    saturation: 0.0,
+    density: 1,
+  },
+};
+
+export const getGalaxyPreset = (theme: Theme): GalaxyPreset => {
+  const type = getThemeType(theme);
+  return GALAXY_BASE_PRESETS[type];
+};
+
