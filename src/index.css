@@ -372,3 +372,16 @@
     @apply bg-[hsl(var(--scrollbar-thumb-hover))];
   }
 }
+
+@layer utilities {
+  .bg-dashed-pattern {
+    background-image: repeating-linear-gradient(
+      45deg,
+      hsl(var(--border) / 0.3) 0px,
+      hsl(var(--border) / 0.3) 2px,
+      transparent 2px,
+      transparent 12px
+    );
+  }
+}
+

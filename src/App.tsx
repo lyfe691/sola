@@ -21,6 +21,7 @@ import  ClickSpark from "./components/ClickSpark";
 import { AuroraProvider } from "./lib/aurora-provider";
 import AuroraBackground from "./components/backgrounds/AuroraBackground";
 import AuroraIntroModal from "./components/AuroraIntroModal";
+import Dashes from "./components/backgrounds/Dashes";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
       <AuroraProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
+            <Dashes />
             <AuroraBackground />
             <ClickSpark
               sparkColor="hsl(var(--primary) / 0.30)"
