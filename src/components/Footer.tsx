@@ -60,8 +60,8 @@ const Footer = () => {
   const e = "/a";
 
   return (
-    <StickyFooter className="border-t border-foreground/5 bg-background/5 backdrop-blur-sm text-foreground">
-      <div className="h-full w-full px-6 sm:px-8 py-12 flex flex-col justify-between">
+    <StickyFooter className="border-t border-foreground/5 bg-background text-foreground">
+      <div className="w-full px-6 sm:px-8 py-12 flex flex-col justify-between">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* brand and info */}
           <div className="space-y-4">
