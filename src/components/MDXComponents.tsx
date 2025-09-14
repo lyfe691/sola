@@ -7,6 +7,8 @@
  */
 
 import React from 'react';
+import { ExternalLink } from 'lucide-react';
+import { LinkPreview } from '@/components/ui/link-preview';
 import { motion } from 'motion/react';
 import { AdvancedCodeBlock } from '@/components/ui/code/advanced-code-block/advanced-code-block';
 
@@ -181,17 +183,29 @@ export const MDXComponents = {
   ),
   
   // Links
-  a: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a 
-      href={href}
-      className="link"
-      target={href?.startsWith('http') ? '_blank' : undefined}
-      rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
-      {...props}
-    >
-      {children}
-    </a>
-  ),
+  a: ({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    const isExternal = typeof href === 'string' && /^https?:\/\//i.test(href);
+    const anyProps = props as any;
+    const iconProp = anyProps?.icon ?? anyProps?.ext ?? anyProps?.['data-icon'];
+    const showIcon = iconProp === undefined ? false : iconProp !== false && iconProp !== 'false';
+    if (isExternal && href) {
+      return (
+        <LinkPreview href={href} previewType="auto" compact={false} className="link inline-flex items-center gap-1">
+          <span>{children}</span>
+          {showIcon ? <ExternalLink className="w-3 h-3 opacity-60" /> : null}
+        </LinkPreview>
+      );
+    }
+    return (
+      <a 
+        href={href}
+        className="link inline-flex items-center gap-1"
+        {...props}
+      >
+        <span>{children}</span>
+      </a>
+    );
+  },
   
   // Horizontal rule
   hr: ({ ...props }: MDXComponentProps) => (

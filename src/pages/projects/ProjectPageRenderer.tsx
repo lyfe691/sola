@@ -11,8 +11,8 @@ import { useParams, Navigate, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { MDXProvider } from '@mdx-js/react';
 import ProjectPage from '@/components/ProjectPage';
-import { Button } from '@/components/ui/button';
 import { ExternalLink, Globe, ArrowRight } from 'lucide-react';
+import { LinkPreview } from '@/components/ui/link-preview';
 import { FaGithubAlt } from 'react-icons/fa';
 import { getProjectConfig, getAllProjectSlugs, projectPagesConfig } from '@/config/projects';
 import { MDXComponents } from '@/components/MDXComponents';
@@ -40,6 +40,47 @@ const ProjectPageRenderer: React.FC = () => {
   }
 
   const MDXComponent = getMDXComponent(config.mdxPath);
+
+  const getHostname = (href: string) => {
+    try { return new URL(href).hostname.replace(/^www\./, ''); } catch { return href; }
+  };
+
+  const LinkTile: React.FC<{ href: string; label: string; icon: React.ReactNode; variant?: 'primary' | 'outline' }>
+    = ({ href, label, icon, variant = 'primary' }) => (
+    <LinkPreview href={href} previewType="auto" compact={true} className="block">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={[
+          'group relative w-full h-full rounded-xl px-4 py-3',
+          'border transition-colors duration-150 ease-out',
+          variant === 'primary'
+            ? 'border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/40'
+            : 'border-foreground/20 bg-foreground/5 hover:bg-foreground/10',
+          'shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
+          'inline-flex items-center gap-3 text-foreground',
+        ].join(' ')}
+      >
+        {/* decorative shine */}
+        <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
+
+        {/* icon pill */}
+        <span className="shrink-0 grid place-items-center w-8 h-8 rounded-lg bg-foreground/10 text-foreground/70 group-hover:bg-primary/15 group-hover:text-primary transition-colors">
+          {icon}
+        </span>
+        
+        {/* label */}
+        <span className="flex flex-col text-left leading-tight">
+          <span className="text-sm font-medium tracking-tight">{label}</span>
+          <span className="text-[11px] text-foreground/60">{getHostname(href)}</span>
+        </span>
+
+        {/* arrow cue */}
+        <ExternalLink className="ml-auto w-4 h-4 text-foreground/40 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-colors duration-150 ease-out" />
+      </a>
+    </LinkPreview>
+  );
 
   return (
     <ProjectPage
@@ -97,67 +138,37 @@ const ProjectPageRenderer: React.FC = () => {
           </div>
         </motion.section>
 
-        {/* links - moved to top for better UX */}
+        {/* links - hero call-to-action tiles */}
         <motion.section 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.25 }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">{t.common.links}</h2>
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
             {config.links.live && (
-              <Button
-                asChild
-                size="sm"
-                className="text-xs h-9"
-              >
-                <a 
-                  href={config.links.live}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {config.links.live.includes('chromewebstore') ? (
-                    <Globe className="w-3.5 h-3.5 mr-1.5" />
-                  ) : (
-                    <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                  )}
-                  {config.links.live.includes('chromewebstore') ? t.common.chromeStore : t.common.visitSite}
-                </a>
-              </Button>
+              <LinkTile
+                href={config.links.live}
+                label={config.links.live.includes('chromewebstore') ? t.common.chromeStore : t.common.visitSite}
+                icon={config.links.live.includes('chromewebstore') ? <Globe className="w-4 h-4" /> : <ExternalLink className="w-4 h-4" />}
+                variant="primary"
+              />
             )}
             {config.links.github && (
-              <Button
-                asChild
+              <LinkTile
+                href={config.links.github}
+                label={t.common.sourceCode}
+                icon={<FaGithubAlt className="w-4 h-4" />}
                 variant="outline"
-                size="sm"
-                className="text-xs h-9"
-              >
-                <a 
-                  href={config.links.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaGithubAlt className="w-3.5 h-3.5 mr-1.5" />
-                  {t.common.sourceCode}
-                </a>
-              </Button>
+              />
             )}
             {config.links.demo && (
-              <Button
-                asChild
+              <LinkTile
+                href={config.links.demo}
+                label={t.common.demo}
+                icon={<ExternalLink className="w-4 h-4" />}
                 variant="outline"
-                size="sm"
-                className="text-xs h-9"
-              >
-                <a 
-                  href={config.links.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="w-3.5 h-3.5 mr-1.5" />
-                  {t.common.demo}
-                </a>
-              </Button>
+              />
             )}
           </div>
         </motion.section>
