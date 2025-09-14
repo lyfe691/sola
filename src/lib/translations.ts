@@ -109,14 +109,39 @@ export const translations = {
       title: "Experience",
       backHome: "Back home",
       subtitle: "My professional journey and educational experiences that have shaped my technical expertise.",
+      sections: {
+        work: "Work",
+        education: "Education"
+      },
+      chips: {
+        onsite: "On-site",
+        remote: "Remote",
+        hybrid: "Hybrid",
+        internship: "Internship",
+        full_time: "Full-time",
+        part_time: "Part-time",
+        contract: "Contract",
+        freelance: "Freelance"
+      },
       period: {
         present: "Present",
         gz: "Aug 2025 - Present",
+        freelance: "Jul 2025 - Present",
         wiss: "Aug 2023 - Present",
         sek: "2020 - 2023"
       },
+      freelance: {
+        role: "Freelance Web Developer",
+        company: "Self-employed",
+        location: "Zürich, Switzerland",
+        description: "Delivering modern web solutions for clients—from landing pages to full‑stack features—with a focus on clean UX, performance, and maintainable code.",
+        achievements: [
+          "Built and shipped projects with React, Next.js, TypeScript, Tailwind CSS.",
+          "Implemented backend features with Spring Boot and Java; versioned and automated with Git."
+        ]
+      },
       gz: {
-        role: "IAM Engineering Intern",
+        role: "IAM Developer",
         company: "Gesundheitswelt Zollikerberg",
         location: "Zollikon, Switzerland",
         description: "As an IAM Engineering Intern, I contribute to the maintenance and optimization of IT infrastructure, with a focus on automating identity and access management processes. The company delivers healthcare services to residents of Zollikon.",
@@ -251,7 +276,7 @@ export const translations = {
       title: "About Me",
       backHome: "Back home",
       viewSkills: "View Skills",
-      intro: "I'm Yanis Sebastian Zürcher, a 17-year-old software developer based in Zürich, Switzerland. I study Computer Science at WISS, but most of what I know comes from building my own projects—not from school.",
+      intro: "I'm Yanis Sebastian Zürcher, a 17-year-old software developer based in Zürich, Switzerland. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from building my own projects—not from school.",
       hobbies: "I focus on creating fast, clean, and minimal web applications. Whether it's full-stack platforms or sharp frontends, I care about clarity, performance, and a refined user experience. I'm always pushing my own ideas forward—building things that feel as good as they function.",
       philosophy: {
         title: "My Approach",
@@ -290,7 +315,7 @@ export const translations = {
       },
       resume: {
         title: "Request Full Resume",
-        description: "The public version of my resume has some sensitive information censored. If you need the full version, please contact me or send an email to yanis.sebastian.zuercher@gmail.com.",
+        description: "The public version of my resume has some sensitive information censored. If you need the full version, please contact me or send an email to [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
         viewButton: "View Censored Version",
         downloadButton: "Download Censored Version",
         languageLabel: "Language:",
@@ -494,14 +519,39 @@ export const translations = {
       title: "Erfahrung",
       backHome: "Zurück",
       subtitle: "Mein beruflicher Werdegang und meine Ausbildung, die meine technische Expertise geprägt haben.",
+      sections: {
+        work: "Beruf",
+        education: "Ausbildung"
+      },
+      chips: {
+        onsite: "Vor Ort",
+        remote: "Remote",
+        hybrid: "Hybrid",
+        internship: "Praktikum",
+        full_time: "Vollzeit",
+        part_time: "Teilzeit",
+        contract: "Vertrag",
+        freelance: "Freelance"
+      },
       period: {
         present: "Heute",
         gz: "Aug 2025 - Heute",
+        freelance: "Jul 2025 - Heute",
         wiss: "Aug 2023 - Heute",
         sek: "2020 - 2023"
       },
+      freelance: {
+        role: "Freelance Webentwickler",
+        company: "Selbstständig",
+        location: "Zürich, Schweiz",
+        description: "Entwicklung moderner Weblösungen – von Landingpages bis zu Full‑Stack‑Features. Fokus auf saubere UX, Performance und wartbaren Code.",
+        achievements: [
+          "Projekte mit React, Next.js, TypeScript, Tailwind CSS umgesetzt.",
+          "Backend‑Features mit Spring Boot und Java; Versionsverwaltung und Automatisierung mit Git."
+        ]
+      },
       gz: {
-        role: "Praktikant IAM Engineering",
+        role: "IAM-Entwickler",
         company: "Gesundheitswelt Zollikerberg",
         location: "Zollikon, Schweiz",
         description: "Als Praktikant im Bereich IAM Engineering unterstütze ich die Wartung und Optimierung der IT-Infrastruktur mit Schwerpunkt auf der Automatisierung von Identity- und Access-Management-Prozessen. Das Unternehmen bietet Gesundheitsdienstleistungen für die Einwohner von Zollikon an.",
@@ -636,7 +686,7 @@ export const translations = {
       title: "Über Mich",
       backHome: "Zurück",
       viewSkills: "Fähigkeiten ansehen",
-      intro: "Ich bin Yanis Sebastian Zürcher, ein 17-jähriger Softwareentwickler aus Zürich, Schweiz. Ich studiere Informatik an der WISS, aber das meiste habe ich mir durch eigene Projekte beigebracht – nicht durch die Schule.",
+      intro: "Ich bin Yanis Sebastian Zürcher, ein 17-jähriger Softwareentwickler aus Zürich, Schweiz. Ich studiere Informatik an der [WISS](https://www.wiss.ch), aber das meiste habe ich mir durch eigene Projekte beigebracht – nicht durch die Schule.",
       hobbies: "Ich konzentriere mich darauf, schnelle, saubere und minimalistische Webanwendungen zu entwickeln. Ob Full-Stack-Plattformen oder elegante Frontends – mir sind Klarheit, Performance und ein durchdachtes Nutzererlebnis wichtig. Ich arbeite ständig an meinen eigenen Ideen und entwickle Dinge, die sich genauso gut anfühlen, wie sie funktionieren.",
       philosophy: {
         title: "Mein Ansatz",
@@ -675,7 +725,7 @@ export const translations = {
       },
       resume: {
         title: "Vollständigen Lebenslauf anfordern",
-        description: "Die öffentliche Version meines Lebenslaufs hat einige sensible Informationen zensiert. Wenn Sie die vollständige Version benötigen, kontaktieren Sie mich bitte oder senden Sie eine E-Mail an yanis.sebastian.zuercher@gmail.com.",
+        description: "Die öffentliche Version meines Lebenslaufs hat einige sensible Informationen zensiert. Wenn Sie die vollständige Version benötigen, kontaktieren Sie mich bitte oder senden Sie eine E-Mail an [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
         viewButton: "Zensierte Version ansehen",
         downloadButton: "Zensierte Version herunterladen",
         languageLabel: "Sprache:",
@@ -879,14 +929,39 @@ export const translations = {
       title: "Experiencia",
       backHome: "Regresar",
       subtitle: "Mi trayectoria profesional y experiencias educativas que han formado mi experiencia técnica.",
+      sections: {
+        work: "Trabajo",
+        education: "Educación"
+      },
+      chips: {
+        onsite: "Presencial",
+        remote: "Remoto",
+        hybrid: "Híbrido",
+        internship: "Pasantía",
+        full_time: "Tiempo completo",
+        part_time: "Medio tiempo",
+        contract: "Contrato",
+        freelance: "Freelance"
+      },
       period: {
         present: "Presente",
         gz: "Ago 2025 - Presente",
+        freelance: "Jul 2025 - Presente",
         wiss: "Ago 2023 - Presente",
         sek: "2020 - 2023"
       },
+      freelance: {
+        role: "Desarrollador Web Freelance",
+        company: "Autónomo",
+        location: "Zürich, Suiza",
+        description: "Desarrollo soluciones web modernas, desde landings hasta funciones full‑stack, con foco en UX limpia, rendimiento y código mantenible.",
+        achievements: [
+          "Proyectos con React, Next.js, TypeScript y Tailwind CSS.",
+          "Funciones backend con Spring Boot y Java; versionado y automatización con Git."
+        ]
+      },
       gz: {
-        role: "Practicante de Ingeniería IAM",
+        role: "Desarrollador IAM",
         company: "Gesundheitswelt Zollikerberg",
         location: "Zollikon, Suiza",
         description: "Como practicante de ingeniería IAM, contribuyo al mantenimiento y la optimización de la infraestructura de TI, enfocándome en la automatización de procesos de gestión de identidad y acceso. La empresa ofrece servicios de salud a los residentes de Zollikon.",
@@ -1021,7 +1096,7 @@ export const translations = {
       title: "Sobre Mí",
       backHome: "Regresar",
       viewSkills: "Ver Habilidades",
-      intro: "Soy Yanis Sebastian Zürcher, un desarrollador de software de 17 años de Zúrich, Suiza. Estudio Ciencias de la Computación en WISS, pero la mayor parte de lo que sé lo he aprendido haciendo mis propios proyectos, no en la escuela.",
+      intro: "Soy Yanis Sebastian Zürcher, un desarrollador de software de 17 años de Zúrich, Suiza. Estudio Ciencias de la Computación en [WISS](https://www.wiss.ch), pero la mayor parte de lo que sé lo he aprendido haciendo mis propios proyectos, no en la escuela.",
       hobbies: "Me enfoco en crear aplicaciones web rápidas, limpias y minimalistas. Ya sea desarrollando plataformas completas o interfaces pulidas, me importan la claridad, el rendimiento y una experiencia de usuario refinada. Siempre estoy desarrollando nuevas ideas propias y creando cosas que se sienten tan bien como funcionan.",
       philosophy: {
         title: "Mi Enfoque",
@@ -1060,7 +1135,7 @@ export const translations = {
       },
       resume: {
         title: "Solicitar currículum completo",
-        description: "La versión pública de mi currículum tiene información sensible censurada. Si necesitas la versión completa, por favor contáctame o envía un email a yanis.sebastian.zuercher@gmail.com.",
+        description: "La versión pública de mi currículum tiene información sensible censurada. Si necesitas la versión completa, por favor contáctame o envía un email a [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
         viewButton: "Ver versión censurada",
         downloadButton: "Descargar versión censurada",
         languageLabel: "Idioma:",
@@ -1265,14 +1340,39 @@ export const translations = {
       title: "経験",
       backHome: "ホームに戻る",
       subtitle: "私の技術的専門知識を形成してきた職業経験と教育経験です。",
+      sections: {
+        work: "職務",
+        education: "学歴"
+      },
+      chips: {
+        onsite: "オンサイト",
+        remote: "リモート",
+        hybrid: "ハイブリッド",
+        internship: "インターンシップ",
+        full_time: "フルタイム",
+        part_time: "パートタイム",
+        contract: "契約",
+        freelance: "フリーランス"
+      },
       period: {
         present: "現在",
         gz: "2025年8月 - 現在",
+        freelance: "2025年7月 - 現在",
         wiss: "2023年8月 - 現在",
         sek: "2020年 - 2023年"
       },
+      freelance: {
+        role: "フリーランス Web エンジニア",
+        company: "フリーランス",
+        location: "スイス、チューリッヒ",
+        description: "ランディングからフルスタック機能まで、モダンな Web ソリューションを提供。クリーンなUX、性能、保守性を重視。",
+        achievements: [
+          "React / Next.js / TypeScript / Tailwind CSS を用いた制作・運用。",
+          "Spring Boot と Java によるバックエンド機能、Git によるバージョン管理。"
+        ]
+      },
       gz: {
-        role: "IAMエンジニアリング・インターン",
+        role: "IAM デベロッパー",
         company: "Gesundheitswelt Zollikerberg",
         location: "スイス、ツォリコン",
         description: "IAMエンジニアリングのインターンとして、ITインフラの保守・最適化に取り組み、特にIDおよびアクセス管理（IAM）プロセスの自動化に焦点を当てています。この企業はツォリコンの住民に医療サービスを提供しています。",
@@ -1407,7 +1507,7 @@ export const translations = {
       title: "私について",
       backHome: "ホームに戻る",
       viewSkills: "スキルを見る",
-      intro: "ヤニス・セバスチャン・ズルヒャー（Yanis Sebastian Zürcher）と申します。スイスのチューリッヒを拠点とする17歳のソフトウェア開発者です。WISSでコンピュータサイエンスを学んでいますが、私の知識のほとんどは学校ではなく、自分でプロジェクトを作りながら身につけたものです。",
+      intro: "ヤニス・セバスチャン・ズルヒャー（Yanis Sebastian Zürcher）と申します。スイスのチューリッヒを拠点とする17歳のソフトウェア開発者です。[WISS](https://www.wiss.ch)でコンピュータサイエンスを学んでいますが、私の知識のほとんどは学校ではなく、自分でプロジェクトを作りながら身につけたものです。",
       hobbies: "高速でクリーン、かつミニマルなWebアプリケーションの開発に注力しています。フルスタックのプラットフォームでも洗練されたフロントエンドでも、明快さ、パフォーマンス、洗練されたユーザー体験を大切にしています。常に自分のアイデアを形にし、使い心地と機能性を兼ね備えたプロダクトを作り続けています。",
       philosophy: {
         title: "開発アプローチ",
@@ -1446,7 +1546,7 @@ export const translations = {
       },
       resume: {
         title: "完全版履歴書のリクエスト",
-        description: "公開版の履歴書には、機密情報の一部が検閲されています。完全版が必要な場合は、お問い合わせいただくか、yanis.sebastian.zuercher@gmail.comまでメールをお送りください。",
+        description: "公開版の履歴書には、機密情報の一部が検閲されています。完全版が必要な場合は、お問い合わせいただくか、[yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com) までメールをお送りください。",
         viewButton: "検閲版を表示",
         downloadButton: "検閲版をダウンロード",
         languageLabel: "言語:",
@@ -1650,14 +1750,39 @@ export const translations = {
       title: "经验",
       backHome: "返回首页",
       subtitle: "塑造我技术专长的职业历程和教育经历。",
+      sections: {
+        work: "工作",
+        education: "教育"
+      },
+      chips: {
+        onsite: "现场",
+        remote: "远程",
+        hybrid: "混合",
+        internship: "实习",
+        full_time: "全职",
+        part_time: "兼职",
+        contract: "合同",
+        freelance: "自由职业"
+      },
       period: {
         present: "至今",
         gz: "2025年8月 - 至今",
+        freelance: "2025年7月 - 至今",
         wiss: "2023年8月 - 至今",
         sek: "2020年 - 2023年"
       },
+      freelance: {
+        role: "自由职业 Web 开发者",
+        company: "自由职业",
+        location: "苏黎世, 瑞士",
+        description: "为客户交付现代化 Web 方案，从落地页到全栈功能，注重清晰体验、性能与可维护性。",
+        achievements: [
+          "使用 React、Next.js、TypeScript、Tailwind CSS 构建与交付项目。",
+          "以 Spring Boot 与 Java 实现后端功能；使用 Git 进行版本管理与自动化。"
+        ]
+      },
       gz: {
-        role: "IAM工程实习生",
+        role: "IAM 开发工程师",
         company: "Gesundheitswelt Zollikerberg",
         location: "瑞士，佐利孔",
         description: "作为IAM工程实习生，我协助维护和优化公司的IT基础设施，重点在于自动化身份与访问管理流程。该公司为佐利孔居民提供医疗服务。",
@@ -1792,7 +1917,7 @@ export const translations = {
       title: "关于我",
       backHome: "返回首页",
       viewSkills: "查看技术技能",
-      intro: "我是Yanis Sebastian Zürcher，一名来自瑞士苏黎世的17岁软件开发者。我在WISS学习计算机科学，但我大部分的知识都是通过自己做项目学来的，而不是在学校里。",
+      intro: "我是Yanis Sebastian Zürcher，一名来自瑞士苏黎世的17岁软件开发者。我在[WISS](https://www.wiss.ch)学习计算机科学，但我大部分的知识都是通过自己做项目学来的，而不是在学校里。",
       hobbies: "我专注于构建快速、简洁和极简风格的网页应用。无论是全栈平台还是精致的前端界面，我都注重清晰度、性能和良好的用户体验。我不断推动自己的创意前进，打造既美观又实用的数字产品。",
       philosophy: {
         title: "我的方法",
@@ -1831,7 +1956,7 @@ export const translations = {
       },
       resume: {
         title: "申请完整简历",
-        description: "我的简历公开版本审查了一些敏感信息。如果您需要完整版本，请联系我或发送邮件至yanis.sebastian.zuercher@gmail.com。",
+        description: "我的简历公开版本审查了一些敏感信息。如果您需要完整版本，请联系我或发送邮件至 [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com)。",
         viewButton: "查看审查版本",
         downloadButton: "下载审查版本",
         languageLabel: "语言:",

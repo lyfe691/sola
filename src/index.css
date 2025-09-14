@@ -372,3 +372,9 @@
     @apply bg-[hsl(var(--scrollbar-thumb-hover))];
   }
 }
+
+@layer components {
+  .link {
+    @apply text-primary hover:text-primary/80 underline underline-offset-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm;
+  }
+}

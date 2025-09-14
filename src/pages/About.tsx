@@ -41,6 +41,8 @@ import { getUserActivity } from '@/lib/github';
 import ContributionActivityFeed from '@/components/ContributionActivityFeed';
 import { IconButton } from '@/components/ui/custom/IconButton';
 import ScrollReveal from '@/components/ScrollReveal';
+import { RichText } from '@/components/i18n/RichText';
+import { LinkPreview } from '@/components/ui/link-preview';
 
 // --------------------------------- Helpers ---------------------------------
 
@@ -175,26 +177,16 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
             {(website || linkedin) && (
               <div className="flex flex-wrap gap-2">
                 {website && (
-                  <a
-                    href={website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
-                  >
+                  <LinkPreview href={website} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors">
                     <Globe className="w-3.5 h-3.5" />
                     {t.about.testimonials.visitWebsite}
-                  </a>
+                  </LinkPreview>
                 )}
                 {linkedin && (
-                  <a
-                    href={linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
-                  >
+                  <LinkPreview href={linkedin} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors">
                     <Linkedin className="w-3.5 h-3.5" />
                     {t.about.testimonials.viewLinkedIn}
-                  </a>
+                  </LinkPreview>
                 )}
               </div>
             )}
@@ -262,7 +254,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
               {role}{company && ` at ${company}`}
             </p>
             
-            {/* social links */}
+            {/* social links (card only - no hover preview) */}
             {(website || linkedin) && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {website && (
@@ -311,7 +303,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
             <DrawerHeader className="text-left px-0">
               <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
               <DrawerDescription>
-                {t.about.testimonials.modalDescription.replace('{author}', author)}
+                <RichText text={t.about.testimonials.modalDescription} values={{ author }} />
               </DrawerDescription>
             </DrawerHeader>
             {fullTestimonialContent}
@@ -329,7 +321,7 @@ const TestimonialCard = ({ quote, author, role, company, avatar, rating = 5, web
           <DialogHeader className="pb-2">
             <DialogTitle>{t.about.testimonials.modalTitle}</DialogTitle>
             <DialogDescription>
-              {t.about.testimonials.modalDescription.replace('{author}', author)}
+              <RichText text={t.about.testimonials.modalDescription} values={{ author }} />
             </DialogDescription>
           </DialogHeader>
           {fullTestimonialContent}
@@ -352,7 +344,7 @@ const ResumeModal = () => {
       <div className="pb-2">
         <h3 className="text-lg font-semibold mb-2">{t.about.resume.title}</h3>
         <p className="text-sm text-muted-foreground leading-relaxed">
-          {t.about.resume.description}
+          <RichText text={t.about.resume.description} previewExternal/>
         </p>
       </div>
 
@@ -406,7 +398,7 @@ const ResumeModal = () => {
           <DrawerHeader className="text-left px-0">
             <DrawerTitle>{t.about.resume.title}</DrawerTitle>
             <DrawerDescription>
-              {t.about.resume.description}
+              <RichText text={t.about.resume.description} />
             </DrawerDescription>
           </DrawerHeader>
           
@@ -461,7 +453,7 @@ const ResumeModal = () => {
           <DialogHeader className="pb-2">
             <DialogTitle>{t.about.resume.title}</DialogTitle>
             <DialogDescription>
-              {t.about.resume.description}
+              <RichText text={t.about.resume.description} />
             </DialogDescription>
           </DialogHeader>
 
@@ -583,8 +575,8 @@ const About = () => {
       <ScrollReveal variant="default">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
             <div className="md:col-span-3 space-y-5">
-              <p className="text-lg text-foreground/80 leading-relaxed">{t.about.intro}</p>
-              <p className="text-lg text-foreground/80 leading-relaxed">{t.about.hobbies}</p>
+              <p className="text-lg text-foreground/80 leading-relaxed"><RichText text={t.about.intro} previewExternal /></p>
+              <p className="text-lg text-foreground/80 leading-relaxed"><RichText text={t.about.hobbies} previewExternal /></p>
 
               {/* ----------- Resume Button ---------- */}
 
@@ -617,9 +609,9 @@ const About = () => {
                 <h2 className="text-2xl font-bold">
                 {t.about.github.title}
                 </h2>
-                <a href="https://github.com/lyfe691" target='_blank' rel='noopener noreferrer' className='text-sm text-foreground/70 hover:text-primary transition-colors'>
-                    @lyfe691
-                </a>
+                <LinkPreview href="https://github.com/lyfe691" className='text-sm text-foreground/70 hover:text-primary transition-colors'>
+                  @lyfe691
+                </LinkPreview>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6">
@@ -742,21 +734,21 @@ const About = () => {
                     <Code2 className="w-4 h-4 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold">{t.about.philosophyLabels.clean}</h3>
-                  <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.clean}</p>
+                  <p className="text-sm text-foreground/80 leading-relaxed"><RichText text={t.about.philosophy.clean} /></p>
                 </div>
                 <div className="space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                     <Coffee className="w-4 h-4 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold">{t.about.philosophyLabels.simplicity}</h3>
-                  <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.simplicity}</p>
+                  <p className="text-sm text-foreground/80 leading-relaxed"><RichText text={t.about.philosophy.simplicity} /></p>
                 </div>
                 <div className="space-y-2">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
                     <Book className="w-4 h-4 text-primary" />
                   </div>
                   <h3 className="text-lg font-semibold">{t.about.philosophyLabels.learning}</h3>
-                  <p className="text-sm text-foreground/80 leading-relaxed">{t.about.philosophy.learning}</p>
+                  <p className="text-sm text-foreground/80 leading-relaxed"><RichText text={t.about.philosophy.learning} /></p>
                 </div>
               </div>
             </div>
