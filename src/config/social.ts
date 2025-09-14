@@ -9,7 +9,8 @@ export type SocialId =
   | 'linkedin'
   | 'leetcode'
   | 'hackthebox'
-  | 'chess';
+  | 'chess'
+  | 'tiktok';
 
 export type SocialLink = {
   id: SocialId;
@@ -48,14 +49,19 @@ export const SOCIAL_LINKS: Record<SocialId, SocialLink> = {
     label: 'Chess.com',
     href: 'https://chess.com/member/moment_o',
   },
+  tiktok: {
+    id: 'tiktok',
+    label: 'TikTok',
+    href: 'https://www.tiktok.com/@seeyuh.0',
+  },
 };
 
 export const SOCIAL_ORDER_HERO: SocialId[] = [
   'github',
   'email',
   'linkedin',
+  'tiktok',
   'leetcode',
-  'hackthebox',
   'chess',
 ];
 
@@ -67,6 +73,7 @@ export const SOCIAL_ORDER_FOOTER: SocialId[] = [
   'leetcode',
   'hackthebox',
   'chess',
+  'tiktok',
 ];
 
 

@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { CyclingTextEffect } from "@/components/ui/text-effect-wrapper";
-import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
+import { SiChessdotcom, SiHackthebox, SiLeetcode, SiTiktok } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
@@ -176,6 +176,8 @@ const Index = () => {
                           <SiLeetcode className="w-full h-full" />
                         ) : id === 'hackthebox' ? (
                           <SiHackthebox className="w-full h-full" />
+                        ) : id === 'tiktok' ? (
+                          <SiTiktok className="w-full h-full" />
                         ) : (
                           <SiChessdotcom className="w-full h-full" />
                         );
@@ -189,6 +191,8 @@ const Index = () => {
                           ? 'hover:bg-orange-400/20 hover:border-orange-400/30'
                           : id === 'hackthebox'
                           ? 'hover:bg-emerald-300/20 hover:border-emerald-400/30'
+                          : id === 'tiktok'
+                          ? 'hover:bg-pink-400/20 hover:border-pink-400/30'
                           : 'hover:bg-green-400/20 hover:border-green-400/30';
                         const label = s.label;
                         const href = s.href;

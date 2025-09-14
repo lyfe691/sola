@@ -11,7 +11,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Mail, Linkedin, Info, ChevronRight, ArrowUpRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { SiChessdotcom, SiHackthebox, SiLeetcode } from "react-icons/si";
+import { SiChessdotcom, SiHackthebox, SiLeetcode, SiTiktok } from "react-icons/si";
 import { SOCIAL_LINKS, SOCIAL_ORDER_FOOTER } from "@/config/social";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -34,6 +34,8 @@ const Footer = () => {
       ? <SiLeetcode className="w-4 h-4" />
       : id === 'hackthebox'
       ? <SiHackthebox className="w-4 h-4" />
+      : id === 'tiktok'
+      ? <SiTiktok className="w-4 h-4" />
       : <SiChessdotcom className="w-4 h-4" />;
     const hoverClass = id === 'github'
       ? 'hover:bg-foreground/10 hover:scale-110'
@@ -45,6 +47,8 @@ const Footer = () => {
       ? 'hover:bg-orange-400/20 hover:border-orange-400/30 hover:scale-110'
       : id === 'hackthebox'
       ? 'hover:bg-emerald-300/20 hover:border-emerald-400/30 hover:scale-110'
+      : id === 'tiktok'
+      ? 'hover:bg-pink-400/20 hover:border-pink-400/30 hover:scale-110'
       : 'hover:bg-green-400/20 hover:border-green-400/30 hover:scale-110';
     return { icon, href: s.href, label: s.label, hoverClass };
   });
