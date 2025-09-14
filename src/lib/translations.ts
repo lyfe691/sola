@@ -242,6 +242,10 @@ export const translations = {
         self: {
           title: "Self",
           description: "Self is a customizable Windows system information display tool inspired by Neofetch, built with Python. It displays system stats alongside image or ASCII art directly in the terminal. With support for block and braille render modes, theme customization, and a simple PowerShell installer, it brings a clean, Unix-style aesthetic to Windows."
+        },
+        taco: {
+          title: "Taco",
+          description: "A production‑ready template site centered on Taco, my brother's dog — built with Next.js, TypeScript, and Tailwind CSS. It includes localization with automatic detection, a blog system, and a clean modular architecture suitable for real projects."
         }
       }
     },
@@ -652,6 +656,10 @@ export const translations = {
         self: {
           title: "Self",
           description: "Self ist ein anpassbares Systeminformations-Tool für Windows, inspiriert von Neofetch und mit Python entwickelt. Es zeigt Systeminformationen zusammen mit Bild- oder ASCII-Art direkt im Terminal an. Mit Unterstützung für Block- und Braille-Darstellung, anpassbaren Themes und einem einfachen PowerShell-Installer bringt es eine saubere, Unix-ähnliche Ästhetik auf Windows."
+        },
+        taco: {
+          title: "Taco",
+          description: "Ein produktionsreifes Template rund um Taco, den Hund meines Bruders — mit Next.js, TypeScript und Tailwind CSS. Enthält Lokalisierung mit automatischer Erkennung, ein Blog‑System und eine saubere, modulare Architektur für echte Projekte."
         }
       }
     },
@@ -1062,6 +1070,10 @@ export const translations = {
         self: {
           title: "Self",
           description: "Self es una herramienta personalizable de visualización de información del sistema para Windows, inspirada en Neofetch y construida con Python. Muestra estadísticas del sistema junto a arte ASCII o imágenes directamente en la terminal. Con soporte para modos de renderizado en bloques o braille, temas personalizables y un instalador sencillo por PowerShell, aporta una estética limpia al estilo Unix a Windows."
+        },
+        taco: {
+          title: "Taco",
+          description: "Plantilla lista para producción en torno a Taco, el perro de mi hermano — construida con Next.js, TypeScript y Tailwind CSS. Incluye localización con detección automática, blog y una arquitectura modular limpia apta para proyectos reales."
         }
       }
     },
@@ -1473,6 +1485,10 @@ export const translations = {
         self: {
           title: "Self",
           description: "Self は、Neofetch にインスパイアされたカスタマイズ可能な Windows 用のシステム情報表示ツールで、Python で構築されています。システム情報を画像や ASCII アートと共にターミナル上に表示します。ブロックと点字の描画モード、テーマのカスタマイズ、簡単な PowerShell インストーラーに対応し、Windows にクリーンで Unix ライクな美しさをもたらします。"
+        },
+        taco: {
+          title: "Taco",
+          description: "弟の犬 Taco を題材にしたプロダクション品質のテンプレート。Next.js・TypeScript・Tailwind CSS により、言語自動検出付きのローカリゼーション、ブログ機能、モジュール化されたクリーンなアーキテクチャを備えています。"
         }
       }
     },
@@ -1883,6 +1899,10 @@ export const translations = {
         self: {
           title: "Self",
           description: "Self 是一个可自定义的 Windows 系统信息显示工具，受 Neofetch 启发，并使用 Python 构建。它可在终端中显示系统信息，并配合图像或 ASCII 艺术显示。支持方块或盲文渲染模式、可定制主题，以及简洁的 PowerShell 安装程序，为 Windows 带来清爽的类 Unix 风格美学。"
+        },
+        taco: {
+          title: "Taco",
+          description: "围绕我弟弟的狗狗 Taco 打造的生产级模板网站——基于 Next.js、TypeScript、Tailwind CSS。内置带自动检测的本地化、博客系统，以及适用于真实项目的干净模块化架构。"
         }
       }
     },

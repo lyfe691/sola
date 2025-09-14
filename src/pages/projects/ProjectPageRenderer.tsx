@@ -48,10 +48,7 @@ const ProjectPageRenderer: React.FC = () => {
   const LinkTile: React.FC<{ href: string; label: string; icon: React.ReactNode; variant?: 'primary' | 'outline' }>
     = ({ href, label, icon, variant = 'primary' }) => (
     <LinkPreview href={href} previewType="auto" compact={true} className="block">
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+      <div
         className={[
           'group relative w-full h-full rounded-xl px-4 py-3',
           'border transition-colors duration-150 ease-out',
@@ -78,7 +75,7 @@ const ProjectPageRenderer: React.FC = () => {
 
         {/* arrow cue */}
         <ExternalLink className="ml-auto w-4 h-4 text-foreground/40 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-colors duration-150 ease-out" />
-      </a>
+      </div>
     </LinkPreview>
   );
 

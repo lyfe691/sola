@@ -86,21 +86,6 @@ const buildSortOptions = (t: any): ComboboxOption[] => [
 
 const createProjectsData = (t: any): Project[] => [
   {
-    id: "self",
-    title: t.projects.list.self.title,
-    description: t.projects.list.self.description,
-    image: "/projects/self.png",
-    github: "https://github.com/lyfe691/self",
-    tags: ["Neofetch", "Python", "Terminal", "Windows"],
-    featured: true,
-    date: {
-      start: "2025-05",
-      display: "May 2025"
-    },
-    priority: 3,
-    slug: "self"
-  },
-  {
     id: "sola",
     title: t.projects.list.sola.title,
     description: t.projects.list.sola.description,
@@ -134,9 +119,24 @@ const createProjectsData = (t: any): Project[] => [
     slug: "applicare"
   },
   {
+    id: "self",
+    title: t.projects.list.self.title,
+    description: t.projects.list.self.description,
+    image: "/projects/self.png",
+    github: "https://github.com/lyfe691/self",
+    tags: ["Neofetch", "Python", "Terminal", "Windows"],
+    featured: true,
+    date: {
+      start: "2025-05",
+      display: "May 2025"
+    },
+    priority: 3,
+    slug: "self"
+  },
+  {
     id: "code-extractor",
     title: t.projects.list.codeExtractor.title,
-    description: t.projects.list.codeExtractor.description + " (600+ Users)",
+    description: t.projects.list.codeExtractor.description + "(1000+ Users)",
     image: "/projects/website-code-extractor.svg",
     link: "https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm",
     github: "https://github.com/lyfe691/Website-Code-Extractor",
@@ -148,6 +148,22 @@ const createProjectsData = (t: any): Project[] => [
     },
     priority: 4,
     slug: "code-extractor"
+  },
+  {
+    id: "Taco",
+    title: t.projects.list.taco.title,
+    description: t.projects.list.taco.description,
+    image: "/projects/taco.png",
+    link: "https://takitwo.vercel.app",
+    github: "https://github.com/lyfe691/taco",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "i18n", "Localization", "Blog", "Template"],
+    featured: true,
+    date: {
+      start: "2025-04",
+      display: "Apr 2025"
+    },
+    priority: 5,
+    slug: "taco"
   },
   {
     id: "osint",
@@ -163,7 +179,7 @@ const createProjectsData = (t: any): Project[] => [
       end: "2024-12",
       display: "Nov 2024 - Dec 2024"
     },
-    priority: 5
+    priority: 6
   },
   {
     id: "chatapp",
@@ -178,7 +194,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-09",
       display: "Sep 2024"
     },
-    priority: 6
+    priority: 7
   },
   // non-featured projects
   {

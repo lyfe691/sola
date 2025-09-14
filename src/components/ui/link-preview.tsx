@@ -59,7 +59,6 @@ export const LinkPreview: React.FC<LinkPreviewProps> = ({ href, children, classN
       </HoverCardTrigger>
       <HoverCardContent className="w-auto p-0 overflow-hidden bg-background/80 backdrop-blur-sm transition-all duration-150">
         <div className="relative">
-          <span className="absolute -top-1 left-1/2 -translate-x-1/2 rotate-45 w-2 h-2 bg-background/80 border border-border/50" />
           {!compact && (
             mode === "iframe" ? (
               <div className="relative w-full aspect-video bg-background/80">

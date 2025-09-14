@@ -149,6 +149,34 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     },
     mdxPath: 'self'
   }
+  ,
+  taco: {
+    slug: 'taco',
+    title: 'Taco',
+    description: "Production‑grade Next.js template with localization and blog (centered on Taco, my brother's dog)",
+    date: 'April 2025',
+    silkColor: '#66cc99',
+    silkSpeed: 3.8,
+    silkScale: 1.05,
+    silkNoiseIntensity: 1.6,
+    silkRotation: -0.15,
+    overview: "Taco is a clean, production‑ready template site centered around my brother's dog. It demonstrates localization with automatic detection, a simple blog system, and a modular architecture that can be adapted to real projects.",
+    techStack: [
+      'Next.js', 'TypeScript', 'Tailwind CSS', 'React', 'Framer Motion', 'Vercel', 'i18n'
+    ],
+    features: [
+      'Localization with automatic language detection',
+      'Client/provider i18n hook and language persistence',
+      'Blog pages using MDX and shared components',
+      'Clean routing and modular project structure',
+      'Accessible semantics and fast TTFB'
+    ],
+    links: {
+      live: 'https://takitwo.vercel.app',
+      github: 'https://github.com/lyfe691/taco'
+    },
+    mdxPath: 'taco'
+  }
 };
 
 export const getProjectConfig = (slug: string): ProjectPageConfig | null => {
