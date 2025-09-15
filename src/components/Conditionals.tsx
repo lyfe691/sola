@@ -29,7 +29,7 @@ export const Conditionals = () => {
       {shouldRenderFooter && <Footer />}
 
       {shouldRenderToggles && (
-        <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
+        <div className="fixed top-6 right-6 z-30 flex items-center gap-2">
           <SearchToggle />
           <LanguageToggle />
           <ThemeToggle />

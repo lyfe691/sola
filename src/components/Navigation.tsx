@@ -43,7 +43,7 @@ const DESKTOP_CONTAINER_CLASSES =
   "hidden md:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/20 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
 
 const MOBILE_OVERLAY_CLASSES =
-  "fixed inset-0 bg-background/80 backdrop-blur-xl z-50 md:hidden mobile-menu";
+  "fixed inset-0 bg-background/80 backdrop-blur-xl z-[60] md:hidden mobile-menu";
 
 // memoized navigation item for better performance
 const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({ 
@@ -201,9 +201,18 @@ const Navigation = () => {
 
   const closeMenu = useCallback(() => {
     // Allow animations to play out smoothly
-    setTimeout(() => setIsMenuOpen(false), 100);
+    setTimeout(() => {
+      setIsMenuOpen(false);
+      window.dispatchEvent(new CustomEvent('mobile-menu-toggle', { detail: { open: false } }));
+    }, 100);
   }, []);
-  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => {
+      const next = !prev;
+      window.dispatchEvent(new CustomEvent('mobile-menu-toggle', { detail: { open: next } }));
+      return next;
+    });
+  }, []);
 
   // memoized navigation items
   const homeItem = { text: t.common.home, path: "/", icon: Home };
@@ -339,7 +348,7 @@ const Navigation = () => {
       </div>
 
       {/* mobile menu button */}
-      <div className="md:hidden fixed top-5 left-5 z-[51] menu-button">
+      <div className="md:hidden fixed top-5 left-5 z-[70] menu-button">
         <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
       </div>
 
