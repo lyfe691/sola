@@ -18,6 +18,7 @@ import { getProjectConfig, getAllProjectSlugs, projectPagesConfig } from '@/conf
 import { MDXComponents } from '@/components/MDXComponents';
 import { useLanguage } from '@/lib/language-provider';
 import { translations } from '@/lib/translations';
+import { Separator } from '@/components/ui/separator';
 
 // dynamic mdx component
 const getMDXComponent = (mdxPath: string) => {
@@ -169,6 +170,8 @@ const ProjectPageRenderer: React.FC = () => {
             )}
           </div>
         </motion.section>
+
+        <Separator /> 
 
         {/* mdx content */}
         <motion.div

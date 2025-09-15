@@ -97,23 +97,36 @@ export interface ProcessedActivity {
 
 export async function getUserActivity(username: string): Promise<ProcessedActivity[]> {
     const token = import.meta.env.VITE_GITHUB_TOKEN;
-    const headers: HeadersInit = {
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'sola-portfolio'
+
+    // Build headers that are valid for browser fetch to GitHub API
+    // Note: 'User-Agent' cannot be set from browsers and will be stripped.
+    const baseHeaders: HeadersInit = {
+        'Accept': 'application/vnd.github.v3+json'
     };
 
-    if (token) {
-        headers['Authorization'] = `bearer ${token}`;
+    const withAuthHeaders: HeadersInit = { ...baseHeaders };
+    if (token && typeof token === 'string' && token.trim().length > 0) {
+        // Use proper scheme casing. GitHub supports 'Bearer' for fine-grained PATs.
+        withAuthHeaders['Authorization'] = `Bearer ${token.trim()}`;
     }
 
+    const requestUrl = `https://api.github.com/users/${username}/events/public?per_page=20`;
+
     try {
-        const response = await fetch(`https://api.github.com/users/${username}/events/public?per_page=20`, { headers });
-        
+        // Try authenticated (when token present)
+        let response = await fetch(requestUrl, { headers: withAuthHeaders });
+
+        // If unauthorized/forbidden (bad or revoked token, or env misconfigured), retry without auth
+        if (response.status === 401 || response.status === 403) {
+            console.warn(`GitHub API auth failed with ${response.status}. Retrying without token.`);
+            response = await fetch(requestUrl, { headers: baseHeaders });
+        }
+
         if (!response.ok) {
             console.error(`GitHub API responded with ${response.status}: ${response.statusText}`);
             return [];
         }
-        
+
         const events: GitHubEvent[] = await response.json();
         return events.map(processEvent).filter(Boolean) as ProcessedActivity[];
     } catch (error) {
