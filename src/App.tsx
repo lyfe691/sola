@@ -19,6 +19,7 @@ import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import  ClickSpark from "./components/ClickSpark";
 import { AuroraProvider } from "./lib/aurora-provider";
+import { GradualBlurProvider } from "./lib/gradual-blur-provider";
 import AuroraBackground from "./components/backgrounds/AuroraBackground";
 import AuroraIntroModal from "./components/AuroraIntroModal";
 
@@ -32,33 +33,40 @@ function KeyboardShortcuts() {
 }
 
 // app
+const gradualBlurDefaults = {
+  responsive: true,
+  gpuOptimized: true,
+};
+
 const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
       <AuroraProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <AuroraBackground />
-            <ClickSpark
-              sparkColor="hsl(var(--primary) / 0.30)"
-              sparkSize={4}
-              sparkCount={7}
-              duration={450}
-            >
-              <div className="min-h-screen flex flex-col relative">
-                <Toaster position="bottom-right" />
-                <AuroraIntroModal/>
-                <BrowserRouter>
-                  <KeyboardShortcuts />
-                  <CommandMenu />
-                  <AnimatedRoutes />
-                  <ScrollToTop />
-                  <Conditionals />
-                </BrowserRouter>
-              </div>
-            </ClickSpark>
-          </TooltipProvider>
-        </QueryClientProvider>
+        <GradualBlurProvider defaults={gradualBlurDefaults}>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <AuroraBackground />
+              <ClickSpark
+                sparkColor="hsl(var(--primary) / 0.30)"
+                sparkSize={4}
+                sparkCount={7}
+                duration={450}
+              >
+                <div className="min-h-screen flex flex-col relative">
+                  <Toaster position="bottom-right" />
+                  <AuroraIntroModal/>
+                  <BrowserRouter>
+                    <KeyboardShortcuts />
+                    <CommandMenu />
+                    <AnimatedRoutes />
+                    <ScrollToTop />
+                    <Conditionals />
+                  </BrowserRouter>
+                </div>
+              </ClickSpark>
+            </TooltipProvider>
+          </QueryClientProvider>
+        </GradualBlurProvider>
       </AuroraProvider>
     </LanguageProvider>
   </ThemeProvider>
