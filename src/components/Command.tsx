@@ -36,6 +36,7 @@ import {
   Search,
   Laptop,
   Sparkles,
+  Star,
 } from "lucide-react"
 import { useCommandMenu } from "@/hooks/use-command-menu"
 import { useTheme } from "./theme-provider"
@@ -43,6 +44,7 @@ import { useLanguage } from "@/lib/language-provider"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useAurora } from "@/lib/aurora-provider";
+import { useGalaxy } from "@/lib/galaxy-provider";
 
 // import types
 type Language = "en" | "de" | "ja" | "es" | "zh" 
@@ -54,6 +56,7 @@ export function CommandMenu() {
   const { isOpen, closeCommandMenu } = useCommandMenu()
   const isMobile = useIsMobile()
   const { enabled: auroraEnabled, toggle: toggleAurora } = useAurora()
+  const { enabled: galaxyEnabled, toggle: toggleGalaxy } = useGalaxy()
 
   // handle navigation
   const handleNavigation = (path: string) => {
@@ -186,6 +189,11 @@ export function CommandMenu() {
             <Sparkles className="mr-2 h-4 w-4" />
             <span>Aurora</span>
             <CommandShortcut>{auroraEnabled ? "On" : "Off"}</CommandShortcut>
+          </CommandItem>
+          <CommandItem onSelect={() => toggleGalaxy()} className="cursor-pointer">
+            <Star className="mr-2 h-4 w-4" />
+            <span>Galaxy</span>
+            <CommandShortcut>{galaxyEnabled ? "On" : "Off"}</CommandShortcut>
           </CommandItem>
         </CommandGroup>
       </CommandList>

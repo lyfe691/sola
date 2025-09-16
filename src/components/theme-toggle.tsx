@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { STANDARD_THEMES, CUSTOM_THEMES, THEMES, type Theme } from "@/config/themes"
 import { useAurora } from "@/lib/aurora-provider"
+import { useGalaxy } from "@/lib/galaxy-provider"
 import { Switch } from "@/components/ui/switch"
 
 export function ThemeToggle() {
@@ -26,6 +27,7 @@ export function ThemeToggle() {
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light")
   const [mounted, setMounted] = useState(false)
   const { enabled: auroraEnabled, setEnabled: setAuroraEnabled } = useAurora()
+  const { enabled: galaxyEnabled, setEnabled: setGalaxyEnabled } = useGalaxy()
 
   // monitor system theme changes
   useEffect(() => {
@@ -128,7 +130,24 @@ export function ThemeToggle() {
             aria-label="toggle aurora"
           />
         </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            setGalaxyEnabled(!galaxyEnabled);
+          }}
+          className="flex items-center justify-between py-1.5"
+        >
+          <div className="flex items-center gap-2">
+            <span>Galaxy</span>
+          </div>
+          <Switch
+            checked={galaxyEnabled}
+            onCheckedChange={(v) => setGalaxyEnabled(Boolean(v))}
+            onClick={(e) => e.stopPropagation()}
+            aria-label="toggle galaxy"
+          />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
-} 
+}
