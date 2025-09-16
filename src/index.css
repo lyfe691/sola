@@ -144,133 +144,133 @@
   
   
   .life {
-    --background: 150 50% 92%; 
-    --foreground: 150 20% 15%; 
-    --card: 150 40% 85%;
-    --card-foreground: 150 25% 20%;
-    --popover: 160 45% 90%; 
-    --popover-foreground: 150 25% 15%;
-    --primary: 150 35% 40%; 
-    --primary-foreground: 150 15% 85%; 
-    --secondary: 160 25% 65%;
-    --secondary-foreground: 150 15% 20%;
-    --muted: 140 20% 75%; 
-    --muted-foreground: 150 15% 35%;
-    --accent: 160 25% 70%; 
-    --accent-foreground: 150 20% 20%;
-    --destructive: 0 56% 50%;
+    --background: 152 44% 88%;
+    --foreground: 152 24% 12%;
+    --card: 152 38% 92%;
+    --card-foreground: 152 24% 12%;
+    --popover: 152 38% 92%;
+    --popover-foreground: 152 24% 12%;
+    --primary: 151 64% 28%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 154 30% 68%;
+    --secondary-foreground: 152 22% 14%;
+    --muted: 152 18% 80%;
+    --muted-foreground: 152 12% 32%;
+    --accent: 156 42% 58%;
+    --accent-foreground: 152 24% 12%;
+    --destructive: 0 65% 48%;
     --destructive-foreground: 0 0% 98%;
-    --border: 150 25% 45%;
-    --input: 150 20% 30%;
-    --ring: 160 30% 50%;   
+    --border: 152 20% 62%;
+    --input: 152 20% 62%;
+    --ring: 151 64% 28%;  
     --radius: 0.5rem; 
-    --scrollbar-track: 150 40% 85%;
-    --scrollbar-thumb: 150 35% 60%;
-    --scrollbar-thumb-hover: 150 35% 50%;
+    --scrollbar-track: 152 26% 82%;
+    --scrollbar-thumb: 151 24% 56%;
+    --scrollbar-thumb-hover: 151 24% 52%;
   }
 
   .cyber {
-    --background: 265 30% 7%;
-    --foreground: 0 0% 95%;
-    --card: 265 30% 10%;
+    --background: 262 28% 8%;
+    --foreground: 0 0% 96%;
+    --card: 262 28% 10%;
     --card-foreground: 0 0% 96%;
-    --popover: 265 30% 12%;
-    --popover-foreground: 0 0% 90%;
-    --primary: 305 94% 52%;
+    --popover: 262 28% 12%;
+    --popover-foreground: 0 0% 92%;
+    --primary: 285 85% 60%; /* neon magenta */
     --primary-foreground: 0 0% 100%;
-    --secondary: 230 100% 60%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 265 15% 15%;
-    --muted-foreground: 0 0% 80%;
-    --accent: 270 80% 55%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 90% 50%;
+    --secondary: 190 90% 56%; /* cyan */
+    --secondary-foreground: 0 0% 8%;
+    --muted: 262 16% 20%;
+    --muted-foreground: 0 0% 78%;
+    --accent: 260 80% 65%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 72% 52%;
     --destructive-foreground: 0 0% 100%;
-    --border: 265 20% 25%;
-    --input: 265 20% 20%;
-    --ring: 305 100% 60%;
-    --radius: 0.25rem;
-    --scrollbar-track: 265 30% 12%;
-    --scrollbar-thumb: 305 94% 42%;
-    --scrollbar-thumb-hover: 305 94% 52%;
+    --border: 262 18% 24%;
+    --input: 262 18% 20%;
+    --ring: 285 85% 60%;
+    --radius: 0.375rem;
+    --scrollbar-track: 262 24% 12%;
+    --scrollbar-thumb: 285 70% 48%;
+    --scrollbar-thumb-hover: 285 70% 56%;
   }
   
   .cloud {
-    --background: 222 100% 95%;
-    --foreground: 222 5% 10%;
-    --card: 222 50% 90%;
-    --card-foreground: 222 5% 15%;
-    --popover: 222 100% 95%;
-    --popover-foreground: 222 100% 10%;
-    --primary: 222 45% 72%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 222 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 222 30% 85%;
-    --muted-foreground: 222 5% 35%;
-    --accent: 222 30% 80%;
-    --accent-foreground: 222 5% 15%;
-    --destructive: 0 60% 50%;
+    --background: 210 78% 90%;
+    --foreground: 220 20% 15%;
+    --card: 210 70% 94%;
+    --card-foreground: 220 20% 15%;
+    --popover: 210 70% 94%;
+    --popover-foreground: 220 20% 15%;
+    --primary: 212 92% 52%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 50% 84%;
+    --secondary-foreground: 220 22% 18%;
+    --muted: 210 28% 86%;
+    --muted-foreground: 220 14% 36%;
+    --accent: 200 60% 78%;
+    --accent-foreground: 220 20% 15%;
+    --destructive: 0 62% 48%;
     --destructive-foreground: 0 0% 98%;
-    --border: 222 30% 50%;
-    --input: 222 30% 26%;
-    --ring: 222 45% 72%;
+    --border: 210 26% 78%;
+    --input: 210 26% 78%;
+    --ring: 212 92% 52%;
     --radius: 1rem;
-    --scrollbar-track: 222 50% 90%;
-    --scrollbar-thumb: 222 45% 62%;
-    --scrollbar-thumb-hover: 222 45% 52%;
+    --scrollbar-track: 210 42% 88%;
+    --scrollbar-thumb: 212 36% 64%;
+    --scrollbar-thumb-hover: 212 36% 58%;
   }
 
   .forest {
-    --background: 220 25% 8%;       
-    --foreground: 120 15% 85%;      
-    --card: 200 20% 12%;              
-    --card-foreground: 120 15% 85%;   
-    --popover: 220 25% 8%;             
-    --popover-foreground: 120 15% 85%; 
-    --primary: 140 30% 45%;            
-    --primary-foreground: 35 25% 95%;  
-    --secondary: 160 15% 25%;          
-    --secondary-foreground: 35 25% 95%; 
-    --muted: 200 20% 15%;             
-    --muted-foreground: 120 10% 75%;  
-    --accent: 140 20% 35%;            
-    --accent-foreground: 35 25% 95%; 
-    --destructive: 0 56% 50%;        
+    --background: 160 20% 9%;       
+    --foreground: 120 20% 90%;      
+    --card: 160 18% 12%;              
+    --card-foreground: 120 20% 90%;   
+    --popover: 160 18% 12%;             
+    --popover-foreground: 120 20% 90%; 
+    --primary: 145 35% 46%;            
+    --primary-foreground: 35 20% 96%;  
+    --secondary: 165 18% 28%;          
+    --secondary-foreground: 120 20% 90%; 
+    --muted: 160 12% 22%;             
+    --muted-foreground: 120 12% 72%;  
+    --accent: 165 30% 36%;            
+    --accent-foreground: 35 20% 96%; 
+    --destructive: 0 58% 52%;        
     --destructive-foreground: 0 0% 98%; 
-    --border: 200 20% 18%;             
-    --input: 200 20% 18%;             
-    --ring: 140 30% 45%;               
+    --border: 160 14% 24%;             
+    --input: 160 14% 20%;             
+    --ring: 145 35% 46%;               
     --radius: 0.375rem;                
-    --scrollbar-track: 200 20% 12%;    
-    --scrollbar-thumb: 140 25% 35%;   
-    --scrollbar-thumb-hover: 140 30% 40%; 
+    --scrollbar-track: 160 16% 14%;    
+    --scrollbar-thumb: 145 22% 32%;   
+    --scrollbar-thumb-hover: 145 22% 38%; 
   }
 
   .amethyst {
-    --background: 250.91 18.64% 11.57%;
-    --foreground: 250.00 36.00% 90.20%;
-    --card: 251.25 20% 15.69%;
-    --card-foreground: 250.00 36.00% 90.20%;
-    --popover: 251.25 20% 15.69%;
-    --popover-foreground: 250.00 36.00% 90.20%;
-    --primary: 263.08 32.50% 68.63%;
-    --primary-foreground: 250.91 18.64% 11.57%;
-    --secondary: 254.48 14.87% 38.24%;
-    --secondary-foreground: 250.00 36.00% 90.20%;
-    --muted: 254.12 20.99% 15.88%;
-    --muted-foreground: 258.95 10.38% 64.12%;
-    --accent: 271.76 15.60% 21.37%;
-    --accent-foreground: 345.52 69.05% 83.53%;
+    --background: 260 24% 12%;
+    --foreground: 260 40% 90%;
+    --card: 260 22% 15%;
+    --card-foreground: 260 40% 90%;
+    --popover: 260 22% 15%;
+    --popover-foreground: 260 40% 90%;
+    --primary: 270 60% 70%;
+    --primary-foreground: 260 24% 12%;
+    --secondary: 255 30% 38%;
+    --secondary-foreground: 260 40% 92%;
+    --muted: 260 18% 22%;
+    --muted-foreground: 260 14% 70%;
+    --accent: 275 40% 46%;
+    --accent-foreground: 330 70% 86%;
     --destructive: 0 58% 56%;
     --destructive-foreground: 0 0% 98%;
-    --border: 252 18.52% 21.18%;
-    --input: 249.47 19.59% 19.02%;
-    --ring: 263.08 32.50% 68.63%;
+    --border: 260 16% 24%;
+    --input: 260 16% 20%;
+    --ring: 270 60% 70%;
     --radius: 0.5rem;
-    --scrollbar-track: 250.91 18.64% 11.57%;
-    --scrollbar-thumb: 263.08 32.50% 68.63%;
-    --scrollbar-thumb-hover: 263.08 32.50% 68.63%;
+    --scrollbar-track: 260 20% 14%;
+    --scrollbar-thumb: 270 40% 60%;
+    --scrollbar-thumb-hover: 270 40% 66%;
   }
 
   .vintage {
@@ -300,29 +300,55 @@
   }
 
   .coffee {
-    --background: 35 25% 92%;
-    --foreground: 25 30% 20%;
-    --card: 40 30% 88%;
-    --card-foreground: 25 30% 20%;
-    --popover: 40 30% 88%;
-    --popover-foreground: 25 30% 20%;
-    --primary: 25 60% 35%;
-    --primary-foreground: 35 25% 92%;
-    --secondary: 30 35% 70%;
-    --secondary-foreground: 25 30% 20%;
-    --muted: 35 20% 82%;
-    --muted-foreground: 25 20% 45%;
-    --accent: 45 45% 75%;
-    --accent-foreground: 25 30% 20%;
+    --background: 35 35% 95%;
+    --foreground: 25 30% 18%;
+    --card: 35 28% 98%;
+    --card-foreground: 25 30% 18%;
+    --popover: 35 28% 98%;
+    --popover-foreground: 25 30% 18%;
+    --primary: 25 45% 38%;
+    --primary-foreground: 35 30% 96%;
+    --secondary: 28 32% 82%;
+    --secondary-foreground: 25 30% 18%;
+    --muted: 35 20% 88%;
+    --muted-foreground: 25 18% 44%;
+    --accent: 28 45% 72%;
+    --accent-foreground: 25 30% 18%;
     --destructive: 0 56% 48%;
     --destructive-foreground: 0 0% 96%;
-    --border: 30 25% 65%;
-    --input: 30 25% 65%;
-    --ring: 25 60% 35%;
+    --border: 30 18% 78%;
+    --input: 30 18% 78%;
+    --ring: 25 45% 38%;
     --radius: 0.375rem;
-    --scrollbar-track: 40 30% 88%;
-    --scrollbar-thumb: 25 60% 25%;
-    --scrollbar-thumb-hover: 25 60% 15%;
+    --scrollbar-track: 35 24% 90%;
+    --scrollbar-thumb: 25 24% 60%;
+    --scrollbar-thumb-hover: 25 24% 52%;
+  }
+
+  .rose {
+    --background: 350 50% 95%;
+    --foreground: 350 24% 12%;
+    --card: 350 45% 98%;
+    --card-foreground: 350 24% 12%;
+    --popover: 350 45% 98%;
+    --popover-foreground: 350 24% 12%;
+    --primary: 350 70% 42%; /* wine rose */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 350 30% 88%;
+    --secondary-foreground: 350 24% 14%;
+    --muted: 350 20% 92%;
+    --muted-foreground: 350 14% 36%;
+    --accent: 352 38% 85%;
+    --accent-foreground: 350 24% 12%;
+    --destructive: 0 68% 48%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 350 18% 82%;
+    --input: 350 18% 82%;
+    --ring: 350 70% 42%;
+    --radius: 0.5rem;
+    --scrollbar-track: 350 22% 92%;
+    --scrollbar-thumb: 350 26% 72%;
+    --scrollbar-thumb-hover: 350 26% 66%;
   }
 
   * {
