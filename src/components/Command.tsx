@@ -24,22 +24,11 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import { 
-  Home, 
-  User, 
-  Briefcase, 
-  Code, 
-  GraduationCap, 
-  Mail, 
-  Settings, 
-  Globe, 
-  Search,
-  Laptop,
-  Sparkles,
-} from "lucide-react"
+import { Sparkles } from "lucide-react"
 import { useCommandMenu } from "@/hooks/use-command-menu"
 import { useTheme } from "./theme-provider"
 import { useLanguage } from "@/lib/language-provider"
+import { translations } from "@/lib/translations"
 import { useIsMobile } from "@/hooks/use-mobile"
 import { THEMES, STANDARD_THEMES, CUSTOM_THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useAurora } from "@/lib/aurora-provider";
@@ -51,6 +40,7 @@ export function CommandMenu() {
   const navigate = useNavigate()
   const { theme, setTheme } = useTheme()
   const { language, setLanguage } = useLanguage()
+  const t = translations[language]
   const { isOpen, closeCommandMenu } = useCommandMenu()
   const isMobile = useIsMobile()
   const { enabled: auroraEnabled, toggle: toggleAurora } = useAurora()
@@ -77,115 +67,117 @@ export function CommandMenu() {
   const commandContent = (
     <>
       <CommandInput 
-        placeholder="Type a command or search..." 
+        placeholder={t.common.command.placeholder} 
         className={isMobile ? "text-base" : undefined}
       />
       <CommandList className="max-h-[60vh] overflow-y-auto">
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>{t.common.command.noResults}</CommandEmpty>
         
-        <CommandGroup heading="Navigation">
+        <CommandGroup heading={t.common.command.groups.navigation}>
           <CommandItem onSelect={() => handleNavigation('/')} className="cursor-pointer">
-            <Home className="mr-2 h-4 w-4" />
-            <span>Home</span>
+            <span>{t.common.home}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation('/about')} className="cursor-pointer">
-            <User className="mr-2 h-4 w-4" />
-            <span>About</span>
+            <span>{t.nav.about}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation('/projects')} className="cursor-pointer">
-            <Code className="mr-2 h-4 w-4" />
-            <span>Projects</span>
+            <span>{t.nav.projects}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation('/skills')} className="cursor-pointer">
-            <GraduationCap className="mr-2 h-4 w-4" />
-            <span>Skills</span>
+            <span>{t.nav.skills}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation('/experience')} className="cursor-pointer">
-            <Briefcase className="mr-2 h-4 w-4" />
-            <span>Experience</span>
+            <span>{t.nav.experience}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation('/services')} className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Services</span>
+            <span>{t.nav.services}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation('/contact')} className="cursor-pointer">
-            <Mail className="mr-2 h-4 w-4" />
-            <span>Contact</span>
+            <span>{t.nav.contact}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => handleNavigation('/privacy')} className="cursor-pointer">
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Privacy Policy</span>
+            <span>{t.footer.privacy}</span>
+            <CommandShortcut>↵</CommandShortcut>
           </CommandItem>
         </CommandGroup>
         
         <CommandSeparator />
         
-        <CommandGroup heading="Theme">
-          {STANDARD_THEMES.map((themeOption) => {
-            const IconComponent = themeOption.icon;
-            return (
-              <CommandItem key={themeOption.value} onSelect={() => handleThemeChange(themeOption.value as ConfiguredTheme)} className="cursor-pointer">
-                <IconComponent className="mr-2 h-4 w-4" />
-                <span>{themeOption.label}</span>
-                {theme === themeOption.value && <CommandShortcut>✓</CommandShortcut>}
+        <CommandGroup heading={t.common.command.groups.theme}>
+          <div className="flex flex-wrap gap-2 px-2 pb-1">
+            {STANDARD_THEMES.map((themeOption) => {
+              const IconComponent = themeOption.icon;
+              const isActive = theme === themeOption.value;
+              return (
+                <CommandItem
+                  key={themeOption.value}
+                  onSelect={() => handleThemeChange(themeOption.value as ConfiguredTheme)}
+                  className={`cursor-pointer w-auto inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${isActive ? 'bg-accent text-accent-foreground' : ''}`}
+                >
+                  <IconComponent className="h-3.5 w-3.5" />
+                  <span>{themeOption.label}</span>
+                </CommandItem>
+              );
+            })}
+          </div>
+        </CommandGroup>
+
+        <CommandSeparator />
+
+        <CommandGroup heading={t.common.menu.customThemes}>
+          <div className="flex flex-wrap gap-2 px-2 pb-1">
+            {CUSTOM_THEMES.map((themeOption) => {
+              const IconComponent = themeOption.icon;
+              const isActive = theme === themeOption.value;
+              return (
+                <CommandItem
+                  key={themeOption.value}
+                  onSelect={() => handleThemeChange(themeOption.value as ConfiguredTheme)}
+                  className={`cursor-pointer w-auto inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${isActive ? 'bg-accent text-accent-foreground' : ''}`}
+                >
+                  <IconComponent className="h-3.5 w-3.5" />
+                  <span>{themeOption.label}</span>
+                </CommandItem>
+              );
+            })}
+          </div>
+        </CommandGroup>
+        
+        <CommandSeparator />
+        
+        <CommandGroup heading={t.common.command.groups.language}>
+          <div className="flex flex-wrap gap-2 px-2 pb-2">
+            {([
+              { code: 'en', label: 'English' },
+              { code: 'de', label: 'Deutsch' },
+              { code: 'es', label: 'Español' },
+              { code: 'ja', label: '日本語' },
+              { code: 'zh', label: '中文' },
+            ] as const).map(({ code, label }) => (
+              <CommandItem
+                key={code}
+                onSelect={() => handleLanguageChange(code)}
+                className={`cursor-pointer w-auto inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${language === code ? 'bg-accent text-accent-foreground' : ''}`}
+              >
+                <span>{label}</span>
               </CommandItem>
-            );
-          })}
-          <CommandSeparator />
-          {CUSTOM_THEMES.map((themeOption) => {
-            const IconComponent = themeOption.icon;
-            return (
-              <CommandItem key={themeOption.value} onSelect={() => handleThemeChange(themeOption.value as ConfiguredTheme)} className="cursor-pointer">
-                <IconComponent className="mr-2 h-4 w-4" />
-                <span>{themeOption.label}</span>
-                {theme === themeOption.value && <CommandShortcut>✓</CommandShortcut>}
-              </CommandItem>
-            );
-          })}
+            ))}
+          </div>
         </CommandGroup>
         
         <CommandSeparator />
         
-        <CommandGroup heading="Language">
-          <CommandItem onSelect={() => handleLanguageChange('en')} className="cursor-pointer">
-            <Globe className="mr-2 h-4 w-4" />
-            <span>English</span>
-            {language === 'en' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleLanguageChange('de')} className="cursor-pointer">
-            <Globe className="mr-2 h-4 w-4" />
-            <span>Deutsch</span>
-            {language === 'de' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleLanguageChange('es')} className="cursor-pointer">
-            <Globe className="mr-2 h-4 w-4" />
-            <span>Español</span>
-            {language === 'es' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleLanguageChange('ja')} className="cursor-pointer">
-            <Globe className="mr-2 h-4 w-4" />
-            <span>日本語</span>
-            {language === 'ja' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-          <CommandItem onSelect={() => handleLanguageChange('zh')} className="cursor-pointer">
-            <Globe className="mr-2 h-4 w-4" />
-            <span>中文</span>
-            {language === 'zh' && <CommandShortcut>✓</CommandShortcut>}
-          </CommandItem>
-        </CommandGroup>
-        
-        <CommandSeparator />
-        
-        <CommandGroup heading="Shortcuts">
-          <CommandItem className="cursor-default">
-            <Search className="mr-2 h-4 w-4" />
-            <span>Search</span>
-            <CommandShortcut>⌘K</CommandShortcut>
-          </CommandItem>
+        <CommandGroup heading={t.common.command.groups.shortcuts}>
           <CommandItem onSelect={() => toggleAurora()} className="cursor-pointer">
-            <Sparkles className="mr-2 h-4 w-4" />
-            <span>Aurora</span>
-            <CommandShortcut>{auroraEnabled ? "On" : "Off"}</CommandShortcut>
+            <span>{t.common.command.shortcuts.aurora}</span>
+            <CommandShortcut>{auroraEnabled ? t.common.on : t.common.off}</CommandShortcut>
           </CommandItem>
         </CommandGroup>
       </CommandList>

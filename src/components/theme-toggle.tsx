@@ -14,18 +14,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { STANDARD_THEMES, CUSTOM_THEMES, THEMES, type Theme } from "@/config/themes"
 import { useAurora } from "@/lib/aurora-provider"
 import { Switch } from "@/components/ui/switch"
+import { useLanguage } from "@/lib/language-provider"
+import { translations } from "@/lib/translations"
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light")
   const [mounted, setMounted] = useState(false)
   const { enabled: auroraEnabled, setEnabled: setAuroraEnabled } = useAurora()
+  const { language } = useLanguage()
+  const t = translations[language]
 
   // monitor system theme changes
   useEffect(() => {
@@ -82,6 +87,7 @@ export function ThemeToggle() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-background/35 backdrop-blur-sm min-w-[180px]">
+        <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
         {/* standard themes */}
         {STANDARD_THEMES.map((option) => (
           <DropdownMenuItem
@@ -97,6 +103,7 @@ export function ThemeToggle() {
         {/* separator */}
         <DropdownMenuSeparator />
 
+        <DropdownMenuLabel>{t.common.menu.customThemes}</DropdownMenuLabel>
         {/* custom themes */}
         {CUSTOM_THEMES.map((option) => (
           <DropdownMenuItem
@@ -111,6 +118,7 @@ export function ThemeToggle() {
 
         {/* effects */}
         <DropdownMenuSeparator />
+        <DropdownMenuLabel>{t.common.menu.effects}</DropdownMenuLabel>
         <DropdownMenuItem
           onSelect={(e) => {
             e.preventDefault();

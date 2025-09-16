@@ -53,6 +53,27 @@ export const translations = {
       projects: "Projects",
       back: "Back",
       overview: "Overview",
+      menu: {
+        themes: "Themes",
+        customThemes: "Custom themes",
+        effects: "Effects"
+      },
+      on: "On",
+      off: "Off",
+      command: {
+        placeholder: "Type a command or search...",
+        noResults: "No results found.",
+        groups: {
+          navigation: "Navigation",
+          theme: "Theme",
+          language: "Language",
+          shortcuts: "Shortcuts"
+        },
+        shortcuts: {
+          search: "Search",
+          aurora: "Aurora"
+        }
+      },
       techStack: "Tech Stack",
       links: "Links",
       chromeStore: "Chrome Store",
@@ -467,6 +488,27 @@ export const translations = {
       projects: "Projekte",
       back: "Zurück",
       overview: "Überblick",
+      menu: {
+        themes: "Themen",
+        customThemes: "Eigene Themen",
+        effects: "Effekte"
+      },
+      on: "An",
+      off: "Aus",
+      command: {
+        placeholder: "Befehl eingeben oder suchen...",
+        noResults: "Keine Ergebnisse gefunden.",
+        groups: {
+          navigation: "Navigation",
+          theme: "Theme",
+          language: "Sprache",
+          shortcuts: "Kurzbefehle"
+        },
+        shortcuts: {
+          search: "Suche",
+          aurora: "Aurora"
+        }
+      },
       techStack: "Technologie-Stack",
       links: "Links",
       chromeStore: "Chrome Store",
@@ -881,6 +923,27 @@ export const translations = {
       projects: "Proyectos",
       back: "Volver",
       overview: "Resumen",
+      menu: {
+        themes: "Temas",
+        customThemes: "Temas personalizados",
+        effects: "Efectos"
+      },
+      on: "Activado",
+      off: "Desactivado",
+      command: {
+        placeholder: "Escribe un comando o busca...",
+        noResults: "Sin resultados.",
+        groups: {
+          navigation: "Navegación",
+          theme: "Tema",
+          language: "Idioma",
+          shortcuts: "Atajos"
+        },
+        shortcuts: {
+          search: "Buscar",
+          aurora: "Aurora"
+        }
+      },
       techStack: "Tecnologías",
       links: "Enlaces",
       chromeStore: "Chrome Web Store",
@@ -1295,6 +1358,27 @@ export const translations = {
       projects: "プロジェクト",
       back: "戻る",
       overview: "概要",
+      menu: {
+        themes: "テーマ",
+        customThemes: "カスタムテーマ",
+        effects: "エフェクト"
+      },
+      on: "オン",
+      off: "オフ",
+      command: {
+        placeholder: "コマンドまたは検索を入力...",
+        noResults: "該当なし",
+        groups: {
+          navigation: "ナビゲーション",
+          theme: "テーマ",
+          language: "言語",
+          shortcuts: "ショートカット"
+        },
+        shortcuts: {
+          search: "検索",
+          aurora: "オーロラ"
+        }
+      },
       techStack: "技術スタック",
       links: "リンク",
       chromeStore: "Chrome ストア",
@@ -1710,6 +1794,27 @@ export const translations = {
       projects: "项目",
       back: "返回",
       overview: "概览",
+      menu: {
+        themes: "主题",
+        customThemes: "自定义主题",
+        effects: "效果"
+      },
+      on: "开",
+      off: "关",
+      command: {
+        placeholder: "输入命令或搜索...",
+        noResults: "没有结果",
+        groups: {
+          navigation: "导航",
+          theme: "主题",
+          language: "语言",
+          shortcuts: "快捷方式"
+        },
+        shortcuts: {
+          search: "搜索",
+          aurora: "极光"
+        }
+      },
       techStack: "技术栈",
       links: "链接",
       chromeStore: "Chrome 商店",

@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
+// no section label needed for languages
 
 export function LanguageToggle() {
   const { language, setLanguage, detectedLanguage, detectedLanguageCode } = useLanguage()

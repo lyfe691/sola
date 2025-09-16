@@ -607,7 +607,7 @@ const Contact = () => {
                   <Send className="w-4 h-4" />
                 )
               }
-              variant="secondary"
+              variant="default"
               className="group border-foreground/20"
             >
               <span className="flex items-center gap-2">
