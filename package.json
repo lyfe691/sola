@@ -59,6 +59,7 @@
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.514.0",
+    "mathjs": "^14.7.0",
     "motion": "^12.8.0",
     "ogl": "^1.0.11",
     "radix-ui": "^1.4.2",

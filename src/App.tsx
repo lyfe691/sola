@@ -17,10 +17,11 @@ import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
-import  ClickSpark from "./components/ClickSpark";
+import ClickSpark from "./components/ClickSpark";
 import { AuroraProvider } from "./lib/aurora-provider";
 import AuroraBackground from "./components/backgrounds/AuroraBackground";
 import AuroraIntroModal from "./components/AuroraIntroModal";
+import { GradualBlurProvider } from "./lib/gradual-blur-provider";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -36,29 +37,31 @@ const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
       <AuroraProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <AuroraBackground />
-            <ClickSpark
-              sparkColor="hsl(var(--primary) / 0.30)"
-              sparkSize={4}
-              sparkCount={7}
-              duration={450}
-            >
-              <div className="min-h-screen flex flex-col relative">
-                <Toaster position="bottom-right" />
-                <AuroraIntroModal/>
-                <BrowserRouter>
-                  <KeyboardShortcuts />
-                  <CommandMenu />
-                  <AnimatedRoutes />
-                  <ScrollToTop />
-                  <Conditionals />
-                </BrowserRouter>
-              </div>
-            </ClickSpark>
-          </TooltipProvider>
-        </QueryClientProvider>
+        <GradualBlurProvider>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <AuroraBackground />
+              <ClickSpark
+                sparkColor="hsl(var(--primary) / 0.30)"
+                sparkSize={4}
+                sparkCount={7}
+                duration={450}
+              >
+                <div className="min-h-screen flex flex-col relative">
+                  <Toaster position="bottom-right" />
+                  <AuroraIntroModal/>
+                  <BrowserRouter>
+                    <KeyboardShortcuts />
+                    <CommandMenu />
+                    <AnimatedRoutes />
+                    <ScrollToTop />
+                    <Conditionals />
+                  </BrowserRouter>
+                </div>
+              </ClickSpark>
+            </TooltipProvider>
+          </QueryClientProvider>
+        </GradualBlurProvider>
       </AuroraProvider>
     </LanguageProvider>
   </ThemeProvider>
