@@ -507,13 +507,12 @@ const About = () => {
   // testimonials - untranslatable due to respective copyrights
   const testimonials = [
     {
-      quote: "Yanis carried me through every subject—I genuinely did next to nothing. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
+      quote: "Yanis carried me through every Software Engineering (IT) subject—I genuinely did next to nothing. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
       author: "Dominik Könitzer",
       role: "Intern",
       company: "mpa international ag",
       rating: 5,
       website: "https://dominikkoenitzer.ch",
-      linkedin: "https://linkedin.com/in/dominikkoenitzer"
     },
     {
       quote: "Working with Yanis was a fantastic experience. He carried me through every subject, consistently bringing creative solutions to complex problems and delivering everything on time. Truly an exceptional developer.",
