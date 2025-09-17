@@ -32,10 +32,8 @@ export default function ThemeRandomizer() {
   const [open, setOpen] = useState(false);
   const [spinning, setSpinning] = useState(false);
   const [currentIdx, setCurrentIdx] = useState(() => Math.max(0, CANDIDATE_THEMES.findIndex(t => t.value === theme)) || 0);
-  const intervalRef = useRef<number | null>(null);
   const originalThemeRef = useRef<Theme | null>(null);
   const rafIdRef = useRef<number | null>(null);
-  const settleTimeoutRef = useRef<number | null>(null);
   const lastStepAtRef = useRef<number>(0);
 
   // URL param test controls
@@ -56,7 +54,6 @@ export default function ThemeRandomizer() {
       }
 
       if (themeParam) {
-        // only set if it's a known theme
         const known = CANDIDATE_THEMES.find(t => t.value === themeParam);
         if (known) setTheme(themeParam);
       }
@@ -67,29 +64,19 @@ export default function ThemeRandomizer() {
     } catch {}
   }, [setTheme]);
 
-  // Capture the original theme when opening; clear and stop spinning on close
   useEffect(() => {
     if (open) {
       if (originalThemeRef.current == null) originalThemeRef.current = theme;
     } else {
       originalThemeRef.current = null;
-      if (intervalRef.current) {
-        window.clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
       if (rafIdRef.current) {
         cancelAnimationFrame(rafIdRef.current);
         rafIdRef.current = null;
-      }
-      if (settleTimeoutRef.current) {
-        window.clearTimeout(settleTimeoutRef.current);
-        settleTimeoutRef.current = null;
       }
       setSpinning(false);
     }
   }, [open, theme]);
 
-  // Determine first-visit: show if no stored theme and not seen before
   useEffect(() => {
     try {
       const seen = localStorage.getItem(STORAGE_SEEN_KEY) === "true";
@@ -112,84 +99,57 @@ export default function ThemeRandomizer() {
   const onKeep = () => {
     const chosen = CANDIDATE_THEMES[currentIdx];
     setTheme(chosen.value as Theme);
-    // keep the applied theme; just close
     closeModal();
   };
-
-  // removed Skip behavior; closing keeps current theme
 
   const onSpin = () => {
     if (spinning) return;
     setSpinning(true);
 
-    // immediate first advance for instant feedback
+    const totalDuration = 6000 + Math.random() * 2200; // 6.0s - 8.2s
+    const minIntervalMs = 160; // fast start
+    const maxIntervalMs = 520; // slow end
+
+    const start = performance.now();
+
     setCurrentIdx((i) => {
       const next = (i + 1) % CANDIDATE_THEMES.length;
       const nextTheme = CANDIDATE_THEMES[next].value as Theme;
       setTheme(nextTheme);
       return next;
     });
-
-    // rAF-driven scheduler with easing and time-accumulated stepping
-    const totalDuration = 4800 + Math.random() * 2200; // 4.8s - 7.0s slower
-    const start = performance.now();
-    // ensure no wait after first step
-    lastStepAtRef.current = start - 120;
+    lastStepAtRef.current = start;
 
     const loop = (now: number) => {
       const elapsed = now - start;
       const t = Math.min(1, elapsed / totalDuration);
-      // ease-out: start fast, end slow
-      const speedMs = 85 + 335 * (t * t); // ~85ms -> ~420ms, overall slower
+      const eased = 1 - Math.pow(1 - t, 3);
+      const intervalMs = minIntervalMs + (maxIntervalMs - minIntervalMs) * eased;
 
-      if (now - lastStepAtRef.current >= speedMs) {
-        const stepsToCatchUp = Math.max(1, Math.floor((now - lastStepAtRef.current) / speedMs));
-        for (let s = 0; s < stepsToCatchUp; s++) {
-          setCurrentIdx((i) => {
-            const next = (i + 1) % CANDIDATE_THEMES.length;
-            const nextTheme = CANDIDATE_THEMES[next].value as Theme;
-            setTheme(nextTheme);
-            return next;
-          });
-        }
+      if (now - lastStepAtRef.current >= intervalMs) {
+        setCurrentIdx((i) => {
+          const next = (i + 1) % CANDIDATE_THEMES.length;
+          const nextTheme = CANDIDATE_THEMES[next].value as Theme;
+          setTheme(nextTheme);
+          return next;
+        });
         lastStepAtRef.current = now;
       }
 
       if (t < 1) {
         rafIdRef.current = requestAnimationFrame(loop);
       } else {
-        // graceful settle steps
-        let remaining = 10 + Math.floor(Math.random() * 7); // 10..16
-        const settle = () => {
-          setCurrentIdx((i) => {
-            const next = (i + 1) % CANDIDATE_THEMES.length;
-            const nextTheme = CANDIDATE_THEMES[next].value as Theme;
-            setTheme(nextTheme);
-            remaining -= 1;
-            if (remaining <= 0) {
-              setSpinning(false);
-              rafIdRef.current = null;
-              settleTimeoutRef.current = null;
-              return next;
-            }
-            settleTimeoutRef.current = window.setTimeout(() => {
-              rafIdRef.current = requestAnimationFrame(settle);
-            }, 160) as unknown as number; // slower settle cadence
-            return next;
-          });
-        };
-        rafIdRef.current = requestAnimationFrame(settle);
+        setSpinning(false);
+        rafIdRef.current = null;
       }
     };
 
     rafIdRef.current = requestAnimationFrame(loop);
   };
 
-  // UI helpers
   const selected = CANDIDATE_THEMES[currentIdx] ?? CANDIDATE_THEMES[0];
   const SelectedIcon = selected.icon as any;
 
-  // prevent background scroll while open
   useEffect(() => {
     if (open) {
       const prev = document.body.style.overflow;
