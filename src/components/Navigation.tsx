@@ -311,12 +311,12 @@ const Navigation = () => {
   }
 
   return (
-    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4">
+    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4 pointer-events-none">
       
       {/* desktop navigation */}
       <div className="flex justify-center items-center">
         <motion.nav
-          className={DESKTOP_CONTAINER_CLASSES}
+          className={cn(DESKTOP_CONTAINER_CLASSES, "pointer-events-auto")}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
@@ -348,7 +348,7 @@ const Navigation = () => {
       </div>
 
       {/* mobile menu button */}
-      <div className="md:hidden fixed top-5 left-5 z-[70] menu-button">
+      <div className="md:hidden fixed top-5 left-5 z-[70] menu-button pointer-events-auto">
         <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
       </div>
 
@@ -360,7 +360,7 @@ const Navigation = () => {
             animate="visible"
             exit="hidden"
             variants={mobileMenuVariants}
-            className={MOBILE_OVERLAY_CLASSES}
+            className={cn(MOBILE_OVERLAY_CLASSES, "pointer-events-auto")}
           style={{
             backdropFilter: 'blur(20px) saturate(180%)',
             WebkitBackdropFilter: 'blur(20px) saturate(180%)',
