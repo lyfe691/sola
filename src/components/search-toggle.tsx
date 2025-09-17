@@ -28,7 +28,7 @@ export function SearchToggle() {
             <span className="sr-only">Search</span>
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent className="bg-background/85 backdrop-blur-sm">
           <span>Search</span>
           <span className="ml-2 text-xs text-muted-foreground">⌘K</span>
         </TooltipContent>

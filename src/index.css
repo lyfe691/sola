@@ -366,6 +366,16 @@
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
   }
 
+  /* Smooth theme transitions */
+  html, body, #root, .app-theme-surface {
+    transition:
+      background-color 250ms ease,
+      color 250ms ease,
+      border-color 250ms ease,
+      fill 250ms ease,
+      stroke 250ms ease;
+  }
+
   * {
     @apply border-border outline-ring/50;
     font-family: 'Geist', sans-serif;

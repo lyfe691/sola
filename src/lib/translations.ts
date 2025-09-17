@@ -126,6 +126,14 @@ export const translations = {
       enableButton: "Enable Aurora",
       notNowButton: "Not now"
     },
+    randomizer: {
+      welcome: "Welcome",
+      title: "Pick a vibe — or let fate decide",
+      description: "Spin the wheel to discover a theme. You can change it anytime in the top-right.",
+      spin: "Spin",
+      spinning: "Spinning...",
+      keep: "Keep this"
+    },
     experience: {
       title: "Experience",
       backHome: "Back home",
@@ -561,6 +569,14 @@ export const translations = {
       enableButton: "Aurora aktivieren",
       notNowButton: "Nicht jetzt"
     },
+    randomizer: {
+      welcome: "Willkommen",
+      title: "Wähle eine Stimmung — oder überlasse es dem Zufall",
+      description: "Drehe das Rad und entdecke ein Theme. Du kannst es später jederzeit oben rechts ändern.",
+      spin: "Drehen",
+      spinning: "Dreht...",
+      keep: "Behalten"
+    },
     experience: {
       title: "Erfahrung",
       backHome: "Zurück",
@@ -681,7 +697,7 @@ export const translations = {
         },
         dockerService: {
           title: "Docker Service Deployment",
-          description: "Dieses Docker-Compose-Projekt setzt MediaWiki, Nextcloud und Gogs auf und legt den Fokus auf Teamarbeit, Containerisierung und Dokumentation. Entwickelt mit Benicio Von Felten."
+          description: "Dieses Docker-Compose-Projekt setzt MediaWiki, Nextcloud, Gogs auf und legt den Fokus auf Teamarbeit, Containerisierung und Dokumentation. Entwickelt mit Benicio Von Felten."
         },
         phishing: {
           title: "Phishing Website Tutorial",
@@ -995,6 +1011,14 @@ export const translations = {
       performanceWarning: "Nota: Puede afectar el rendimiento en dispositivos más antiguos o navegadores más lentos.",
       enableButton: "Activar Aurora",
       notNowButton: "Ahora no"
+    },
+    randomizer: {
+      welcome: "Bienvenido",
+      title: "Elige una vibra — o déjalo al destino",
+      description: "Gira la rueda para descubrir un tema. Puedes cambiarlo cuando quieras arriba a la derecha.",
+      spin: "Girar",
+      spinning: "Girando...",
+      keep: "Conservar"
     },
     experience: {
       title: "Experiencia",
@@ -1432,6 +1456,14 @@ export const translations = {
       enableButton: "Aurora を有効化",
       notNowButton: "後で"
     },
+    randomizer: {
+      welcome: "ようこそ",
+      title: "雰囲気を選ぶ — あるいは運に任せる",
+      description: "ホイールを回してテーマを見つけましょう。右上からいつでも変更できます。",
+      spin: "回す",
+      spinning: "回転中...",
+      keep: "これにする"
+    },
     experience: {
       title: "経験",
       backHome: "ホームに戻る",
@@ -1639,8 +1671,8 @@ export const translations = {
         link: "私と働く",
         viewMore: "もっと見る",
         visitWebsite: "ウェブサイトを見る",
-        viewLinkedIn: "LinkedIn を見る",
-        websiteChip: "ウェブサイト",
+        viewLinkedIn: "LinkedIn ansehen",
+        websiteChip: "Webseite",
         modalTitle: "推薦文",
         modalDescription: "{author} からの全文推薦"
       },
@@ -1866,6 +1898,14 @@ export const translations = {
       performanceWarning: "注意：在较旧设备或较慢浏览器上可能影响性能。",
       enableButton: "开启 Aurora",
       notNowButton: "稍后"
+    },
+    randomizer: {
+      welcome: "欢迎",
+      title: "选个氛围——或交给运气",
+      description: "转盘来发现一个主题。你可以随时在右上角更改。",
+      spin: "旋转",
+      spinning: "旋转中...",
+      keep: "保留此主题"
     },
     experience: {
       title: "经验",
