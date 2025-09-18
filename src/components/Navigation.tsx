@@ -40,7 +40,7 @@ const desktopItemVariants = {
 // mobile items will use per-instance variants defined inline to allow simple index-based delay
 
 const DESKTOP_CONTAINER_CLASSES =
-  "hidden md:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/20 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
+  "hidden md:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/40 dark:border-border/60 bg-background/70 dark:bg-foreground/5 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5 dark:shadow-black/40";
 
 const MOBILE_OVERLAY_CLASSES =
   "fixed inset-0 bg-background/80 backdrop-blur-xl z-[60] md:hidden mobile-menu";
@@ -59,7 +59,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
   const isItemActive = isActive(item.path);
   const linkBaseClass = isMobile
     ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
-    : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2";
+    : "relative px-6 py-3 text-base font-medium rounded-full transition-all duration-300 z-10 flex items-center gap-2 hover:bg-foreground/5 hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_4px_12px_rgba(255,255,255,0.06)]";
   const linkClassName = cn(
     linkBaseClass,
     isItemActive ? "text-primary" : "text-foreground/60 hover:text-foreground"
