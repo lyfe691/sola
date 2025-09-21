@@ -378,7 +378,7 @@
 
   * {
     @apply border-border outline-ring/50;
-    font-family: 'Geist', sans-serif;
+    font-family: 'Plus Jakarta Sans', 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
   }
   
   code, pre, kbd, samp {
