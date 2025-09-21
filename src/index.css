@@ -364,6 +364,8 @@
   
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Smooth theme transitions */
@@ -378,7 +380,7 @@
 
   * {
     @apply border-border outline-ring/50;
-    font-family: 'Plus Jakarta Sans', 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, Ubuntu, Cantarell, 'Noto Sans', 'Helvetica Neue', Arial, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+    font-family: 'Satoshi', 'General Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'SF Pro', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', system-ui, sans-serif;
   }
   
   code, pre, kbd, samp {
