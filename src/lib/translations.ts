@@ -401,7 +401,8 @@ export const translations = {
       title: "Services",
       subtitle: "Comprehensive software development services tailored to your needs.",
       backHome: "Back home",
-      pricing: "* Prices are negotiable and will be tailored to your specific needs and project scope.",
+      pricing: "Listed rates are starting points—each proposal is tailored to match your project's scope and priorities.",
+      startingFrom: "Starting from",
       getStarted: "Get Started",
       services: {
         fullstack: {
@@ -412,7 +413,8 @@ export const translations = {
             "RESTful API development",
             "Database design and implementation",
             "Performance optimization"
-          ]
+          ],
+          price: "CHF 3,200"
         },
         frontend: {
           title: "Frontend Development",
@@ -422,7 +424,8 @@ export const translations = {
             "UI/UX implementation",
             "Animation and interactivity",
             "Mobile-first design"
-          ]
+          ],
+          price: "CHF 1,600"
         },
         backend: {
           title: "Backend Development",
@@ -432,7 +435,8 @@ export const translations = {
             "Database management",
             "Server optimization",
             "Security implementation"
-          ]
+          ],
+          price: "CHF 1,900"
         },
         consulting: {
           title: "Technical Consulting",
@@ -442,7 +446,8 @@ export const translations = {
             "Technology stack selection",
             "Performance auditing",
             "Security assessment"
-          ]
+          ],
+          price: "CHF 120 / hour"
         }
       },
       customRequirements: {
@@ -844,7 +849,8 @@ export const translations = {
       title: "Dienstleistungen",
       subtitle: "Umfassende Softwareentwicklungsdienste, angepasst an Ihre Bedürfnisse.",
       backHome: "Zurück",
-      pricing: "* Preise sind verhandelbar und werden auf Ihre spezifischen Bedürfnisse und den Projektumfang abgestimmt.",
+      pricing: "Die aufgeführten Preise dienen als Ausgangspunkt – das finale Angebot richtet sich nach Ihrem Projektumfang und Ihren Prioritäten.",
+      startingFrom: "Ab",
       getStarted: "Loslegen",
       services: {
         fullstack: {
@@ -855,7 +861,8 @@ export const translations = {
             "RESTful API-Entwicklung",
             "Datenbankdesign und -implementierung",
             "Leistungsoptimierung"
-          ]
+          ],
+          price: "CHF 3'200"
         },
         frontend: {
           title: "Frontend-Entwicklung",
@@ -865,7 +872,8 @@ export const translations = {
             "UI/UX-Implementierung",
             "Animation und Interaktivität",
             "Mobile-First-Design"
-          ]
+          ],
+          price: "CHF 1'600"
         },
         backend: {
           title: "Backend-Entwicklung",
@@ -875,7 +883,8 @@ export const translations = {
             "Datenbankverwaltung",
             "Server-Optimierung",
             "Sicherheitsimplementierung"
-          ]
+          ],
+          price: "CHF 1'900"
         },
         consulting: {
           title: "Technische Beratung",
@@ -885,7 +894,8 @@ export const translations = {
             "Technologie-Stack-Auswahl",
             "Performance-Auditing",
             "Sicherheitsbewertung"
-          ]
+          ],
+          price: "CHF 120 / Stunde"
         }
       },
       customRequirements: {
@@ -1287,7 +1297,8 @@ export const translations = {
       title: "Servicios",
       subtitle: "Servicios integrales de desarrollo de software adaptados a sus necesidades, entregados con experiencia y precisión.",
       backHome: "Regresar",
-      pricing: "* Precios negociables y ajustados a sus necesidades específicas y al alcance del proyecto.",
+      pricing: "Las tarifas indicadas son un punto de partida; la propuesta final se ajusta al alcance y prioridades de su proyecto.",
+      startingFrom: "Desde",
       getStarted: "Comenzar",
       services: {
         fullstack: {
@@ -1298,7 +1309,8 @@ export const translations = {
             "Desarrollo de API RESTful",
             "Diseño e implementación de bases de datos",
             "Optimización de rendimiento"
-          ]
+          ],
+          price: "CHF 3,200"
         },
         frontend: {
           title: "Desarrollo Frontend",
@@ -1308,7 +1320,8 @@ export const translations = {
             "Implementación de UI/UX",
             "Animación e interactividad",
             "Diseño mobile-first"
-          ]
+          ],
+          price: "CHF 1,600"
         },
         backend: {
           title: "Desarrollo Backend",
@@ -1318,7 +1331,8 @@ export const translations = {
             "Administración de bases de datos",
             "Optimización de servidores",
             "Implementación de seguridad"
-          ]
+          ],
+          price: "CHF 1,900"
         },
         consulting: {
           title: "Consultoría Técnica",
@@ -1328,7 +1342,8 @@ export const translations = {
             "Selección de pila tecnológica",
             "Auditoría de rendimiento",
             "Evaluación de seguridad"
-          ]
+          ],
+          price: "CHF 120 / hora"
         }
       },
       customRequirements: {
@@ -1731,7 +1746,8 @@ export const translations = {
       title: "サービス",
       subtitle: "お客様のニーズに合わせた包括的なソフトウェア開発サービス。",
       backHome: "ホームに戻る",
-      pricing: "* 料金は交渉可能で、お客様の具体的なニーズとプロジェクトの規模に応じて調整します。",
+      pricing: "掲載している料金は目安です。最終的なお見積もりはプロジェクトの内容と優先度に合わせて調整いたします。",
+      startingFrom: "開始料金",
       getStarted: "今すぐ始める",
       services: {
         fullstack: {
@@ -1742,7 +1758,8 @@ export const translations = {
             "RESTful API開発",
             "データベース設計と実装",
             "パフォーマンス最適化"
-          ]
+          ],
+          price: "CHF 3,200"
         },
         frontend: {
           title: "フロントエンド開発",
@@ -1752,7 +1769,8 @@ export const translations = {
             "UI/UX実装",
             "アニメーションと対話",
             "モバイルファースト設計"
-          ]
+          ],
+          price: "CHF 1,600"
         },
         backend: {
           title: "バックエンド開発",
@@ -1762,7 +1780,8 @@ export const translations = {
             "データベース管理",
             "サーバー最適化",
             "セキュリティ実装"
-          ]
+          ],
+          price: "CHF 1,900"
         },
         consulting: {
           title: "技術コンサルティング",
@@ -1772,7 +1791,8 @@ export const translations = {
             "技術スタックの選定",
             "パフォーマンス監査",
             "セキュリティ評価"
-          ]
+          ],
+          price: "CHF 120 / 時間"
         }
       },
       customRequirements: {
@@ -2174,8 +2194,9 @@ export const translations = {
       title: "服务",
       subtitle: "根据您的需求定制的全面软件开发服务。",
       backHome: "返回首页",
-      pricing: "* 价格可协商，将根据您的具体需求和项目范围进行调整。",
-      getStarted: "开始", 
+      pricing: "列出的费用仅作起点，最终报价将根据您的项目范围与优先级量身定制。",
+      startingFrom: "起价",
+      getStarted: "开始",
       services: {
         fullstack: {
           title: "全栈开发",
@@ -2185,7 +2206,8 @@ export const translations = {
             "RESTful API开发",
             "数据库设计和实现",
             "性能优化"
-          ]
+          ],
+          price: "CHF 3,200"
         },
         frontend: {
           title: "前端开发",
@@ -2195,7 +2217,8 @@ export const translations = {
             "UI/UX实现",
             "动画和交互",
             "移动优先设计"
-          ]
+          ],
+          price: "CHF 1,600"
         },
         backend: {
           title: "后端开发",
@@ -2205,7 +2228,8 @@ export const translations = {
             "数据库管理",
             "服务器优化",
             "安全实现"
-          ]
+          ],
+          price: "CHF 1,900"
         },
         consulting: {
           title: "技术咨询",
@@ -2215,7 +2239,8 @@ export const translations = {
             "技术栈选择",
             "性能审计",
             "安全评估"
-          ]
+          ],
+          price: "CHF 120 / 小时"
         }
       },
       customRequirements: {

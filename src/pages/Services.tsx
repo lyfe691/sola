@@ -89,7 +89,7 @@ const Services = () => {
       </ScrollReveal>
 
       <ScrollReveal variant="default">
-        <p className="text-primary/80 text-sm mb-8 sm:mb-12 max-w-2xl italic">
+        <p className="text-primary/80 text-sm mb-8 sm:mb-12 max-w-2xl">
           {t.services.pricing}
         </p>
       </ScrollReveal>
@@ -100,61 +100,70 @@ const Services = () => {
             <motion.div
               onHoverStart={() => setHoveredService(service.key)}
               onHoverEnd={() => setHoveredService(null)}
-              className="p-5 sm:p-6 rounded-lg border border-foreground/10 
-                         bg-foreground/5 backdrop-blur-sm transition-all duration-300 
+              className="relative group flex flex-col p-5 sm:p-6 rounded-lg border border-foreground/10
+                         bg-foreground/5 backdrop-blur-sm transition-all duration-300
                          hover:border-primary/20 hover:bg-primary/5 cursor-default"
             >
-                {service.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 
-                               bg-primary text-primary-foreground text-xs rounded-full
-                               font-medium shadow-sm">
-                    {service.highlight}
-                  </div>
-                )}
-                
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent
-                              group-hover:from-primary/20 group-hover:to-transparent transition-all duration-300">
-                    <service.icon 
-                      className={`w-6 h-6 transition-colors duration-300
-                                ${hoveredService === service.key 
-                                  ? 'text-primary' 
-                                  : 'text-primary/80'}`}
-                    />
-                  </div>
-                  <h3 className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
-                    {t.services.services[service.key].title}
-                  </h3>
+              {service.highlight && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5
+                             bg-primary text-primary-foreground text-xs rounded-full
+                             font-medium shadow-sm">
+                  {service.highlight}
                 </div>
-                
-                <p className="text-sm text-foreground/70 mb-6">
-                  {t.services.services[service.key].description}
-                </p>
+              )}
 
-                <ul className="space-y-3">
-                  {t.services.services[service.key].features.map((feature, i) => (
-                    <li 
-                      key={i}
-                      className="flex items-start gap-2.5 text-sm text-foreground/70
-                               group-hover:text-foreground/80 transition-colors"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-primary/80 group-hover:text-primary shrink-0 mt-0.5
-                                           transition-colors" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* service contact button */}
-                <div className="mt-6">
-                  <Link to={getServiceContactUrl(service.key)}>
-                    <IconButton 
-                      variant="default" 
-                      className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
-                      label={t.services.getStarted || "Get Started"}
-                    />
-                  </Link>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent
+                            group-hover:from-primary/20 group-hover:to-transparent transition-all duration-300">
+                  <service.icon
+                    className={`w-6 h-6 transition-colors duration-300
+                              ${hoveredService === service.key
+                                ? 'text-primary'
+                                : 'text-primary/80'}`}
+                  />
                 </div>
+                <h3 className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
+                  {t.services.services[service.key].title}
+                </h3>
+              </div>
+
+              <p className="text-sm text-foreground/70 mb-6">
+                {t.services.services[service.key].description}
+              </p>
+
+              <ul className="space-y-3 flex-1">
+                {t.services.services[service.key].features.map((feature, i) => (
+                  <li
+                    key={i}
+                    className="flex items-start gap-2.5 text-sm text-foreground/70
+                             group-hover:text-foreground/80 transition-colors"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-primary/80 group-hover:text-primary shrink-0 mt-0.5
+                                         transition-colors" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* service pricing & contact */}
+              <div className="mt-6 space-y-4">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-foreground/60">
+                    {t.services.startingFrom}
+                  </p>
+                  <p className="text-lg font-semibold text-foreground">
+                    {t.services.services[service.key].price}
+                  </p>
+                </div>
+
+                <Link to={getServiceContactUrl(service.key)}>
+                  <IconButton
+                    variant="default"
+                    className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
+                    label={t.services.getStarted || "Get Started"}
+                  />
+                </Link>
+              </div>
             </motion.div>
           </ScrollReveal>
         ))}
