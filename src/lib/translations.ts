@@ -404,6 +404,11 @@ export const translations = {
       pricing: "Listed rates are starting points—each proposal is tailored to match your project's scope and priorities.",
       startingFrom: "Starting from",
       getStarted: "Get Started",
+      heroHighlights: [
+        "Discovery-focused kickoff sessions",
+        "Milestone-based delivery cadence",
+        "Maintainable, well-documented code",
+      ],
       services: {
         fullstack: {
           title: "Full Stack Development",
@@ -414,6 +419,7 @@ export const translations = {
             "Database design and implementation",
             "Performance optimization"
           ],
+          badge: "",
           price: "CHF 3,200"
         },
         frontend: {
@@ -425,6 +431,7 @@ export const translations = {
             "Animation and interactivity",
             "Mobile-first design"
           ],
+          badge: "Most Popular",
           price: "CHF 1,600"
         },
         backend: {
@@ -436,6 +443,7 @@ export const translations = {
             "Server optimization",
             "Security implementation"
           ],
+          badge: "",
           price: "CHF 1,900"
         },
         consulting: {
@@ -447,6 +455,7 @@ export const translations = {
             "Performance auditing",
             "Security assessment"
           ],
+          badge: "",
           price: "CHF 120 / hour"
         }
       },
@@ -852,6 +861,11 @@ export const translations = {
       pricing: "Die aufgeführten Preise dienen als Ausgangspunkt – das finale Angebot richtet sich nach Ihrem Projektumfang und Ihren Prioritäten.",
       startingFrom: "Ab",
       getStarted: "Loslegen",
+      heroHighlights: [
+        "Discovery-orientierte Kick-off-Workshops",
+        "Lieferung in klaren Meilensteinen",
+        "Wartbarer, sauber dokumentierter Code",
+      ],
       services: {
         fullstack: {
           title: "Full-Stack-Entwicklung",
@@ -862,6 +876,7 @@ export const translations = {
             "Datenbankdesign und -implementierung",
             "Leistungsoptimierung"
           ],
+          badge: "",
           price: "CHF 3'200"
         },
         frontend: {
@@ -873,6 +888,7 @@ export const translations = {
             "Animation und Interaktivität",
             "Mobile-First-Design"
           ],
+          badge: "Meistgebucht",
           price: "CHF 1'600"
         },
         backend: {
@@ -884,6 +900,7 @@ export const translations = {
             "Server-Optimierung",
             "Sicherheitsimplementierung"
           ],
+          badge: "",
           price: "CHF 1'900"
         },
         consulting: {
@@ -895,6 +912,7 @@ export const translations = {
             "Performance-Auditing",
             "Sicherheitsbewertung"
           ],
+          badge: "",
           price: "CHF 120 / Stunde"
         }
       },
@@ -1300,6 +1318,11 @@ export const translations = {
       pricing: "Las tarifas indicadas son un punto de partida; la propuesta final se ajusta al alcance y prioridades de su proyecto.",
       startingFrom: "Desde",
       getStarted: "Comenzar",
+      heroHighlights: [
+        "Sesiones de inicio centradas en discovery",
+        "Entrega con cadencia basada en hitos",
+        "Código mantenible y bien documentado",
+      ],
       services: {
         fullstack: {
           title: "Desarrollo Full Stack",
@@ -1310,6 +1333,7 @@ export const translations = {
             "Diseño e implementación de bases de datos",
             "Optimización de rendimiento"
           ],
+          badge: "",
           price: "CHF 3,200"
         },
         frontend: {
@@ -1321,6 +1345,7 @@ export const translations = {
             "Animación e interactividad",
             "Diseño mobile-first"
           ],
+          badge: "El más solicitado",
           price: "CHF 1,600"
         },
         backend: {
@@ -1332,6 +1357,7 @@ export const translations = {
             "Optimización de servidores",
             "Implementación de seguridad"
           ],
+          badge: "",
           price: "CHF 1,900"
         },
         consulting: {
@@ -1343,6 +1369,7 @@ export const translations = {
             "Auditoría de rendimiento",
             "Evaluación de seguridad"
           ],
+          badge: "",
           price: "CHF 120 / hora"
         }
       },
@@ -1749,6 +1776,11 @@ export const translations = {
       pricing: "掲載している料金は目安です。最終的なお見積もりはプロジェクトの内容と優先度に合わせて調整いたします。",
       startingFrom: "開始料金",
       getStarted: "今すぐ始める",
+      heroHighlights: [
+        "ディスカバリー重視のキックオフセッション",
+        "明確なマイルストーンで進むデリバリー",
+        "保守しやすく文書化されたコード",
+      ],
       services: {
         fullstack: {
           title: "フルスタック開発",
@@ -1759,6 +1791,7 @@ export const translations = {
             "データベース設計と実装",
             "パフォーマンス最適化"
           ],
+          badge: "",
           price: "CHF 3,200"
         },
         frontend: {
@@ -1770,6 +1803,7 @@ export const translations = {
             "アニメーションと対話",
             "モバイルファースト設計"
           ],
+          badge: "一番人気",
           price: "CHF 1,600"
         },
         backend: {
@@ -1781,6 +1815,7 @@ export const translations = {
             "サーバー最適化",
             "セキュリティ実装"
           ],
+          badge: "",
           price: "CHF 1,900"
         },
         consulting: {
@@ -1792,6 +1827,7 @@ export const translations = {
             "パフォーマンス監査",
             "セキュリティ評価"
           ],
+          badge: "",
           price: "CHF 120 / 時間"
         }
       },
@@ -2197,6 +2233,11 @@ export const translations = {
       pricing: "列出的费用仅作起点，最终报价将根据您的项目范围与优先级量身定制。",
       startingFrom: "起价",
       getStarted: "开始",
+      heroHighlights: [
+        "以探索为核心的启动会",
+        "基于清晰里程碑的交付节奏",
+        "注重可维护性的完善文档代码",
+      ],
       services: {
         fullstack: {
           title: "全栈开发",
@@ -2207,6 +2248,7 @@ export const translations = {
             "数据库设计和实现",
             "性能优化"
           ],
+          badge: "",
           price: "CHF 3,200"
         },
         frontend: {
@@ -2218,6 +2260,7 @@ export const translations = {
             "动画和交互",
             "移动优先设计"
           ],
+          badge: "最受欢迎",
           price: "CHF 1,600"
         },
         backend: {
@@ -2229,6 +2272,7 @@ export const translations = {
             "服务器优化",
             "安全实现"
           ],
+          badge: "",
           price: "CHF 1,900"
         },
         consulting: {
@@ -2240,6 +2284,7 @@ export const translations = {
             "性能审计",
             "安全评估"
           ],
+          badge: "",
           price: "CHF 120 / 小时"
         }
       },
