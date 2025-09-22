@@ -6,22 +6,19 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState } from "react";
-import { Code2, Blocks, Database, Lightbulb, ArrowRightIcon, CheckCircle2} from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { } from "react";
+import { Code2, Blocks, Database, Lightbulb, CheckCircle2} from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/IconButton";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const Services = () => {
-  const [hoveredService, setHoveredService] = useState<string | null>(null);
   const { language } = useLanguage();
   const t = translations[language] as Translation;
-  const navigate = useNavigate();
 
   const servicesList = [
     {
@@ -31,7 +28,7 @@ const Services = () => {
     {
       icon: Blocks,
       key: 'frontend',
-      highlight: 'Most Popular'
+      highlight: t.services?.badges?.mostPopular || 'Most Popular'
     },
     {
       icon: Database,
@@ -77,20 +74,14 @@ const Services = () => {
       </Helmet>
 
       <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-6 sm:mb-6">
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12">
           {t.services.title}
         </h1>
       </ScrollReveal>
 
       <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-4 max-w-2xl">
+        <p className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
           {t.services.subtitle}
-        </p>
-      </ScrollReveal>
-
-      <ScrollReveal variant="default">
-        <p className="text-primary/80 text-sm mb-8 sm:mb-12 max-w-2xl italic">
-          {t.services.pricing}
         </p>
       </ScrollReveal>
 
@@ -98,11 +89,9 @@ const Services = () => {
         {servicesList.map((service, index) => (
           <ScrollReveal key={service.key} variant="default" delay={index * 140}>
             <motion.div
-              onHoverStart={() => setHoveredService(service.key)}
-              onHoverEnd={() => setHoveredService(null)}
-              className="p-5 sm:p-6 rounded-lg border border-foreground/10 
+              className="group relative p-5 sm:p-6 rounded-lg border border-foreground/10 
                          bg-foreground/5 backdrop-blur-sm transition-all duration-300 
-                         hover:border-primary/20 hover:bg-primary/5 cursor-default"
+                         hover:border-primary/20 hover:bg-primary/5 cursor-default shadow-sm hover:shadow-md"
             >
                 {service.highlight && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 
@@ -112,19 +101,21 @@ const Services = () => {
                   </div>
                 )}
                 
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent
-                              group-hover:from-primary/20 group-hover:to-transparent transition-all duration-300">
-                    <service.icon 
-                      className={`w-6 h-6 transition-colors duration-300
-                                ${hoveredService === service.key 
-                                  ? 'text-primary' 
-                                  : 'text-primary/80'}`}
-                    />
+                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-foreground/10">
+                  <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent">
+                    <service.icon className="w-6 h-6 text-primary/80" />
                   </div>
                   <h3 className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
                     {t.services.services[service.key].title}
                   </h3>
+                  <div className="ml-auto">
+                    <span className="px-2.5 py-1 rounded-md text-xs font-medium 
+                                    bg-foreground/10 text-foreground/80 
+                                    group-hover:bg-primary/10 group-hover:text-primary 
+                                    transition-colors">
+                      {t.services.services[service.key].price}
+                    </span>
+                  </div>
                 </div>
                 
                 <p className="text-sm text-foreground/70 mb-6">

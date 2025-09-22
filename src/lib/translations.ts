@@ -398,6 +398,9 @@ export const translations = {
       },
     },
     services: {
+      badges: {
+        mostPopular: "Most Popular"
+      },
       title: "Services",
       subtitle: "Comprehensive software development services tailored to your needs.",
       backHome: "Back home",
@@ -407,6 +410,7 @@ export const translations = {
         fullstack: {
           title: "Full Stack Development",
           description: "End-to-end web application development using modern technologies.",
+          price: "from CHF 75/h",
           features: [
             "Responsive web applications",
             "RESTful API development",
@@ -417,6 +421,7 @@ export const translations = {
         frontend: {
           title: "Frontend Development",
           description: "Creating beautiful, responsive, and user-friendly interfaces.",
+          price: "from CHF 65/h",
           features: [
             "React development",
             "UI/UX implementation",
@@ -427,6 +432,7 @@ export const translations = {
         backend: {
           title: "Backend Development",
           description: "Robust and scalable server-side solutions.",
+          price: "from CHF 70/h",
           features: [
             "API architecture",
             "Database management",
@@ -437,6 +443,7 @@ export const translations = {
         consulting: {
           title: "Technical Consulting",
           description: "Expert guidance for your technical decisions.",
+          price: "from CHF 60/h",
           features: [
             "Architecture planning",
             "Technology stack selection",
@@ -841,6 +848,9 @@ export const translations = {
       },
     },
     services: {
+      badges: {
+        mostPopular: "Am beliebtesten"
+      },
       title: "Dienstleistungen",
       subtitle: "Umfassende Softwareentwicklungsdienste, angepasst an Ihre Bedürfnisse.",
       backHome: "Zurück",
@@ -850,6 +860,7 @@ export const translations = {
         fullstack: {
           title: "Full-Stack-Entwicklung",
           description: "Ganzheitliche Webentwicklung mit modernen Technologien.",
+          price: "ab CHF 75/h",
           features: [
             "Responsive Webanwendungen",
             "RESTful API-Entwicklung",
@@ -860,6 +871,7 @@ export const translations = {
         frontend: {
           title: "Frontend-Entwicklung",
           description: "Erstellung schöner und benutzerfreundlicher Oberflächen.",
+          price: "ab CHF 65/h",
           features: [
             "React development",
             "UI/UX-Implementierung",
@@ -870,6 +882,7 @@ export const translations = {
         backend: {
           title: "Backend-Entwicklung",
           description: "Robuste und skalierbare Server-Lösungen.",
+          price: "ab CHF 70/h",
           features: [
             "API-Architektur",
             "Datenbankverwaltung",
@@ -880,6 +893,7 @@ export const translations = {
         consulting: {
           title: "Technische Beratung",
           description: "Expertenhilfe bei technischen Entscheidungen.",
+          price: "ab CHF 60/h",
           features: [
             "Architekturplanung",
             "Technologie-Stack-Auswahl",
@@ -1284,6 +1298,9 @@ export const translations = {
       },
     },
     services: {
+      badges: {
+        mostPopular: "Más popular"
+      },
       title: "Servicios",
       subtitle: "Servicios integrales de desarrollo de software adaptados a sus necesidades, entregados con experiencia y precisión.",
       backHome: "Regresar",
@@ -1293,6 +1310,7 @@ export const translations = {
         fullstack: {
           title: "Desarrollo Full Stack",
           description: "Desarrollo integral de aplicaciones web utilizando tecnologías modernas como React, Spring Boot y MongoDB.",
+          price: "desde CHF 75/h",
           features: [
             "Aplicaciones web responsivas",
             "Desarrollo de API RESTful",
@@ -1303,6 +1321,7 @@ export const translations = {
         frontend: {
           title: "Desarrollo Frontend",
           description: "Creación de interfaces atractivas, responsivas y fáciles de usar con marcos y sistemas de diseño modernos.",
+          price: "desde CHF 65/h",
           features: [
             "Desarrollo con React",
             "Implementación de UI/UX",
@@ -1313,6 +1332,7 @@ export const translations = {
         backend: {
           title: "Desarrollo Backend",
           description: "Soluciones del lado del servidor robustas y escalables.",
+          price: "desde CHF 70/h",
           features: [
             "Arquitectura de API",
             "Administración de bases de datos",
@@ -1323,6 +1343,7 @@ export const translations = {
         consulting: {
           title: "Consultoría Técnica",
           description: "Orientación experta para sus decisiones técnicas.",
+          price: "desde CHF 60/h",
           features: [
             "Planificación de arquitectura",
             "Selección de pila tecnológica",
@@ -1728,6 +1749,9 @@ export const translations = {
       },
     },
     services: {
+      badges: {
+        mostPopular: "一番人気"
+      },
       title: "サービス",
       subtitle: "お客様のニーズに合わせた包括的なソフトウェア開発サービス。",
       backHome: "ホームに戻る",
@@ -1737,6 +1761,7 @@ export const translations = {
         fullstack: {
           title: "フルスタック開発",
           description: "最新技術を使用したエンドツーエンドのWeb開発。",
+          price: "CHF 75/時〜",
           features: [
             "レスポンシブWebアプリケーション",
             "RESTful API開発",
@@ -1747,6 +1772,7 @@ export const translations = {
         frontend: {
           title: "フロントエンド開発",
           description: "美しく使いやすいインターフェースの作成。",
+          price: "CHF 65/時〜",
           features: [
             "React開発",
             "UI/UX実装",
@@ -1757,6 +1783,7 @@ export const translations = {
         backend: {
           title: "バックエンド開発",
           description: "堅牢でスケーラブルなサーバーサイドソリューション。",
+          price: "CHF 70/時〜",
           features: [
             "API設計",
             "データベース管理",
@@ -1767,6 +1794,7 @@ export const translations = {
         consulting: {
           title: "技術コンサルティング",
           description: "技術的な意思決定のための専門家によるガイダンス。",
+          price: "CHF 60/時〜",
           features: [
             "アーキテクチャ計画",
             "技術スタックの選定",
@@ -2171,6 +2199,9 @@ export const translations = {
       },
     },
     services: {
+      badges: {
+        mostPopular: "最受欢迎"
+      },
       title: "服务",
       subtitle: "根据您的需求定制的全面软件开发服务。",
       backHome: "返回首页",
@@ -2180,6 +2211,7 @@ export const translations = {
         fullstack: {
           title: "全栈开发",
           description: "使用现代技术进行端到端的Web开发。",
+          price: "CHF 75/小时起",
           features: [
             "响应式Web应用",
             "RESTful API开发",
@@ -2190,6 +2222,7 @@ export const translations = {
         frontend: {
           title: "前端开发",
           description: "创建美观、响应式和用户友好的界面。",
+          price: "CHF 65/小时起",
           features: [
             "React开发",
             "UI/UX实现",
@@ -2200,6 +2233,7 @@ export const translations = {
         backend: {
           title: "后端开发",
           description: "强大且可扩展的服务器端解决方案。",
+          price: "CHF 70/小时起",
           features: [
             "API设计",
             "数据库管理",
@@ -2210,6 +2244,7 @@ export const translations = {
         consulting: {
           title: "技术咨询",
           description: "为您的技术决策提供专业指导。",
+          price: "CHF 60/小时起",
           features: [
             "架构规划",
             "技术栈选择",
