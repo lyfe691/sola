@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { } from "react";
-import { Code2, Blocks, Database, Lightbulb, CheckCircle2} from "lucide-react";
+import { Code2, Blocks, Database, Lightbulb, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
@@ -15,6 +14,7 @@ import { translations, type Translation } from "@/lib/translations";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/IconButton";
 import ScrollReveal from "@/components/ScrollReveal";
+import { cn } from "@/lib/utils";
 
 const Services = () => {
   const { language } = useLanguage();
@@ -85,68 +85,76 @@ const Services = () => {
         </p>
       </ScrollReveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+      <ScrollReveal variant="default">
+        <div className="mb-8 sm:mb-12 rounded-2xl border border-foreground/10 bg-foreground/[0.04] p-4 text-sm text-foreground/70 shadow-sm sm:p-5">
+          {t.services.pricing}
+        </div>
+      </ScrollReveal>
+
+      <div className="grid grid-cols-1 gap-5 sm:gap-6 md:grid-cols-2 mb-8 sm:mb-12">
         {servicesList.map((service, index) => (
           <ScrollReveal key={service.key} variant="default" delay={index * 140}>
-            <motion.div
-              className="group relative p-5 sm:p-6 rounded-lg border border-foreground/10 
-                         bg-foreground/5 backdrop-blur-sm transition-all duration-300 
-                         hover:border-primary/20 hover:bg-primary/5 cursor-default shadow-sm hover:shadow-md"
+            <motion.article
+              className={cn(
+                "group relative flex h-full flex-col overflow-hidden rounded-2xl border border-foreground/10",
+                "bg-gradient-to-br from-background via-foreground/[0.02] to-background p-6 shadow-sm",
+                "transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg",
+                service.highlight && "pt-12 sm:pt-14"
+              )}
             >
-                {service.highlight && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 
-                               bg-primary text-primary-foreground text-xs rounded-full
-                               font-medium shadow-sm">
-                    {service.highlight}
+              {service.highlight && (
+                <span className="absolute right-6 top-6 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-sm">
+                  {service.highlight}
+                </span>
+              )}
+
+              <div className="flex flex-col gap-5">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <service.icon className="h-5 w-5" />
                   </div>
-                )}
-                
-                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-foreground/10">
-                  <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent">
-                    <service.icon className="w-6 h-6 text-primary/80" />
+                  <div>
+                    <h3 className="text-lg font-semibold text-foreground">
+                      {t.services.services[service.key].title}
+                    </h3>
+                    <p className="mt-1 text-sm text-foreground/70">
+                      {t.services.services[service.key].description}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
-                    {t.services.services[service.key].title}
-                  </h3>
-                  <div className="ml-auto">
-                    <span className="px-2.5 py-1 rounded-md text-xs font-medium 
-                                    bg-foreground/10 text-foreground/80 
-                                    group-hover:bg-primary/10 group-hover:text-primary 
-                                    transition-colors">
-                      {t.services.services[service.key].price}
+                </div>
+
+                <div className="rounded-xl border border-dashed border-primary/30 bg-primary/5 px-4 py-3">
+                  <span className="text-xs font-medium uppercase tracking-wide text-primary/70">
+                    {t.services.priceLabel ?? "Starting at"}
+                  </span>
+                  <p className="mt-1 text-2xl font-semibold text-primary">
+                    {t.services.services[service.key].price}
+                  </p>
+                </div>
+              </div>
+
+              <ul className="mt-6 flex flex-1 flex-col gap-3">
+                {t.services.services[service.key].features.map((feature, i) => (
+                  <li
+                    key={`${service.key}-${i}`}
+                    className="flex items-center gap-3 rounded-xl border border-foreground/5 bg-foreground/[0.02] px-3 py-2 text-sm text-foreground/70 transition-colors group-hover:border-primary/20 group-hover:bg-primary/5"
+                  >
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <CheckCircle2 className="h-4 w-4" />
                     </span>
-                  </div>
-                </div>
-                
-                <p className="text-sm text-foreground/70 mb-6">
-                  {t.services.services[service.key].description}
-                </p>
+                    <span className="leading-5">{feature}</span>
+                  </li>
+                ))}
+              </ul>
 
-                <ul className="space-y-3">
-                  {t.services.services[service.key].features.map((feature, i) => (
-                    <li 
-                      key={i}
-                      className="flex items-start gap-2.5 text-sm text-foreground/70
-                               group-hover:text-foreground/80 transition-colors"
-                    >
-                      <CheckCircle2 className="w-4 h-4 text-primary/80 group-hover:text-primary shrink-0 mt-0.5
-                                           transition-colors" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* service contact button */}
-                <div className="mt-6">
-                  <Link to={getServiceContactUrl(service.key)}>
-                    <IconButton 
-                      variant="default" 
-                      className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
-                      label={t.services.getStarted || "Get Started"}
-                    />
-                  </Link>
-                </div>
-            </motion.div>
+              <div className="mt-6 pt-2">
+                <Link to={getServiceContactUrl(service.key)}>
+                  <IconButton size="lg" className="w-full">
+                    {t.services.getStarted || "Get Started"}
+                  </IconButton>
+                </Link>
+              </div>
+            </motion.article>
           </ScrollReveal>
         ))}
       </div>
