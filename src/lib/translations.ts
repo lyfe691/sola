@@ -399,66 +399,66 @@ export const translations = {
     },
     services: {
       title: "Services",
-      subtitle: "Focused development support for shipping faster.",
+      subtitle: "Four focused ways to work together.",
       backHome: "Back home",
-      pricing: "Choose the engagement that fits best—these rates are typical starting points and final estimates follow discovery.",
+      pricing: "Transparent starting points—pick what fits and we’ll shape the rest together.",
       startingFrom: "Starting from",
-      getStarted: "Get Started",
+      getStarted: "Start a project",
       heroHighlights: [
-        "Lightweight scopes, no surprises",
-        "Weekly progress check-ins",
+        "Lean kickoff, quick ramp",
+        "Weekly touchpoints included",
       ],
       services: {
         fullstack: {
           title: "Full Stack Development",
-          description: "Plan, build, and evolve complete web products end to end.",
+          description: "Build and evolve your product end to end.",
           features: [
-            "Architecture & scope definition",
-            "Frontend and backend implementation",
-            "Launch support and handover",
+            "Product scope",
+            "UI + API build",
+            "Launch follow-up",
           ],
           badge: "All-in-one",
           price: "CHF 3,200+"
         },
         frontend: {
           title: "Frontend Development",
-          description: "Craft responsive, accessible, and on-brand interfaces.",
+          description: "Polished React interfaces without extra overhead.",
           features: [
-            "Responsive React implementations",
-            "Design system rollouts",
-            "Interaction polish & accessibility",
+            "Responsive layouts",
+            "Design systems",
+            "Accessibility fixes",
           ],
-          badge: "Popular",
+          badge: "Most booked",
           price: "CHF 1,600+"
         },
         backend: {
           title: "Backend Development",
-          description: "Design dependable services that scale with your product.",
+          description: "Reliable services and data layers that scale.",
           features: [
-            "API and service architecture",
-            "Database modelling & migrations",
-            "Deployment and observability setup",
+            "API architecture",
+            "Data modelling",
+            "Observability setup",
           ],
           badge: "",
           price: "CHF 1,900+"
         },
         consulting: {
           title: "Technical Consulting",
-          description: "Get clarity on architecture, stack choices, and next steps.",
+          description: "Targeted guidance for teams and roadmaps.",
           features: [
-            "Architecture and stack reviews",
-            "Performance & security audits",
-            "Pairing sessions with your team",
+            "Architecture reviews",
+            "Performance audits",
+            "Pairing sessions",
           ],
           badge: "",
-          price: "CHF 120 / hour"
+          price: "CHF 120 / h"
         }
       },
       customRequirements: {
         title: "Need something custom?",
-        description: "If your scope doesn’t fit neatly into these packages, let’s outline a tailored collaboration.",
-        button: "Start a conversation",
-        note: "Share a quick overview and I'll respond within one business day."
+        description: "Brief doesn’t fit these packages? Let’s outline a tailored path together.",
+        button: "Talk about your scope",
+        note: "Share a quick snapshot and I'll reply within one business day."
       }
     },
   },
@@ -852,66 +852,66 @@ export const translations = {
     },
     services: {
       title: "Dienstleistungen",
-      subtitle: "Fokussierte Entwicklungsleistungen für schnelle Ergebnisse.",
+      subtitle: "Vier fokussierte Wege für eine Zusammenarbeit.",
       backHome: "Zurück",
-      pricing: "Wählen Sie das passende Angebot – die Beträge sind typische Einstiegspreise, das finale Angebot entsteht nach dem Kennenlernen.",
+      pricing: "Transparente Einstiegspreise – wir verfeinern das Angebot gemeinsam nach dem Kick-off.",
       startingFrom: "Ab",
-      getStarted: "Loslegen",
+      getStarted: "Projekt starten",
       heroHighlights: [
-        "Klare Projektumfänge ohne Überraschungen",
-        "Wöchentliche Status-Updates",
+        "Schlanker Start, schnelle Umsetzung",
+        "Wöchentliche Touchpoints inklusive",
       ],
       services: {
         fullstack: {
           title: "Full-Stack-Entwicklung",
-          description: "Konzipiere, entwickle und erweitere komplette Webprodukte aus einer Hand.",
+          description: "Produkt ganzheitlich planen, bauen und weiterentwickeln.",
           features: [
-            "Architektur- und Scope-Definition",
-            "Frontend- und Backend-Umsetzung",
-            "Begleitung bis zum Launch",
+            "Produkt-Scoping",
+            "UI + API Umsetzung",
+            "Launch-Begleitung",
           ],
-          badge: "Rundumpaket",
+          badge: "Alles aus einer Hand",
           price: "CHF 3'200+"
         },
         frontend: {
           title: "Frontend-Entwicklung",
-          description: "Baue reaktionsschnelle, zugängliche und markenkonforme Interfaces.",
+          description: "Hochwertige React-Interfaces ohne Ballast.",
           features: [
-            "Responsive React-Implementierungen",
-            "Design-System-Rollouts",
-            "Interaktions-Feinschliff & Barrierefreiheit",
+            "Responsives Layout",
+            "Design-Systeme",
+            "Accessibility-Optimierung",
           ],
-          badge: "Beliebt",
+          badge: "Meist gebucht",
           price: "CHF 1'600+"
         },
         backend: {
           title: "Backend-Entwicklung",
-          description: "Entwirf belastbare Services, die mit deinem Produkt skalieren.",
+          description: "Zuverlässige Services und Datenebenen, die mitwachsen.",
           features: [
-            "API- und Service-Architektur",
-            "Datenbankmodellierung & Migrationen",
-            "Deployment und Observability",
+            "API-Architektur",
+            "Datenmodellierung",
+            "Observability-Setup",
           ],
           badge: "",
           price: "CHF 1'900+"
         },
         consulting: {
           title: "Technische Beratung",
-          description: "Erhalte Klarheit bei Architektur, Stack-Auswahl und nächsten Schritten.",
+          description: "Gezielte technische Begleitung für Team und Roadmap.",
           features: [
-            "Architektur- & Stack-Reviews",
-            "Performance- und Security-Audits",
-            "Gemeinsame Sessions mit deinem Team",
+            "Architektur-Reviews",
+            "Performance-Audits",
+            "Pairing-Sessions",
           ],
           badge: "",
-          price: "CHF 120 / Stunde"
+          price: "CHF 120 / Std"
         }
       },
       customRequirements: {
         title: "Individuelle Anforderungen?",
-        description: "Ihr Vorhaben passt nicht in diese Pakete? Lassen Sie uns eine maßgeschneiderte Zusammenarbeit definieren.",
-        button: "Gespräch starten",
-        note: "Schicken Sie mir eine kurze Zusammenfassung – ich melde mich innerhalb eines Werktags."
+        description: "Passt Ihr Briefing nicht exakt? Wir skizzieren gemeinsam den richtigen Rahmen.",
+        button: "Individuelle Anfrage senden",
+        note: "Eine kurze Übersicht reicht – ich melde mich innerhalb eines Werktags."
       }
     },
   },
@@ -1305,66 +1305,66 @@ export const translations = {
     },
     services: {
       title: "Servicios",
-      subtitle: "Soporte de desarrollo enfocado para lanzar más rápido.",
+      subtitle: "Cuatro formas enfocadas de colaborar.",
       backHome: "Regresar",
-      pricing: "Elige el servicio que mejor encaje — estas tarifas son precios iniciales habituales y el presupuesto final llega tras la fase de discovery.",
+      pricing: "Tarifas iniciales transparentes; afinamos los detalles juntos tras la toma de requisitos.",
       startingFrom: "Desde",
-      getStarted: "Comenzar",
+      getStarted: "Iniciar proyecto",
       heroHighlights: [
-        "Alcances claros sin sorpresas",
-        "Revisiones de avance semanales",
+        "Inicio ágil, avance rápido",
+        "Reuniones semanales incluidas",
       ],
       services: {
         fullstack: {
           title: "Desarrollo Full Stack",
-          description: "Planificamos, construimos y evolucionamos productos web completos de principio a fin.",
+          description: "Construyo y hago crecer tu producto de punta a punta.",
           features: [
-            "Definición de arquitectura y alcance",
-            "Implementación frontend y backend",
-            "Acompañamiento en lanzamiento y traspaso",
+            "Alcance del producto",
+            "UI + API completas",
+            "Soporte de lanzamiento",
           ],
           badge: "Todo en uno",
           price: "CHF 3,200+"
         },
         frontend: {
           title: "Desarrollo Frontend",
-          description: "Diseñamos interfaces accesibles, responsivas y alineadas con tu marca.",
+          description: "Interfaces React pulidas sin sobrecarga.",
           features: [
-            "Implementaciones React responsivas",
-            "Despliegue de sistemas de diseño",
-            "Pulido de interacciones y accesibilidad",
+            "Diseños responsivos",
+            "Sistemas de diseño",
+            "Ajustes de accesibilidad",
           ],
-          badge: "Popular",
+          badge: "Más solicitado",
           price: "CHF 1,600+"
         },
         backend: {
           title: "Desarrollo Backend",
-          description: "Diseñamos servicios confiables que escalan con tu producto.",
+          description: "Servicios y datos fiables que escalan contigo.",
           features: [
-            "Arquitectura de APIs y servicios",
-            "Modelado y migraciones de bases de datos",
-            "Configuración de despliegue y observabilidad",
+            "Arquitectura de APIs",
+            "Modelado de datos",
+            "Configuración de observabilidad",
           ],
           badge: "",
           price: "CHF 1,900+"
         },
         consulting: {
           title: "Consultoría Técnica",
-          description: "Obtén claridad sobre arquitectura, stack y próximos pasos.",
+          description: "Acompañamiento técnico preciso para tu equipo.",
           features: [
-            "Revisiones de arquitectura y stack",
-            "Auditorías de rendimiento y seguridad",
-            "Sesiones de acompañamiento con tu equipo",
+            "Revisiones de arquitectura",
+            "Auditorías de rendimiento",
+            "Sesiones de pairing",
           ],
           badge: "",
-          price: "CHF 120 / hora"
+          price: "CHF 120 / h"
         }
       },
       customRequirements: {
         title: "¿Necesitas algo a medida?",
-        description: "Si tu proyecto no encaja en estos paquetes, definamos juntos una colaboración personalizada.",
-        button: "Iniciar conversación",
-        note: "Compárteme un resumen breve y te responderé en un día hábil."
+        description: "¿Tu necesidad es diferente? Definamos una colaboración a medida.",
+        button: "Hablar de un encargo a medida",
+        note: "Comparte un resumen breve y responderé en un día laborable."
       }
     }
   },
@@ -1759,66 +1759,66 @@ export const translations = {
     },
     services: {
       title: "サービス",
-      subtitle: "スピーディーなリリースを支える、集中型の開発サポート。",
+      subtitle: "4つのシンプルな協業プランです。",
       backHome: "ホームに戻る",
-      pricing: "プロジェクトに最適なプランをお選びください。表示料金は目安で、詳細なお見積もりはヒアリング後にご提示します。",
+      pricing: "起点となる料金を明示しています。内容に合わせて一緒に最終見積もりを整えましょう。",
       startingFrom: "開始料金",
-      getStarted: "今すぐ始める",
+      getStarted: "プロジェクトを始める",
       heroHighlights: [
-        "驚きのない明確なスコープ",
-        "週次の進捗チェックイン",
+        "短時間のキックオフ",
+        "毎週の進捗共有つき",
       ],
       services: {
         fullstack: {
           title: "フルスタック開発",
-          description: "構想から運用まで、一貫してWebプロダクトを並走開発します。",
+          description: "企画から運用まで、プロダクトを丸ごと伴走します。",
           features: [
-            "アーキテクチャとスコープ設計",
-            "フロント・バックエンド実装",
-            "ローンチ支援と引き継ぎ",
+            "要件スコープ整理",
+            "UI + API 実装",
+            "ローンチ後フォロー",
           ],
           badge: "ワンストップ",
           price: "CHF 3,200+"
         },
         frontend: {
           title: "フロントエンド開発",
-          description: "ブランドに寄り添った、アクセシブルで反応の良いUIを構築します。",
+          description: "余計な負担なく、洗練されたReactフロントエンドを。",
           features: [
-            "レスポンシブなReact実装",
+            "レスポンシブ設計",
             "デザインシステム導入",
-            "インタラクションとアクセシビリティ調整",
+            "アクセシビリティ改善",
           ],
-          badge: "人気",
+          badge: "人気プラン",
           price: "CHF 1,600+"
         },
         backend: {
           title: "バックエンド開発",
-          description: "プロダクトの成長に合わせてスケールする堅牢なサービスを設計します。",
+          description: "伸びるチームのための堅牢なサービスとデータ基盤。",
           features: [
-            "API・サービスアーキテクチャ",
-            "データベース設計と移行",
-            "デプロイと可観測性の整備",
+            "APIアーキテクチャ",
+            "データモデリング",
+            "監視とログ整備",
           ],
           badge: "",
           price: "CHF 1,900+"
         },
         consulting: {
           title: "技術コンサルティング",
-          description: "アーキテクチャや技術選定、次の一手を明確にします。",
+          description: "技術判断とチーム体制をピンポイントで支援します。",
           features: [
-            "アーキテクチャ／スタックレビュー",
-            "パフォーマンス＆セキュリティ診断",
-            "チームとの伴走セッション",
+            "アーキテクチャレビュー",
+            "パフォーマンス監査",
+            "ペアワークセッション",
           ],
           badge: "",
-          price: "CHF 120 / 時間"
+          price: "CHF 120 / 時"
         }
       },
       customRequirements: {
         title: "オーダーメイドが必要ですか？",
-        description: "既存プランに当てはまらない内容もお気軽にご相談ください。最適な進め方をご提案します。",
-        button: "相談してみる",
-        note: "概要をお送りいただければ、1営業日以内に折り返します。"
+        description: "パッケージに当てはまらない要件も歓迎です。最適な形を一緒に描きましょう。",
+        button: "カスタム相談をする",
+        note: "概要を少し共有いただければ、1営業日以内に返信します。"
       }
     }
   },
@@ -2212,56 +2212,56 @@ export const translations = {
     },
     services: {
       title: "服务",
-      subtitle: "聚焦高效交付的轻量化开发服务。",
+      subtitle: "四种专注的合作方式。",
       backHome: "返回首页",
-      pricing: "选择最适合的合作方式——以下金额为常见起步价，最终报价将在需求沟通后确认。",
+      pricing: "起步价清晰透明，细节会在沟通后一起定制。",
       startingFrom: "起价",
-      getStarted: "开始",
+      getStarted: "开启项目",
       heroHighlights: [
-        "范围清晰、过程透明",
-        "每周进度同步",
+        "快速启动",
+        "每周例行同步",
       ],
       services: {
         fullstack: {
           title: "全栈开发",
-          description: "从规划到上线，全程伴随构建完整的 Web 产品。",
+          description: "端到端陪伴你构建并迭代产品。",
           features: [
-            "架构与范围规划",
-            "前后端一体化实现",
-            "上线支持与交付交接",
+            "范围梳理",
+            "UI 与 API 开发",
+            "上线后支持",
           ],
           badge: "一站式",
           price: "CHF 3,200+"
         },
         frontend: {
           title: "前端开发",
-          description: "打造符合品牌的无障碍、响应式界面体验。",
+          description: "轻量交付精致的 React 界面。",
           features: [
-            "响应式 React 实现",
+            "自适应布局",
             "设计系统落地",
-            "交互与无障碍优化",
+            "无障碍优化",
           ],
-          badge: "热门",
+          badge: "最受欢迎",
           price: "CHF 1,600+"
         },
         backend: {
           title: "后端开发",
-          description: "设计可随业务扩展的稳定服务与数据层。",
+          description: "稳健的服务与数据层，随业务扩展。",
           features: [
-            "API 与服务架构设计",
-            "数据库建模与迁移",
-            "部署与可观测性配置",
+            "API 架构设计",
+            "数据建模",
+            "可观测性配置",
           ],
           badge: "",
           price: "CHF 1,900+"
         },
         consulting: {
           title: "技术咨询",
-          description: "为架构、技术选型与下一步行动提供清晰建议。",
+          description: "为团队与路线图提供精准技术指引。",
           features: [
-            "架构与技术栈评审",
-            "性能与安全诊断",
-            "团队协作辅导",
+            "架构评审",
+            "性能审计",
+            "协作陪练",
           ],
           badge: "",
           price: "CHF 120 / 小时"
@@ -2269,9 +2269,9 @@ export const translations = {
       },
       customRequirements: {
         title: "需要定制方案？",
-        description: "如果这些套餐无法覆盖您的需求，我们可以共同规划合适的合作方式。",
-        button: "发起交流",
-        note: "请先简单介绍项目背景，我会在1个工作日内回复。"
+        description: "需求不在以上方案？我们可以制定独立合作方式。",
+        button: "聊聊定制需求",
+        note: "简单介绍你的想法，我会在一个工作日内回复。"
       }
     }
   } 
