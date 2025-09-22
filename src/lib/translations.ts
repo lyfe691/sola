@@ -302,8 +302,13 @@ export const translations = {
       connect: "Connect",
       contact: "Contact",
       contactForm: "Contact Form",
-      privacy: "Privacy Policy", 
-      legal: "Legal"
+      privacy: "Privacy Policy",
+      legal: "Legal",
+      availability: "Open for new collaborations",
+      ctaTitle: "Let’s build the next standout experience.",
+      ctaSubtitle: "Share your product, brand, or engineering challenge—I'll respond within 24 hours.",
+      ctaPrimary: "Start a project",
+      ctaSecondary: "View services"
     },
     about: {
       title: "About Me",
@@ -737,7 +742,7 @@ export const translations = {
       backHome: "Zurück zur Startseite"
     },
     footer: {
-      atw: "über diese website", 
+      atw: "über diese website",
       madeWith: "Erstellt mit",
       by: "von",
       rights: "Alle Rechte vorbehalten.",
@@ -746,7 +751,12 @@ export const translations = {
       contact: "Kontakt",
       contactForm: "Kontaktformular",
       privacy: "Datenschutzerklärung",
-      legal: "Rechtliches"
+      legal: "Rechtliches",
+      availability: "Offen für neue Kooperationen",
+      ctaTitle: "Lass uns das nächste herausragende Erlebnis entwickeln.",
+      ctaSubtitle: "Erzähl mir von deinem Produkt, deiner Marke oder deinem Team – ich melde mich innerhalb von 24 Stunden.",
+      ctaPrimary: "Projekt starten",
+      ctaSecondary: "Leistungen ansehen"
     },
     about: {
       title: "Über Mich",
@@ -1189,7 +1199,12 @@ export const translations = {
       contact: "Contacto",
       contactForm: "Formulario de contacto",
       privacy: "Política de privacidad",
-      legal: "Legal"
+      legal: "Legal",
+      availability: "Disponible para nuevas colaboraciones",
+      ctaTitle: "Construyamos la próxima experiencia destacada.",
+      ctaSubtitle: "Cuéntame sobre tu producto, marca o reto tecnológico: responderé en menos de 24 horas.",
+      ctaPrimary: "Iniciar un proyecto",
+      ctaSecondary: "Ver servicios"
     },
     about: {
       title: "Sobre Mí",
@@ -1633,7 +1648,12 @@ export const translations = {
       contact: "連絡先",
       contactForm: "フォームを介して",
       privacy: "プライバシーポリシー",
-      legal: "法的"
+      legal: "法的",
+      availability: "新しいコラボレーションに対応可能",
+      ctaTitle: "次の印象的な体験を一緒に形にしましょう。",
+      ctaSubtitle: "プロダクトやブランド、エンジニアリングの課題についてお聞かせください。24時間以内にご返信します。",
+      ctaPrimary: "プロジェクトを始める",
+      ctaSecondary: "提供サービスを見る"
     },
     about: {
       title: "私について",
@@ -2067,7 +2087,7 @@ export const translations = {
       backHome: "返回首页"
     },
     footer: {
-      atw: "关于这个网站", 
+      atw: "关于这个网站",
       madeWith: "由",
       by: "制作",
       rights: "保留所有权利。",
@@ -2076,7 +2096,12 @@ export const translations = {
       contact: "联系",
       contactForm: "通过表单",
       privacy: "隐私政策",
-      legal: "法律的"
+      legal: "法律的",
+      availability: "可洽谈新的合作",
+      ctaTitle: "一起打造下一个令人难忘的体验。",
+      ctaSubtitle: "告诉我你的产品、品牌或技术挑战，我会在 24 小时内回复。",
+      ctaPrimary: "启动项目",
+      ctaSecondary: "查看服务"
     },
     about: {
       title: "关于我",
