@@ -348,7 +348,7 @@ export const translations = {
       },
       resume: {
         title: "Request Full Resume",
-        description: "The public version of my resume has some sensitive information censored. If you need the full version, please contact me or send an email to [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
+        description: "The public version of my resume has some sensitive information censored. If you need the full version, please [contact me](https://sola.ysz.life/contact) or send an email to [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
         viewButton: "View Censored Version",
         downloadButton: "Download Censored Version",
         languageLabel: "Language:",
@@ -798,7 +798,7 @@ export const translations = {
       },
       resume: {
         title: "Vollständigen Lebenslauf anfordern",
-        description: "Die öffentliche Version meines Lebenslaufs hat einige sensible Informationen zensiert. Wenn Sie die vollständige Version benötigen, kontaktieren Sie mich bitte oder senden Sie eine E-Mail an [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
+        description: "Die öffentliche Version meines Lebenslaufs hat einige sensible Informationen zensiert. Wenn Sie die vollständige Version benötigen, [kontaktieren Sie mich](https://sola.ysz.life/contact) bitte oder senden Sie eine E-Mail an [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
         viewButton: "Zensierte Version ansehen",
         downloadButton: "Zensierte Version herunterladen",
         languageLabel: "Sprache:",
@@ -1248,7 +1248,7 @@ export const translations = {
       },
       resume: {
         title: "Solicitar currículum completo",
-        description: "La versión pública de mi currículum tiene información sensible censurada. Si necesitas la versión completa, por favor contáctame o envía un email a [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
+        description: "La versión pública de mi currículum tiene información sensible censurada. Si necesitas la versión completa, por favor [contáctame](https://sola.ysz.life/contact) o envía un email a [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
         viewButton: "Ver versión censurada",
         downloadButton: "Descargar versión censurada",
         languageLabel: "Idioma:",
@@ -1699,7 +1699,7 @@ export const translations = {
       },
       resume: {
         title: "完全版履歴書のリクエスト",
-        description: "公開版の履歴書には、機密情報の一部が検閲されています。完全版が必要な場合は、お問い合わせいただくか、[yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com) までメールをお送りください。",
+        description: "公開版の履歴書には、機密情報の一部が検閲されています。完全版が必要な場合は、[お問い合わせ](https://sola.ysz.life/contact)いただくか、[yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com) までメールをお送りください。",
         viewButton: "検閲版を表示",
         downloadButton: "検閲版をダウンロード",
         languageLabel: "言語:",
@@ -2149,7 +2149,7 @@ export const translations = {
       },
       resume: {
         title: "申请完整简历",
-        description: "我的简历公开版本审查了一些敏感信息。如果您需要完整版本，请联系我或发送邮件至 [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com)。",
+        description: "我的简历公开版本审查了一些敏感信息。如果您需要完整版本，请[联系我](https://sola.ysz.life/contact)或发送邮件至 [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com)。",
         viewButton: "查看审查版本",
         downloadButton: "下载审查版本",
         languageLabel: "语言:",

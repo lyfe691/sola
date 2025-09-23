@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { } from "react";
-import { Code2, Blocks, Database, Lightbulb, CheckCircle2} from "lucide-react";
+import { Code2, Blocks, Database, Lightbulb, CheckCircle2, Tag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
@@ -101,17 +100,18 @@ const Services = () => {
                   </div>
                 )}
                 
-                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-foreground/10">
-                  <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent">
-                    <service.icon className="w-6 h-6 text-primary/80" />
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-4 pb-3 border-b border-foreground/10 sm:items-center">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent">
+                      <service.icon className="w-6 h-6 text-primary/80" />
+                    </div>
+                    <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary transition-colors truncate">
+                      {t.services.services[service.key].title}
+                    </h3>
                   </div>
-                  <h3 className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
-                    {t.services.services[service.key].title}
-                  </h3>
-                  <div className="ml-auto">
-                    <span className="px-2.5 py-1 rounded-md text-xs font-medium 
-                                    bg-foreground/10 text-foreground/80 
-                                    group-hover:bg-primary/10 group-hover:text-primary 
+                  <div className="sm:ml-auto mt-1 sm:mt-0 shrink-0 hidden sm:block">
+                    <span className="px-2.5 py-1 rounded-md text-xs font-medium whitespace-nowrap 
+                                    bg-primary/10 text-primary border border-primary/20 
                                     transition-colors">
                       {t.services.services[service.key].price}
                     </span>
@@ -136,12 +136,21 @@ const Services = () => {
                   ))}
                 </ul>
 
+                {/* mobile price above button */}
+                <div className="sm:hidden mt-4">
+                  <div className="w-full rounded-lg bg-foreground/5 border border-foreground/10 px-3 py-2 
+                                  text-sm text-foreground/90 flex items-center justify-center gap-2">
+                    <Tag className="w-4 h-4 text-primary/80" />
+                    <span className="font-semibold">{t.services.services[service.key].price}</span>
+                  </div>
+                </div>
+
                 {/* service contact button */}
-                <div className="mt-6">
+                <div className="mt-4 sm:mt-6">
                   <Link to={getServiceContactUrl(service.key)}>
                     <IconButton 
                       variant="default" 
-                      className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm"
+                      className="w-full justify-between border-accent/50 group-hover:border-primary/50 text-sm rounded-lg"
                       label={t.services.getStarted || "Get Started"}
                     />
                   </Link>
