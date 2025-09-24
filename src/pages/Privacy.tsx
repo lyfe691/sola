@@ -14,8 +14,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-// removed warning banner icon as ive add the translations 
-// added translations here in the file cause i was too lazy to add them to the translations.ts file
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -25,7 +23,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { LinkPreview } from "@/components/ui/link-preview";
