@@ -9,7 +9,6 @@
 import { useState, useMemo } from "react";
 import { 
   ArrowUpRight, 
-  Info, 
   MoveRight, 
   SortAsc, 
   Star, 
@@ -27,14 +26,9 @@ import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
+import { RichText } from "@/components/i18n/RichText";
 
 interface Project {
   id: string;
@@ -52,6 +46,7 @@ interface Project {
   };
   priority: number;
   slug?: string;
+  vercelSatori?: boolean;
 }
 
 type SortOption = 'priority' | 'date-newest' | 'date-oldest' | 'name-asc' | 'name-desc';
@@ -265,8 +260,9 @@ const createProjectsData = (t: any): Project[] => [
 ];
 
 // Extracted components for better organization
-const ProjectImage = ({ project, hoveredProject }: { project: Project; hoveredProject: string | null }) => {
+const ProjectImage = ({ project, hoveredProject, t }: { project: Project; hoveredProject: string | null; t: any }) => {
   if (!project.image) return null;
+  const usesVercelSatori = project.vercelSatori ?? true;
   
   return (
     <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
@@ -285,6 +281,27 @@ const ProjectImage = ({ project, hoveredProject }: { project: Project; hoveredPr
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
+      {usesVercelSatori && (
+        <motion.div
+          className="absolute left-2 bottom-2 md:left-3 md:bottom-3 pointer-events-none"
+          initial={{ opacity: 0, y: 2, filter: "blur(2px)" }}
+          animate={{ 
+            opacity: hoveredProject === project.id ? 1 : 0,
+            y: hoveredProject === project.id ? 0 : 2,
+            filter: hoveredProject === project.id ? "blur(0px)" : "blur(2px)"
+          }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+        >
+          <div className="inline-flex items-center px-2 py-[2px] md:px-2.5 md:py-1 rounded-full bg-background/60 backdrop-blur-sm ring-1 ring-foreground/10 shadow-sm pointer-events-auto">
+            <span className="text-[10px] md:text-xs font-medium leading-none text-foreground/80">
+              <RichText 
+                text={t.projects.satoriAttribution} 
+                linkClassName="text-foreground/80 hover:text-primary underline underline-offset-2 decoration-foreground/30 hover:decoration-primary transition-colors" 
+              />
+            </span>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };
@@ -437,7 +454,7 @@ const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
       {project.featured ? (
         <div className={`${cardClassName} overflow-hidden`}>
           <div className="grid md:grid-cols-2 h-full">
-            <ProjectImage project={project} hoveredProject={hoveredProject} />
+            <ProjectImage project={project} hoveredProject={hoveredProject} t={t} />
             <ProjectContent project={project} t={t} />
           </div>
         </div>
@@ -452,7 +469,6 @@ const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
 
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>('priority');
   const { language } = useLanguage();
   const t = translations[language] as Translation;
@@ -499,31 +515,8 @@ const Projects = () => {
       </Helmet>
 
       <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-8 sm:mb-12 flex items-center gap-3">
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12">
           {t.projects.title}
-          <TooltipProvider>
-            <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen}>
-              <TooltipTrigger asChild>
-                <Info 
-                  className="w-5 h-5 text-foreground/60 hover:text-primary transition-colors cursor-help" 
-                  onClick={() => setTooltipOpen(!tooltipOpen)}
-                />
-              </TooltipTrigger>
-              <TooltipContent side="right" className="max-w-xs sm:max-w-none bg-background text-foreground">
-                <p className="text-sm">
-                  {t.projects.imageTooltip}{' '}
-                  <a 
-                    href="https://og-playground.vercel.app/" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-primary hover:underline inline-flex items-center gap-1"
-                  >
-                    Vercel OG Image <ArrowUpRight className="w-3 h-3" />
-                  </a>
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
         </h1>
       </ScrollReveal>
 

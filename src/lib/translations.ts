@@ -214,6 +214,7 @@ export const translations = {
       viewGithub: "View Code",
       technologies: "Technologies used",
       imageTooltip: "Some project images created with",
+      satoriAttribution: "Image created with [Vercel Satori](https://og-playground.vercel.app/)",
       sortBy: "Sort by",
       sortOptions: {
         priority: "Priority",
@@ -664,6 +665,7 @@ export const translations = {
       viewGithub: "View Code",
       technologies: "Technologies used",
       imageTooltip: "Einige Projektbilder erstellt mit",
+      satoriAttribution: "Bild erstellt mit [Vercel Satori](https://og-playground.vercel.app/)",
       sortBy: "Sortieren nach",
       sortOptions: {
         priority: "Priorität",
@@ -1114,6 +1116,7 @@ export const translations = {
       viewGithub: "Ver Código",
       technologies: "Tecnologías utilizadas",
       imageTooltip: "Algunas imágenes de proyecto creadas con",
+      satoriAttribution: "Imagen creada con [Vercel Satori](https://og-playground.vercel.app/)",
       sortBy: "Ordenar por",
       sortOptions: {
         priority: "Prioridad",
@@ -1565,6 +1568,7 @@ export const translations = {
       viewGithub: "コードを見る",
       technologies: "使用技術",
       imageTooltip: "いくつかのプロジェクト画像が作成された",
+      satoriAttribution: "この画像は [Vercel Satori](https://og-playground.vercel.app/) で生成",
       sortBy: "並べ替え",
       sortOptions: {
         priority: "優先度",
@@ -2015,6 +2019,7 @@ export const translations = {
       viewGithub: "查看代码",
       technologies: "使用的技术",
       imageTooltip: "一些项目图像创建于",
+      satoriAttribution: "图像由 [Vercel Satori](https://og-playground.vercel.app/) 生成",
       sortBy: "排序",
       sortOptions: {
         priority: "优先级",
