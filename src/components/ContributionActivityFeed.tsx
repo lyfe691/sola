@@ -29,7 +29,7 @@ import {
   Clock,
   MoveRight
 } from 'lucide-react';
-import { IconButton } from './ui/custom/IconButton';
+import { IconButton } from './ui/custom/icon-button';
 
 interface ContributionActivityFeedProps {
   events: ProcessedActivity[];

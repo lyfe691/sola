@@ -10,11 +10,11 @@ import React, { Suspense, lazy } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { MDXProvider } from '@mdx-js/react';
-import ProjectPage from '@/components/ProjectPage';
+import ProjectPage from '@/components/ProjectDeepDive';
 import { ExternalLink, Globe, ArrowRight } from 'lucide-react';
-import { LinkPreview } from '@/components/ui/link-preview';
+import { LinkPreview } from '@/components/ui/custom/link-preview';
 import { FaGithubAlt } from 'react-icons/fa';
-import { getProjectConfig, getAllProjectSlugs, projectPagesConfig } from '@/config/projects';
+import { getProjectConfig, getAllProjectSlugs, projectPagesConfig } from '@/config/project-deep-dive';
 import { MDXComponents } from '@/components/MDXComponents';
 import { useLanguage } from '@/lib/language-provider';
 import { translations } from '@/lib/translations';
@@ -25,7 +25,7 @@ const getMDXComponent = (mdxPath: string) => {
   return lazy(() => import(`@/content/projects/${mdxPath}.mdx`));
 };
 
-const ProjectPageRenderer: React.FC = () => {
+const ProjectDeepDiveRenderer: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const t = translations[language];
@@ -248,4 +248,4 @@ const ProjectPageRenderer: React.FC = () => {
   );
 };
 
-export default ProjectPageRenderer; 
+export default ProjectDeepDiveRenderer; 

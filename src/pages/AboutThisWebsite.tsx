@@ -10,9 +10,9 @@
 
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom"
-import { IconButton } from "@/components/ui/custom/IconButton";
+import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronLeft } from "lucide-react";
-import { LinkPreview } from "@/components/ui/link-preview";
+import { LinkPreview } from "@/components/ui/custom/link-preview";
 
 export default function AboutThisWebsite() {
 

@@ -11,24 +11,18 @@ import { useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react"
 
-const SCROLL_THRESHOLD = 100; // Pixels scrolled before showing the button
+const SCROLL_THRESHOLD = 100; // px
 const SCROLL_DEBOUNCE_DELAY = 100; // ms
 
-/**
- * ScrollToTop - A component that:
- * 1. Automatically scrolls to top on route change
- * 2. Provides a button to manually scroll to top when scrolled down
- */
+// render
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   const [isVisible, setIsVisible] = useState(false);
 
-  // Smooth scroll to top on route change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pathname]);
 
-  // Debounced scroll handler
   const handleScroll = useCallback(() => {
     if (window.pageYOffset > SCROLL_THRESHOLD) {
       setIsVisible(true);
@@ -37,7 +31,6 @@ const ScrollToTop = () => {
     }
   }, []);
 
-  // Add scroll event listener with debounce
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
     

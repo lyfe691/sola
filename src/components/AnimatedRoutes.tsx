@@ -26,7 +26,7 @@ const Contact = lazy(() => import("@/pages/Contact"));
 const Services = lazy(() => import("@/pages/Services"));
 const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
-const ProjectPageRenderer = lazy(() => import("@/pages/projects/ProjectPageRenderer"));
+const ProjectDeepDiveRenderer = lazy(() => import("@/pages/projects/ProjectDeepDiveRenderer"));
 
 
 // define types for pagetransition
@@ -118,7 +118,7 @@ export const AnimatedRoutes = () => {
           path="/projects/:slug" 
           element={
             <ProjectLayout>
-              {withTransition(ProjectPageRenderer)}
+              {withTransition(ProjectDeepDiveRenderer)}
             </ProjectLayout>
           } 
         />

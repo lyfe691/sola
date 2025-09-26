@@ -17,7 +17,7 @@ import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
-import  ClickSpark from "./components/ClickSpark";
+import  ClickSpark from "./components/ui/custom/click-spark";
 import { AuroraProvider } from "./lib/aurora-provider";
 import AuroraBackground from "./components/backgrounds/AuroraBackground";
 import AuroraIntroModal from "./components/temporary/AuroraIntroModal";

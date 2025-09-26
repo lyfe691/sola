@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Helmet } from 'react-helmet-async';
-import { IconButton } from './ui/custom/IconButton';
+import { IconButton } from './ui/custom/icon-button';
 
 interface ProjectPageProps {
   title: string;

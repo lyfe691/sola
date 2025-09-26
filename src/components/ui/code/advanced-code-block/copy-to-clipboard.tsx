@@ -24,7 +24,7 @@ export default function CopyToClipboard({ code, className }: CopyToClipboardProp
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      setTimeout(() => setCopied(false), 5000); // 5s
+      setTimeout(() => setCopied(false), 2500); // 2.5s
     } catch (error) {
       console.error("Failed to copy code:", error);
       toast.error("Failed to copy code");
@@ -33,7 +33,7 @@ export default function CopyToClipboard({ code, className }: CopyToClipboardProp
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="sm"
       onClick={copyToClipboard}
       className={cn(
@@ -42,11 +42,20 @@ export default function CopyToClipboard({ code, className }: CopyToClipboardProp
       )}
       aria-label={copied ? "Copied!" : "Copy code"}
     >
-      {copied ? (
-        <Check className="h-4 w-4" />
-      ) : (
-        <Copy className="h-4 w-4" />
-      )}
+      <div className="relative">
+        <Copy 
+          className={cn(
+            "h-4 w-4 transition-all duration-300 ease-in-out",
+            copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
+          )}
+        />
+        <Check 
+          className={cn(
+            "h-4 w-4 absolute inset-0 transition-all duration-300 ease-in-out text-foreground",
+            copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
+          )}
+        />
+      </div>
     </Button>
   );
 } 

@@ -10,7 +10,7 @@
 import type { ReactNode } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
-import { LinkPreview } from "@/components/ui/link-preview";
+import { LinkPreview } from "@/components/ui/custom/link-preview";
 
 type InterpolationValues = Record<string, string | number>;
 

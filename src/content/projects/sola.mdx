@@ -18,87 +18,7 @@ Built with a **component-first approach** using React and TypeScript for type sa
 - **React Router** for client-side routing
 - **shadcn/ui** for accessible, customizable components; works well with Tailwind CSS
 
-### Architecture
-
-The project follows a modular structure (removed some rather unimportant files for brevity):
-
-```txt
-├── .gitignore
-├── LICENSE
-├── NOTICE
-├── README.md
-├── bun.lockb
-├── components.json
-├── eslint.config.js
-├── index.html
-├── package-lock.json
-├── package.json
-├── postcss.config.js
-├── public
-├── src
-    ├── App.tsx
-    ├── components
-    │   ├── AnimatedRoutes.tsx
-    │   ├── ClickSpark.tsx
-    │   ├── Command.tsx
-    │   ├── Conditionals.tsx
-    │   ├── Footer.tsx
-    │   ├── HireMe.tsx
-    │   ├── NameMorpher.tsx
-    │   ├── Navigation.tsx
-    │   ├── ScrollToTop.tsx
-    │   ├── language-toggle.tsx
-    │   ├── search-toggle.tsx
-    │   ├── theme-provider.tsx
-    │   ├── theme-toggle.tsx
-    │   └── ui/ 
-    │       ├── (all shadcn/ui components)
-    │       └── custom/
-    │           └── IconButton.tsx
-    │
-    ├── config
-    │   ├── (particles removed)
-    │   └── themes.ts
-    ├── hooks
-    │   ├── use-command-menu.tsx
-    │   ├── use-mobile.tsx
-    │   └── use-toast.ts
-    ├── index.css
-    ├── layouts
-    │   ├── BlankLayout.tsx
-    │   ├── MainLayout.tsx
-    │   └── SimpleLayout.tsx
-    ├── lib
-    │   ├── language-provider.tsx
-    │   ├── translations.ts
-    │   └── utils.ts
-    ├── main.tsx
-    ├── pages
-    │   ├── About.tsx
-    │   ├── AboutThisWebsite.tsx
-    │   ├── Contact.tsx
-    │   ├── Experience.tsx
-    │   ├── Index.tsx
-    │   ├── NotFound.tsx
-    │   ├── Projects.tsx
-    │   ├── Services.tsx
-    │   ├── Skills.tsx
-    │   └── backup
-    │   │   ├── claude.suggestion.index.bak
-    │   │   └── d162ec23456334755c0f6407f8d4e47c827ca2fe.index.bak
-    ├── utils
-    │   └── transitions.ts
-    └── vite-env.d.ts
-├── tailwind.config.ts
-├── todo.md
-├── tsconfig.app.json
-├── tsconfig.json
-├── tsconfig.node.json
-├── vercel.json
-└── vite.config.ts
-```
-
-## Performance Optimization
+## Performance & Development
 
 Performance was a **key priority** from the start. Here's what I implemented:
 
@@ -106,8 +26,10 @@ Performance was a **key priority** from the start. Here's what I implemented:
 2. **Lazy Loading**: Images load only when needed
 3. **Bundle Optimization**: Tree shaking and minification
 4. **Caching Strategy**: React Query for efficient data management
+5. **SEO**: React Helmet for SEO optimization
+6. **i18n**: Custom React i18next for internationalization
 
-### Optimization Techniques
+### Example: Optimization Techniques
 
 <CodeBlock
   code={`// image optimization with lazy loading
@@ -187,12 +109,15 @@ The portfolio has successfully achieved its goals:
 
 ## Future Enhancements
 
-I've already added so much that im running out of ideas, however heres what i thought of adding: 
+I'm always looking for ways to improve the project. Here are some ideas:
 
 -  **Blog Integration**: Technical writing section
--  **Interactive Demos**: Live code examples for projects (possibly here)
--  **now** page: inspired by a <a href="https://nownownow.com/" target="_blank" rel="noopener noreferrer">now</a> page.
+-  **Interactive Demos**: Live code examples for projects
+-  **now** page: inspired by a [now](https://nownownow.com/) page.
 
----
+&amp; whatever else I can think of.
 
-*This project represents not just a portfolio, but a testament to modern web development practices and attention to detail -- It has been fun.* 
+
+***
+
+*This project&mdash;with over [300 clean commits](https://github.com/lyfe691/sola/commits/main)&mdash;represents not just a portfolio, but a testament to modern web development practices and attention to detail.* 

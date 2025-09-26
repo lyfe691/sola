@@ -12,24 +12,21 @@ import { Link } from "react-router-dom";
 import { 
   Mail,
   Linkedin,
-  ArrowRight,
-  MoveRight,
   FolderGit2,
   Contact,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { motion, AnimatePresence, AnimationGeneratorType } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { CyclingTextEffect } from "@/components/ui/text-effect-wrapper";
+import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
 import { SiChessdotcom, SiHackthebox, SiLeetcode, SiTiktok } from "react-icons/si";
-import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import { containerVariants, itemVariants, titleVariants, usePageInit } from "@/utils/transitions";  
 import { Helmet } from "react-helmet-async";
-import { NameMorpher } from "@/components/NameMorpher";
-import { IconButton } from "@/components/ui/custom/IconButton";
+import { NameMorpher } from "@/components/ui/custom/name-morpher";
+import { IconButton } from "@/components/ui/custom/icon-button";
 // defer heavy background imports until needed
 // import Threads from "@/components/backgrounds/Threads";
 // import Squares from "@/components/backgrounds/Squares";

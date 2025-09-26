@@ -25,8 +25,8 @@ import {
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { LinkPreview } from "@/components/ui/link-preview";
-import { IconButton } from "@/components/ui/custom/IconButton";
+import { LinkPreview } from "@/components/ui/custom/link-preview";
+import { IconButton } from "@/components/ui/custom/icon-button";
 import { ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 

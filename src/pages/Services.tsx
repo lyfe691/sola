@@ -12,7 +12,7 @@ import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Helmet } from "react-helmet-async";
-import { IconButton } from "@/components/ui/custom/IconButton";
+import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const Services = () => {

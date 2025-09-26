@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
-import { LinkPreview } from '@/components/ui/link-preview';
+import { LinkPreview } from '@/components/ui/custom/link-preview';
 import { motion } from 'motion/react';
 import { AdvancedCodeBlock } from '@/components/ui/code/advanced-code-block/advanced-code-block';
 
