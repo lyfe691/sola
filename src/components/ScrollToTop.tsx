@@ -6,77 +6,68 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
-import { ArrowUp } from "lucide-react";
+import { useEffect, useState, useCallback } from "react"
+import { useLocation } from "react-router-dom"
+import { ArrowUp } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 
-const SCROLL_THRESHOLD = 100; // px
-const SCROLL_DEBOUNCE_DELAY = 100; // ms
+const SCROLL_THRESHOLD = 120
+const SCROLL_DEBOUNCE_DELAY = 120
 
-// render
-const ScrollToTop = () => {
-  const { pathname } = useLocation();
-  const [isVisible, setIsVisible] = useState(false);
+export default function ScrollToTop() {
+  const { pathname } = useLocation()
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [pathname]);
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [pathname])
 
   const handleScroll = useCallback(() => {
-    if (window.pageYOffset > SCROLL_THRESHOLD) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  }, []);
+    setVisible(window.scrollY > SCROLL_THRESHOLD)
+  }, [])
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    
-    const debouncedScrollHandler = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => handleScroll(), SCROLL_DEBOUNCE_DELAY);
-    };
+    let timeoutId: NodeJS.Timeout
 
-    window.addEventListener("scroll", debouncedScrollHandler);
-    
+    const debouncedScroll = () => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(handleScroll, SCROLL_DEBOUNCE_DELAY)
+    }
+
+    window.addEventListener("scroll", debouncedScroll)
     return () => {
-      window.removeEventListener("scroll", debouncedScrollHandler);
-      clearTimeout(timeoutId);
-    };
-  }, [handleScroll]);
+      window.removeEventListener("scroll", debouncedScroll)
+      clearTimeout(timeoutId)
+    }
+  }, [handleScroll])
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  };
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {visible && (
         <motion.button
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{ duration: 0.2 }}
+          key="scroll-to-top"
           onClick={scrollToTop}
           aria-label="Scroll to top"
-          className="fixed bottom-6 right-6 p-3 rounded-full bg-primary/10 
-                   border border-primary/20 backdrop-blur-sm 
-                   hover:bg-primary/20 transition-colors duration-300
-                   focus:outline-none focus:ring-2 focus:ring-primary/20
-                   focus:ring-offset-2 focus:ring-offset-background z-50"
+          initial={{ opacity: 0, scale: 0.85, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.85, y: 10 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="fixed bottom-6 right-6 z-50 flex items-center justify-center
+                     h-11 w-11 rounded-full
+                     bg-background/70 text-foreground
+                     backdrop-blur-sm shadow-lg
+                     hover:bg-background/90
+                     transition-colors"
         >
-          <ArrowUp className="w-5 h-5 text-primary" />
+          <ArrowUp className="h-5 w-5" strokeWidth={2} />
         </motion.button>
       )}
     </AnimatePresence>
-  );
-};
-
-export default ScrollToTop;
+  )
+}
