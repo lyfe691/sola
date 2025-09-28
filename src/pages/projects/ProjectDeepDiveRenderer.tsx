@@ -11,7 +11,7 @@ import { useParams, Navigate, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { MDXProvider } from '@mdx-js/react';
 import ProjectPage from '@/components/ProjectDeepDive';
-import { ExternalLink, Globe, ArrowRight } from 'lucide-react';
+import { ExternalLink, Globe } from 'lucide-react';
 import { LinkPreview } from '@/components/ui/custom/link-preview';
 import { FaGithubAlt } from 'react-icons/fa';
 import { getProjectConfig, getAllProjectSlugs, projectPagesConfig } from '@/config/project-deep-dive';
@@ -79,6 +79,34 @@ const ProjectDeepDiveRenderer: React.FC = () => {
       </div>
     </LinkPreview>
   );
+
+  // compute smart recommendations: prefer projects with overlapping tech stacks.
+  const getRecommendedProjectSlugs = (currentSlug: string, count: number): string[] => {
+    const current = projectPagesConfig[currentSlug!];
+    if (!current) return getAllProjectSlugs().filter(s => s !== currentSlug).slice(0, count);
+
+    const currentTech = new Set((current.techStack || []).map(t => t.toLowerCase()));
+
+    const scored = getAllProjectSlugs()
+      .filter(s => s !== currentSlug)
+      .map(sl => {
+        const tech = (projectPagesConfig[sl].techStack || []).map(t => t.toLowerCase());
+        const overlap = tech.reduce((acc, t) => acc + (currentTech.has(t) ? 1 : 0), 0);
+        const jitter = Math.random() * 0.15; // slight variation to avoid identical ordering
+        return { slug: sl, score: overlap + jitter };
+      })
+      .sort((a, b) => b.score - a.score);
+
+    // shuffle a bit if all scores are less than 0.2
+    if (scored.length > 0 && scored.every(s => s.score < 0.2)) {
+      for (let i = scored.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [scored[i], scored[j]] = [scored[j], scored[i]];
+      }
+    }
+
+    return scored.slice(0, count).map(s => s.slug);
+  };
 
   return (
     <ProjectPage
@@ -200,25 +228,22 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         >
           <h2 className="text-lg font-semibold mb-6 text-foreground">{t.common.moreProjects}</h2>
           <div className="grid sm:grid-cols-2 gap-6">
-            {getAllProjectSlugs()
-              .filter(projectSlug => projectSlug !== slug)
-              .slice(0, 2)
-              .map((projectSlug) => {
+            {getRecommendedProjectSlugs(slug, 2).map((projectSlug) => {
                 const project = projectPagesConfig[projectSlug];
                 return (
                   <Link
                     key={projectSlug}
                     to={`/projects/${projectSlug}`}
-                    className="group block p-4 rounded-lg border border-border/50 hover:border-border 
-                             transition-all duration-200 hover:bg-muted/20"
+                    className="group block p-4 rounded-lg border border-border/40 bg-foreground/5 
+                             transition-all duration-700 ease-out hover:bg-foreground/10 hover:border-border 
+                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
                   >
-                    <div className="flex items-start justify-between mb-3">
-                      <h3 className="font-medium text-foreground group-hover:text-primary transition-colors">
+                    <div className="mb-3">
+                      <h3 className="font-medium text-foreground group-hover:underline underline-offset-4 decoration-foreground/20 transition-colors duration-300 ease-out">
                         {project.title}
                       </h3>
-                      <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary 
-                                           group-hover:translate-x-1 transition-all duration-200" />
                     </div>
+                    <time className="block text-[11px] text-muted-foreground mb-2">{project.date}</time>
                     <p className="text-xs text-muted-foreground leading-relaxed mb-3">
                       {project.description}
                     </p>
@@ -226,8 +251,8 @@ const ProjectDeepDiveRenderer: React.FC = () => {
                       {project.techStack.slice(0, 3).map((tech) => (
                         <span 
                           key={tech}
-                          className="px-2 py-1 bg-primary/5 text-primary border border-primary/20 
-                                   text-xs rounded font-medium"
+                          className="px-2 py-0.5 bg-foreground/5 text-foreground/60 border border-foreground/10 
+                                   text-xs rounded"
                         >
                           {tech}
                         </span>
