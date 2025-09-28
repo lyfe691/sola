@@ -80,32 +80,61 @@ const ProjectDeepDiveRenderer: React.FC = () => {
     </LinkPreview>
   );
 
-  // compute smart recommendations: prefer projects with overlapping tech stacks.
+  // algorithmically recommend projects with overlapping tech stacks
   const getRecommendedProjectSlugs = (currentSlug: string, count: number): string[] => {
+    const allSlugs = getAllProjectSlugs();
     const current = projectPagesConfig[currentSlug!];
-    if (!current) return getAllProjectSlugs().filter(s => s !== currentSlug).slice(0, count);
-
-    const currentTech = new Set((current.techStack || []).map(t => t.toLowerCase()));
-
-    const scored = getAllProjectSlugs()
-      .filter(s => s !== currentSlug)
-      .map(sl => {
-        const tech = (projectPagesConfig[sl].techStack || []).map(t => t.toLowerCase());
-        const overlap = tech.reduce((acc, t) => acc + (currentTech.has(t) ? 1 : 0), 0);
-        const jitter = Math.random() * 0.15; // slight variation to avoid identical ordering
-        return { slug: sl, score: overlap + jitter };
-      })
-      .sort((a, b) => b.score - a.score);
-
-    // shuffle a bit if all scores are less than 0.2
-    if (scored.length > 0 && scored.every(s => s.score < 0.2)) {
-      for (let i = scored.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [scored[i], scored[j]] = [scored[j], scored[i]];
+    if (!current) return allSlugs.filter(s => s !== currentSlug).slice(0, count);
+    const normalize = (s: string) => s.toLowerCase();
+    const currentTech = new Set((current.techStack || []).map(normalize));
+    const docFreq: Record<string, number> = {};
+    for (const sl of allSlugs) {
+      const seen = new Set<string>();
+      for (const t of (projectPagesConfig[sl].techStack || []).map(normalize)) {
+        if (!seen.has(t)) {
+          docFreq[t] = (docFreq[t] || 0) + 1;
+          seen.add(t);
+        }
       }
     }
+    const N = allSlugs.length;
+    const idf = (t: string) => {
+      const df = docFreq[t] || 0;
+      return Math.log((N + 1) / (df + 1));
+    };
 
-    return scored.slice(0, count).map(s => s.slug);
+    const scored = allSlugs
+      .filter(s => s !== currentSlug)
+      .map(sl => {
+        const tech = new Set((projectPagesConfig[sl].techStack || []).map(normalize));
+        let score = 0;
+        for (const t of currentTech) {
+          if (tech.has(t)) score += idf(t);
+        }
+        return { slug: sl, score };
+      })
+      .sort((a, b) => b.score - a.score);
+    const pool = (scored.some(s => s.score > 0) ? scored.filter(s => s.score > 0) : scored).slice(0, 4);
+    const dayKey = new Date().toISOString().slice(0, 10); // YYYY‑MM‑DD
+    const hash = (str: string) => {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
+      return Math.abs(h);
+    };
+    const rotation = pool.length ? hash(dayKey + currentSlug) % pool.length : 0;
+    const picks: string[] = [];
+    for (let i = 0; i < pool.length && picks.length < count; i++) {
+      const idx = (i + rotation) % pool.length;
+      const candidate = pool[idx].slug;
+      if (!picks.includes(candidate)) picks.push(candidate);
+    }
+    if (picks.length < count) {
+      for (const s of scored) {
+        if (picks.length >= count) break;
+        if (!picks.includes(s.slug)) picks.push(s.slug);
+      }
+    }
+    return picks.slice(0, count);
   };
 
   return (
