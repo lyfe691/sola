@@ -155,8 +155,8 @@ const createProjectsData = (t: any): Project[] => [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
     featured: true,
     date: {
-      start: "2025-05",
-      display: "May 2025"
+      start: "2025-08",
+      display: "Aug 2025"
     },
     priority: 5,
     slug: "thoughts"
