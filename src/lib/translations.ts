@@ -48,6 +48,15 @@ export const translations = {
         description: "The requested resource could not be found.",
       }
     },
+    certifications: {
+      title: "Certifications",
+      empty: "No certifications published yet.",
+      verify: "Verify",
+      expired: "Expired",
+      credentialId: "Credential ID",
+      expires: "Expires",
+      viewPdf: "View PDF"
+    },
     common: {
       home: "Home",
       projects: "Projects",
@@ -93,7 +102,7 @@ export const translations = {
     },
     hire: {
       hirebtn:"Hire Me", 
-      hiretitle: "Currently Commited",
+      hiretitle: "Currently Committed",
       hiretxt: "I'm currently tied to an internship. However, if your offer beats it, I'm open to a conversation. Feel free to explore what I can do.",
       hirelbl: "Contact Me", 
     },
@@ -208,6 +217,7 @@ export const translations = {
       backHome: "Back home",
       featured: "Featured Projects",
       other: "Other Projects",
+      otherInfo: "Non‑featured projects: smaller tools, experiments, and utilities.",
       viewDetails: "View Details",
       viewAll: "View All Projects",
       viewProject: "View Project",
@@ -231,7 +241,7 @@ export const translations = {
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
-          description: "A simple Chrome extension that extracts HTML, CSS, JavaScript, and images from websites and packages them into a zip file with JSzip. Ideal for smaller sites, it allows quick access to web code, though it may struggle with larger sites that rely heavily on server-side code."
+          description: "A simple Chrome extension that extracts HTML, CSS, JavaScript, and images from websites and packages them into a zip file with JSZip. Ideal for smaller sites, it allows quick access to web code, though it may struggle with larger sites that rely heavily on server-side code."
         },
         applicare: {
           title: "AppliCare",
@@ -251,7 +261,7 @@ export const translations = {
         },
         viewCounter: {
           title: "View Counter",
-          description: "This is a simple view counter application that counts the number of times a page has been viewed. It is built with Spring Boot and redis."
+          description: "This is a simple view counter application that counts the number of times a page has been viewed. It is built with Spring Boot and Redis."
         },
         dockerService: {
           title: "Docker Service Deployment",
@@ -267,7 +277,7 @@ export const translations = {
         },
         sola: {
           title: "Sola",
-          description: "Sola is my personal website, the one youre on right now. It is built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way."
+          description: "Sola is my personal website, the one you're on right now. It's built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way."
         },
         self: {
           title: "Self",
@@ -503,6 +513,15 @@ export const translations = {
         description: "Die angeforderte Ressource wurde nicht gefunden.",
       }
     },
+    certifications: {
+      title: "Zertifikate",
+      empty: "Noch keine Zertifikate veröffentlicht.",
+      verify: "Prüfen",
+      expired: "Abgelaufen",
+      credentialId: "Zertifikats-ID",
+      expires: "Gültig bis",
+      viewPdf: "PDF anzeigen"
+    },
     common: {
       home: "Startseite",
       projects: "Projekte",
@@ -661,13 +680,14 @@ export const translations = {
     projects: {
       title: "Projekte",
       backHome: "Zurück",
-      featured: "Featured Projects",
-      other: "Other Projects",
+      featured: "Hervorgehobene Projekte",
+      other: "Weitere Projekte",
+      otherInfo: "Nicht hervorgehobene Projekte: kleinere Tools, Experimente und Utilities.",
       viewDetails: "Details ansehen",
-      viewAll: "View All Projects",
-      viewProject: "View Project",
-      viewGithub: "View Code",
-      technologies: "Technologies used",
+      viewAll: "Alle Projekte ansehen",
+      viewProject: "Projekt ansehen",
+      viewGithub: "Code ansehen",
+      technologies: "Verwendete Technologien",
       imageTooltip: "Einige Projektbilder erstellt mit",
       satoriAttribution: "Bild erstellt mit [Vercel Satori](https://og-playground.vercel.app/)",
       sortBy: "Sortieren nach",
@@ -883,7 +903,7 @@ export const translations = {
           description: "Erstellung schöner und benutzerfreundlicher Oberflächen.",
           price: "ab CHF 65/h",
           features: [
-            "React development",
+            "React-Entwicklung",
             "UI/UX-Implementierung",
             "Animation und Interaktivität",
             "Mobile-First-Design"
@@ -957,6 +977,15 @@ export const translations = {
         title: "404 • No encontrado",
         description: "El recurso solicitado no se encontró.",
       }
+    },
+    certifications: {
+      title: "Certificaciones",
+      empty: "Aún no hay certificaciones publicadas.",
+      verify: "Verificar",
+      expired: "Vencido",
+      credentialId: "ID de credencial",
+      expires: "Vence",
+      viewPdf: "Ver PDF"
     },
     common: {
       home: "Inicio",
@@ -1118,6 +1147,7 @@ export const translations = {
       backHome: "Regresar",
       featured: "Proyectos Destacados",
       other: "Otros Proyectos",
+      otherInfo: "Proyectos no destacados: utilidades y experimentos más pequeños.",
       viewDetails: "Ver Detalles",
       viewAll: "Ver Todos los Proyectos",
       viewProject: "Ver Proyecto",
@@ -1161,7 +1191,7 @@ export const translations = {
         },
         viewCounter: {
           title: "Contador de Vistas",
-          description: "Esta es una aplicación simple de contador de vistas que cuenta el número de veces que se ha visto una página. Está construida con Spring Boot y redis."
+          description: "Esta es una aplicación simple de contador de vistas que cuenta el número de veces que se ha visto una página. Está construida con Spring Boot y Redis."
         },
         dockerService: {
           title: "Despliegue de Servicios Docker",
@@ -1413,6 +1443,15 @@ export const translations = {
         description: "要求されたリソースは見つかりませんでした。",
       }
     },
+    certifications: {
+      title: "認定・資格",
+      empty: "公開中の認定はまだありません。",
+      verify: "検証",
+      expired: "有効期限切れ",
+      credentialId: "資格 ID",
+      expires: "有効期限",
+      viewPdf: "PDF を表示"
+    },
     common: {
       home: "ホーム",
       projects: "プロジェクト",
@@ -1574,6 +1613,7 @@ export const translations = {
       backHome: "ホームに戻る",
       featured: "主要プロジェクト",
       other: "その他のプロジェクト",
+      otherInfo: "非注目のプロジェクト：小さなツールや実験的なもの。",
       viewDetails: "詳細を見る",
       viewAll: "すべてのプロジェクトを見る",
       viewProject: "プロジェクトを見る",
@@ -1608,7 +1648,7 @@ export const translations = {
           description: "このOSINTウェブサイトは、オープンソースインテリジェンスと不断に進化するデジタル調査の世界への関心から生まれたプロジェクトです。調査スキルを磨き、批判的思考を促す対話型の演習を提供しています。"
         },
         chatapp: {
-          title: "聊天应用",
+          title: "ChatApp",
           description: "ChatAppは、ユーザーがアカウントを作成し、様々なチャットルームで他のユーザーとつながることができるユーザーフレンドリーなチャットプラットフォームです。Spring Bootで構築され、MongoDBによる効率的なデータストレージを備え、リアルタイムコミュニケーションのためのシームレスな体験を提供します。"
         },
         vmDetector: {
@@ -1712,8 +1752,8 @@ export const translations = {
         link: "私と働く",
         viewMore: "もっと見る",
         visitWebsite: "ウェブサイトを見る",
-        viewLinkedIn: "LinkedIn ansehen",
-        websiteChip: "Webseite",
+        viewLinkedIn: "LinkedIn を見る",
+        websiteChip: "ウェブサイト",
         modalTitle: "推薦文",
         modalDescription: "{author} からの全文推薦"
       },
@@ -1868,6 +1908,15 @@ export const translations = {
         title: "404 • 未找到",
         description: "未找到请求的资源。",
       }
+    },
+    certifications: {
+      title: "证书",
+      empty: "尚未发布任何证书。",
+      verify: "验证",
+      expired: "已过期",
+      credentialId: "证书编号",
+      expires: "到期",
+      viewPdf: "查看 PDF"
     },
     common: {
       home: "首页",
@@ -2029,6 +2078,7 @@ export const translations = {
       backHome: "返回首页",
       featured: "精选项目",
       other: "其他项目",
+      otherInfo: "非精选项目：一些小型工具与实验项目。",
       viewDetails: "查看详情",
       viewAll: "查看所有项目",
       viewProject: "查看项目",
@@ -2052,7 +2102,7 @@ export const translations = {
       list: {
         codeExtractor: {
           title: "网站代码提取器",
-          description: "一个简单的Chrome扩展程序，可以从网站提取HTML、CSS、JavaScript和图片，并使用JSzip打包成zip文件。适用于小型网站，可以快速访问网页代码，但可能在严重依赖服务器端代码的大型网站上受到限制。"
+          description: "一个简单的 Chrome 扩展程序，可以从网站提取 HTML、CSS、JavaScript 和图片，并使用 JSZip 打包成 ZIP 文件。适用于小型网站，可以快速访问网页代码，但可能在严重依赖服务器端代码的大型网站上受到限制。"
         },
         applicare: {
           title: "AppliCare",
@@ -2163,8 +2213,8 @@ export const translations = {
         }
       },
       testimonials: {
-        title: "人們的聲音",
-        link: "與我合作",
+        title: "人们的声音",
+        link: "与我合作",
         viewMore: "查看更多",
         visitWebsite: "访问网站",
         viewLinkedIn: "查看 LinkedIn",

@@ -16,7 +16,8 @@ import {
   CalendarClock,
   ArrowDownAZ,
   ArrowUpAZ,
-  FileSearch
+  FileSearch,
+  Info
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion } from "motion/react";
@@ -29,6 +30,7 @@ import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Project {
   id: string;
@@ -572,8 +574,18 @@ const Projects = () => {
       </div>
 
       <ScrollReveal variant="title">
-        <div className="flex items-center gap-3 mb-6 sm:mb-8">
-                     <h2 className="text-2xl font-semibold">{t.projects.other}</h2>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+          <h2 className="text-2xl font-semibold break-words">{t.projects.other}</h2>
+          <div className="relative group shrink-0">
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Info className="w-4 h-4 hover:text-primary transition-colors duration-300 group-hover:text-primary cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="bg-background/85 backdrop-blur-sm" side="right" align="center">
+                {t.projects.otherInfo}
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </ScrollReveal>
 

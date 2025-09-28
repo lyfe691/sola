@@ -543,7 +543,7 @@ const Privacy = () => {
             </div>
 
             <motion.div {...trail(2)} className="mb-16 text-center">
-              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10">
+              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap break-words shrink-0">
                 {L[language].pageTitle}
               </h1>
               <div className="mt-8 flex items-center justify-center">

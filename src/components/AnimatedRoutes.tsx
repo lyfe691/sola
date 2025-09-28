@@ -27,6 +27,7 @@ const Services = lazy(() => import("@/pages/Services"));
 const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
 const ProjectDeepDiveRenderer = lazy(() => import("@/pages/projects/ProjectDeepDiveRenderer"));
+const Certifications = lazy(() => import("@/pages/Certifications"));
 
 
 // define types for pagetransition
@@ -175,6 +176,16 @@ export const AnimatedRoutes = () => {
           element={
             <SimpleLayout>
               {withTransition(Privacy)}
+            </SimpleLayout>
+          } 
+        />
+
+        {/* Certifications */}
+        <Route 
+          path="/certifications" 
+          element={
+            <SimpleLayout>
+              {withTransition(Certifications)}
             </SimpleLayout>
           } 
         />
