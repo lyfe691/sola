@@ -79,6 +79,7 @@ const buildSortOptions = (t: any): ComboboxOption[] => [
   }
 ];
 
+// slug = deepdive
 const createProjectsData = (t: any): Project[] => [
   {
     id: "sola",
@@ -143,6 +144,22 @@ const createProjectsData = (t: any): Project[] => [
     },
     priority: 4,
     slug: "code-extractor"
+  },
+  {
+    id: "thoughts",
+    title: t.projects.list.thoughts.title,
+    description: t.projects.list.thoughts.description,
+    image: "/projects/thoughts.svg",
+    link: "https://thoughts.ysz.life",
+    github: "https://github.com/lyfe691/thoughts",
+    tags: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
+    featured: true,
+    date: {
+      start: "2025-05",
+      display: "May 2025"
+    },
+    priority: 5,
+    slug: "thoughts"
   },
   {
     id: "Taco",
@@ -327,7 +344,7 @@ const ProjectDate = ({ date }: { date: Project['date'] }) => (
 
 const ProjectDescription = ({ description }: { description: string }) => (
   <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
-    {description}
+    <RichText text={description} />
   </p>
 );
 
@@ -542,7 +559,7 @@ const Projects = () => {
       {/* Featured Projects */}
       <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
-          <ScrollReveal key={project.id} variant="default" delay={index * 70}>
+          <ScrollReveal key={project.id} variant="default" delay={index * 10}>
             <ProjectCard
               project={project}
               hoveredProject={hoveredProject}

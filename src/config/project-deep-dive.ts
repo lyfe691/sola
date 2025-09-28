@@ -148,8 +148,33 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       github: 'https://github.com/lyfe691/self'
     },
     mdxPath: 'self'
-  }
-  ,
+  },
+
+  thoughts: {
+    slug: 'thoughts',
+    title: 'Thoughts',
+    description: "A minimal personal site for sharing reflections, fragments, and notes.",
+    date: 'August 2025',
+    silkColor: '#ffffff',
+    silkSpeed: 3.8,
+    silkScale: 1.05,
+    silkNoiseIntensity: 1.6,
+    silkRotation: -0.15,
+    overview: "A quiet space separate from my portfolio, designed for simplicity and writing. Built with Next.js, MDX, and Tailwind CSS, and featuring a custom guestbook for visitors to leave their own thoughts.",
+    techStack: [
+      'Next.js', 'TypeScript', 'Tailwind CSS', 'MDX'
+    ],
+    features: [
+      'MDX-based publishing system for reflections and notes',
+      'Custom-built guestbook with moderation support'
+    ],
+    links: {
+      live: 'https://thoughts.ysz.life',
+      github: 'https://github.com/lyfe691/thoughts'
+    },
+    mdxPath: 'thoughts'
+  },
+
   taco: {
     slug: 'taco',
     title: 'Taco',

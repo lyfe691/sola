@@ -276,6 +276,10 @@ export const translations = {
         taco: {
           title: "Taco",
           description: "A production‑ready template site centered on Taco, my brother's dog — built with Next.js, TypeScript, and Tailwind CSS. It includes localization with automatic detection, a blog system, and a clean modular architecture suitable for real projects."
+        },
+        thoughts: {
+          title: "Thoughts",
+          description: "A minimal personal site where I share reflections, fragments, and notes. Inspired by [Shu Ding](https://shud.in)’s personal website, built with Next.js, MDX, and Tailwind. Includes a custom guestbook feature where visitors can leave their own thoughts."
         }
       }
     },
@@ -727,6 +731,10 @@ export const translations = {
         taco: {
           title: "Taco",
           description: "Ein produktionsreifes Template rund um Taco, den Hund meines Bruders — mit Next.js, TypeScript und Tailwind CSS. Enthält Lokalisierung mit automatischer Erkennung, ein Blog‑System und eine saubere, modulare Architektur für echte Projekte."
+        },
+        thoughts: {
+          title: "Thoughts",
+          description: "Eine minimalistische persönliche Seite, auf der ich Reflexionen, Fragmente und Notizen teile. Inspiriert von der persönlichen Website von [Shu Ding](https://shud.in), gebaut mit Next.js, MDX und Tailwind. Enthält ein eigenes Gästebuch, in dem Besucher ihre Gedanken hinterlassen können."
         }
       }
     },
@@ -1178,6 +1186,10 @@ export const translations = {
         taco: {
           title: "Taco",
           description: "Plantilla lista para producción en torno a Taco, el perro de mi hermano — construida con Next.js, TypeScript y Tailwind CSS. Incluye localización con detección automática, blog y una arquitectura modular limpia apta para proyectos reales."
+        },
+        thoughts: {
+          title: "Thoughts",
+          description: "Un sitio personal minimalista donde comparto reflexiones, fragmentos y notas. Inspirado por el sitio web personal de [Shu Ding](https://shud.in), construido con Next.js, MDX y Tailwind. Incluye un libro de visitas personalizado donde los visitantes pueden dejar sus propios pensamientos."
         }
       }
     },
@@ -1630,6 +1642,10 @@ export const translations = {
         taco: {
           title: "Taco",
           description: "弟の犬 Taco を題材にしたプロダクション品質のテンプレート。Next.js・TypeScript・Tailwind CSS により、言語自動検出付きのローカリゼーション、ブログ機能、モジュール化されたクリーンなアーキテクチャを備えています。"
+        },
+        thoughts: {
+          title: "Thoughts",
+          description: "考えや断片、メモを共有するミニマルな個人サイトです。[Shu Ding](https://shud.in) の個人サイトに触発され、Next.js・MDX・Tailwind CSS で構築しました。訪問者が自分の想いを書き残せる独自のゲストブック機能を備えています。"
         }
       }
     },
@@ -2081,6 +2097,10 @@ export const translations = {
         taco: {
           title: "Taco",
           description: "围绕我弟弟的狗狗 Taco 打造的生产级模板网站——基于 Next.js、TypeScript、Tailwind CSS。内置带自动检测的本地化、博客系统，以及适用于真实项目的干净模块化架构。"
+        },
+        thoughts: {
+          title: "Thoughts",
+          description: "一个极简的个人网站，用来分享我的思考、片段与笔记。受 [Shu Ding](https://shud.in) 个人网站启发，使用 Next.js、MDX 和 Tailwind 构建。包含自定义留言簿功能，访客可以留下自己的想法。"
         }
       }
     },
