@@ -25,6 +25,7 @@ interface NavItemProps {
   isActive: (path: string) => boolean;
   isMobile?: boolean;
   onClick?: () => void;
+  shouldAnimateInitial?: boolean;
 }
 
 // motion variants and class constants
@@ -47,11 +48,12 @@ const MOBILE_OVERLAY_CLASSES =
 
 // memoized navigation item for better performance
 const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({ 
-  item, 
-  index, 
-  isActive, 
-  isMobile = false, 
-  onClick = () => {} 
+  item,
+  index,
+  isActive,
+  isMobile = false,
+  onClick = () => {},
+  shouldAnimateInitial = true
 }, ref) => {
   const itemVariants = desktopItemVariants;
 
@@ -92,7 +94,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
         key={item.text}
         custom={index}
         variants={mobileVariants}
-        initial="initial"
+        initial={shouldAnimateInitial ? "initial" : false}
         animate="animate"
         exit="exit"
         className="w-full"
@@ -117,7 +119,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
       key={item.text}
       custom={index}
       variants={itemVariants}
-      initial="hidden"
+      initial={shouldAnimateInitial ? "hidden" : false}
       animate="visible"
       exit="hidden"
     >
@@ -195,9 +197,16 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
   const { language } = useLanguage();
   const t = translations[language];
   const location = useLocation();
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  const shouldAnimateInitial = !hasMounted;
 
   const closeMenu = useCallback(() => {
     // Allow animations to play out smoothly
@@ -317,7 +326,7 @@ const Navigation = () => {
       <div className="flex justify-center items-center">
         <motion.nav
           className={cn(DESKTOP_CONTAINER_CLASSES, "pointer-events-auto")}
-          initial={{ opacity: 0, y: -20 }}
+          initial={shouldAnimateInitial ? { opacity: 0, y: -20 } : false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] }}
           style={{
@@ -331,7 +340,8 @@ const Navigation = () => {
             item={homeItem}
             index={0}
             isActive={isActive}
-          />  
+            shouldAnimateInitial={shouldAnimateInitial}
+          />
           
           <div className="h-8 w-px bg-border/30 mx-3" />
           
@@ -342,6 +352,7 @@ const Navigation = () => {
               item={item}
               index={i}
               isActive={isActive}
+              shouldAnimateInitial={shouldAnimateInitial}
             />
           ))}
         </motion.nav>
@@ -382,6 +393,7 @@ const Navigation = () => {
                   isActive={isActive}
                   isMobile={true}
                   onClick={closeMenu}
+                  shouldAnimateInitial={shouldAnimateInitial}
                 />
                 <div className="my-4 h-px w-full bg-border" />
                 <div className="space-y-2">
@@ -393,6 +405,7 @@ const Navigation = () => {
                       isActive={isActive}
                       isMobile={true}
                       onClick={closeMenu}
+                      shouldAnimateInitial={shouldAnimateInitial}
                     />
                   ))}
                 </div>
