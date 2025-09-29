@@ -7,7 +7,15 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { Home } from "lucide-react";
+import {
+  Home,
+  User,
+  Briefcase,
+  FolderOpen,
+  Sparkles,
+  Layers,
+  Mail,
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "@/lib/language-provider";
@@ -58,8 +66,8 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
   const Component = motion.div;
   const isItemActive = isActive(item.path);
   const linkBaseClass = isMobile
-    ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
-    : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2";
+    ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+    : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary";
   const linkClassName = cn(
     linkBaseClass,
     isItemActive ? "text-primary" : "text-foreground/60 hover:text-foreground"
@@ -104,7 +112,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
           className={linkClassName}
           aria-current={isItemActive ? "page" : undefined}
         >
-          {item.icon && <item.icon className="w-6 h-6 mr-3" />}
+          {item.icon && <item.icon className="w-6 h-6 mr-3" aria-hidden="true" />}
           {item.text}
         </Link>
       </Component>
@@ -136,7 +144,7 @@ const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({
             transition={{ type: 'spring', stiffness: 320, damping: 30, mass: 0.85 }}
           />
         )}
-        {item.icon && <item.icon className="w-4 h-4" />}
+        {item.icon && <item.icon className="w-4 h-4" aria-hidden="true" />}
         <span className="relative z-10">{item.text}</span>
       </Link>
     </Component>
@@ -217,12 +225,12 @@ const Navigation = () => {
   // memoized navigation items
   const homeItem = { text: t.common.home, path: "/", icon: Home };
   const navItems = [
-    { text: t.nav.about, path: "/about" },
-    { text: t.nav.experience, path: "/experience" },
-    { text: t.nav.projects, path: "/projects" },
-    { text: t.nav.skills, path: "/skills" },
-    { text: t.nav.services, path: "/services" },
-    { text: t.nav.contact, path: "/contact" }
+    { text: t.nav.about, path: "/about", icon: User },
+    { text: t.nav.experience, path: "/experience", icon: Briefcase },
+    { text: t.nav.projects, path: "/projects", icon: FolderOpen },
+    { text: t.nav.skills, path: "/skills", icon: Sparkles },
+    { text: t.nav.services, path: "/services", icon: Layers },
+    { text: t.nav.contact, path: "/contact", icon: Mail }
   ];
 
   // memoized isactive check
@@ -250,6 +258,17 @@ const Navigation = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen, closeMenu]);
 
+  // close menu on escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMenuOpen) {
+        closeMenu();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isMenuOpen, closeMenu]);
+
   // prevent body scrolling when menu is open
   useEffect(() => {
     if (isMenuOpen) {
@@ -268,9 +287,10 @@ const Navigation = () => {
 
   // close menu when route changes
   useEffect(() => {
-    // Don't close immediately - let the Link onClick handle it
-    // This effect is just for cleanup if needed
-  }, [location.pathname]);
+    if (isMenuOpen) {
+      closeMenu();
+    }
+  }, [location.pathname, isMenuOpen, closeMenu]);
 
 
   // mobile menu animations
