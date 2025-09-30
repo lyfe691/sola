@@ -478,11 +478,11 @@ export const translations = {
     seo: {
       home: {
         title: "Yanis Sebastian Zürcher • Softwareentwickler in Zürich",
-        description: "Softwareentwickler aus Zürich – Fokus auf skalierbare, schnelle und durchdachte Systeme in Infrastruktur, Identity und Interfaces.",
+        description: "Softwareentwickler aus Zürich – mit Fokus auf skalierbare, schnelle und durchdachte Systeme in Infrastruktur, Identitätsmanagement und Benutzeroberflächen.",
       },
       about: {
         title: "Über mich • Yanis Sebastian Zürcher",
-        description: "Mehr über meinen Hintergrund, meine Werte und die Tools, mit denen ich schnelle, saubere und minimale Software baue.",
+        description: "Mehr über meinen Hintergrund, meine Werte und die Werkzeuge, mit denen ich schnelle, saubere und minimalistische Software baue.",
       },
       projects: {
         title: "Projekte • Yanis Sebastian Zürcher",
@@ -528,8 +528,8 @@ export const translations = {
       back: "Zurück",
       overview: "Überblick",
       menu: {
-        themes: "Themen",
-        customThemes: "Eigene Themen",
+        themes: "Designs",
+        customThemes: "Eigene Designs",
         effects: "Effekte"
       },
       on: "An",
@@ -539,9 +539,9 @@ export const translations = {
         noResults: "Keine Ergebnisse gefunden.",
         groups: {
           navigation: "Navigation",
-          theme: "Theme",
+          theme: "Design",
           language: "Sprache",
-          shortcuts: "Kurzbefehle"
+          shortcuts: "Tastenkürzel"
         },
         shortcuts: {
           search: "Suche",
@@ -550,7 +550,7 @@ export const translations = {
       },
       techStack: "Technologie-Stack",
       links: "Links",
-      chromeStore: "Chrome Store",
+      chromeStore: "Chrome Web Store",
       visitSite: "Website besuchen",
       sourceCode: "Quellcode",
       demo: "Demo",
@@ -560,16 +560,16 @@ export const translations = {
     },
     feed: {
       recentActivity: "Aktuelle Aktivitäten",
-      lastEvents: "Letzte 20 Ereignisse",
+      lastEvents: "Letzte 20 Aktivitäten",
       noActivity: "Keine aktuellen Aktivitäten",
-      checkBack: "Schau später noch einmal vorbei",
+      checkBack: "Schauen Sie später noch einmal vorbei",
       moreSuffix: "mehr"
     },
     hire: {
-      hirebtn: "Stell mich ein",
-      hiretitle: "Derzeit verpflichtet",
+      hirebtn: "Jetzt anfragen",
+      hiretitle: "Derzeit eingebunden",
       hiretxt: "Ich bin momentan an ein Praktikum gebunden. Sollte Ihr Angebot jedoch besser sein, bin ich offen für ein Gespräch. Entdecken Sie gerne, was ich kann.",
-      hirelbl: "Kontakt"
+      hirelbl: "Kontakt aufnehmen"
     },
     nav: {
       about: "Über mich",
@@ -588,29 +588,29 @@ export const translations = {
       description2: "Ich entwickle skalierbare, schnelle und durchdachte Systeme.",
       description3: "Tätig in Infrastruktur, Identitätsmanagement und Benutzeroberflächen.",
       description4: "Fokus auf Struktur, Klarheit und Präzision.",
-      contactMe: "Kontakt",
+      contactMe: "Kontakt aufnehmen",
       viewProjects: "Projekte ansehen"
     },
     auroraIntro: {
       newLabel: "Neu",
       title: "Aurora-Hintergrund",
-      description: "Ein dezenter, animierter Hintergrund, der sich deinem Theme anpasst.",
-      instruction: "Du kannst ihn jederzeit aktivieren oder deaktivieren: Klicke oben rechts auf den Theme-Umschalter und schalte 'Aurora-Hintergrund' um.",
+      description: "Ein dezenter, animierter Hintergrund, der sich Ihrem Design anpasst.",
+      instruction: "Sie können ihn jederzeit aktivieren oder deaktivieren: Öffnen Sie oben rechts den Design-Umschalter und schalten Sie 'Aurora‑Hintergrund' um.",
       performanceWarning: "Hinweis: Kann die Leistung auf älteren Geräten oder langsameren Browsern beeinträchtigen.",
       enableButton: "Aurora aktivieren",
       notNowButton: "Nicht jetzt"
     },
     randomizer: {
       welcome: "Willkommen",
-      title: "Wähle eine Stimmung — oder überlasse es dem Zufall",
-      description: "Drehe das Rad und entdecke ein Theme. Du kannst es später jederzeit oben rechts ändern.",
+      title: "Wählen Sie eine Stimmung — oder überlassen Sie es dem Zufall",
+      description: "Drehen Sie am Rad und entdecken Sie ein Design. Sie können es jederzeit oben rechts ändern.",
       spin: "Drehen",
       spinning: "Dreht...",
       keep: "Behalten"
     },
     experience: {
       title: "Erfahrung",
-      backHome: "Zurück",
+      backHome: "Zurück zur Startseite",
       subtitle: "Mein beruflicher Werdegang und meine Ausbildung, die meine technische Expertise geprägt haben.",
       sections: {
         work: "Beruf",
@@ -679,10 +679,10 @@ export const translations = {
     },
     projects: {
       title: "Projekte",
-      backHome: "Zurück",
+      backHome: "Zurück zur Startseite",
       featured: "Hervorgehobene Projekte",
       other: "Weitere Projekte",
-      otherInfo: "Nicht hervorgehobene Projekte: kleinere Tools, Experimente und Utilities.",
+      otherInfo: "Nicht hervorgehobene Projekte: kleinere Tools, Experimente und Hilfsprogramme.",
       viewDetails: "Details ansehen",
       viewAll: "Alle Projekte ansehen",
       viewProject: "Projekt ansehen",
@@ -693,8 +693,8 @@ export const translations = {
       sortBy: "Sortieren nach",
       sortOptions: {
         priority: "Priorität",
-        dateNewest: "Datum (neueste)",
-        dateOldest: "Datum (älteste)",
+        dateNewest: "Datum (neueste zuerst)",
+        dateOldest: "Datum (älteste zuerst)",
         nameAsc: "Name (A–Z)",
         nameDesc: "Name (Z–A)"
       },
@@ -706,7 +706,7 @@ export const translations = {
       list: {
         codeExtractor: {
           title: "Website Code Extractor",
-          description: "Eine einfache Chrome-Erweiterung, die HTML, CSS, JavaScript und Bilder von Websites extrahiert und sie mit JSzip in eine ZIP-Datei verpackt. Ideal für kleinere Websites, ermöglicht sie schnellen Zugriff auf Webcode, kann aber bei grösseren Websites, die stark von serverseitigem Code abhängen, an Grenzen stoßen."
+          description: "Eine einfache Chrome-Erweiterung, die HTML, CSS, JavaScript und Bilder von Websites extrahiert und sie mit JSZip in eine ZIP-Datei verpackt. Ideal für kleinere Websites – bei grösseren Seiten, die stark von serverseitigem Code abhängen, stösst sie an Grenzen."
         },
         applicare: {
           title: "AppliCare",
@@ -722,15 +722,15 @@ export const translations = {
         },
         vmDetector: {
           title: "Virtual Machine Detector",
-          description: "Dies ist ein Tool, das erkennt, ob eine Maschine eine virtuelle Maschine ist."
+          description: "Ein Tool zur Erkennung, ob ein System in einer virtuellen Maschine läuft."
         },
         viewCounter: {
           title: "View Counter",
-          description: "Dies ist eine einfache Besucherzähler-Anwendung, die zählt, wie oft eine Seite aufgerufen wurde. Sie wurde mit Spring Boot und Redis entwickelt."
+          description: "Einfache Besucherzähler‑App, die Seitenaufrufe zählt. Entwickelt mit Spring Boot und Redis."
         },
         dockerService: {
           title: "Docker Service Deployment",
-          description: "Dieses Docker-Compose-Projekt setzt MediaWiki, Nextcloud, Gogs auf und legt den Fokus auf Teamarbeit, Containerisierung und Dokumentation. Entwickelt mit Benicio Von Felten."
+          description: "Dieses Docker‑Compose‑Projekt stellt MediaWiki, Nextcloud und Gogs bereit und fokussiert Teamarbeit, Containerisierung und Dokumentation. Gemeinsam mit Benicio Von Felten entwickelt."
         },
         phishing: {
           title: "Phishing Website Tutorial",
@@ -742,11 +742,11 @@ export const translations = {
         },
         sola: {
           title: "Sola",
-          description: "Sola ist meine persönliche Website, die, auf der du dich gerade befindest. Sie wurde mit React, TypeScript und Tailwind CSS erstellt und ist darauf ausgelegt, meine Projekte, Fähigkeiten und Erfahrungen auf eine saubere und moderne Weise zu präsentieren."
+          description: "Sola ist meine persönliche Website. Entwickelt mit React, TypeScript und Tailwind CSS, präsentiert sie meine Projekte, Fähigkeiten und Erfahrungen in einem klaren, modernen Design."
         }, 
         self: {
           title: "Self",
-          description: "Self ist ein anpassbares Systeminformations-Tool für Windows, inspiriert von Neofetch und mit Python entwickelt. Es zeigt Systeminformationen zusammen mit Bild- oder ASCII-Art direkt im Terminal an. Mit Unterstützung für Block- und Braille-Darstellung, anpassbaren Themes und einem einfachen PowerShell-Installer bringt es eine saubere, Unix-ähnliche Ästhetik auf Windows."
+          description: "Self ist ein anpassbares Systeminformations-Tool für Windows, inspiriert von Neofetch und mit Python entwickelt. Es zeigt Systeminformationen zusammen mit Bild- oder ASCII-Art direkt im Terminal an. Mit Unterstützung für Block- und Braille-Darstellung, anpassbaren Designs und einem einfachen PowerShell-Installer bringt es eine saubere, Unix-ähnliche Ästhetik auf Windows."
         },
         taco: {
           title: "Taco",
@@ -760,7 +760,7 @@ export const translations = {
     },
     skills: {
       title: "Fähigkeiten",
-      backHome: "Zurück",
+      backHome: "Zurück zur Startseite",
       groups: {
         frontend: "Frontend",
         backend: "Backend",
@@ -774,20 +774,20 @@ export const translations = {
       backHome: "Zurück zur Startseite"
     },
     footer: {
-      atw: "über diese website", 
+      atw: "Über diese Website", 
       madeWith: "Erstellt mit",
       by: "von",
       rights: "Alle Rechte vorbehalten.",
       navigation: "Navigation",
-      connect: "Verbinden",
+      connect: "Vernetzen",
       contact: "Kontakt",
       contactForm: "Kontaktformular",
       privacy: "Datenschutzerklärung",
       legal: "Rechtliches"
     },
     about: {
-      title: "Über Mich",
-      backHome: "Zurück",
+      title: "Über mich",
+      backHome: "Zurück zur Startseite",
       viewSkills: "Fähigkeiten ansehen",
       intro: "Ich bin Yanis Sebastian Zürcher, ein 17-jähriger Softwareentwickler aus Zürich, Schweiz. Ich studiere Informatik an der [WISS](https://www.wiss.ch), aber das meiste habe ich mir durch eigene Projekte beigebracht – nicht durch die Schule.",
       hobbies: "Ich konzentriere mich darauf, schnelle, saubere und minimalistische Webanwendungen zu entwickeln. Ob Full-Stack-Plattformen oder elegante Frontends – mir sind Klarheit, Performance und ein durchdachtes Nutzererlebnis wichtig. Ich arbeite ständig an meinen eigenen Ideen und entwickle Dinge, die sich genauso gut anfühlen, wie sie funktionieren.",
@@ -801,15 +801,15 @@ export const translations = {
         title: "Leidenschaften & Interessen",
         nature: {
           title: "Alpine Erkundung",
-          description: "Das Leben in der Schweiz bietet unglaublichen Zugang zur Natur. Ich wandere regelmäßig durch die Alpen und finde, dass die Kombination aus Herausforderung und natürlicher Schönheit sowohl mentale Klarheit als auch kreative Inspiration für meine technische Arbeit bietet."
+          description: "Das Leben in der Schweiz bietet unglaublichen Zugang zur Natur. Ich wandere regelmässig durch die Alpen und finde, dass die Kombination aus Herausforderung und natürlicher Schönheit sowohl mentale Klarheit als auch kreative Inspiration für meine technische Arbeit bietet."
         },
         tech: {
-          title: "Open-Source-Beitrag",
-          description: "Ich trage aktiv zu mehreren Open-Source-Projekten bei, wobei ich mich besonders auf Leistungsoptimierung und Verbesserungen der Barrierefreiheit konzentriere. Diese Gemeinschaftsbeteiligung hält mich an der Spitze der Entwicklung, während ich dem Ökosystem, das ich schätze, etwas zurückgebe."
+          title: "Open‑Source‑Engagement",
+          description: "Ich engagiere mich aktiv in mehreren Open‑Source‑Projekten – mit Fokus auf Leistungsoptimierung und Barrierefreiheit. Dieses Engagement hält mich technisch auf dem neuesten Stand und ermöglicht es mir, dem Ökosystem, das ich schätze, etwas zurückzugeben."
         },
         learning: {
           title: "Technische Literatur",
-          description: "Ich pflege eine kuratierte Sammlung technischer Bücher und nehme regelmäßig an Online-Kursen teil. Derzeit erforsche ich fortgeschrittene Muster in verteilten Systemen und funktionale Programmierparadigmen, die ich in meinen Projekten anwende."
+          description: "Ich pflege eine kuratierte Sammlung technischer Bücher und nehme regelmässig an Online‑Kursen teil. Derzeit erforsche ich fortgeschrittene Muster in verteilten Systemen und funktionale Programmierparadigmen, die ich in meinen Projekten anwende."
         },
         workspace: {
           title: "Optimierte Umgebung",
@@ -817,12 +817,12 @@ export const translations = {
         }
       },
       testimonials: {
-        title: "Was Leute sagen",
-        link: "Arbeite mit mir",
+        title: "Kundenstimmen",
+        link: "Mit mir arbeiten",
         viewMore: "Mehr anzeigen",
-        visitWebsite: "Webseite besuchen",
+        visitWebsite: "Website besuchen",
         viewLinkedIn: "LinkedIn ansehen",
-        websiteChip: "Webseite",
+        websiteChip: "Website",
         modalTitle: "Referenz",
         modalDescription: "Vollständige Referenz von {author}"
       },
@@ -847,7 +847,7 @@ export const translations = {
     contact: {
       title: "Kontakt",
       description: "Haben Sie eine Frage oder möchten Sie zusammenarbeiten? Kontaktieren Sie mich!",
-      backHome: "Zurück",
+      backHome: "Zurück zur Startseite",
       nameLabel: "Name",
       namePlaceholder: "Ihr Name",
       emailLabel: "E-Mail",
@@ -866,7 +866,7 @@ export const translations = {
       uploadedLabel: "Hochgeladen",
       cloudinaryLinkLabel: "Cloudinary‑Link",
       dropOverlay: "Zum Anhängen ablegen",
-      fileTooLarge: "Datei ist zu groß (max. {max}).",
+      fileTooLarge: "Datei ist zu gross (max. {max}).",
       unsupportedFileType: "Nicht unterstützter Dateityp. Erlaubt: PNG, JPG, WEBP, PDF, DOC, DOCX.",
       validation: {
         nameRequired: "Bitte geben Sie Ihren Namen ein.",
@@ -885,7 +885,7 @@ export const translations = {
       subtitle: "Umfassende Softwareentwicklungsdienste, angepasst an Ihre Bedürfnisse.",
       backHome: "Zurück",
       pricing: "* Preise sind verhandelbar und werden auf Ihre spezifischen Bedürfnisse und den Projektumfang abgestimmt.",
-      getStarted: "Loslegen",
+      getStarted: "Jetzt starten",
       services: {
         fullstack: {
           title: "Full-Stack-Entwicklung",
@@ -905,7 +905,7 @@ export const translations = {
           features: [
             "React-Entwicklung",
             "UI/UX-Implementierung",
-            "Animation und Interaktivität",
+            "Animationen und Interaktivität",
             "Mobile-First-Design"
           ]
         },
@@ -917,7 +917,7 @@ export const translations = {
             "API-Architektur",
             "Datenbankverwaltung",
             "Server-Optimierung",
-            "Sicherheitsimplementierung"
+            "Sicherheitsmassnahmen"
           ]
         },
         consulting: {
@@ -926,8 +926,8 @@ export const translations = {
           price: "ab CHF 60/h",
           features: [
             "Architekturplanung",
-            "Technologie-Stack-Auswahl",
-            "Performance-Auditing",
+            "Technologiestack-Auswahl",
+            "Leistungsanalyse",
             "Sicherheitsbewertung"
           ]
         }
@@ -1171,7 +1171,7 @@ export const translations = {
       list: {
         codeExtractor: {
           title: "Extractor de Código Web",
-          description: "Una extensión simple de Chrome que extrae HTML, CSS, JavaScript e imágenes de sitios web y los empaqueta en un archivo zip con JSzip. Ideal para sitios pequeños, permite acceso rápido al código web, aunque puede tener limitaciones con sitios más grandes que dependen en gran medida de código del servidor."
+          description: "Una extensión simple de Chrome que extrae HTML, CSS, JavaScript e imágenes de sitios web y los empaqueta en un archivo ZIP con JSZip. Ideal para sitios pequeños, permite acceso rápido al código web, aunque puede tener limitaciones con sitios más grandes que dependen en gran medida del código del servidor."
         },
         applicare: {
           title: "AppliCare",
@@ -1207,7 +1207,7 @@ export const translations = {
         },
         sola: {
           title: "Sola",
-          description: "Sola es mi sitio web personal, la que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna."
+          description: "Sola es mi sitio web personal, el que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna."
         }, 
         self: {
           title: "Self",
@@ -1408,7 +1408,7 @@ export const translations = {
     seo: {
       home: {
         title: "Yanis Sebastian Zürcher • チューリッヒのソフトウェア開発者",
-        description: "スケーラブルで高速、丁寧に設計されたシステムに注力。インフラ、アイデンティティ、インターフェース領域で活動。",
+        description: "スケーラブルで高速、丁寧に設計されたシステムに注力。インフラ、アイデンティティ、UI などの領域で活動。",
       },
       about: {
         title: "概要 • Yanis Sebastian Zürcher",
@@ -1526,7 +1526,7 @@ export const translations = {
       newLabel: "新機能",
       title: "オーロラ背景",
       description: "テーマに合わせて変化する、さりげないアニメーション背景です。",
-      instruction: "いつでも有効 / 無効を切り替えられます。右上のテーマ切替を開き『Aurora background』を切り替えてください。",
+      instruction: "いつでも有効/無効を切り替えられます。右上のテーマ切替を開き『Aurora background』を切り替えてください。",
       performanceWarning: "注意：古いデバイスや遅いブラウザではパフォーマンスに影響する可能性があります。",
       enableButton: "Aurora を有効化",
       notNowButton: "後で"
@@ -1613,7 +1613,7 @@ export const translations = {
       backHome: "ホームに戻る",
       featured: "主要プロジェクト",
       other: "その他のプロジェクト",
-      otherInfo: "非注目のプロジェクト：小さなツールや実験的なもの。",
+      otherInfo: "注目外のプロジェクト：小さなツールや実験的なもの。",
       viewDetails: "詳細を見る",
       viewAll: "すべてのプロジェクトを見る",
       viewProject: "プロジェクトを見る",
@@ -1637,7 +1637,7 @@ export const translations = {
       list: {
         codeExtractor: {
           title: "ウェブサイトコード抽出ツール",
-          description: "ウェブサイトからHTML、CSS、JavaScript、画像を抽出し、JSzipでZIPファイルにパッケージ化するシンプルなChrome拡張機能です。小規模なサイトに最適で、ウェブコードに素早くアクセスできますが、サーバーサイドコードに大きく依存する大規模なサイトでは制限がある場合があります。"
+          description: "ウェブサイトから HTML、CSS、JavaScript、画像を抽出し、JSZip で ZIP にまとめるシンプルな Chrome 拡張です。小規模サイトに最適でコードへ素早くアクセスできますが、サーバー側コードに依存する大規模サイトでは制限があります。"
         },
         applicare: {
           title: "AppliCare",
@@ -1673,7 +1673,7 @@ export const translations = {
         },
         sola: {
           title: "Sola",
-          description: "Solaは私の個人ウェブサイトで、現在ご覧のものです。React、TypeScript、Tailwind CSSで作成され、プロジェクト、スキル、経験をクリーンでモダンな方法で表示することを目的としています。"
+          description: "Sola は私の個人サイトです。React・TypeScript・Tailwind CSS で構築し、プロジェクトやスキル、経験をクリーンかつモダンに紹介します。"
         }, 
         self: {
           title: "Self",
@@ -1874,7 +1874,7 @@ export const translations = {
     seo: {
       home: {
         title: "Yanis Sebastian Zürcher • 苏黎世软件开发者",
-        description: "专注于可扩展、快速且精心设计的系统，涉及基础设施、身份与访问和界面。",
+        description: "专注于可扩展、快速且精心设计的系统，涉及基础设施、身份与访问以及界面设计。",
       },
       about: {
         title: "关于我 • Yanis Sebastian Zürcher",
@@ -2078,7 +2078,7 @@ export const translations = {
       backHome: "返回首页",
       featured: "精选项目",
       other: "其他项目",
-      otherInfo: "非精选项目：一些小型工具与实验项目。",
+      otherInfo: "非精选项目：小型工具与实验项目。",
       viewDetails: "查看详情",
       viewAll: "查看所有项目",
       viewProject: "查看项目",
@@ -2102,7 +2102,7 @@ export const translations = {
       list: {
         codeExtractor: {
           title: "网站代码提取器",
-          description: "一个简单的 Chrome 扩展程序，可以从网站提取 HTML、CSS、JavaScript 和图片，并使用 JSZip 打包成 ZIP 文件。适用于小型网站，可以快速访问网页代码，但可能在严重依赖服务器端代码的大型网站上受到限制。"
+          description: "一款简单的 Chrome 扩展，可从网站提取 HTML、CSS、JavaScript 和图片，并用 JSZip 打包为 ZIP。适用于小型网站，便于快速获取网页代码；对严重依赖服务端代码的大型网站存在一定限制。"
         },
         applicare: {
           title: "AppliCare",
@@ -2138,7 +2138,7 @@ export const translations = {
         },
         sola: {
           title: "Sola",
-          description: "Sola是我的个人网站，您现在正在查看。使用React、TypeScript和Tailwind CSS构建，旨在以干净且现代的方式展示项目、技能和经验。"
+          description: "Sola 是我的个人网站。基于 React、TypeScript 与 Tailwind CSS 构建，用以以干净、现代的方式展示我的项目、技能与经验。"
         },
         self: {
           title: "Self",
