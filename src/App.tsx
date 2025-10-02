@@ -20,8 +20,10 @@ import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import ClickSpark from "./components/ui/custom/click-spark";
 import { AuroraProvider } from "./lib/aurora-provider";
 import AuroraBackground from "./components/backgrounds/AuroraBackground";
-import AuroraIntroModal from "./components/temporary/AuroraIntroModal";
-import ThemeRandomizer from "./components/temporary/ThemeRandomizer";
+// defer imports to improve performance
+// import AuroraIntroModal from "./components/temporary/AuroraIntroModal";
+// import ThemeRandomizer from "./components/temporary/ThemeRandomizer";
+import GitHubStarModal from "./components/temporary/GitHubStarModal";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -49,8 +51,9 @@ const App = () => (
               <div className="min-h-screen flex flex-col relative">
                 <Toaster position="bottom-right" />
                 {/* <AuroraIntroModal/> */}
-                <ThemeRandomizer />
+                {/* <ThemeRandomizer /> */}
                 <BrowserRouter>
+                  <GitHubStarModal />
                   <KeyboardShortcuts />
                   <CommandMenu />
                   <AnimatedRoutes />
