@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from 'react';
+import React from "react";
 
 interface ProjectLayoutProps {
   children: React.ReactNode;
@@ -20,11 +20,9 @@ interface ProjectLayoutProps {
 const ProjectLayout: React.FC<ProjectLayoutProps> = ({ children }) => {
   return (
     <main className="min-h-screen flex flex-col">
-      <div className="flex-1 flex flex-col">
-        {children}
-      </div>
+      <div className="flex-1 flex flex-col">{children}</div>
     </main>
   );
 };
 
-export default ProjectLayout; 
+export default ProjectLayout;

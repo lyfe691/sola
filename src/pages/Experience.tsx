@@ -19,7 +19,12 @@ const Experience = () => {
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
-  type EmploymentType = "full_time" | "part_time" | "contract" | "internship" | "freelance";
+  type EmploymentType =
+    | "full_time"
+    | "part_time"
+    | "contract"
+    | "internship"
+    | "freelance";
   type LocationType = "onsite" | "remote" | "hybrid";
 
   const work = [
@@ -33,7 +38,15 @@ const Experience = () => {
       employmentType: "internship" as EmploymentType,
       description: t.experience.gz.description,
       achievements: t.experience.gz.achievements,
-      technologies: ["Identity & Access Management (IAM)", "Python", "Powershell", "Git", "Automation", "Active Directory", "Teamwork"]
+      technologies: [
+        "Identity & Access Management (IAM)",
+        "Python",
+        "Powershell",
+        "Git",
+        "Automation",
+        "Active Directory",
+        "Teamwork",
+      ],
     },
     {
       period: t.experience.period.freelance,
@@ -45,7 +58,15 @@ const Experience = () => {
       employmentType: "part_time" as EmploymentType,
       description: t.experience.freelance.description,
       achievements: t.experience.freelance.achievements,
-      technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Spring Boot", "Java", "Git"]
+      technologies: [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Spring Boot",
+        "Java",
+        "Git",
+      ],
     },
   ];
 
@@ -60,7 +81,20 @@ const Experience = () => {
       employmentType: "full_time" as EmploymentType,
       description: t.experience.wiss.description,
       achievements: t.experience.wiss.achievements,
-      technologies: ["React", "TypeScript", "JavaScript", "Project Management", "Teamwork", "Java", "Spring Boot", "MongoDB", "Docker", "Git", "Linux", "Figma"]
+      technologies: [
+        "React",
+        "TypeScript",
+        "JavaScript",
+        "Project Management",
+        "Teamwork",
+        "Java",
+        "Spring Boot",
+        "MongoDB",
+        "Docker",
+        "Git",
+        "Linux",
+        "Figma",
+      ],
     },
     {
       period: t.experience.period.sek,
@@ -72,8 +106,8 @@ const Experience = () => {
       employmentType: "full_time" as EmploymentType,
       description: t.experience.sek.description,
       achievements: t.experience.sek.achievements,
-      technologies: ["MINT", "English", "German", "French", "Office 365"]
-    }
+      technologies: ["MINT", "English", "German", "French", "Office 365"],
+    },
   ];
 
   return (
@@ -88,18 +122,24 @@ const Experience = () => {
           {t.experience.title}
         </h1>
       </ScrollReveal>
-      
+
       <ScrollReveal variant="default">
         <p className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
           {t.experience.subtitle}
         </p>
       </ScrollReveal>
-          
+
       {/* Work */}
       <div className="relative space-y-8 sm:space-y-12 mb-12">
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-xl font-semibold">{t.experience.sections?.work ?? 'Work'}</h2>
+            <h2 className="text-xl font-semibold">
+              {t.experience.sections?.work ?? "Work"}
+            </h2>
             <div className="h-px flex-1 bg-foreground/10" />
           </div>
         </motion.div>
@@ -112,12 +152,15 @@ const Experience = () => {
               className="relative grid grid-cols-[20px_1fr] sm:grid-cols-[25px_1fr] gap-4 sm:gap-6 md:gap-8"
             >
               <div>
-                <motion.div 
+                <motion.div
                   className="w-[15px] h-[15px] sm:w-[23px] sm:h-[23px] rounded-full border-2 
                             border-primary/40 bg-background transition-colors duration-300"
                   animate={{
-                    borderColor: hoveredExp === exp.role ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.4)",
-                    scale: hoveredExp === exp.role ? 1.1 : 1
+                    borderColor:
+                      hoveredExp === exp.role
+                        ? "hsl(var(--primary))"
+                        : "hsl(var(--primary) / 0.4)",
+                    scale: hoveredExp === exp.role ? 1.1 : 1,
                   }}
                 />
               </div>
@@ -131,7 +174,7 @@ const Experience = () => {
                     {exp.role}
                   </h3>
                   <span className="hidden sm:block text-foreground/40">•</span>
-                  <a 
+                  <a
                     href={exp.companyLink}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -151,9 +194,13 @@ const Experience = () => {
                     const emp = chips[exp.employmentType] || exp.employmentType;
                     return (
                       <>
-                        <span className="px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10">{loc}</span>
+                        <span className="px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10">
+                          {loc}
+                        </span>
                         <span className="px-1 text-foreground/40">•</span>
-                        <span className="px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10">{emp}</span>
+                        <span className="px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10">
+                          {emp}
+                        </span>
                       </>
                     );
                   })()}
@@ -163,7 +210,10 @@ const Experience = () => {
                 </p>
                 <div className="space-y-2 mb-5 sm:mb-6">
                   {exp.achievements.map((achievement, i) => (
-                    <div key={i} className="flex items-start gap-2 text-sm text-foreground/70">
+                    <div
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-foreground/70"
+                    >
                       <span className="text-primary">-</span>
                       <span>{achievement}</span>
                     </div>
@@ -190,9 +240,15 @@ const Experience = () => {
 
       {/* Education */}
       <div className="relative space-y-8 sm:space-y-12">
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
           <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-xl font-semibold">{t.experience.sections?.education ?? 'Education'}</h2>
+            <h2 className="text-xl font-semibold">
+              {t.experience.sections?.education ?? "Education"}
+            </h2>
             <div className="h-px flex-1 bg-foreground/10" />
           </div>
         </motion.div>
@@ -204,64 +260,70 @@ const Experience = () => {
               onHoverEnd={() => setHoveredExp(null)}
               className="relative grid grid-cols-[20px_1fr] sm:grid-cols-[25px_1fr] gap-4 sm:gap-6 md:gap-8"
             >
-                <div>
-                  <motion.div 
-                    className="w-[15px] h-[15px] sm:w-[23px] sm:h-[23px] rounded-full border-2 
+              <div>
+                <motion.div
+                  className="w-[15px] h-[15px] sm:w-[23px] sm:h-[23px] rounded-full border-2 
                               border-primary/40 bg-background transition-colors duration-300"
-                    animate={{
-                      borderColor: hoveredExp === exp.role ? "hsl(var(--primary))" : "hsl(var(--primary) / 0.4)",
-                      scale: hoveredExp === exp.role ? 1.1 : 1
-                    }}
-                  />
+                  animate={{
+                    borderColor:
+                      hoveredExp === exp.role
+                        ? "hsl(var(--primary))"
+                        : "hsl(var(--primary) / 0.4)",
+                    scale: hoveredExp === exp.role ? 1.1 : 1,
+                  }}
+                />
+              </div>
+
+              <div className="pb-6 sm:pb-8">
+                <span className="text-xs font-mono text-foreground/40 mb-2 block">
+                  {exp.period}
+                </span>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2">
+                  <h3 className="text-lg font-medium text-primary">
+                    {exp.role}
+                  </h3>
+                  <span className="hidden sm:block text-foreground/40">•</span>
+                  <a
+                    href={exp.companyLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/70 hover:text-primary underline underline-offset-2 decoration-foreground/30 hover:decoration-primary transition-colors"
+                  >
+                    {exp.company}
+                    <ExternalLink className="w-3 h-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" />
+                  </a>
+                </div>
+                <p className="text-sm text-foreground/40 mb-4">
+                  {exp.location}
+                </p>
+                <p className="text-sm text-foreground/70 mb-5 sm:mb-6 leading-relaxed">
+                  {exp.description}
+                </p>
+
+                <div className="space-y-2 mb-5 sm:mb-6">
+                  {exp.achievements.map((achievement, i) => (
+                    <div
+                      key={i}
+                      className="flex items-start gap-2 text-sm text-foreground/70"
+                    >
+                      <span className="text-primary">-</span>
+                      <span>{achievement}</span>
+                    </div>
+                  ))}
                 </div>
 
-                <div className="pb-6 sm:pb-8">
-                  <span className="text-xs font-mono text-foreground/40 mb-2 block">
-                    {exp.period}
-                  </span>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-2">
-                    <h3 className="text-lg font-medium text-primary">
-                      {exp.role}
-                    </h3>
-                    <span className="hidden sm:block text-foreground/40">•</span>
-                    <a 
-                      href={exp.companyLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group inline-flex items-center gap-2 text-sm font-medium text-foreground/70 hover:text-primary underline underline-offset-2 decoration-foreground/30 hover:decoration-primary transition-colors"
-                    >
-                      {exp.company}
-                      <ExternalLink className="w-3 h-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" />
-                    </a>
-                  </div>
-                  <p className="text-sm text-foreground/40 mb-4">
-                    {exp.location}
-                  </p>
-                  <p className="text-sm text-foreground/70 mb-5 sm:mb-6 leading-relaxed">
-                    {exp.description}
-                  </p>
-                  
-                  <div className="space-y-2 mb-5 sm:mb-6">
-                    {exp.achievements.map((achievement, i) => (
-                      <div key={i} className="flex items-start gap-2 text-sm text-foreground/70">
-                        <span className="text-primary">-</span>
-                        <span>{achievement}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {exp.technologies.map((tech, i) => (
-                      <span
-                        key={i}
-                        className="px-2 py-1 text-xs rounded-md bg-foreground/5 
+                <div className="flex flex-wrap gap-2">
+                  {exp.technologies.map((tech, i) => (
+                    <span
+                      key={i}
+                      className="px-2 py-1 text-xs rounded-md bg-foreground/5 
                                  text-foreground/60 border border-foreground/10
                                  hover:border-primary/20 hover:text-primary
                                  transition-colors duration-300"
-                      >
-                        {tech}
-                      </span>
-                    ))}
+                    >
+                      {tech}
+                    </span>
+                  ))}
                 </div>
               </div>
             </motion.div>
@@ -273,4 +335,3 @@ const Experience = () => {
 };
 
 export default Experience;
-

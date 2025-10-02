@@ -1,8 +1,13 @@
-import { ProjectImage, ProjectGallery, TechStack, CodeBlock } from '@/components/MDXComponents';
+import {
+  ProjectImage,
+  ProjectGallery,
+  TechStack,
+  CodeBlock,
+} from "@/components/MDXComponents";
 
 # Design Philosophy
 
-The design philosophy behind Sola centers on **minimalism with purpose**. Every element serves a function, from the subtle animations that guide user attention to the carefully chosen typography hierarchy. 
+The design philosophy behind Sola centers on **minimalism with purpose**. Every element serves a function, from the subtle animations that guide user attention to the carefully chosen typography hierarchy.
 
 > "Good design is as little design as possible" - Dieter Rams
 
@@ -47,17 +52,17 @@ const OptimizedImage = ({ src, alt, ...props }: { src: string, alt: string, [key
 
 // memoized expensive calculations
 const ExpensiveComponent = memo(({ data }: { data: any[] }) => {
-  const processedData = useMemo(() => {
-    return data.map(item => ({
-      ...item,
-      processed: heavyCalculation(item)
-    }));
-  }, [data]);
+const processedData = useMemo(() => {
+return data.map(item => ({
+...item,
+processed: heavyCalculation(item)
+}));
+}, [data]);
 
-  return <div>{/* render */}</div>;
+return <div>{/* render */}</div>;
 });`}
-  fileName="optimization-techniques.tsx"
-  lang="typescript"
+fileName="optimization-techniques.tsx"
+lang="typescript"
 />
 
 The result? A portfolio that loads quickly and feels responsive on all devices.
@@ -93,14 +98,14 @@ The portfolio has successfully achieved its goals:
 
 ### Key Metrics
 
-| Metric | Score | Target |
-|--------|-------|--------|
-| Performance | 100 | 90+ |
-| Accessibility | 100 | 95+ |
-| Best Practices | 100 | 95+ |
-| SEO | 100 | 90+ |
+| Metric         | Score | Target |
+| -------------- | ----- | ------ |
+| Performance    | 100   | 90+    |
+| Accessibility  | 100   | 95+    |
+| Best Practices | 100   | 95+    |
+| SEO            | 100   | 90+    |
 
-<ProjectImage 
+<ProjectImage
   src="/projects/sola/lighthouse.png"
   alt="Performance metrics"
   caption="Lighthouse performance results"
@@ -111,13 +116,12 @@ The portfolio has successfully achieved its goals:
 
 I'm always looking for ways to improve the project. Here are some ideas:
 
--  **Blog Integration**: Technical writing section
--  **Interactive Demos**: Live code examples for projects
--  **now** page: inspired by a [now](https://nownownow.com/) page.
+- **Blog Integration**: Technical writing section
+- **Interactive Demos**: Live code examples for projects
+- **now** page: inspired by a [now](https://nownownow.com/) page.
 
 &amp; whatever else I can think of.
 
+---
 
-***
-
-*This project&mdash;with over [300 clean commits](https://github.com/lyfe691/sola/commits/main)&mdash;represents not just a portfolio, but a testament to modern web development practices and attention to detail.* 
+_This project&mdash;with over [300 clean commits](https://github.com/lyfe691/sola/commits/main)&mdash;represents not just a portfolio, but a testament to modern web development practices and attention to detail._

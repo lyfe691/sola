@@ -6,7 +6,14 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 type AuroraProviderProps = {
   children: React.ReactNode;
@@ -50,21 +57,19 @@ export function AuroraProvider({
     }
   }, [enabled, storageKey]);
 
-  const value = useMemo<AuroraProviderState>(
-    () => {
-      const toggle = () => setEnabled((v) => !v);
-      return { enabled, setEnabled, toggle };
-    },
-    [enabled]
-  );
+  const value = useMemo<AuroraProviderState>(() => {
+    const toggle = () => setEnabled((v) => !v);
+    return { enabled, setEnabled, toggle };
+  }, [enabled]);
 
-  return <AuroraContext.Provider value={value}>{children}</AuroraContext.Provider>;
+  return (
+    <AuroraContext.Provider value={value}>{children}</AuroraContext.Provider>
+  );
 }
 
 export const useAurora = () => {
   const ctx = useContext(AuroraContext);
-  if (ctx === undefined) throw new Error("useAurora must be used within an AuroraProvider");
+  if (ctx === undefined)
+    throw new Error("useAurora must be used within an AuroraProvider");
   return ctx;
 };
-
-

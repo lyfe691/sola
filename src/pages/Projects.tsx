@@ -7,17 +7,17 @@
  */
 
 import { useState, useMemo } from "react";
-import { 
-  ArrowUpRight, 
-  MoveRight, 
-  SortAsc, 
-  Star, 
-  Calendar, 
+import {
+  ArrowUpRight,
+  MoveRight,
+  SortAsc,
+  Star,
+  Calendar,
   CalendarClock,
   ArrowDownAZ,
   ArrowUpAZ,
   FileSearch,
-  Info
+  Info,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion } from "motion/react";
@@ -30,7 +30,11 @@ import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Project {
   id: string;
@@ -51,34 +55,39 @@ interface Project {
   vercelSatori?: boolean;
 }
 
-type SortOption = 'priority' | 'date-newest' | 'date-oldest' | 'name-asc' | 'name-desc';
+type SortOption =
+  | "priority"
+  | "date-newest"
+  | "date-oldest"
+  | "name-asc"
+  | "name-desc";
 
 const buildSortOptions = (t: any): ComboboxOption[] => [
   {
-    value: 'priority',
+    value: "priority",
     label: t.projects.sortOptions.priority,
-    icon: <Star className="w-4 h-4" />
+    icon: <Star className="w-4 h-4" />,
   },
   {
-    value: 'date-newest',
+    value: "date-newest",
     label: t.projects.sortOptions.dateNewest,
-    icon: <Calendar className="w-4 h-4" />
+    icon: <Calendar className="w-4 h-4" />,
   },
   {
-    value: 'date-oldest',
+    value: "date-oldest",
     label: t.projects.sortOptions.dateOldest,
-    icon: <CalendarClock className="w-4 h-4" />
+    icon: <CalendarClock className="w-4 h-4" />,
   },
   {
-    value: 'name-asc',
+    value: "name-asc",
     label: t.projects.sortOptions.nameAsc,
-    icon: <ArrowDownAZ className="w-4 h-4" />
+    icon: <ArrowDownAZ className="w-4 h-4" />,
   },
   {
-    value: 'name-desc',
+    value: "name-desc",
     label: t.projects.sortOptions.nameDesc,
-    icon: <ArrowUpAZ className="w-4 h-4" />
-  }
+    icon: <ArrowUpAZ className="w-4 h-4" />,
+  },
 ];
 
 // slug = deepdive
@@ -90,14 +99,22 @@ const createProjectsData = (t: any): Project[] => [
     image: "/projects/sola.png",
     link: "https://sola.ysz.life",
     github: "https://github.com/lyfe691/sola",
-    tags: ["Portfolio", "shadcn/ui", "TypeScript", "React", "Vite", "Tailwind CSS", "SEO"],
+    tags: [
+      "Portfolio",
+      "shadcn/ui",
+      "TypeScript",
+      "React",
+      "Vite",
+      "Tailwind CSS",
+      "SEO",
+    ],
     featured: true,
     date: {
       start: "2025-02",
-      display: "Feb 2025 - Present"
+      display: "Feb 2025 - Present",
     },
     priority: 1,
-    slug: "sola"
+    slug: "sola",
   },
   {
     id: "applicare",
@@ -106,15 +123,24 @@ const createProjectsData = (t: any): Project[] => [
     image: "/projects/applicare.svg",
     link: "https://applicare.app",
     github: "https://github.com/lyfe691/AppliCare",
-    tags: ["React (Vite)", "Spring Boot", "Ant Design", "MongoDB", "Java", "JavaScript", "Docker", "SEO"],
+    tags: [
+      "React (Vite)",
+      "Spring Boot",
+      "Ant Design",
+      "MongoDB",
+      "Java",
+      "JavaScript",
+      "Docker",
+      "SEO",
+    ],
     featured: true,
     date: {
       start: "2024-12",
       end: "2025-02",
-      display: "Dec 2024 - Feb 2025"
+      display: "Dec 2024 - Feb 2025",
     },
     priority: 2,
-    slug: "applicare"
+    slug: "applicare",
   },
   {
     id: "self",
@@ -126,10 +152,10 @@ const createProjectsData = (t: any): Project[] => [
     featured: true,
     date: {
       start: "2025-05",
-      display: "May 2025"
+      display: "May 2025",
     },
     priority: 3,
-    slug: "self"
+    slug: "self",
   },
   {
     id: "code-extractor",
@@ -142,10 +168,10 @@ const createProjectsData = (t: any): Project[] => [
     featured: true,
     date: {
       start: "2024-08",
-      display: "Aug 2024"
+      display: "Aug 2024",
     },
     priority: 4,
-    slug: "code-extractor"
+    slug: "code-extractor",
   },
   {
     id: "thoughts",
@@ -158,10 +184,10 @@ const createProjectsData = (t: any): Project[] => [
     featured: true,
     date: {
       start: "2025-08",
-      display: "Aug 2025"
+      display: "Aug 2025",
     },
     priority: 5,
-    slug: "thoughts"
+    slug: "thoughts",
   },
   {
     id: "Taco",
@@ -170,14 +196,22 @@ const createProjectsData = (t: any): Project[] => [
     image: "/projects/taco.png",
     link: "https://takitwo.vercel.app",
     github: "https://github.com/lyfe691/taco",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "i18n", "Localization", "Blog", "Template"],
+    tags: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "i18n",
+      "Localization",
+      "Blog",
+      "Template",
+    ],
     featured: true,
     date: {
       start: "2025-04",
-      display: "Apr 2025"
+      display: "Apr 2025",
     },
     priority: 5,
-    slug: "taco"
+    slug: "taco",
   },
   {
     id: "osint",
@@ -191,9 +225,9 @@ const createProjectsData = (t: any): Project[] => [
     date: {
       start: "2024-11",
       end: "2024-12",
-      display: "Nov 2024 - Dec 2024"
+      display: "Nov 2024 - Dec 2024",
     },
-    priority: 6
+    priority: 6,
   },
   {
     id: "chatapp",
@@ -202,13 +236,20 @@ const createProjectsData = (t: any): Project[] => [
     image: "/projects/chatapp.svg",
     link: "https://chat-app.ch",
     github: "https://github.com/lyfe691/chatapp",
-    tags: ["React", "Spring Boot", "MongoDB", "Java", "JavaScript", "WebSocket"],
+    tags: [
+      "React",
+      "Spring Boot",
+      "MongoDB",
+      "Java",
+      "JavaScript",
+      "WebSocket",
+    ],
     featured: true,
     date: {
       start: "2024-09",
-      display: "Sep 2024"
+      display: "Sep 2024",
     },
-    priority: 7
+    priority: 7,
   },
   // non-featured projects
   {
@@ -220,9 +261,9 @@ const createProjectsData = (t: any): Project[] => [
     featured: false,
     date: {
       start: "2024-08",
-      display: "Aug 2024"
+      display: "Aug 2024",
     },
-    priority: 7
+    priority: 7,
   },
   {
     id: "view-counter",
@@ -233,22 +274,30 @@ const createProjectsData = (t: any): Project[] => [
     featured: false,
     date: {
       start: "2024-08",
-      display: "Aug 2024"
+      display: "Aug 2024",
     },
-    priority: 8
+    priority: 8,
   },
   {
     id: "docker-service",
     title: t.projects.list.dockerService.title,
     description: t.projects.list.dockerService.description,
     github: "https://github.com/lyfe691/LB-WISS_169-347",
-    tags: ["Docker", "Docker Compose", "MediaWiki", "Nextcloud", "Gogs", "Teamwork", "Documentation"],
+    tags: [
+      "Docker",
+      "Docker Compose",
+      "MediaWiki",
+      "Nextcloud",
+      "Gogs",
+      "Teamwork",
+      "Documentation",
+    ],
     featured: false,
     date: {
       start: "2024-06",
-      display: "Jun 2024"
+      display: "Jun 2024",
     },
-    priority: 9
+    priority: 9,
   },
   {
     id: "phishing",
@@ -259,9 +308,9 @@ const createProjectsData = (t: any): Project[] => [
     featured: false,
     date: {
       start: "2024-04",
-      display: "Apr 2024"
+      display: "Apr 2024",
     },
-    priority: 10
+    priority: 10,
   },
   {
     id: "otw",
@@ -272,31 +321,39 @@ const createProjectsData = (t: any): Project[] => [
     featured: false,
     date: {
       start: "2024-04",
-      display: "Apr 2024"
+      display: "Apr 2024",
     },
-    priority: 11
-  }
+    priority: 11,
+  },
 ];
 
 // Extracted components for better organization
-const ProjectImage = ({ project, hoveredProject, t }: { project: Project; hoveredProject: string | null; t: any }) => {
+const ProjectImage = ({
+  project,
+  hoveredProject,
+  t,
+}: {
+  project: Project;
+  hoveredProject: string | null;
+  t: any;
+}) => {
   if (!project.image) return null;
   const usesVercelSatori = project.vercelSatori ?? true;
-  
+
   return (
     <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
-      <motion.img 
-        src={project.image} 
+      <motion.img
+        src={project.image}
         alt={project.title}
         loading="lazy"
         decoding="async"
         className="w-full h-full object-cover"
         animate={{
-          scale: hoveredProject === project.id ? 1.05 : 1
+          scale: hoveredProject === project.id ? 1.05 : 1,
         }}
         transition={{
           duration: 0.3,
-          ease: "easeOut"
+          ease: "easeOut",
         }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
@@ -304,18 +361,18 @@ const ProjectImage = ({ project, hoveredProject, t }: { project: Project; hovere
         <motion.div
           className="absolute left-2 bottom-2 md:left-3 md:bottom-3 pointer-events-none"
           initial={{ opacity: 0, y: 2, filter: "blur(2px)" }}
-          animate={{ 
+          animate={{
             opacity: hoveredProject === project.id ? 1 : 0,
             y: hoveredProject === project.id ? 0 : 2,
-            filter: hoveredProject === project.id ? "blur(0px)" : "blur(2px)"
+            filter: hoveredProject === project.id ? "blur(0px)" : "blur(2px)",
           }}
           transition={{ duration: 0.25, ease: "easeOut" }}
         >
           <div className="inline-flex items-center px-2 py-[2px] md:px-2.5 md:py-1 rounded-full bg-background/60 backdrop-blur-sm ring-1 ring-foreground/10 shadow-sm pointer-events-auto">
             <span className="text-[10px] md:text-xs font-medium leading-none text-foreground/80">
-              <RichText 
-                text={t.projects.satoriAttribution} 
-                linkClassName="text-foreground/80 hover:text-primary underline underline-offset-2 decoration-foreground/30 hover:decoration-primary transition-colors" 
+              <RichText
+                text={t.projects.satoriAttribution}
+                linkClassName="text-foreground/80 hover:text-primary underline underline-offset-2 decoration-foreground/30 hover:decoration-primary transition-colors"
               />
             </span>
           </div>
@@ -325,12 +382,21 @@ const ProjectImage = ({ project, hoveredProject, t }: { project: Project; hovere
   );
 };
 
-const ProjectHeader = ({ project, hoveredProject }: { project: Project; hoveredProject: string | null }) => (
+const ProjectHeader = ({
+  project,
+  hoveredProject,
+}: {
+  project: Project;
+  hoveredProject: string | null;
+}) => (
   <div className="flex items-start justify-between mb-2">
-    <motion.h3 
+    <motion.h3
       className="text-lg sm:text-xl font-medium text-foreground group-hover:text-primary transition-colors"
       animate={{
-        color: hoveredProject === project.id ? "hsl(var(--primary))" : "hsl(var(--foreground))"
+        color:
+          hoveredProject === project.id
+            ? "hsl(var(--primary))"
+            : "hsl(var(--foreground))",
       }}
     >
       {project.title}
@@ -338,7 +404,7 @@ const ProjectHeader = ({ project, hoveredProject }: { project: Project; hoveredP
   </div>
 );
 
-const ProjectDate = ({ date }: { date: Project['date'] }) => (
+const ProjectDate = ({ date }: { date: Project["date"] }) => (
   <div className="mb-3 text-xs font-mono text-foreground/60">
     {date.display}
   </div>
@@ -353,20 +419,20 @@ const ProjectDescription = ({ description }: { description: string }) => (
 const ProjectTags = ({ tags }: { tags: string[] }) => {
   const tagVariants = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       scale: 1,
-      transition: { type: "spring" as const, stiffness: 300, damping: 20 }
-    }
+      transition: { type: "spring" as const, stiffness: 300, damping: 20 },
+    },
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="flex flex-wrap gap-1.5 sm:gap-2"
       variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
     >
       {tags.map((tag, i) => (
-        <motion.span 
+        <motion.span
           key={i}
           variants={tagVariants}
           className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
@@ -393,7 +459,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
             <IconButton
               label={t.projects.viewDetails}
               icon={<FileSearch className="w-4 h-4" />}
-              variant="default"  
+              variant="default"
               size="lg"
               className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
             />
@@ -407,7 +473,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
                 size="lg"
                 className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
               >
-                <a 
+                <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -424,7 +490,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
                 size="lg"
                 className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
               >
-                <a 
+                <a
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -446,7 +512,7 @@ const ProjectContent = ({ project, t }: { project: Project; t: any }) => (
     <ProjectHeader project={project} hoveredProject={null} />
     <ProjectDate date={project.date} />
     <ProjectDescription description={project.description} />
-    
+
     <div className="space-y-4">
       <ProjectTags tags={project.tags} />
       <ProjectActions project={project} t={t} />
@@ -454,15 +520,22 @@ const ProjectContent = ({ project, t }: { project: Project; t: any }) => (
   </div>
 );
 
-const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
+const ProjectCard = ({
+  project,
+  hoveredProject,
+  onHover,
+  onHoverEnd,
+  t,
+}: {
   project: Project;
   hoveredProject: string | null;
   onHover: () => void;
   onHoverEnd: () => void;
   t: any;
 }) => {
-  const cardClassName = "group rounded-lg border border-foreground/10 bg-foreground/5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300";
-  
+  const cardClassName =
+    "group rounded-lg border border-foreground/10 bg-foreground/5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300";
+
   return (
     <motion.div
       key={project.id}
@@ -473,7 +546,11 @@ const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
       {project.featured ? (
         <div className={`${cardClassName} overflow-hidden`}>
           <div className="grid md:grid-cols-2 h-full">
-            <ProjectImage project={project} hoveredProject={hoveredProject} t={t} />
+            <ProjectImage
+              project={project}
+              hoveredProject={hoveredProject}
+              t={t}
+            />
             <ProjectContent project={project} t={t} />
           </div>
         </div>
@@ -488,35 +565,39 @@ const ProjectCard = ({ project, hoveredProject, onHover, onHoverEnd, t }: {
 
 const Projects = () => {
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
-  const [sortBy, setSortBy] = useState<SortOption>('priority');
+  const [sortBy, setSortBy] = useState<SortOption>("priority");
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
   const { featuredProjects, otherProjects, sortOptions } = useMemo(() => {
     const projects = createProjectsData(t);
     const sortOptions = buildSortOptions(t);
-    
+
     const sortedProjects = [...projects].sort((a, b) => {
       switch (sortBy) {
-        case 'priority':
+        case "priority":
           return a.priority - b.priority;
-        case 'date-newest':
-          return new Date(b.date.start).getTime() - new Date(a.date.start).getTime();
-        case 'date-oldest':
-          return new Date(a.date.start).getTime() - new Date(b.date.start).getTime();
-        case 'name-asc':
+        case "date-newest":
+          return (
+            new Date(b.date.start).getTime() - new Date(a.date.start).getTime()
+          );
+        case "date-oldest":
+          return (
+            new Date(a.date.start).getTime() - new Date(b.date.start).getTime()
+          );
+        case "name-asc":
           return a.title.localeCompare(b.title);
-        case 'name-desc':
+        case "name-desc":
           return b.title.localeCompare(a.title);
         default:
           return a.priority - b.priority;
       }
     });
-    
+
     return {
-      featuredProjects: sortedProjects.filter(p => p.featured),
-      otherProjects: sortedProjects.filter(p => !p.featured),
-      sortOptions
+      featuredProjects: sortedProjects.filter((p) => p.featured),
+      otherProjects: sortedProjects.filter((p) => !p.featured),
+      sortOptions,
     };
   }, [t, sortBy]);
 
@@ -534,30 +615,30 @@ const Projects = () => {
       </Helmet>
 
       <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-8 sm:mb-12">
-          {t.projects.title}
-        </h1>
+        <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.projects.title}</h1>
       </ScrollReveal>
 
       {/* Sort Controls */}
       <ScrollReveal variant="default">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12">
-            <div className="flex items-center gap-3">
-              <SortAsc className="w-4 h-4 text-foreground/60" />
-              <span className="text-sm text-foreground/60 font-medium">{t.projects.sortBy}:</span>
-              <Combobox
-                options={sortOptions}
-                value={sortBy}
-                onValueChange={(value: string) => setSortBy(value as SortOption)}
-                placeholder={t.projects.selectSorting}
-                searchPlaceholder={t.projects.searchPlaceholder}
-                emptyMessage={t.projects.emptyMessage}
-                className="w-[160px] sm:w-[180px]"
-              />
-            </div>
+          <div className="flex items-center gap-3">
+            <SortAsc className="w-4 h-4 text-foreground/60" />
+            <span className="text-sm text-foreground/60 font-medium">
+              {t.projects.sortBy}:
+            </span>
+            <Combobox
+              options={sortOptions}
+              value={sortBy}
+              onValueChange={(value: string) => setSortBy(value as SortOption)}
+              placeholder={t.projects.selectSorting}
+              searchPlaceholder={t.projects.searchPlaceholder}
+              emptyMessage={t.projects.emptyMessage}
+              className="w-[160px] sm:w-[180px]"
+            />
           </div>
-        </ScrollReveal>
-          
+        </div>
+      </ScrollReveal>
+
       {/* Featured Projects */}
       <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
@@ -575,13 +656,19 @@ const Projects = () => {
 
       <ScrollReveal variant="title">
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-          <h2 className="text-2xl font-semibold break-words">{t.projects.other}</h2>
+          <h2 className="text-2xl font-semibold break-words">
+            {t.projects.other}
+          </h2>
           <div className="relative group shrink-0">
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <Info className="w-4 h-4 hover:text-primary transition-colors duration-300 group-hover:text-primary cursor-help" />
               </TooltipTrigger>
-              <TooltipContent className="bg-background/85 backdrop-blur-sm" side="right" align="center">
+              <TooltipContent
+                className="bg-background/85 backdrop-blur-sm"
+                side="right"
+                align="center"
+              >
                 {t.projects.otherInfo}
               </TooltipContent>
             </Tooltip>
@@ -613,7 +700,12 @@ const Projects = () => {
             icon={<ArrowUpRight className="w-4 h-4" />}
             className="transition-all duration-300 group border-foreground/20 rounded-full"
             label={t.projects.viewAll}
-            onClick={() => window.open("https://github.com/lyfe691?tab=repositories", "_blank")}
+            onClick={() =>
+              window.open(
+                "https://github.com/lyfe691?tab=repositories",
+                "_blank",
+              )
+            }
           />
         </div>
       </ScrollReveal>

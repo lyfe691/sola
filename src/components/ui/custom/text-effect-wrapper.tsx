@@ -119,7 +119,8 @@ const AnimationComponent: React.FC<{
   // Render plain whitespace segments without motion to avoid spacing glitches
   if (segment.trim() === "") {
     const WrapperTag = per === "line" ? "span" : "span";
-    const plainClass = per === "line" ? "block" : "inline whitespace-pre select-none";
+    const plainClass =
+      per === "line" ? "block" : "inline whitespace-pre select-none";
     return (
       <span aria-hidden="true" className={plainClass}>
         {segment}
@@ -142,7 +143,7 @@ const AnimationComponent: React.FC<{
       </motion.span>
     ) : (
       <motion.span className="inline-block whitespace-pre">
-        {segment.split("").map((char, charIndex) => (
+        {segment.split("").map((char, charIndex) =>
           char === " " ? (
             // render raw space without motion to prevent layout jitter
             <span
@@ -163,8 +164,8 @@ const AnimationComponent: React.FC<{
             >
               {char}
             </motion.span>
-          )
-        ))}
+          ),
+        )}
       </motion.span>
     );
 
@@ -346,7 +347,7 @@ export function CyclingTextEffect({
     if (texts.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % texts.length);
+      setCurrentIndex((prev) => (prev + 1) % texts.length);
     }, displayDuration);
 
     return () => clearInterval(interval);
@@ -355,10 +356,7 @@ export function CyclingTextEffect({
   if (texts.length === 0) return null;
 
   return (
-    <div 
-      style={style}
-      className={className}
-    >
+    <div style={style} className={className}>
       <AnimatePresence mode="wait">
         <TextEffectWrapper
           key={currentIndex}
@@ -369,11 +367,11 @@ export function CyclingTextEffect({
           speedReveal={speedReveal}
           speedSegment={speedSegment}
           trigger={true}
-          style={{ display: 'block' }}
+          style={{ display: "block" }}
         >
           {texts[currentIndex]}
         </TextEffectWrapper>
       </AnimatePresence>
     </div>
   );
-} 
+}

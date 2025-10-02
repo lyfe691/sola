@@ -126,38 +126,40 @@ void main() {
 
 // Function to get theme color from CSS variables
 const getThemeColor = (): [number, number, number] => {
-  if (typeof window === 'undefined') return [0.6, 0.8, 1.0];
-  
+  if (typeof window === "undefined") return [0.6, 0.8, 1.0];
+
   const computedStyle = getComputedStyle(document.documentElement);
-  const primaryHsl = computedStyle.getPropertyValue('--primary').trim();
-  
+  const primaryHsl = computedStyle.getPropertyValue("--primary").trim();
+
   if (primaryHsl) {
-    const [h, s, l] = primaryHsl.split(' ').map(val => parseFloat(val.replace('%', '')));
-    
+    const [h, s, l] = primaryHsl
+      .split(" ")
+      .map((val) => parseFloat(val.replace("%", "")));
+
     // Convert HSL to RGB
     const hue = h / 360;
     const saturation = s / 100;
     const lightness = Math.min(0.8, l / 100 + 0.2); // Brighten for visibility
-    
+
     const c = (1 - Math.abs(2 * lightness - 1)) * saturation;
-    const x = c * (1 - Math.abs((hue * 6) % 2 - 1));
+    const x = c * (1 - Math.abs(((hue * 6) % 2) - 1));
     const m = lightness - c / 2;
-    
+
     let r, g, b;
-    if (hue < 1/6) [r, g, b] = [c, x, 0];
-    else if (hue < 2/6) [r, g, b] = [x, c, 0];
-    else if (hue < 3/6) [r, g, b] = [0, c, x];
-    else if (hue < 4/6) [r, g, b] = [0, x, c];
-    else if (hue < 5/6) [r, g, b] = [x, 0, c];
+    if (hue < 1 / 6) [r, g, b] = [c, x, 0];
+    else if (hue < 2 / 6) [r, g, b] = [x, c, 0];
+    else if (hue < 3 / 6) [r, g, b] = [0, c, x];
+    else if (hue < 4 / 6) [r, g, b] = [0, x, c];
+    else if (hue < 5 / 6) [r, g, b] = [x, 0, c];
     else [r, g, b] = [c, 0, x];
-    
+
     return [
       Math.min(1, Math.max(0.3, r + m)),
       Math.min(1, Math.max(0.3, g + m)),
-      Math.min(1, Math.max(0.3, b + m))
+      Math.min(1, Math.max(0.3, b + m)),
     ];
   }
-  
+
   return [0.6, 0.8, 1.0];
 };
 
@@ -183,7 +185,7 @@ const Threads: React.FC<ThreadsProps> = ({
 
     const geometry = new Triangle(gl);
     const themeColor = getThemeColor();
-    
+
     const program = new Program(gl, {
       vertex: vertexShader,
       fragment: fragmentShader,
@@ -193,7 +195,7 @@ const Threads: React.FC<ThreadsProps> = ({
           value: new Color(
             gl.canvas.width,
             gl.canvas.height,
-            gl.canvas.width / gl.canvas.height
+            gl.canvas.width / gl.canvas.height,
           ),
         },
         uColor: { value: new Color(...themeColor) },
@@ -226,11 +228,11 @@ const Threads: React.FC<ThreadsProps> = ({
       const y = 1.0 - (e.clientY - rect.top) / rect.height;
       targetMouse = [Math.max(0, Math.min(1, x)), Math.max(0, Math.min(1, y))];
     }
-    
+
     function handleMouseLeave() {
       targetMouse = [0.5, 0.5];
     }
-    
+
     if (enableMouseInteraction) {
       // Add mouse listeners to the document for better interaction
       document.addEventListener("mousemove", handleMouseMove);
@@ -244,7 +246,7 @@ const Threads: React.FC<ThreadsProps> = ({
     });
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['class']
+      attributeFilter: ["class"],
     });
 
     function update(t: number) {
@@ -255,7 +257,7 @@ const Threads: React.FC<ThreadsProps> = ({
         program.uniforms.uMouse.value[0] = currentMouse[0];
         program.uniforms.uMouse.value[1] = currentMouse[1];
       }
-      
+
       program.uniforms.iTime.value = t * 0.001;
       renderer.render({ scene: mesh });
       animationFrameId.current = requestAnimationFrame(update);
@@ -263,15 +265,16 @@ const Threads: React.FC<ThreadsProps> = ({
     animationFrameId.current = requestAnimationFrame(update);
 
     return () => {
-      if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
+      if (animationFrameId.current)
+        cancelAnimationFrame(animationFrameId.current);
       window.removeEventListener("resize", resize);
       observer.disconnect();
-      
+
       if (enableMouseInteraction) {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseleave", handleMouseLeave);
       }
-      
+
       if (container.contains(gl.canvas)) container.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };

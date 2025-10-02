@@ -19,7 +19,7 @@ import { translations } from "@/lib/translations";
 const STORAGE_SEEN_KEY = "theme-randomizer-seen";
 const STORAGE_THEME_KEY = "vite-ui-theme";
 
-const CANDIDATE_THEMES = THEMES.filter(t => t.value !== "system");
+const CANDIDATE_THEMES = THEMES.filter((t) => t.value !== "system");
 
 function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -31,7 +31,13 @@ export default function ThemeRandomizer() {
   const t = translations[language].randomizer;
   const [open, setOpen] = useState(false);
   const [spinning, setSpinning] = useState(false);
-  const [currentIdx, setCurrentIdx] = useState(() => Math.max(0, CANDIDATE_THEMES.findIndex(t => t.value === theme)) || 0);
+  const [currentIdx, setCurrentIdx] = useState(
+    () =>
+      Math.max(
+        0,
+        CANDIDATE_THEMES.findIndex((t) => t.value === theme),
+      ) || 0,
+  );
   const originalThemeRef = useRef<Theme | null>(null);
   const rafIdRef = useRef<number | null>(null);
   const lastStepAtRef = useRef<number>(0);
@@ -43,8 +49,14 @@ export default function ThemeRandomizer() {
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
-      const action = (params.get("randomizer") || params.get("tr") || "").toLowerCase();
-      const themeParam = (params.get("randomizerTheme") || params.get("trTheme") || "") as Theme;
+      const action = (
+        params.get("randomizer") ||
+        params.get("tr") ||
+        ""
+      ).toLowerCase();
+      const themeParam = (params.get("randomizerTheme") ||
+        params.get("trTheme") ||
+        "") as Theme;
 
       if (action === "clear" || action === "reset") {
         try {
@@ -54,7 +66,7 @@ export default function ThemeRandomizer() {
       }
 
       if (themeParam) {
-        const known = CANDIDATE_THEMES.find(t => t.value === themeParam);
+        const known = CANDIDATE_THEMES.find((t) => t.value === themeParam);
         if (known) setTheme(themeParam);
       }
 
@@ -80,7 +92,9 @@ export default function ThemeRandomizer() {
   useEffect(() => {
     try {
       const seen = localStorage.getItem(STORAGE_SEEN_KEY) === "true";
-      const storedTheme = localStorage.getItem(STORAGE_THEME_KEY) as Theme | null;
+      const storedTheme = localStorage.getItem(
+        STORAGE_THEME_KEY,
+      ) as Theme | null;
       if (!seen && !storedTheme) {
         const timer = window.setTimeout(() => setOpen(true), 700);
         return () => window.clearTimeout(timer);
@@ -91,10 +105,15 @@ export default function ThemeRandomizer() {
     }
   }, []);
 
-  const closeModal = useMemo(() => () => {
-    setOpen(false);
-    try { localStorage.setItem(STORAGE_SEEN_KEY, "true"); } catch {}
-  }, []);
+  const closeModal = useMemo(
+    () => () => {
+      setOpen(false);
+      try {
+        localStorage.setItem(STORAGE_SEEN_KEY, "true");
+      } catch {}
+    },
+    [],
+  );
 
   const onKeep = () => {
     const chosen = CANDIDATE_THEMES[currentIdx];
@@ -124,7 +143,8 @@ export default function ThemeRandomizer() {
       const elapsed = now - start;
       const t = Math.min(1, elapsed / totalDuration);
       const eased = 1 - Math.pow(1 - t, 3);
-      const intervalMs = minIntervalMs + (maxIntervalMs - minIntervalMs) * eased;
+      const intervalMs =
+        minIntervalMs + (maxIntervalMs - minIntervalMs) * eased;
 
       if (now - lastStepAtRef.current >= intervalMs) {
         setCurrentIdx((i) => {
@@ -154,7 +174,9 @@ export default function ThemeRandomizer() {
     if (open) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
-      return () => { document.body.style.overflow = prev; };
+      return () => {
+        document.body.style.overflow = prev;
+      };
     }
   }, [open]);
 
@@ -195,13 +217,16 @@ export default function ThemeRandomizer() {
                 <Sparkles className="w-3.5 h-3.5" />
                 {t.welcome}
               </div>
-              <h2 id="theme-randomizer-title" className="text-xl sm:text-2xl font-semibold mb-2">
+              <h2
+                id="theme-randomizer-title"
+                className="text-xl sm:text-2xl font-semibold mb-2"
+              >
                 {t.title}
               </h2>
               <p className="text-foreground/70 text-sm sm:text-base mb-4">
                 {t.description}
               </p>
-              
+
               <div className="relative flex flex-col items-center gap-4 py-6">
                 <motion.div
                   key={selected.value}
@@ -211,7 +236,7 @@ export default function ThemeRandomizer() {
                   className={cn(
                     "relative w-48 sm:w-56 aspect-square rounded-2xl border border-foreground/10",
                     "flex items-center justify-center",
-                    "bg-foreground/[0.03]"
+                    "bg-foreground/[0.03]",
                   )}
                 >
                   <motion.div
@@ -221,14 +246,19 @@ export default function ThemeRandomizer() {
                     className="flex flex-col items-center justify-center gap-2"
                   >
                     <SelectedIcon className="w-10 h-10" />
-                    <div className="text-base sm:text-lg font-medium">{selected.label}</div>
-                    <div className="text-xs text-foreground/60">{selected.value}</div>
+                    <div className="text-base sm:text-lg font-medium">
+                      {selected.label}
+                    </div>
+                    <div className="text-xs text-foreground/60">
+                      {selected.value}
+                    </div>
                   </motion.div>
 
                   <motion.div
                     className="absolute -inset-0.5 rounded-2xl pointer-events-none"
                     style={{
-                      background: "radial-gradient(60% 60% at 50% 40%, hsl(var(--primary)/0.16), transparent)",
+                      background:
+                        "radial-gradient(60% 60% at 50% 40%, hsl(var(--primary)/0.16), transparent)",
                       filter: "blur(12px)",
                     }}
                   />
@@ -241,10 +271,14 @@ export default function ThemeRandomizer() {
                     className={cn(
                       "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium",
                       "border border-foreground/20 hover:bg-foreground/10 transition",
-                      spinning && "opacity-60 cursor-not-allowed"
+                      spinning && "opacity-60 cursor-not-allowed",
                     )}
                   >
-                    {spinning ? <Shuffle className="w-4 h-4 animate-pulse" /> : <Dice5 className="w-4 h-4" />}
+                    {spinning ? (
+                      <Shuffle className="w-4 h-4 animate-pulse" />
+                    ) : (
+                      <Dice5 className="w-4 h-4" />
+                    )}
                     {spinning ? t.spinning : t.spin}
                   </button>
 
@@ -261,6 +295,6 @@ export default function ThemeRandomizer() {
         </div>
       )}
     </AnimatePresence>,
-    document.body
+    document.body,
   );
-} 
+}

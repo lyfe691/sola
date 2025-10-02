@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from 'react';
+import React from "react";
 
 interface BlankLayoutProps {
   children: React.ReactNode;
@@ -14,15 +14,11 @@ interface BlankLayoutProps {
 
 /**
  * BlankLayout - minimal layout without any UI elements
- * used for standalone pages like AboutThisWebsite where no navigation, 
+ * used for standalone pages like AboutThisWebsite where no navigation,
  * toggles, or other UI elements should be displayed
  */
 const BlankLayout: React.FC<BlankLayoutProps> = ({ children }) => {
-  return (
-    <main className="min-h-screen">
-      {children}
-    </main>
-  );
+  return <main className="min-h-screen">{children}</main>;
 };
 
-export default BlankLayout; 
+export default BlankLayout;

@@ -6,8 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from 'react';
-import Navigation from '@/components/Navigation';
+import React from "react";
+import Navigation from "@/components/Navigation";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -31,4 +31,3 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
 };
 
 export default MainLayout;
-

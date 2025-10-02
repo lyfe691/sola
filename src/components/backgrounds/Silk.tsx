@@ -91,7 +91,7 @@ interface SilkPlaneProps {
 
 const SilkPlane = forwardRef<Mesh, SilkPlaneProps>(function SilkPlane(
   { uniforms },
-  ref
+  ref,
 ) {
   const { viewport } = useThree();
 
@@ -151,7 +151,7 @@ const Silk: React.FC<SilkProps> = ({
       uRotation: { value: rotation },
       uTime: { value: 0 },
     }),
-    [speed, scale, noiseIntensity, color, rotation]
+    [speed, scale, noiseIntensity, color, rotation],
   );
 
   return (

@@ -12,11 +12,11 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     {
-      enforce: 'pre',
+      enforce: "pre",
       ...mdx({
         remarkPlugins: [remarkGfm],
-        providerImportSource: "@mdx-js/react"
-      })
+        providerImportSource: "@mdx-js/react",
+      }),
     },
     react(),
   ],

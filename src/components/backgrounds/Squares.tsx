@@ -15,63 +15,71 @@ interface SquaresProps {
 
 // Function to get theme-aware colors from CSS variables
 const getThemeColors = () => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return {
-      borderColor: 'rgba(128, 128, 128, 0.2)',
-      hoverFillColor: 'rgba(128, 128, 128, 0.1)',
-      gradientColor: 'rgba(0, 0, 0, 0.02)'
+      borderColor: "rgba(128, 128, 128, 0.2)",
+      hoverFillColor: "rgba(128, 128, 128, 0.1)",
+      gradientColor: "rgba(0, 0, 0, 0.02)",
     };
   }
-  
+
   const computedStyle = getComputedStyle(document.documentElement);
-  const borderHsl = computedStyle.getPropertyValue('--border').trim();
-  const mutedHsl = computedStyle.getPropertyValue('--muted').trim();
-  const backgroundHsl = computedStyle.getPropertyValue('--background').trim();
-  
+  const borderHsl = computedStyle.getPropertyValue("--border").trim();
+  const mutedHsl = computedStyle.getPropertyValue("--muted").trim();
+  const backgroundHsl = computedStyle.getPropertyValue("--background").trim();
+
   // Check if we're in a light or dark theme
   const isLightTheme = () => {
     if (backgroundHsl) {
-      const [, , l] = backgroundHsl.split(' ').map(val => parseFloat(val.replace('%', '')));
+      const [, , l] = backgroundHsl
+        .split(" ")
+        .map((val) => parseFloat(val.replace("%", "")));
       return l > 50; // Light theme if lightness > 50%
     }
     return true; // Default to light
   };
-  
+
   // Convert HSL to RGBA with opacity
   const hslToRgba = (hsl: string, opacity: number = 1) => {
-    const [h, s, l] = hsl.split(' ').map(val => parseFloat(val.replace('%', '')));
-    
+    const [h, s, l] = hsl
+      .split(" ")
+      .map((val) => parseFloat(val.replace("%", "")));
+
     const hue = h / 360;
     const saturation = s / 100;
     const lightness = l / 100;
-    
+
     const c = (1 - Math.abs(2 * lightness - 1)) * saturation;
-    const x = c * (1 - Math.abs((hue * 6) % 2 - 1));
+    const x = c * (1 - Math.abs(((hue * 6) % 2) - 1));
     const m = lightness - c / 2;
-    
+
     let r, g, b;
-    if (hue < 1/6) [r, g, b] = [c, x, 0];
-    else if (hue < 2/6) [r, g, b] = [x, c, 0];
-    else if (hue < 3/6) [r, g, b] = [0, c, x];
-    else if (hue < 4/6) [r, g, b] = [0, x, c];
-    else if (hue < 5/6) [r, g, b] = [x, 0, c];
+    if (hue < 1 / 6) [r, g, b] = [c, x, 0];
+    else if (hue < 2 / 6) [r, g, b] = [x, c, 0];
+    else if (hue < 3 / 6) [r, g, b] = [0, c, x];
+    else if (hue < 4 / 6) [r, g, b] = [0, x, c];
+    else if (hue < 5 / 6) [r, g, b] = [x, 0, c];
     else [r, g, b] = [c, 0, x];
-    
+
     const red = Math.round((r + m) * 255);
     const green = Math.round((g + m) * 255);
     const blue = Math.round((b + m) * 255);
-    
+
     return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
   };
-  
+
   const lightMode = isLightTheme();
-  
+
   return {
-    borderColor: borderHsl ? hslToRgba(borderHsl, 0.3) : 'rgba(128, 128, 128, 0.2)',
-    hoverFillColor: mutedHsl ? hslToRgba(mutedHsl, 0.5) : 'rgba(128, 128, 128, 0.1)',
-    gradientColor: lightMode 
-      ? 'rgba(0, 0, 0, 0.02)' // Very subtle in light mode
-      : 'rgba(0, 0, 0, 0.15)'  // More visible in dark mode
+    borderColor: borderHsl
+      ? hslToRgba(borderHsl, 0.3)
+      : "rgba(128, 128, 128, 0.2)",
+    hoverFillColor: mutedHsl
+      ? hslToRgba(mutedHsl, 0.5)
+      : "rgba(128, 128, 128, 0.1)",
+    gradientColor: lightMode
+      ? "rgba(0, 0, 0, 0.02)" // Very subtle in light mode
+      : "rgba(0, 0, 0, 0.15)", // More visible in dark mode
   };
 };
 
@@ -102,7 +110,7 @@ const Squares: React.FC<SquaresProps> = ({
     const observer = new MutationObserver(updateThemeColors);
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['class']
+      attributeFilter: ["class"],
     });
 
     // Initial color update
@@ -122,7 +130,7 @@ const Squares: React.FC<SquaresProps> = ({
       if (!ctx) return;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       const colors = themeColorsRef.current;
       const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
       const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
@@ -155,7 +163,7 @@ const Squares: React.FC<SquaresProps> = ({
         0,
         canvas.width / 2,
         canvas.height / 2,
-        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
+        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2,
       );
       gradient.addColorStop(0, "rgba(0, 0, 0, 0)");
       gradient.addColorStop(1, colors.gradientColor);
@@ -206,10 +214,10 @@ const Squares: React.FC<SquaresProps> = ({
       const startY = Math.floor(gridOffset.current.y / squareSize) * squareSize;
 
       const hoveredSquareX = Math.floor(
-        (mouseX + gridOffset.current.x - startX) / squareSize
+        (mouseX + gridOffset.current.x - startX) / squareSize,
       );
       const hoveredSquareY = Math.floor(
-        (mouseY + gridOffset.current.y - startY) / squareSize
+        (mouseY + gridOffset.current.y - startY) / squareSize,
       );
 
       if (

@@ -6,17 +6,17 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from 'react';
-import { motion, Variants } from 'motion/react';
-import { 
+import React from "react";
+import { motion, Variants } from "motion/react";
+import {
   useScrollReveal,
   scrollRevealVariants,
   scrollPageTitleVariants,
   scrollTitleVariants,
   scrollSubtleVariants,
   scrollContainerVariants,
-  scrollChildVariants
-} from '@/utils/transitions';
+  scrollChildVariants,
+} from "@/utils/transitions";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -29,7 +29,13 @@ interface ScrollRevealProps {
    * - container: For sections with staggered children
    * - child: For items within staggered containers
    */
-  variant?: 'default' | 'pageTitle' | 'title' | 'subtle' | 'container' | 'child';
+  variant?:
+    | "default"
+    | "pageTitle"
+    | "title"
+    | "subtle"
+    | "container"
+    | "child";
   /**
    * Custom animation variants (overrides variant)
    */
@@ -69,25 +75,25 @@ const ANIMATION_VARIANTS = {
 
 /**
  * ScrollReveal - The foundation of smooth scroll animations
- * 
+ *
  * Perfectly tuned for consistency across the entire application.
  * Uses standardized timing, easing, and intersection observer settings.
  */
 export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
-  variant = 'default',
+  variant = "default",
   customVariants,
-  className = '',
+  className = "",
   options,
   delay = 0,
-  as: Component = 'div'
+  as: Component = "div",
 }) => {
   // Optimized hook selection for performance
   const { ref, isInView } = useScrollReveal(delay, options);
 
   // Get animation variants
   const variants = customVariants || ANIMATION_VARIANTS[variant];
-  
+
   // Create motion component
   const MotionComponent = motion[Component] as any;
 
@@ -104,4 +110,4 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   );
 };
 
-export default ScrollReveal; 
+export default ScrollReveal;

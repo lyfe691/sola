@@ -1,14 +1,14 @@
-declare module 'react-github-calendar' {
+declare module "react-github-calendar" {
   export interface GitHubCalendarProps {
     username: string;
     /**
      * Theme for the calendar
      */
-    colorScheme?: 'light' | 'dark' | 'system';
+    colorScheme?: "light" | "dark" | "system";
     /**
      * Year to display, or 'last' for last 12 months
      */
-    year?: number | 'last';
+    year?: number | "last";
     /**
      * Font size for the calendar
      */
@@ -71,4 +71,4 @@ declare module 'react-github-calendar' {
    */
   const GitHubCalendar: React.FC<GitHubCalendarProps>;
   export default GitHubCalendar;
-} 
+}

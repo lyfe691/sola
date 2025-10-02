@@ -43,11 +43,32 @@ const letterVariants: Variants = {
     scale: 1,
     filter: "blur(0px)",
     transition: {
-      x: { ...ANIMATION_CONFIG.SPRING, delay: custom * ANIMATION_CONFIG.LETTER_DELAY },
-      y: { ...ANIMATION_CONFIG.SPRING, delay: custom * ANIMATION_CONFIG.LETTER_DELAY },
-      rotateX: { type: "spring", stiffness: 250, damping: 20, delay: custom * ANIMATION_CONFIG.LETTER_DELAY },
-      rotateY: { type: "spring", stiffness: 250, damping: 20, delay: custom * ANIMATION_CONFIG.LETTER_DELAY },
-      scale: { type: "spring", stiffness: 280, damping: 18, delay: custom * ANIMATION_CONFIG.LETTER_DELAY },
+      x: {
+        ...ANIMATION_CONFIG.SPRING,
+        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
+      },
+      y: {
+        ...ANIMATION_CONFIG.SPRING,
+        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
+      },
+      rotateX: {
+        type: "spring",
+        stiffness: 250,
+        damping: 20,
+        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
+      },
+      rotateY: {
+        type: "spring",
+        stiffness: 250,
+        damping: 20,
+        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
+      },
+      scale: {
+        type: "spring",
+        stiffness: 280,
+        damping: 18,
+        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
+      },
       opacity: { duration: 0.3, ease: "easeIn", delay: custom * 0.05 },
       filter: { duration: 0.3, ease: "easeIn", delay: custom * 0.05 },
     },
@@ -61,11 +82,31 @@ const letterVariants: Variants = {
     scale: 0.85,
     filter: "blur(4px)",
     transition: {
-      x: { duration: 0.35, ease: ANIMATION_CONFIG.EASE_CURVE, delay: custom * ANIMATION_CONFIG.EXIT_DELAY },
-      y: { duration: 0.35, ease: ANIMATION_CONFIG.EASE_CURVE, delay: custom * ANIMATION_CONFIG.EXIT_DELAY },
-      rotateX: { duration: 0.35, ease: ANIMATION_CONFIG.EASE_CURVE, delay: custom * ANIMATION_CONFIG.EXIT_DELAY },
-      rotateY: { duration: 0.35, ease: ANIMATION_CONFIG.EASE_CURVE, delay: custom * ANIMATION_CONFIG.EXIT_DELAY },
-      scale: { duration: 0.35, ease: ANIMATION_CONFIG.EASE_CURVE, delay: custom * ANIMATION_CONFIG.EXIT_DELAY },
+      x: {
+        duration: 0.35,
+        ease: ANIMATION_CONFIG.EASE_CURVE,
+        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
+      },
+      y: {
+        duration: 0.35,
+        ease: ANIMATION_CONFIG.EASE_CURVE,
+        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
+      },
+      rotateX: {
+        duration: 0.35,
+        ease: ANIMATION_CONFIG.EASE_CURVE,
+        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
+      },
+      rotateY: {
+        duration: 0.35,
+        ease: ANIMATION_CONFIG.EASE_CURVE,
+        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
+      },
+      scale: {
+        duration: 0.35,
+        ease: ANIMATION_CONFIG.EASE_CURVE,
+        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
+      },
       opacity: { duration: 0.25, ease: "easeOut", delay: custom * 0.03 },
       filter: { duration: 0.25, ease: "easeOut", delay: custom * 0.03 },
     },
@@ -78,34 +119,37 @@ const containerVariants: Variants = {
   exit: { opacity: 0.9, y: -5 },
 };
 
-export const NameMorpher = ({ 
-  greeting, 
+export const NameMorpher = ({
+  greeting,
   names = ["Yanis", "Sebi", "lyfe691"],
-  cycleInterval = ANIMATION_CONFIG.CYCLE_INTERVAL 
+  cycleInterval = ANIMATION_CONFIG.CYCLE_INTERVAL,
 }: NameMorpherProps) => {
   const [currentNameIndex, setCurrentNameIndex] = useState(0);
-  
-  const currentName = useMemo(() => names[currentNameIndex], [names, currentNameIndex]);
-  
-  const containerWidth = useMemo(() => 
-    `${currentName.length * ANIMATION_CONFIG.CHAR_WIDTH}em`, 
-    [currentName.length]
+
+  const currentName = useMemo(
+    () => names[currentNameIndex],
+    [names, currentNameIndex],
+  );
+
+  const containerWidth = useMemo(
+    () => `${currentName.length * ANIMATION_CONFIG.CHAR_WIDTH}em`,
+    [currentName.length],
   );
 
   useEffect(() => {
     if (names.length <= 1) return;
-    
+
     const interval = setInterval(() => {
       setCurrentNameIndex((prev) => (prev + 1) % names.length);
     }, cycleInterval);
-    
+
     return () => clearInterval(interval);
   }, [names.length, cycleInterval]);
-  
+
   return (
     <>
       <span className="text-foreground inline-block">{greeting}</span>
-      <motion.span 
+      <motion.span
         className="relative inline-block overflow-hidden align-baseline"
         initial={false}
         animate={{ width: containerWidth }}
@@ -114,17 +158,17 @@ export const NameMorpher = ({
           stiffness: 200,
           damping: 25,
         }}
-        style={{ 
-          display: "inline-flex", 
-          justifyContent: "center", 
-          padding: "0.1em", 
-          borderRadius: "0.25em", 
-          backgroundColor: "hsl(var(--muted) / 0.65)", 
-          verticalAlign: "baseline"
+        style={{
+          display: "inline-flex",
+          justifyContent: "center",
+          padding: "0.1em",
+          borderRadius: "0.25em",
+          backgroundColor: "hsl(var(--muted) / 0.65)",
+          verticalAlign: "baseline",
         }}
       >
         <AnimatePresence mode="popLayout">
-          <motion.div 
+          <motion.div
             key={currentName}
             variants={containerVariants}
             initial="initial"
@@ -132,20 +176,20 @@ export const NameMorpher = ({
             exit="exit"
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             className="inline-flex"
-            style={{ perspective: "500px" }} 
+            style={{ perspective: "500px" }}
           >
-            {currentName.split('').map((letter, index) => (
+            {currentName.split("").map((letter, index) => (
               <motion.span
                 key={`${currentName}-${index}`}
                 variants={letterVariants}
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                custom={index} 
+                custom={index}
                 className="text-primary inline-block"
                 style={{
-                  textShadow: "0 0 12px hsl(var(--primary) / 0.2)", 
-                  willChange: "transform, opacity, filter"
+                  textShadow: "0 0 12px hsl(var(--primary) / 0.2)",
+                  willChange: "transform, opacity, filter",
                 }}
               >
                 {letter}

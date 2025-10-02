@@ -55,4 +55,4 @@ export default function ShikiCode({ code, lang, theme }: ShikiCodeProps) {
       className="[&>pre]:!bg-transparent [&>pre]:!p-0 [&>pre]:!m-0 [&_code]:!bg-transparent [&>pre]:!color-inherit [&>pre]:!pl-4"
     />
   );
-} 
+}

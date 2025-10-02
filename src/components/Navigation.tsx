@@ -16,8 +16,18 @@ import { cn } from "@/lib/utils";
 
 const STANDARD_EASE = [0.4, 0, 0.2, 1] as const;
 const EMPHASIZED_EASE = [0.22, 1, 0.36, 1] as const;
-const NAV_CONTAINER_LAYOUT = { type: "spring", stiffness: 240, damping: 34, mass: 0.88 } as const;
-const NAV_ITEM_LAYOUT = { type: "spring", stiffness: 320, damping: 36, mass: 0.82 } as const;
+const NAV_CONTAINER_LAYOUT = {
+  type: "spring",
+  stiffness: 240,
+  damping: 34,
+  mass: 0.88,
+} as const;
+const NAV_ITEM_LAYOUT = {
+  type: "spring",
+  stiffness: 320,
+  damping: 36,
+  mass: 0.82,
+} as const;
 const DESKTOP_ITEM_TRANSITION = { layout: NAV_ITEM_LAYOUT } as const;
 
 // define types for the navitem component
@@ -53,110 +63,132 @@ const MOBILE_OVERLAY_CLASSES =
   "fixed inset-0 bg-background/80 backdrop-blur-xl z-[60] md:hidden mobile-menu";
 
 // memoized navigation item for better performance
-const NavItem = memo(forwardRef<HTMLAnchorElement, NavItemProps>(({ 
-  item,
-  index,
-  isActive,
-  isMobile = false,
-  onClick = () => {},
-  shouldAnimateInitial = true
-}, ref) => {
-  const itemVariants = desktopItemVariants;
-
-  const Component = motion.div;
-  const isItemActive = isActive(item.path);
-  const linkBaseClass = isMobile
-    ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
-    : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2";
-  const linkClassName = cn(
-    linkBaseClass,
-    isItemActive ? "text-primary" : "text-foreground/60 hover:text-foreground"
-  );
-
-  if (isMobile) {
-    const mobileVariants = {
-      initial: { opacity: 0, y: 20 },
-      animate: {
-        opacity: 1,
-        y: 0,
-        transition: { 
-          delay: index * 0.04, 
-          duration: 0.4,
-          ease: [0.22, 1, 0.36, 1] as [number, number, number, number]
-        },
+const NavItem = memo(
+  forwardRef<HTMLAnchorElement, NavItemProps>(
+    (
+      {
+        item,
+        index,
+        isActive,
+        isMobile = false,
+        onClick = () => {},
+        shouldAnimateInitial = true,
       },
-      exit: { 
-        opacity: 0, 
-        y: -15,
-        transition: { 
-          duration: 0.3,
-          ease: [0.4, 0, 0.2, 1] as [number, number, number, number]
-        } 
-      },
-    } as const;
-    return (
-      <Component
-        layout
-        key={item.path}
-        custom={index}
-        variants={mobileVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        className="w-full"
-      >
-        <Link 
-          to={item.path} 
-          onClick={onClick}
-          ref={ref}
-          className={linkClassName}
-          aria-current={isItemActive ? "page" : undefined}
+      ref,
+    ) => {
+      const itemVariants = desktopItemVariants;
+
+      const Component = motion.div;
+      const isItemActive = isActive(item.path);
+      const linkBaseClass = isMobile
+        ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
+        : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2";
+      const linkClassName = cn(
+        linkBaseClass,
+        isItemActive
+          ? "text-primary"
+          : "text-foreground/60 hover:text-foreground",
+      );
+
+      if (isMobile) {
+        const mobileVariants = {
+          initial: { opacity: 0, y: 20 },
+          animate: {
+            opacity: 1,
+            y: 0,
+            transition: {
+              delay: index * 0.04,
+              duration: 0.4,
+              ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+            },
+          },
+          exit: {
+            opacity: 0,
+            y: -15,
+            transition: {
+              duration: 0.3,
+              ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
+            },
+          },
+        } as const;
+        return (
+          <Component
+            layout
+            key={item.path}
+            custom={index}
+            variants={mobileVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className="w-full"
+          >
+            <Link
+              to={item.path}
+              onClick={onClick}
+              ref={ref}
+              className={linkClassName}
+              aria-current={isItemActive ? "page" : undefined}
+            >
+              {item.icon && <item.icon className="w-6 h-6 mr-3" />}
+              {item.text}
+            </Link>
+          </Component>
+        );
+      }
+
+      return (
+        <Component
+          layout
+          key={item.path}
+          custom={index}
+          variants={itemVariants}
+          initial={shouldAnimateInitial ? "hidden" : false}
+          animate="visible"
+          exit="hidden"
+          transition={DESKTOP_ITEM_TRANSITION}
         >
-          {item.icon && <item.icon className="w-6 h-6 mr-3" />}
-          {item.text}
-        </Link>
-      </Component>
-    );
-  }
-
-  return (
-    <Component
-      layout
-      key={item.path}
-      custom={index}
-      variants={itemVariants}
-      initial={shouldAnimateInitial ? "hidden" : false}
-      animate="visible"
-      exit="hidden"
-      transition={DESKTOP_ITEM_TRANSITION}
-    >
-      <Link
-        to={item.path}
-        onClick={onClick}
-        ref={ref}
-        className={linkClassName}
-        aria-current={isItemActive ? "page" : undefined}
-      >
-        {isItemActive && (
-          <motion.div
-            layoutId="nav-active"
-            className="absolute inset-0 rounded-full bg-foreground/10"
-            initial={false}
-            transition={{ type: 'spring', stiffness: 320, damping: 30, mass: 0.85 }}
-          />
-        )}
-        {item.icon && <item.icon className="w-4 h-4" />}
-        <motion.span layout className="relative z-10">{item.text}</motion.span>
-      </Link>
-    </Component>
-  );
-}));
+          <Link
+            to={item.path}
+            onClick={onClick}
+            ref={ref}
+            className={linkClassName}
+            aria-current={isItemActive ? "page" : undefined}
+          >
+            {isItemActive && (
+              <motion.div
+                layoutId="nav-active"
+                className="absolute inset-0 rounded-full bg-foreground/10"
+                initial={false}
+                transition={{
+                  type: "spring",
+                  stiffness: 320,
+                  damping: 30,
+                  mass: 0.85,
+                }}
+              />
+            )}
+            {item.icon && <item.icon className="w-4 h-4" />}
+            <motion.span layout className="relative z-10">
+              {item.text}
+            </motion.span>
+          </Link>
+        </Component>
+      );
+    },
+  ),
+);
 
 // ensure display name is set for devtools
 NavItem.displayName = "NavItem";
 
 // mobile menu button with animated hamburger
-const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () => void }) => {
+const MobileMenuButton = ({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}) => {
   return (
     <motion.button
       onClick={onClick}
@@ -173,28 +205,34 @@ const MobileMenuButton = ({ isOpen, onClick }: { isOpen: boolean; onClick: () =>
           <motion.span
             className="h-[1.4px] bg-current rounded-full w-full absolute top-0"
             initial={false}
-            animate={{ 
+            animate={{
               rotate: isOpen ? 45 : 0,
               y: isOpen ? 0 : -3,
               top: "50%",
-              marginTop: "-0.7px"
+              marginTop: "-0.7px",
             }}
             style={{ transformOrigin: "center" }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+            transition={{
+              duration: 0.3,
+              ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+            }}
           />
-          
+
           {/* Bottom bar */}
           <motion.span
             className="h-[1.4px] bg-current rounded-full w-full absolute bottom-0"
             initial={false}
-            animate={{ 
+            animate={{
               rotate: isOpen ? -45 : 0,
               y: isOpen ? 0 : 3,
               bottom: "50%",
-              marginBottom: "-0.7px"
+              marginBottom: "-0.7px",
             }}
             style={{ transformOrigin: "center" }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
+            transition={{
+              duration: 0.3,
+              ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+            }}
           />
         </div>
       </div>
@@ -219,13 +257,17 @@ const Navigation = () => {
     // Allow animations to play out smoothly
     setTimeout(() => {
       setIsMenuOpen(false);
-      window.dispatchEvent(new CustomEvent('mobile-menu-toggle', { detail: { open: false } }));
+      window.dispatchEvent(
+        new CustomEvent("mobile-menu-toggle", { detail: { open: false } }),
+      );
     }, 100);
   }, []);
   const toggleMenu = useCallback(() => {
-    setIsMenuOpen(prev => {
+    setIsMenuOpen((prev) => {
       const next = !prev;
-      window.dispatchEvent(new CustomEvent('mobile-menu-toggle', { detail: { open: next } }));
+      window.dispatchEvent(
+        new CustomEvent("mobile-menu-toggle", { detail: { open: next } }),
+      );
       return next;
     });
   }, []);
@@ -238,47 +280,52 @@ const Navigation = () => {
     { text: t.nav.projects, path: "/projects" },
     { text: t.nav.skills, path: "/skills" },
     { text: t.nav.services, path: "/services" },
-    { text: t.nav.contact, path: "/contact" }
+    { text: t.nav.contact, path: "/contact" },
   ];
 
   // memoized isactive check
-  const isActive = useCallback((path: string) => {
-    return location.pathname === path;
-  }, [location.pathname]);
-
+  const isActive = useCallback(
+    (path: string) => {
+      return location.pathname === path;
+    },
+    [location.pathname],
+  );
 
   // effect to handle clicks outside the menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isMenuOpen) {
-        const menu = document.querySelector('.mobile-menu');
-        const menuButton = document.querySelector('.menu-button');
-        
-        if (menu && menuButton && 
-            !menu.contains(event.target as Node) && 
-            !menuButton.contains(event.target as Node)) {
+        const menu = document.querySelector(".mobile-menu");
+        const menuButton = document.querySelector(".menu-button");
+
+        if (
+          menu &&
+          menuButton &&
+          !menu.contains(event.target as Node) &&
+          !menuButton.contains(event.target as Node)
+        ) {
           closeMenu();
         }
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenuOpen, closeMenu]);
 
   // prevent body scrolling when menu is open
   useEffect(() => {
     if (isMenuOpen) {
       // prevent scrolling on body when menu is open
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
       // restore scrolling
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
-    
+
     return () => {
       // cleanup in case component unmounts while menu is open
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     };
   }, [isMenuOpen]);
 
@@ -288,47 +335,45 @@ const Navigation = () => {
     // This effect is just for cleanup if needed
   }, [location.pathname]);
 
-
   // mobile menu animations
   const mobileMenuVariants: Record<string, any> = {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      transition: { 
-        duration: 0.5, 
+      transition: {
+        duration: 0.5,
         ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
-        when: "afterChildren" 
+        when: "afterChildren",
       },
     },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { 
-        duration: 0.4, 
+      transition: {
+        duration: 0.4,
         ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-        when: "beforeChildren" 
+        when: "beforeChildren",
       },
     },
   };
 
   const mobileNavContainer: Record<string, any> = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       transition: {
         staggerChildren: 0.03,
         staggerDirection: -1,
-      }
+      },
     },
     visible: {
       opacity: 1,
-      transition: { 
-        staggerChildren: 0.06, 
-        delayChildren: 0.08 
+      transition: {
+        staggerChildren: 0.06,
+        delayChildren: 0.08,
       },
     },
-  }
+  };
 
   return (
     <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4 pointer-events-none">
-      
       {/* desktop navigation */}
       <div className="flex justify-center items-center">
         <motion.nav
@@ -343,8 +388,8 @@ const Navigation = () => {
             layout: NAV_CONTAINER_LAYOUT,
           }}
           style={{
-            backdropFilter: 'blur(28px) saturate(160%)',
-            WebkitBackdropFilter: 'blur(28px) saturate(160%)',
+            backdropFilter: "blur(28px) saturate(160%)",
+            WebkitBackdropFilter: "blur(28px) saturate(160%)",
           }}
           aria-label="Primary"
         >
@@ -355,9 +400,9 @@ const Navigation = () => {
             isActive={isActive}
             shouldAnimateInitial={shouldAnimateInitial}
           />
-          
+
           <div className="h-8 w-px bg-border/30 mx-3" />
-          
+
           {/* main navigation - main layout */}
           {navItems.map((item, i) => (
             <NavItem
@@ -385,12 +430,12 @@ const Navigation = () => {
             exit="hidden"
             variants={mobileMenuVariants}
             className={cn(MOBILE_OVERLAY_CLASSES, "pointer-events-auto")}
-          style={{
-            backdropFilter: 'blur(20px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-          }}
+            style={{
+              backdropFilter: "blur(20px) saturate(180%)",
+              WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            }}
           >
-            <motion.nav 
+            <motion.nav
               variants={mobileNavContainer}
               initial="hidden"
               animate="visible"

@@ -19,10 +19,13 @@ const HIDE_FOOTER_PATHS = new Set(["/", "/404", "/a"]);
 export const Conditionals = () => {
   const { pathname } = useLocation();
 
-  const isProjectDetailPage = pathname.startsWith("/projects/") && pathname !== "/projects";
+  const isProjectDetailPage =
+    pathname.startsWith("/projects/") && pathname !== "/projects";
 
-  const shouldRenderToggles = !HIDE_TOGGLES_PATHS.has(pathname) && !isProjectDetailPage;
-  const shouldRenderFooter = !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage;
+  const shouldRenderToggles =
+    !HIDE_TOGGLES_PATHS.has(pathname) && !isProjectDetailPage;
+  const shouldRenderFooter =
+    !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage;
 
   return (
     <>

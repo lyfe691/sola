@@ -1,13 +1,18 @@
-import { ProjectImage, ProjectGallery, TechStack, CodeBlock } from '@/components/MDXComponents';
+import {
+  ProjectImage,
+  ProjectGallery,
+  TechStack,
+  CodeBlock,
+} from "@/components/MDXComponents";
 
 # Design Intent
 
 **thoughts** was built to be a quieter companion to my main portfolio.  
-It’s a space to write down reflections, fragments, and notes that don’t always fit into a polished project.  
+It’s a space to write down reflections, fragments, and notes that don’t always fit into a polished project.
 
 The design emphasizes **clarity and simplicity**: minimal layout, careful typography, and enough whitespace for content to breathe. It’s meant to feel personal and unhurried — less like a portfolio, more like a notebook.
 
-> “You were never supposed to be here.” — a subtle hint in the 404 page that sets the tone for this site.  
+> “You were never supposed to be here.” — a subtle hint in the 404 page that sets the tone for this site.
 
 ---
 
@@ -28,13 +33,11 @@ const { default: MDXContent, metadata } = await import(
 )
 
 return (
-  <div lang={metadata.chinese ? 'zh-Hans' : 'en'}>
-    <MDXContent />
-  </div>
-)`}
-  fileName="page.tsx"
-  lang="typescript"
-/>
+
+<div lang={metadata.chinese ? "zh-Hans" : "en"}>
+  <MDXContent />
+</div>
+)`} fileName="page.tsx" lang="typescript" />
 
 ---
 
@@ -48,7 +51,7 @@ return (
   It includes moderation (admin tokens) and works with Vercel Postgres, with a memory fallback for local development.
 
 - **404 page as poetry**  
-  Instead of a standard error, the *not-found* page doubles as a short verse, making even dead ends part of the site’s character.
+  Instead of a standard error, the _not-found_ page doubles as a short verse, making even dead ends part of the site’s character.
 
 ---
 
@@ -70,4 +73,4 @@ This project gave me:
 
 ---
 
-*thoughts isn’t a showcase site — it’s a personal corner of the web. A place to pause, write, and keep track of where my mind drifts.*
+_thoughts isn’t a showcase site — it’s a personal corner of the web. A place to pause, write, and keep track of where my mind drifts._

@@ -118,7 +118,9 @@ const detectThemeFromHtml = (): Exclude<Theme, "system"> => {
   for (const key of AURORA_THEME_CLASS_KEYS) if (cls.contains(key)) return key;
   // Fallback: if .dark present use dark else light based on media query
   if (cls.contains("dark")) return "dark";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 };
 
 export default function Aurora({
@@ -148,7 +150,6 @@ export default function Aurora({
     gl.canvas.style.backgroundColor = "transparent";
     // gl.canvas.style.pointerEvents = "none";
 
-
     let program: Program | undefined;
 
     const toRGB = (hex: string) => {
@@ -160,7 +161,11 @@ export default function Aurora({
     gl.canvas.style.mixBlendMode = preset.blendMode as any;
 
     const setRes = () => {
-      if (program) program.uniforms.uResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight];
+      if (program)
+        program.uniforms.uResolution.value = [
+          gl.drawingBufferWidth,
+          gl.drawingBufferHeight,
+        ];
     };
 
     const resize = () => {
@@ -170,24 +175,31 @@ export default function Aurora({
     window.addEventListener("resize", resize);
 
     const geometry = new Triangle(gl);
-    if ((geometry as any).attributes?.uv) delete (geometry as any).attributes.uv;
+    if ((geometry as any).attributes?.uv)
+      delete (geometry as any).attributes.uv;
 
     program = new Program(gl, {
       vertex: VERT,
       fragment: FRAG,
       uniforms: {
-        uTime:        { value: 0 },
-        uAmplitude:   { value: propsRef.current.amplitude },
-        uColorStops:  { value: (propsRef.current.colorStops ?? preset.colorStops).map(toRGB) },
-        uResolution:  { value: [gl.drawingBufferWidth, gl.drawingBufferHeight] },
-        uBlend:       { value: propsRef.current.blend ?? preset.blend },
-        uIntensity:   { value: preset.intensity },
-        uScale:       { value: propsRef.current.scale ?? preset.scale },
-        uFeather:     { value: propsRef.current.feather ?? preset.feather },
-        uAlphaGamma:  { value: propsRef.current.alphaGamma ?? preset.alphaGamma },
-        uSaturation:  { value: propsRef.current.saturation ?? preset.saturation },
-        uMinAlpha:    { value: propsRef.current.minAlpha ?? preset.minAlpha },
-        uBase:        { value: propsRef.current.base ?? preset.base },
+        uTime: { value: 0 },
+        uAmplitude: { value: propsRef.current.amplitude },
+        uColorStops: {
+          value: (propsRef.current.colorStops ?? preset.colorStops).map(toRGB),
+        },
+        uResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight] },
+        uBlend: { value: propsRef.current.blend ?? preset.blend },
+        uIntensity: { value: preset.intensity },
+        uScale: { value: propsRef.current.scale ?? preset.scale },
+        uFeather: { value: propsRef.current.feather ?? preset.feather },
+        uAlphaGamma: {
+          value: propsRef.current.alphaGamma ?? preset.alphaGamma,
+        },
+        uSaturation: {
+          value: propsRef.current.saturation ?? preset.saturation,
+        },
+        uMinAlpha: { value: propsRef.current.minAlpha ?? preset.minAlpha },
+        uBase: { value: propsRef.current.base ?? preset.base },
       },
     });
 
@@ -199,31 +211,43 @@ export default function Aurora({
       const p = getAuroraPreset(detectThemeFromHtml());
       gl.canvas.style.mixBlendMode = p.blendMode as any;
       program.uniforms.uIntensity.value = p.intensity;
-      if (!propsRef.current.colorStops) program.uniforms.uColorStops.value = p.colorStops.map(toRGB);
-      if (propsRef.current.blend == null) program.uniforms.uBlend.value = p.blend;
-      if (propsRef.current.scale == null) program.uniforms.uScale.value = p.scale;
-      if (propsRef.current.feather == null) program.uniforms.uFeather.value = p.feather;
-      if (propsRef.current.alphaGamma == null) program.uniforms.uAlphaGamma.value = p.alphaGamma;
-      if (propsRef.current.saturation == null) program.uniforms.uSaturation.value = p.saturation;
-      if (propsRef.current.minAlpha == null) program.uniforms.uMinAlpha.value = p.minAlpha;
+      if (!propsRef.current.colorStops)
+        program.uniforms.uColorStops.value = p.colorStops.map(toRGB);
+      if (propsRef.current.blend == null)
+        program.uniforms.uBlend.value = p.blend;
+      if (propsRef.current.scale == null)
+        program.uniforms.uScale.value = p.scale;
+      if (propsRef.current.feather == null)
+        program.uniforms.uFeather.value = p.feather;
+      if (propsRef.current.alphaGamma == null)
+        program.uniforms.uAlphaGamma.value = p.alphaGamma;
+      if (propsRef.current.saturation == null)
+        program.uniforms.uSaturation.value = p.saturation;
+      if (propsRef.current.minAlpha == null)
+        program.uniforms.uMinAlpha.value = p.minAlpha;
       if (propsRef.current.base == null) program.uniforms.uBase.value = p.base;
       setRes();
     };
 
     const observer = new MutationObserver(applyTheme);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     let raf = 0;
     const loop = (t: number) => {
       raf = requestAnimationFrame(loop);
       if (!program) return;
       const { time = t * 0.01 } = propsRef.current;
-      program.uniforms.uTime.value = (time * (propsRef.current.speed ?? speed)) * 0.1;
+      program.uniforms.uTime.value =
+        time * (propsRef.current.speed ?? speed) * 0.1;
       program.uniforms.uAmplitude.value = propsRef.current.amplitude;
 
       // live overrides
       if (propsRef.current.colorStops) {
-        program.uniforms.uColorStops.value = propsRef.current.colorStops.map(toRGB);
+        program.uniforms.uColorStops.value =
+          propsRef.current.colorStops.map(toRGB);
       }
       if (typeof propsRef.current.blend === "number") {
         program.uniforms.uBlend.value = propsRef.current.blend;

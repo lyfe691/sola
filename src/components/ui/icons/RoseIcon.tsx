@@ -1,6 +1,9 @@
 import * as React from "react";
 
-export const RoseIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({ className, ...props }) => (
+export const RoseIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({
+  className,
+  ...props
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
@@ -23,5 +26,3 @@ export const RoseIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({ className, .
 );
 
 export default RoseIcon;
-
-

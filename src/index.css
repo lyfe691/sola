@@ -2,32 +2,32 @@
 
 /* Geist from vercel */
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-Regular.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-Medium.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-SemiBold.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-Bold.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -35,32 +35,32 @@
 
 /* GeistMono from vercel */
 @font-face {
-  font-family: 'GeistMono';
-  src: url('/fonts/GeistMono-Regular.woff2') format('woff2');
+  font-family: "GeistMono";
+  src: url("/fonts/GeistMono-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'GeistMono';
-  src: url('/fonts/GeistMono-Medium.woff2') format('woff2');
+  font-family: "GeistMono";
+  src: url("/fonts/GeistMono-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'GeistMono';
-  src: url('/fonts/GeistMono-SemiBold.woff2') format('woff2');
+  font-family: "GeistMono";
+  src: url("/fonts/GeistMono-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'GeistMono';
-  src: url('/fonts/GeistMono-Bold.woff2') format('woff2');
+  font-family: "GeistMono";
+  src: url("/fonts/GeistMono-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -107,7 +107,7 @@
     --sidebar-border: 240 5% 85%;
     --sidebar-ring: 0 0% 20%;
   }
-  
+
   .dark {
     --background: 240 6% 12%;
     --foreground: 0 0% 92%;
@@ -141,8 +141,7 @@
     --sidebar-border: 240 5% 28%;
     --sidebar-ring: 0 0% 75%;
   }
-  
-  
+
   .life {
     --background: 152 44% 88%;
     --foreground: 152 24% 12%;
@@ -162,8 +161,8 @@
     --destructive-foreground: 0 0% 98%;
     --border: 152 20% 62%;
     --input: 152 20% 62%;
-    --ring: 151 64% 28%;  
-    --radius: 0.5rem; 
+    --ring: 151 64% 28%;
+    --radius: 0.5rem;
     --scrollbar-track: 152 26% 82%;
     --scrollbar-thumb: 151 24% 56%;
     --scrollbar-thumb-hover: 151 24% 52%;
@@ -194,7 +193,7 @@
     --scrollbar-thumb: 285 70% 48%;
     --scrollbar-thumb-hover: 285 70% 56%;
   }
-  
+
   .cloud {
     --background: 210 78% 90%;
     --foreground: 220 20% 15%;
@@ -222,29 +221,29 @@
   }
 
   .forest {
-    --background: 160 20% 9%;       
-    --foreground: 120 20% 90%;      
-    --card: 160 18% 12%;              
-    --card-foreground: 120 20% 90%;   
-    --popover: 160 18% 12%;             
-    --popover-foreground: 120 20% 90%; 
-    --primary: 145 35% 46%;            
-    --primary-foreground: 35 20% 96%;  
-    --secondary: 165 18% 28%;          
-    --secondary-foreground: 120 20% 90%; 
-    --muted: 160 12% 22%;             
-    --muted-foreground: 120 12% 72%;  
-    --accent: 165 30% 36%;            
-    --accent-foreground: 35 20% 96%; 
-    --destructive: 0 58% 52%;        
-    --destructive-foreground: 0 0% 98%; 
-    --border: 160 14% 24%;             
-    --input: 160 14% 20%;             
-    --ring: 145 35% 46%;               
-    --radius: 0.375rem;                
-    --scrollbar-track: 160 16% 14%;    
-    --scrollbar-thumb: 145 22% 32%;   
-    --scrollbar-thumb-hover: 145 22% 38%; 
+    --background: 160 20% 9%;
+    --foreground: 120 20% 90%;
+    --card: 160 18% 12%;
+    --card-foreground: 120 20% 90%;
+    --popover: 160 18% 12%;
+    --popover-foreground: 120 20% 90%;
+    --primary: 145 35% 46%;
+    --primary-foreground: 35 20% 96%;
+    --secondary: 165 18% 28%;
+    --secondary-foreground: 120 20% 90%;
+    --muted: 160 12% 22%;
+    --muted-foreground: 120 12% 72%;
+    --accent: 165 30% 36%;
+    --accent-foreground: 35 20% 96%;
+    --destructive: 0 58% 52%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 14% 24%;
+    --input: 160 14% 20%;
+    --ring: 145 35% 46%;
+    --radius: 0.375rem;
+    --scrollbar-track: 160 16% 14%;
+    --scrollbar-thumb: 145 22% 32%;
+    --scrollbar-thumb-hover: 145 22% 38%;
   }
 
   .amethyst {
@@ -274,29 +273,29 @@
   }
 
   .vintage {
-    --background: 44.0000 42.8571% 93.1373%;
-    --foreground: 28.5714 16.5354% 24.9020%;
-    --card: 42.0000 100.0000% 98.0392%;
-    --card-foreground: 28.5714 16.5354% 24.9020%;
-    --popover: 42.0000 100.0000% 98.0392%;
-    --popover-foreground: 28.5714 16.5354% 24.9020%;
-    --primary: 30.0000 33.8710% 48.6275%;
+    --background: 44 42.8571% 93.1373%;
+    --foreground: 28.5714 16.5354% 24.902%;
+    --card: 42 100% 98.0392%;
+    --card-foreground: 28.5714 16.5354% 24.902%;
+    --popover: 42 100% 98.0392%;
+    --popover-foreground: 28.5714 16.5354% 24.902%;
+    --primary: 30 33.871% 48.6275%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 40.6452 34.8315% 82.5490%;
+    --secondary: 40.6452 34.8315% 82.549%;
     --secondary-foreground: 28.9655 18.7097% 30.3922%;
     --muted: 39 34.4828% 88.6275%;
     --muted-foreground: 32.3077 18.4834% 41.3725%;
-    --accent: 42.8571 32.8125% 74.9020%;
-    --accent-foreground: 28.5714 16.5354% 24.9020%;
+    --accent: 42.8571 32.8125% 74.902%;
+    --accent-foreground: 28.5714 16.5354% 24.902%;
     --destructive: 0 56% 48%;
     --destructive-foreground: 0 0% 100%;
-    --border: 40.0000 31.4286% 79.4118%;
-    --input: 40.0000 31.4286% 79.4118%;
-    --ring: 30.0000 33.8710% 48.6275%;
+    --border: 40 31.4286% 79.4118%;
+    --input: 40 31.4286% 79.4118%;
+    --ring: 30 33.871% 48.6275%;
     --radius: 0.25rem;
-    --scrollbar-track: 42.0000 100.0000% 98.0392%;
-    --scrollbar-thumb: 30.0000 33.8710% 48.6275%;
-    --scrollbar-thumb-hover: 30.0000 33.8710% 48.6275%;
+    --scrollbar-track: 42 100% 98.0392%;
+    --scrollbar-thumb: 30 33.871% 48.6275%;
+    --scrollbar-thumb-hover: 30 33.871% 48.6275%;
   }
 
   .coffee {
@@ -354,20 +353,23 @@
   * {
     @apply border-border;
   }
-  
+
   html {
     scroll-behavior: smooth;
     /* Firefox */
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--scrollbar-thumb)) transparent;
   }
-  
+
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
   }
 
   /* Smooth theme transitions */
-  html, body, #root, .app-theme-surface {
+  html,
+  body,
+  #root,
+  .app-theme-surface {
     transition:
       background-color 250ms ease,
       color 250ms ease,
@@ -378,15 +380,18 @@
 
   * {
     @apply border-border outline-ring/50;
-    font-family: 'Geist', sans-serif;
+    font-family: "Geist", sans-serif;
   }
-  
-  code, pre, kbd, samp {
-    font-family: 'GeistMono', monospace;
+
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: "GeistMono", monospace;
   }
-  
+
   .font-mono {
-    font-family: 'GeistMono', monospace;
+    font-family: "GeistMono", monospace;
   }
 
   /* ---------- scrollbar styles ---------- */

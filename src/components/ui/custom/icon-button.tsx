@@ -51,16 +51,17 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     const buttonSize = size as keyof typeof ICON_SIZES;
-    const finalIconSize = iconSize ?? ICON_SIZES[buttonSize] ?? ICON_SIZES.default;
-    const iconBg = ICON_BG_VARIANTS[variant as keyof typeof ICON_BG_VARIANTS] ?? ICON_BG_VARIANTS.default;
-    
+    const finalIconSize =
+      iconSize ?? ICON_SIZES[buttonSize] ?? ICON_SIZES.default;
+    const iconBg =
+      ICON_BG_VARIANTS[variant as keyof typeof ICON_BG_VARIANTS] ??
+      ICON_BG_VARIANTS.default;
+
     const isIconRight = iconPosition === "right";
     const labelContent = children || label;
-
-
 
     return (
       <Button
@@ -70,7 +71,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         className={cn(
           "group/btn relative overflow-hidden",
           "transition-all duration-300 ease-out",
-          className
+          className,
         )}
         {...props}
       >
@@ -79,16 +80,17 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
           <span
             className={cn(
               "relative z-10 transition-all duration-300 ease-out text-center",
-              "group-hover/btn:opacity-0 group-hover/btn:scale-95"
+              "group-hover/btn:opacity-0 group-hover/btn:scale-95",
             )}
             style={{
-              [isIconRight ? 'paddingRight' : 'paddingLeft']: 'calc(max(28%, 2.25rem) + 0.25rem)'
+              [isIconRight ? "paddingRight" : "paddingLeft"]:
+                "calc(max(28%, 2.25rem) + 0.25rem)",
             }}
           >
             {labelContent}
           </span>
         )}
-        
+
         {/* icon container */}
         <div
           className={cn(
@@ -97,10 +99,10 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
             "w-[max(28%,2.25rem)] group-hover/btn:w-[calc(100%-0.5rem)]",
             "group-active/btn:scale-95",
             isIconRight ? "right-1" : "left-1",
-            iconBg
+            iconBg,
           )}
           style={{
-            borderRadius: 'inherit'
+            borderRadius: "inherit",
           }}
           aria-hidden="true"
         >
@@ -113,7 +115,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         </div>
       </Button>
     );
-  }
+  },
 );
 
 IconButton.displayName = "IconButton";

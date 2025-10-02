@@ -6,44 +6,44 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, useState, useCallback } from "react"
-import { useLocation } from "react-router-dom"
-import { ArrowUp } from "lucide-react"
-import { motion, AnimatePresence } from "motion/react"
+import { useEffect, useState, useCallback } from "react";
+import { useLocation } from "react-router-dom";
+import { ArrowUp } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
-const SCROLL_THRESHOLD = 120
-const SCROLL_DEBOUNCE_DELAY = 120
+const SCROLL_THRESHOLD = 120;
+const SCROLL_DEBOUNCE_DELAY = 120;
 
 export default function ScrollToTop() {
-  const { pathname } = useLocation()
-  const [visible, setVisible] = useState(false)
+  const { pathname } = useLocation();
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }, [pathname])
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
 
   const handleScroll = useCallback(() => {
-    setVisible(window.scrollY > SCROLL_THRESHOLD)
-  }, [])
+    setVisible(window.scrollY > SCROLL_THRESHOLD);
+  }, []);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout
+    let timeoutId: NodeJS.Timeout;
 
     const debouncedScroll = () => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(handleScroll, SCROLL_DEBOUNCE_DELAY)
-    }
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(handleScroll, SCROLL_DEBOUNCE_DELAY);
+    };
 
-    window.addEventListener("scroll", debouncedScroll)
+    window.addEventListener("scroll", debouncedScroll);
     return () => {
-      window.removeEventListener("scroll", debouncedScroll)
-      clearTimeout(timeoutId)
-    }
-  }, [handleScroll])
+      window.removeEventListener("scroll", debouncedScroll);
+      clearTimeout(timeoutId);
+    };
+  }, [handleScroll]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <AnimatePresence>
@@ -69,5 +69,5 @@ export default function ScrollToTop() {
         </motion.button>
       )}
     </AnimatePresence>
-  )
+  );
 }

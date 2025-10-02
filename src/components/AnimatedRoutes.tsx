@@ -26,169 +26,121 @@ const Contact = lazy(() => import("@/pages/Contact"));
 const Services = lazy(() => import("@/pages/Services"));
 const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
 const Privacy = lazy(() => import("@/pages/Privacy"));
-const ProjectDeepDiveRenderer = lazy(() => import("@/pages/projects/ProjectDeepDiveRenderer"));
+const ProjectDeepDiveRenderer = lazy(
+  () => import("@/pages/projects/ProjectDeepDiveRenderer"),
+);
 const Certifications = lazy(() => import("@/pages/Certifications"));
-
 
 // define types for pagetransition
 interface PageTransitionProps {
-    children: ReactNode;
-  }
-  
-  // pt wrapper for route animations
-  const PageTransition = ({ children }: PageTransitionProps) => {
-    return (  
-      <motion.div
-        variants={pageTransitionVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        transition={pageTransition}
-        className="flex-1 flex flex-col"
-      >
-        {children}
-      </motion.div>
-    );
-  };
+  children: ReactNode;
+}
+
+// pt wrapper for route animations
+const PageTransition = ({ children }: PageTransitionProps) => {
+  return (
+    <motion.div
+      variants={pageTransitionVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={pageTransition}
+      className="flex-1 flex flex-col"
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export const AnimatedRoutes = () => {
-    const location = useLocation();
-    
-    // helper to wrap a component with page transition and suspense fallback
-    const withTransition = (Component: React.ComponentType) => (
-      <AnimatePresence mode="wait">
-        <PageTransition key={location.pathname}>
-          <Suspense fallback={<div className="flex-1" />}> 
-            <Component />
-          </Suspense>
-        </PageTransition>
-      </AnimatePresence>
-    );
-  
-    return (
-      <Routes location={location}>
-        {/* home */}
-        <Route 
-          path="/" 
-          element={
-            <SimpleLayout>
-              {withTransition(Index)}
-            </SimpleLayout>
-          } 
-        />
-        
-        {/* 404 Route */}
-        <Route 
-          path="/404" 
-          element={
-            <BlankLayout>
-              {withTransition(NotFound)}
-            </BlankLayout>
-          }
-        />
-        
-        {/* redirect to /404 if page doesnt exist, this also fixes the layout issue */}
-        <Route 
-          path="*" 
-          element={
-            <Navigate to = "/404" />
-          } 
-        />
-  
-        {/* standard layout for content pages */}
-        <Route 
-          path="/about" 
-          element={
-            <MainLayout>
-              {withTransition(About)}
-            </MainLayout>
-          } 
-        />
-        
-        <Route 
-          path="/projects" 
-          element={
-            <MainLayout>
-              {withTransition(Projects)}
-            </MainLayout>
-          } 
-        />
-        
-        {/* Individual project pages */}
-        <Route 
-          path="/projects/:slug" 
-          element={
-            <ProjectLayout>
-              {withTransition(ProjectDeepDiveRenderer)}
-            </ProjectLayout>
-          } 
-        />
-        
-        <Route 
-          path="/skills" 
-          element={
-            <MainLayout>
-              {withTransition(Skills)}
-            </MainLayout>
-          } 
-        />
-        
-        <Route 
-          path="/experience" 
-          element={
-            <MainLayout>
-              {withTransition(Experience)}
-            </MainLayout>
-          } 
-        />
-        
-        <Route 
-          path="/contact" 
-          element={
-            <MainLayout>
-              {withTransition(Contact)}
-            </MainLayout>
-          } 
-        />
-        
-        <Route 
-          path="/services" 
-          element={
-            <MainLayout>
-              {withTransition(Services)}
-            </MainLayout>
-          } 
-        />
-  
-        {/* 這個網站是怎麼造出來的 */}
-        <Route 
-          path="/a" 
-          element={
-            <BlankLayout>
-              {withTransition(AboutThisWebsite)}
-            </BlankLayout>
-          } 
-        />
-        
-        {/* Privacy Policy */}
-        <Route 
-          path="/privacy" 
-          element={
-            <SimpleLayout>
-              {withTransition(Privacy)}
-            </SimpleLayout>
-          } 
-        />
+  const location = useLocation();
 
-        {/* Certifications */}
-        <Route 
-          path="/certifications" 
-          element={
-            <SimpleLayout>
-              {withTransition(Certifications)}
-            </SimpleLayout>
-          } 
-        />
-      </Routes>
-    );
-  };
+  // helper to wrap a component with page transition and suspense fallback
+  const withTransition = (Component: React.ComponentType) => (
+    <AnimatePresence mode="wait">
+      <PageTransition key={location.pathname}>
+        <Suspense fallback={<div className="flex-1" />}>
+          <Component />
+        </Suspense>
+      </PageTransition>
+    </AnimatePresence>
+  );
+
+  return (
+    <Routes location={location}>
+      {/* home */}
+      <Route
+        path="/"
+        element={<SimpleLayout>{withTransition(Index)}</SimpleLayout>}
+      />
+
+      {/* 404 Route */}
+      <Route
+        path="/404"
+        element={<BlankLayout>{withTransition(NotFound)}</BlankLayout>}
+      />
+
+      {/* redirect to /404 if page doesnt exist, this also fixes the layout issue */}
+      <Route path="*" element={<Navigate to="/404" />} />
+
+      {/* standard layout for content pages */}
+      <Route
+        path="/about"
+        element={<MainLayout>{withTransition(About)}</MainLayout>}
+      />
+
+      <Route
+        path="/projects"
+        element={<MainLayout>{withTransition(Projects)}</MainLayout>}
+      />
+
+      {/* Individual project pages */}
+      <Route
+        path="/projects/:slug"
+        element={
+          <ProjectLayout>
+            {withTransition(ProjectDeepDiveRenderer)}
+          </ProjectLayout>
+        }
+      />
+
+      <Route
+        path="/skills"
+        element={<MainLayout>{withTransition(Skills)}</MainLayout>}
+      />
+
+      <Route
+        path="/experience"
+        element={<MainLayout>{withTransition(Experience)}</MainLayout>}
+      />
+
+      <Route
+        path="/contact"
+        element={<MainLayout>{withTransition(Contact)}</MainLayout>}
+      />
+
+      <Route
+        path="/services"
+        element={<MainLayout>{withTransition(Services)}</MainLayout>}
+      />
+
+      {/* 這個網站是怎麼造出來的 */}
+      <Route
+        path="/a"
+        element={<BlankLayout>{withTransition(AboutThisWebsite)}</BlankLayout>}
+      />
+
+      {/* Privacy Policy */}
+      <Route
+        path="/privacy"
+        element={<SimpleLayout>{withTransition(Privacy)}</SimpleLayout>}
+      />
+
+      {/* Certifications */}
+      <Route
+        path="/certifications"
+        element={<SimpleLayout>{withTransition(Certifications)}</SimpleLayout>}
+      />
+    </Routes>
+  );
+};

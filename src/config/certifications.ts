@@ -31,7 +31,7 @@ export const certifications: Certification[] = [
     url: "https://www.coursera.org/account/accomplishments/verify/1MXUZJ4Y79II",
     skills: ["Artificial Intelligence (AI)", "Generative AI", "NLP"],
     issuerLogo: "/certificates/issuer/ibm_logo.jpg",
-    certificateImage: "/certificates/IBM_AI_Yanis-Sebastian-Zürcher.pdf"
+    certificateImage: "/certificates/IBM_AI_Yanis-Sebastian-Zürcher.pdf",
   },
   {
     id: "ibm-ml-python",
@@ -40,9 +40,15 @@ export const certifications: Certification[] = [
     issueDate: "2025-09-04",
     credentialId: "ADQLN32BTE5H",
     url: "https://www.coursera.org/account/accomplishments/verify/ADQLN32BTE5H",
-    skills: ["Python", "Machine Learning", "Scikit-learn", "Regression", "Classification"],
+    skills: [
+      "Python",
+      "Machine Learning",
+      "Scikit-learn",
+      "Regression",
+      "Classification",
+    ],
     issuerLogo: "/certificates/issuer/ibm_logo.jpg",
-    certificateImage: "/certificates/IBM_ML_Yanis-Sebastian-Zürcher.pdf"
+    certificateImage: "/certificates/IBM_ML_Yanis-Sebastian-Zürcher.pdf",
   },
   {
     id: "cambridge-b2-fce",
@@ -51,7 +57,8 @@ export const certifications: Certification[] = [
     issueDate: "2025-07-01",
     skills: ["English B2"],
     issuerLogo: "/certificates/issuer/cambridge_logo.jpg",
-    certificateImage: "/certificates/b2-fce-cambridge_Yanis-Sebastian-Zürcher.pdf"
+    certificateImage:
+      "/certificates/b2-fce-cambridge_Yanis-Sebastian-Zürcher.pdf",
   },
   {
     id: "fcc-js-algorithms-ds",
@@ -61,7 +68,8 @@ export const certifications: Certification[] = [
     url: "https://www.freecodecamp.org/certification/lyfe691/javascript-algorithms-and-data-structures-v8",
     skills: ["JavaScript", "Algorithms", "Data Structures"],
     issuerLogo: "/certificates/issuer/free_code_camp_logo.jpg",
-    certificateImage: "/certificates/js-fcc_algorithms-ds_Yanis-Sebastian-Zürcher.png"
+    certificateImage:
+      "/certificates/js-fcc_algorithms-ds_Yanis-Sebastian-Zürcher.png",
   },
   {
     id: "mimo-fullstack",
@@ -72,8 +80,8 @@ export const certifications: Certification[] = [
     url: "https://www.virtualbadge.io/certificate-validator?credential=56c5227a-95c9-4b7f-a462-8bf34303d644",
     skills: ["Full-Stack", "Web Development"],
     issuerLogo: "/certificates/issuer/mimo_logo.png",
-    certificateImage: "/certificates/mimo_ft_Yanis-Sebastian-Zürcher.png"
-  }
+    certificateImage: "/certificates/mimo_ft_Yanis-Sebastian-Zürcher.png",
+  },
 ];
 
 export function getAllCertifications(): Certification[] {
@@ -85,12 +93,15 @@ export function getAllCertifications(): Certification[] {
 }
 
 export function getCertificationsByIssuer(issuer: string): Certification[] {
-  return getAllCertifications().filter((c) => c.issuer.toLowerCase() === issuer.toLowerCase());
+  return getAllCertifications().filter(
+    (c) => c.issuer.toLowerCase() === issuer.toLowerCase(),
+  );
 }
 
-export function isExpired(cert: Certification, now: Date = new Date()): boolean {
+export function isExpired(
+  cert: Certification,
+  now: Date = new Date(),
+): boolean {
   if (!cert.expirationDate) return false;
   return new Date(cert.expirationDate).getTime() < now.getTime();
 }
-
-

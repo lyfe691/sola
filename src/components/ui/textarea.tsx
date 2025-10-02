@@ -1,13 +1,14 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 const textareaVariants = cva(
   "flex w-full px-3 py-2 text-base md:text-sm ring-offset-background placeholder:text-muted-foreground caret-[hsl(var(--ring))] disabled:cursor-not-allowed disabled:opacity-50 transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:transition-opacity placeholder:opacity-70 focus-visible:placeholder:opacity-50 selection:bg-ring/20",
   {
     variants: {
       appearance: {
-        default: "rounded-md border border-input bg-background hover:border-foreground/25",
+        default:
+          "rounded-md border border-input bg-background hover:border-foreground/25",
         soft: "rounded-md border border-foreground/10 bg-muted/50 hover:bg-muted",
         subtle:
           "rounded-md border border-foreground/10 bg-background/80 backdrop-blur-[2px] hover:bg-background/90",
@@ -45,22 +46,28 @@ const textareaVariants = cva(
       minHeight: "sm",
       invalid: false,
     },
-  }
-)
+  },
+);
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     VariantProps<typeof textareaVariants> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, resizable, minHeight, appearance, radius, invalid, ...props }, ref) => (
+  (
+    { className, resizable, minHeight, appearance, radius, invalid, ...props },
+    ref,
+  ) => (
     <textarea
-      className={cn(textareaVariants({ resizable, minHeight, appearance, radius, invalid }), className)}
+      className={cn(
+        textareaVariants({ resizable, minHeight, appearance, radius, invalid }),
+        className,
+      )}
       ref={ref}
       {...props}
     />
-  )
-)
-Textarea.displayName = "Textarea"
+  ),
+);
+Textarea.displayName = "Textarea";
 
-export { Textarea, textareaVariants }
+export { Textarea, textareaVariants };

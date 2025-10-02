@@ -6,22 +6,22 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
-import './index.css';
-import { Analytics } from "@vercel/analytics/react"
-import { HelmetProvider } from 'react-helmet-async';
+import React from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.tsx";
+import "./index.css";
+import { Analytics } from "@vercel/analytics/react";
+import { HelmetProvider } from "react-helmet-async";
 
 // get the root element
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 
 // small safety check
 if (!rootElement) {
-  throw new Error('Failed to find the root element');
+  throw new Error("Failed to find the root element");
 }
 
-// create root 
+// create root
 const root = createRoot(rootElement);
 
 // render app with strict mode
@@ -31,6 +31,5 @@ root.render(
       <App />
     </HelmetProvider>
     <Analytics />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
-

@@ -17,7 +17,10 @@ interface CopyToClipboardProps {
   className?: string;
 }
 
-export default function CopyToClipboard({ code, className }: CopyToClipboardProps) {
+export default function CopyToClipboard({
+  code,
+  className,
+}: CopyToClipboardProps) {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = async () => {
@@ -38,24 +41,24 @@ export default function CopyToClipboard({ code, className }: CopyToClipboardProp
       onClick={copyToClipboard}
       className={cn(
         "h-8 w-8 p-0 text-muted-foreground hover:text-foreground transition-colors",
-        className
+        className,
       )}
       aria-label={copied ? "Copied!" : "Copy code"}
     >
       <div className="relative">
-        <Copy 
+        <Copy
           className={cn(
             "h-4 w-4 transition-all duration-300 ease-in-out",
-            copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
+            copied ? "scale-0 opacity-0" : "scale-100 opacity-100",
           )}
         />
-        <Check 
+        <Check
           className={cn(
             "h-4 w-4 absolute inset-0 transition-all duration-300 ease-in-out text-foreground",
-            copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
+            copied ? "scale-100 opacity-100" : "scale-0 opacity-0",
           )}
         />
       </div>
     </Button>
   );
-} 
+}

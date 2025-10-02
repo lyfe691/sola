@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-
 import type { ReactNode } from "react";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -35,7 +34,12 @@ function interpolate(input: string, values?: InterpolationValues): string {
 }
 
 function isExternalHref(href: string): boolean {
-  return /^(?:https?:)?\/\//i.test(href) || href.startsWith("mailto:") || href.startsWith("tel:") || href.startsWith("ftp:");
+  return (
+    /^(?:https?:)?\/\//i.test(href) ||
+    href.startsWith("mailto:") ||
+    href.startsWith("tel:") ||
+    href.startsWith("ftp:")
+  );
 }
 
 /**
@@ -47,7 +51,7 @@ function isExternalHref(href: string): boolean {
 function renderWithLinks(
   text: string,
   linkClassName?: string,
-  options?: { previewExternal?: boolean }
+  options?: { previewExternal?: boolean },
 ): ReactNode[] {
   const nodes: ReactNode[] = [];
   const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g; // [label](url)
@@ -66,15 +70,19 @@ function renderWithLinks(
       nodes.push(
         <Link key={`${start}-link`} to={href} className={linkClassName}>
           {label}
-        </Link>
+        </Link>,
       );
     } else if (isExternalHref(href)) {
       const openNewTab = /^https?:\/\//i.test(href);
       if (options?.previewExternal && openNewTab) {
         nodes.push(
-          <LinkPreview key={`${start}-extp`} href={href} className={linkClassName}>
+          <LinkPreview
+            key={`${start}-extp`}
+            href={href}
+            className={linkClassName}
+          >
             {label}
-          </LinkPreview>
+          </LinkPreview>,
         );
       } else {
         nodes.push(
@@ -82,10 +90,12 @@ function renderWithLinks(
             key={`${start}-ext`}
             href={href}
             className={linkClassName}
-            {...(openNewTab ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            {...(openNewTab
+              ? { target: "_blank", rel: "noopener noreferrer" }
+              : {})}
           >
             {label}
-          </a>
+          </a>,
         );
       }
     } else {
@@ -93,7 +103,7 @@ function renderWithLinks(
       nodes.push(
         <a key={`${start}-raw`} href={href} className={linkClassName}>
           {label}
-        </a>
+        </a>,
       );
     }
 
@@ -115,10 +125,10 @@ export const RichText: React.FC<RichTextProps> = ({
   previewExternal = false,
 }) => {
   const interpolated = interpolate(text, values);
-  const content = renderWithLinks(interpolated, linkClassName, { previewExternal });
+  const content = renderWithLinks(interpolated, linkClassName, {
+    previewExternal,
+  });
   return <span className={className}>{content}</span>;
 };
 
 export default RichText;
-
-

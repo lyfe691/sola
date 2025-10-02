@@ -33,16 +33,15 @@ type LanguageProviderState = {
 };
 
 const LanguageContext = createContext<LanguageProviderState | undefined>(
-  undefined
+  undefined,
 );
 
 function normalize(code: string): Language {
   const lower = code.toLowerCase();
   const base = lower.split("-")[0];
-  const hit =
-    (SUPPORTED as readonly string[]).includes(lower)
-      ? (lower as Language)
-      : (SUPPORTED as readonly string[]).includes(base)
+  const hit = (SUPPORTED as readonly string[]).includes(lower)
+    ? (lower as Language)
+    : (SUPPORTED as readonly string[]).includes(base)
       ? (base as Language)
       : "en";
   return hit;
@@ -69,9 +68,7 @@ export function LanguageProvider({
   const [language, setLanguageState] = useState<Language>(() => {
     try {
       const stored =
-        typeof window !== "undefined"
-          ? localStorage.getItem(storageKey)
-          : null;
+        typeof window !== "undefined" ? localStorage.getItem(storageKey) : null;
       if (stored && (SUPPORTED as readonly string[]).includes(stored)) {
         return stored as Language;
       }
@@ -90,7 +87,7 @@ export function LanguageProvider({
       }
       setLanguageState(next);
     },
-    [storageKey]
+    [storageKey],
   );
 
   // cross-tab sync
@@ -131,16 +128,19 @@ export function LanguageProvider({
       detectedLanguage: auto.matched,
       detectedLanguageCode: auto.source,
     }),
-    [language, setLanguage, auto.matched, auto.source]
+    [language, setLanguage, auto.matched, auto.source],
   );
 
   return (
-    <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
+    <LanguageContext.Provider value={value}>
+      {children}
+    </LanguageContext.Provider>
   );
 }
 
 export const useLanguage = () => {
   const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used within a LanguageProvider");
+  if (!ctx)
+    throw new Error("useLanguage must be used within a LanguageProvider");
   return ctx;
 };

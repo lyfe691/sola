@@ -1,4 +1,9 @@
-import { ProjectImage, ProjectGallery, TechStack, CodeBlock } from '@/components/MDXComponents';
+import {
+  ProjectImage,
+  ProjectGallery,
+  TechStack,
+  CodeBlock,
+} from "@/components/MDXComponents";
 
 # Building AppliCare
 
@@ -178,7 +183,6 @@ The frontend was built with React and Vite for fast development and builds.
 
 The backend was built with Spring Boot and MongoDB for flexible data storage.
 
-
 ## Deployment & DevOps
 
 ### Docker Configuration
@@ -195,7 +199,7 @@ COPY src src
 
 RUN chmod +x ./mvnw
 RUN ./mvnw install -DskipTests
-RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../\*.jar)
 
 FROM eclipse-temurin:21-jre-alpine
 VOLUME /tmp
@@ -204,8 +208,8 @@ COPY --from=build \${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY --from=build \${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build \${DEPENDENCY}/BOOT-INF/classes /app
 ENTRYPOINT ["java","-cp","app:app/lib/*","com.applicare.applicare.ApplicareApplication"]`}
-  fileName="Dockerfile"
-  lang="dockerfile"
+fileName="Dockerfile"
+lang="dockerfile"
 />
 
 ## Results & Impact
@@ -219,16 +223,24 @@ The application successfully addresses the job search tracking problem:
 
 ### Performance Metrics
 
-| Metric | Value | Impact |
-|--------|-------|--------|
-| Load Time | < 2s | Fast user experience |
-| API Response | < 200ms | Responsive interactions |
-| User Satisfaction | 4.8/5 | Positive feedback |
+| Metric            | Value   | Impact                  |
+| ----------------- | ------- | ----------------------- |
+| Load Time         | < 2s    | Fast user experience    |
+| API Response      | < 200ms | Responsive interactions |
+| User Satisfaction | 4.8/5   | Positive feedback       |
 
-<ProjectGallery 
+<ProjectGallery
   images={[
-    { src: "/projects/applicare/dashboard.png", alt: "Application dashboard", caption: "Main dashboard showing application overview" },
-    { src: "/projects/applicare/manage.png", alt: "Manage Applications page", caption: "Where you can manage your applications" }
+    {
+      src: "/projects/applicare/dashboard.png",
+      alt: "Application dashboard",
+      caption: "Main dashboard showing application overview",
+    },
+    {
+      src: "/projects/applicare/manage.png",
+      alt: "Manage Applications page",
+      caption: "Where you can manage your applications",
+    },
   ]}
   columns={2}
   size="full"
@@ -251,4 +263,4 @@ The application successfully addresses the job search tracking problem:
 
 ---
 
-*AppliCare demonstrates how modern web technologies can solve real-world problems with elegant, user-focused solutions.* 
+_AppliCare demonstrates how modern web technologies can solve real-world problems with elegant, user-focused solutions._

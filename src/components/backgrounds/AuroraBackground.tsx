@@ -13,10 +13,11 @@ export default function AuroraBackground() {
   const { enabled } = useAurora();
   if (!enabled) return null;
   return (
-    <div className="fixed inset-0 -z-10 pointer-events-none select-none" aria-hidden>
+    <div
+      className="fixed inset-0 -z-10 pointer-events-none select-none"
+      aria-hidden
+    >
       <Aurora />
     </div>
   );
 }
-
-

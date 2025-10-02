@@ -6,8 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { MoonStar, Sun, Check } from "lucide-react"
-import { useTheme } from "./theme-provider"
+import { MoonStar, Sun, Check } from "lucide-react";
+import { useTheme } from "./theme-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,64 +15,77 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { useEffect, useState } from "react"
-import { STANDARD_THEMES, CUSTOM_THEMES, THEMES, type Theme } from "@/config/themes"
-import { useAurora } from "@/lib/aurora-provider"
-import { Switch } from "@/components/ui/switch"
-import { useLanguage } from "@/lib/language-provider"
-import { translations } from "@/lib/translations"
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import {
+  STANDARD_THEMES,
+  CUSTOM_THEMES,
+  THEMES,
+  type Theme,
+} from "@/config/themes";
+import { useAurora } from "@/lib/aurora-provider";
+import { Switch } from "@/components/ui/switch";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light")
-  const [mounted, setMounted] = useState(false)
-  const { enabled: auroraEnabled, setEnabled: setAuroraEnabled } = useAurora()
-  const { language } = useLanguage()
-  const t = translations[language]
+  const { theme, setTheme } = useTheme();
+  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
+  const { enabled: auroraEnabled, setEnabled: setAuroraEnabled } = useAurora();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   // monitor system theme changes
   useEffect(() => {
-    setMounted(true)
-    
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
-    setSystemTheme(mediaQuery.matches ? "dark" : "light")
+    setMounted(true);
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setSystemTheme(mediaQuery.matches ? "dark" : "light");
 
     const handler = (e: MediaQueryListEvent) => {
-      setSystemTheme(e.matches ? "dark" : "light")
-    }
+      setSystemTheme(e.matches ? "dark" : "light");
+    };
 
-    mediaQuery.addEventListener("change", handler)
-    return () => mediaQuery.removeEventListener("change", handler)
-  }, [])
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   // don't render anything until mounted to prevent hydration mismatch
   if (!mounted) {
-    return null
+    return null;
   }
 
-  const resolvedTheme = theme === "system" ? systemTheme : theme
+  const resolvedTheme = theme === "system" ? systemTheme : theme;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="ghost" 
+          variant="ghost"
           size="icon"
           className="w-9 h-9 transition-colors hover:bg-muted"
         >
           {/* show icon with smooth animation */}
           {theme === "system" ? (
             <>
-              <Sun className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
-              <MoonStar className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
+              <Sun
+                className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`}
+              />
+              <MoonStar
+                className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
+              />
             </>
           ) : (
             <>
-              <Sun className={`h-4 w-4 transition-all ${theme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`} />
-              <MoonStar className={`absolute h-4 w-4 transition-all ${theme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`} />
-              {CUSTOM_THEMES.map(t => {
+              <Sun
+                className={`h-4 w-4 transition-all ${theme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`}
+              />
+              <MoonStar
+                className={`absolute h-4 w-4 transition-all ${theme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
+              />
+              {CUSTOM_THEMES.map((t) => {
                 const IconComponent = t.icon;
                 return (
                   <IconComponent
@@ -86,7 +99,10 @@ export function ThemeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background/85 backdrop-blur-sm min-w-[180px]">
+      <DropdownMenuContent
+        align="end"
+        className="bg-background/85 backdrop-blur-sm min-w-[180px]"
+      >
         <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
         {/* standard themes */}
         {STANDARD_THEMES.map((option) => (
@@ -138,5 +154,5 @@ export function ThemeToggle() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-} 
+  );
+}

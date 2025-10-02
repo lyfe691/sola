@@ -30,12 +30,14 @@ export const AdvancedCodeBlock = ({
   theme,
   className,
   ...props
-}: AdvancedBlockProps & Omit<HTMLAttributes<HTMLDivElement>, 'className'>) => {
+}: AdvancedBlockProps & Omit<HTMLAttributes<HTMLDivElement>, "className">) => {
   const { theme: currentTheme } = useTheme();
-  
-  // Automatically determine the appropriate Shiki theme - handles ALL themes dynamically  
-  const selectedTheme = theme || (getThemeType(currentTheme) === 'dark' ? 'github-dark' : 'github-light');
-  
+
+  // Automatically determine the appropriate Shiki theme - handles ALL themes dynamically
+  const selectedTheme =
+    theme ||
+    (getThemeType(currentTheme) === "dark" ? "github-dark" : "github-light");
+
   return (
     <motion.figure
       initial={{ opacity: 0, y: 20 }}
@@ -58,10 +60,14 @@ export const AdvancedCodeBlock = ({
             className="overflow-x-auto overflow-y-auto bg-muted/30 py-4 text-sm leading-6 text-foreground"
             style={{ paddingRight: "10px" }}
           >
-            <ShikiCode code={code} lang={lang} theme={selectedTheme as BundledTheme} />
+            <ShikiCode
+              code={code}
+              lang={lang}
+              theme={selectedTheme as BundledTheme}
+            />
           </pre>
         </div>
       </div>
     </motion.figure>
   );
-}; 
+};
