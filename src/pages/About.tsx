@@ -25,7 +25,7 @@ import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
 import { Helmet } from "react-helmet-async";
@@ -86,7 +86,7 @@ const viewResume = (language: string) => {
 type InterestCardProps = {
   title: string;
   description: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   image: string;
 };
 
@@ -604,7 +604,6 @@ const ResumeModal = () => {
 const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
-  const navigate = useNavigate();
   const { theme } = useTheme();
   const [selectedYear, setSelectedYear] = useState<"last" | number>("last");
   const [activity, setActivity] = useState<ProcessedActivity[]>([]);

@@ -27,7 +27,6 @@ import {
   Eye,
   ArrowUpRight,
   Clock,
-  MoveRight,
 } from "lucide-react";
 import { IconButton } from "@/components/ui/custom/icon-button";
 
