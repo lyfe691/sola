@@ -1,28 +1,18 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import mdx from "@mdx-js/rollup";
-import remarkGfm from "remark-gfm";
-import path from "path";
+import path from "path"
+import tailwindcss from "@tailwindcss/vite"
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 3000,
-  },
-  plugins: [
-    {
-      enforce: "pre",
-      ...mdx({
-        remarkPlugins: [remarkGfm],
-        providerImportSource: "@mdx-js/react",
-      }),
-    },
-    react(),
-  ],
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
+  server: {
+    host: "::",
+    port: 3000,
+  },
+})
