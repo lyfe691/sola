@@ -1,0 +1,266 @@
+import {
+  ProjectImage,
+  ProjectGallery,
+  TechStack,
+  CodeBlock,
+} from "@/components/MDXComponents";
+
+# Building AppliCare
+
+AppliCare emerged from a personal need - tracking job applications was becoming overwhelming, and existing solutions were either too complex or too basic. I wanted something that felt modern, intuitive, and actually helped in the job search process.
+
+## The Problem
+
+Job searching in today's day and age means managing dozens of applications across multiple platforms. Keeping track of:
+
+- **Application Status**: Where did I apply? What stage am I in?
+- **Interview Schedules**: When are my interviews? What type?
+- **Company Research**: Notes about companies and positions
+- **Follow-ups / tasks**: When to send thank you emails or check status
+
+> "I was losing track of applications and missing follow-up opportunities. There had to be a better way."
+
+### Architecture
+
+```txt
+├── .gitignore
+├── .vscode
+    └── launch.json
+├── LICENSE
+├── README.md
+├── TODO
+    └── TODO.md
+├── applicare_backend
+    ├── .gitattributes
+    ├── .gitignore
+    ├── .mvn
+    │   └── wrapper
+    │   │   └── maven-wrapper.properties
+    ├── Dockerfile
+    ├── mvnw
+    ├── mvnw.cmd
+    ├── pom.xml
+    └── src
+    │   ├── main
+    │       ├── java
+    │       │   └── com
+    │       │   │   └── applicare
+    │       │   │       └── applicare
+    │       │   │           ├── ApplicareApplication.java
+    │       │   │           ├── config
+    │       │   │               ├── SecurityConfig.java
+    │       │   │               └── WebConfig.java
+    │       │   │           ├── controller
+    │       │   │               ├── AuthController.java
+    │       │   │               ├── JobApplicationController.java
+    │       │   │               ├── TaskController.java
+    │       │   │               └── UserController.java
+    │       │   │           ├── filter
+    │       │   │               └── JwtAuthenticationFilter.java
+    │       │   │           ├── model
+    │       │   │               ├── JobApplication.java
+    │       │   │               ├── Task.java
+    │       │   │               └── User.java
+    │       │   │           ├── repository
+    │       │   │               ├── JobApplicationRepository.java
+    │       │   │               ├── TaskRepository.java
+    │       │   │               └── UserRepository.java
+    │       │   │           ├── service
+    │       │   │               ├── AuthService.java
+    │       │   │               ├── JobApplicationService.java
+    │       │   │               ├── MailService.java
+    │       │   │               ├── TaskService.java
+    │       │   │               └── UserService.java
+    │       │   │           └── util
+    │       │   │               └── JwtUtil.java
+    │       └── resources
+    │       │   ├── application-dev.properties
+    │       │   ├── application-prod.properties
+    │       │   └── application.properties
+    │   └── test
+    │       └── java
+    │           └── com
+    │               └── applicare
+    │                   └── applicare
+    │                       └── ApplicareApplicationTests.java
+├── applicare_frontend
+    ├── .gitignore
+    ├── README.md
+    ├── eslint.config.js
+    ├── index.html
+    ├── package-lock.json
+    ├── package.json
+    ├── public
+    │   ├── applicare.png
+    │   ├── og-image.png
+    │   ├── og-image.svg
+    │   ├── robots.txt
+    │   └── sitemap.xml
+    ├── src
+    │   ├── App.css
+    │   ├── App.jsx
+    │   ├── __tests__
+    │   │   └── App.test.jsx
+    │   ├── api
+    │   │   └── axios.js
+    │   ├── assets
+    │   │   ├── google.svg
+    │   │   ├── logo
+    │   │   │   ├── logo-dark.svg
+    │   │   │   └── logo-light.svg
+    │   │   └── react.svg
+    │   ├── components
+    │   │   ├── ConfigProvider.jsx
+    │   │   ├── Footer.jsx
+    │   │   ├── Layout.jsx
+    │   │   ├── Nav.jsx
+    │   │   ├── ProtectedRoute.jsx
+    │   │   └── notice
+    │   │   │   └── NoticeBar.jsx
+    │   ├── config
+    │   │   └── urls.js
+    │   ├── context
+    │   │   ├── auth
+    │   │   │   └── AuthContext.jsx
+    │   │   └── theme
+    │   │   │   └── ThemeContext.jsx
+    │   ├── css
+    │   │   ├── Auth.module.css
+    │   │   ├── Dashboard.module.css
+    │   │   ├── Footer.css
+    │   │   ├── Landing.module.css
+    │   │   ├── Layout.css
+    │   │   ├── Manage.module.css
+    │   │   ├── Nav.css
+    │   │   └── backup
+    │   │   │   └── AuthCss.backup
+    │   ├── features
+    │   │   ├── applications
+    │   │   │   └── components
+    │   │   │   │   ├── NewApplicationForm.jsx
+    │   │   │   │   └── NewApplicationForm.module.css
+    │   │   ├── auth
+    │   │   │   ├── components
+    │   │   │   │   ├── AuthForm.jsx
+    │   │   │   │   └── PasswordInput.jsx
+    │   │   │   └── pages
+    │   │   │   │   ├── ForgotPassword.jsx
+    │   │   │   │   ├── Login.jsx
+    │   │   │   │   ├── Register.jsx
+    │   │   │   │   └── ResetPassword.jsx
+    │   │   └── settings
+    │   │   │   └── pages
+    │   │   │       ├── Settings.jsx
+    │   │   │       └── Settings.module.css
+    │   ├── index.css
+    │   ├── main.jsx
+    │   ├── pages
+    │   │   ├── Dashboard.jsx
+    │   │   ├── Landing.jsx
+    │   │   └── Manage.jsx
+    │   └── setupTests.js
+    ├── vite.config.js
+    └── vitest.config.js
+└── docs
+    ├── Dokumentation.md
+    └── images
+        ├── class_diagram.png
+        ├── mockups
+            ├── Auth_Mockup.png
+            ├── Dashboard_Mockup.png
+            ├── Landing_Mockup.png
+            ├── Manage_Mockup.png
+            └── Settings_Mockup.png
+        └── mongodb_compass.png
+
+```
+
+### Frontend Architecture
+
+The frontend was built with React and Vite for fast development and builds.
+
+### Backend Design
+
+The backend was built with Spring Boot and MongoDB for flexible data storage.
+
+## Deployment & DevOps
+
+### Docker Configuration
+
+<CodeBlock
+  code={`# Backend Dockerfile
+FROM eclipse-temurin:21-jdk-alpine as build
+WORKDIR /workspace/app
+
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+
+RUN chmod +x ./mvnw
+RUN ./mvnw install -DskipTests
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../\*.jar)
+
+FROM eclipse-temurin:21-jre-alpine
+VOLUME /tmp
+ARG DEPENDENCY=/workspace/app/target/dependency
+COPY --from=build \${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build \${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build \${DEPENDENCY}/BOOT-INF/classes /app
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.applicare.applicare.ApplicareApplication"]`}
+fileName="Dockerfile"
+lang="dockerfile"
+/>
+
+## Results & Impact
+
+The application successfully addresses the job search tracking problem:
+
+- **Organized Workflow**: Clear status tracking for all applications
+- **Interview Management**: Centralized scheduling and note-taking
+- **Progress Visualization**: Charts and analytics for job search progress
+- **Document Storage**: Centralized resume and cover letter management
+
+### Performance Metrics
+
+| Metric            | Value   | Impact                  |
+| ----------------- | ------- | ----------------------- |
+| Load Time         | < 2s    | Fast user experience    |
+| API Response      | < 200ms | Responsive interactions |
+| User Satisfaction | 4.8/5   | Positive feedback       |
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/applicare/dashboard.png",
+      alt: "Application dashboard",
+      caption: "Main dashboard showing application overview",
+    },
+    {
+      src: "/projects/applicare/manage.png",
+      alt: "Manage Applications page",
+      caption: "Where you can manage your applications",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+## Lessons Learned
+
+### Technical Insights
+
+1. **MongoDB Flexibility**: NoSQL was perfect for evolving requirements
+2. **Ant Design**: Consistent UI components accelerated development
+3. **Docker**: Simplified deployment and environment consistency
+4. **Spring Boot**: Rapid API development with excellent documentation
+
+### User Experience
+
+- **Simplicity First**: Complex features hidden behind clean interfaces
+- **Mobile Responsive**: Job searching happens everywhere
+- **Bulk Operations**: Managing multiple applications efficiently
+- **CRUD Operations**: Create, Read, Update, Delete applications
+
+---
+
+_AppliCare demonstrates how modern web technologies can solve real-world problems with elegant, user-focused solutions._

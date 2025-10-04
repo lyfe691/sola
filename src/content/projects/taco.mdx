@@ -1,0 +1,142 @@
+import {
+  ProjectImage,
+  ProjectGallery,
+  TechStack,
+  CodeBlock,
+} from "@/components/MDXComponents";
+
+# Taco — Production‑ready template with i18n and blog
+
+Taco is a clean Next.js template centered on my brother's dog. It demonstrates a practical foundation for real projects: localization with automatic detection, a simple blog system, shared UI primitives, and a modular architecture.
+
+## Stack & Approach
+
+- Next.js + TypeScript for app routing and SSR/ISR
+- Tailwind CSS for a strict, maintainable design system
+- Framer Motion for subtle UI polish (kept minimal)
+- Vercel for fast, zero‑config deployments
+
+<TechStack
+  technologies={[
+    "Next.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Vercel",
+    "i18n",
+  ]}
+/>
+
+## Internationalization
+
+Language detection runs on the client with persistence to `localStorage`. A provider exposes the current language, a setter, supported languages and a typed `t` function. This can be wired to UI controls (dropdown/toggle) and used across pages and MDX.
+
+### use-translation hook
+
+<CodeBlock
+  code={`"use client";
+
+import {
+  t as translateRaw,
+  TranslationKey,
+  languages,
+  defaultLanguage,
+  setLanguage as setInternalLanguage,
+  detectUserLanguage,
+} from "@/lib/i18n";
+import { Language } from "@/lib/i18n/languages";
+import {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  ReactNode,
+} from "react";
+
+interface TranslationContextType {
+currentLanguage: Language;
+setLanguage: (langCode: string) => void;
+t: (key: TranslationKey) => string;
+languages: Language[];
+}
+
+const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
+
+export function TranslationProvider({ children }: { children: ReactNode }) {
+  const [language, setLanguageState] = useState<Language>(defaultLanguage);
+
+useEffect(() => {
+const storedLang = localStorage.getItem("language");
+const detected = storedLang || detectUserLanguage();
+const lang = languages.find((l) => l.code === detected) || defaultLanguage;
+
+    setInternalLanguage(lang.code);
+    setLanguageState(lang);
+
+}, []);
+
+const setLanguage = (langCode: string) => {
+const lang = languages.find((l) => l.code === langCode);
+if (!lang) return;
+
+    setInternalLanguage(lang.code);
+    setLanguageState(lang);
+    localStorage.setItem("language", langCode);
+
+};
+
+const t = (key: TranslationKey) => translateRaw(key, language.code);
+
+return (
+<TranslationContext.Provider
+value={{ currentLanguage: language, setLanguage, t, languages }} >
+{children}
+</TranslationContext.Provider>
+);
+}
+
+export function useTranslation() {
+  const context = useContext(TranslationContext);
+  if (!context) {
+    throw new Error("useTranslation must be used within a TranslationProvider");
+  }
+  return context;
+}`} 
+  fileName="hooks/use-translation.tsx"
+  lang="tsx"
+/>
+
+### Client language init
+
+<CodeBlock
+  code={`"use client";
+
+import { useEffect } from "react";
+import { useTranslation } from "@/hooks/use-translation";
+
+export default function ClientLanguageInit() {
+  const { currentLanguage } = useTranslation();
+
+useEffect(() => {
+console.log("i18n detected def/sys language:", currentLanguage.code);
+}, [currentLanguage]);
+
+return null;
+}`}
+fileName="components/ClientLanguageInit.tsx"
+lang="tsx"
+/>
+
+## Blog
+
+Content is authored with MDX and rendered through shared components (`MDXComponents`) for consistent typography, code blocks, and links. The same system powers this page, keeping presentation uniform across blog posts and deep dives.
+
+## Architecture
+
+- Clear separation of `config`, `content`, `components`, `pages`
+- MDX for content; config maps slugs to metadata and routes
+- Shared primitives (breadcrumbs, buttons, link previews) keep things consistent
+
+---
+
+This template is pragmatic, localized, and easy to extend.

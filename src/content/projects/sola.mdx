@@ -1,0 +1,127 @@
+import {
+  ProjectImage,
+  ProjectGallery,
+  TechStack,
+  CodeBlock,
+} from "@/components/MDXComponents";
+
+# Design Philosophy
+
+The design philosophy behind Sola centers on **minimalism with purpose**. Every element serves a function, from the subtle animations that guide user attention to the carefully chosen typography hierarchy.
+
+> "Good design is as little design as possible" - Dieter Rams
+
+The goal was to create a space where content breathes and visitors can focus on what matters most.
+
+## Technical Architecture
+
+Built with a **component-first approach** using React and TypeScript for type safety. The architecture includes:
+
+- **Vite** for fast development builds
+- **Tailwind CSS** for consistent styling and design system
+- **Framer Motion** for smooth animations and transitions
+- **React Router** for client-side routing
+- **shadcn/ui** for accessible, customizable components; works well with Tailwind CSS
+
+## Performance & Development
+
+Performance was a **key priority** from the start. Here's what I implemented:
+
+1. **Code Splitting**: Dynamic imports for route-based splitting
+2. **Lazy Loading**: Images load only when needed
+3. **Bundle Optimization**: Tree shaking and minification
+4. **Caching Strategy**: React Query for efficient data management
+5. **SEO**: React Helmet for SEO optimization
+6. **i18n**: Custom React i18next for internationalization
+
+### Example: Optimization Techniques
+
+<CodeBlock
+  code={`// image optimization with lazy loading
+const OptimizedImage = ({ src, alt, ...props }: { src: string, alt: string, [key: string]: any }) => {
+  return (
+    <img 
+      src={src} 
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      {...props}
+    />
+  );
+};
+
+// memoized expensive calculations
+const ExpensiveComponent = memo(({ data }: { data: any[] }) => {
+const processedData = useMemo(() => {
+return data.map(item => ({
+...item,
+processed: heavyCalculation(item)
+}));
+}, [data]);
+
+return <div>{/* render */}</div>;
+});`}
+fileName="optimization-techniques.tsx"
+lang="typescript"
+/>
+
+The result? A portfolio that loads quickly and feels responsive on all devices.
+
+---
+
+## Development Process
+
+### Initial Planning
+
+I began by researching contemporary portfolio trends and UX patterns, reviewing dozens of developer sites to see what works—and what doesn’t. In the process I discovered [shadcn/ui](https://ui.shadcn.com/) by [shadcn](https://shadcn.com). Although it isn’t a portfolio, this open-source design system impressed me with its minimal, clean aesthetic and ease of use, and it became a key inspiration for my project.
+
+### Implementation Phases
+
+The development was broken into focused phases:
+
+1. **Foundation**: Basic routing and layout structure
+2. **Components**: Building the core UI component library
+3. **Content**: Adding project data and content management
+4. **Animations**: Implementing smooth transitions and micro-interactions
+5. **Optimization**: Performance tuning and accessibility improvements
+
+---
+
+## Results & Impact
+
+The portfolio has successfully achieved its goals:
+
+- **100 Lighthouse Score** across all metrics (Performance, Accessibility, Best Practices, SEO)
+- **Sub-second loading times** on most connections
+- **Positive feedback** from peers and potential employers
+- **Increased visibility** in the developer community
+
+### Key Metrics
+
+| Metric         | Score | Target |
+| -------------- | ----- | ------ |
+| Performance    | 100   | 90+    |
+| Accessibility  | 100   | 95+    |
+| Best Practices | 100   | 95+    |
+| SEO            | 100   | 90+    |
+
+<ProjectImage
+  src="/projects/sola/lighthouse.png"
+  alt="Performance metrics"
+  caption="Lighthouse performance results"
+  size="full"
+/>
+
+## Future Enhancements
+
+I'm always looking for ways to improve the project. Here are some ideas:
+
+- **Blog Integration**: Technical writing section
+- **Interactive Demos**: Live code examples for projects
+- **now** page: inspired by a [now](https://nownownow.com/) page.
+
+&amp; whatever else I can think of.
+
+---
+
+_This project&mdash;with over [300 clean commits](https://github.com/lyfe691/sola/commits/main)&mdash;represents not just a portfolio, but a testament to modern web development practices and attention to detail._
