@@ -33,11 +33,11 @@ export default function GitHubStarModal({
   const seenRef = useRef(false);
   const [imageLoaded, setImageLoaded] = useReactState(false);
   const { language } = useLanguage();
-  const t = (translations as unknown as Record<string, any>)[language]?.starModal ?? {
+  const t = (translations as unknown as Record<string, any>)[language]
+    ?.starModal ?? {
     eyebrow: "I value your feedback",
     title: "Enjoying my portfolio?",
-    body:
-      "If you like it, I’d really appreciate a star on GitHub. Have feedback? [Contact me](/contact).",
+    body: "If you like it, I’d really appreciate a star on GitHub. Have feedback? [Contact me](/contact).",
     starCta: "Star on GitHub",
     maybeLater: "Maybe later",
   };
@@ -46,7 +46,11 @@ export default function GitHubStarModal({
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
-      const action = (params.get("star") || params.get("s") || "").toLowerCase();
+      const action = (
+        params.get("star") ||
+        params.get("s") ||
+        ""
+      ).toLowerCase();
       if (action === "clear") {
         try {
           localStorage.removeItem(STORAGE_SEEN_KEY);
@@ -228,8 +232,16 @@ export default function GitHubStarModal({
                   <span className="inline-flex items-center">
                     <motion.span
                       initial={{ rotate: 0, x: 0 }}
-                      animate={{ rotate: [0, -10, 10, -5, 5, 0], x: [0, -0.5, 0.5, -0.25, 0.25, 0] }}
-                      transition={{ duration: 1.8, repeat: Infinity, repeatDelay: 1.2, ease: "easeInOut" }}
+                      animate={{
+                        rotate: [0, -10, 10, -5, 5, 0],
+                        x: [0, -0.5, 0.5, -0.25, 0.25, 0],
+                      }}
+                      transition={{
+                        duration: 1.8,
+                        repeat: Infinity,
+                        repeatDelay: 1.2,
+                        ease: "easeInOut",
+                      }}
                       style={{ display: "inline-block" }}
                     >
                       <Star className="w-4 h-4" />
@@ -252,5 +264,3 @@ export default function GitHubStarModal({
     document.body,
   );
 }
-
-

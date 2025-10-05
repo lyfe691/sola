@@ -157,14 +157,13 @@ export const translations = {
       spinning: "Spinning...",
       keep: "Keep this",
     },
-      starModal: {
-        eyebrow: "I value your feedback",
-        title: "Enjoying my portfolio?",
-        body:
-          "If you like it, I’d really appreciate a star on GitHub. Have feedback? [Contact me](/contact).",
-        starCta: "Star on GitHub",
-        maybeLater: "Maybe later",
-      },
+    starModal: {
+      eyebrow: "I value your feedback",
+      title: "Enjoying my portfolio?",
+      body: "If you like it, I’d really appreciate a star on GitHub. Have feedback? [Contact me](/contact).",
+      starCta: "Star on GitHub",
+      maybeLater: "Maybe later",
+    },
     experience: {
       title: "Experience",
       backHome: "Back home",
@@ -681,14 +680,13 @@ export const translations = {
       spinning: "Dreht...",
       keep: "Behalten",
     },
-      starModal: {
-        eyebrow: "Dein Feedback zählt",
-        title: "Gefällt dir mein Portfolio?",
-        body:
-          "Wenn es dir gefällt, freue ich mich über einen Stern auf GitHub. Feedback? [Schreib mir](/contact).",
-        starCta: "Auf GitHub Stern geben",
-        maybeLater: "Vielleicht später",
-      },
+    starModal: {
+      eyebrow: "Dein Feedback zählt",
+      title: "Gefällt dir mein Portfolio?",
+      body: "Wenn es dir gefällt, freue ich mich über einen Stern auf GitHub. Feedback? [Schreib mir](/contact).",
+      starCta: "Auf GitHub Stern geben",
+      maybeLater: "Vielleicht später",
+    },
     experience: {
       title: "Erfahrung",
       backHome: "Zurück zur Startseite",
@@ -1207,14 +1205,13 @@ export const translations = {
       spinning: "Girando...",
       keep: "Conservar",
     },
-      starModal: {
-        eyebrow: "Valoro tus comentarios",
-        title: "¿Te gusta mi portafolio?",
-        body:
-          "Si te gusta, me ayudaría mucho una estrella en GitHub. ¿Comentarios? [Contáctame](/contact).",
-        starCta: "Dar estrella en GitHub",
-        maybeLater: "Quizás después",
-      },
+    starModal: {
+      eyebrow: "Valoro tus comentarios",
+      title: "¿Te gusta mi portafolio?",
+      body: "Si te gusta, me ayudaría mucho una estrella en GitHub. ¿Comentarios? [Contáctame](/contact).",
+      starCta: "Dar estrella en GitHub",
+      maybeLater: "Quizás después",
+    },
     experience: {
       title: "Experiencia",
       backHome: "Regresar",
@@ -1729,14 +1726,13 @@ export const translations = {
       spinning: "回転中...",
       keep: "これにする",
     },
-      starModal: {
-        eyebrow: "ご意見うれしいです",
-        title: "ポートフォリオはいかがですか？",
-        body:
-          "気に入っていただけたら、GitHubでスターをいただけると嬉しいです。ご意見は[こちら](/contact)へ。",
-        starCta: "GitHubでスターする",
-        maybeLater: "あとで",
-      },
+    starModal: {
+      eyebrow: "ご意見うれしいです",
+      title: "ポートフォリオはいかがですか？",
+      body: "気に入っていただけたら、GitHubでスターをいただけると嬉しいです。ご意見は[こちら](/contact)へ。",
+      starCta: "GitHubでスターする",
+      maybeLater: "あとで",
+    },
     experience: {
       title: "経験",
       backHome: "ホームに戻る",
@@ -2237,14 +2233,13 @@ export const translations = {
       spinning: "旋转中...",
       keep: "保留此主题",
     },
-      starModal: {
-        eyebrow: "你的反馈很重要",
-        title: "喜欢我的作品集吗？",
-        body:
-          "如果喜欢，欢迎在 GitHub 点个星。有建议？[联系我](/contact)。",
-        starCta: "在 GitHub 点星",
-        maybeLater: "稍后",
-      },
+    starModal: {
+      eyebrow: "你的反馈很重要",
+      title: "喜欢我的作品集吗？",
+      body: "如果喜欢，欢迎在 GitHub 点个星。有建议？[联系我](/contact)。",
+      starCta: "在 GitHub 点星",
+      maybeLater: "稍后",
+    },
     experience: {
       title: "经验",
       backHome: "返回首页",

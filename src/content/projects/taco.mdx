@@ -88,12 +88,13 @@ if (!lang) return;
 const t = (key: TranslationKey) => translateRaw(key, language.code);
 
 return (
+
 <TranslationContext.Provider
-value={{ currentLanguage: language, setLanguage, t, languages }} >
-{children}
+  value={{ currentLanguage: language, setLanguage, t, languages }}
+>
+  {children}
 </TranslationContext.Provider>
-);
-}
+); }
 
 export function useTranslation() {
   const context = useContext(TranslationContext);
