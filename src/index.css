@@ -365,7 +365,7 @@
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
   }
 
-  /* Smooth theme transitions */
+  /* smooth theme transitions */
   html,
   body,
   #root,

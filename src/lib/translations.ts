@@ -77,6 +77,7 @@ export const translations = {
       },
       on: "On",
       off: "Off",
+      search: "Search",
       command: {
         placeholder: "Type a command or search...",
         noResults: "No results found.",
@@ -599,6 +600,7 @@ export const translations = {
       },
       on: "An",
       off: "Aus",
+      search: "Suche",
       command: {
         placeholder: "Befehl eingeben oder suchen...",
         noResults: "Keine Ergebnisse gefunden.",
@@ -1124,6 +1126,7 @@ export const translations = {
       },
       on: "Activado",
       off: "Desactivado",
+      search: "Buscar",
       command: {
         placeholder: "Escribe un comando o busca...",
         noResults: "Sin resultados.",
@@ -1647,6 +1650,7 @@ export const translations = {
       },
       on: "オン",
       off: "オフ",
+      search: "検索",
       command: {
         placeholder: "コマンドまたは検索を入力...",
         noResults: "該当なし",
@@ -2157,6 +2161,7 @@ export const translations = {
       },
       on: "开",
       off: "关",
+      search: "搜索",
       command: {
         placeholder: "输入命令或搜索...",
         noResults: "没有结果",

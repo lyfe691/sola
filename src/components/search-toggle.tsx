@@ -14,10 +14,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { type Translation, translations } from "@/lib/translations";
+import { useLanguage } from "@/lib/language-provider";
 
 export function SearchToggle() {
   const { toggleCommandMenu } = useCommandMenu();
-
+  const { language } = useLanguage();
+  const t = translations[language] as Translation;
+  
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -33,8 +38,12 @@ export function SearchToggle() {
         </Button>
       </TooltipTrigger>
       <TooltipContent className="bg-background/85 backdrop-blur-sm">
-        <span>Search</span>
-        <span className="ml-2 text-xs text-muted-foreground">⌘K</span>
+      <KbdGroup>
+        <p className="text-sm">{t.common.search}</p>
+        <Kbd>⌘</Kbd>
+        <span>+</span>
+        <Kbd>K</Kbd>
+      </KbdGroup>
       </TooltipContent>
     </Tooltip>
   );

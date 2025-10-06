@@ -37,7 +37,7 @@ export function LanguageToggle() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="bg-background/35 backdrop-blur-sm"
+        className="bg-background/85 backdrop-blur-sm"
       >
         <DropdownMenuItem
           onClick={() => setLanguage("en")}
