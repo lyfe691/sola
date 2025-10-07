@@ -23,6 +23,17 @@ export interface Certification {
 // edit certs
 export const certifications: Certification[] = [
   {
+    id: "ibm-devops",
+    title: "Introduction to DevOps",
+    issuer: "IBM",
+    issueDate: "2025-09-30",
+    credentialId: "FKSD765VOYRE",
+    url: "https://www.coursera.org/account/accomplishments/verify/FKSD765VOYRE",
+    skills: ["DevOps", "CI/CD", "Docker", "Kubernetes", "Git"],
+    issuerLogo: "/certificates/issuer/ibm_logo.jpg",
+    certificateImage: "/certificates/IBM_DevOps_Yanis-Sebastian-Zürcher.pdf",
+  },
+  {
     id: "ibm-intro-ai",
     title: "Introduction to Artificial Intelligence (AI)",
     issuer: "IBM",
