@@ -6,6 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+// All of this is ugly. I'll refactor soon.
+
 import { useLocation } from "react-router-dom";
 import Footer from "./Footer";
 import { SearchToggle } from "./search-toggle";
@@ -22,10 +24,13 @@ export const Conditionals = () => {
   const isProjectDetailPage =
     pathname.startsWith("/projects/") && pathname !== "/projects";
 
+  const isTempPage =
+    pathname.startsWith("/t/") && pathname !== "/t";
+
   const shouldRenderToggles =
-    !HIDE_TOGGLES_PATHS.has(pathname) && !isProjectDetailPage;
+    !HIDE_TOGGLES_PATHS.has(pathname) && !isProjectDetailPage && !isTempPage;
   const shouldRenderFooter =
-    !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage;
+    !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage && !isTempPage;
 
   return (
     <>
