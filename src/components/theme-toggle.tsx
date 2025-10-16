@@ -119,7 +119,7 @@ export function ThemeToggle() {
         {/* separator */}
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel>{t.common.menu.customThemes}</DropdownMenuLabel>
+        <DropdownMenuLabel className="px-2 pb-1 pt-1 text-xs font-medium uppercase text-muted-foreground/70">{t.common.menu.customThemes}</DropdownMenuLabel>
         {/* custom themes */}
         {CUSTOM_THEMES.map((option) => (
           <DropdownMenuItem
