@@ -9,7 +9,7 @@
 /* This is the main page, therefore called index */
 
 import { Link } from "react-router-dom";
-import { Mail, Linkedin, FolderGit2, Contact } from "lucide-react";
+import { Mail, Linkedin, FolderGit2, Contact, ChevronRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
@@ -23,12 +23,7 @@ import {
   SiTiktok,
 } from "react-icons/si";
 import Navigation from "@/components/Navigation";
-import {
-  containerVariants,
-  itemVariants,
-  titleVariants,
-  usePageInit,
-} from "@/utils/transitions";
+import { usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { IconButton } from "@/components/ui/custom/icon-button";
@@ -37,6 +32,88 @@ import { IconButton } from "@/components/ui/custom/icon-button";
 // import Squares from "@/components/backgrounds/Squares";
 // import Aurora from "@/components/backgrounds/Aurora";
 import { SOCIAL_LINKS, SOCIAL_ORDER_HERO } from "@/config/social";
+
+const homeAnimations = {
+  container: {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { duration: 0.9, staggerChildren: 0.12, delayChildren: 0.1 },
+    },
+  },
+  nav: {
+    hidden: { opacity: 0, y: -6 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+  badge: {
+    hidden: { opacity: 0, y: -6, scale: 0.99 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+  heading: {
+    hidden: { opacity: 0, x: -14 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+  description: {
+    hidden: { opacity: 0, x: 14 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+  buttons: {
+    hidden: { opacity: 0, y: 8 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+  ctaLeft: {
+    hidden: { opacity: 0, x: -12 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+  ctaRight: {
+    hidden: { opacity: 0, x: 12 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+   socialsContainer: {
+     hidden: { opacity: 0 },
+     show: {
+       opacity: 1,
+       transition: { staggerChildren: 0.12, when: "beforeChildren" as const },
+     },
+   },
+  socialItem: {
+    hidden: (i: number) => ({ opacity: 0, x: i % 2 === 0 ? -10 : 10 }),
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
+    },
+  },
+} as const;
 
 const Index = () => {
   const isLoaded = usePageInit(0);
@@ -60,9 +137,9 @@ const Index = () => {
       {isLoaded && (
         <motion.div
           className="flex flex-col h-screen relative overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
+          variants={homeAnimations.container}
+          initial="hidden"
+          animate="show"
         >
           <Helmet>
             <title>{t.seo.home.title}</title>
@@ -101,19 +178,35 @@ const Index = () => {
               <div className="flex-1 flex flex-col justify-center items-start">
                 <div className="flex flex-col">
                   <div className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0">
+                    <motion.div
+                      variants={homeAnimations.badge}
+                      className="mb-2 sm:mb-3"
+                    >
+                      <a
+                        href="https://choom.ysz.life"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label="Visit Choom"
+                        className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-2.5 py-1 sm:px-3 sm:py-1.5 transition-colors hover:border-foreground/20 hover:bg-foreground/10 relative z-30 whitespace-nowrap"
+                      >
+                        <span className="text-[11px] sm:text-sm font-medium text-foreground/60">
+                          {t.index.currentlyWorkingOn}
+                        </span>
+                        <span className="text-[11px] sm:text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/40 via-foreground to-foreground/40 [background-size:200%_100%] [background-position:200%_0] animate-[shine_6s_linear_infinite] sm:animate-[shine_5s_linear_infinite] will-change-[background-position]">
+                          Choom
+                        </span>
+                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-0.5 will-change-transform" />
+                      </a>
+                    </motion.div>
                     <motion.h1
-                      variants={titleVariants}
-                      initial="hidden"
-                      animate="visible"
+                      variants={homeAnimations.heading}
                       className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
                     >
                       <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
                     </motion.h1>
 
                     <motion.div
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="visible"
+                      variants={homeAnimations.description}
                       className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
                     >
                       <CyclingTextEffect
@@ -130,45 +223,46 @@ const Index = () => {
 
                   <motion.div
                     className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0"
-                    layout
                     transition={{
                       duration: 0.5,
                       ease: [0.25, 0.46, 0.45, 0.94],
                     }}
                   >
                     <motion.div
-                      variants={itemVariants}
-                      initial="hidden"
-                      animate="visible"
+                      variants={homeAnimations.buttons}
                       className="flex flex-wrap gap-3 mb-6 sm:mb-8"
                     >
                       <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                        <Link to="/contact">
-                          <IconButton
-                            icon={<Contact className="w-4 h-4" />}
-                            variant="default"
-                            className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5 font-medium"
-                            label={t.index.contactMe}
-                          />
-                        </Link>
+                        <motion.div variants={homeAnimations.ctaLeft}>
+                          <Link to="/contact">
+                            <IconButton
+                              icon={<Contact className="w-4 h-4" />}
+                              variant="default"
+                              className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5 font-medium"
+                              label={t.index.contactMe}
+                            />
+                          </Link>
+                        </motion.div>
 
-                        <Link to="/projects">
-                          <IconButton
-                            icon={<FolderGit2 className="w-4 h-4" />}
-                            variant="secondary"
-                            className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
-                            label={t.index.viewProjects}
-                          />
-                        </Link>
+                        <motion.div variants={homeAnimations.ctaRight}>
+                          <Link to="/projects">
+                            <IconButton
+                              icon={<FolderGit2 className="w-4 h-4" />}
+                              variant="secondary"
+                              className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
+                              label={t.index.viewProjects}
+                            />
+                          </Link>
+                        </motion.div>
                       </div>
                     </motion.div>
                     <motion.div
-                      variants={itemVariants}
+                      variants={homeAnimations.socialsContainer}
                       initial="hidden"
-                      animate="visible"
-                      className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0"
+                      animate="show"
+                      className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0 will-change-transform"
                     >
-                      {SOCIAL_ORDER_HERO.map((id) => {
+                      {SOCIAL_ORDER_HERO.map((id, index) => {
                         const s = SOCIAL_LINKS[id];
                         const icon =
                           id === "github" ? (
@@ -203,13 +297,15 @@ const Index = () => {
                         const label = s.label;
                         const href = s.href;
                         return (
-                          <a
+                          <motion.a
                             key={label}
                             href={href}
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label={label}
-                            className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden ${hoverClass}
+                            custom={index}
+                            variants={homeAnimations.socialItem}
+                            className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden transform-gpu will-change-transform ${hoverClass}
                             w-10 h-10 sm:w-12 sm:h-12 md:w-12 md:h-12
                             ${
                               label === "LeetCode"
@@ -242,7 +338,7 @@ const Index = () => {
                             <span className="md:hidden absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap pointer-events-none">
                               {label}
                             </span>
-                          </a>
+                          </motion.a>
                         );
                       })}
                     </motion.div>
