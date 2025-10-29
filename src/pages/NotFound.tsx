@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/language-provider";
@@ -29,12 +29,16 @@ const NotFound = () => {
     "{",
     `  "error": "Resource not found"`,
     "}",
+    "",
+    "Type 'help' for available commands.",
   ];
 
   const [typedPrompt, setTypedPrompt] = useState("");
   const [typedResponse, setTypedResponse] = useState<string[]>([]);
-  const [lineIndex, setLineIndex] = useState(0);
   const [isInitialDelay, setIsInitialDelay] = useState(true);
+  const [history, setHistory] = useState<string[]>([]);
+  const [command, setCommand] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isInitialDelay) {
@@ -58,12 +62,55 @@ const NotFound = () => {
     return () => clearTimeout(responseTimeout);
   }, [typedPrompt, isInitialDelay]);
 
+  useEffect(() => {
+    if (typedResponse.length === RESPONSE_LINES.length) {
+      inputRef.current?.focus();
+    }
+  }, [typedResponse]);
+
   const typeResponseLine = (index: number) => {
     if (index < RESPONSE_LINES.length) {
       setTimeout(() => {
         setTypedResponse((prev) => [...prev, RESPONSE_LINES[index]]);
         typeResponseLine(index + 1);
       }, 80);
+    }
+  };
+
+  const executeCommand = (cmd: string) => {
+    const trimmed = cmd.trim();
+    if (!trimmed) {
+      setHistory((prev) => [...prev, ROOT_PROMPT]);
+      return;
+    }
+
+    switch (trimmed.toLowerCase()) {
+      case "help":
+        setHistory((prev) => [
+          ...prev,
+          `${ROOT_PROMPT}${trimmed}`,
+          "Available commands:",
+          "home - return to start",
+          "projects - view projects",
+          "clear - clear terminal",
+          "help - show this message",
+        ]);
+        break;
+      case "home":
+        window.location.href = "/";
+        break;
+      case "projects":
+        window.location.href = "/projects";
+        break;
+      case "clear":
+        setHistory([]);
+        break;
+      default:
+        setHistory((prev) => [
+          ...prev,
+          `${ROOT_PROMPT}${trimmed}`,
+          `${trimmed}: command not found`,
+        ]);
     }
   };
 
@@ -84,19 +131,41 @@ const NotFound = () => {
         </div>
 
         {/* Terminal */}
-        <pre className="p-6 font-mono text-sm sm:text-base leading-relaxed whitespace-pre-wrap text-muted-foreground">
-          {ROOT_PROMPT}
-          {typedPrompt}
-          {(isInitialDelay || typedPrompt.length < PROMPT.length) && (
-            <span className="inline-block animate-pulse w-2">▮</span>
-          )}
+        <div className="p-6 font-mono text-sm sm:text-base leading-relaxed whitespace-pre-wrap text-muted-foreground">
+          <div>
+            {ROOT_PROMPT}
+            {typedPrompt}
+            {(isInitialDelay || typedPrompt.length < PROMPT.length) && (
+              <span className="inline-block animate-pulse w-2">▮</span>
+            )}
+          </div>
           {typedResponse.length > 0 &&
             typedResponse.map((line, idx) => (
               <div key={idx} className="opacity-90">
                 {line}
               </div>
             ))}
-        </pre>
+          {history.map((line, idx) => (
+            <div key={`h-${idx}`} className="opacity-90">
+              {line}
+            </div>
+          ))}
+          <div className="flex">
+            <span>{ROOT_PROMPT}</span>
+            <input
+              ref={inputRef}
+              className="flex-1 bg-transparent outline-none" 
+              value={command}
+              onChange={(e) => setCommand(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  executeCommand(command);
+                  setCommand("");
+                }
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       <Button
