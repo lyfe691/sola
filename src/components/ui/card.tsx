@@ -1,20 +1,40 @@
 import * as React from "react";
+import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className,
-    )}
-    {...props}
-  />
-));
+import { useSilentMotion, type MotionIntensity } from "./silent-motion";
+
+type CardProps = React.HTMLAttributes<HTMLDivElement> & {
+  disableMotion?: boolean;
+  motionIntensity?: MotionIntensity;
+};
+
+const MotionCard = motion.div;
+
+const Card = React.forwardRef<HTMLDivElement, CardProps>(
+  (
+    { className, disableMotion, motionIntensity = "subtle", ...props },
+    ref,
+  ) => {
+    const motionProps = useSilentMotion({
+      disabled: disableMotion,
+      intensity: motionIntensity,
+    });
+
+    return (
+      <MotionCard
+        ref={ref}
+        className={cn(
+          "rounded-lg border bg-card text-card-foreground shadow-sm",
+          className,
+        )}
+        {...motionProps}
+        {...props}
+      />
+    );
+  },
+);
 Card.displayName = "Card";
 
 const CardHeader = React.forwardRef<
