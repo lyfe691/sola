@@ -1,6 +1,10 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { motion } from "framer-motion";
+
 import { cn } from "@/lib/utils";
+
+import { useSilentMotion, type MotionIntensity } from "./silent-motion";
 
 const inputVariants = cva(
   "flex w-full px-3 py-2 text-base md:text-sm ring-offset-background placeholder:text-muted-foreground caret-[hsl(var(--ring))] disabled:cursor-not-allowed disabled:opacity-50 file:border-0 file:bg-transparent file:text-sm file:font-medium transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:transition-opacity placeholder:opacity-70 focus-visible:placeholder:opacity-50 selection:bg-ring/20",
@@ -46,23 +50,46 @@ const inputVariants = cva(
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVariants> {}
+    VariantProps<typeof inputVariants> {
+  disableMotion?: boolean;
+  motionIntensity?: MotionIntensity;
+}
+
+const MotionInput = motion.input;
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, type, inputSize, appearance, radius, invalid, ...props },
+    {
+      className,
+      type,
+      inputSize,
+      appearance,
+      radius,
+      invalid,
+      disableMotion,
+      motionIntensity = "subtle",
+      ...props
+    },
     ref,
-  ) => (
-    <input
-      type={type}
-      className={cn(
-        inputVariants({ inputSize, appearance, radius, invalid }),
-        className,
-      )}
-      ref={ref}
-      {...props}
-    />
-  ),
+  ) => {
+    const motionProps = useSilentMotion({
+      disabled: disableMotion || props.disabled,
+      intensity: motionIntensity,
+    });
+
+    return (
+      <MotionInput
+        type={type}
+        className={cn(
+          inputVariants({ inputSize, appearance, radius, invalid }),
+          className,
+        )}
+        ref={ref}
+        {...motionProps}
+        {...props}
+      />
+    );
+  },
 );
 Input.displayName = "Input";
 
