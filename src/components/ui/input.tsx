@@ -1,6 +1,8 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { motion, type MotionProps } from "motion/react";
 import { cn } from "@/lib/utils";
+import { silentMotion } from "./silent-motion";
 
 const inputVariants = cva(
   "flex w-full px-3 py-2 text-base md:text-sm ring-offset-background placeholder:text-muted-foreground caret-[hsl(var(--ring))] disabled:cursor-not-allowed disabled:opacity-50 file:border-0 file:bg-transparent file:text-sm file:font-medium transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:transition-opacity placeholder:opacity-70 focus-visible:placeholder:opacity-50 selection:bg-ring/20",
@@ -46,14 +48,16 @@ const inputVariants = cva(
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVariants> {}
+    VariantProps<typeof inputVariants>,
+    MotionProps {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     { className, type, inputSize, appearance, radius, invalid, ...props },
     ref,
   ) => (
-    <input
+    <motion.input
+      {...silentMotion({ depth: 2.2, press: false })}
       type={type}
       className={cn(
         inputVariants({ inputSize, appearance, radius, invalid }),
