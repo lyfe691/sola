@@ -1,8 +1,10 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import { motion, type MotionProps } from "motion/react";
 
 import { cn } from "@/lib/utils";
+import { silentMotion } from "./silent-motion";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
@@ -35,17 +37,48 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants>,
+    MotionProps {
   asChild?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
+const MotionSlot = motion(
+  React.forwardRef<
+    HTMLElement,
+    React.ComponentPropsWithoutRef<typeof Slot> & MotionProps
+  >(function MotionSlot({ children, ...props }, forwardedRef) {
     return (
-      <Comp
+      <Slot ref={forwardedRef as never} {...props}>
+        {children}
+      </Slot>
+    );
+  }),
+);
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    { className, variant, size, asChild = false, type, ...props },
+    ref,
+  ) => {
+    const motionProps = silentMotion({ depth: 3.6 });
+
+    if (asChild) {
+      return (
+        <MotionSlot
+          {...motionProps}
+          className={cn(buttonVariants({ variant, size, className }))}
+          {...props}
+          ref={ref as never}
+        />
+      );
+    }
+
+    return (
+      <motion.button
+        {...motionProps}
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+        type={type ?? "button"}
         {...props}
       />
     );
