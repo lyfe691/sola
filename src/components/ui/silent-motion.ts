@@ -131,12 +131,13 @@ export function useSilentMotion(
   );
 
   const handlePointerDown = React.useCallback<NonNullable<MotionProps["onPointerDown"]>>(
-    () => {
+    (event) => {
       if (isDisabled) return;
       pressedRef.current = true;
+      updateFromEvent(event as MotionPointerEvent);
       scale.set(1 - profile.pressScale);
     },
-    [isDisabled, profile.pressScale, scale],
+    [isDisabled, profile.pressScale, scale, updateFromEvent],
   );
 
   const handlePointerUp = React.useCallback<NonNullable<MotionProps["onPointerUp"]>>(
@@ -175,12 +176,13 @@ export function useSilentMotion(
 
   return {
     style: mergeStyle,
-    onPointerMove: handlePointerMove,
-    onPointerEnter: handlePointerEnter,
+    onPointerMoveCapture: handlePointerMove,
+    onPointerEnterCapture: handlePointerEnter,
+    onPointerLeaveCapture: handlePointerLeave,
     onPointerLeave: handlePointerLeave,
-    onPointerDown: handlePointerDown,
-    onPointerUp: handlePointerUp,
-    onPointerCancel: handlePointerCancel,
+    onPointerDownCapture: handlePointerDown,
+    onPointerUpCapture: handlePointerUp,
+    onPointerCancelCapture: handlePointerCancel,
     onFocus: handleFocus,
     onBlur: handleBlur,
   } satisfies MotionProps;

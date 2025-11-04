@@ -12,7 +12,25 @@ const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
-const DialogPortal = DialogPrimitive.Portal;
+const DialogPortal = ({
+  className,
+  children,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Portal> & {
+  className?: string;
+}) => (
+  <DialogPrimitive.Portal {...props}>
+    <div
+      className={cn(
+        "fixed inset-0 z-50 flex min-h-screen items-center justify-center",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  </DialogPrimitive.Portal>
+);
+DialogPortal.displayName = DialogPrimitive.Portal.displayName;
 
 const DialogClose = DialogPrimitive.Close;
 
@@ -26,9 +44,9 @@ const DialogOverlay = React.forwardRef<
     ref={ref}
     className={cn(
       "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm backdrop-saturate-150",
-      "relative",
       "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
       "after:pointer-events-none after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_top,_rgba(148,163,184,0.18),transparent_55%)]",
+      "pointer-events-auto",
       className,
     )}
     {...props}
@@ -46,12 +64,13 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         "fixed left-1/2 top-1/2 z-50 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-hidden",
-        "relative",
+        "relative pointer-events-auto",
         "rounded-3xl border border-white/10 bg-background/95 p-8 shadow-[0_28px_80px_-24px_rgba(15,23,42,0.65)] backdrop-blur-xl",
         "before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-[radial-gradient(circle_at_top,_rgba(148,163,184,0.24),transparent_60%)]",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
-        "data-[state=open]:zoom-in-90 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-top-[45%] data-[state=closed]:slide-out-to-top-[45%]",
-        "duration-200",
+        "data-[state=open]:zoom-in-90 data-[state=closed]:zoom-out-95",
+        "duration-200 will-change-transform",
+        "max-h-[calc(100vh-4rem)] overflow-y-auto",
         "sm:p-10",
         className,
       )}
@@ -82,6 +101,7 @@ const DialogCloseButton = () => {
         "transition-colors duration-200 hover:bg-white/20 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-white/30",
         "focus:ring-offset-2 focus:ring-offset-background",
       )}
+      type="button"
       {...motionProps}
     >
       <X className="h-4 w-4" />
