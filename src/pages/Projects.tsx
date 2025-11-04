@@ -24,7 +24,7 @@ import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
 import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
 import { IconButton } from "@/components/ui/custom/icon-button";
@@ -467,38 +467,30 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
         ) : (
           <>
             {project.github && (
-              <Button
-                asChild
+              <ButtonLink
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="default"
                 size="lg"
                 className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
               >
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaGithubAlt className="w-4 h-4 mr-1" />
-                  {t.projects.viewGithub}
-                </a>
-              </Button>
+                <FaGithubAlt className="w-4 h-4 mr-1" />
+                {t.projects.viewGithub}
+              </ButtonLink>
             )}
             {project.link && (
-              <Button
-                asChild
+              <ButtonLink
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 variant="default"
                 size="lg"
                 className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
               >
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ArrowUpRight className="w-4 h-4 mr-1" />
-                  {t.projects.visitProject}
-                </a>
-              </Button>
+                <ArrowUpRight className="w-4 h-4 mr-1" />
+                {t.projects.visitProject}
+              </ButtonLink>
             )}
           </>
         )}

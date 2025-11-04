@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useSilentMotion, type SilentMotionOptions } from "./silent-motion";
 
 const MotionButton = motion.button;
+const MotionAnchor = motion.a;
 const MotionSlot = motion(Slot);
 
 const buttonVariants = cva(
@@ -45,6 +46,12 @@ export interface ButtonProps
   motion?: SilentMotionOptions;
 }
 
+export interface ButtonLinkProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    VariantProps<typeof buttonVariants> {
+  motion?: SilentMotionOptions;
+}
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     { className, variant, size, asChild = false, motion: motionOptions, style, ...props },
@@ -68,4 +75,27 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+const ButtonLink = React.forwardRef<HTMLAnchorElement, ButtonLinkProps>(
+  ({ className, variant, size, motion: motionOptions, style, ...props }, ref) => {
+    const motionProps = useSilentMotion(
+      {
+        intensity:
+          size === "lg" ? "bold" : size === "sm" ? "subtle" : "default",
+        ...motionOptions,
+      },
+      style,
+    );
+
+    return (
+      <MotionAnchor
+        ref={ref}
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...motionProps}
+        {...props}
+      />
+    );
+  },
+);
+ButtonLink.displayName = "ButtonLink";
+
+export { Button, ButtonLink, buttonVariants };
