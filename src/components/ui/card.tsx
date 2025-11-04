@@ -11,8 +11,8 @@ interface CardBaseProps {
 const Card = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & CardBaseProps
->(({ className, motion: motionOptions, ...props }, ref) => {
-  const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions });
+(({ className, motion: motionOptions, style, ...props }, ref) => {
+  const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions }, style);
 
   return (
     <motion.div

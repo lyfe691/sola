@@ -1,10 +1,26 @@
-import { useMemo } from "react";
-import { useReducedMotion } from "motion/react";
-import type { MotionProps } from "motion/react";
+import * as React from "react";
+import {
+  useReducedMotion,
+  useSpring,
+  type MotionProps,
+  type MotionStyle,
+} from "motion/react";
 
 type Intensity = "subtle" | "default" | "bold";
 
-type Strategy = "lift" | "depth";
+type SilentMotionProfile = {
+  translate: number;
+  hoverScale: number;
+  pressScale: number;
+};
+
+const intensityMap: Record<Intensity, SilentMotionProfile> = {
+  subtle: { translate: 1.25, hoverScale: 0.004, pressScale: 0.012 },
+  default: { translate: 1.75, hoverScale: 0.007, pressScale: 0.016 },
+  bold: { translate: 2.25, hoverScale: 0.01, pressScale: 0.022 },
+};
+
+const springConfig = { stiffness: 420, damping: 32, mass: 0.6 } as const;
 
 export interface SilentMotionOptions {
   /**
@@ -13,70 +29,159 @@ export interface SilentMotionOptions {
    */
   intensity?: Intensity;
   /**
-   * Controls the direction of the hover animation.
-   * `lift` raises the element slightly, while `depth` adds a deeper press-in effect.
-   * @default "lift"
+   * Override the resolved profile for finer control.
    */
-  strategy?: Strategy;
-  /**
-   * Override the default transition.
-   */
-  transition?: MotionProps["transition"];
+  profile?: Partial<SilentMotionProfile>;
   /**
    * Disable the motion entirely (for static surfaces or when nested motion would conflict).
    */
   disabled?: boolean;
 }
 
-type MotionScale = {
-  hover: { y: number; scale: number };
-  tap: { y: number; scale: number };
-};
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
 
-const intensityMap: Record<Intensity, MotionScale> = {
-  subtle: {
-    hover: { y: -2, scale: 1.005 },
-    tap: { y: 1, scale: 0.995 },
-  },
-  default: {
-    hover: { y: -3, scale: 1.012 },
-    tap: { y: 1.75, scale: 0.985 },
-  },
-  bold: {
-    hover: { y: -4, scale: 1.02 },
-    tap: { y: 2.5, scale: 0.972 },
-  },
-};
-
-const baseTransition: MotionProps["transition"] = {
-  type: "spring",
-  stiffness: 420,
-  damping: 32,
-  mass: 0.6,
-};
-
-export function useSilentMotion({
-  intensity = "default",
-  strategy = "lift",
-  transition,
-  disabled = false,
-}: SilentMotionOptions = {}): MotionProps {
+export function useSilentMotion(
+  { intensity = "default", profile: profileOverride, disabled = false }: SilentMotionOptions = {},
+  userStyle?: MotionStyle,
+): MotionProps {
   const shouldReduceMotion = useReducedMotion();
+  const isDisabled = shouldReduceMotion || disabled;
 
-  return useMemo(() => {
-    if (shouldReduceMotion || disabled) {
-      return {};
+  const profile = React.useMemo(() => {
+    const baseProfile = intensityMap[intensity] ?? intensityMap.default;
+    return {
+      translate: profileOverride?.translate ?? baseProfile.translate,
+      hoverScale: profileOverride?.hoverScale ?? baseProfile.hoverScale,
+      pressScale: profileOverride?.pressScale ?? baseProfile.pressScale,
+    } satisfies SilentMotionProfile;
+  }, [intensity, profileOverride]);
+
+  const x = useSpring(0, springConfig);
+  const y = useSpring(0, springConfig);
+  const scale = useSpring(1, springConfig);
+
+  const hoveredRef = React.useRef(false);
+  const pressedRef = React.useRef(false);
+
+  const mergeStyle = React.useMemo(() => {
+    if (isDisabled) {
+      return userStyle;
     }
 
-    const motionScale = intensityMap[intensity] ?? intensityMap.default;
-    const hoverY = strategy === "lift" ? motionScale.hover.y : -motionScale.hover.y;
+    return userStyle
+      ? ({ ...userStyle, x, y, scale } satisfies MotionStyle)
+      : ({ x, y, scale } satisfies MotionStyle);
+  }, [isDisabled, scale, userStyle, x, y]);
 
-    return {
-      initial: { y: 0, scale: 1 },
-      whileHover: { y: hoverY, scale: motionScale.hover.scale },
-      whileFocus: { y: hoverY, scale: motionScale.hover.scale },
-      whileTap: { y: motionScale.tap.y, scale: motionScale.tap.scale },
-      transition: transition ?? baseTransition,
-    };
-  }, [disabled, intensity, shouldReduceMotion, strategy, transition]);
+  const reset = React.useCallback(() => {
+    hoveredRef.current = false;
+    pressedRef.current = false;
+    x.set(0);
+    y.set(0);
+    scale.set(1);
+  }, [scale, x, y]);
+
+  type MotionPointerEvent = Parameters<NonNullable<MotionProps["onPointerMove"]>>[0];
+
+  const updateFromEvent = React.useCallback(
+    (event: MotionPointerEvent) => {
+      if (isDisabled) return;
+      const target = event.currentTarget as HTMLElement | null;
+      if (!target) return;
+      const { left, top, width, height } = target.getBoundingClientRect();
+      const relativeX = clamp(((event.clientX - left) / width - 0.5) * 2, -1, 1);
+      const relativeY = clamp(((event.clientY - top) / height - 0.5) * 2, -1, 1);
+
+      x.set(relativeX * profile.translate);
+      y.set(relativeY * profile.translate);
+
+      if (!pressedRef.current) {
+        scale.set(1 + profile.hoverScale);
+      }
+    },
+    [isDisabled, profile.hoverScale, profile.translate, scale, x, y],
+  );
+
+  const handlePointerMove = React.useCallback<NonNullable<MotionProps["onPointerMove"]>>(
+    (event) => {
+      if (isDisabled) return;
+      hoveredRef.current = true;
+      updateFromEvent(event);
+    },
+    [isDisabled, updateFromEvent],
+  );
+
+  const handlePointerEnter = React.useCallback<NonNullable<MotionProps["onPointerEnter"]>>(
+    (event) => {
+      if (isDisabled) return;
+      hoveredRef.current = true;
+      updateFromEvent(event as MotionPointerEvent);
+    },
+    [isDisabled, updateFromEvent],
+  );
+
+  const handlePointerLeave = React.useCallback<NonNullable<MotionProps["onPointerLeave"]>>(
+    () => {
+      if (isDisabled) return;
+      reset();
+    },
+    [isDisabled, reset],
+  );
+
+  const handlePointerDown = React.useCallback<NonNullable<MotionProps["onPointerDown"]>>(
+    () => {
+      if (isDisabled) return;
+      pressedRef.current = true;
+      scale.set(1 - profile.pressScale);
+    },
+    [isDisabled, profile.pressScale, scale],
+  );
+
+  const handlePointerUp = React.useCallback<NonNullable<MotionProps["onPointerUp"]>>(
+    () => {
+      if (isDisabled) return;
+      pressedRef.current = false;
+      scale.set(hoveredRef.current ? 1 + profile.hoverScale : 1);
+    },
+    [isDisabled, profile.hoverScale, scale],
+  );
+
+  const handlePointerCancel = React.useCallback<NonNullable<MotionProps["onPointerCancel"]>>(
+    () => {
+      if (isDisabled) return;
+      reset();
+    },
+    [isDisabled, reset],
+  );
+
+  const handleFocus = React.useCallback<NonNullable<MotionProps["onFocus"]>>(() => {
+    if (isDisabled) return;
+    hoveredRef.current = true;
+    if (!pressedRef.current) {
+      scale.set(1 + profile.hoverScale);
+    }
+  }, [isDisabled, profile.hoverScale, scale]);
+
+  const handleBlur = React.useCallback<NonNullable<MotionProps["onBlur"]>>(() => {
+    if (isDisabled) return;
+    reset();
+  }, [isDisabled, reset]);
+
+  if (isDisabled) {
+    return { style: mergeStyle };
+  }
+
+  return {
+    style: mergeStyle,
+    onPointerMove: handlePointerMove,
+    onPointerEnter: handlePointerEnter,
+    onPointerLeave: handlePointerLeave,
+    onPointerDown: handlePointerDown,
+    onPointerUp: handlePointerUp,
+    onPointerCancel: handlePointerCancel,
+    onFocus: handleFocus,
+    onBlur: handleBlur,
+  } satisfies MotionProps;
 }

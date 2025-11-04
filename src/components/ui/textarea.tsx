@@ -68,11 +68,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       radius,
       invalid,
       motion: motionOptions,
+      style,
       ...props
     },
     ref,
   ) => {
-    const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions });
+    const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions }, style);
 
     return (
       <motion.textarea

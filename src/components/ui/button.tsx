@@ -46,11 +46,14 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, motion: motionOptions, ...props }, ref) => {
+  (
+    { className, variant, size, asChild = false, motion: motionOptions, style, ...props },
+    ref,
+  ) => {
     const motionProps = useSilentMotion({
       intensity: size === "lg" ? "bold" : size === "sm" ? "subtle" : "default",
       ...motionOptions,
-    });
+    }, style);
 
     const Comp = asChild ? MotionSlot : MotionButton;
     return (

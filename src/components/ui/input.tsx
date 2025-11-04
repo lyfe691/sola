@@ -63,11 +63,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       radius,
       invalid,
       motion: motionOptions,
+      style,
       ...props
     },
     ref,
   ) => {
-    const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions });
+    const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions }, style);
 
     return (
       <motion.input
