@@ -3,38 +3,16 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
-import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
-import { useSilentMotion } from "./silent-motion";
 
 const Dialog = DialogPrimitive.Root;
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
-const DialogPortal = ({
-  className,
-  children,
-  ...props
-}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Portal> & {
-  className?: string;
-}) => (
-  <DialogPrimitive.Portal {...props}>
-    <div
-      className={cn(
-        "fixed inset-0 z-50 flex min-h-screen items-center justify-center",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  </DialogPrimitive.Portal>
-);
-DialogPortal.displayName = DialogPrimitive.Portal.displayName;
+const DialogPortal = DialogPrimitive.Portal;
 
 const DialogClose = DialogPrimitive.Close;
-
-const MotionDialogClose = motion(DialogPrimitive.Close);
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -43,10 +21,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm backdrop-saturate-150",
-      "data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
-      "after:pointer-events-none after:absolute after:inset-0 after:bg-[radial-gradient(circle_at_top,_rgba(148,163,184,0.18),transparent_55%)]",
-      "pointer-events-auto",
+      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className,
     )}
     {...props}
@@ -63,52 +38,20 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed left-1/2 top-1/2 z-50 w-full max-w-xl -translate-x-1/2 -translate-y-1/2 overflow-hidden",
-        "relative pointer-events-auto",
-        "rounded-3xl border border-white/10 bg-background/95 p-8 shadow-[0_28px_80px_-24px_rgba(15,23,42,0.65)] backdrop-blur-xl",
-        "before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:bg-[radial-gradient(circle_at_top,_rgba(148,163,184,0.24),transparent_60%)]",
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
-        "data-[state=open]:zoom-in-90 data-[state=closed]:zoom-out-95",
-        "duration-200 will-change-transform",
-        "max-h-[calc(100vh-4rem)] overflow-y-auto",
-        "sm:p-10",
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
         className,
       )}
       {...props}
     >
       {children}
-      <DialogCloseButton />
+      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+        <X className="h-4 w-4" />
+        <span className="sr-only">Close</span>
+      </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
 ));
 DialogContent.displayName = DialogPrimitive.Content.displayName;
-
-const DialogCloseButton = () => {
-  const motionProps = useSilentMotion(
-    {
-      intensity: "subtle",
-    },
-    {
-      transformOrigin: "center",
-    },
-  );
-
-  return (
-    <MotionDialogClose
-      className={cn(
-        "absolute right-5 top-5 inline-flex size-9 items-center justify-center rounded-full",
-        "border border-white/15 bg-white/10 text-foreground/80 backdrop-blur",
-        "transition-colors duration-200 hover:bg-white/20 hover:text-foreground focus:outline-none focus:ring-2 focus:ring-white/30",
-        "focus:ring-offset-2 focus:ring-offset-background",
-      )}
-      type="button"
-      {...motionProps}
-    >
-      <X className="h-4 w-4" />
-      <span className="sr-only">Close</span>
-    </MotionDialogClose>
-  );
-};
 
 const DialogHeader = ({
   className,
@@ -116,9 +59,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col gap-2 text-left",
-      "pb-4",
-      "border-b border-white/10",
+      "flex flex-col space-y-1.5 text-center sm:text-left",
       className,
     )}
     {...props}
@@ -132,8 +73,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col-reverse gap-2 pt-4 sm:flex-row sm:justify-end sm:gap-3",
-      "border-t border-white/10",
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
       className,
     )}
     {...props}
