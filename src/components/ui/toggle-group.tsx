@@ -3,9 +3,11 @@
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { type VariantProps } from "class-variance-authority";
+import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { toggleVariants } from "@/components/ui/toggle";
+import { useSilentMotion, type SilentMotionOptions } from "./silent-motion";
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants>
@@ -32,15 +34,26 @@ const ToggleGroup = React.forwardRef<
 
 ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
 
+const MotionToggleGroupItem = motion(ToggleGroupPrimitive.Item);
+
 const ToggleGroupItem = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> &
-    VariantProps<typeof toggleVariants>
->(({ className, children, variant, size, ...props }, ref) => {
+    VariantProps<typeof toggleVariants> & {
+      motion?: SilentMotionOptions;
+    }
+>(({ className, children, variant, size, style, motion: motionOptions, ...props }, ref) => {
   const context = React.useContext(ToggleGroupContext);
+  const motionProps = useSilentMotion(
+    {
+      intensity: (context.size || size) === "lg" ? "bold" : "default",
+      ...motionOptions,
+    },
+    style,
+  );
 
   return (
-    <ToggleGroupPrimitive.Item
+    <MotionToggleGroupItem
       ref={ref}
       className={cn(
         toggleVariants({
@@ -49,10 +62,11 @@ const ToggleGroupItem = React.forwardRef<
         }),
         className,
       )}
+      {...motionProps}
       {...props}
     >
       {children}
-    </ToggleGroupPrimitive.Item>
+    </MotionToggleGroupItem>
   );
 });
 
