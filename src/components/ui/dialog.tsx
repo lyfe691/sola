@@ -91,7 +91,7 @@ const DialogOverlay = React.forwardRef<
             ref={ref}
             {...props}
             className={cn(
-              "fixed inset-0 z-50 bg-neutral-950/55 backdrop-blur-sm transition-opacity supports-[backdrop-filter]:bg-neutral-950/35",
+              "fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-sm transition-opacity supports-[backdrop-filter]:bg-neutral-950/45",
               className,
             )}
             initial={{ opacity: 0 }}
@@ -129,7 +129,7 @@ const DialogContent = React.forwardRef<
                 ref={ref}
                 {...props}
                 className={cn(
-                  "pointer-events-auto relative grid w-full max-w-lg gap-6 rounded-2xl border border-border/60 bg-background/92 p-6 shadow-[0_24px_80px_-40px_rgba(15,15,20,0.7)] outline-none supports-[backdrop-filter]:bg-background/75 sm:rounded-3xl sm:p-8",
+                  "pointer-events-auto relative grid w-full max-w-lg gap-6 rounded-2xl border border-border/50 bg-background p-6 shadow-[0_24px_80px_-40px_rgba(15,15,20,0.7)] outline-none supports-[backdrop-filter]:bg-background/90 sm:rounded-3xl sm:p-8",
                   className,
                 )}
                 initial={{ opacity: 0, scale: 0.9 }}
