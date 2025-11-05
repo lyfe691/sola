@@ -144,14 +144,21 @@ export async function getUserActivity(
     }
 
     const events: GitHubEvent[] = await response.json();
-    return events.map(processEvent).filter(Boolean) as ProcessedActivity[];
+    const processed = await Promise.all(
+      events.map((event) => processEvent(event, withAuthHeaders, baseHeaders)),
+    );
+    return processed.filter(Boolean) as ProcessedActivity[];
   } catch (error) {
     console.error("Failed to fetch user activity:", error);
     return [];
   }
 }
 
-function processEvent(event: GitHubEvent): ProcessedActivity | null {
+async function processEvent(
+  event: GitHubEvent,
+  authHeaders: HeadersInit,
+  fallbackHeaders: HeadersInit,
+): Promise<ProcessedActivity | null> {
   const baseActivity = {
     id: event.id,
     repo: event.repo.name,
@@ -161,20 +168,7 @@ function processEvent(event: GitHubEvent): ProcessedActivity | null {
 
   switch (event.type) {
     case "PushEvent":
-      const commits = event.payload.commits || [];
-      const distinctCommits = event.payload.distinct_size || commits.length;
-      const branch = event.payload.ref?.replace("refs/heads/", "") || "main";
-
-      return {
-        ...baseActivity,
-        type: "push",
-        title: `Pushed ${distinctCommits} commit${distinctCommits !== 1 ? "s" : ""} to ${branch}`,
-        description: commits[0]?.message || "No commit message",
-        metadata: {
-          commits: distinctCommits,
-          branch: branch,
-        },
-      };
+      return await buildPushActivity(event, baseActivity, authHeaders, fallbackHeaders);
 
     case "PullRequestEvent":
       const pr = event.payload.pull_request!;
@@ -307,4 +301,147 @@ function processEvent(event: GitHubEvent): ProcessedActivity | null {
   }
 
   return null;
+}
+
+async function buildPushActivity(
+  event: GitHubEvent,
+  baseActivity: {
+    id: string;
+    repo: string;
+    repoUrl: string;
+    timestamp: string;
+  },
+  authHeaders: HeadersInit,
+  fallbackHeaders: HeadersInit,
+): Promise<ProcessedActivity | null> {
+  const commits = event.payload.commits ?? [];
+  const branch = event.payload.ref?.replace("refs/heads/", "") || "main";
+  const size =
+    typeof event.payload.size === "number" ? event.payload.size : commits.length;
+  const distinctSize =
+    typeof event.payload.distinct_size === "number"
+      ? event.payload.distinct_size
+      : size;
+
+  let commitCount = Math.max(distinctSize, size, commits.length);
+  if (!Number.isFinite(commitCount)) {
+    commitCount = commits.length;
+  }
+
+  let description = commits.find((commit) => commit.message?.trim())?.message;
+  description = description?.trim();
+
+  const headSha = commits[0]?.sha || event.payload.head;
+
+  if (!description && headSha) {
+    description = await fetchCommitMessage(
+      event.repo.name,
+      headSha,
+      authHeaders,
+      fallbackHeaders,
+    );
+  }
+
+  if (!description) {
+    description = await fetchLatestCommitMessage(
+      event.repo.name,
+      branch,
+      authHeaders,
+      fallbackHeaders,
+    );
+  }
+
+  if (!description) {
+    description = event.payload.forced
+      ? "Branch history was rewritten"
+      : "Latest changes synchronized";
+  }
+
+  const forced = Boolean(event.payload.forced);
+  const created = Boolean(event.payload.created);
+  const deleted = Boolean(event.payload.deleted);
+
+  let title: string;
+
+  if (deleted) {
+    title = `Cleared branch ${branch}`;
+  } else if (commitCount > 0) {
+    title = `Pushed ${commitCount} commit${commitCount !== 1 ? "s" : ""} to ${branch}`;
+  } else if (forced) {
+    title = `Force-pushed ${branch}`;
+  } else if (created) {
+    title = `Initialized ${branch}`;
+  } else {
+    title = `Updated ${branch}`;
+  }
+
+  return {
+    ...baseActivity,
+    type: "push",
+    title,
+    description,
+    metadata: {
+      commits: commitCount,
+      branch,
+    },
+  };
+}
+
+async function fetchWithFallback(
+  url: string,
+  authHeaders: HeadersInit,
+  fallbackHeaders: HeadersInit,
+) {
+  try {
+    let response = await fetch(url, { headers: authHeaders });
+    if (response.status === 401 || response.status === 403) {
+      response = await fetch(url, { headers: fallbackHeaders });
+    }
+    if (!response.ok) {
+      return null;
+    }
+    return response;
+  } catch (error) {
+    console.error("GitHub request failed", error);
+    return null;
+  }
+}
+
+async function fetchCommitMessage(
+  repoFullName: string,
+  sha: string,
+  authHeaders: HeadersInit,
+  fallbackHeaders: HeadersInit,
+) {
+  const url = `https://api.github.com/repos/${repoFullName}/commits/${sha}`;
+  const response = await fetchWithFallback(url, authHeaders, fallbackHeaders);
+  if (!response) return null;
+  try {
+    const data = await response.json();
+    const message: string | undefined = data?.commit?.message;
+    return message ? message.split("\n")[0].trim() : null;
+  } catch (error) {
+    console.error("Failed to parse commit response", error);
+    return null;
+  }
+}
+
+async function fetchLatestCommitMessage(
+  repoFullName: string,
+  branch: string,
+  authHeaders: HeadersInit,
+  fallbackHeaders: HeadersInit,
+) {
+  const url = `https://api.github.com/repos/${repoFullName}/commits?sha=${encodeURIComponent(branch)}&per_page=1`;
+  const response = await fetchWithFallback(url, authHeaders, fallbackHeaders);
+  if (!response) return null;
+  try {
+    const data = await response.json();
+    const commit = Array.isArray(data) ? data[0] : data;
+    const message: string | undefined = commit?.commit?.message;
+    return message ? message.split("\n")[0].trim() : null;
+  } catch (error) {
+    console.error("Failed to parse commits response", error);
+    return null;
+  }
 }
