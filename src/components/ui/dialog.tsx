@@ -86,10 +86,9 @@ const DialogOverlay = React.forwardRef<
   return (
     <AnimatePresence>
       {open ? (
-        <DialogPrimitive.Overlay forceMount asChild>
+        <DialogPrimitive.Overlay forceMount asChild {...props}>
           <motion.div
             ref={ref}
-            {...props}
             className={cn(
               "fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-sm transition-opacity supports-[backdrop-filter]:bg-neutral-950/45",
               className,
@@ -124,10 +123,9 @@ const DialogContent = React.forwardRef<
             exit={{ opacity: 0 }}
             transition={containerTransition}
           >
-            <DialogPrimitive.Content forceMount asChild>
+            <DialogPrimitive.Content forceMount asChild {...props}>
               <motion.div
                 ref={ref}
-                {...props}
                 className={cn(
                   "pointer-events-auto relative grid w-full max-w-lg gap-6 rounded-2xl border border-border/50 bg-background p-6 shadow-[0_24px_80px_-40px_rgba(15,15,20,0.7)] outline-none supports-[backdrop-filter]:bg-background/90 sm:rounded-3xl sm:p-8",
                   className,
