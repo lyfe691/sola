@@ -502,7 +502,7 @@ const ResumeModal = () => {
 
           <div className="flex flex-col gap-3">
             <Button
-              variant="outline"
+              variant="default"
               size="sm"
               onClick={() => {
                 viewResume(selectedLang);
@@ -512,7 +512,7 @@ const ResumeModal = () => {
               {t.about.resume.viewButton}
             </Button>
             <Button
-              variant="secondary"
+              variant="ghost"
               size="sm"
               onClick={() => {
                 downloadResume(selectedLang);
@@ -575,7 +575,7 @@ const ResumeModal = () => {
 
         <div className="flex flex-col gap-3 pt-4">
           <Button
-            variant="outline"
+            variant="default"
             size="sm"
             onClick={() => {
               viewResume(selectedLang);
@@ -585,7 +585,7 @@ const ResumeModal = () => {
             {t.about.resume.viewButton}
           </Button>
           <Button
-            variant="secondary"
+            variant="ghost"
             size="sm"
             onClick={() => {
               downloadResume(selectedLang);
