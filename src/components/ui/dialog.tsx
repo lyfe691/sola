@@ -74,6 +74,7 @@ const DialogPortal = DialogPrimitive.Portal;
 const DialogClose = DialogPrimitive.Close;
 
 const overlayTransition = { duration: 0.4, ease: [0.22, 1, 0.36, 1] } as const;
+const overlayBlurAmount = "12px" as const;
 const containerTransition = { duration: 0.42, ease: [0.22, 1, 0.36, 1] } as const;
 const panelTransition = { duration: 0.46, ease: [0.22, 1, 0.36, 1] } as const;
 
@@ -90,12 +91,30 @@ const DialogOverlay = React.forwardRef<
           <motion.div
             ref={ref}
             className={cn(
-              "fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-sm transition-opacity supports-[backdrop-filter]:bg-neutral-950/45",
+              "fixed inset-0 z-50 bg-neutral-950/70 transition-opacity supports-[backdrop-filter]:bg-neutral-950/45",
               className,
             )}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={
+              {
+                opacity: 0,
+                backdropFilter: "blur(0px)",
+                WebkitBackdropFilter: "blur(0px)",
+              } as any
+            }
+            animate={
+              {
+                opacity: 1,
+                backdropFilter: `blur(${overlayBlurAmount})`,
+                WebkitBackdropFilter: `blur(${overlayBlurAmount})`,
+              } as any
+            }
+            exit={
+              {
+                opacity: 0,
+                backdropFilter: "blur(0px)",
+                WebkitBackdropFilter: "blur(0px)",
+              } as any
+            }
             transition={overlayTransition}
           />
         </DialogPrimitive.Overlay>
