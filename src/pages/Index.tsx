@@ -180,22 +180,30 @@ const Index = () => {
                   <div className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0">
                     <motion.div
                       variants={homeAnimations.badge}
-                      className="mb-2 sm:mb-3"
+                      className="mb-4 sm:mb-5"
                     >
                       <a
                         href="https://choom.ysz.life"
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Visit Choom"
-                        className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-2.5 py-1 sm:px-3 sm:py-1.5 transition-colors hover:border-foreground/20 hover:bg-foreground/10 relative z-30 whitespace-nowrap"
+                        className="group relative flex items-center gap-3 rounded-2xl border border-foreground/10 bg-background/80 px-4 py-3 shadow-[0_10px_35px_-25px_rgba(15,23,42,0.45)] backdrop-blur transition-colors hover:border-foreground/20 hover:bg-background/90"
                       >
-                        <span className="text-[11px] sm:text-sm font-medium text-foreground/60">
-                          {t.index.currentlyWorkingOn}
+                        <span className="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
+                          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/40" />
+                          <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
                         </span>
-                        <span className="text-[11px] sm:text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/40 via-foreground to-foreground/40 [background-size:200%_100%] [background-position:200%_0] animate-[shine_6s_linear_infinite] sm:animate-[shine_5s_linear_infinite] will-change-[background-position]">
-                          Choom
-                        </span>
-                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-0.5 will-change-transform" />
+                        <div className="flex flex-col text-left">
+                          <span className="text-[11px] uppercase tracking-[0.25em] text-foreground/50">
+                            {t.index.currentlyWorkingOn}
+                          </span>
+                          <span className="text-sm font-semibold text-foreground sm:text-base">
+                            Choom
+                          </span>
+                        </div>
+                        <div className="ml-auto inline-flex h-8 w-8 items-center justify-center rounded-full border border-transparent bg-foreground/[0.06] text-foreground/60 transition-all duration-300 group-hover:text-foreground group-hover:border-foreground/20">
+                          <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                        </div>
                       </a>
                     </motion.div>
                     <motion.h1
