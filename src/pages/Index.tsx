@@ -187,15 +187,18 @@ const Index = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Visit Choom"
-                        className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-2.5 py-1 sm:px-3 sm:py-1.5 transition-colors hover:border-foreground/20 hover:bg-foreground/10 relative z-30 whitespace-nowrap"
+                        className="group inline-flex items-center gap-2 sm:gap-3 rounded-xl border border-foreground/10 bg-foreground/[0.04] px-3 py-1.5 sm:px-3.5 sm:py-2 transition-all hover:border-foreground/20 hover:bg-foreground/10 relative z-30"
                       >
-                        <span className="text-[11px] sm:text-sm font-medium text-foreground/60">
-                          {t.index.currentlyWorkingOn}
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(16,185,129,0.15)] group-hover:shadow-[0_0_0_4px_rgba(16,185,129,0.2)] transition-all" />
+                        <span className="flex flex-col">
+                          <span className="text-[10px] sm:text-xs font-medium uppercase tracking-[0.18em] text-foreground/50">
+                            {t.index.currentlyWorkingOn}
+                          </span>
+                          <span className="text-xs sm:text-sm font-semibold text-foreground">
+                            Choom
+                          </span>
                         </span>
-                        <span className="text-[11px] sm:text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/40 via-foreground to-foreground/40 [background-size:200%_100%] [background-position:200%_0] animate-[shine_6s_linear_infinite] sm:animate-[shine_5s_linear_infinite] will-change-[background-position]">
-                          Choom
-                        </span>
-                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-0.5 will-change-transform" />
+                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-1" />
                       </a>
                     </motion.div>
                     <motion.h1
