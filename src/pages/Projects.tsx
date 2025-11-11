@@ -123,12 +123,12 @@ const createProjectsData = (t: any): Project[] => [
     link: "https://kinoa.lol",
     github: "https://github.com/lyfe691/kinoa",
     tags: [
-      "Web Application",
+      "Next.js",
       "shadcn/ui",
       "TypeScript",
       "Tailwind CSS",
       "TMDB API",
-      "Streaming Service",
+      "Streaming",
     ],
     featured: true,
     date: {
