@@ -183,17 +183,17 @@ const Index = () => {
                       className="mb-2 sm:mb-3"
                     >
                       <a
-                        href="https://choom.ysz.life"
+                        href="https://kinoa.lol"
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="Visit Choom"
+                        aria-label="Visit Kinoa"
                         className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-2.5 py-1 sm:px-3 sm:py-1.5 transition-colors hover:border-foreground/20 hover:bg-foreground/10 relative z-30 whitespace-nowrap"
                       >
                         <span className="text-[11px] sm:text-sm font-medium text-foreground/60">
                           {t.index.currentlyWorkingOn}
                         </span>
                         <span className="text-[11px] sm:text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/40 via-foreground to-foreground/40 [background-size:200%_100%] [background-position:200%_0] animate-[shine_6s_linear_infinite] sm:animate-[shine_5s_linear_infinite] will-change-[background-position]">
-                          Choom
+                          Kinoa
                         </span>
                         <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-0.5 will-change-transform" />
                       </a>
