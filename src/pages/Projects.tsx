@@ -106,7 +106,6 @@ const createProjectsData = (t: any): Project[] => [
       "React",
       "Vite",
       "Tailwind CSS",
-      "SEO",
     ],
     featured: true,
     date: {
@@ -115,6 +114,30 @@ const createProjectsData = (t: any): Project[] => [
     },
     priority: 1,
     slug: "sola",
+  },
+  {
+    id: "kinoa",
+    title: t.projects.list.kinoa.title,
+    description: t.projects.list.kinoa.description,
+    image: "/projects/kinoa.svg",
+    link: "https://kinoa.lol",
+    github: "https://github.com/lyfe691/kinoa",
+    tags: [
+      "Web Application",
+      "shadcn/ui",
+      "TypeScript",
+      "Tailwind CSS",
+      "TMDB API",
+      "Streaming Service",
+    ],
+    featured: true,
+    date: {
+      start: "2025-11",
+      display: "Nov 2025",
+    },
+    priority: 2,
+    slug: "kinoa",
+    vercelSatori: false,
   },
   {
     id: "applicare",
@@ -131,7 +154,6 @@ const createProjectsData = (t: any): Project[] => [
       "Java",
       "JavaScript",
       "Docker",
-      "SEO",
     ],
     featured: true,
     date: {
@@ -139,7 +161,7 @@ const createProjectsData = (t: any): Project[] => [
       end: "2025-02",
       display: "Dec 2024 - Feb 2025",
     },
-    priority: 2,
+    priority: 3,
     slug: "applicare",
   },
   {
@@ -154,7 +176,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-05",
       display: "May 2025",
     },
-    priority: 3,
+    priority: 4,
     slug: "self",
   },
   {
@@ -170,7 +192,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 4,
+    priority: 5,
     slug: "code-extractor",
   },
   {
@@ -186,7 +208,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-08",
       display: "Aug 2025",
     },
-    priority: 5,
+    priority: 6,
     slug: "thoughts",
   },
   {
@@ -210,7 +232,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-04",
       display: "Apr 2025",
     },
-    priority: 5,
+    priority: 6,
     slug: "taco",
   },
   {
@@ -227,7 +249,7 @@ const createProjectsData = (t: any): Project[] => [
       end: "2024-12",
       display: "Nov 2024 - Dec 2024",
     },
-    priority: 6,
+    priority: 7,
   },
   {
     id: "chatapp",
@@ -249,7 +271,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-09",
       display: "Sep 2024",
     },
-    priority: 7,
+    priority: 8,
   },
   // non-featured projects
   {
@@ -263,7 +285,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 7,
+    priority: 9,
   },
   {
     id: "view-counter",
@@ -276,7 +298,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 8,
+    priority: 10,
   },
   {
     id: "docker-service",
@@ -297,7 +319,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-06",
       display: "Jun 2024",
     },
-    priority: 9,
+    priority: 11,
   },
   {
     id: "phishing",
@@ -310,7 +332,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-04",
       display: "Apr 2024",
     },
-    priority: 10,
+    priority: 12,
   },
   {
     id: "otw",
@@ -323,7 +345,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-04",
       display: "Apr 2024",
     },
-    priority: 11,
+    priority: 13,
   },
 ];
 

@@ -137,13 +137,49 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     mdxPath: "code-extractor",
   },
 
+  kinoa: {
+    slug: "kinoa",
+    title: "Kinoa",
+    description: "A free streaming website for films and series with a clean, distraction-free interface",
+    date: "November 2025",
+    silkColor: "#32342f",
+    silkSpeed: 4.2,
+    silkScale: 1.12,
+    silkNoiseIntensity: 1.6,
+    silkRotation: -0.25,
+    overview:
+      "Kinoa is a free streaming website that lets you watch films and series without subscriptions, paywalls, or ad clutter. Built with the Next.js App Router and shadcn/ui, it pulls live metadata from TMDB and streams content through third-party hosters with automatic failover. The interface is designed to be minimal and distraction-free—browse trending titles, discover new releases, and hit play instantly. Every detail page includes inline playback, so you never have to leave the page to start watching.",
+    techStack: [
+      "Next.js App Router",
+      "React Server Components",
+      "TypeScript",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "TMDB REST API",
+      "Third-party Streaming",
+      "Vercel",
+    ],
+    features: [
+      "Trending and genre-based rows with live TMDB data",
+      "Inline playback on movie and TV detail pages via third-party hosters",
+      "Episode navigator for TV seasons with per-server selection",
+      "Global search with instant feedback across movies and series",
+      "Privacy-first approach with no media storage or proxying",
+    ],
+    links: {
+      live: "https://kinoa.lol",
+      github: "https://github.com/lyfe691/kinoa",
+    },
+    mdxPath: "kinoa",
+  },
+
   self: {
     slug: "self",
     title: "Self",
     description:
       "A customizable Windows system information display tool inspired by Neofetch",
     date: "May 2025",
-    silkColor: "#b8d6de",
+    silkColor: "#1f2937",
     silkSpeed: 3,
     silkScale: 1.1,
     silkNoiseIntensity: 1.5,

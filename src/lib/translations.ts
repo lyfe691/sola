@@ -319,6 +319,11 @@ export const translations = {
           description:
             "Sola is my personal website, the one you're on right now. It's built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way.",
         },
+        kinoa: {
+          title: "Kinoa",
+          description:
+            "Kinoa is a free streaming website built with Next.js, shadcn/ui, and TMDB data. Watch films and series without subscriptions or ads, with inline playback from third-party hosters, automatic server failover, and a clean interface focused on content.",
+        },
         self: {
           title: "Self",
           description:
@@ -843,6 +848,11 @@ export const translations = {
           title: "Sola",
           description:
             "Sola ist meine persönliche Website. Entwickelt mit React, TypeScript und Tailwind CSS, präsentiert sie meine Projekte, Fähigkeiten und Erfahrungen in einem klaren, modernen Design.",
+        },
+        kinoa: {
+          title: "Kinoa",
+          description:
+            "Kinoa ist eine kostenlose Streaming-Website, gebaut mit Next.js, shadcn/ui und TMDB-Daten. Schaue Filme und Serien ohne Abos oder Werbung, mit Inline-Wiedergabe von Drittanbietern, automatischem Server-Failover und einer sauberen, inhaltsorientierten Oberfläche.",
         },
         self: {
           title: "Self",
@@ -1371,6 +1381,11 @@ export const translations = {
           description:
             "Sola es mi sitio web personal, el que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna.",
         },
+        kinoa: {
+          title: "Kinoa",
+          description:
+            "Kinoa es un sitio web de streaming gratuito creado con Next.js, shadcn/ui y datos de TMDB. Mira películas y series sin suscripciones ni anuncios, con reproducción inline desde proveedores externos, cambio automático de servidores y una interfaz limpia enfocada en el contenido.",
+        },
         self: {
           title: "Self",
           description:
@@ -1890,6 +1905,11 @@ export const translations = {
           description:
             "Sola は私の個人サイトです。React・TypeScript・Tailwind CSS で構築し、プロジェクトやスキル、経験をクリーンかつモダンに紹介します。",
         },
+        kinoa: {
+          title: "Kinoa",
+          description:
+            "Kinoa は Next.js、shadcn/ui、TMDB データで構築した無料ストリーミングサイトです。サブスクや広告なしで映画やドラマを視聴でき、サードパーティホスターからのインライン再生、自動サーバー切り替え、コンテンツ重視のクリーンなインターフェースを備えています。",
+        },
         self: {
           title: "Self",
           description:
@@ -2398,6 +2418,11 @@ export const translations = {
           title: "Sola",
           description:
             "Sola 是我的个人网站。基于 React、TypeScript 与 Tailwind CSS 构建，用以以干净、现代的方式展示我的项目、技能与经验。",
+        },
+        kinoa: {
+          title: "Kinoa",
+          description:
+            "Kinoa 是一个基于 Next.js、shadcn/ui 和 TMDB 数据构建的免费流媒体网站。无需订阅或广告即可观看电影和剧集，通过第三方提供商内嵌播放、自动服务器切换，以及专注于内容的简洁界面。",
         },
         self: {
           title: "Self",

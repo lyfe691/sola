@@ -1,0 +1,101 @@
+import {
+  TechStack,
+  CodeBlock,
+  ProjectGallery,
+} from "@/components/MDXComponents";
+
+# Free Streaming Without the Noise
+
+**Kinoa** is a free streaming website where you can watch films and series without subscriptions, paywalls, or ad clutter. It pulls live metadata from TMDB and delivers streams via third-party hosters with a clean, distraction-free interface. No popups, no waiting—just browse and play.
+
+> "Press play. That's it."
+
+## Design Philosophy
+
+- Clean, minimal UI that puts content first
+- Dark theme with warm accents for comfortable viewing
+- Hero carousel, trending rows, and quick picks on the home page
+- Inline playback on every detail page with automatic server failover
+- No popups, no paywalls
+
+## Technical Architecture
+
+Kinoa is built on the **Next.js App Router** with React Server Components, keeping data fetching close to the UI while streaming responses to the client.
+
+<TechStack
+  technologies={[
+    "Next.js App Router",
+    "React Server Components",
+    "TypeScript",
+    "Tailwind CSS",
+    "shadcn/ui",
+    "TMDB REST API",
+    "Third-party Streaming",
+    "Vercel",
+  ]}
+/>
+
+### Route Structure
+
+The core routes map directly to the streaming experience:
+
+<CodeBlock
+  code={`
+├── page.tsx                 ← hero carousel, trending rows, quick picks
+├── movie/[id]/page.tsx      ← detail view with inline trailer & recommendations
+├── tv/[id]/[season]/[episode]/page.tsx
+│   └── server selection + episodic playback
+├── search/page.tsx          ← instant lookup across movies & series
+└── (legal)/[slug]/page.tsx  ← privacy & terms in a dedicated slot
+
+& a lot more...`}
+  fileName="app/"
+  lang="text"
+/>
+
+### How it looks
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/kinoa/home.png",
+      alt: "Kinoa home page - Light mode",
+      caption: "Kinoa home page - Light mode",
+    },
+        {
+      src: "/projects/kinoa/search.png",
+      alt: "Kinoa search page - Light mode",
+      caption: "Kinoa search page - Light mode",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+### Data Layer
+
+- Typed helper functions in `lib/tmdb.ts` wrap the TMDB REST API for fetching movie and series metadata.
+- Responses are cached with `fetch` options tuned for the App Router to minimize redundant requests.
+- Client pages stream metadata first, then load player embeds from third-party hosters, keeping interaction snappy.
+- Server components handle data fetching server-side, reducing client bundle size and improving initial page loads.
+
+## Feature Highlights
+
+1. **Clean interface** — A minimal, clean UI that keeps the focus on content without distractions.
+2. **Free streaming** — No subscriptions, no paywalls. Just browse and play.
+3. **Inline playback everywhere** — Movie and series pages embed players directly from third-party hosters, so the play button never leaves the screen.
+4. **Automatic server failover** — If one stream fails, the player automatically tries alternate servers without interruption.
+5. **Episode navigator** — TV routes expose seasons, episodes, and alternate servers from one panel for quick access.
+6. **Fast global search** — `/search` delivers instant feedback across films and shows as you type, with minimal UI chrome.
+7. **Privacy-first stance** — No media is stored or proxied; playback stays on third-party domains and credentials remain out of the repo.
+
+## Operations & Tooling
+
+- Local development uses `pnpm` with strict linting and formatting scripts.
+- Environment variables stay outside the repo (`NEXT_PUBLIC_TMDB_API_KEY`, `OMDB_API_KEY`).
+- Deploying to **Vercel** unlocks edge caching, image optimisation, and automatic previews for every push.
+
+---
+
+_Kinoa keeps free streaming simple and clean—pick a title and hit play._
+
+
