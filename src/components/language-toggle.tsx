@@ -9,6 +9,7 @@
 import { Check, Languages } from "lucide-react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { LANGUAGES } from "@/config/languages";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,42 +40,16 @@ export function LanguageToggle() {
         align="end"
         className="bg-background/85 backdrop-blur-sm"
       >
-        <DropdownMenuItem
-          onClick={() => setLanguage("en")}
-          className="flex justify-between"
-        >
-          English
-          {language === "en" && <Check className="h-4 w-4" />}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setLanguage("de")}
-          className="flex justify-between"
-        >
-          Deutsch
-          {language === "de" && <Check className="h-4 w-4" />}
-        </DropdownMenuItem>
-
-        <DropdownMenuItem
-          onClick={() => setLanguage("es")}
-          className="flex justify-between"
-        >
-          Español
-          {language === "es" && <Check className="h-4 w-4" />}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setLanguage("ja")}
-          className="flex justify-between"
-        >
-          日本語
-          {language === "ja" && <Check className="h-4 w-4" />}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setLanguage("zh")}
-          className="flex justify-between"
-        >
-          中文
-          {language === "zh" && <Check className="h-4 w-4" />}
-        </DropdownMenuItem>
+        {LANGUAGES.map(({ code, label }) => (
+          <DropdownMenuItem
+            key={code}
+            onClick={() => setLanguage(code)}
+            className="flex justify-between"
+          >
+            {label}
+            {language === code && <Check className="h-4 w-4" />}
+          </DropdownMenuItem>
+        ))}
         <div className="px-2 py-1.5 text-xs text-foreground/50 border-t border-foreground/10 mt-1">
           {t.i18n?.detectedNote.replace(
             "{lang}",

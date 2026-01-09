@@ -15,9 +15,10 @@ import {
   useEffect,
 } from "react";
 import type { ReactNode } from "react";
-
-const SUPPORTED = ["en", "de", "es", "ja", "zh"] as const;
-type Language = (typeof SUPPORTED)[number];
+import {
+  type Language,
+  SUPPORTED_LANGUAGE_CODES,
+} from "@/config/languages";
 
 type LanguageProviderProps = {
   children: ReactNode;
@@ -39,9 +40,9 @@ const LanguageContext = createContext<LanguageProviderState | undefined>(
 function normalize(code: string): Language {
   const lower = code.toLowerCase();
   const base = lower.split("-")[0];
-  const hit = (SUPPORTED as readonly string[]).includes(lower)
+  const hit = (SUPPORTED_LANGUAGE_CODES as readonly string[]).includes(lower)
     ? (lower as Language)
-    : (SUPPORTED as readonly string[]).includes(base)
+    : (SUPPORTED_LANGUAGE_CODES as readonly string[]).includes(base)
       ? (base as Language)
       : "en";
   return hit;
@@ -69,7 +70,7 @@ export function LanguageProvider({
     try {
       const stored =
         typeof window !== "undefined" ? localStorage.getItem(storageKey) : null;
-      if (stored && (SUPPORTED as readonly string[]).includes(stored)) {
+      if (stored && (SUPPORTED_LANGUAGE_CODES as readonly string[]).includes(stored)) {
         return stored as Language;
       }
     } catch {
@@ -96,7 +97,7 @@ export function LanguageProvider({
       if (
         e.key === storageKey &&
         e.newValue &&
-        (SUPPORTED as readonly string[]).includes(e.newValue)
+        (SUPPORTED_LANGUAGE_CODES as readonly string[]).includes(e.newValue)
       ) {
         setLanguageState(e.newValue as Language);
       }

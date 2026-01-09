@@ -37,9 +37,7 @@ import {
   type Theme as ConfiguredTheme,
 } from "@/config/themes";
 import { useAurora } from "@/lib/aurora-provider";
-
-// import types
-type Language = "en" | "de" | "ja" | "es" | "zh";
+import { LANGUAGES, type Language } from "@/config/languages";
 
 export function CommandMenu() {
   const navigate = useNavigate();
@@ -187,15 +185,7 @@ export function CommandMenu() {
 
         <CommandGroup heading={t.common.command.groups.language}>
           <div className="flex flex-wrap gap-2 px-2 pb-2">
-            {(
-              [
-                { code: "en", label: "English" },
-                { code: "de", label: "Deutsch" },
-                { code: "es", label: "Español" },
-                { code: "ja", label: "日本語" },
-                { code: "zh", label: "中文" },
-              ] as const
-            ).map(({ code, label }) => (
+            {LANGUAGES.map(({ code, label }) => (
               <CommandItem
                 key={code}
                 onSelect={() => handleLanguageChange(code)}
