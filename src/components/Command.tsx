@@ -32,12 +32,15 @@ import { translations } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   THEMES,
-  STANDARD_THEMES,
-  CUSTOM_THEMES,
   type Theme as ConfiguredTheme,
 } from "@/config/themes";
 import { useAurora } from "@/lib/aurora-provider";
 import { LANGUAGES, type Language } from "@/config/languages";
+import {
+  MAIN_NAVIGATION,
+  FOOTER_NAVIGATION,
+  type NavigationItem,
+} from "@/config/navigation";
 
 export function CommandMenu() {
   const navigate = useNavigate();
@@ -66,6 +69,17 @@ export function CommandMenu() {
     closeCommandMenu();
   };
 
+  // helper to get translated label
+  const getNavLabel = (item: NavigationItem) => {
+    if (item.translationKey === "home") return t.common.home;
+    if (item.isFooter) {
+      // @ts-ignore - we know privacy exists in footer
+      return t.footer[item.translationKey];
+    }
+    // @ts-ignore - dynamic key access
+    return t.nav[item.translationKey];
+  };
+
   // command content that's shared between both mobile and desktop versions
   const commandContent = (
     <>
@@ -77,69 +91,24 @@ export function CommandMenu() {
         <CommandEmpty>{t.common.command.noResults}</CommandEmpty>
 
         <CommandGroup heading={t.common.command.groups.navigation}>
-          <CommandItem
-            onSelect={() => handleNavigation("/")}
-            className="cursor-pointer"
-          >
-            <span>{t.common.home}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigation("/about")}
-            className="cursor-pointer"
-          >
-            <span>{t.nav.about}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigation("/projects")}
-            className="cursor-pointer"
-          >
-            <span>{t.nav.projects}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigation("/skills")}
-            className="cursor-pointer"
-          >
-            <span>{t.nav.skills}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigation("/experience")}
-            className="cursor-pointer"
-          >
-            <span>{t.nav.experience}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigation("/services")}
-            className="cursor-pointer"
-          >
-            <span>{t.nav.services}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigation("/contact")}
-            className="cursor-pointer"
-          >
-            <span>{t.nav.contact}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
-          <CommandItem
-            onSelect={() => handleNavigation("/privacy")}
-            className="cursor-pointer"
-          >
-            <span>{t.footer.privacy}</span>
-            <CommandShortcut>↵</CommandShortcut>
-          </CommandItem>
+          {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
+            <CommandItem
+              key={item.key}
+              onSelect={() => handleNavigation(item.path)}
+              className="cursor-pointer"
+            >
+              <span>{getNavLabel(item)}</span>
+              <CommandShortcut>↵</CommandShortcut>
+            </CommandItem>
+          ))}
         </CommandGroup>
 
         <CommandSeparator />
 
         <CommandGroup heading={t.common.command.groups.theme}>
           <div className="flex flex-wrap gap-2 px-2 pb-1">
-            {STANDARD_THEMES.map((themeOption) => {
+            {THEMES.map((themeOption) => {
+              if (themeOption.isCustom) return null; // Custom themes handled in next group
               const IconComponent = themeOption.icon;
               const isActive = theme === themeOption.value;
               return (
@@ -162,7 +131,8 @@ export function CommandMenu() {
 
         <CommandGroup heading={t.common.menu.customThemes}>
           <div className="flex flex-wrap gap-2 px-2 pb-1">
-            {CUSTOM_THEMES.map((themeOption) => {
+            {THEMES.map((themeOption) => {
+              if (!themeOption.isCustom) return null;
               const IconComponent = themeOption.icon;
               const isActive = theme === themeOption.value;
               return (

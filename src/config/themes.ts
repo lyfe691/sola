@@ -104,11 +104,9 @@ export const THEMES: ThemeConfig[] = [
   },
 ];
 
-export const STANDARD_THEMES = THEMES.filter((t) => !t.isCustom);
-export const CUSTOM_THEMES = THEMES.filter((t) => t.isCustom);
-
 export const ALL_THEME_VALUES = THEMES.map((t) => t.value);
 export type Theme = (typeof ALL_THEME_VALUES)[number];
+
 
 /** resolve light/dark "type" for a given theme (handles "system"). */
 export const getThemeType = (currentTheme: Theme): "light" | "dark" => {

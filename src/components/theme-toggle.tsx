@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { MoonStar, Sun, Check } from "lucide-react";
+import { Check } from "lucide-react";
 import { useTheme } from "./theme-provider";
 import {
   DropdownMenu,
@@ -19,8 +19,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import {
-  STANDARD_THEMES,
-  CUSTOM_THEMES,
   THEMES,
   type Theme,
 } from "@/config/themes";
@@ -68,34 +66,26 @@ export function ThemeToggle() {
           className="w-9 h-9 transition-colors hover:bg-muted"
         >
           {/* show icon with smooth animation */}
-          {theme === "system" ? (
-            <>
-              <Sun
-                className={`h-4 w-4 transition-all ${resolvedTheme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`}
+          {THEMES.map((t) => {
+            // We only render icons for themes that can actually be visually represented as the "current state"
+            // i.e., "system" isn't a visual state itself, it resolves to light or dark.
+            if (t.value === "system") return null;
+
+            const IconComponent = t.icon;
+            // Determine if this specific theme icon should be shown
+            const isVisible =
+              theme === "system"
+                ? t.value === resolvedTheme
+                : theme === t.value;
+
+            return (
+              <IconComponent
+                key={t.value}
+                className={`absolute h-4 w-4 transition-all ${isVisible ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
               />
-              <MoonStar
-                className={`absolute h-4 w-4 transition-all ${resolvedTheme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
-              />
-            </>
-          ) : (
-            <>
-              <Sun
-                className={`h-4 w-4 transition-all ${theme === "light" ? "rotate-0 scale-100" : "-rotate-90 scale-0"}`}
-              />
-              <MoonStar
-                className={`absolute h-4 w-4 transition-all ${theme === "dark" ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
-              />
-              {CUSTOM_THEMES.map((t) => {
-                const IconComponent = t.icon;
-                return (
-                  <IconComponent
-                    key={t.value}
-                    className={`absolute h-4 w-4 transition-all ${theme === t.value ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
-                  />
-                );
-              })}
-            </>
-          )}
+            );
+          })}
+          
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
@@ -105,32 +95,38 @@ export function ThemeToggle() {
       >
         <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
         {/* standard themes */}
-        {STANDARD_THEMES.map((option) => (
-          <DropdownMenuItem
-            key={option.value}
-            onClick={() => setTheme(option.value as Theme)}
-            className="flex justify-between"
-          >
-            {option.label}
-            {theme === option.value && <Check className="h-4 w-4 ml-2" />}
-          </DropdownMenuItem>
-        ))}
+        {THEMES.map((option) => {
+          if (option.isCustom) return null;
+          return (
+            <DropdownMenuItem
+              key={option.value}
+              onClick={() => setTheme(option.value as Theme)}
+              className="flex justify-between"
+            >
+              {option.label}
+              {theme === option.value && <Check className="h-4 w-4 ml-2" />}
+            </DropdownMenuItem>
+          );
+        })}
 
         {/* separator */}
         <DropdownMenuSeparator />
 
         <DropdownMenuLabel className="px-2 pb-1 pt-1 text-xs font-medium uppercase text-muted-foreground/70">{t.common.menu.customThemes}</DropdownMenuLabel>
         {/* custom themes */}
-        {CUSTOM_THEMES.map((option) => (
-          <DropdownMenuItem
-            key={option.value}
-            onClick={() => setTheme(option.value as Theme)}
-            className="flex justify-between"
-          >
-            {option.label}
-            {theme === option.value && <Check className="h-4 w-4 ml-2" />}
-          </DropdownMenuItem>
-        ))}
+        {THEMES.map((option) => {
+          if (!option.isCustom) return null;
+          return (
+            <DropdownMenuItem
+              key={option.value}
+              onClick={() => setTheme(option.value as Theme)}
+              className="flex justify-between"
+            >
+              {option.label}
+              {theme === option.value && <Check className="h-4 w-4 ml-2" />}
+            </DropdownMenuItem>
+          );
+        })}
 
         {/* effects */}
         <DropdownMenuSeparator />

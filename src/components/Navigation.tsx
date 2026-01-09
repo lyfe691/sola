@@ -7,12 +7,12 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { Home } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
+import { MAIN_NAVIGATION, type NavigationItem } from "@/config/navigation";
 
 const STANDARD_EASE = [0.4, 0, 0.2, 1] as const;
 const EMPHASIZED_EASE = [0.22, 1, 0.36, 1] as const;
@@ -273,15 +273,15 @@ const Navigation = () => {
   }, []);
 
   // memoized navigation items
-  const homeItem = { text: t.common.home, path: "/", icon: Home };
-  const navItems = [
-    { text: t.nav.about, path: "/about" },
-    { text: t.nav.experience, path: "/experience" },
-    { text: t.nav.projects, path: "/projects" },
-    { text: t.nav.skills, path: "/skills" },
-    { text: t.nav.services, path: "/services" },
-    { text: t.nav.contact, path: "/contact" },
-  ];
+  const homeItem = {
+    text: t.common.home,
+    path: "/",
+    icon: MAIN_NAVIGATION[0].icon,
+  };
+  const navItems = MAIN_NAVIGATION.slice(1).map((item) => ({
+    text: t.nav[item.translationKey as keyof typeof t.nav] || item.key,
+    path: item.path,
+  }));
 
   // memoized isactive check
   const isActive = useCallback(
