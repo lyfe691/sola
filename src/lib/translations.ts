@@ -144,7 +144,7 @@ export const translations = {
       title: "Introducing Aurora background",
       description: "A subtle, animated background that adapts to your theme.",
       instruction:
-        "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora background'.",
+        "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora'.",
       performanceWarning:
         "Note: May impact performance on older devices or slower browsers.",
       enableButton: "Enable Aurora",
@@ -1734,7 +1734,7 @@ export const translations = {
       description:
         "テーマに合わせて変化する、さりげないアニメーション背景です。",
       instruction:
-        "いつでも有効/無効を切り替えられます。右上のテーマ切替を開き『Aurora background』を切り替えてください。",
+        "いつでも有効/無効を切り替えられます。右上のテーマ切替を開き『Aurora』を切り替えてください。",
       performanceWarning:
         "注意：古いデバイスや遅いブラウザではパフォーマンスに影響する可能性があります。",
       enableButton: "Aurora を有効化",
@@ -2250,7 +2250,7 @@ export const translations = {
       title: "极光背景",
       description: "一个会随主题变化的细腻动态背景。",
       instruction:
-        "你可随时开启或关闭：点击右上角主题开关，切换『Aurora background』即可。",
+        "你可随时开启或关闭：点击右上角主题开关，切换『Aurora』即可。",
       performanceWarning: "注意：在较旧设备或较慢浏览器上可能影响性能。",
       enableButton: "开启 Aurora",
       notNowButton: "稍后",

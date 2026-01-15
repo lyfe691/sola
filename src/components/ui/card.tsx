@@ -1,27 +1,18 @@
 import * as React from "react";
-import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
-import { useSilentMotion, type SilentMotionOptions } from "./silent-motion";
-
-interface CardBaseProps {
-  motion?: SilentMotionOptions;
-}
 
 const Card = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & CardBaseProps
-(({ className, motion: motionOptions, style, ...props }, ref) => {
-  const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions }, style);
-
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
-    <motion.div
+    <div
       ref={ref}
       className={cn(
         "rounded-lg border bg-card text-card-foreground shadow-sm",
         className,
       )}
-      {...motionProps}
       {...props}
     />
   );

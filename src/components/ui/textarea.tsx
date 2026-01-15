@@ -1,9 +1,7 @@
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
-import { useSilentMotion, type SilentMotionOptions } from "./silent-motion";
 
 const textareaVariants = cva(
   "flex w-full px-3 py-2 text-base md:text-sm ring-offset-background placeholder:text-muted-foreground caret-[hsl(var(--ring))] disabled:cursor-not-allowed disabled:opacity-50 transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 placeholder:transition-opacity placeholder:opacity-70 focus-visible:placeholder:opacity-50 selection:bg-ring/20",
@@ -55,7 +53,6 @@ const textareaVariants = cva(
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
     VariantProps<typeof textareaVariants> {
-  motion?: SilentMotionOptions;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
@@ -67,22 +64,17 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       appearance,
       radius,
       invalid,
-      motion: motionOptions,
-      style,
       ...props
     },
     ref,
   ) => {
-    const motionProps = useSilentMotion({ intensity: "subtle", ...motionOptions }, style);
-
     return (
-      <motion.textarea
+      <textarea
         className={cn(
           textareaVariants({ resizable, minHeight, appearance, radius, invalid }),
           className,
         )}
         ref={ref}
-        {...motionProps}
         {...props}
       />
     );

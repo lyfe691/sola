@@ -7,11 +7,17 @@
  */
 
 import React, { useEffect, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
+import { Sparkles } from "lucide-react";
 import { useAurora } from "@/lib/aurora-provider";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { AnimatePresence, motion } from "motion/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const STORAGE_KEY = "aurora-intro-seen";
 const AURORA_STORAGE_KEY = "aurora-enabled";
@@ -25,6 +31,7 @@ const AuroraIntroModal: React.FC<AuroraIntroModalProps> = ({
 }) => {
   const { enabled, setEnabled } = useAurora();
   const [open, setOpen] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const { language } = useLanguage();
   const t = translations[language]?.auroraIntro as any;
 
@@ -87,115 +94,75 @@ const AuroraIntroModal: React.FC<AuroraIntroModalProps> = ({
     onClose();
   };
 
-  return createPortal(
-    <AnimatePresence>
-      {open && (
-        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
-          <motion.div
-            className="absolute inset-0 bg-black/40 backdrop-blur-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            onClick={onClose}
-            aria-hidden
-          />
-          <motion.div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="aurora-intro-title"
-            className="relative w-full max-w-lg rounded-2xl bg-background border border-foreground/10 shadow-xl overflow-hidden"
-            initial={{ opacity: 0, scale: 0.98, y: 8, filter: "blur(8px)" }}
-            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, scale: 0.98, y: 8, filter: "blur(8px)" }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-          >
-            <button
-              aria-label="Close"
-              onClick={onClose}
-              className="absolute right-3 top-3 z-10 rounded-full p-1.5 text-foreground/60 hover:text-foreground hover:bg-foreground/10 transition"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (nextOpen) {
+      setOpen(true);
+      return;
+    }
+    onClose();
+  };
 
-            <div className="relative h-40 sm:h-48">
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="block gap-0 overflow-hidden border border-foreground/10 p-0 shadow-xl">
+        <div className="p-4 sm:p-5">
+          <div className="relative mb-3 h-40 w-full sm:h-48">
+            <div className="absolute inset-0 overflow-hidden rounded-2xl border-4 border-border/50 bg-foreground/[0.03] shadow-lg shadow-black/5">
+              {!imageLoaded && (
+                <Skeleton className="absolute inset-0 rounded-none" />
+              )}
               <img
                 src={imageSrc}
                 alt="Aurora preview"
-                className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
+                className={`pointer-events-none h-full w-full select-none object-cover transition-opacity ${
+                  imageLoaded ? "opacity-100" : "opacity-0"
+                }`}
+                loading="lazy"
+                decoding="async"
+                onLoad={() => setImageLoaded(true)}
+              />
+              <div
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,0.15))",
+                }}
               />
             </div>
+          </div>
 
-            <div className="p-5 sm:p-6">
-              <div className="mb-2 text-xs font-medium tracking-wide text-foreground/60">
-                {t?.newLabel ?? "New"}
-              </div>
-              <h2
-                id="aurora-intro-title"
-                className="text-xl sm:text-2xl font-semibold mb-2"
-              >
-                {t?.title ?? "Introducing Aurora background"}
-              </h2>
-              <p className="text-foreground/70 text-sm sm:text-base mb-3">
-                {(t?.description ??
-                  "A subtle, animated background that adapts to your theme.") +
-                  " " +
-                  (t?.instruction ??
-                    "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora background'.")}
-              </p>
+          <div className="mb-2 flex items-center gap-1 text-xs font-medium tracking-wide text-foreground/60">
+            <Sparkles className="h-3.5 w-3.5" />
+            {t?.newLabel ?? "New"}
+          </div>
+          <DialogTitle className="mb-2 text-xl font-semibold sm:text-2xl">
+            {t?.title ?? "Introducing Aurora background"}
+          </DialogTitle>
+          <DialogDescription className="mb-4 text-sm text-foreground/70 sm:text-base">
+            {(t?.description ??
+              "A subtle, animated background that adapts to your theme.") +
+              " " +
+              (t?.instruction ??
+                "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora background'.")}
+          </DialogDescription>
 
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-foreground/5 border border-foreground/10 mb-5">
-                <svg
-                  className="w-4 h-4 text-foreground/60 mt-0.5 flex-shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 16.5c-.77.833.192 2.5 1.732 2.5z"
-                  />
-                </svg>
-                <p className="text-foreground/70 text-xs leading-relaxed">
-                  {t?.performanceWarning ??
-                    "Aurora uses smooth animations that may impact performance on older devices or slower browsers. You can disable it anytime if you experience lag."}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2 sm:gap-3 justify-end">
-                <button
-                  onClick={onEnable}
-                  className="inline-flex items-center justify-center rounded-full bg-foreground text-background px-4 py-2 text-sm font-medium hover:opacity-90 transition"
-                >
-                  {t?.enableButton ?? "Enable Aurora"}
-                </button>
-                <button
-                  onClick={onClose}
-                  className="inline-flex items-center justify-center rounded-full border border-foreground/20 px-4 py-2 text-sm font-medium text-foreground/80 hover:bg-foreground/10 transition"
-                >
-                  {t?.notNowButton ?? "Not now"}
-                </button>
-              </div>
-            </div>
-          </motion.div>
+          <div className="flex flex-wrap justify-end gap-2 sm:gap-3">
+            <button
+              onClick={onEnable}
+              className="inline-flex items-center justify-center rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:opacity-90"
+            >
+              {t?.enableButton ?? "Enable Aurora"}
+            </button>
+            <button
+              onClick={onClose}
+              className="inline-flex items-center justify-center rounded-full border border-foreground/20 px-4 py-2 text-sm font-medium text-foreground/80 transition hover:bg-foreground/10"
+            >
+              {t?.notNowButton ?? "Not now"}
+            </button>
+          </div>
         </div>
-      )}
-    </AnimatePresence>,
-    document.body,
+      </DialogContent>
+    </Dialog>
   );
 };
 
