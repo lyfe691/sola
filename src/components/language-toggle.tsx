@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -19,18 +19,24 @@ import {
 import { Button } from "@/components/ui/button";
 // no section label needed for languages
 
-export function LanguageToggle() {
+export function LanguageToggle({
+  open,
+  onOpenChange,
+}: {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const { language, setLanguage, detectedLanguage, detectedLanguageCode } =
     useLanguage();
   const t = translations[language];
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
-          className="w-9 h-9 transition-colors hover:bg-muted"
+          className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
         >
           <Languages className="h-4 w-4" />
           <span className="sr-only">Toggle language</span>

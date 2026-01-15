@@ -6,16 +6,10 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-// All of this is ugly. I'll refactor soon.
-
 import { useLocation } from "react-router-dom";
 import Footer from "./Footer";
-import { SearchToggle } from "./search-toggle";
-import { LanguageToggle } from "./language-toggle";
-import { ThemeToggle } from "./theme-toggle";
 
-// centralized route rules for visibility
-const HIDE_TOGGLES_PATHS = new Set(["/a", "/404"]);
+// footer visibility rules
 const HIDE_FOOTER_PATHS = new Set(["/", "/404", "/a"]);
 
 export const Conditionals = () => {
@@ -27,22 +21,8 @@ export const Conditionals = () => {
   const isTempPage =
     pathname.startsWith("/t/") && pathname !== "/t";
 
-  const shouldRenderToggles =
-    !HIDE_TOGGLES_PATHS.has(pathname) && !isProjectDetailPage && !isTempPage;
   const shouldRenderFooter =
     !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage && !isTempPage;
 
-  return (
-    <>
-      {shouldRenderFooter && <Footer />}
-
-      {shouldRenderToggles && (
-        <div className="fixed top-6 right-6 z-30 flex items-center gap-2">
-          <SearchToggle />
-          <LanguageToggle />
-          <ThemeToggle />
-        </div>
-      )}
-    </>
-  );
+  return <>{shouldRenderFooter && <Footer />}</>;
 };

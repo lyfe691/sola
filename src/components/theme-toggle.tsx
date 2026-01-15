@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -27,7 +27,13 @@ import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
-export function ThemeToggle() {
+export function ThemeToggle({
+  open,
+  onOpenChange,
+}: {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}) {
   const { theme, setTheme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
@@ -58,12 +64,12 @@ export function ThemeToggle() {
   const resolvedTheme = theme === "system" ? systemTheme : theme;
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={onOpenChange}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
-          className="w-9 h-9 transition-colors hover:bg-muted"
+          className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
         >
           {/* show icon with smooth animation */}
           {THEMES.map((t) => {

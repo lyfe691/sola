@@ -29,7 +29,7 @@ export function SearchToggle() {
         <Button
           variant="ghost"
           size="icon"
-          className="w-9 h-9 transition-colors hover:bg-muted"
+          className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
           onClick={toggleCommandMenu}
           aria-label="Search"
         >

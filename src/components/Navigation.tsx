@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -7,21 +7,18 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { useEffect, useState, useCallback, memo, forwardRef } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
-import { MAIN_NAVIGATION, type NavigationItem } from "@/config/navigation";
+import { MAIN_NAVIGATION } from "@/config/navigation";
+import { SearchToggle } from "./search-toggle";
+import { LanguageToggle } from "./language-toggle";
+import { ThemeToggle } from "./theme-toggle";
 
 const STANDARD_EASE = [0.4, 0, 0.2, 1] as const;
 const EMPHASIZED_EASE = [0.22, 1, 0.36, 1] as const;
-const NAV_CONTAINER_LAYOUT = {
-  type: "spring",
-  stiffness: 240,
-  damping: 34,
-  mass: 0.88,
-} as const;
 const NAV_ITEM_LAYOUT = {
   type: "spring",
   stiffness: 320,
@@ -44,7 +41,7 @@ interface NavItemProps {
   shouldAnimateInitial?: boolean;
 }
 
-// motion variants and class constants
+// motion variants
 const desktopItemVariants = {
   hidden: { opacity: 0, y: -10 },
   visible: (i: number = 0) => ({
@@ -54,13 +51,42 @@ const desktopItemVariants = {
   }),
 };
 
-// mobile items will use per-instance variants defined inline to allow simple index-based delay
+const mobileItemVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.04, duration: 0.4, ease: EMPHASIZED_EASE },
+  }),
+  exit: {
+    opacity: 0,
+    y: -15,
+    transition: { duration: 0.3, ease: STANDARD_EASE },
+  },
+};
 
+const mobileMenuVariants = {
+  hidden: {
+    opacity: 0,
+    transition: { duration: 0.5, ease: STANDARD_EASE, when: "afterChildren" },
+  },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.4, ease: EMPHASIZED_EASE, when: "beforeChildren" },
+  },
+};
+
+const mobileNavContainerVariants = {
+  hidden: { opacity: 0, transition: { staggerChildren: 0.03, staggerDirection: -1 } },
+  visible: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.08 } },
+};
+
+// class constants
 const DESKTOP_CONTAINER_CLASSES =
-  "hidden md:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/20 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
+  "hidden lg:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/20 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
 
 const MOBILE_OVERLAY_CLASSES =
-  "fixed inset-0 bg-background/80 backdrop-blur-xl z-[60] md:hidden mobile-menu";
+  "fixed inset-0 bg-background/80 backdrop-blur-xl z-[60] lg:hidden mobile-menu";
 
 // memoized navigation item for better performance
 const NavItem = memo(
@@ -91,32 +117,12 @@ const NavItem = memo(
       );
 
       if (isMobile) {
-        const mobileVariants = {
-          initial: { opacity: 0, y: 20 },
-          animate: {
-            opacity: 1,
-            y: 0,
-            transition: {
-              delay: index * 0.04,
-              duration: 0.4,
-              ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-            },
-          },
-          exit: {
-            opacity: 0,
-            y: -15,
-            transition: {
-              duration: 0.3,
-              ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
-            },
-          },
-        } as const;
         return (
           <Component
             layout
             key={item.path}
             custom={index}
-            variants={mobileVariants}
+            variants={mobileItemVariants}
             initial="initial"
             animate="animate"
             exit="exit"
@@ -168,7 +174,11 @@ const NavItem = memo(
               />
             )}
             {item.icon && <item.icon className="w-4 h-4" />}
-            <motion.span layout className="relative z-10">
+            <motion.span 
+              layout 
+              transition={{ layout: NAV_ITEM_LAYOUT }}
+              className="relative z-10"
+            >
               {item.text}
             </motion.span>
           </Link>
@@ -180,6 +190,40 @@ const NavItem = memo(
 
 // ensure display name is set for devtools
 NavItem.displayName = "NavItem";
+
+// toggle group for theme, language, and search
+interface ToggleGroupProps {
+  className?: string;
+  gap?: "tight" | "normal";
+}
+
+const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
+  const [openDropdown, setOpenDropdown] = useState<"language" | "theme" | null>(
+    null,
+  );
+
+  return (
+    <motion.div
+      layout
+      className={cn(
+        "flex items-center",
+        gap === "tight" ? "gap-1" : "gap-2",
+        className,
+      )}
+    >
+      <SearchToggle />
+      <LanguageToggle
+        open={openDropdown === "language"}
+        onOpenChange={(isOpen) => setOpenDropdown(isOpen ? "language" : null)}
+      />
+      <ThemeToggle
+        open={openDropdown === "theme"}
+        onOpenChange={(isOpen) => setOpenDropdown(isOpen ? "theme" : null)}
+      />
+    </motion.div>
+  );
+});
+ToggleGroup.displayName = "ToggleGroup";
 
 // mobile menu button with animated hamburger
 const MobileMenuButton = ({
@@ -329,96 +373,69 @@ const Navigation = () => {
     };
   }, [isMenuOpen]);
 
-  // close menu when route changes
-  useEffect(() => {
-    // Don't close immediately - let the Link onClick handle it
-    // This effect is just for cleanup if needed
-  }, [location.pathname]);
-
-  // mobile menu animations
-  const mobileMenuVariants: Record<string, any> = {
-    hidden: {
-      opacity: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.4, 0, 0.2, 1] as [number, number, number, number],
-        when: "afterChildren",
-      },
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.4,
-        ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
-        when: "beforeChildren",
-      },
-    },
-  };
-
-  const mobileNavContainer: Record<string, any> = {
-    hidden: {
-      opacity: 0,
-      transition: {
-        staggerChildren: 0.03,
-        staggerDirection: -1,
-      },
-    },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.06,
-        delayChildren: 0.08,
-      },
-    },
-  };
-
   return (
     <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4 pointer-events-none">
       {/* desktop navigation */}
       <div className="flex justify-center items-center">
-        <motion.nav
-          layout
-          layoutRoot
-          className={cn(DESKTOP_CONTAINER_CLASSES, "pointer-events-auto")}
-          initial={shouldAnimateInitial ? { opacity: 0, y: -20 } : false}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.45,
-            ease: STANDARD_EASE,
-            layout: NAV_CONTAINER_LAYOUT,
-          }}
-          style={{
-            backdropFilter: "blur(28px) saturate(160%)",
-            WebkitBackdropFilter: "blur(28px) saturate(160%)",
-          }}
-          aria-label="Primary"
-        >
-          {/* home navigation - simple layout*/}
-          <NavItem
-            item={homeItem}
-            index={0}
-            isActive={isActive}
-            shouldAnimateInitial={shouldAnimateInitial}
-          />
-
-          <div className="h-8 w-px bg-border/30 mx-3" />
-
-          {/* main navigation - main layout */}
-          {navItems.map((item, i) => (
+        <LayoutGroup>
+          <motion.nav
+            layout
+            className={cn(DESKTOP_CONTAINER_CLASSES, "pointer-events-auto")}
+            initial={shouldAnimateInitial ? { opacity: 0, y: -20 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.45,
+              ease: STANDARD_EASE,
+              layout: {
+                type: "spring",
+                stiffness: 150,
+                damping: 25,
+                mass: 0.8,
+              },
+            }}
+            style={{
+              backdropFilter: "blur(28px) saturate(160%)",
+              WebkitBackdropFilter: "blur(28px) saturate(160%)",
+            }}
+            aria-label="Primary"
+          >
+            {/* home navigation */}
             <NavItem
-              key={item.path}
-              item={item}
-              index={i}
+              item={homeItem}
+              index={0}
               isActive={isActive}
               shouldAnimateInitial={shouldAnimateInitial}
             />
-          ))}
-        </motion.nav>
+
+            <motion.div layout className="h-8 w-px bg-border/30 mx-3" />
+
+            {/* main navigation */}
+            {navItems.map((item, i) => (
+              <NavItem
+                key={item.path}
+                item={item}
+                index={i}
+                isActive={isActive}
+                shouldAnimateInitial={shouldAnimateInitial}
+              />
+            ))}
+
+            <motion.div layout className="h-8 w-px bg-border/30 mx-3" />
+
+            {/* toggles */}
+            <ToggleGroup />
+          </motion.nav>
+        </LayoutGroup>
       </div>
 
       {/* mobile menu button */}
-      <div className="md:hidden fixed top-5 left-5 z-[70] menu-button pointer-events-auto">
+      <div className="lg:hidden fixed top-5 left-5 z-[70] menu-button pointer-events-auto">
         <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
+      </div>
+
+      {/* mobile toggles - fixed top right, aligned with hamburger */}
+      <div className="lg:hidden fixed top-5 right-5 z-[70] pointer-events-auto">
+        <ToggleGroup gap="normal" />
       </div>
 
       {/* mobile navigation menu */}
@@ -428,7 +445,7 @@ const Navigation = () => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            variants={mobileMenuVariants}
+            variants={mobileMenuVariants as any}
             className={cn(MOBILE_OVERLAY_CLASSES, "pointer-events-auto")}
             style={{
               backdropFilter: "blur(20px) saturate(180%)",
@@ -436,7 +453,7 @@ const Navigation = () => {
             }}
           >
             <motion.nav
-              variants={mobileNavContainer}
+              variants={mobileNavContainerVariants}
               initial="hidden"
               animate="visible"
               exit="hidden"
