@@ -97,7 +97,7 @@ export function ThemeToggle({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="bg-background min-w-[180px]"
+        className="min-w-[180px]"
       >
         <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
         {/* standard themes */}
