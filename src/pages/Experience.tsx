@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -131,18 +131,14 @@ const Experience = () => {
 
       {/* Work */}
       <div className="relative space-y-8 sm:space-y-12 mb-12">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
+        <ScrollReveal variant="default">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-xl font-semibold">
               {t.experience.sections?.work ?? "Work"}
             </h2>
             <div className="h-px flex-1 bg-foreground/10" />
           </div>
-        </motion.div>
+        </ScrollReveal>
         <div className="absolute left-0 top-10 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
         {work.map((exp, index) => (
           <ScrollReveal key={index} variant="default" delay={index * 160}>
@@ -240,18 +236,14 @@ const Experience = () => {
 
       {/* Education */}
       <div className="relative space-y-8 sm:space-y-12">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-        >
+        <ScrollReveal variant="default">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="text-xl font-semibold">
               {t.experience.sections?.education ?? "Education"}
             </h2>
             <div className="h-px flex-1 bg-foreground/10" />
           </div>
-        </motion.div>
+        </ScrollReveal>
         <div className="absolute left-0 top-0 bottom-0 w-px bg-foreground/10 ml-[7px] sm:ml-[11px]" />
         {education.map((exp, index) => (
           <ScrollReveal key={index} variant="default" delay={index * 160}>
