@@ -6,11 +6,94 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
-import { ExternalLink } from "lucide-react";
+import React, { useState, useCallback } from "react";
+import { ExternalLink, X } from "lucide-react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import { AdvancedCodeBlock } from "@/components/ui/code/advanced-code-block/advanced-code-block";
+
+// image lightbox component for expandable images
+const ImageLightbox: React.FC<{
+  src: string;
+  alt: string;
+  isOpen: boolean;
+  onClose: () => void;
+}> = ({ src, alt, isOpen, onClose }) => {
+  // close on escape key and lock scroll
+  React.useEffect(() => {
+    if (!isOpen) return;
+    
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    
+    document.body.style.overflow = "hidden";
+    document.addEventListener("keydown", handleEscape);
+    
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, onClose]);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed top-0 left-0 right-0 bottom-0 z-[100] flex items-center justify-center bg-black/90 p-6 cursor-zoom-out overflow-hidden"
+          onClick={onClose}
+        >
+          <motion.img
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            src={src}
+            alt={alt}
+            className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg cursor-zoom-out"
+          />
+          <button
+            onClick={onClose}
+            className="absolute top-6 right-6 p-3 rounded-full bg-background hover:bg-muted text-foreground transition-colors shadow-lg"
+            aria-label="Close"
+          >
+            <X className="w-5 h-5" strokeWidth={2} />
+          </button>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+// reusable expandable image component
+const ExpandableImage: React.FC<{
+  src: string;
+  alt: string;
+  className?: string;
+}> = ({ src, alt, className = "" }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOpen = useCallback(() => setIsOpen(true), []);
+  const handleClose = useCallback(() => setIsOpen(false), []);
+
+  return (
+    <>
+      <motion.img
+        src={src}
+        alt={alt}
+        className={`cursor-zoom-in ${className}`}
+        loading="lazy"
+        onClick={handleOpen}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+      />
+      <ImageLightbox src={src} alt={alt} isOpen={isOpen} onClose={handleClose} />
+    </>
+  );
+};
 
 // Custom components for MDX content that match the design system
 
@@ -172,20 +255,18 @@ export const MDXComponents = {
     </code>
   ),
 
-  // Images
-  img: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
+  // Images - expandable on click
+  img: ({ src, alt }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       className="mb-6"
     >
-      <img
-        src={src}
-        alt={alt}
+      <ExpandableImage
+        src={src || ""}
+        alt={alt || ""}
         className="w-full rounded-lg border border-border/50 mb-2"
-        loading="lazy"
-        {...props}
       />
       {alt && (
         <p className="text-xs text-muted-foreground italic text-center">
@@ -295,11 +376,10 @@ export const ProjectImage: React.FC<{
           : "max-w-2xl mx-auto"
     }`}
   >
-    <img
+    <ExpandableImage
       src={src}
       alt={alt}
       className="w-full rounded-lg border border-border/50"
-      loading="lazy"
     />
     {caption && (
       <p className="text-xs text-muted-foreground italic text-center mt-2">
@@ -323,11 +403,10 @@ export const ProjectGallery: React.FC<{
         transition={{ duration: 0.6 }}
         className="mb-6 max-w-4xl mx-auto"
       >
-        <img
+        <ExpandableImage
           src={images[0].src}
           alt={images[0].alt}
           className="w-full rounded-lg border border-border/50"
-          loading="lazy"
         />
         {images[0].caption && (
           <p className="text-xs text-muted-foreground italic text-center mt-2">
@@ -343,7 +422,7 @@ export const ProjectGallery: React.FC<{
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className={`grid gap-4 mb-6 ${
+      className={`grid gap-4 mb-6 items-start ${
         columns === 2
           ? "sm:grid-cols-2"
           : columns === 3
@@ -353,11 +432,10 @@ export const ProjectGallery: React.FC<{
     >
       {images.map((image, index) => (
         <div key={index} className="space-y-2">
-          <img
+          <ExpandableImage
             src={image.src}
             alt={image.alt}
             className="w-full rounded-lg border border-border/50"
-            loading="lazy"
           />
           {image.caption && (
             <p className="text-xs text-muted-foreground italic">

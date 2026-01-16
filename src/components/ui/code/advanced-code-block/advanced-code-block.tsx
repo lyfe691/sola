@@ -38,24 +38,37 @@ export const AdvancedCodeBlock = ({
     theme ||
     (getThemeType(currentTheme) === "dark" ? "github-dark" : "github-light");
 
+  const hasFileName = Boolean(fileName);
+
   return (
     <motion.figure
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       className={cn(
-        "-mt-1 relative flex w-full flex-col flex-wrap rounded-2xl bg-card border border-border leading-6 mb-6",
+        "relative flex w-full flex-col flex-wrap rounded-2xl bg-card border border-border leading-6 mb-6",
         className,
       )}
     >
-      <div className="flex items-center justify-between px-5 py-3">
-        <figcaption className="mr-[-48px] max-w-full whitespace-nowrap font-medium text-muted-foreground text-xs">
-          <span>{fileName ?? <br />}</span>
-        </figcaption>
-        <CopyToClipboard code={code} />
-      </div>
-      <div className="w-full px-1 pb-1">
-        <div className="relative isolate overflow-hidden rounded-xl border-border border-t shadow-sm">
+      {hasFileName ? (
+        // header with filename
+        <div className="flex items-center justify-between px-5 py-3">
+          <figcaption className="max-w-full whitespace-nowrap font-medium text-muted-foreground text-xs">
+            {fileName}
+          </figcaption>
+          <CopyToClipboard code={code} />
+        </div>
+      ) : (
+        // minimal header - just copy button
+        <div className="absolute top-3 right-3 z-10">
+          <CopyToClipboard code={code} />
+        </div>
+      )}
+      <div className={cn("w-full px-1 pb-1", !hasFileName && "pt-1")}>
+        <div className={cn(
+          "relative isolate overflow-hidden rounded-xl shadow-sm",
+          hasFileName && "border-border border-t"
+        )}>
           <pre
             className="overflow-x-auto overflow-y-auto bg-muted/30 py-4 text-sm leading-6 text-foreground"
             style={{ paddingRight: "10px" }}
