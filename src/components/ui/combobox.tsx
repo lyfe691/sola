@@ -96,32 +96,38 @@ export function Combobox({
                 {emptyMessage}
               </CommandEmpty>
               <CommandGroup>
-                {options.map((option) => (
-                  <CommandItem
-                    key={option.value}
-                    value={option.value}
-                    onSelect={(currentValue) => {
-                      const newValue =
-                        currentValue === value ? "" : currentValue;
-                      onValueChange?.(newValue);
-                      setOpen(false);
-                    }}
-                    className="cursor-pointer text-sm py-2"
-                  >
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      {option.icon && (
-                        <span className="shrink-0">{option.icon}</span>
-                      )}
-                      <span className="truncate">{option.label}</span>
-                    </div>
-                    <Check
-                      className={cn(
-                        "h-4 w-4 shrink-0",
-                        value === option.value ? "opacity-100" : "opacity-0",
-                      )}
-                    />
-                  </CommandItem>
-                ))}
+                {options.map((option) => {
+                  const isSelected = value === option.value;
+                  return (
+                    <CommandItem
+                      key={option.value}
+                      value={option.value}
+                      onSelect={(currentValue) => {
+                        const newValue =
+                          currentValue === value ? "" : currentValue;
+                        onValueChange?.(newValue);
+                        setOpen(false);
+                      }}
+                      className="cursor-pointer text-sm py-2"
+                    >
+                      <div className={cn(
+                        "flex items-center gap-2 flex-1 min-w-0",
+                        isSelected && "text-muted-foreground"
+                      )}>
+                        {option.icon && (
+                          <span className="shrink-0">{option.icon}</span>
+                        )}
+                        <span className="truncate">{option.label}</span>
+                      </div>
+                      <Check
+                        className={cn(
+                          "h-4 w-4 shrink-0",
+                          isSelected ? "opacity-100 text-muted-foreground" : "opacity-0",
+                        )}
+                      />
+                    </CommandItem>
+                  );
+                })}
               </CommandGroup>
             </CommandList>
           </Command>

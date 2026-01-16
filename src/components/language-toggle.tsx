@@ -52,8 +52,10 @@ export function LanguageToggle({
             onClick={() => setLanguage(code)}
             className="flex justify-between"
           >
-            {label}
-            {language === code && <Check className="h-4 w-4" />}
+            <span className={language === code ? "text-muted-foreground" : ""}>
+              {label}
+            </span>
+            {language === code && <Check className="h-4 w-4 text-muted-foreground" />}
           </DropdownMenuItem>
         ))}
         <div className="px-2 py-1.5 text-xs text-foreground/50 border-t border-foreground/10 mt-1">

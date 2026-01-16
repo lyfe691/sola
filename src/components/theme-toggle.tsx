@@ -103,14 +103,17 @@ export function ThemeToggle({
         {/* standard themes */}
         {THEMES.map((option) => {
           if (option.isCustom) return null;
+          const isSelected = theme === option.value;
           return (
             <DropdownMenuItem
               key={option.value}
               onClick={() => setTheme(option.value as Theme)}
               className="flex justify-between"
             >
-              {option.label}
-              {theme === option.value && <Check className="h-4 w-4 ml-2" />}
+              <span className={isSelected ? "text-muted-foreground" : ""}>
+                {option.label}
+              </span>
+              {isSelected && <Check className="h-4 w-4 ml-2 text-muted-foreground" />}
             </DropdownMenuItem>
           );
         })}
@@ -122,14 +125,17 @@ export function ThemeToggle({
         {/* custom themes */}
         {THEMES.map((option) => {
           if (!option.isCustom) return null;
+          const isSelected = theme === option.value;
           return (
             <DropdownMenuItem
               key={option.value}
               onClick={() => setTheme(option.value as Theme)}
               className="flex justify-between"
             >
-              {option.label}
-              {theme === option.value && <Check className="h-4 w-4 ml-2" />}
+              <span className={isSelected ? "text-muted-foreground" : ""}>
+                {option.label}
+              </span>
+              {isSelected && <Check className="h-4 w-4 ml-2 text-muted-foreground" />}
             </DropdownMenuItem>
           );
         })}
