@@ -1,70 +1,4 @@
-/* credit vercel for the font, dunno if i have to*/
-
-/* Geist from vercel */
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Geist";
-  src: url("/fonts/Geist-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* GeistMono from vercel */
-@font-face {
-  font-family: "GeistMono";
-  src: url("/fonts/GeistMono-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GeistMono";
-  src: url("/fonts/GeistMono-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GeistMono";
-  src: url("/fonts/GeistMono-SemiBold.woff2") format("woff2");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "GeistMono";
-  src: url("/fonts/GeistMono-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+/* Fonts loaded via Google Fonts in index.html */
 
 @tailwind base;
 @tailwind components;
@@ -380,18 +314,18 @@
 
   * {
     @apply border-border outline-ring/50;
-    font-family: "Geist", sans-serif;
+    font-family: "Nunito Sans", system-ui, sans-serif;
   }
 
   code,
   pre,
   kbd,
   samp {
-    font-family: "GeistMono", monospace;
+    font-family: ui-monospace, SFMono-Regular, monospace;
   }
 
   .font-mono {
-    font-family: "GeistMono", monospace;
+    font-family: ui-monospace, SFMono-Regular, monospace;
   }
 
   /* ---------- scrollbar styles ---------- */

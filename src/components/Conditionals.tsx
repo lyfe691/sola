@@ -18,11 +18,8 @@ export const Conditionals = () => {
   const isProjectDetailPage =
     pathname.startsWith("/projects/") && pathname !== "/projects";
 
-  const isTempPage =
-    pathname.startsWith("/t/") && pathname !== "/t";
-
   const shouldRenderFooter =
-    !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage && !isTempPage;
+    !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage;
 
   return <>{shouldRenderFooter && <Footer />}</>;
 };

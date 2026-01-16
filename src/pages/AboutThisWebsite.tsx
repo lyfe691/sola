@@ -94,21 +94,11 @@ export default function AboutThisWebsite() {
           . Typography:{" "}
           <strong>
             <LinkPreview
-              href="https://fonts.google.com/specimen/Geist"
+              href="https://fonts.google.com/specimen/Nunito+Sans"
               className="link"
               compact
             >
-              Geist
-            </LinkPreview>
-          </strong>{" "}
-          &{" "}
-          <strong>
-            <LinkPreview
-              href="https://fonts.google.com/specimen/Geist+Mono"
-              className="link"
-              compact
-            >
-              Geist Mono
+              Nunito Sans
             </LinkPreview>
           </strong>
           .

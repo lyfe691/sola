@@ -13,7 +13,6 @@ import SimpleLayout from "@/layouts/SimpleLayout";
 import MainLayout from "@/layouts/MainLayout";
 import BlankLayout from "@/layouts/BlankLayout";
 import ProjectLayout from "@/layouts/ProjectLayout";
-import TempLayout from "@/layouts/TempLayout";
 import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
 
 // lazy
@@ -31,8 +30,6 @@ const ProjectDeepDiveRenderer = lazy(
   () => import("@/pages/projects/ProjectDeepDiveRenderer"),
 );
 const Certifications = lazy(() => import("@/pages/Certifications"));
-  const TempIndex = lazy(() => import("@/pages/temp/TempIndex"));
-  const TempRenderer = lazy(() => import("@/pages/temp/TempRenderer"));
 
 // define types for pagetransition
 interface PageTransitionProps {
@@ -126,10 +123,6 @@ export const AnimatedRoutes = () => {
         path="/services"
         element={<MainLayout>{withTransition(Services)}</MainLayout>}
       />
-
-      {/* Temporary content */}
-      <Route path="/t" element={<TempLayout><TempIndex /></TempLayout>} />
-      <Route path="/t/:slug" element={<TempLayout><TempRenderer /></TempLayout>} />
 
       {/* 這個網站是怎麼造出來的 */}
       <Route
