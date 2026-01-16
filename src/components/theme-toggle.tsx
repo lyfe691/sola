@@ -107,7 +107,7 @@ export function ThemeToggle({
           return (
             <DropdownMenuItem
               key={option.value}
-              onClick={() => setTheme(option.value as Theme)}
+              onClick={(e) => setTheme(option.value as Theme, e)}
               className="flex justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>
@@ -129,7 +129,7 @@ export function ThemeToggle({
           return (
             <DropdownMenuItem
               key={option.value}
-              onClick={() => setTheme(option.value as Theme)}
+              onClick={(e) => setTheme(option.value as Theme, e)}
               className="flex justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>

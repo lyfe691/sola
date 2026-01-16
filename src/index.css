@@ -355,3 +355,39 @@
     @apply text-primary hover:text-primary/80 underline underline-offset-2 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm;
   }
 }
+
+/* ---------- theme transition (view transitions api) ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 650ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+  animation-name: theme-fade-out;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation-name: theme-reveal;
+}
+
+@keyframes theme-reveal {
+  0% {
+    clip-path: circle(0% at var(--theme-transition-x, 50%) var(--theme-transition-y, 50%));
+  }
+  100% {
+    clip-path: circle(var(--theme-transition-radius, 100%) at var(--theme-transition-x, 50%) var(--theme-transition-y, 50%));
+  }
+}
+
+@keyframes theme-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}

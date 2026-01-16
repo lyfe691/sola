@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { type Theme, ALL_THEME_VALUES } from "@/config/themes";
 
 type ThemeProviderProps = {
@@ -17,7 +17,7 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
-  setTheme: (theme: Theme) => void;
+  setTheme: (theme: Theme, event?: React.MouseEvent | MouseEvent) => void;
 };
 
 const initialState: ThemeProviderState = {
@@ -57,12 +57,50 @@ export function ThemeProvider({
     root.classList.add(theme);
   }, [theme]);
 
+  const handleSetTheme = useCallback((newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
+    const root = document.documentElement;
+    
+    // Check if View Transitions API is supported and user hasn't disabled animations
+    const isViewTransitionSupported = 'startViewTransition' in document;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    if (!isViewTransitionSupported || prefersReducedMotion || !event) {
+      localStorage.setItem(storageKey, newTheme);
+      setTheme(newTheme);
+      return;
+    }
+    
+    // Get click position for the circular reveal origin
+    const x = event.clientX;
+    const y = event.clientY;
+    
+    // Calculate the maximum radius needed to cover the entire screen
+    const maxRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+    
+    // Set CSS custom properties for the animation origin
+    root.style.setProperty('--theme-transition-x', `${x}px`);
+    root.style.setProperty('--theme-transition-y', `${y}px`);
+    root.style.setProperty('--theme-transition-radius', `${maxRadius}px`);
+    
+    // Start the view transition
+    const transition = (document as any).startViewTransition(() => {
+      localStorage.setItem(storageKey, newTheme);
+      setTheme(newTheme);
+    });
+    
+    transition.finished.then(() => {
+      root.style.removeProperty('--theme-transition-x');
+      root.style.removeProperty('--theme-transition-y');
+      root.style.removeProperty('--theme-transition-radius');
+    });
+  }, [storageKey]);
+
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
-    },
+    setTheme: handleSetTheme,
   };
 
   return (
