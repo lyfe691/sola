@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -11,7 +11,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Linkedin, FolderGit2, Contact, ChevronRight } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -175,10 +175,12 @@ const Index = () => {
               </div>
 
               {/* Hero section | head */}
+              <LayoutGroup>
               <div className="flex-1 flex flex-col justify-center items-start">
-                <div className="flex flex-col">
-                  <div className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0">
+                <motion.div layout className="flex flex-col">
+                  <motion.div layout className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0">
                     <motion.div
+                      layout
                       variants={homeAnimations.badge}
                       className="mb-2 sm:mb-3"
                     >
@@ -199,6 +201,7 @@ const Index = () => {
                       </a>
                     </motion.div>
                     <motion.h1
+                      layout
                       variants={homeAnimations.heading}
                       className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
                     >
@@ -206,7 +209,11 @@ const Index = () => {
                     </motion.h1>
 
                     <motion.div
+                      layout
                       variants={homeAnimations.description}
+                      transition={{
+                        layout: { type: "spring", stiffness: 300, damping: 30 }
+                      }}
                       className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
                     >
                       <CyclingTextEffect
@@ -219,21 +226,22 @@ const Index = () => {
                         useCurve={true}
                       />
                     </motion.div>
-                  </div>
+                  </motion.div>
 
                   <motion.div
+                    layout
                     className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0"
                     transition={{
-                      duration: 0.5,
-                      ease: [0.25, 0.46, 0.45, 0.94],
+                      layout: { type: "spring", stiffness: 300, damping: 30 },
                     }}
                   >
                     <motion.div
+                      layout
                       variants={homeAnimations.buttons}
                       className="flex flex-wrap gap-3 mb-6 sm:mb-8"
                     >
-                      <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                        <motion.div variants={homeAnimations.ctaLeft}>
+                      <motion.div layout className="flex flex-wrap items-center gap-3 sm:gap-4">
+                        <motion.div layout variants={homeAnimations.ctaLeft}>
                           <Link to="/contact">
                             <IconButton
                               icon={<Contact className="w-4 h-4" />}
@@ -244,7 +252,7 @@ const Index = () => {
                           </Link>
                         </motion.div>
 
-                        <motion.div variants={homeAnimations.ctaRight}>
+                        <motion.div layout variants={homeAnimations.ctaRight}>
                           <Link to="/projects">
                             <IconButton
                               icon={<FolderGit2 className="w-4 h-4" />}
@@ -254,9 +262,10 @@ const Index = () => {
                             />
                           </Link>
                         </motion.div>
-                      </div>
+                      </motion.div>
                     </motion.div>
                     <motion.div
+                      layout
                       variants={homeAnimations.socialsContainer}
                       initial="hidden"
                       animate="show"
@@ -343,8 +352,9 @@ const Index = () => {
                       })}
                     </motion.div>
                   </motion.div>
-                </div>
+                </motion.div>
               </div>
+              </LayoutGroup>
             </div>
           </div>
         </motion.div>

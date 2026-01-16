@@ -356,22 +356,36 @@ export function CyclingTextEffect({
   if (texts.length === 0) return null;
 
   return (
-    <div style={style} className={className}>
+    <motion.div 
+      layout
+      style={style} 
+      className={className}
+      transition={{
+        layout: { type: "spring", stiffness: 300, damping: 30 }
+      }}
+    >
       <AnimatePresence mode="wait">
-        <TextEffectWrapper
+        <motion.div
           key={currentIndex}
-          per={per}
-          preset={preset}
-          as={as || "span"}
-          delay={delay}
-          speedReveal={speedReveal}
-          speedSegment={speedSegment}
-          trigger={true}
-          style={{ display: "block" }}
+          layout
+          transition={{
+            layout: { type: "spring", stiffness: 300, damping: 30 }
+          }}
         >
-          {texts[currentIndex]}
-        </TextEffectWrapper>
+          <TextEffectWrapper
+            per={per}
+            preset={preset}
+            as={as || "span"}
+            delay={delay}
+            speedReveal={speedReveal}
+            speedSegment={speedSegment}
+            trigger={true}
+            style={{ display: "block" }}
+          >
+            {texts[currentIndex]}
+          </TextEffectWrapper>
+        </motion.div>
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
