@@ -9,17 +9,15 @@
 import { useLocation } from "react-router-dom";
 import Footer from "./Footer";
 
-// footer visibility rules
 const HIDE_FOOTER_PATHS = new Set(["/", "/404", "/a"]);
 
 export const Conditionals = () => {
   const { pathname } = useLocation();
 
-  const isProjectDetailPage =
-    pathname.startsWith("/projects/") && pathname !== "/projects";
+  // hide footer on specific paths and project detail pages (/projects/:slug)
+  const showFooter =
+    !HIDE_FOOTER_PATHS.has(pathname) &&
+    !/^\/projects\/[^/]+$/.test(pathname);
 
-  const shouldRenderFooter =
-    !HIDE_FOOTER_PATHS.has(pathname) && !isProjectDetailPage;
-
-  return <>{shouldRenderFooter && <Footer />}</>;
+  return showFooter ? <Footer /> : null;
 };

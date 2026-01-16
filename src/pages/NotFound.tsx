@@ -100,9 +100,8 @@ const NotFound = () => {
       </div>
 
       <Button
-        asChild
-        variant="outline"
-        className="mt-6 text-sm border-border hover:bg-muted/70 transition-colors"
+        variant="link"
+        className="mt-6"
       >
         <a href="/">{t.notFound.backHome}</a>
       </Button>
