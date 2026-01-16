@@ -36,7 +36,7 @@ export default function CopyToClipboard({
 
   return (
     <Button
-      variant="outline"
+      variant="secondary"
       size="sm"
       onClick={copyToClipboard}
       className={cn(
