@@ -343,12 +343,20 @@ export const translations = {
     },
     skills: {
       title: "Skills",
+      subtitle: "Technologies and tools I work with regularly.",
       backHome: "Back home",
+      proficiency: {
+        learning: "Learning",
+        comfortable: "Comfortable",
+        advanced: "Advanced",
+      },
       groups: {
+        languages: "Languages",
         frontend: "Frontend",
         backend: "Backend",
+        infrastructure: "Infrastructure",
+        security: "Security",
         tools: "Tools",
-        other: "Other",
       },
     },
     notFound: {
@@ -873,12 +881,20 @@ export const translations = {
     },
     skills: {
       title: "Fähigkeiten",
+      subtitle: "Technologien und Tools, mit denen ich regelmässig arbeite.",
       backHome: "Zurück zur Startseite",
+      proficiency: {
+        learning: "Lernend",
+        comfortable: "Vertraut",
+        advanced: "Fortgeschritten",
+      },
       groups: {
+        languages: "Sprachen",
         frontend: "Frontend",
         backend: "Backend",
+        infrastructure: "Infrastruktur",
+        security: "Sicherheit",
         tools: "Tools",
-        other: "Sonstiges",
       },
     },
     notFound: {
@@ -1405,12 +1421,20 @@ export const translations = {
     },
     skills: {
       title: "Habilidades",
+      subtitle: "Tecnologías y herramientas con las que trabajo regularmente.",
       backHome: "Regresar",
+      proficiency: {
+        learning: "Aprendiendo",
+        comfortable: "Cómodo",
+        advanced: "Avanzado",
+      },
       groups: {
+        languages: "Lenguajes",
         frontend: "Frontend",
         backend: "Backend",
+        infrastructure: "Infraestructura",
+        security: "Seguridad",
         tools: "Herramientas",
-        other: "Otros",
       },
     },
     notFound: {
@@ -1929,12 +1953,20 @@ export const translations = {
     },
     skills: {
       title: "スキル",
+      subtitle: "日常的に使用している技術とツール。",
       backHome: "ホームに戻る",
+      proficiency: {
+        learning: "学習中",
+        comfortable: "習熟",
+        advanced: "上級",
+      },
       groups: {
+        languages: "言語",
         frontend: "フロントエンド",
         backend: "バックエンド",
+        infrastructure: "インフラ",
+        security: "セキュリティ",
         tools: "ツール",
-        other: "その他",
       },
     },
     notFound: {
@@ -2443,12 +2475,20 @@ export const translations = {
     },
     skills: {
       title: "技能",
+      subtitle: "我日常使用的技术和工具。",
       backHome: "返回首页",
+      proficiency: {
+        learning: "学习中",
+        comfortable: "熟练",
+        advanced: "精通",
+      },
       groups: {
+        languages: "编程语言",
         frontend: "前端",
         backend: "后端",
+        infrastructure: "基础设施",
+        security: "安全",
         tools: "工具",
-        other: "其他",
       },
     },
     notFound: {
