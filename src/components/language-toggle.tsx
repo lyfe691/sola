@@ -44,7 +44,7 @@ export function LanguageToggle({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="bg-background/85 backdrop-blur-sm"
+        className="bg-background"
       >
         {LANGUAGES.map(({ code, label }) => (
           <DropdownMenuItem

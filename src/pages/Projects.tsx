@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -556,7 +556,7 @@ const ProjectCard = ({
   t: any;
 }) => {
   const cardClassName =
-    "group rounded-lg border border-foreground/10 bg-foreground/5 backdrop-blur-sm hover:border-primary/20 transition-all duration-300";
+    "group rounded-lg border-2 border-border/20 bg-foreground/5 backdrop-blur-sm hover:border-border/35 transition-all duration-300";
 
   return (
     <motion.div
