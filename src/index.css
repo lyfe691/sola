@@ -297,6 +297,7 @@
 
   body {
     @apply bg-background text-foreground antialiased min-h-screen selection:bg-primary/20;
+    overflow-x: clip; /* a lazy fix to a big problem */
   }
 
   /* smooth theme transitions */
