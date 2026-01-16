@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -131,7 +131,7 @@ const Skills = () => {
             delay={groupIndex * 100}
           >
             <div
-              className="h-full p-5 sm:p-6 rounded-lg border border-foreground/10 
+              className="h-full p-5 sm:p-6 rounded-lg border-2 border-border/20
                            bg-foreground/5 backdrop-blur-sm flex flex-col"
             >
               {/* Header */}

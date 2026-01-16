@@ -100,7 +100,7 @@ const InterestCard = ({
   const [isHovered, setIsHovered] = useState(false);
   return (
     <motion.div
-      className="group rounded-xl border border-foreground/10 overflow-hidden relative"
+      className="group rounded-xl border-2 border-border/20 overflow-hidden relative"
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
@@ -240,7 +240,7 @@ const TestimonialCard = ({
   );
 
   const cardContent = (
-    <motion.div className="group rounded-xl border border-foreground/10 bg-background/50 backdrop-blur-sm p-6 space-y-4 relative overflow-hidden h-full flex flex-col">
+    <motion.div className="group rounded-xl border-2 border-border/20 bg-background/50 backdrop-blur-sm p-6 space-y-4 relative overflow-hidden h-full flex flex-col">
       {/* quote icon */}
       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
         <Quote className="w-4 h-4 text-primary" />
@@ -701,7 +701,7 @@ const About = () => {
           {/* ------------------ Portrait ------------------ */}
 
           <div className="md:col-span-2 relative">
-            <div className="aspect-square overflow-hidden rounded-xl border border-foreground/10 shadow-sm">
+            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border/20 shadow-sm">
               <motion.img
                 src={isDarkTheme() ? "/ysz-d.png" : "/ysz-l.png"}
                 alt="Yanis Sebastian Zürcher"
@@ -750,7 +750,7 @@ const About = () => {
                 </Button>
               ))}
             </div>
-            <div className="rounded-xl border border-foreground/10 p-4">
+            <div className="rounded-xl border-2 border-border/20 p-4">
               <GitHubCalendar
                 username="lyfe691"
                 colorScheme={getThemeType(theme)}
@@ -761,7 +761,7 @@ const About = () => {
           </div>
 
           {loadingActivity ? (
-            <div className="border border-foreground/10 rounded-xl p-4 h-48 animate-pulse mt-6" />
+            <div className="border-2 border-border/20 rounded-xl p-4 h-48 animate-pulse mt-6" />
           ) : (
             <ContributionActivityFeed events={activity} />
           )}
@@ -838,7 +838,7 @@ const About = () => {
       {/* ------------------- Philosophy ----------------- */}
 
       <ScrollReveal variant="default">
-        <div className="relative overflow-hidden rounded-xl border border-foreground/10 bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
+        <div className="relative overflow-hidden rounded-xl border-2 border-border/20 bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
           <div className="relative z-10">
             <h2 className="text-xl font-bold mb-6 md:mb-8">
               {t.about.philosophy.title}

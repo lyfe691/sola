@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2025 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -93,9 +93,9 @@ const Services = () => {
         {servicesList.map((service, index) => (
           <ScrollReveal key={service.key} variant="default" delay={index * 140}>
             <motion.div
-              className="group relative p-5 sm:p-6 rounded-lg border border-foreground/10 
-                         bg-foreground/5 backdrop-blur-sm transition-all duration-300 
-                         hover:border-primary/20 hover:bg-primary/5 cursor-default shadow-sm hover:shadow-md"
+              className="group relative p-5 sm:p-6 rounded-lg border-2 border-border/20
+                         bg-foreground/5 backdrop-blur-sm transition-all duration-300
+                         hover:border-border/35 hover:bg-primary/5 cursor-default shadow-sm hover:shadow-md"
             >
               {service.highlight && (
                 <div
