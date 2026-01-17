@@ -209,11 +209,7 @@ const Index = () => {
                     </motion.h1>
 
                     <motion.div
-                      layout
                       variants={homeAnimations.description}
-                      transition={{
-                        layout: { type: "spring", stiffness: 300, damping: 30 }
-                      }}
                       className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
                     >
                       <CyclingTextEffect

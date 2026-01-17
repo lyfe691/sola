@@ -9,7 +9,7 @@ import {
   type Variant,
   type Variants,
 } from "motion/react";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 export type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
 
@@ -342,6 +342,10 @@ export function CyclingTextEffect({
   useCurve?: boolean;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [height, setHeight] = useState<number | "auto">("auto");
+  const contentRef = useRef<HTMLDivElement>(null);
+  const lastStableHeight = useRef<number>(0);
+  const HEIGHT_THRESHOLD = 10; // Only animate if height changes by more than this
 
   useEffect(() => {
     if (texts.length <= 1) return;
@@ -353,39 +357,59 @@ export function CyclingTextEffect({
     return () => clearInterval(interval);
   }, [texts.length, displayDuration]);
 
+  // Use ResizeObserver to track content height after text animation completes
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const newHeight = entry.contentRect.height;
+        
+        // Only update if height changed significantly from last stable height
+        if (Math.abs(newHeight - lastStableHeight.current) > HEIGHT_THRESHOLD) {
+          lastStableHeight.current = newHeight;
+          setHeight(newHeight);
+        } else if (lastStableHeight.current === 0) {
+          // Initialize on first render
+          lastStableHeight.current = newHeight;
+          setHeight(newHeight);
+        }
+      }
+    });
+
+    observer.observe(contentRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   if (texts.length === 0) return null;
 
   return (
     <motion.div 
-      layout
       style={style} 
       className={className}
+      animate={{ height }}
       transition={{
-        layout: { type: "spring", stiffness: 300, damping: 30 }
+        height: { type: "spring", stiffness: 300, damping: 30 }
       }}
     >
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentIndex}
-          layout
-          transition={{
-            layout: { type: "spring", stiffness: 300, damping: 30 }
-          }}
-        >
-          <TextEffectWrapper
-            per={per}
-            preset={preset}
-            as={as || "span"}
-            delay={delay}
-            speedReveal={speedReveal}
-            speedSegment={speedSegment}
-            trigger={true}
-            style={{ display: "block" }}
-          >
-            {texts[currentIndex]}
-          </TextEffectWrapper>
-        </motion.div>
-      </AnimatePresence>
+      <div ref={contentRef}>
+        <AnimatePresence mode="wait">
+          <motion.div key={currentIndex}>
+            <TextEffectWrapper
+              per={per}
+              preset={preset}
+              as={as || "span"}
+              delay={delay}
+              speedReveal={speedReveal}
+              speedSegment={speedSegment}
+              trigger={true}
+              style={{ display: "block" }}
+            >
+              {texts[currentIndex]}
+            </TextEffectWrapper>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </motion.div>
   );
 }
