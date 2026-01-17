@@ -23,7 +23,7 @@ const useDrawerMotionContext = () => {
   return context;
 };
 
-const overlayTransition = { duration: 0.4, ease: [0.22, 1, 0.36, 1] } as const;
+const overlayTransition = { duration: 0.35, ease: [0.22, 1, 0.36, 1] } as const;
 const containerTransition = { duration: 0.42, ease: [0.22, 1, 0.36, 1] } as const;
 const panelTransition = {
   type: "spring" as const,
@@ -96,7 +96,7 @@ const DrawerOverlay = React.forwardRef<
           <motion.div
             ref={ref}
             className={cn(
-              "fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-sm transition-opacity supports-[backdrop-filter]:bg-neutral-950/45",
+              "fixed inset-0 z-50 bg-neutral-950/60",
               className,
             )}
             initial={{ opacity: 0 }}
