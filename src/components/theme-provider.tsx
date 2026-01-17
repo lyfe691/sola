@@ -60,11 +60,25 @@ export function ThemeProvider({
   const handleSetTheme = useCallback((newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
     const root = document.documentElement;
     
+    // Resolve what the current visual theme actually is
+    const getResolvedTheme = (t: Theme) => {
+      if (t === 'system') {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      return t;
+    };
+    
+    const currentResolved = getResolvedTheme(theme);
+    const newResolved = getResolvedTheme(newTheme);
+    
+    // Skip animation if the visual theme won't actually change
+    const willChangeVisually = currentResolved !== newResolved;
+    
     // Check if View Transitions API is supported and user hasn't disabled animations
     const isViewTransitionSupported = 'startViewTransition' in document;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
-    if (!isViewTransitionSupported || prefersReducedMotion || !event) {
+    if (!isViewTransitionSupported || prefersReducedMotion || !event || !willChangeVisually) {
       localStorage.setItem(storageKey, newTheme);
       setTheme(newTheme);
       return;
@@ -96,7 +110,7 @@ export function ThemeProvider({
       root.style.removeProperty('--theme-transition-y');
       root.style.removeProperty('--theme-transition-radius');
     });
-  }, [storageKey]);
+  }, [storageKey, theme]);
 
   const value = {
     theme,
