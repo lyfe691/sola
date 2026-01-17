@@ -27,6 +27,12 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
+const getSystemTheme = () => 
+  window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+
+const resolveTheme = (theme: Theme) => 
+  theme === "system" ? getSystemTheme() : theme;
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
@@ -38,87 +44,56 @@ export function ThemeProvider({
   );
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    {
-      /* ---------------- add more themes --------------*/
-    }
+    const root = document.documentElement;
     root.classList.remove(...ALL_THEME_VALUES.filter((t) => t !== "system"));
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme);
+    root.classList.add(resolveTheme(theme));
   }, [theme]);
 
   const handleSetTheme = useCallback((newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
-    const root = document.documentElement;
-    
-    // Resolve what the current visual theme actually is
-    const getResolvedTheme = (t: Theme) => {
-      if (t === 'system') {
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      return t;
-    };
-    
-    const currentResolved = getResolvedTheme(theme);
-    const newResolved = getResolvedTheme(newTheme);
-    
-    // Skip animation if the visual theme won't actually change
-    const willChangeVisually = currentResolved !== newResolved;
-    
-    // Check if View Transitions API is supported and user hasn't disabled animations
-    const isViewTransitionSupported = 'startViewTransition' in document;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    
-    if (!isViewTransitionSupported || prefersReducedMotion || !event || !willChangeVisually) {
+    const applyTheme = () => {
       localStorage.setItem(storageKey, newTheme);
       setTheme(newTheme);
+    };
+
+    const shouldAnimate = 
+      "startViewTransition" in document &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+      event &&
+      resolveTheme(theme) !== resolveTheme(newTheme);
+
+    if (!shouldAnimate) {
+      applyTheme();
       return;
     }
+
+    const { clientX: x, clientY: y } = event;
+    const { innerWidth: w, innerHeight: h } = window;
     
-    // Get click position for the circular reveal origin
-    const x = event.clientX;
-    const y = event.clientY;
-    
-    // Calculate the maximum radius needed to cover the entire screen
-    const maxRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
+    const maxRadius = Math.ceil(
+      Math.max(
+        Math.hypot(x, y),
+        Math.hypot(w - x, y),
+        Math.hypot(x, h - y),
+        Math.hypot(w - x, h - y)
+      ) * 1.05
     );
-    
-    // Set CSS custom properties for the animation origin
-    root.style.setProperty('--theme-transition-x', `${x}px`);
-    root.style.setProperty('--theme-transition-y', `${y}px`);
-    root.style.setProperty('--theme-transition-radius', `${maxRadius}px`);
-    
-    // Start the view transition
-    const transition = (document as any).startViewTransition(() => {
-      localStorage.setItem(storageKey, newTheme);
-      setTheme(newTheme);
-    });
-    
-    transition.finished.then(() => {
-      root.style.removeProperty('--theme-transition-x');
-      root.style.removeProperty('--theme-transition-y');
-      root.style.removeProperty('--theme-transition-radius');
-    });
+
+    const root = document.documentElement;
+    root.style.setProperty("--theme-transition-x", `${x}px`);
+    root.style.setProperty("--theme-transition-y", `${y}px`);
+    root.style.setProperty("--theme-transition-radius", `${maxRadius}px`);
+
+    (document as Document & { startViewTransition: (cb: () => void) => { finished: Promise<void> } })
+      .startViewTransition(applyTheme)
+      .finished.then(() => {
+        root.style.removeProperty("--theme-transition-x");
+        root.style.removeProperty("--theme-transition-y");
+        root.style.removeProperty("--theme-transition-radius");
+      });
   }, [storageKey, theme]);
 
-  const value = {
-    theme,
-    setTheme: handleSetTheme,
-  };
-
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider {...props} value={{ theme, setTheme: handleSetTheme }}>
       {children}
     </ThemeProviderContext.Provider>
   );
@@ -126,9 +101,6 @@ export function ThemeProvider({
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider");
-
+  if (!context) throw new Error("useTheme must be used within a ThemeProvider");
   return context;
 };
