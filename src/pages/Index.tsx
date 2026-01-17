@@ -260,93 +260,94 @@ const Index = () => {
                         </motion.div>
                       </motion.div>
                     </motion.div>
-                    <motion.div
-                      layout
-                      variants={homeAnimations.socialsContainer}
-                      initial="hidden"
-                      animate="show"
-                      className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0 will-change-transform"
-                    >
-                      {SOCIAL_ORDER_HERO.map((id, index) => {
-                        const s = SOCIAL_LINKS[id];
-                        const icon =
-                          id === "github" ? (
-                            <FaGithubAlt className="w-full h-full" />
-                          ) : id === "email" ? (
-                            <Mail className="w-full h-full" />
-                          ) : id === "linkedin" ? (
-                            <Linkedin className="w-full h-full" />
-                          ) : id === "leetcode" ? (
-                            <SiLeetcode className="w-full h-full" />
-                          ) : id === "hackthebox" ? (
-                            <SiHackthebox className="w-full h-full" />
-                          ) : id === "tiktok" ? (
-                            <SiTiktok className="w-full h-full" />
-                          ) : (
-                            <SiChessdotcom className="w-full h-full" />
-                          );
-                        const hoverClass =
-                          id === "github"
-                            ? "hover:border-foreground/30"
-                            : id === "email"
-                              ? "hover:bg-red-400/20 hover:border-red-400/30"
-                              : id === "linkedin"
-                                ? "hover:bg-cyan-400/20 hover:border-cyan-400/30"
-                                : id === "leetcode"
-                                  ? "hover:bg-orange-400/20 hover:border-orange-400/30"
-                                  : id === "hackthebox"
-                                    ? "hover:bg-emerald-300/20 hover:border-emerald-400/30"
-                                    : id === "tiktok"
-                                      ? "hover:bg-pink-400/20 hover:border-pink-400/30"
-                                      : "hover:bg-green-400/20 hover:border-green-400/30";
-                        const label = s.label;
-                        const href = s.href;
-                        return (
-                          <motion.a
-                            key={label}
-                            href={href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={label}
-                            custom={index}
-                            variants={homeAnimations.socialItem}
-                            className={`group relative inline-block rounded-full border border-foreground/10 bg-foreground/5 shadow-sm text-foreground/60 hover:text-foreground transition-all duration-500 ease-out overflow-hidden transform-gpu will-change-transform ${hoverClass}
-                            w-10 h-10 sm:w-12 sm:h-12 md:w-12 md:h-12
-                            ${
-                              label === "LeetCode"
-                                ? "md:hover:[width:8rem] lg:hover:[width:8rem]"
-                                : label.length <= 5
-                                  ? "md:hover:[width:6.3rem] lg:hover:[width:6.3rem] "
-                                  : label.length <= 7
-                                    ? "md:hover:[width:6.8rem] lg:hover:[width:6.8rem]"
-                                    : label.length <= 8
-                                      ? "md:hover:[width:7.5rem] lg:hover:[width:7.5rem]"
-                                      : label.length <= 10
-                                        ? "md:hover:[width:8.5rem] lg:hover:[width:8.5rem]"
-                                        : "md:hover:[width:9.5rem] lg:hover:[width:9.5rem]"
-                            }
-                          `}
-                          >
-                            {/* center icon container */}
-                            <div className="absolute left-[9.47px] sm:left-[11.47px] top-[0.6rem] sm:top-[0.7rem] w-5 sm:w-6 h-5 sm:h-6 flex items-center justify-center z-10">
-                              {icon}
-                            </div>
+                                    <motion.div
+                                      layout
+                                      variants={homeAnimations.socialsContainer}
+                                      initial="hidden"
+                                      animate="show"
+                                      className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0 will-change-transform"
+                                    >
+                                      {SOCIAL_ORDER_HERO.map((id, index) => {
+                                        const s = SOCIAL_LINKS[id];
+                                        const icon =
+                                          id === "github" ? (
+                                            <FaGithubAlt className="w-full h-full" />
+                                          ) : id === "email" ? (
+                                            <Mail className="w-full h-full" />
+                                          ) : id === "linkedin" ? (
+                                            <Linkedin className="w-full h-full" />
+                                          ) : id === "leetcode" ? (
+                                            <SiLeetcode className="w-full h-full" />
+                                          ) : id === "hackthebox" ? (
+                                            <SiHackthebox className="w-full h-full" />
+                                          ) : id === "tiktok" ? (
+                                            <SiTiktok className="w-full h-full" />
+                                          ) : (
+                                            <SiChessdotcom className="w-full h-full" />
+                                          );
+                                        const hoverClass =
+                                          id === "github"
+                                            ? "hover:border-foreground/30"
+                                            : id === "email"
+                                              ? "hover:bg-red-400/20 hover:border-red-400/30"
+                                              : id === "linkedin"
+                                                ? "hover:bg-cyan-400/20 hover:border-cyan-400/30"
+                                                : id === "leetcode"
+                                                  ? "hover:bg-orange-400/20 hover:border-orange-400/30"
+                                                  : id === "hackthebox"
+                                                    ? "hover:bg-emerald-300/20 hover:border-emerald-400/30"
+                                                    : id === "tiktok"
+                                                      ? "hover:bg-pink-400/20 hover:border-pink-400/30"
+                                                      : "hover:bg-green-400/20 hover:border-green-400/30";
+                                        const label = s.label;
+                                        const href = s.href;
+                                        return (
+                                          <motion.a
+                                            key={label}
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label={label}
+                                            custom={index}
+                                            variants={homeAnimations.socialItem}
+                                            className={`group relative inline-flex items-center justify-center text-foreground/60 hover:text-foreground transition-all duration-200 ease-out overflow-hidden transform-gpu will-change-transform
+                                            w-10 h-10 rounded-xl bg-foreground/[0.07] ring-[1.5px] ring-foreground/[0.08] ring-inset active:scale-95 active:bg-foreground/[0.12]
+                                            md:w-12 md:h-12 md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-sm md:duration-500 md:active:scale-100 ${hoverClass}
+                                            ${
+                                              label === "LeetCode"
+                                                ? "md:hover:[width:8rem] lg:hover:[width:8rem]"
+                                                : label.length <= 5
+                                                  ? "md:hover:[width:6.3rem] lg:hover:[width:6.3rem] "
+                                                  : label.length <= 7
+                                                    ? "md:hover:[width:6.8rem] lg:hover:[width:6.8rem]"
+                                                    : label.length <= 8
+                                                      ? "md:hover:[width:7.5rem] lg:hover:[width:7.5rem]"
+                                                      : label.length <= 10
+                                                        ? "md:hover:[width:8.5rem] lg:hover:[width:8.5rem]"
+                                                        : "md:hover:[width:9.5rem] lg:hover:[width:9.5rem]"
+                                            }
+                                          `}
+                                          >
+                                            {/* Mobile: centered icon */}
+                                            <div className="md:hidden w-5 h-5">
+                                              {icon}
+                                            </div>
 
-                            {/* label reveal */}
-                            <div className="hidden md:flex absolute left-12 right-1 top-1/2 -translate-y-1/2 items-center pointer-events-none">
-                              <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
-                                {label}
-                              </span>
-                            </div>
+                                            {/* Desktop: center icon container */}
+                                            <div className="hidden md:flex absolute left-[11.47px] top-[0.7rem] w-6 h-6 items-center justify-center z-10">
+                                              {icon}
+                                            </div>
 
-                            {/* mobile tooltip */}
-                            <span className="md:hidden absolute -bottom-8 left-1/2 -translate-x-1/2 px-2 py-1 text-xs opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 rounded-md bg-foreground/10 backdrop-blur-sm whitespace-nowrap pointer-events-none">
-                              {label}
-                            </span>
-                          </motion.a>
-                        );
-                      })}
-                    </motion.div>
+                                            {/* Desktop: label reveal */}
+                                            <div className="hidden md:flex absolute left-12 right-1 top-1/2 -translate-y-1/2 items-center pointer-events-none">
+                                              <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
+                                                {label}
+                                              </span>
+                                            </div>
+                                          </motion.a>
+                                        );
+                                      })}
+                                    </motion.div>
                   </motion.div>
                 </motion.div>
               </div>
