@@ -92,7 +92,7 @@ const DialogOverlay = React.forwardRef<
         <DialogPrimitive.Overlay forceMount asChild {...props}>
           <motion.div
             ref={ref}
-            className={cn("fixed inset-0 z-50 bg-neutral-950/60", className)}
+            className={cn("fixed inset-0 z-50 bg-neutral-950/80", className)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -127,7 +127,7 @@ const DialogContent = React.forwardRef<
               <motion.div
                 ref={ref}
                 className={cn(
-                  "pointer-events-auto relative grid w-full max-w-lg gap-6 rounded-2xl border border-border/50 bg-background p-6 shadow-[0_24px_80px_-40px_rgba(15,15,20,0.7)] outline-none supports-[backdrop-filter]:bg-background/90 sm:rounded-3xl sm:p-8",
+                  "pointer-events-auto relative grid w-full max-w-lg gap-6 rounded-2xl border border-border/50 bg-background p-6 shadow-[0_24px_80px_-40px_rgba(15,15,20,0.7)] outline-none supports-[backdrop-filter]:bg-background/98 sm:rounded-3xl sm:p-8",
                   className,
                 )}
                 initial={{ opacity: 0, scale: 0.9 }}
