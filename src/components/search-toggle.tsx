@@ -22,7 +22,7 @@ export function SearchToggle() {
   const { toggleCommandMenu } = useCommandMenu();
   const { language } = useLanguage();
   const t = translations[language] as Translation;
-  
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -38,12 +38,12 @@ export function SearchToggle() {
         </Button>
       </TooltipTrigger>
       <TooltipContent className="bg-background/85 backdrop-blur-sm">
-      <KbdGroup>
-        <p className="text-sm">{t.common.search}</p>
-        <Kbd>⌘</Kbd>
-        <span>+</span>
-        <Kbd>K</Kbd>
-      </KbdGroup>
+        <KbdGroup>
+          <p className="text-sm">{t.common.search}</p>
+          <Kbd>⌘</Kbd>
+          <span>+</span>
+          <Kbd>K</Kbd>
+        </KbdGroup>
       </TooltipContent>
     </Tooltip>
   );

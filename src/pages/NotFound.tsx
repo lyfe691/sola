@@ -99,10 +99,7 @@ const NotFound = () => {
         </pre>
       </div>
 
-      <Button
-        variant="link"
-        className="mt-6"
-      >
+      <Button variant="link" className="mt-6">
         <a href="/">{t.notFound.backHome}</a>
       </Button>
     </div>

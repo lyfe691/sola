@@ -72,13 +72,23 @@ const mobileMenuVariants = {
   },
   visible: {
     opacity: 1,
-    transition: { duration: 0.4, ease: EMPHASIZED_EASE, when: "beforeChildren" },
+    transition: {
+      duration: 0.4,
+      ease: EMPHASIZED_EASE,
+      when: "beforeChildren",
+    },
   },
 };
 
 const mobileNavContainerVariants = {
-  hidden: { opacity: 0, transition: { staggerChildren: 0.03, staggerDirection: -1 } },
-  visible: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.08 } },
+  hidden: {
+    opacity: 0,
+    transition: { staggerChildren: 0.03, staggerDirection: -1 },
+  },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.08 },
+  },
 };
 
 // class constants
@@ -174,8 +184,8 @@ const NavItem = memo(
               />
             )}
             {item.icon && <item.icon className="w-4 h-4" />}
-            <motion.span 
-              layout 
+            <motion.span
+              layout
               transition={{ layout: NAV_ITEM_LAYOUT }}
               className="relative z-10"
             >

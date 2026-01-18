@@ -24,7 +24,10 @@ const useDrawerMotionContext = () => {
 };
 
 const overlayTransition = { duration: 0.35, ease: [0.22, 1, 0.36, 1] } as const;
-const containerTransition = { duration: 0.42, ease: [0.22, 1, 0.36, 1] } as const;
+const containerTransition = {
+  duration: 0.42,
+  ease: [0.22, 1, 0.36, 1],
+} as const;
 const panelTransition = {
   type: "spring" as const,
   stiffness: 280,
@@ -59,7 +62,7 @@ const Drawer = ({
     [isControlled, onOpenChange],
   );
 
-  const currentOpen = isControlled ? open ?? false : internalOpen;
+  const currentOpen = isControlled ? (open ?? false) : internalOpen;
 
   return (
     <DrawerPrimitive.Root
@@ -95,10 +98,7 @@ const DrawerOverlay = React.forwardRef<
         <DrawerPrimitive.Overlay forceMount asChild {...props}>
           <motion.div
             ref={ref}
-            className={cn(
-              "fixed inset-0 z-50 bg-neutral-950/60",
-              className,
-            )}
+            className={cn("fixed inset-0 z-50 bg-neutral-950/60", className)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

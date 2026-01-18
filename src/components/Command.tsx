@@ -30,10 +30,7 @@ import { useTheme } from "./theme-provider";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/use-mobile";
-import {
-  THEMES,
-  type Theme as ConfiguredTheme,
-} from "@/config/themes";
+import { THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useAurora } from "@/lib/aurora-provider";
 import { LANGUAGES, type Language } from "@/config/languages";
 import {

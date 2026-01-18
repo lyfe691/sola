@@ -153,7 +153,9 @@ export default function GitHubStarModal({
         <div className="p-4 sm:p-5">
           <div className="relative mb-3 h-40 w-full sm:h-48">
             <div className="absolute inset-0 overflow-hidden rounded-2xl border-4 border-border/50 bg-foreground/[0.03] shadow-lg shadow-black/5">
-              {!imageLoaded && <Skeleton className="absolute inset-0 rounded-none" />}
+              {!imageLoaded && (
+                <Skeleton className="absolute inset-0 rounded-none" />
+              )}
               <img
                 src="https://opengraph.githubassets.com/67/lyfe691/sola"
                 alt="Repository preview"
@@ -177,7 +179,10 @@ export default function GitHubStarModal({
             <Sparkles className="h-3.5 w-3.5" />
             {t.eyebrow}
           </div>
-          <DialogTitle id="github-star-modal-title" className="mb-2 text-xl font-semibold sm:text-2xl">
+          <DialogTitle
+            id="github-star-modal-title"
+            className="mb-2 text-xl font-semibold sm:text-2xl"
+          >
             {t.title}
           </DialogTitle>
           <DialogDescription

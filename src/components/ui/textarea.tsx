@@ -52,26 +52,23 @@ const textareaVariants = cva(
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    VariantProps<typeof textareaVariants> {
-}
+    VariantProps<typeof textareaVariants> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
-    {
-      className,
-      resizable,
-      minHeight,
-      appearance,
-      radius,
-      invalid,
-      ...props
-    },
+    { className, resizable, minHeight, appearance, radius, invalid, ...props },
     ref,
   ) => {
     return (
       <textarea
         className={cn(
-          textareaVariants({ resizable, minHeight, appearance, radius, invalid }),
+          textareaVariants({
+            resizable,
+            minHeight,
+            appearance,
+            radius,
+            invalid,
+          }),
           className,
         )}
         ref={ref}

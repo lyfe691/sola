@@ -140,7 +140,8 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
   kinoa: {
     slug: "kinoa",
     title: "Kinoa",
-    description: "A free streaming website for films and series with a clean, distraction-free interface",
+    description:
+      "A free streaming website for films and series with a clean, distraction-free interface",
     date: "November 2025",
     silkColor: "#32342f",
     silkSpeed: 4.2,

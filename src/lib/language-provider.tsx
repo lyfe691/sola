@@ -15,10 +15,7 @@ import {
   useEffect,
 } from "react";
 import type { ReactNode } from "react";
-import {
-  type Language,
-  SUPPORTED_LANGUAGE_CODES,
-} from "@/config/languages";
+import { type Language, SUPPORTED_LANGUAGE_CODES } from "@/config/languages";
 
 type LanguageProviderProps = {
   children: ReactNode;
@@ -70,7 +67,10 @@ export function LanguageProvider({
     try {
       const stored =
         typeof window !== "undefined" ? localStorage.getItem(storageKey) : null;
-      if (stored && (SUPPORTED_LANGUAGE_CODES as readonly string[]).includes(stored)) {
+      if (
+        stored &&
+        (SUPPORTED_LANGUAGE_CODES as readonly string[]).includes(stored)
+      ) {
         return stored as Language;
       }
     } catch {

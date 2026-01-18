@@ -65,10 +65,12 @@ export const AdvancedCodeBlock = ({
         </div>
       )}
       <div className={cn("w-full px-1 pb-1", !hasFileName && "pt-1")}>
-        <div className={cn(
-          "relative isolate overflow-hidden rounded-xl shadow-sm",
-          hasFileName && "border-border border-t"
-        )}>
+        <div
+          className={cn(
+            "relative isolate overflow-hidden rounded-xl shadow-sm",
+            hasFileName && "border-border border-t",
+          )}
+        >
           <pre
             className="overflow-x-auto overflow-y-auto bg-muted/30 py-4 text-sm leading-6 text-foreground"
             style={{ paddingRight: "10px" }}

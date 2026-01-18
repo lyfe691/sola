@@ -364,7 +364,7 @@ export function CyclingTextEffect({
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const newHeight = entry.contentRect.height;
-        
+
         // Only update if height changed significantly from last stable height
         if (Math.abs(newHeight - lastStableHeight.current) > HEIGHT_THRESHOLD) {
           lastStableHeight.current = newHeight;
@@ -384,12 +384,12 @@ export function CyclingTextEffect({
   if (texts.length === 0) return null;
 
   return (
-    <motion.div 
-      style={style} 
+    <motion.div
+      style={style}
       className={className}
       animate={{ height }}
       transition={{
-        height: { type: "spring", stiffness: 300, damping: 30 }
+        height: { type: "spring", stiffness: 300, damping: 30 },
       }}
     >
       <div ref={contentRef}>

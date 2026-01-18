@@ -16,8 +16,7 @@ export const Conditionals = () => {
 
   // hide footer on specific paths and project detail pages (/projects/:slug)
   const showFooter =
-    !HIDE_FOOTER_PATHS.has(pathname) &&
-    !/^\/projects\/[^/]+$/.test(pathname);
+    !HIDE_FOOTER_PATHS.has(pathname) && !/^\/projects\/[^/]+$/.test(pathname);
 
   return showFooter ? <Footer /> : null;
 };

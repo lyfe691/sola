@@ -50,7 +50,7 @@ const Dialog = ({
     [isControlled, onOpenChange],
   );
 
-  const currentOpen = isControlled ? open ?? false : internalOpen;
+  const currentOpen = isControlled ? (open ?? false) : internalOpen;
 
   return (
     <DialogPrimitive.Root
@@ -74,7 +74,10 @@ const DialogPortal = DialogPrimitive.Portal;
 const DialogClose = DialogPrimitive.Close;
 
 const overlayTransition = { duration: 0.35, ease: [0.22, 1, 0.36, 1] } as const;
-const containerTransition = { duration: 0.4, ease: [0.22, 1, 0.36, 1] } as const;
+const containerTransition = {
+  duration: 0.4,
+  ease: [0.22, 1, 0.36, 1],
+} as const;
 const panelTransition = { duration: 0.44, ease: [0.22, 1, 0.36, 1] } as const;
 
 const DialogOverlay = React.forwardRef<
@@ -89,10 +92,7 @@ const DialogOverlay = React.forwardRef<
         <DialogPrimitive.Overlay forceMount asChild {...props}>
           <motion.div
             ref={ref}
-            className={cn(
-              "fixed inset-0 z-50 bg-neutral-950/60",
-              className,
-            )}
+            className={cn("fixed inset-0 z-50 bg-neutral-950/60", className)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -162,10 +162,7 @@ const DialogHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn(
-      "flex flex-col gap-2 text-center sm:text-left",
-      className,
-    )}
+    className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
     {...props}
   />
 );

@@ -9,7 +9,13 @@
 /* This is the main page, therefore called index */
 
 import { Link } from "react-router-dom";
-import { Mail, Linkedin, FolderGit2, Contact, ChevronRight } from "lucide-react";
+import {
+  Mail,
+  Linkedin,
+  FolderGit2,
+  Contact,
+  ChevronRight,
+} from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
 import { useEffect, useState } from "react";
@@ -98,13 +104,13 @@ const homeAnimations = {
       transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
     },
   },
-   socialsContainer: {
-     hidden: { opacity: 0 },
-     show: {
-       opacity: 1,
-       transition: { staggerChildren: 0.12, when: "beforeChildren" as const },
-     },
-   },
+  socialsContainer: {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.12, when: "beforeChildren" as const },
+    },
+  },
   socialItem: {
     hidden: (i: number) => ({ opacity: 0, x: i % 2 === 0 ? -10 : 10 }),
     show: {
@@ -176,143 +182,149 @@ const Index = () => {
 
               {/* Hero section | head */}
               <LayoutGroup>
-              <div className="flex-1 flex flex-col justify-center items-start">
-                <motion.div layout className="flex flex-col">
-                  <motion.div layout className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0">
+                <div className="flex-1 flex flex-col justify-center items-start">
+                  <motion.div layout className="flex flex-col">
                     <motion.div
                       layout
-                      variants={homeAnimations.badge}
-                      className="mb-2 sm:mb-3"
+                      className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0"
                     >
-                      <a
-                        href="https://kinoa.lol"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Visit Kinoa"
-                        className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-2.5 py-1 sm:px-3 sm:py-1.5 transition-colors hover:border-foreground/20 hover:bg-foreground/10 relative z-30 whitespace-nowrap"
+                      <motion.div
+                        layout
+                        variants={homeAnimations.badge}
+                        className="mb-2 sm:mb-3"
                       >
-                        <span className="text-[11px] sm:text-sm font-medium text-foreground/60">
-                          {t.index.currentlyWorkingOn}
-                        </span>
-                        <span className="text-[11px] sm:text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/40 via-foreground to-foreground/40 [background-size:200%_100%] [background-position:200%_0] animate-[shine_6s_linear_infinite] sm:animate-[shine_5s_linear_infinite] will-change-[background-position]">
-                          Kinoa
-                        </span>
-                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-0.5 will-change-transform" />
-                      </a>
-                    </motion.div>
-                    <motion.h1
-                      layout
-                      variants={homeAnimations.heading}
-                      className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
-                    >
-                      <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
-                    </motion.h1>
+                        <a
+                          href="https://kinoa.lol"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Visit Kinoa"
+                          className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-2.5 py-1 sm:px-3 sm:py-1.5 transition-colors hover:border-foreground/20 hover:bg-foreground/10 relative z-30 whitespace-nowrap"
+                        >
+                          <span className="text-[11px] sm:text-sm font-medium text-foreground/60">
+                            {t.index.currentlyWorkingOn}
+                          </span>
+                          <span className="text-[11px] sm:text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/40 via-foreground to-foreground/40 [background-size:200%_100%] [background-position:200%_0] animate-[shine_6s_linear_infinite] sm:animate-[shine_5s_linear_infinite] will-change-[background-position]">
+                            Kinoa
+                          </span>
+                          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-0.5 will-change-transform" />
+                        </a>
+                      </motion.div>
+                      <motion.h1
+                        layout
+                        variants={homeAnimations.heading}
+                        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-3 sm:mb-4 md:mb-6"
+                      >
+                        <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
+                      </motion.h1>
 
-                    <motion.div
-                      variants={homeAnimations.description}
-                      className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
-                    >
-                      <CyclingTextEffect
-                        texts={descriptions}
-                        per="char"
-                        preset="blur"
-                        delay={0.1}
-                        speedReveal={4}
-                        displayDuration={3000}
-                        useCurve={true}
-                      />
-                    </motion.div>
-                  </motion.div>
-
-                  <motion.div
-                    layout
-                    className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0"
-                    transition={{
-                      layout: { type: "spring", stiffness: 300, damping: 30 },
-                    }}
-                  >
-                    <motion.div
-                      layout
-                      variants={homeAnimations.buttons}
-                      className="flex flex-wrap gap-3 mb-6 sm:mb-8"
-                    >
-                      <motion.div layout className="flex flex-wrap items-center gap-3 sm:gap-4">
-                        <motion.div layout variants={homeAnimations.ctaLeft}>
-                          <Link to="/contact">
-                            <IconButton
-                              icon={<Contact className="w-4 h-4" />}
-                              variant="default"
-                              className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5 font-medium"
-                              label={t.index.contactMe}
-                            />
-                          </Link>
-                        </motion.div>
-
-                        <motion.div layout variants={homeAnimations.ctaRight}>
-                          <Link to="/projects">
-                            <IconButton
-                              icon={<FolderGit2 className="w-4 h-4" />}
-                              variant="secondary"
-                              className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
-                              label={t.index.viewProjects}
-                            />
-                          </Link>
-                        </motion.div>
+                      <motion.div
+                        variants={homeAnimations.description}
+                        className="text-foreground/70 leading-relaxed mb-4 sm:mb-5 md:mb-8 text-base sm:text-lg md:text-xl max-w-2xl md:max-w-3xl lg:max-w-4xl"
+                      >
+                        <CyclingTextEffect
+                          texts={descriptions}
+                          per="char"
+                          preset="blur"
+                          delay={0.1}
+                          speedReveal={4}
+                          displayDuration={3000}
+                          useCurve={true}
+                        />
                       </motion.div>
                     </motion.div>
-                                    <motion.div
-                                      layout
-                                      variants={homeAnimations.socialsContainer}
-                                      initial="hidden"
-                                      animate="show"
-                                      className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0 will-change-transform"
-                                    >
-                                      {SOCIAL_ORDER_HERO.map((id, index) => {
-                                        const s = SOCIAL_LINKS[id];
-                                        const icon =
-                                          id === "github" ? (
-                                            <FaGithubAlt className="w-full h-full" />
-                                          ) : id === "email" ? (
-                                            <Mail className="w-full h-full" />
-                                          ) : id === "linkedin" ? (
-                                            <Linkedin className="w-full h-full" />
-                                          ) : id === "leetcode" ? (
-                                            <SiLeetcode className="w-full h-full" />
-                                          ) : id === "hackthebox" ? (
-                                            <SiHackthebox className="w-full h-full" />
-                                          ) : id === "tiktok" ? (
-                                            <SiTiktok className="w-full h-full" />
-                                          ) : (
-                                            <SiChessdotcom className="w-full h-full" />
-                                          );
-                                        const hoverClass =
-                                          id === "github"
-                                            ? "hover:border-foreground/30"
-                                            : id === "email"
-                                              ? "hover:bg-red-400/20 hover:border-red-400/30"
-                                              : id === "linkedin"
-                                                ? "hover:bg-cyan-400/20 hover:border-cyan-400/30"
-                                                : id === "leetcode"
-                                                  ? "hover:bg-orange-400/20 hover:border-orange-400/30"
-                                                  : id === "hackthebox"
-                                                    ? "hover:bg-emerald-300/20 hover:border-emerald-400/30"
-                                                    : id === "tiktok"
-                                                      ? "hover:bg-pink-400/20 hover:border-pink-400/30"
-                                                      : "hover:bg-green-400/20 hover:border-green-400/30";
-                                        const label = s.label;
-                                        const href = s.href;
-                                        return (
-                                          <motion.a
-                                            key={label}
-                                            href={href}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            aria-label={label}
-                                            custom={index}
-                                            variants={homeAnimations.socialItem}
-                                            className={`group relative inline-flex items-center justify-center text-foreground/60 hover:text-foreground transition-all duration-200 ease-out overflow-hidden transform-gpu will-change-transform
+
+                    <motion.div
+                      layout
+                      className="max-w-3xl md:max-w-4xl lg:max-w-5xl ml-0"
+                      transition={{
+                        layout: { type: "spring", stiffness: 300, damping: 30 },
+                      }}
+                    >
+                      <motion.div
+                        layout
+                        variants={homeAnimations.buttons}
+                        className="flex flex-wrap gap-3 mb-6 sm:mb-8"
+                      >
+                        <motion.div
+                          layout
+                          className="flex flex-wrap items-center gap-3 sm:gap-4"
+                        >
+                          <motion.div layout variants={homeAnimations.ctaLeft}>
+                            <Link to="/contact">
+                              <IconButton
+                                icon={<Contact className="w-4 h-4" />}
+                                variant="default"
+                                className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5 font-medium"
+                                label={t.index.contactMe}
+                              />
+                            </Link>
+                          </motion.div>
+
+                          <motion.div layout variants={homeAnimations.ctaRight}>
+                            <Link to="/projects">
+                              <IconButton
+                                icon={<FolderGit2 className="w-4 h-4" />}
+                                variant="secondary"
+                                className="text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
+                                label={t.index.viewProjects}
+                              />
+                            </Link>
+                          </motion.div>
+                        </motion.div>
+                      </motion.div>
+                      <motion.div
+                        layout
+                        variants={homeAnimations.socialsContainer}
+                        initial="hidden"
+                        animate="show"
+                        className="flex flex-wrap items-center gap-3 sm:gap-4 mb-0 will-change-transform"
+                      >
+                        {SOCIAL_ORDER_HERO.map((id, index) => {
+                          const s = SOCIAL_LINKS[id];
+                          const icon =
+                            id === "github" ? (
+                              <FaGithubAlt className="w-full h-full" />
+                            ) : id === "email" ? (
+                              <Mail className="w-full h-full" />
+                            ) : id === "linkedin" ? (
+                              <Linkedin className="w-full h-full" />
+                            ) : id === "leetcode" ? (
+                              <SiLeetcode className="w-full h-full" />
+                            ) : id === "hackthebox" ? (
+                              <SiHackthebox className="w-full h-full" />
+                            ) : id === "tiktok" ? (
+                              <SiTiktok className="w-full h-full" />
+                            ) : (
+                              <SiChessdotcom className="w-full h-full" />
+                            );
+                          const hoverClass =
+                            id === "github"
+                              ? "hover:border-foreground/30"
+                              : id === "email"
+                                ? "hover:bg-red-400/20 hover:border-red-400/30"
+                                : id === "linkedin"
+                                  ? "hover:bg-cyan-400/20 hover:border-cyan-400/30"
+                                  : id === "leetcode"
+                                    ? "hover:bg-orange-400/20 hover:border-orange-400/30"
+                                    : id === "hackthebox"
+                                      ? "hover:bg-emerald-300/20 hover:border-emerald-400/30"
+                                      : id === "tiktok"
+                                        ? "hover:bg-pink-400/20 hover:border-pink-400/30"
+                                        : "hover:bg-green-400/20 hover:border-green-400/30";
+                          const label = s.label;
+                          const href = s.href;
+                          return (
+                            <motion.a
+                              key={label}
+                              href={href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label={label}
+                              custom={index}
+                              variants={homeAnimations.socialItem}
+                              className={`group relative inline-flex items-center justify-center text-foreground/60 hover:text-foreground transition-all duration-200 ease-out overflow-hidden transform-gpu will-change-transform
                                             w-10 h-10 rounded-xl bg-foreground/[0.07] ring-[1.5px] ring-foreground/[0.08] ring-inset active:scale-95 active:bg-foreground/[0.12]
-                                            md:w-12 md:h-12 md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-sm md:duration-500 md:active:scale-100 ${hoverClass}
+                                            md:w-12 md:h-12 md:rounded-full md:ring-0 md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-sm md:duration-500 md:active:scale-100 ${hoverClass}
                                             ${
                                               label === "LeetCode"
                                                 ? "md:hover:[width:8rem] lg:hover:[width:8rem]"
@@ -327,30 +339,28 @@ const Index = () => {
                                                         : "md:hover:[width:9.5rem] lg:hover:[width:9.5rem]"
                                             }
                                           `}
-                                          >
-                                            {/* Mobile: centered icon */}
-                                            <div className="md:hidden w-5 h-5">
-                                              {icon}
-                                            </div>
+                            >
+                              {/* Mobile: centered icon */}
+                              <div className="md:hidden w-5 h-5">{icon}</div>
 
-                                            {/* Desktop: center icon container */}
-                                            <div className="hidden md:flex absolute left-[11.47px] top-[0.7rem] w-6 h-6 items-center justify-center z-10">
-                                              {icon}
-                                            </div>
+                              {/* Desktop: center icon container */}
+                              <div className="hidden md:flex absolute left-[11.47px] top-[0.7rem] w-6 h-6 items-center justify-center z-10">
+                                {icon}
+                              </div>
 
-                                            {/* Desktop: label reveal */}
-                                            <div className="hidden md:flex absolute left-12 right-1 top-1/2 -translate-y-1/2 items-center pointer-events-none">
-                                              <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
-                                                {label}
-                                              </span>
-                                            </div>
-                                          </motion.a>
-                                        );
-                                      })}
-                                    </motion.div>
+                              {/* Desktop: label reveal */}
+                              <div className="hidden md:flex absolute left-12 right-1 top-1/2 -translate-y-1/2 items-center pointer-events-none">
+                                <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
+                                  {label}
+                                </span>
+                              </div>
+                            </motion.a>
+                          );
+                        })}
+                      </motion.div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              </div>
+                </div>
               </LayoutGroup>
             </div>
           </div>

@@ -6,7 +6,13 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { type Theme, ALL_THEME_VALUES } from "@/config/themes";
 
 type ThemeProviderProps = {
@@ -27,10 +33,10 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
-const getSystemTheme = () => 
+const getSystemTheme = () =>
   window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
-const resolveTheme = (theme: Theme) => 
+const resolveTheme = (theme: Theme) =>
   theme === "system" ? getSystemTheme() : theme;
 
 export function ThemeProvider({
@@ -49,51 +55,61 @@ export function ThemeProvider({
     root.classList.add(resolveTheme(theme));
   }, [theme]);
 
-  const handleSetTheme = useCallback((newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
-    const applyTheme = () => {
-      localStorage.setItem(storageKey, newTheme);
-      setTheme(newTheme);
-    };
+  const handleSetTheme = useCallback(
+    (newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
+      const applyTheme = () => {
+        localStorage.setItem(storageKey, newTheme);
+        setTheme(newTheme);
+      };
 
-    const shouldAnimate = 
-      "startViewTransition" in document &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
-      event &&
-      resolveTheme(theme) !== resolveTheme(newTheme);
+      const shouldAnimate =
+        "startViewTransition" in document &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
+        event &&
+        resolveTheme(theme) !== resolveTheme(newTheme);
 
-    if (!shouldAnimate) {
-      applyTheme();
-      return;
-    }
+      if (!shouldAnimate) {
+        applyTheme();
+        return;
+      }
 
-    const { clientX: x, clientY: y } = event;
-    const { innerWidth: w, innerHeight: h } = window;
-    
-    const maxRadius = Math.ceil(
-      Math.max(
-        Math.hypot(x, y),
-        Math.hypot(w - x, y),
-        Math.hypot(x, h - y),
-        Math.hypot(w - x, h - y)
-      ) * 1.05
-    );
+      const { clientX: x, clientY: y } = event;
+      const { innerWidth: w, innerHeight: h } = window;
 
-    const root = document.documentElement;
-    root.style.setProperty("--theme-transition-x", `${x}px`);
-    root.style.setProperty("--theme-transition-y", `${y}px`);
-    root.style.setProperty("--theme-transition-radius", `${maxRadius}px`);
+      const maxRadius = Math.ceil(
+        Math.max(
+          Math.hypot(x, y),
+          Math.hypot(w - x, y),
+          Math.hypot(x, h - y),
+          Math.hypot(w - x, h - y),
+        ) * 1.05,
+      );
 
-    (document as Document & { startViewTransition: (cb: () => void) => { finished: Promise<void> } })
-      .startViewTransition(applyTheme)
-      .finished.then(() => {
-        root.style.removeProperty("--theme-transition-x");
-        root.style.removeProperty("--theme-transition-y");
-        root.style.removeProperty("--theme-transition-radius");
-      });
-  }, [storageKey, theme]);
+      const root = document.documentElement;
+      root.style.setProperty("--theme-transition-x", `${x}px`);
+      root.style.setProperty("--theme-transition-y", `${y}px`);
+      root.style.setProperty("--theme-transition-radius", `${maxRadius}px`);
+
+      (
+        document as Document & {
+          startViewTransition: (cb: () => void) => { finished: Promise<void> };
+        }
+      )
+        .startViewTransition(applyTheme)
+        .finished.then(() => {
+          root.style.removeProperty("--theme-transition-x");
+          root.style.removeProperty("--theme-transition-y");
+          root.style.removeProperty("--theme-transition-radius");
+        });
+    },
+    [storageKey, theme],
+  );
 
   return (
-    <ThemeProviderContext.Provider {...props} value={{ theme, setTheme: handleSetTheme }}>
+    <ThemeProviderContext.Provider
+      {...props}
+      value={{ theme, setTheme: handleSetTheme }}
+    >
       {children}
     </ThemeProviderContext.Provider>
   );

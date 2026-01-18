@@ -18,10 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import {
-  THEMES,
-  type Theme,
-} from "@/config/themes";
+import { THEMES, type Theme } from "@/config/themes";
 import { useAurora } from "@/lib/aurora-provider";
 import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/lib/language-provider";
@@ -91,14 +88,11 @@ export function ThemeToggle({
               />
             );
           })}
-          
+
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        className="min-w-[180px]"
-      >
+      <DropdownMenuContent align="end" className="min-w-[180px]">
         <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
         {/* standard themes */}
         {THEMES.map((option) => {
@@ -113,7 +107,9 @@ export function ThemeToggle({
               <span className={isSelected ? "text-muted-foreground" : ""}>
                 {option.label}
               </span>
-              {isSelected && <Check className="h-4 w-4 ml-2 text-muted-foreground" />}
+              {isSelected && (
+                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
+              )}
             </DropdownMenuItem>
           );
         })}
@@ -121,7 +117,9 @@ export function ThemeToggle({
         {/* separator */}
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="px-2 pb-1 pt-1 text-xs font-medium uppercase text-muted-foreground/70">{t.common.menu.customThemes}</DropdownMenuLabel>
+        <DropdownMenuLabel className="px-2 pb-1 pt-1 text-xs font-medium uppercase text-muted-foreground/70">
+          {t.common.menu.customThemes}
+        </DropdownMenuLabel>
         {/* custom themes */}
         {THEMES.map((option) => {
           if (!option.isCustom) return null;
@@ -135,7 +133,9 @@ export function ThemeToggle({
               <span className={isSelected ? "text-muted-foreground" : ""}>
                 {option.label}
               </span>
-              {isSelected && <Check className="h-4 w-4 ml-2 text-muted-foreground" />}
+              {isSelected && (
+                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
+              )}
             </DropdownMenuItem>
           );
         })}

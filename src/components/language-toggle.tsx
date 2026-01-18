@@ -42,9 +42,7 @@ export function LanguageToggle({
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-      >
+      <DropdownMenuContent align="end">
         {LANGUAGES.map(({ code, label }) => (
           <DropdownMenuItem
             key={code}
@@ -54,7 +52,9 @@ export function LanguageToggle({
             <span className={language === code ? "text-muted-foreground" : ""}>
               {label}
             </span>
-            {language === code && <Check className="h-4 w-4 text-muted-foreground" />}
+            {language === code && (
+              <Check className="h-4 w-4 text-muted-foreground" />
+            )}
           </DropdownMenuItem>
         ))}
         <div className="px-2 py-1.5 text-xs text-foreground/50 border-t border-foreground/10 mt-1">

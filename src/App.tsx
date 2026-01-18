@@ -50,7 +50,7 @@ const App = () => (
             >
               <div className="min-h-screen flex flex-col relative">
                 <Toaster position="bottom-right" />
-                <AuroraIntroModal/>
+                <AuroraIntroModal />
                 {/* <ThemeRandomizer /> */}
                 <BrowserRouter>
                   {/* <GitHubStarModal /> */}

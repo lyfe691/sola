@@ -372,15 +372,21 @@
 
 @keyframes theme-reveal {
   0% {
-    clip-path: circle(0px at var(--theme-transition-x, 50%) var(--theme-transition-y, 50%));
+    clip-path: circle(
+      0px at var(--theme-transition-x, 50%) var(--theme-transition-y, 50%)
+    );
   }
   100% {
-    clip-path: circle(var(--theme-transition-radius, 150vmax) at var(--theme-transition-x, 50%) var(--theme-transition-y, 50%));
+    clip-path: circle(
+      var(--theme-transition-radius, 150vmax) at var(--theme-transition-x, 50%)
+        var(--theme-transition-y, 50%)
+    );
   }
 }
 
 @keyframes theme-fade-out {
-  0%, 20% {
+  0%,
+  20% {
     opacity: 1;
   }
   100% {

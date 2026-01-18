@@ -9,7 +9,11 @@
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { SKILL_GROUPS, type SkillGroup, type Proficiency } from "@/config/skills";
+import {
+  SKILL_GROUPS,
+  type SkillGroup,
+  type Proficiency,
+} from "@/config/skills";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const ProficiencyDots = ({ level }: { level: Proficiency }) => (
@@ -25,31 +29,36 @@ const ProficiencyDots = ({ level }: { level: Proficiency }) => (
   </div>
 );
 
-const SkillChip = ({ 
-  name, 
+const SkillChip = ({
+  name,
   icon: Icon,
-  level 
-}: { 
-  name: string; 
+  level,
+}: {
+  name: string;
   icon: React.ComponentType<{ className?: string; size?: number }>;
   level: Proficiency;
 }) => (
   <div className="group flex items-center justify-between gap-3 px-4 py-3 rounded-lg bg-foreground/5 border-2 border-border/20 hover:border-border/40 hover:bg-foreground/10 transition-all duration-200">
     <div className="flex items-center gap-2.5">
-      <Icon className="w-5 h-5 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" size={20} />
-      <span className="text-sm font-medium text-foreground/70 group-hover:text-foreground/90 transition-colors">{name}</span>
+      <Icon
+        className="w-5 h-5 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
+        size={20}
+      />
+      <span className="text-sm font-medium text-foreground/70 group-hover:text-foreground/90 transition-colors">
+        {name}
+      </span>
     </div>
     <ProficiencyDots level={level} />
   </div>
 );
 
-const SkillSection = ({ 
-  group, 
-  title, 
+const SkillSection = ({
+  group,
+  title,
   delay,
-}: { 
-  group: SkillGroup; 
-  title: string; 
+}: {
+  group: SkillGroup;
+  title: string;
   delay: number;
 }) => (
   <ScrollReveal variant="default" delay={delay}>
@@ -60,10 +69,10 @@ const SkillSection = ({
       </div>
       <div className="grid gap-2">
         {group.skills.map((skill) => (
-          <SkillChip 
-            key={skill.name} 
-            name={skill.name} 
-            icon={skill.icon} 
+          <SkillChip
+            key={skill.name}
+            name={skill.name}
+            icon={skill.icon}
             level={skill.level}
           />
         ))}
@@ -99,7 +108,8 @@ const Skills = () => {
 
       <ScrollReveal variant="default">
         <p className="text-foreground/60 mb-10 max-w-2xl">
-          {(t.skills as { subtitle?: string }).subtitle || "Technologies and tools I work with regularly."}
+          {(t.skills as { subtitle?: string }).subtitle ||
+            "Technologies and tools I work with regularly."}
         </p>
       </ScrollReveal>
 

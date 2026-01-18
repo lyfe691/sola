@@ -175,9 +175,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
       </div>
 
       {/* content */}
-      {children && (
-        <div className="max-w-4xl mx-auto py-12">{children}</div>
-      )}
+      {children && <div className="max-w-4xl mx-auto py-12">{children}</div>}
     </motion.div>
   );
 };

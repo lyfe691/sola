@@ -168,7 +168,12 @@ async function processEvent(
 
   switch (event.type) {
     case "PushEvent":
-      return await buildPushActivity(event, baseActivity, authHeaders, fallbackHeaders);
+      return await buildPushActivity(
+        event,
+        baseActivity,
+        authHeaders,
+        fallbackHeaders,
+      );
 
     case "PullRequestEvent":
       const pr = event.payload.pull_request!;
@@ -317,7 +322,9 @@ async function buildPushActivity(
   const commits = event.payload.commits ?? [];
   const branch = event.payload.ref?.replace("refs/heads/", "") || "main";
   const size =
-    typeof event.payload.size === "number" ? event.payload.size : commits.length;
+    typeof event.payload.size === "number"
+      ? event.payload.size
+      : commits.length;
   const distinctSize =
     typeof event.payload.distinct_size === "number"
       ? event.payload.distinct_size

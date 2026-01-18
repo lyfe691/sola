@@ -110,10 +110,12 @@ export function Combobox({
                       }}
                       className="cursor-pointer text-sm py-2"
                     >
-                      <div className={cn(
-                        "flex items-center gap-2 flex-1 min-w-0",
-                        isSelected && "text-muted-foreground"
-                      )}>
+                      <div
+                        className={cn(
+                          "flex items-center gap-2 flex-1 min-w-0",
+                          isSelected && "text-muted-foreground",
+                        )}
+                      >
                         {option.icon && (
                           <span className="shrink-0">{option.icon}</span>
                         )}
@@ -122,7 +124,9 @@ export function Combobox({
                       <Check
                         className={cn(
                           "h-4 w-4 shrink-0",
-                          isSelected ? "opacity-100 text-muted-foreground" : "opacity-0",
+                          isSelected
+                            ? "opacity-100 text-muted-foreground"
+                            : "opacity-0",
                         )}
                       />
                     </CommandItem>

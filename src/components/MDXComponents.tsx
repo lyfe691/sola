@@ -22,14 +22,14 @@ const ImageLightbox: React.FC<{
   // close on escape key and lock scroll
   React.useEffect(() => {
     if (!isOpen) return;
-    
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
-    
+
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", handleEscape);
-    
+
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
@@ -90,7 +90,12 @@ const ExpandableImage: React.FC<{
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.2, ease: "easeOut" }}
       />
-      <ImageLightbox src={src} alt={alt} isOpen={isOpen} onClose={handleClose} />
+      <ImageLightbox
+        src={src}
+        alt={alt}
+        isOpen={isOpen}
+        onClose={handleClose}
+      />
     </>
   );
 };
