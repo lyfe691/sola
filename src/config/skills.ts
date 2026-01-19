@@ -21,6 +21,13 @@ import {
   FigmaOriginal,
   Html5Original,
   Css3Original,
+  CplusplusOriginal,
+  KotlinOriginal,
+  FastapiOriginal,
+  DjangoPlain,
+  KubernetesOriginal,
+  NginxOriginal,
+  TerraformOriginal,
 } from "devicons-react";
 import {
   SiShadcnui,
@@ -32,9 +39,21 @@ import {
   SiWireshark,
   SiPostman,
   SiNotion,
+  SiFramer,
+  SiVite,
+  SiRadixui,
+  SiRedis,
+  SiMetasploit,
+  SiOwasp,
+  SiGithub,
+  SiNpm,
+  SiInsomnia,
+  SiObsidian,
+  SiSupabase,
+  SiAmazonwebservices,
 } from "react-icons/si";
 import { VscodeOriginal } from "devicons-react";
-import { Terminal } from "lucide-react";
+import { Terminal, MousePointer2 } from "lucide-react";
 import type { IconType } from "react-icons";
 import type { ComponentType } from "react";
 
@@ -64,6 +83,8 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       { name: "Java", icon: JavaOriginal, level: 4 },
       { name: "CSS", icon: Css3Original, level: 4 },
       { name: "Python", icon: PythonOriginal, level: 3 },
+      { name: "Kotlin", icon: KotlinOriginal, level: 3 },
+      { name: "C++", icon: CplusplusOriginal, level: 2 },
     ],
   },
   {
@@ -73,6 +94,9 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       { name: "Tailwind CSS", icon: TailwindcssOriginal, level: 5 },
       { name: "Next.js", icon: NextjsOriginal, level: 4 },
       { name: "shadcn/ui", icon: SiShadcnui, level: 5 },
+      { name: "Radix UI", icon: SiRadixui, level: 4 },
+      { name: "Framer Motion", icon: SiFramer, level: 4 },
+      { name: "Vite", icon: SiVite, level: 4 },
       { name: "Figma", icon: FigmaOriginal, level: 3 },
     ],
   },
@@ -84,6 +108,10 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       { name: "Node.js", icon: NodejsOriginal, level: 3 },
       { name: "PostgreSQL", icon: PostgresqlOriginal, level: 3 },
       { name: "MySQL", icon: MysqlOriginal, level: 3 },
+      { name: "Redis", icon: SiRedis, level: 3 },
+      { name: "Supabase", icon: SiSupabase, level: 3 },
+      { name: "FastAPI", icon: FastapiOriginal, level: 2 },
+      { name: "Django", icon: DjangoPlain, level: 2 },
     ],
   },
   {
@@ -96,6 +124,10 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       { name: "GitHub Actions", icon: SiGithubactions, level: 3 },
       { name: "PowerShell", icon: Terminal, level: 4 },
       { name: "Bash", icon: SiGnubash, level: 3 },
+      { name: "Nginx", icon: NginxOriginal, level: 3 },
+      { name: "Kubernetes", icon: KubernetesOriginal, level: 2 },
+      { name: "AWS", icon: SiAmazonwebservices, level: 2 },
+      { name: "Terraform", icon: TerraformOriginal, level: 2 },
     ],
   },
   {
@@ -103,7 +135,10 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
     skills: [
       { name: "Kali Linux", icon: SiKalilinux, level: 4 },
       { name: "OSINT", icon: Terminal, level: 4 },
+      { name: "Nmap", icon: Terminal, level: 4 },
       { name: "Wireshark", icon: SiWireshark, level: 3 },
+      { name: "OWASP", icon: SiOwasp, level: 3 },
+      { name: "Metasploit", icon: SiMetasploit, level: 3 },
       { name: "Burp Suite", icon: SiBurpsuite, level: 2 },
     ],
   },
@@ -111,8 +146,13 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
     id: "tools",
     skills: [
       { name: "VS Code", icon: VscodeOriginal, level: 5 },
-      { name: "Postman", icon: SiPostman, level: 3 },
+      { name: "Cursor", icon: MousePointer2, level: 5 },
+      { name: "GitHub", icon: SiGithub, level: 5 },
+      { name: "npm", icon: SiNpm, level: 4 },
       { name: "Notion", icon: SiNotion, level: 4 },
+      { name: "Obsidian", icon: SiObsidian, level: 4 },
+      { name: "Postman", icon: SiPostman, level: 3 },
+      { name: "Insomnia", icon: SiInsomnia, level: 3 },
     ],
   },
 ];
