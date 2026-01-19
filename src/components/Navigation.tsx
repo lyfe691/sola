@@ -41,15 +41,6 @@ interface NavItemProps {
   shouldAnimateInitial?: boolean;
 }
 
-// motion variants
-const desktopItemVariants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.35, ease: EMPHASIZED_EASE, delay: i * 0.05 },
-  }),
-};
 
 const mobileItemVariants = {
   initial: { opacity: 0, y: 20 },
@@ -112,9 +103,6 @@ const NavItem = memo(
       },
       ref,
     ) => {
-      const itemVariants = desktopItemVariants;
-
-      const Component = motion.div;
       const isItemActive = isActive(item.path);
       const linkBaseClass = isMobile
         ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
@@ -128,7 +116,7 @@ const NavItem = memo(
 
       if (isMobile) {
         return (
-          <Component
+          <motion.div
             layout
             key={item.path}
             custom={index}
@@ -148,21 +136,12 @@ const NavItem = memo(
               {item.icon && <item.icon className="w-6 h-6 mr-3" />}
               {item.text}
             </Link>
-          </Component>
+          </motion.div>
         );
       }
 
       return (
-        <Component
-          layout
-          key={item.path}
-          custom={index}
-          variants={itemVariants}
-          initial={shouldAnimateInitial ? "hidden" : false}
-          animate="visible"
-          exit="hidden"
-          transition={DESKTOP_ITEM_TRANSITION}
-        >
+        <motion.div layout key={item.path} transition={DESKTOP_ITEM_TRANSITION}>
           <Link
             to={item.path}
             onClick={onClick}
@@ -192,7 +171,7 @@ const NavItem = memo(
               {item.text}
             </motion.span>
           </Link>
-        </Component>
+        </motion.div>
       );
     },
   ),
@@ -391,11 +370,11 @@ const Navigation = () => {
           <motion.nav
             layout
             className={cn(DESKTOP_CONTAINER_CLASSES, "pointer-events-auto")}
-            initial={shouldAnimateInitial ? { opacity: 0, y: -20 } : false}
-            animate={{ opacity: 1, y: 0 }}
+            initial={shouldAnimateInitial ? { opacity: 0, scale: 0.97 } : false}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{
-              duration: 0.45,
-              ease: STANDARD_EASE,
+              duration: 0.4,
+              ease: [0.22, 1, 0.36, 1],
               layout: {
                 type: "spring",
                 stiffness: 150,
