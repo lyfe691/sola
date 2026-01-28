@@ -14,7 +14,6 @@ import {
   Linkedin,
   FolderGit2,
   Contact,
-  ChevronRight,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { motion, AnimatePresence, LayoutGroup } from "motion/react";
@@ -33,6 +32,7 @@ import { usePageInit } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { IconButton } from "@/components/ui/custom/icon-button";
+import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
 // defer heavy background imports until needed
 // import Threads from "@/components/backgrounds/Threads";
 // import Squares from "@/components/backgrounds/Squares";
@@ -198,15 +198,15 @@ const Index = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label="Visit Kinoa"
-                          className="group inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-foreground/10 bg-foreground/5 px-2.5 py-1 sm:px-3 sm:py-1.5 transition-colors hover:border-foreground/20 hover:bg-foreground/10 relative z-30 whitespace-nowrap"
+                          className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 sm:px-3.5 sm:py-1.5 relative z-30 whitespace-nowrap backdrop-blur-sm bg-foreground/[0.03] dark:bg-foreground/[0.05] ring-1 ring-foreground/[0.04] dark:ring-foreground/[0.08] transition-all duration-300 hover:bg-foreground/[0.05] dark:hover:bg-foreground/[0.08] hover:ring-foreground/[0.06] dark:hover:ring-foreground/[0.12]"
                         >
-                          <span className="text-[11px] sm:text-sm font-medium text-foreground/60">
+                          <span className="text-[11px] sm:text-[13px] font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60">
                             {t.index.currentlyWorkingOn}
                           </span>
-                          <span className="text-[11px] sm:text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/40 via-foreground to-foreground/40 [background-size:200%_100%] [background-position:200%_0] animate-[shine_6s_linear_infinite] sm:animate-[shine_5s_linear_infinite] will-change-[background-position]">
+                          <span className="text-[11px] sm:text-[13px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/50 via-foreground to-foreground/50 [background-size:200%_100%] animate-[shine_4s_ease-in-out_infinite]">
                             Kinoa
                           </span>
-                          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-foreground/50 transition-transform duration-300 group-hover:translate-x-0.5 will-change-transform" />
+                          <ChevronToArrowIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60" />
                         </a>
                       </motion.div>
                       <motion.h1
