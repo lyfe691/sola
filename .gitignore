@@ -26,3 +26,11 @@ dist-ssr
 # Add-Copyright.ps1
 add-copyright.ps1
 .vercel
+
+.agents/
+.agent/
+.cursor/
+.codex/
+.claude/
+.gemini/
+skills/
