@@ -149,7 +149,7 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     silkNoiseIntensity: 1.6,
     silkRotation: -0.25,
     overview:
-      "Kinoa is a free streaming website that lets you watch films and series without subscriptions, paywalls, or ad clutter. Built with the Next.js App Router and shadcn/ui, it pulls live metadata from TMDB and streams content through third-party hosters with automatic failover. The interface is designed to be minimal and distraction-free—browse trending titles, discover new releases, and hit play instantly. Every detail page includes inline playback, so you never have to leave the page to start watching.",
+      "Kinoa is a free streaming website for watching films and series — no subscription, no paywall. Built with the Next.js App Router and shadcn/ui, it pulls live metadata from TMDB and streams through third-party hosters with automatic failover. The interface stays minimal: browse trending titles, discover new releases, and hit play right on the detail page without being redirected elsewhere.",
     techStack: [
       "Next.js App Router",
       "React Server Components",
@@ -165,7 +165,7 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Inline playback on movie and TV detail pages via third-party hosters",
       "Episode navigator for TV seasons with per-server selection",
       "Global search with instant feedback across movies and series",
-      "Privacy-first approach with no media storage or proxying",
+      "Ad-supported with watchlist and watch history via Supabase",
     ],
     links: {
       live: "https://kinoa.lol",

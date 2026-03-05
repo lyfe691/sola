@@ -322,7 +322,7 @@ export const translations = {
         kinoa: {
           title: "Kinoa",
           description:
-            "Kinoa is a free streaming website built with Next.js, shadcn/ui, and TMDB data. Watch films and series without subscriptions or ads, with inline playback from third-party hosters, automatic server failover, and a clean interface focused on content.",
+            "Kinoa is a free streaming site built with Next.js, shadcn/ui, and Supabase. No subscription needed — browse films and series, watch with inline playback from third-party hosters, and let automatic server failover handle the rest.",
         },
         self: {
           title: "Self",
@@ -860,7 +860,7 @@ export const translations = {
         kinoa: {
           title: "Kinoa",
           description:
-            "Kinoa ist eine kostenlose Streaming-Website, gebaut mit Next.js, shadcn/ui und TMDB-Daten. Schaue Filme und Serien ohne Abos oder Werbung, mit Inline-Wiedergabe von Drittanbietern, automatischem Server-Failover und einer sauberen, inhaltsorientierten Oberfläche.",
+            "Kinoa ist eine kostenlose Streaming-Website mit Next.js, shadcn/ui und Supabase. Kein Abo nötig — stöbere in Filmen und Serien, schaue mit Inline-Wiedergabe von Drittanbietern und lass das automatische Server-Failover den Rest erledigen.",
         },
         self: {
           title: "Self",
@@ -1400,7 +1400,7 @@ export const translations = {
         kinoa: {
           title: "Kinoa",
           description:
-            "Kinoa es un sitio web de streaming gratuito creado con Next.js, shadcn/ui y datos de TMDB. Mira películas y series sin suscripciones ni anuncios, con reproducción inline desde proveedores externos, cambio automático de servidores y una interfaz limpia enfocada en el contenido.",
+            "Kinoa es un sitio de streaming gratuito hecho con Next.js, shadcn/ui y Supabase. Sin suscripción — navega entre películas y series, mira con reproducción inline desde proveedores externos y deja que el cambio automático de servidores haga el resto.",
         },
         self: {
           title: "Self",
@@ -1932,7 +1932,7 @@ export const translations = {
         kinoa: {
           title: "Kinoa",
           description:
-            "Kinoa は Next.js、shadcn/ui、TMDB データで構築した無料ストリーミングサイトです。サブスクや広告なしで映画やドラマを視聴でき、サードパーティホスターからのインライン再生、自動サーバー切り替え、コンテンツ重視のクリーンなインターフェースを備えています。",
+            "Kinoa は Next.js、shadcn/ui、Supabase で構築した無料ストリーミングサイトです。サブスク不要 — 映画やドラマをサードパーティホスターからインライン再生でき、サーバーが落ちても自動で切り替わります。",
         },
         self: {
           title: "Self",
@@ -2454,7 +2454,7 @@ export const translations = {
         kinoa: {
           title: "Kinoa",
           description:
-            "Kinoa 是一个基于 Next.js、shadcn/ui 和 TMDB 数据构建的免费流媒体网站。无需订阅或广告即可观看电影和剧集，通过第三方提供商内嵌播放、自动服务器切换，以及专注于内容的简洁界面。",
+            "Kinoa 是基于 Next.js、shadcn/ui 和 Supabase 构建的免费流媒体网站。无需订阅 — 浏览电影和剧集，通过第三方提供商内嵌播放，服务器自动切换，简洁好用。",
         },
         self: {
           title: "Self",

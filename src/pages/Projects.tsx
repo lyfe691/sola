@@ -137,7 +137,7 @@ const createProjectsData = (t: any): Project[] => [
     },
     priority: 2,
     slug: "kinoa",
-    vercelSatori: false,
+    vercelSatori: true,
   },
   {
     id: "applicare",

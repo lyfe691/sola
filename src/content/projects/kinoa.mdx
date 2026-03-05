@@ -4,23 +4,75 @@ import {
   ProjectGallery,
 } from "@/components/MDXComponents";
 
-# Free Streaming Without the Noise
+# A Cleaner Way to Watch
 
-**Kinoa** is a free streaming website where you can watch films and series without subscriptions, paywalls, or ad clutter. It pulls live metadata from TMDB and delivers streams via third-party hosters with a clean, distraction-free interface. No popups, no waiting—just browse and play.
+**Kinoa** is a free streaming site for films and series. No subscription needed — browse, search, save to your watchlist, and watch right on the detail page. It runs ads to keep the lights on, pulls metadata from TMDB, and streams through VidFast with a clean interface that gets out of your way.
 
-> "Press play. That's it."
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/kinoa/home-desktop.png",
+      alt: "Kinoa home page — desktop",
+      caption: "Home — desktop",
+    },
+    {
+      src: "/projects/kinoa/detail-lain-dark.png",
+      alt: "Serial Experiments Lain detail page — dark mode",
+      caption: "Detail page with inline player — dark mode",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
 
-## Design Philosophy
+## What You Get
 
-- Clean, minimal UI that puts content first
-- Dark theme with warm accents for comfortable viewing
-- Hero carousel, trending rows, and quick picks on the home page
-- Inline playback on every detail page with automatic server failover
-- No popups, no paywalls
+The home page opens with a search bar front and center, a trending section with filter tabs (All / Movies / TV Shows), and rows for latest releases. Everything is filterable and loads live from TMDB.
 
-## Technical Architecture
+Every title has its own detail page — poster, backdrop, rating, runtime, genres, episode list for TV. The player embeds inline so you never leave. If playback fails, just pick a different server.
 
-Kinoa is built on the **Next.js App Router** with React Server Components, keeping data fetching close to the UI while streaming responses to the client.
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/kinoa/watchlist-desktop.png",
+      alt: "My Watchlist — desktop",
+      caption: "Watchlist — desktop",
+    },
+    {
+      src: "/projects/kinoa/search-desktop.png",
+      alt: "Search page — desktop",
+      caption: "Search — desktop",
+    },
+    {
+      src: "/projects/kinoa/search-results-dark.png",
+      alt: "Search results for Breaking Bad — dark mode",
+      caption: "Search results — dark mode",
+    },
+  ]}
+  columns={3}
+  size="full"
+/>
+
+Accounts are optional but unlock watchlist sync and history across devices. Sign up with Google or email/password — the register page doubles as a mosaic of random posters, which I'm proud of.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/kinoa/register-dark.png",
+      alt: "Create account page — dark mode",
+      caption: "Register — dark mode",
+    },
+    {
+      src: "/projects/kinoa/settings-dark.png",
+      alt: "Settings — dark mode",
+      caption: "Settings — dark mode",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+
+## Tech Stack
 
 <TechStack
   technologies={[
@@ -29,71 +81,66 @@ Kinoa is built on the **Next.js App Router** with React Server Components, keepi
     "TypeScript",
     "Tailwind CSS",
     "shadcn/ui",
+    "Supabase",
     "TMDB REST API",
-    "Third-party Streaming",
+    "VidFast",
     "Vercel",
   ]}
 />
 
-### Route Structure
-
-The core routes map directly to the streaming experience:
+## Route Structure
 
 <CodeBlock
-  code={`
-├── page.tsx                 ← hero carousel, trending rows, quick picks
-├── movie/[id]/page.tsx      ← detail view with inline trailer & recommendations
-├── tv/[id]/[season]/[episode]/page.tsx
-│   └── server selection + episodic playback
-├── search/page.tsx          ← instant lookup across movies & series
-└── (legal)/[slug]/page.tsx  ← privacy & terms in a dedicated slot
-
-& a lot more...`}
-fileName="app/"
-lang="text"
+  code={`app/
+├── (auth)/              ← register, sign in
+├── (legal)/[slug]/      ← privacy policy, terms
+├── (main)/
+│   ├── page.tsx         ← home: search, trending, rows
+│   ├── movie/[id]/      ← movie detail + inline player
+│   ├── tv/[id]/         ← TV detail + episode navigator
+│   ├── search/          ← full search with genre + sort filters
+│   ├── watchlist/       ← saved titles with backup/restore
+│   ├── settings/        ← profile, security, data management
+│   └── contact/
+└── api/                 ← internal endpoints`}
+  fileName="app/"
+  lang="text"
 />
 
-### How it looks
+## Under the Hood
+
+Data fetching is all server-side via typed helpers in `lib/tmdb.ts`. TMDB responses are cached through the App Router's fetch layer. The player is a single `player.tsx` component that takes a discriminated union — `kind: "movie"` or `kind: "tv"` — and builds a VidFast iframe URL accordingly.
+
+Auth and persistence run through **Supabase**: watchlist entries and watch history are stored per-user, with a backup/restore feature on the watchlist page (you can see it in the screenshot above).
+
+Ads are served via three components in `components/ads/`: a native banner that appears between content rows on the home page, a popunder, and a social bar.
+
+## Mobile
+
+The layout is fully responsive. Navigation collapses to a hamburger, the grid drops to two columns, and search/watchlist work the same on any screen size.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/kinoa/home.png",
-      alt: "Kinoa home page - Light mode",
-      caption: "Kinoa home page - Light mode",
+      src: "/projects/kinoa/home-mobile.png",
+      alt: "Kinoa home page — mobile",
+      caption: "Home — mobile",
     },
     {
-      src: "/projects/kinoa/search.png",
-      alt: "Kinoa search page - Light mode",
-      caption: "Kinoa search page - Light mode",
+      src: "/projects/kinoa/watchlist-mobile.png",
+      alt: "Watchlist — mobile",
+      caption: "Watchlist — mobile",
+    },
+    {
+      src: "/projects/kinoa/search-mobile.png",
+      alt: "Search — mobile",
+      caption: "Search — mobile",
     },
   ]}
-  columns={2}
+  columns={3}
   size="full"
 />
-### Data Layer
-
-- Typed helper functions in `lib/tmdb.ts` wrap the TMDB REST API for fetching movie and series metadata.
-- Responses are cached with `fetch` options tuned for the App Router to minimize redundant requests.
-- Client pages stream metadata first, then load player embeds from third-party hosters, keeping interaction snappy.
-- Server components handle data fetching server-side, reducing client bundle size and improving initial page loads.
-
-## Feature Highlights
-
-1. **Clean interface** — A minimal, clean UI that keeps the focus on content without distractions.
-2. **Free streaming** — No subscriptions, no paywalls. Just browse and play.
-3. **Inline playback everywhere** — Movie and series pages embed players directly from third-party hosters, so the play button never leaves the screen.
-4. **Automatic server failover** — If one stream fails, the player automatically tries alternate servers without interruption.
-5. **Episode navigator** — TV routes expose seasons, episodes, and alternate servers from one panel for quick access.
-6. **Fast global search** — `/search` delivers instant feedback across films and shows as you type, with minimal UI chrome.
-7. **Privacy-first stance** — No media is stored or proxied; playback stays on third-party domains and credentials remain out of the repo.
-
-## Operations & Tooling
-
-- Local development uses `pnpm` with strict linting and formatting scripts.
-- Environment variables stay outside the repo (`NEXT_PUBLIC_TMDB_API_KEY`, `OMDB_API_KEY`).
-- Deploying to **Vercel** unlocks edge caching, image optimisation, and automatic previews for every push.
 
 ---
 
-_Kinoa keeps free streaming simple and clean—pick a title and hit play._
+_Built for anyone who just wants to watch something without the noise._

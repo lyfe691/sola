@@ -194,17 +194,17 @@ const Index = () => {
                         className="mb-2 sm:mb-3"
                       >
                         <a
-                          href="https://kinoa.lol"
+                          href="https://luma.ysz.life"
                           target="_blank"
                           rel="noopener noreferrer"
-                          aria-label="Visit Kinoa"
+                          aria-label="Visit Luma"
                           className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 sm:px-3.5 sm:py-1.5 relative z-30 whitespace-nowrap backdrop-blur-sm bg-foreground/[0.03] dark:bg-foreground/[0.05] ring-1 ring-foreground/[0.04] dark:ring-foreground/[0.08] transition-all duration-300 hover:bg-foreground/[0.05] dark:hover:bg-foreground/[0.08] hover:ring-foreground/[0.06] dark:hover:ring-foreground/[0.12]"
                         >
                           <span className="text-[11px] sm:text-[13px] font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60">
                             {t.index.currentlyWorkingOn}
                           </span>
                           <span className="text-[11px] sm:text-[13px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/50 via-foreground to-foreground/50 [background-size:200%_100%] animate-[shine_4s_ease-in-out_infinite]">
-                            Kinoa
+                            Luma
                           </span>
                           <ChevronToArrowIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60" />
                         </a>
