@@ -130,7 +130,7 @@ export const translations = {
     index: {
       greeting: "Hello, I'm ",
       description1:
-        "17-year-old software developer based in Zurich, Switzerland.",
+        "18-year-old software developer based in Zurich, Switzerland.",
       description2:
         "I build scalable, fast, and thoughtfully designed systems.",
       description3: "Working across infrastructure, identity, and interfaces.",
@@ -187,7 +187,7 @@ export const translations = {
       },
       period: {
         present: "Present",
-        gz: "Aug 2025 - Present",
+        gz: "Aug 2025 - Mar 2026",
         freelance: "Jul 2025 - Present",
         wiss: "Aug 2023 - Present",
         sek: "2020 - 2023",
@@ -213,7 +213,6 @@ export const translations = {
           "Assisted in automating identity and access management (IAM) workflows using PowerShell and Python.",
           "Participated in the implementation of internal IT infrastructure improvements.",
           "Contributed to Active Directory maintenance and user provisioning tasks.",
-          "More achievements to be added as internship progresses.",
         ],
       },
       wiss: {
@@ -381,7 +380,7 @@ export const translations = {
       backHome: "Back home",
       viewSkills: "View Skills",
       intro:
-        "I'm Yanis Sebastian Zürcher, a 17-year-old software developer based in Zürich, Switzerland. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from building my own projects—not from school.",
+        "I'm Yanis Sebastian Zürcher, an 18-year-old software developer based in Zürich, Switzerland. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from building my own projects—not from school.",
       hobbies:
         "I focus on creating fast, clean, and minimal web applications. Whether it's full-stack platforms or sharp frontends, I care about clarity, performance, and a refined user experience. I'm always pushing my own ideas forward—building things that feel as good as they function.",
       philosophy: {
@@ -666,7 +665,7 @@ export const translations = {
     },
     index: {
       greeting: "Hallo, ich bin ",
-      description1: "17-jähriger Softwareentwickler aus Zürich, Schweiz.",
+      description1: "18-jähriger Softwareentwickler aus Zürich, Schweiz.",
       description2:
         "Ich entwickle skalierbare, schnelle und durchdachte Systeme.",
       description3:
@@ -725,7 +724,7 @@ export const translations = {
       },
       period: {
         present: "Heute",
-        gz: "Aug 2025 - Heute",
+        gz: "Aug 2025 - Mär 2026",
         freelance: "Jul 2025 - Heute",
         wiss: "Aug 2023 - Heute",
         sek: "2020 - 2023",
@@ -751,7 +750,6 @@ export const translations = {
           "Unterstützung bei der Automatisierung von Identity- und Access-Management (IAM)-Abläufen mit PowerShell und Python.",
           "Mitarbeit bei der Umsetzung interner Verbesserungen der IT-Infrastruktur.",
           "Beitrag zur Pflege von Active Directory und zur Benutzerverwaltung.",
-          "Weitere Leistungen folgen im Verlauf des Praktikums.",
         ],
       },
       wiss: {
@@ -919,7 +917,7 @@ export const translations = {
       backHome: "Zurück zur Startseite",
       viewSkills: "Fähigkeiten ansehen",
       intro:
-        "Ich bin Yanis Sebastian Zürcher, ein 17-jähriger Softwareentwickler aus Zürich, Schweiz. Ich studiere Informatik an der [WISS](https://www.wiss.ch), aber das meiste habe ich mir durch eigene Projekte beigebracht – nicht durch die Schule.",
+        "Ich bin Yanis Sebastian Zürcher, ein 18-jähriger Softwareentwickler aus Zürich, Schweiz. Ich studiere Informatik an der [WISS](https://www.wiss.ch), aber das meiste habe ich mir durch eigene Projekte beigebracht – nicht durch die Schule.",
       hobbies:
         "Ich konzentriere mich darauf, schnelle, saubere und minimalistische Webanwendungen zu entwickeln. Ob Full-Stack-Plattformen oder elegante Frontends – mir sind Klarheit, Performance und ein durchdachtes Nutzererlebnis wichtig. Ich arbeite ständig an meinen eigenen Ideen und entwickle Dinge, die sich genauso gut anfühlen, wie sie funktionieren.",
       philosophy: {
@@ -1207,7 +1205,7 @@ export const translations = {
     index: {
       greeting: "Hola, soy ",
       description1:
-        "Desarrollador de software de 17 años con base en Zúrich, Suiza.",
+        "Desarrollador de software de 18 años con base en Zúrich, Suiza.",
       description2:
         "Construyo sistemas escalables, rápidos y cuidadosamente diseñados.",
       description3:
@@ -1265,7 +1263,7 @@ export const translations = {
       },
       period: {
         present: "Presente",
-        gz: "Ago 2025 - Presente",
+        gz: "Ago 2025 - Mar 2026",
         freelance: "Jul 2025 - Presente",
         wiss: "Ago 2023 - Presente",
         sek: "2020 - 2023",
@@ -1291,7 +1289,6 @@ export const translations = {
           "Apoyé en la automatización de flujos de trabajo de gestión de identidad y acceso (IAM) utilizando PowerShell y Python.",
           "Participé en la implementación de mejoras internas en la infraestructura de TI.",
           "Colaboré en el mantenimiento de Active Directory y en tareas de aprovisionamiento de usuarios.",
-          "Se agregarán más logros a medida que avance la pasantía.",
         ],
       },
       wiss: {
@@ -1459,7 +1456,7 @@ export const translations = {
       backHome: "Regresar",
       viewSkills: "Ver Habilidades",
       intro:
-        "Soy Yanis Sebastian Zürcher, un desarrollador de software de 17 años de Zúrich, Suiza. Estudio Ciencias de la Computación en [WISS](https://www.wiss.ch), pero la mayor parte de lo que sé lo he aprendido haciendo mis propios proyectos, no en la escuela.",
+        "Soy Yanis Sebastian Zürcher, un desarrollador de software de 18 años de Zúrich, Suiza. Estudio Ciencias de la Computación en [WISS](https://www.wiss.ch), pero la mayor parte de lo que sé lo he aprendido haciendo mis propios proyectos, no en la escuela.",
       hobbies:
         "Me enfoco en crear aplicaciones web rápidas, limpias y minimalistas. Ya sea desarrollando plataformas completas o interfaces pulidas, me importan la claridad, el rendimiento y una experiencia de usuario refinada. Siempre estoy desarrollando nuevas ideas propias y creando cosas que se sienten tan bien como funcionan.",
       philosophy: {
@@ -1744,7 +1741,7 @@ export const translations = {
     },
     index: {
       greeting: "こんにちは、私は ",
-      description1: "スイス・チューリッヒ在住、17歳のソフトウェア開発者。",
+      description1: "スイス・チューリッヒ在住、18歳のソフトウェア開発者。",
       description2: "スケーラブルで高速、考え抜かれたシステムを構築します。",
       description3: "インフラ、認証、インターフェースに取り組んでいます。",
       description4: "構造・明瞭さ・精度に重点を置いています。",
@@ -1800,7 +1797,7 @@ export const translations = {
       },
       period: {
         present: "現在",
-        gz: "2025年8月 - 現在",
+        gz: "2025年8月 - 2026年3月",
         freelance: "2025年7月 - 現在",
         wiss: "2023年8月 - 現在",
         sek: "2020年 - 2023年",
@@ -1826,7 +1823,6 @@ export const translations = {
           "PowerShellとPythonを使用してIAMワークフローの自動化を支援。",
           "社内のITインフラ改善の導入に参加。",
           "Active Directoryの保守やユーザー管理業務をサポート。",
-          "インターン期間中に実績を随時追加予定。",
         ],
       },
       wiss: {
@@ -1991,7 +1987,7 @@ export const translations = {
       backHome: "ホームに戻る",
       viewSkills: "スキルを見る",
       intro:
-        "ヤニス・セバスチャン・ズルヒャー（Yanis Sebastian Zürcher）と申します。スイスのチューリッヒを拠点とする17歳のソフトウェア開発者です。[WISS](https://www.wiss.ch)でコンピュータサイエンスを学んでいますが、私の知識のほとんどは学校ではなく、自分でプロジェクトを作りながら身につけたものです。",
+        "ヤニス・セバスチャン・ズルヒャー（Yanis Sebastian Zürcher）と申します。スイスのチューリッヒを拠点とする18歳のソフトウェア開発者です。[WISS](https://www.wiss.ch)でコンピュータサイエンスを学んでいますが、私の知識のほとんどは学校ではなく、自分でプロジェクトを作りながら身につけたものです。",
       hobbies:
         "高速でクリーン、かつミニマルなWebアプリケーションの開発に注力しています。フルスタックのプラットフォームでも洗練されたフロントエンドでも、明快さ、パフォーマンス、洗練されたユーザー体験を大切にしています。常に自分のアイデアを形にし、使い心地と機能性を兼ね備えたプロダクトを作り続けています。",
       philosophy: {
@@ -2269,7 +2265,7 @@ export const translations = {
     },
     index: {
       greeting: "你好，我是 ",
-      description1: "来自瑞士苏黎世的17岁软件开发者。",
+      description1: "来自瑞士苏黎世的18岁软件开发者。",
       description2: "构建可扩展、高速、结构清晰的系统。",
       description3: "涉及基础设施、身份管理和界面设计。",
       description4: "注重结构、清晰性和精确性。",
@@ -2322,7 +2318,7 @@ export const translations = {
       },
       period: {
         present: "至今",
-        gz: "2025年8月 - 至今",
+        gz: "2025年8月 - 2026年3月",
         freelance: "2025年7月 - 至今",
         wiss: "2023年8月 - 至今",
         sek: "2020年 - 2023年",
@@ -2348,7 +2344,6 @@ export const translations = {
           "使用PowerShell和Python协助自动化IAM工作流程。",
           "参与公司内部IT基础设施优化的实施。",
           "协助维护Active Directory并处理用户管理任务。",
-          "实习过程中将持续添加更多成果。",
         ],
       },
       wiss: {
@@ -2513,7 +2508,7 @@ export const translations = {
       backHome: "返回首页",
       viewSkills: "查看技术技能",
       intro:
-        "我是Yanis Sebastian Zürcher，一名来自瑞士苏黎世的17岁软件开发者。我在[WISS](https://www.wiss.ch)学习计算机科学，但我大部分的知识都是通过自己做项目学来的，而不是在学校里。",
+        "我是Yanis Sebastian Zürcher，一名来自瑞士苏黎世的18岁软件开发者。我在[WISS](https://www.wiss.ch)学习计算机科学，但我大部分的知识都是通过自己做项目学来的，而不是在学校里。",
       hobbies:
         "我专注于构建快速、简洁和极简风格的网页应用。无论是全栈平台还是精致的前端界面，我都注重清晰度、性能和良好的用户体验。我不断推动自己的创意前进，打造既美观又实用的数字产品。",
       philosophy: {
