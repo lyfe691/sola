@@ -94,11 +94,11 @@ export default function AboutThisWebsite() {
           . Typography:{" "}
           <strong>
             <LinkPreview
-              href="https://fonts.google.com/specimen/Nunito+Sans"
+              href="https://fonts.google.com/specimen/Space+Grotesk"
               className="link"
               compact
             >
-              Nunito Sans
+              Space Grotesk
             </LinkPreview>
           </strong>
           .
