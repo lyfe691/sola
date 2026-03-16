@@ -35,6 +35,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Project {
   id: string;
@@ -383,17 +384,23 @@ const ProjectImage = ({
   hoveredProject: string | null;
   t: any;
 }) => {
+  const [loaded, setLoaded] = useState(false);
+
   if (!project.image) return null;
   const usesVercelSatori = project.vercelSatori ?? true;
 
   return (
-    <div className="relative h-[200px] md:h-full overflow-hidden bg-foreground/5">
+    <div className="relative h-[200px] md:min-h-[280px] md:h-full overflow-hidden bg-foreground/5">
+      {!loaded && (
+        <Skeleton className="absolute inset-0 rounded-none" />
+      )}
       <motion.img
         src={project.image}
         alt={project.title}
         loading="lazy"
         decoding="async"
-        className="w-full h-full object-cover"
+        onLoad={() => setLoaded(true)}
+        className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
         animate={{
           scale: hoveredProject === project.id ? 1.05 : 1,
         }}
