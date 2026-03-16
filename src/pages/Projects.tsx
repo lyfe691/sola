@@ -142,7 +142,7 @@ const createProjectsData = (t: any): Project[] => [
     id: "kinoa",
     title: t.projects.list.kinoa.title,
     description: t.projects.list.kinoa.description,
-    image: "/projects/kinoa.svg",
+    image: "/projects/kinoa.png",
     link: "https://kinoa.lol",
     github: "https://github.com/lyfe691/kinoa",
     tags: [
