@@ -156,7 +156,8 @@ const createProjectsData = (t: any): Project[] => [
     featured: true,
     date: {
       start: "2025-11",
-      display: "Nov 2025",
+      end: "2026-01",
+      display: "Nov 2025 - Jan 2026",
     },
     priority: 3,
     slug: "kinoa",

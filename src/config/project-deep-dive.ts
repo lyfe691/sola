@@ -182,7 +182,7 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     title: "Kinoa",
     description:
       "A free streaming website for films and series with a clean, distraction-free interface",
-    date: "November 2025",
+    date: "November 2025 - January 2026",
     silkColor: "#a0785a",
     silkSpeed: 4.2,
     silkScale: 1.12,
