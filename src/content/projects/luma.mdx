@@ -1,0 +1,163 @@
+import {
+  CodeBlock,
+  ProjectGallery,
+  ProjectImage,
+} from "@/components/MDXComponents";
+
+# One Interface, Every Model
+
+Most AI apps lock you into a single provider. Luma doesn't — bring your own API keys and switch between Claude, GPT, Gemini, Grok, Mistral, DeepSeek, and more without leaving the conversation. The interface stays minimal: a sidebar for your chats, a model picker, and a clean input area. No clutter, no upsells.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/chat-desktop.png",
+      alt: "Luma chat view — desktop",
+      caption: "Chat — desktop",
+    },
+    {
+      src: "/projects/luma/welcome-desktop.png",
+      alt: "Luma welcome screen — desktop | Dark mode",
+      caption: "Welcome screen — desktop | Dark mode",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+
+## What You Get
+
+The home screen opens with a clean prompt input and a model selector. Pick any model from 14+ providers — the selector groups them by provider and shows capabilities (reasoning, vision, tools, fast) at a glance.
+
+Every conversation is a full tree, not a flat list. Edit a previous message and Luma branches the conversation, keeping both paths. Navigate between branches with the branch control, or switch back to the original thread anytime.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/model-selector.png",
+      alt: "Model selector showing available providers and models",
+      caption: "Model selector — 14+ providers",
+    },
+    {
+      src: "/projects/luma/settings-desktop.png",
+      alt: "Settings dialog — API key management",
+      caption: "Settings — encrypted key management",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+
+Messages render with full rich content: syntax-highlighted code blocks (Shiki), LaTeX math (KaTeX), Mermaid diagrams, reasoning traces for thinking models, inline citations from web search, and generated images — all streamed in real time.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/code-block.png",
+      alt: "Code block with syntax highlighting",
+      caption: "Syntax highlighting via Shiki",
+    },
+    {
+      src: "/projects/luma/search-results.png",
+      alt: "Web search results inline in chat",
+      caption: "Web search — Tavily integration",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+
+## Architecture
+
+<CodeBlock
+  code={`app/
+├── api/
+│   ├── chat/route.ts          ← main streaming endpoint
+│   ├── chat/branch/route.ts   ← branch switching
+│   ├── keys/route.ts          ← API key CRUD (encrypted)
+│   ├── title/route.ts         ← auto title generation
+│   └── export/route.ts        ← chat export
+├── auth/callback/route.ts     ← Supabase OAuth callback
+├── c/[chatId]/page.tsx        ← individual chat view
+├── page.tsx                   ← home / new chat
+└── layout.tsx                 ← root layout (providers)
+components/
+├── ai-elements/               ← rich content renderers
+├── chat/                      ← chat UI components
+├── streamdown/                ← streaming markdown config
+└── ui/                        ← shadcn/ui primitives
+lib/
+├── chat-tree.ts               ← tree data structure & branching
+├── chat-storage.ts            ← Supabase client + message cache
+├── encryption.ts              ← AES-256-GCM for API keys
+├── providers.ts               ← provider & model catalogue
+└── prompt-mode.ts             ← search / image / study modes`}
+  fileName="project structure"
+  lang="text"
+/>
+
+## The Chat Tree
+
+Conversations are stored as a tree of message nodes, not a flat array. Each node has a `parent_id`, enabling full branching — edit a message and a new branch is created. The active path is tracked via `active_leaf_id` on each chat session.
+
+`chat-tree.ts` handles the core logic: `buildGraph()` creates an in-memory adjacency map from the flat node list, and `buildTimelineMessages()` walks from root to the active leaf to produce the linear message array for rendering.
+
+## Providers & Models
+
+Luma supports 14 providers out of the box. Each uses the appropriate Vercel AI SDK adapter — native SDKs for OpenAI, Anthropic, Google, xAI, Mistral, Cohere, and Alibaba, plus an OpenAI-compatible adapter for DeepSeek, Kimi, GLM, StepFun, Inception, and MiniMax.
+
+Adding a new model is a single entry in `providers.ts`. The model ID format is `"provider:model-name"` (e.g., `"anthropic:claude-opus-4-6"`), and the chat route dynamically creates the right SDK client based on the provider type.
+
+## Security
+
+API keys are encrypted with AES-256-GCM before hitting the database. The encryption key lives server-side only — keys are decrypted per-request in the chat API route, never exposed to the client. All database access goes through Supabase RLS policies scoped to `auth.uid()`.
+
+## Tools
+
+The model has access to two built-in tools:
+- **Web search** via Tavily — up to 2 calls per response, 5 results each, rendered as inline citations
+- **Image generation** via Grok Imagine, DALL-E 3, or Google Imagen 3 — generated images appear inline in the conversation
+
+Prompt modes (`search`, `image`, `study`) adjust the system prompt and tool priority based on what you're trying to do.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/image-generation.png",
+      alt: "Image generation within a chat",
+      caption: "Image generation — inline results",
+    },
+    {
+      src: "/projects/luma/command-palette.png",
+      alt: "Command palette for quick actions",
+      caption: "Command palette — Cmd+K",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+
+## Mobile
+
+The layout is fully responsive. The sidebar collapses into a drawer, the chat input adapts to smaller screens, and all features — branching, model switching, settings — work the same on mobile.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/chat-mobile.png",
+      alt: "Luma chat view — mobile",
+      caption: "Chat — mobile",
+    },
+    {
+      src: "/projects/luma/sidebar-mobile.png",
+      alt: "Sidebar drawer — mobile",
+      caption: "Sidebar — mobile",
+    },
+  ]}
+  columns={2}
+  size="full"
+/>
+
+---
+
+_Your keys, your models, one interface._

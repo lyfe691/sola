@@ -28,6 +28,46 @@ export interface ProjectPageConfig {
 }
 
 export const projectPagesConfig: Record<string, ProjectPageConfig> = {
+  luma: {
+    slug: "luma",
+    title: "Luma",
+    description:
+      "A multi-model AI platform — bring your own keys, talk to any model",
+    date: "March 2026 - Present",
+    silkColor: "#7a8a5c",
+    silkSpeed: 3.5,
+    silkScale: 1.15,
+    silkNoiseIntensity: 1.7,
+    silkRotation: -0.1,
+    overview:
+      "Luma is a multi-model AI platform where you bring your own API keys and talk to the best models from OpenAI, Anthropic, Google, xAI, Mistral, Cohere, DeepSeek, and more — all through a single, polished interface. Built with Next.js 16, the Vercel AI SDK, and Supabase, it features a tree-based conversation model with full branching support, encrypted key storage, streaming markdown rendering, web search, image generation, and rich content display including code highlighting, math, and diagrams.",
+    techStack: [
+      "Next.js 16",
+      "React 19",
+      "TypeScript",
+      "Vercel AI SDK",
+      "Supabase",
+      "Tailwind CSS v4",
+      "shadcn/ui",
+      "Framer Motion",
+      "Three.js",
+      "Shiki",
+    ],
+    features: [
+      "Multi-provider support: OpenAI, Anthropic, Google, xAI, Mistral, Cohere, DeepSeek, and more",
+      "Tree-based conversations with full branching and branch switching",
+      "Encrypted API key storage with AES-256-GCM",
+      "Streaming markdown with code highlighting, math (KaTeX), and diagrams (Mermaid)",
+      "Built-in web search (Tavily) and image generation (Grok Imagine, DALL-E 3, Imagen 3)",
+      "Command palette, keyboard shortcuts, and pinned chats",
+    ],
+    links: {
+      live: "https://luma.ysz.life",
+      github: "https://github.com/lyfe691/luma",
+    },
+    mdxPath: "luma",
+  },
+
   sola: {
     slug: "sola",
     title: "Sola",
@@ -142,8 +182,8 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     title: "Kinoa",
     description:
       "A free streaming website for films and series with a clean, distraction-free interface",
-    date: "November 2025",
-    silkColor: "#32342f",
+    date: "November 2025 - January 2026",
+    silkColor: "#a0785a",
     silkSpeed: 4.2,
     silkScale: 1.12,
     silkNoiseIntensity: 1.6,

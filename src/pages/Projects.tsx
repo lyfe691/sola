@@ -93,6 +93,29 @@ const buildSortOptions = (t: any): ComboboxOption[] => [
 // slug = deepdive
 const createProjectsData = (t: any): Project[] => [
   {
+    id: "luma",
+    title: t.projects.list.luma.title,
+    description: t.projects.list.luma.description,
+    image: "/projects/luma.png",
+    link: "https://luma.ysz.life",
+    github: "https://github.com/lyfe691/luma",
+    tags: [
+      "Next.js 16",
+      "Vercel AI SDK",
+      "TypeScript",
+      "Supabase",
+      "shadcn/ui",
+      "Tailwind CSS",
+    ],
+    featured: true,
+    date: {
+      start: "2026-03",
+      display: "Mar 2026 - Present",
+    },
+    priority: 1,
+    slug: "luma",
+  },
+  {
     id: "sola",
     title: t.projects.list.sola.title,
     description: t.projects.list.sola.description,
@@ -112,14 +135,14 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-02",
       display: "Feb 2025 - Present",
     },
-    priority: 1,
+    priority: 2,
     slug: "sola",
   },
   {
     id: "kinoa",
     title: t.projects.list.kinoa.title,
     description: t.projects.list.kinoa.description,
-    image: "/projects/kinoa.svg",
+    image: "/projects/kinoa.png",
     link: "https://kinoa.lol",
     github: "https://github.com/lyfe691/kinoa",
     tags: [
@@ -133,9 +156,10 @@ const createProjectsData = (t: any): Project[] => [
     featured: true,
     date: {
       start: "2025-11",
-      display: "Nov 2025",
+      end: "2026-01",
+      display: "Nov 2025 - Jan 2026",
     },
-    priority: 2,
+    priority: 3,
     slug: "kinoa",
     vercelSatori: true,
   },
@@ -161,7 +185,7 @@ const createProjectsData = (t: any): Project[] => [
       end: "2025-02",
       display: "Dec 2024 - Feb 2025",
     },
-    priority: 3,
+    priority: 4,
     slug: "applicare",
   },
   {
@@ -176,7 +200,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-05",
       display: "May 2025",
     },
-    priority: 4,
+    priority: 5,
     slug: "self",
   },
   {
@@ -192,7 +216,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 5,
+    priority: 6,
     slug: "code-extractor",
   },
   {
@@ -208,7 +232,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-08",
       display: "Aug 2025",
     },
-    priority: 6,
+    priority: 7,
     slug: "thoughts",
   },
   {
@@ -232,7 +256,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-04",
       display: "Apr 2025",
     },
-    priority: 6,
+    priority: 7,
     slug: "taco",
   },
   {
@@ -249,7 +273,7 @@ const createProjectsData = (t: any): Project[] => [
       end: "2024-12",
       display: "Nov 2024 - Dec 2024",
     },
-    priority: 7,
+    priority: 8,
   },
   {
     id: "chatapp",
@@ -271,7 +295,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-09",
       display: "Sep 2024",
     },
-    priority: 8,
+    priority: 9,
   },
   // non-featured projects
   {
@@ -285,7 +309,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 9,
+    priority: 10,
   },
   {
     id: "view-counter",
@@ -298,7 +322,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 10,
+    priority: 11,
   },
   {
     id: "docker-service",
@@ -319,7 +343,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-06",
       display: "Jun 2024",
     },
-    priority: 11,
+    priority: 12,
   },
   {
     id: "phishing",
@@ -332,7 +356,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-04",
       display: "Apr 2024",
     },
-    priority: 12,
+    priority: 13,
   },
   {
     id: "otw",
@@ -345,7 +369,7 @@ const createProjectsData = (t: any): Project[] => [
       start: "2024-04",
       display: "Apr 2024",
     },
-    priority: 13,
+    priority: 14,
   },
 ];
 

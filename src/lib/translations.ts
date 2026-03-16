@@ -338,6 +338,11 @@ export const translations = {
           description:
             "A minimal personal site where I share reflections, fragments, and notes. Inspired by [Shu Ding](https://shud.in)’s personal website, built with Next.js, MDX, and Tailwind. Includes a custom guestbook feature where visitors can leave their own thoughts.",
         },
+        luma: {
+          title: "Luma",
+          description:
+            "A multi-model AI platform that lets you bring your own API keys and talk to the best models — Claude, GPT, Gemini, Grok, and more — all in one place. Built with Next.js 16, the Vercel AI SDK, and Supabase.",
+        },
       },
     },
     skills: {
@@ -874,6 +879,11 @@ export const translations = {
           title: "Thoughts",
           description:
             "Eine minimalistische persönliche Seite, auf der ich Reflexionen, Fragmente und Notizen teile. Inspiriert von der persönlichen Website von [Shu Ding](https://shud.in), gebaut mit Next.js, MDX und Tailwind. Enthält ein eigenes Gästebuch, in dem Besucher ihre Gedanken hinterlassen können.",
+        },
+        luma: {
+          title: "Luma",
+          description:
+            "Eine Multi‑Modell‑KI‑Plattform, bei der du deine eigenen API‑Schlüssel mitbringst und mit den besten Modellen sprichst — Claude, GPT, Gemini, Grok und mehr — alles an einem Ort. Gebaut mit Next.js 16, dem Vercel AI SDK und Supabase.",
         },
       },
     },
@@ -1414,6 +1424,11 @@ export const translations = {
           description:
             "Un sitio personal minimalista donde comparto reflexiones, fragmentos y notas. Inspirado por el sitio web personal de [Shu Ding](https://shud.in), construido con Next.js, MDX y Tailwind. Incluye un libro de visitas personalizado donde los visitantes pueden dejar sus propios pensamientos.",
         },
+        luma: {
+          title: "Luma",
+          description:
+            "Una plataforma de IA multi‑modelo donde traes tus propias claves API y hablas con los mejores modelos — Claude, GPT, Gemini, Grok y más — todo en un solo lugar. Construido con Next.js 16, el SDK de IA de Vercel y Supabase.",
+        },
       },
     },
     skills: {
@@ -1945,6 +1960,11 @@ export const translations = {
           description:
             "考えや断片、メモを共有するミニマルな個人サイトです。[Shu Ding](https://shud.in) の個人サイトに触発され、Next.js・MDX・Tailwind CSS で構築しました。訪問者が自分の想いを書き残せる独自のゲストブック機能を備えています。",
         },
+        luma: {
+          title: "Luma",
+          description:
+            "自分の API キーを持ち込み、Claude・GPT・Gemini・Grok など最高の AI モデルとひとつの場所で対話できるマルチモデル AI プラットフォーム。Next.js 16、Vercel AI SDK、Supabase で構築。",
+        },
       },
     },
     skills: {
@@ -2465,6 +2485,11 @@ export const translations = {
           title: "Thoughts",
           description:
             "一个极简的个人网站，用来分享我的思考、片段与笔记。受 [Shu Ding](https://shud.in) 个人网站启发，使用 Next.js、MDX 和 Tailwind 构建。包含自定义留言簿功能，访客可以留下自己的想法。",
+        },
+        luma: {
+          title: "Luma",
+          description:
+            "自带 API 密钥，与 Claude、GPT、Gemini、Grok 等顶级 AI 模型在同一平台对话的多模型 AI 平台。基于 Next.js 16、Vercel AI SDK 和 Supabase 构建。",
         },
       },
     },
