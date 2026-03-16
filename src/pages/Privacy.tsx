@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Yanis Sebastian Zürcher
+ * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
@@ -43,7 +43,7 @@ const Privacy = () => {
   const L = {
     en: {
       pageTitle: "Privacy Policy",
-      lastUpdated: "Last updated: July 2025",
+      lastUpdated: "Last updated: March 2026",
       intro: {
         title: "Introduction",
         p1: (
@@ -167,7 +167,7 @@ const Privacy = () => {
     },
     de: {
       pageTitle: "Datenschutzerklärung",
-      lastUpdated: "Zuletzt aktualisiert: Juli 2025",
+      lastUpdated: "Zuletzt aktualisiert: März 2026",
       intro: {
         title: "Einführung",
         p1: (
@@ -289,7 +289,7 @@ const Privacy = () => {
     },
     es: {
       pageTitle: "Política de Privacidad",
-      lastUpdated: "Última actualización: julio de 2025",
+      lastUpdated: "Última actualización: marzo de 2026",
       intro: {
         title: "Introducción",
         p1: (
@@ -410,7 +410,7 @@ const Privacy = () => {
     },
     ja: {
       pageTitle: "プライバシーポリシー",
-      lastUpdated: "最終更新日: 2025年7月",
+      lastUpdated: "最終更新日: 2026年3月",
       intro: {
         title: "はじめに",
         p1: (
@@ -530,7 +530,7 @@ const Privacy = () => {
     },
     zh: {
       pageTitle: "隐私政策",
-      lastUpdated: "最后更新：2025年7月",
+      lastUpdated: "最后更新：2026年3月",
       intro: {
         title: "简介",
         p1: (
@@ -648,7 +648,7 @@ const Privacy = () => {
   } as const;
 
   // last updated utilities
-  const LAST_UPDATED_ISO = "2025-09-16"; // update when content meaningfully changes
+  const LAST_UPDATED_ISO = "2026-03-16"; // update when content meaningfully changes
   const localeMap: Record<typeof language, string> = {
     en: "en-US",
     de: "de-CH",

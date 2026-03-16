@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 Yanis Sebastian Zürcher
+ * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
@@ -611,7 +611,7 @@ const About = () => {
   const [activity, setActivity] = useState<ProcessedActivity[]>([]);
   const [loadingActivity, setLoadingActivity] = useState(true);
 
-  const years = [2025, 2024];
+  const years = [2026, 2025];
 
   // testimonials - untranslatable due to respective copyrights
   const testimonials = [

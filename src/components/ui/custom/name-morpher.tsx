@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 Yanis Sebastian Zürcher
+ * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
