@@ -543,6 +543,13 @@ export const translations = {
           ],
         },
       },
+      contactTemplate: {
+        inquiry: "Inquiry",
+        greeting: "Hi Yanis,",
+        interested: "I'm interested in your {service} services.",
+        discuss: "I'd like to discuss:",
+        closing: "Looking forward to hearing from you!",
+      },
       customRequirements: {
         title: "Custom Requirements?",
         description:
@@ -1085,6 +1092,13 @@ export const translations = {
             "Sicherheitsbewertung",
           ],
         },
+      },
+      contactTemplate: {
+        inquiry: "Anfrage",
+        greeting: "Hallo Yanis,",
+        interested: "Ich interessiere mich für Ihre {service}-Dienstleistungen.",
+        discuss: "Ich möchte Folgendes besprechen:",
+        closing: "Ich freue mich auf Ihre Antwort!",
       },
       customRequirements: {
         title: "Spezielle Anforderungen?",
@@ -1631,6 +1645,13 @@ export const translations = {
           ],
         },
       },
+      contactTemplate: {
+        inquiry: "Consulta",
+        greeting: "Hola Yanis,",
+        interested: "Estoy interesado en sus servicios de {service}.",
+        discuss: "Me gustaría hablar sobre:",
+        closing: "¡Espero su respuesta!",
+      },
       customRequirements: {
         title: "¿Tienes requisitos personalizados?",
         description:
@@ -2163,6 +2184,13 @@ export const translations = {
           ],
         },
       },
+      contactTemplate: {
+        inquiry: "お問い合わせ",
+        greeting: "Yanisさん、こんにちは。",
+        interested: "{service}サービスに興味があります。",
+        discuss: "以下について相談したいです：",
+        closing: "お返事をお待ちしております！",
+      },
       customRequirements: {
         title: "カスタム要件をお持ちですか？",
         description:
@@ -2670,6 +2698,13 @@ export const translations = {
           price: "CHF 60/小时起",
           features: ["架构规划", "技术栈选择", "性能审计", "安全评估"],
         },
+      },
+      contactTemplate: {
+        inquiry: "咨询",
+        greeting: "你好 Yanis，",
+        interested: "我对您的{service}服务感兴趣。",
+        discuss: "我想讨论以下内容：",
+        closing: "期待您的回复！",
       },
       customRequirements: {
         title: "有特定需求？",

@@ -217,13 +217,6 @@ const Contact = () => {
       return;
     }
 
-    // reCAPTCHA validation disabled for now
-    // const recaptchaResponse = (window as any).grecaptcha?.getResponse();
-    // if (!recaptchaResponse) {
-    //   toast.error(t.contact.recaptchaError);
-    //   return;
-    // }
-
     setIsSubmitting(true);
 
     const form = e.currentTarget;

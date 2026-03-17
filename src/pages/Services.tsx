@@ -46,28 +46,15 @@ const Services = () => {
     },
   ];
 
-  // create service contact url
-  // TODO: use intl
+  // create service contact url using translated strings
   const getServiceContactUrl = (serviceKey: string) => {
-    const serviceNames = {
-      fullstack: "Full-Stack Development",
-      frontend: "Frontend Development",
-      backend: "Backend Development",
-      consulting: "Technical Consulting",
-    };
+    const serviceTitle = t.services.services[serviceKey]?.title ?? serviceKey;
+    const ct = t.services.contactTemplate;
+    const features = t.services.services[serviceKey]?.features ?? [];
+    const featureList = features.map((f: string) => `- ${f}`).join("\n");
 
-    const serviceMessages = {
-      fullstack: `Hi Yanis,\n\nI'm interested in your Full-Stack Development services. I need help building a complete web application from frontend to backend.\n\nI'd like to discuss:\n- Project requirements and timeline\n- Technology stack recommendations\n- Development approach and best practices\n\nLooking forward to hearing from you!`,
-
-      frontend: `Hi Yanis,\n\nI'm interested in your Frontend Development services. I need help creating a modern, responsive user interface.\n\nI'd like to discuss:\n- UI/UX implementation\n- React/Next.js development\n- Performance optimization\n- Mobile responsiveness\n\nLooking forward to your response!`,
-
-      backend: `Hi Yanis,\n\nI'm interested in your Backend Development services. I need help building robust server-side solutions.\n\nI'd like to discuss:\n- API development and design\n- Database architecture\n- Server infrastructure\n- Security implementation\n\nLooking forward to hearing from you!`,
-
-      consulting: `Hi Yanis,\n\nI'm interested in your Technical Consulting services. I need guidance on technical decisions and architecture.\n\nI'd like to discuss:\n- Technology stack evaluation\n- Architecture review and recommendations\n- Code review and best practices\n- Performance optimization strategies\n\nLooking forward to your expertise!`,
-    };
-
-    const subject = `${serviceNames[serviceKey as keyof typeof serviceNames]} Inquiry`;
-    const message = serviceMessages[serviceKey as keyof typeof serviceMessages];
+    const subject = `${serviceTitle} – ${ct.inquiry}`;
+    const message = `${ct.greeting}\n\n${ct.interested.replace("{service}", serviceTitle)}\n\n${ct.discuss}\n${featureList}\n\n${ct.closing}`;
 
     return `/contact?subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}`;
   };

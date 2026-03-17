@@ -71,7 +71,6 @@
     "react-reconciler": "^0.31.0",
     "react-resizable-panels": "^3.0.3",
     "react-router-dom": "^6.26.2",
-    "react-type-animation": "^3.2.0",
     "recharts": "^2.15.4",
     "remark-gfm": "^4.0.1",
     "shiki": "^3.6.0",
