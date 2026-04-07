@@ -8,7 +8,7 @@
 
 import React from "react";
 import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { translations, type TranslationAny } from "@/lib/translations";
 import { motion } from "motion/react";
 import type { ProcessedActivity } from "@/lib/github";
 import {
@@ -27,7 +27,6 @@ import {
   Eye,
   ArrowUpRight,
   Clock,
-  MoveRight,
 } from "lucide-react";
 import { IconButton } from "./ui/custom/icon-button";
 
@@ -136,7 +135,7 @@ const ActivityMetadata = ({
   t,
 }: {
   activity: ProcessedActivity;
-  t: any;
+  t: TranslationAny;
 }) => {
   if (!activity.metadata) return null;
 
@@ -196,7 +195,7 @@ const ActivityItem = ({
   activity: ProcessedActivity;
   index: number;
   locale: string;
-  t: any;
+  t: TranslationAny;
 }) => {
   const formatDate = (timestamp: string, locale: string) => {
     const date = new Date(timestamp);

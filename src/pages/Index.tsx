@@ -123,7 +123,7 @@ const homeAnimations = {
 
 const Index = () => {
   const isLoaded = usePageInit(0);
-  const [key, setKey] = useState(0);
+  const [, setKey] = useState(0);
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 

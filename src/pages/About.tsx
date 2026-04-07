@@ -21,12 +21,11 @@ import {
   Globe,
   MoveRight,
 } from "lucide-react";
-import { FaGithubAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
 import { Helmet } from "react-helmet-async";
@@ -394,65 +393,6 @@ const ResumeModal = () => {
     language === "de" ? "de" : "en",
   );
 
-  const content = (
-    <>
-      <div className="pb-2">
-        <h3 className="text-lg font-semibold mb-2">{t.about.resume.title}</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          <RichText text={t.about.resume.description} previewExternal />
-        </p>
-      </div>
-
-      {/* language selection */}
-      <div className="py-4 border-y border-foreground/10">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-medium">
-            {t.about.resume.languageLabel}
-          </span>
-          <ToggleGroup
-            type="single"
-            value={selectedLang}
-            onValueChange={(value) =>
-              value && setSelectedLang(value as "en" | "de")
-            }
-            variant="outline"
-            size="sm"
-          >
-            <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
-              EN
-            </ToggleGroupItem>
-            <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
-              DE
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-3 pt-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => {
-            viewResume(selectedLang);
-            setOpen(false);
-          }}
-        >
-          {t.about.resume.viewButton}
-        </Button>
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => {
-            downloadResume(selectedLang);
-            setOpen(false);
-          }}
-        >
-          {t.about.resume.downloadButton}
-        </Button>
-      </div>
-    </>
-  );
-
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
@@ -605,7 +545,6 @@ const ResumeModal = () => {
 const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
-  const navigate = useNavigate();
   const { theme } = useTheme();
   const [selectedYear, setSelectedYear] = useState<number | "last">("last");
   const [activity, setActivity] = useState<ProcessedActivity[]>([]);

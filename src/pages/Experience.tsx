@@ -185,7 +185,7 @@ const Experience = () => {
                 </p>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-foreground/50 mb-4">
                   {(() => {
-                    const chips: any = (t as any).experience?.chips || {};
+                    const chips = t.experience.chips as Record<string, string>;
                     const loc = chips[exp.locationType] || exp.locationType;
                     const emp = chips[exp.employmentType] || exp.employmentType;
                     return (

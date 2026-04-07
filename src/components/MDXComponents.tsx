@@ -288,8 +288,8 @@ export const MDXComponents = {
     ...props
   }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isExternal = typeof href === "string" && /^https?:\/\//i.test(href);
-    const anyProps = props as any;
-    const iconProp = anyProps?.icon ?? anyProps?.ext ?? anyProps?.["data-icon"];
+    const extProps = props as Record<string, unknown>;
+    const iconProp = extProps?.icon ?? extProps?.ext ?? extProps?.["data-icon"];
     const showIcon =
       iconProp === undefined
         ? false

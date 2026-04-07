@@ -117,7 +117,7 @@ function renderWithLinks(
   return nodes;
 }
 
-export const RichText: React.FC<RichTextProps> = ({
+export const RichText: React.FC<RichTextProps> = React.memo(({
   text,
   values,
   className,
@@ -129,6 +129,8 @@ export const RichText: React.FC<RichTextProps> = ({
     previewExternal,
   });
   return <span className={className}>{content}</span>;
-};
+});
+
+RichText.displayName = "RichText";
 
 export default RichText;

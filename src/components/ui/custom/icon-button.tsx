@@ -8,7 +8,7 @@
 
 import * as React from "react";
 import { Button, type ButtonProps } from "@/components/ui/button";
-import { ChevronRight, MoveRight, ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ICON_SIZES = {

@@ -29,7 +29,6 @@ export const AdvancedCodeBlock = ({
   lang = "typescript",
   theme,
   className,
-  ...props
 }: AdvancedBlockProps & Omit<HTMLAttributes<HTMLDivElement>, "className">) => {
   const { theme: currentTheme } = useTheme();
 

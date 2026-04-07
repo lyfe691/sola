@@ -14,7 +14,7 @@ export interface NavigationItem {
   key: string;
   path: string;
   icon?: ElementType;
-  translationKey: keyof Translation["nav"] | "home";
+  translationKey: keyof Translation["nav"] | keyof Translation["footer"] | "home";
   isFooter?: boolean;
 }
 
@@ -61,7 +61,7 @@ export const FOOTER_NAVIGATION: NavigationItem[] = [
   {
     key: "privacy",
     path: "/privacy",
-    translationKey: "privacy" as any, // Special case handled in footer
+    translationKey: "privacy",
     isFooter: true,
   },
 ];

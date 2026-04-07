@@ -68,6 +68,10 @@ export interface GitHubEvent {
       login: string;
       html_url: string;
     };
+    head?: string;
+    forced?: boolean;
+    created?: boolean;
+    deleted?: boolean;
   };
   public: boolean;
   created_at: string;

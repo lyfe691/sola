@@ -4,7 +4,6 @@ import {
   getAuroraPreset,
   AURORA_THEME_CLASS_KEYS,
   type Theme,
-  type AuroraPreset,
 } from "@/config/themes";
 
 const VERT = `#version 300 es
@@ -158,7 +157,7 @@ export default function Aurora({
     };
 
     const preset = getAuroraPreset(detectThemeFromHtml());
-    gl.canvas.style.mixBlendMode = preset.blendMode as any;
+    gl.canvas.style.mixBlendMode = preset.blendMode as CSSStyleDeclaration["mixBlendMode"];
 
     const setRes = () => {
       if (program)
@@ -175,8 +174,9 @@ export default function Aurora({
     window.addEventListener("resize", resize);
 
     const geometry = new Triangle(gl);
-    if ((geometry as any).attributes?.uv)
-      delete (geometry as any).attributes.uv;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- OGL Triangle internals not typed
+    const geomAttrs = (geometry as Record<string, any>).attributes;
+    if (geomAttrs?.uv) delete geomAttrs.uv;
 
     program = new Program(gl, {
       vertex: VERT,
@@ -209,7 +209,7 @@ export default function Aurora({
     const applyTheme = () => {
       if (!program) return;
       const p = getAuroraPreset(detectThemeFromHtml());
-      gl.canvas.style.mixBlendMode = p.blendMode as any;
+      gl.canvas.style.mixBlendMode = p.blendMode as CSSStyleDeclaration["mixBlendMode"];
       program.uniforms.uIntensity.value = p.intensity;
       if (!propsRef.current.colorStops)
         program.uniforms.uColorStops.value = p.colorStops.map(toRGB);

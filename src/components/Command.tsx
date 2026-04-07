@@ -21,10 +21,7 @@ import {
 import {
   Drawer,
   DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
 } from "@/components/ui/drawer";
-import { Sparkles } from "lucide-react";
 import { useCommandMenu } from "@/hooks/use-command-menu";
 import { useTheme } from "./theme-provider";
 import { useLanguage } from "@/lib/language-provider";
@@ -70,11 +67,9 @@ export function CommandMenu() {
   const getNavLabel = (item: NavigationItem) => {
     if (item.translationKey === "home") return t.common.home;
     if (item.isFooter) {
-      // @ts-ignore - we know privacy exists in footer
-      return t.footer[item.translationKey];
+      return t.footer[item.translationKey as keyof typeof t.footer];
     }
-    // @ts-ignore - dynamic key access
-    return t.nav[item.translationKey];
+    return t.nav[item.translationKey as keyof typeof t.nav];
   };
 
   // command content that's shared between both mobile and desktop versions

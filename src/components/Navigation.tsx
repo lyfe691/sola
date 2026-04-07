@@ -99,7 +99,7 @@ const NavItem = memo(
         isActive,
         isMobile = false,
         onClick = () => {},
-        shouldAnimateInitial = true,
+        shouldAnimateInitial: _shouldAnimateInitial = true,
       },
       ref,
     ) => {
@@ -434,7 +434,7 @@ const Navigation = () => {
             initial="hidden"
             animate="visible"
             exit="hidden"
-            variants={mobileMenuVariants as any}
+            variants={mobileMenuVariants as import("motion/react").Variants}
             className={cn(MOBILE_OVERLAY_CLASSES, "pointer-events-auto")}
             style={{
               backdropFilter: "blur(20px) saturate(180%)",

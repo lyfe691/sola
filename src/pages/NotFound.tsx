@@ -33,7 +33,6 @@ const NotFound = () => {
 
   const [typedPrompt, setTypedPrompt] = useState("");
   const [typedResponse, setTypedResponse] = useState<string[]>([]);
-  const [lineIndex, setLineIndex] = useState(0);
   const [isInitialDelay, setIsInitialDelay] = useState(true);
 
   useEffect(() => {

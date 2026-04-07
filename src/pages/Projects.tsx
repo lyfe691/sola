@@ -9,7 +9,6 @@
 import { useState, useMemo } from "react";
 import {
   ArrowUpRight,
-  MoveRight,
   SortAsc,
   Star,
   Calendar,
@@ -654,12 +653,6 @@ const Projects = () => {
     };
   }, [t, sortBy]);
 
-  const handleProjectClick = (slug: string | undefined) => {
-    if (slug) {
-      window.location.href = `/projects/${slug}`;
-    }
-  };
-
   return (
     <div className="flex flex-col w-full">
       <Helmet>
@@ -731,7 +724,7 @@ const Projects = () => {
 
       {/* Other Projects */}
       <div className="grid gap-4 sm:gap-6">
-        {otherProjects.map((project, index) => (
+        {otherProjects.map((project) => (
           <ScrollReveal key={project.id} variant="default">
             <ProjectCard
               project={project}

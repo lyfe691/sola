@@ -2716,5 +2716,6 @@ export const translations = {
   },
 } as const;
 
-export type Translation = (typeof translations)["en"];
 export type Language = keyof typeof translations;
+export type Translation = (typeof translations)["en"];
+export type TranslationAny = (typeof translations)[Language];

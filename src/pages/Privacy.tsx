@@ -926,9 +926,9 @@ const Privacy = () => {
                   <p className="text-muted-foreground leading-relaxed text-base">
                     {L[language].rights.p1}
                   </p>
-                  {Array.isArray((L as any)[language]?.rights?.items) && (
+                  {"items" in L[language].rights && Array.isArray(L[language].rights.items) && (
                     <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                      {((L as any)[language].rights.items as string[]).map(
+                      {(L[language].rights.items as string[]).map(
                         (item) => (
                           <li key={item} className="flex items-start gap-2">
                             <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary/70" />

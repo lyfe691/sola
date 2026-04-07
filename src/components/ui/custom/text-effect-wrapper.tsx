@@ -9,7 +9,7 @@ import {
   type Variant,
   type Variants,
 } from "motion/react";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 export type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
 
@@ -118,7 +118,6 @@ const AnimationComponent: React.FC<{
 }> = React.memo(({ segment, variants, per, segmentWrapperClassName }) => {
   // Render plain whitespace segments without motion to avoid spacing glitches
   if (segment.trim() === "") {
-    const WrapperTag = per === "line" ? "span" : "span";
     const plainClass =
       per === "line" ? "block" : "inline whitespace-pre select-none";
     return (
@@ -239,7 +238,7 @@ export function TextEffectWrapper({
   delay = 0,
   speedReveal = 1,
   speedSegment = 1,
-  trigger = true,
+  trigger: _trigger = true,
   onAnimationComplete,
   onAnimationStart,
   segmentWrapperClassName,
@@ -247,8 +246,6 @@ export function TextEffectWrapper({
   segmentTransition,
   style,
 }: TextEffectProps) {
-  // force motion
-  const prefersReducedMotion = false;
   const segments = splitText(children, per);
   const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
 
@@ -327,7 +324,7 @@ export function CyclingTextEffect({
   speedSegment = 1,
   displayDuration = 2000,
   style,
-  useCurve = true,
+  useCurve: _useCurve = true,
 }: {
   texts: string[];
   per?: PerType;

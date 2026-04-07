@@ -87,7 +87,7 @@ const Certifications: React.FC = () => {
               </p>
             ) : (
               <div className="grid gap-4 sm:gap-6">
-                {items.map((c, i) => {
+                {items.map((c) => {
                   const expired = isExpired(c);
                   return (
                     <motion.article

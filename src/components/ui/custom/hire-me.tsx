@@ -9,24 +9,19 @@
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { Briefcase } from "lucide-react";
-import { toast } from "sonner";
 import { translations } from "@/lib/translations";
 import { useLanguage } from "@/lib/language-provider";
-import { useNavigate } from "react-router-dom";
 
 const HireMe = () => {
   const { language } = useLanguage();
   const t = translations[language];
-
-  const isHired = true;
-  const navigate = useNavigate();
 
   const prefilledSubject = "Job Opportunity at []";
   const prefilledMessage = `Hi Yanis,\n\nI'm reaching out regarding a potential job opportunity. I've reviewed your portfolio and I'm impressed with your work.\n\nI'd like to discuss a potential collaboration with our team.\n\nLooking forward to your response.`;
 
   const contactUrl = `/contact?subject=${encodeURIComponent(prefilledSubject)}&message=${encodeURIComponent(prefilledMessage)}`;
 
-  const handleHireClick = (e: React.MouseEvent) => {
+  const handleHireClick = (_e: React.MouseEvent) => {
     //  e.preventDefault();
     //   if (isHired === true) {
     //     toast.error(t.hire.hiretitle, {

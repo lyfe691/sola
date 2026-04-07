@@ -1,7 +1,5 @@
 import React, { useRef, useEffect } from "react";
 
-type CanvasStrokeStyle = string | CanvasGradient | CanvasPattern;
-
 interface GridOffset {
   x: number;
   y: number;
