@@ -23,14 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
-# Add-Copyright.ps1
-add-copyright.ps1
-.vercel
 
-.agents/
+# ai
 .agent/
 .cursor/
 .codex/
 .claude/
 .gemini/
-skills/
