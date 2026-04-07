@@ -642,7 +642,7 @@ const About = () => {
           <div className="md:col-span-2 relative">
             <div className="aspect-square overflow-hidden rounded-xl border-2 border-border/20 shadow-sm">
               <motion.img
-                src={isDarkTheme() ? "/ysz-d.png" : "/ysz-l.png"}
+                src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
                 alt="Yanis Sebastian Zürcher"
                 className="w-full h-full object-cover"
                 whileHover={{ scale: 1.02 }}
