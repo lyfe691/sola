@@ -93,6 +93,30 @@ const buildSortOptions = (t: any): ComboboxOption[] => [
 // slug = deepdive
 const createProjectsData = (t: any): Project[] => [
   {
+    id: "kinoa",
+    title: t.projects.list.kinoa.title,
+    description: t.projects.list.kinoa.description,
+    image: "/projects/kinoa.png",
+    link: "https://kinoa.to",
+    github: "https://github.com/lyfe691/kinoa",
+    tags: [
+      "Next.js",
+      "shadcn/ui",
+      "TypeScript",
+      "Tailwind CSS",
+      "TMDB API",
+      "Streaming",
+    ],
+    featured: true,
+    date: {
+      start: "2025-11",
+      display: "Nov 2025 - Present",
+    },
+    priority: 1,
+    slug: "kinoa",
+    vercelSatori: true,
+  },
+  {
     id: "luma",
     title: t.projects.list.luma.title,
     description: t.projects.list.luma.description,
@@ -110,9 +134,10 @@ const createProjectsData = (t: any): Project[] => [
     featured: true,
     date: {
       start: "2026-03",
-      display: "Mar 2026 - Present",
+      end: "2026-04",
+      display: "Mar 2026 - Apr 2026",
     },
-    priority: 1,
+    priority: 2,
     slug: "luma",
   },
   {
@@ -135,33 +160,8 @@ const createProjectsData = (t: any): Project[] => [
       start: "2025-02",
       display: "Feb 2025 - Present",
     },
-    priority: 2,
-    slug: "sola",
-  },
-  {
-    id: "kinoa",
-    title: t.projects.list.kinoa.title,
-    description: t.projects.list.kinoa.description,
-    image: "/projects/kinoa.png",
-    link: "https://kinoa.lol",
-    github: "https://github.com/lyfe691/kinoa",
-    tags: [
-      "Next.js",
-      "shadcn/ui",
-      "TypeScript",
-      "Tailwind CSS",
-      "TMDB API",
-      "Streaming",
-    ],
-    featured: true,
-    date: {
-      start: "2025-11",
-      end: "2026-01",
-      display: "Nov 2025 - Jan 2026",
-    },
     priority: 3,
-    slug: "kinoa",
-    vercelSatori: true,
+    slug: "sola",
   },
   {
     id: "applicare",

@@ -33,7 +33,7 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     title: "Luma",
     description:
       "A multi-model AI platform — bring your own keys, talk to any model",
-    date: "March 2026 - Present",
+    date: "March 2026 - April 2026",
     silkColor: "#7a8a5c",
     silkSpeed: 3.5,
     silkScale: 1.15,
@@ -208,7 +208,7 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Ad-supported with watchlist and watch history via Supabase",
     ],
     links: {
-      live: "https://kinoa.lol",
+      live: "https://kinoa.to",
       github: "https://github.com/lyfe691/kinoa",
     },
     mdxPath: "kinoa",
