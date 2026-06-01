@@ -187,10 +187,24 @@ export const translations = {
       },
       period: {
         present: "Present",
+        nadlo: "May 2026 - Present",
         gz: "Aug 2025 - Mar 2026",
         freelance: "Jul 2025 - Present",
         wiss: "Aug 2023 - Present",
         sek: "2020 - 2023",
+      },
+      nadlo: {
+        role: "Full Stack Software Developer",
+        company: "nadlo",
+        location: "Baden, Switzerland",
+        description:
+          "Building production web applications across the entire stack — designing responsive, accessible interfaces alongside the APIs and data models that power them, with an emphasis on type safety, performance, and shipping fast.",
+        achievements: [
+          "Develop full-stack features end-to-end with Next.js, React, and TypeScript, styled with Tailwind CSS.",
+          "Design and build backend services and REST APIs with NestJS, backed by Supabase (Postgres, auth, and storage).",
+          "Containerize services with Docker and automate build, test, and deploy pipelines with GitHub Actions.",
+          "Own features from concept to deployment, focusing on maintainable, well-typed, and performant code.",
+        ],
       },
       freelance: {
         role: "Freelance Web Developer",
@@ -736,10 +750,24 @@ export const translations = {
       },
       period: {
         present: "Heute",
+        nadlo: "Mai 2026 - Heute",
         gz: "Aug 2025 - Mär 2026",
         freelance: "Jul 2025 - Heute",
         wiss: "Aug 2023 - Heute",
         sek: "2020 - 2023",
+      },
+      nadlo: {
+        role: "Full Stack Softwareentwickler",
+        company: "nadlo",
+        location: "Baden, Schweiz",
+        description:
+          "Entwicklung produktiver Webanwendungen über den gesamten Stack – von responsiven, zugänglichen Oberflächen bis zu den APIs und Datenmodellen dahinter. Fokus auf Typsicherheit, Performance und schnelles Ausliefern.",
+        achievements: [
+          "Full-Stack-Features mit Next.js, React und TypeScript umgesetzt, gestylt mit Tailwind CSS.",
+          "Backend-Services und REST-APIs mit NestJS entwickelt, gestützt auf Supabase (Postgres, Auth und Storage).",
+          "Dienste mit Docker containerisiert und Build-, Test- und Deploy-Pipelines mit GitHub Actions automatisiert.",
+          "Features von der Idee bis zum Deployment verantwortet – mit Fokus auf wartbaren, typsicheren und performanten Code.",
+        ],
       },
       freelance: {
         role: "Freelance Webentwickler",
@@ -1287,10 +1315,24 @@ export const translations = {
       },
       period: {
         present: "Presente",
+        nadlo: "May 2026 - Presente",
         gz: "Ago 2025 - Mar 2026",
         freelance: "Jul 2025 - Presente",
         wiss: "Ago 2023 - Presente",
         sek: "2020 - 2023",
+      },
+      nadlo: {
+        role: "Desarrollador de Software Full Stack",
+        company: "nadlo",
+        location: "Baden, Suiza",
+        description:
+          "Desarrollo de aplicaciones web de producción en todo el stack: interfaces responsivas y accesibles junto con las APIs y modelos de datos que las sustentan, con énfasis en la seguridad de tipos, el rendimiento y la entrega rápida.",
+        achievements: [
+          "Desarrollo de funciones full-stack con Next.js, React y TypeScript, con estilos en Tailwind CSS.",
+          "Diseño y construcción de servicios backend y APIs REST con NestJS, respaldados por Supabase (Postgres, autenticación y almacenamiento).",
+          "Contenerización de servicios con Docker y automatización de pipelines de build, test y despliegue con GitHub Actions.",
+          "Responsable de funciones desde el concepto hasta el despliegue, priorizando código mantenible, tipado y de alto rendimiento.",
+        ],
       },
       freelance: {
         role: "Desarrollador Web Freelance",
@@ -1833,10 +1875,24 @@ export const translations = {
       },
       period: {
         present: "現在",
+        nadlo: "2026年5月 - 現在",
         gz: "2025年8月 - 2026年3月",
         freelance: "2025年7月 - 現在",
         wiss: "2023年8月 - 現在",
         sek: "2020年 - 2023年",
+      },
+      nadlo: {
+        role: "フルスタック ソフトウェアエンジニア",
+        company: "nadlo",
+        location: "スイス、バーデン",
+        description:
+          "フロントからバックまで、本番運用の Web アプリケーションを開発。レスポンシブでアクセシブルな UI と、それを支える API・データモデルを設計し、型安全性・性能・スピーディーなリリースを重視。",
+        achievements: [
+          "Next.js / React / TypeScript でフルスタック機能を開発し、Tailwind CSS でスタイリング。",
+          "NestJS でバックエンドサービスと REST API を構築し、Supabase（Postgres・認証・ストレージ）を活用。",
+          "Docker でサービスをコンテナ化し、GitHub Actions でビルド・テスト・デプロイのパイプラインを自動化。",
+          "企画からデプロイまで機能を一貫して担当し、保守性・型安全性・性能を重視。",
+        ],
       },
       freelance: {
         role: "フリーランス Web エンジニア",
@@ -2366,10 +2422,24 @@ export const translations = {
       },
       period: {
         present: "至今",
+        nadlo: "2026年5月 - 至今",
         gz: "2025年8月 - 2026年3月",
         freelance: "2025年7月 - 至今",
         wiss: "2023年8月 - 至今",
         sek: "2020年 - 2023年",
+      },
+      nadlo: {
+        role: "全栈软件开发工程师",
+        company: "nadlo",
+        location: "巴登, 瑞士",
+        description:
+          "在整个技术栈上构建生产级 Web 应用，从响应式、可访问的界面到支撑它们的 API 与数据模型，注重类型安全、性能与快速交付。",
+        achievements: [
+          "使用 Next.js、React、TypeScript 开发全栈功能，并以 Tailwind CSS 进行样式设计。",
+          "使用 NestJS 构建后端服务与 REST API，依托 Supabase（Postgres、认证与存储）。",
+          "使用 Docker 将服务容器化，并通过 GitHub Actions 自动化构建、测试与部署流程。",
+          "负责从概念到部署的完整功能，注重可维护、强类型与高性能的代码。",
+        ],
       },
       freelance: {
         role: "自由职业 Web 开发者",

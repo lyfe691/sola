@@ -29,6 +29,28 @@ const Experience = () => {
 
   const work = [
     {
+      period: t.experience.period.nadlo,
+      role: t.experience.nadlo.role,
+      company: t.experience.nadlo.company,
+      companyLink: "https://nadlo.ch",
+      location: t.experience.nadlo.location,
+      locationType: "hybrid" as LocationType,
+      employmentType: "internship" as EmploymentType,
+      description: t.experience.nadlo.description,
+      achievements: t.experience.nadlo.achievements,
+      technologies: [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "NestJS",
+        "Tailwind CSS",
+        "Supabase",
+        "Docker",
+        "GitHub Actions",
+        "Git",
+      ],
+    },
+    {
       period: t.experience.period.gz,
       role: t.experience.gz.role,
       company: t.experience.gz.company,
