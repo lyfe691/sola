@@ -25,4 +25,10 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  // These libs are only used inside lazily-imported background modules, so
+  // Vite's initial dep scan never sees them and would re-optimize on first
+  // select (causing a "504 Outdated Optimize Dep" reload). Pre-bundle them.
+  optimizeDeps: {
+    include: ["ogl", "three", "@react-three/fiber", "postprocessing"],
+  },
 }));
