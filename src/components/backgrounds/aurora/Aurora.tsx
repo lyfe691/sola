@@ -3,8 +3,8 @@ import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import {
   getAuroraPreset,
   AURORA_THEME_CLASS_KEYS,
-  type Theme,
-} from "@/config/themes";
+} from "./presets";
+import { type Theme } from "@/config/themes";
 
 const VERT = `#version 300 es
 in vec2 position;
@@ -149,6 +149,8 @@ export default function Aurora({
     gl.canvas.style.backgroundColor = "transparent";
     // gl.canvas.style.pointerEvents = "none";
 
+    // assigned once below, but referenced by closures declared before it
+    // eslint-disable-next-line prefer-const
     let program: Program | undefined;
 
     const toRGB = (hex: string) => {

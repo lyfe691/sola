@@ -28,7 +28,11 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
-import { useAurora } from "@/lib/aurora-provider";
+import { useBackground } from "@/components/backgrounds/background-provider";
+import {
+  BACKGROUNDS,
+  NONE_BACKGROUND,
+} from "@/components/backgrounds/registry";
 import { LANGUAGES, type Language } from "@/config/languages";
 import {
   MAIN_NAVIGATION,
@@ -43,7 +47,18 @@ export function CommandMenu() {
   const t = translations[language];
   const { isOpen, closeCommandMenu } = useCommandMenu();
   const isMobile = useIsMobile();
-  const { enabled: auroraEnabled, toggle: toggleAurora } = useAurora();
+  const { active: activeBackground, setActive: setBackground } = useBackground();
+
+  // none + every registered background
+  const backgroundOptions = [
+    { id: NONE_BACKGROUND, label: t.common.none },
+    ...BACKGROUNDS.map((b) => ({ id: b.id, label: b.label })),
+  ];
+
+  const handleBackgroundChange = (id: string) => {
+    setBackground(id);
+    closeCommandMenu();
+  };
 
   // handle navigation
   const handleNavigation = (path: string) => {
@@ -161,16 +176,19 @@ export function CommandMenu() {
 
         <CommandSeparator />
 
-        <CommandGroup heading={t.common.command.groups.shortcuts}>
-          <CommandItem
-            onSelect={() => toggleAurora()}
-            className="cursor-pointer"
-          >
-            <span>{t.common.command.shortcuts.aurora}</span>
-            <CommandShortcut>
-              {auroraEnabled ? t.common.on : t.common.off}
-            </CommandShortcut>
-          </CommandItem>
+        <CommandGroup heading={t.common.command.groups.background}>
+          {backgroundOptions.map((option) => (
+            <CommandItem
+              key={option.id}
+              onSelect={() => handleBackgroundChange(option.id)}
+              className="cursor-pointer"
+            >
+              <span>{option.label}</span>
+              {activeBackground === option.id && (
+                <CommandShortcut>{t.common.on}</CommandShortcut>
+              )}
+            </CommandItem>
+          ))}
         </CommandGroup>
       </CommandList>
     </>

@@ -33,10 +33,6 @@ import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
-// defer heavy background imports until needed
-// import Threads from "@/components/backgrounds/Threads";
-// import Squares from "@/components/backgrounds/Squares";
-// import Aurora from "@/components/backgrounds/Aurora";
 import { SOCIAL_LINKS, SOCIAL_ORDER_HERO } from "@/config/social";
 
 const homeAnimations = {

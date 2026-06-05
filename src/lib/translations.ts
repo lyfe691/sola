@@ -73,10 +73,11 @@ export const translations = {
       menu: {
         themes: "Themes",
         customThemes: "Custom themes",
-        effects: "Effects",
+        background: "Background",
       },
       on: "On",
       off: "Off",
+      none: "None",
       search: "Search",
       command: {
         placeholder: "Type a command or search...",
@@ -85,11 +86,10 @@ export const translations = {
           navigation: "Navigation",
           theme: "Theme",
           language: "Language",
-          shortcuts: "Shortcuts",
+          background: "Background",
         },
         shortcuts: {
           search: "Search",
-          aurora: "Aurora",
         },
       },
       techStack: "Tech Stack",
@@ -139,15 +139,15 @@ export const translations = {
       contactMe: "Contact me",
       viewProjects: "View projects",
     },
-    auroraIntro: {
+    backgroundsIntro: {
       newLabel: "New",
-      title: "Introducing Aurora background",
+      title: "Introducing backgrounds",
       description: "A subtle, animated background that adapts to your theme.",
       instruction:
-        "You can enable or disable it anytime: open the theme toggle at the top-right and switch 'Aurora'.",
+        "You can change it anytime: open the theme toggle at the top-right and pick a background.",
       performanceWarning:
         "Note: May impact performance on older devices or slower browsers.",
-      enableButton: "Enable Aurora",
+      enableButton: "Choose a background",
       notNowButton: "Not now",
     },
     randomizer: {
@@ -635,10 +635,11 @@ export const translations = {
       menu: {
         themes: "Designs",
         customThemes: "Eigene Designs",
-        effects: "Effekte",
+        background: "Hintergrund",
       },
       on: "An",
       off: "Aus",
+      none: "Keiner",
       search: "Suche",
       command: {
         placeholder: "Befehl eingeben oder suchen...",
@@ -647,11 +648,10 @@ export const translations = {
           navigation: "Navigation",
           theme: "Design",
           language: "Sprache",
-          shortcuts: "Tastenkürzel",
+          background: "Hintergrund",
         },
         shortcuts: {
           search: "Suche",
-          aurora: "Aurora",
         },
       },
       techStack: "Technologie-Stack",
@@ -701,16 +701,16 @@ export const translations = {
       contactMe: "Kontakt aufnehmen",
       viewProjects: "Projekte ansehen",
     },
-    auroraIntro: {
+    backgroundsIntro: {
       newLabel: "Neu",
-      title: "Aurora-Hintergrund",
+      title: "Hintergründe",
       description:
         "Ein dezenter, animierter Hintergrund, der sich Ihrem Design anpasst.",
       instruction:
-        "Sie können ihn jederzeit aktivieren oder deaktivieren: Öffnen Sie oben rechts den Design-Umschalter und schalten Sie 'Aurora‑Hintergrund' um.",
+        "Sie können ihn jederzeit ändern: Öffnen Sie oben rechts den Design-Umschalter und wählen Sie einen Hintergrund.",
       performanceWarning:
         "Hinweis: Kann die Leistung auf älteren Geräten oder langsameren Browsern beeinträchtigen.",
-      enableButton: "Aurora aktivieren",
+      enableButton: "Hintergrund wählen",
       notNowButton: "Nicht jetzt",
     },
     randomizer: {
@@ -1200,10 +1200,11 @@ export const translations = {
       menu: {
         themes: "Temas",
         customThemes: "Temas personalizados",
-        effects: "Efectos",
+        background: "Fondo",
       },
       on: "Activado",
       off: "Desactivado",
+      none: "Ninguno",
       search: "Buscar",
       command: {
         placeholder: "Escribe un comando o busca...",
@@ -1212,11 +1213,10 @@ export const translations = {
           navigation: "Navegación",
           theme: "Tema",
           language: "Idioma",
-          shortcuts: "Atajos",
+          background: "Fondo",
         },
         shortcuts: {
           search: "Buscar",
-          aurora: "Aurora",
         },
       },
       techStack: "Tecnologías",
@@ -1267,15 +1267,15 @@ export const translations = {
       contactMe: "Contáctame",
       viewProjects: "Ver proyectos",
     },
-    auroraIntro: {
+    backgroundsIntro: {
       newLabel: "Nuevo",
-      title: "Fondo Aurora",
+      title: "Fondos",
       description: "Un fondo sutil y animado que se adapta a tu tema.",
       instruction:
-        "Puedes activarlo o desactivarlo en cualquier momento: abre el selector de tema arriba a la derecha y cambia 'Fondo Aurora'.",
+        "Puedes cambiarlo en cualquier momento: abre el selector de tema arriba a la derecha y elige un fondo.",
       performanceWarning:
         "Nota: Puede afectar el rendimiento en dispositivos más antiguos o navegadores más lentos.",
-      enableButton: "Activar Aurora",
+      enableButton: "Elegir un fondo",
       notNowButton: "Ahora no",
     },
     randomizer: {
@@ -1763,10 +1763,11 @@ export const translations = {
       menu: {
         themes: "テーマ",
         customThemes: "カスタムテーマ",
-        effects: "エフェクト",
+        background: "背景",
       },
       on: "オン",
       off: "オフ",
+      none: "なし",
       search: "検索",
       command: {
         placeholder: "コマンドまたは検索を入力...",
@@ -1775,11 +1776,10 @@ export const translations = {
           navigation: "ナビゲーション",
           theme: "テーマ",
           language: "言語",
-          shortcuts: "ショートカット",
+          background: "背景",
         },
         shortcuts: {
           search: "検索",
-          aurora: "オーロラ",
         },
       },
       techStack: "技術スタック",
@@ -1827,16 +1827,16 @@ export const translations = {
       contactMe: "お問い合わせ",
       viewProjects: "プロジェクトを見る",
     },
-    auroraIntro: {
+    backgroundsIntro: {
       newLabel: "新機能",
-      title: "オーロラ背景",
+      title: "背景",
       description:
         "テーマに合わせて変化する、さりげないアニメーション背景です。",
       instruction:
-        "いつでも有効/無効を切り替えられます。右上のテーマ切替を開き『Aurora』を切り替えてください。",
+        "いつでも変更できます。右上のテーマ切替を開き、背景を選んでください。",
       performanceWarning:
         "注意：古いデバイスや遅いブラウザではパフォーマンスに影響する可能性があります。",
-      enableButton: "Aurora を有効化",
+      enableButton: "背景を選ぶ",
       notNowButton: "後で",
     },
     randomizer: {
@@ -2313,10 +2313,11 @@ export const translations = {
       menu: {
         themes: "主题",
         customThemes: "自定义主题",
-        effects: "效果",
+        background: "背景",
       },
       on: "开",
       off: "关",
+      none: "无",
       search: "搜索",
       command: {
         placeholder: "输入命令或搜索...",
@@ -2325,11 +2326,10 @@ export const translations = {
           navigation: "导航",
           theme: "主题",
           language: "语言",
-          shortcuts: "快捷方式",
+          background: "背景",
         },
         shortcuts: {
           search: "搜索",
-          aurora: "极光",
         },
       },
       techStack: "技术栈",
@@ -2377,14 +2377,14 @@ export const translations = {
       contactMe: "联系我",
       viewProjects: "查看项目",
     },
-    auroraIntro: {
+    backgroundsIntro: {
       newLabel: "新",
-      title: "极光背景",
+      title: "背景",
       description: "一个会随主题变化的细腻动态背景。",
       instruction:
-        "你可随时开启或关闭：点击右上角主题开关，切换『Aurora』即可。",
+        "你可随时更改：点击右上角主题开关，选择一个背景即可。",
       performanceWarning: "注意：在较旧设备或较慢浏览器上可能影响性能。",
-      enableButton: "开启 Aurora",
+      enableButton: "选择背景",
       notNowButton: "稍后",
     },
     randomizer: {

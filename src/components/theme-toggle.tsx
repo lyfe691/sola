@@ -19,8 +19,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { THEMES, type Theme } from "@/config/themes";
-import { useAurora } from "@/lib/aurora-provider";
-import { Switch } from "@/components/ui/switch";
+import { useBackground } from "@/components/backgrounds/background-provider";
+import {
+  BACKGROUNDS,
+  NONE_BACKGROUND,
+} from "@/components/backgrounds/registry";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
@@ -34,9 +37,14 @@ export function ThemeToggle({
   const { theme, setTheme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
-  const { enabled: auroraEnabled, setEnabled: setAuroraEnabled } = useAurora();
+  const { active: activeBackground, setActive: setBackground } = useBackground();
   const { language } = useLanguage();
   const t = translations[language];
+
+  const backgroundOptions = [
+    { id: NONE_BACKGROUND, label: t.common.none },
+    ...BACKGROUNDS.map((b) => ({ id: b.id, label: b.label })),
+  ];
 
   // monitor system theme changes
   useEffect(() => {
@@ -140,26 +148,29 @@ export function ThemeToggle({
           );
         })}
 
-        {/* effects */}
+        {/* background */}
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>{t.common.menu.effects}</DropdownMenuLabel>
-        <DropdownMenuItem
-          onSelect={(e) => {
-            e.preventDefault();
-            setAuroraEnabled(!auroraEnabled);
-          }}
-          className="flex items-center justify-between py-1.5"
-        >
-          <div className="flex items-center gap-2">
-            <span>Aurora</span>
-          </div>
-          <Switch
-            checked={auroraEnabled}
-            onCheckedChange={(v) => setAuroraEnabled(Boolean(v))}
-            onClick={(e) => e.stopPropagation()}
-            aria-label="toggle aurora"
-          />
-        </DropdownMenuItem>
+        <DropdownMenuLabel>{t.common.menu.background}</DropdownMenuLabel>
+        {backgroundOptions.map((option) => {
+          const isSelected = activeBackground === option.id;
+          return (
+            <DropdownMenuItem
+              key={option.id}
+              onSelect={(e) => {
+                e.preventDefault();
+                setBackground(option.id);
+              }}
+              className="flex justify-between"
+            >
+              <span className={isSelected ? "text-muted-foreground" : ""}>
+                {option.label}
+              </span>
+              {isSelected && (
+                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
+              )}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -18,8 +18,8 @@ import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import ClickSpark from "./components/ui/custom/click-spark";
-import { AuroraProvider } from "./lib/aurora-provider";
-import AuroraBackground from "./components/backgrounds/AuroraBackground";
+import { BackgroundProvider } from "./components/backgrounds/background-provider";
+import BackgroundLayer from "./components/backgrounds/BackgroundLayer";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -34,10 +34,10 @@ function KeyboardShortcuts() {
 const App = () => (
   <ThemeProvider defaultTheme="system">
     <LanguageProvider>
-      <AuroraProvider>
+      <BackgroundProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
-            <AuroraBackground />
+            <BackgroundLayer />
             <ClickSpark
               sparkColor="hsl(var(--primary) / 0.30)"
               sparkSize={4}
@@ -57,7 +57,7 @@ const App = () => (
             </ClickSpark>
           </TooltipProvider>
         </QueryClientProvider>
-      </AuroraProvider>
+      </BackgroundProvider>
     </LanguageProvider>
   </ThemeProvider>
 );
