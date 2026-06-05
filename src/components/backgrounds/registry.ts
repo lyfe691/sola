@@ -40,6 +40,26 @@ export const BACKGROUNDS: BackgroundDef[] = [
     label: "Side Rays",
     component: lazy(() => import("./side-rays/SideRays")),
   },
+  {
+    id: "ferrofluid",
+    label: "Ferrofluid",
+    component: lazy(() => import("./ferrofluid/Ferrofluid")),
+  },
+  {
+    id: "silk",
+    label: "Silk",
+    component: lazy(() => import("./silk/Silk")),
+  },
+  {
+    id: "pixel-blast",
+    label: "Pixel Blast",
+    component: lazy(() => import("./pixel-blast/PixelBlast")),
+  },
+  {
+    id: "line-waves",
+    label: "Line Waves",
+    component: lazy(() => import("./line-waves/LineWaves")),
+  },
 ];
 
 /** true when `value` is a currently-registered background id */
