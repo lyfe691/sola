@@ -230,6 +230,32 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* SOLA wordmark */}
+        <div
+          className="relative w-full mb-4 select-none"
+          aria-hidden="true"
+          style={{
+            fontSize: "min(14.2vw, 210px)",
+            height: "0.74em",
+            maskImage: "linear-gradient(to bottom, #000 50%, transparent 95%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, #000 50%, transparent 95%)",
+          }}
+        >
+          <div
+            className="absolute inset-0 flex justify-center font-bold uppercase leading-none whitespace-nowrap text-background"
+            style={{
+              fontSize: "inherit",
+              letterSpacing: "0.15em",
+              paddingLeft: "0.15em",
+              textShadow:
+                "0 -1.5px 0 hsl(var(--foreground) / 0.45), 1.5px 0 0 hsl(var(--foreground) / 0.45), 0 1.5px 0 hsl(var(--foreground) / 0.45), -1.5px 0 0 hsl(var(--foreground) / 0.45), 1px 1px 0 hsl(var(--foreground) / 0.45), -1px -1px 0 hsl(var(--foreground) / 0.45), 1px -1px 0 hsl(var(--foreground) / 0.45), -1px 1px 0 hsl(var(--foreground) / 0.45)",
+            }}
+          >
+            SOLA
+          </div>
+        </div>
+
         {/* bottom section */}
         <div className="relative">
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
