@@ -688,7 +688,7 @@ const Contact = () => {
         <AnimatePresence>
           {isPageDragActive && (
             <motion.div
-              className="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center"
+              className="fixed inset-0 z-100 pointer-events-none flex items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -707,7 +707,7 @@ const Contact = () => {
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
                 <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 sm:px-6 sm:py-4 shadow-xl ring-1 ring-foreground/10">
-                  <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-foreground/10 to-transparent blur-xl" />
+                  <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-foreground/10 to-transparent blur-xl" />
                   <div className="relative flex items-center gap-2 text-foreground/80">
                     <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" />
                     <div className="h-2 w-2 rounded-full bg-foreground/50 animate-pulse" />

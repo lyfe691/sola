@@ -44,7 +44,7 @@ const ImageLightbox: React.FC<{
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed top-0 left-0 right-0 bottom-0 z-[100] flex items-center justify-center bg-black/90 p-6 cursor-zoom-out overflow-hidden"
+          className="fixed top-0 left-0 right-0 bottom-0 z-100 flex items-center justify-center bg-black/90 p-6 cursor-zoom-out overflow-hidden"
           onClick={onClose}
         >
           <motion.img
@@ -189,7 +189,7 @@ export const MDXComponents = {
       className="text-sm text-muted-foreground flex items-start gap-2"
       {...props}
     >
-      <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0 mt-2" />
+      <div className="w-1.5 h-1.5 bg-primary rounded-full shrink-0 mt-2" />
       <span>{children}</span>
     </li>
   ),

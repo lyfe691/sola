@@ -87,7 +87,7 @@ const DESKTOP_CONTAINER_CLASSES =
   "hidden lg:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-border/20 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
 
 const MOBILE_OVERLAY_CLASSES =
-  "fixed inset-0 bg-background/80 backdrop-blur-xl z-[60] lg:hidden mobile-menu";
+  "fixed inset-0 bg-background/80 backdrop-blur-xl z-60 lg:hidden mobile-menu";
 
 // memoized navigation item for better performance
 const NavItem = memo(
@@ -225,8 +225,8 @@ const MobileMenuButton = ({
   return (
     <motion.button
       onClick={onClick}
-      className="p-3 rounded-full bg-background/80 backdrop-blur-sm border border-border/20
-                hover:bg-foreground/5 transition-colors duration-300 shadow-sm z-[51]"
+      className="p-3 rounded-full bg-background/80 backdrop-blur-xs border border-border/20
+                hover:bg-foreground/5 transition-colors duration-300 shadow-xs z-51"
       whileTap={{ scale: 0.92 }}
       aria-label={isOpen ? "Close menu" : "Open menu"}
       aria-expanded={isOpen}
@@ -418,12 +418,12 @@ const Navigation = () => {
       </div>
 
       {/* mobile menu button */}
-      <div className="lg:hidden fixed top-5 left-5 z-[70] menu-button pointer-events-auto">
+      <div className="lg:hidden fixed top-5 left-5 z-70 menu-button pointer-events-auto">
         <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
       </div>
 
       {/* mobile toggles - fixed top right, aligned with hamburger */}
-      <div className="lg:hidden fixed top-5 right-5 z-[70] pointer-events-auto">
+      <div className="lg:hidden fixed top-5 right-5 z-70 pointer-events-auto">
         <ToggleGroup gap="normal" />
       </div>
 
@@ -450,7 +450,7 @@ const Navigation = () => {
               aria-label="Primary"
               className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10"
             >
-              <div className="flex-grow">
+              <div className="grow">
                 <NavItem
                   item={homeItem}
                   index={0}

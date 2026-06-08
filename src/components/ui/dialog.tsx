@@ -127,7 +127,7 @@ const DialogContent = React.forwardRef<
               <motion.div
                 ref={ref}
                 className={cn(
-                  "pointer-events-auto relative grid w-full max-w-lg gap-6 rounded-2xl border border-border/50 bg-background p-6 shadow-[0_24px_80px_-40px_rgba(15,15,20,0.7)] outline-none supports-[backdrop-filter]:bg-background/98 sm:rounded-3xl sm:p-8",
+                  "pointer-events-auto relative grid w-full max-w-lg gap-6 rounded-2xl border border-border/50 bg-background p-6 shadow-[0_24px_80px_-40px_rgba(15,15,20,0.7)] outline-hidden supports-backdrop-filter:bg-background/98 sm:rounded-3xl sm:p-8",
                   className,
                 )}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -139,7 +139,7 @@ const DialogContent = React.forwardRef<
                 <DialogClose asChild>
                   <motion.button
                     type="button"
-                    className="absolute right-5 top-5 flex size-12 items-center justify-center text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    className="absolute right-5 top-5 flex size-12 items-center justify-center text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.88 }}
                   >

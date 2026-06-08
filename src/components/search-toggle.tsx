@@ -37,7 +37,7 @@ export function SearchToggle() {
           <span className="sr-only">Search</span>
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="bg-background/85 backdrop-blur-sm">
+      <TooltipContent className="bg-background/85 backdrop-blur-xs">
         <KbdGroup>
           <p className="text-sm">{t.common.search}</p>
           <Kbd>⌘</Kbd>

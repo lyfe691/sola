@@ -60,7 +60,7 @@ const Certifications: React.FC = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="min-h-screen bg-gradient-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
+        className="min-h-screen bg-linear-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
       >
         <Helmet>
           <title>
@@ -75,7 +75,7 @@ const Certifications: React.FC = () => {
 
         <div className="max-w-7xl mx-auto">
           <motion.div {...trail(1)} className="mb-16 text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap break-words shrink-0">
+            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
               {t.certifications?.title ?? "Certifications"}
             </h1>
           </motion.div>
@@ -92,7 +92,7 @@ const Certifications: React.FC = () => {
                   return (
                     <motion.article
                       key={c.id}
-                      className="group rounded-xl border bg-card/60 backdrop-blur-sm p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20"
+                      className="group rounded-xl border bg-card/60 backdrop-blur-xs p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20"
                       variants={cardIn}
                       initial="hidden"
                       animate="visible"
@@ -109,7 +109,7 @@ const Certifications: React.FC = () => {
                           ) : null}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
-                              <h2 className="text-lg font-medium text-foreground break-words">
+                              <h2 className="text-lg font-medium text-foreground wrap-break-word">
                                 {c.title}
                               </h2>
                               {expired && (

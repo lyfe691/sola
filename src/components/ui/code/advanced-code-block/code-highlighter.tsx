@@ -52,7 +52,7 @@ export default function ShikiCode({ code, lang, theme }: ShikiCodeProps) {
   return (
     <div
       dangerouslySetInnerHTML={{ __html: highlightedCode }}
-      className="[&>pre]:!bg-transparent [&>pre]:!p-0 [&>pre]:!m-0 [&_code]:!bg-transparent [&>pre]:!color-inherit [&>pre]:!pl-4"
+      className="[&>pre]:bg-transparent! [&>pre]:p-0! [&>pre]:m-0! [&_code]:bg-transparent! [&>pre]:!color-inherit [&>pre]:pl-4!"
     />
   );
 }

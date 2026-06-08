@@ -58,7 +58,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
     href: string;
     label: string;
     icon: React.ReactNode;
-    variant?: "primary" | "outline";
+    variant?: "primary" | "outline-solid";
   }> = ({ href, label, icon, variant = "primary" }) => (
     <LinkPreview
       href={href}
@@ -73,12 +73,12 @@ const ProjectDeepDiveRenderer: React.FC = () => {
           variant === "primary"
             ? "border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/40"
             : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10",
-          "shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
+          "shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50",
           "inline-flex items-center gap-3 text-foreground",
         ].join(" ")}
       >
         {/* decorative shine */}
-        <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-gradient-to-br from-primary/10 via-transparent to-transparent" />
+        <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
 
         {/* icon pill */}
         <span className="shrink-0 grid place-items-center w-8 h-8 rounded-lg bg-foreground/10 text-foreground/70 group-hover:bg-primary/15 group-hover:text-primary transition-colors">
@@ -314,7 +314,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
                   to={`/projects/${projectSlug}`}
                   className="group block p-4 rounded-lg border border-border/40 bg-foreground/5 
                              transition-all duration-700 ease-out hover:bg-foreground/10 hover:border-border 
-                             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+                             focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-foreground/20"
                 >
                   <div className="mb-3">
                     <h3 className="font-medium text-foreground group-hover:underline underline-offset-4 decoration-foreground/20 transition-colors duration-300 ease-out">

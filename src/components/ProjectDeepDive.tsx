@@ -135,7 +135,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
       </div>
 
       {/* navigation */}
-      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-sm border-b border-border/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-xs border-b border-border/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto py-4">
           <div className="flex items-center justify-between">
             <Breadcrumb>

@@ -408,7 +408,7 @@ const ProjectImage = ({
           ease: "easeOut",
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent md:hidden" />
+      <div className="absolute inset-0 bg-linear-to-t from-background/80 to-transparent md:hidden" />
       {usesVercelSatori && (
         <motion.div
           className="absolute left-2 bottom-2 md:left-3 md:bottom-3 pointer-events-none"
@@ -420,7 +420,7 @@ const ProjectImage = ({
           }}
           transition={{ duration: 0.25, ease: "easeOut" }}
         >
-          <div className="inline-flex items-center px-2 py-[2px] md:px-2.5 md:py-1 rounded-full bg-background/60 backdrop-blur-sm ring-1 ring-foreground/10 shadow-sm pointer-events-auto">
+          <div className="inline-flex items-center px-2 py-[2px] md:px-2.5 md:py-1 rounded-full bg-background/60 backdrop-blur-xs ring-1 ring-foreground/10 shadow-xs pointer-events-auto">
             <span className="text-[10px] md:text-xs font-medium leading-none text-foreground/80">
               <RichText
                 text={t.projects.satoriAttribution}
@@ -463,7 +463,7 @@ const ProjectDate = ({ date }: { date: Project["date"] }) => (
 );
 
 const ProjectDescription = ({ description }: { description: string }) => (
-  <p className="text-foreground/60 text-sm mb-4 sm:mb-6 flex-grow">
+  <p className="text-foreground/60 text-sm mb-4 sm:mb-6 grow">
     <RichText text={description} />
   </p>
 );
@@ -513,7 +513,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
               icon={<FileSearch className="w-4 h-4" />}
               variant="default"
               size="lg"
-              className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
+              className="w-full flex items-center justify-center gap-2 shadow-xs transition-all"
             />
           </Link>
         ) : (
@@ -523,7 +523,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
                 asChild
                 variant="default"
                 size="lg"
-                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
+                className="w-full flex items-center justify-center gap-2 shadow-xs transition-all"
               >
                 <a
                   href={project.github}
@@ -540,7 +540,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
                 asChild
                 variant="default"
                 size="lg"
-                className="w-full flex items-center justify-center gap-2 shadow-sm transition-all"
+                className="w-full flex items-center justify-center gap-2 shadow-xs transition-all"
               >
                 <a
                   href={project.link}
@@ -586,7 +586,7 @@ const ProjectCard = ({
   t: any;
 }) => {
   const cardClassName =
-    "group rounded-lg border-2 border-border/20 bg-foreground/5 backdrop-blur-sm hover:border-border/35 transition-all duration-300";
+    "group rounded-lg border-2 border-border/20 bg-foreground/5 backdrop-blur-xs hover:border-border/35 transition-all duration-300";
 
   return (
     <motion.div
@@ -702,7 +702,7 @@ const Projects = () => {
 
       <ScrollReveal variant="title">
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-          <h2 className="text-2xl font-semibold break-words">
+          <h2 className="text-2xl font-semibold wrap-break-word">
             {t.projects.other}
           </h2>
           <div className="relative group shrink-0">
@@ -711,7 +711,7 @@ const Projects = () => {
                 <Info className="w-4 h-4 hover:text-primary transition-colors duration-300 group-hover:text-primary cursor-help" />
               </TooltipTrigger>
               <TooltipContent
-                className="bg-background/85 backdrop-blur-sm"
+                className="bg-background/85 backdrop-blur-xs"
                 side="right"
                 align="center"
               >

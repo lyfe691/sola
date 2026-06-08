@@ -74,7 +74,7 @@ const Footer = () => {
   const e = "/a";
 
   return (
-    <footer className="relative w-full border-t border-foreground/5 bg-background/5 backdrop-blur-sm">
+    <footer className="relative w-full border-t border-foreground/5 bg-background/5 backdrop-blur-xs">
       {/* bottom glow effect */}
       <div
         className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"
@@ -164,7 +164,7 @@ const Footer = () => {
               >
                 {t.common.home}
               </Link>
-              <div className="w-8 h-px bg-gradient-to-r from-foreground/20 to-transparent" />
+              <div className="w-8 h-px bg-linear-to-r from-foreground/20 to-transparent" />
               {nav.map(({ text, path }) => (
                 <Link
                   key={path}
@@ -192,8 +192,8 @@ const Footer = () => {
                 }}
                 className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-all duration-300 hover:cursor-copy"
               >
-                <Mail className="w-4 h-4 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="leading-relaxed break-words">
+                <Mail className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="leading-relaxed wrap-break-word">
                   yanis.sebastian.zuercher@gmail.com
                 </span>
               </button>
@@ -223,7 +223,7 @@ const Footer = () => {
                   className={`group relative p-2.5 rounded-lg border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-all duration-300 ${link.hoverClass}`}
                 >
                   <div className="relative z-10">{link.icon}</div>
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 rounded-lg bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </a>
               ))}
             </div>
@@ -258,7 +258,7 @@ const Footer = () => {
 
         {/* bottom section */}
         <div className="relative">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent" />
           <div className="pt-8 text-center">
             <p className="text-xs text-foreground/40 leading-relaxed">
               © {year}{" "}

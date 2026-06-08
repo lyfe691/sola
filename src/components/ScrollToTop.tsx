@@ -61,7 +61,7 @@ export default function ScrollToTop() {
           className="fixed bottom-6 right-6 z-50 flex items-center justify-center
                      h-11 w-11 rounded-full
                      bg-background/70 text-foreground
-                     backdrop-blur-sm shadow-lg
+                     backdrop-blur-xs shadow-lg
                      hover:bg-background/90
                      transition-colors"
         >

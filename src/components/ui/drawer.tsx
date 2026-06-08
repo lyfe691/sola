@@ -133,7 +133,7 @@ const DrawerContent = React.forwardRef<
             >
               <motion.div
                 className={cn(
-                  "relative flex w-full max-w-xl flex-col gap-4 rounded-[26px] border border-border/50 bg-background p-6 shadow-[0_-38px_120px_-52px_rgba(12,12,18,0.9)] outline-none supports-[backdrop-filter]:bg-background/92 sm:gap-6 sm:p-8",
+                  "relative flex w-full max-w-xl flex-col gap-4 rounded-[26px] border border-border/50 bg-background p-6 shadow-[0_-38px_120px_-52px_rgba(12,12,18,0.9)] outline-hidden supports-backdrop-filter:bg-background/92 sm:gap-6 sm:p-8",
                   className,
                 )}
                 initial={{ y: 24, opacity: 0 }}

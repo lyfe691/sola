@@ -113,7 +113,7 @@ const InterestCard = ({
           animate={{ scale: isHovered ? 1.05 : 1 }}
           transition={{ duration: 0.4 }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-background to-transparent" />
       </div>
 
       <div className="p-4 space-y-2">
@@ -190,10 +190,10 @@ const TestimonialCard = ({
             <img
               src={avatar}
               alt={author}
-              className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+              className="w-14 h-14 rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
               <span className="text-lg font-medium text-primary">
                 {author
                   .split(" ")
@@ -239,7 +239,7 @@ const TestimonialCard = ({
   );
 
   const cardContent = (
-    <motion.div className="group rounded-xl border-2 border-border/20 bg-background/50 backdrop-blur-sm p-6 space-y-4 relative overflow-hidden h-full flex flex-col">
+    <motion.div className="group rounded-xl border-2 border-border/20 bg-background/50 backdrop-blur-xs p-6 space-y-4 relative overflow-hidden h-full flex flex-col">
       {/* quote icon */}
       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
         <Quote className="w-4 h-4 text-primary" />
@@ -281,10 +281,10 @@ const TestimonialCard = ({
             <img
               src={avatar}
               alt={author}
-              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+              className="w-10 h-10 rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
               <span className="text-sm font-medium text-primary">
                 {author
                   .split(" ")
@@ -640,7 +640,7 @@ const About = () => {
           {/* ------------------ Portrait ------------------ */}
 
           <div className="md:col-span-2 relative">
-            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border/20 shadow-sm">
+            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border/20 shadow-xs">
               <motion.img
                 src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
                 alt="Yanis Sebastian Zürcher"
@@ -777,7 +777,7 @@ const About = () => {
       {/* ------------------- Philosophy ----------------- */}
 
       <ScrollReveal variant="default">
-        <div className="relative overflow-hidden rounded-xl border-2 border-border/20 bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
+        <div className="relative overflow-hidden rounded-xl border-2 border-border/20 bg-linear-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
           <div className="relative z-10">
             <h2 className="text-xl font-bold mb-6 md:mb-8">
               {t.about.philosophy.title}

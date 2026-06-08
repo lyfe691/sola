@@ -11,7 +11,7 @@ import {
 } from "motion/react";
 import React, { useState, useEffect, useRef } from "react";
 
-export type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
+export type PresetType = "blur-sm" | "fade-in-blur" | "scale" | "fade" | "slide";
 
 export type PerType = "word" | "char" | "line";
 
@@ -316,7 +316,7 @@ export function TextEffectWrapper({
 export function CyclingTextEffect({
   texts,
   per = "char",
-  preset = "blur",
+  preset = "blur-sm",
   as = "span",
   className,
   delay = 0,

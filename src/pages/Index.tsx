@@ -149,7 +149,7 @@ const Index = () => {
           </Helmet>
 
           {/* Squares background, remove for now 
-          <div className="absolute inset-0 z-[1]">
+          <div className="absolute inset-0 z-1">
             <Squares 
               speed={0.1} 
               squareSize={40}
@@ -159,7 +159,7 @@ const Index = () => {
           */}
 
           {/* Threads background, remove for now 
-          <div className="absolute inset-0 z-[1] pointer-events-none">
+          <div className="absolute inset-0 z-1 pointer-events-none">
             <div className="w-full h-full pointer-events-auto">
               <Threads
                 amplitude={1.5}
@@ -194,12 +194,12 @@ const Index = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label="Visit Kinoa"
-                          className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 sm:px-3.5 sm:py-1.5 relative z-30 whitespace-nowrap backdrop-blur-sm bg-foreground/[0.03] dark:bg-foreground/[0.05] ring-1 ring-foreground/[0.04] dark:ring-foreground/[0.08] transition-all duration-300 hover:bg-foreground/[0.05] dark:hover:bg-foreground/[0.08] hover:ring-foreground/[0.06] dark:hover:ring-foreground/[0.12]"
+                          className="group inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 sm:px-3.5 sm:py-1.5 relative z-30 whitespace-nowrap backdrop-blur-xs bg-foreground/3 dark:bg-foreground/5 ring-1 ring-foreground/4 dark:ring-foreground/8 transition-all duration-300 hover:bg-foreground/5 dark:hover:bg-foreground/8 hover:ring-foreground/6 dark:hover:ring-foreground/12"
                         >
                           <span className="text-[11px] sm:text-[13px] font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60">
                             {t.index.currentlyWorkingOn}
                           </span>
-                          <span className="text-[11px] sm:text-[13px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-foreground/50 via-foreground to-foreground/50 [background-size:200%_100%] animate-[shine_4s_ease-in-out_infinite]">
+                          <span className="text-[11px] sm:text-[13px] font-semibold text-transparent bg-clip-text bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] animate-[shine_4s_ease-in-out_infinite]">
                             Kinoa
                           </span>
                           <ChevronToArrowIcon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60" />
@@ -319,20 +319,20 @@ const Index = () => {
                               custom={index}
                               variants={homeAnimations.socialItem}
                               className={`group relative inline-flex items-center justify-center text-foreground/60 hover:text-foreground transition-all duration-200 ease-out overflow-hidden transform-gpu will-change-transform
-                                            w-10 h-10 rounded-xl bg-foreground/[0.07] ring-[1.5px] ring-foreground/[0.08] ring-inset active:scale-95 active:bg-foreground/[0.12]
-                                            md:w-12 md:h-12 md:rounded-full md:ring-0 md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-sm md:duration-500 md:active:scale-100 ${hoverClass}
+                                            w-10 h-10 rounded-xl bg-foreground/[0.07] ring-[1.5px] ring-foreground/8 ring-inset active:scale-95 active:bg-foreground/12
+                                            md:w-12 md:h-12 md:rounded-full md:ring-0 md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:duration-500 md:active:scale-100 ${hoverClass}
                                             ${
                                               label === "LeetCode"
-                                                ? "md:hover:[width:8rem] lg:hover:[width:8rem]"
+                                                ? "md:hover:w-32 lg:hover:w-32"
                                                 : label.length <= 5
-                                                  ? "md:hover:[width:6.3rem] lg:hover:[width:6.3rem] "
+                                                  ? "md:hover:w-[6.3rem] lg:hover:w-[6.3rem] "
                                                   : label.length <= 7
-                                                    ? "md:hover:[width:6.8rem] lg:hover:[width:6.8rem]"
+                                                    ? "md:hover:w-[6.8rem] lg:hover:w-[6.8rem]"
                                                     : label.length <= 8
-                                                      ? "md:hover:[width:7.5rem] lg:hover:[width:7.5rem]"
+                                                      ? "md:hover:w-30 lg:hover:w-30"
                                                       : label.length <= 10
-                                                        ? "md:hover:[width:8.5rem] lg:hover:[width:8.5rem]"
-                                                        : "md:hover:[width:9.5rem] lg:hover:[width:9.5rem]"
+                                                        ? "md:hover:w-34 lg:hover:w-34"
+                                                        : "md:hover:w-38 lg:hover:w-38"
                                             }
                                           `}
                             >
@@ -346,7 +346,7 @@ const Index = () => {
 
                               {/* Desktop: label reveal */}
                               <div className="hidden md:flex absolute left-12 right-1 top-1/2 -translate-y-1/2 items-center pointer-events-none">
-                                <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-sm transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
+                                <span className="text-sm font-medium whitespace-nowrap opacity-0 blur-xs transform translate-x-4 group-hover:opacity-100 group-hover:blur-none group-hover:translate-x-0 transition-all duration-500 ease-out delay-100">
                                   {label}
                                 </span>
                               </div>

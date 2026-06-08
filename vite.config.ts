@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
+import tailwindcss from "@tailwindcss/vite";
 import mdx from "@mdx-js/rollup";
 import remarkGfm from "remark-gfm";
 import path from "path";
@@ -19,6 +20,7 @@ export default defineConfig(({ mode }) => ({
       }),
     },
     react(),
+    tailwindcss(),
   ],
   resolve: {
     alias: {

@@ -81,14 +81,14 @@ const Services = () => {
           <ScrollReveal key={service.key} variant="default" delay={index * 140}>
             <motion.div
               className="group relative p-5 sm:p-6 rounded-lg border-2 border-border/20
-                         bg-foreground/5 backdrop-blur-sm transition-all duration-300
-                         hover:border-border/35 hover:bg-primary/5 cursor-default shadow-sm hover:shadow-md"
+                         bg-foreground/5 backdrop-blur-xs transition-all duration-300
+                         hover:border-border/35 hover:bg-primary/5 cursor-default shadow-xs hover:shadow-md"
             >
               {service.highlight && (
                 <div
                   className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 
                                bg-primary text-primary-foreground text-xs rounded-full
-                               font-medium shadow-sm"
+                               font-medium shadow-xs"
                 >
                   {service.highlight}
                 </div>
@@ -96,7 +96,7 @@ const Services = () => {
 
               <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-4 pb-3 border-b border-foreground/10 sm:items-center">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="p-2.5 rounded-lg bg-gradient-to-br from-accent/20 to-transparent">
+                  <div className="p-2.5 rounded-lg bg-linear-to-br from-accent/20 to-transparent">
                     <service.icon className="w-6 h-6 text-primary/80" />
                   </div>
                   <h3 className="text-base sm:text-lg font-medium text-foreground group-hover:text-primary transition-colors truncate">
@@ -166,8 +166,8 @@ const Services = () => {
       <ScrollReveal variant="default">
         <div
           className="relative overflow-hidden rounded-xl p-5 sm:p-6 md:p-8
-                       bg-gradient-to-br from-primary/20 via-primary/10 to-background
-                       border border-primary/20 backdrop-blur-sm"
+                       bg-linear-to-br from-primary/20 via-primary/10 to-background
+                       border border-primary/20 backdrop-blur-xs"
         >
           <div className="relative z-10">
             <h2 className="text-xl font-medium mb-3 text-foreground">

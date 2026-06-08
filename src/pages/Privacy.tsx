@@ -702,7 +702,7 @@ const Privacy = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="min-h-screen bg-gradient-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
+          className="min-h-screen bg-linear-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
         >
           <Helmet>
             <title>{t.seo.privacy.title}</title>
@@ -733,13 +733,13 @@ const Privacy = () => {
             </div>
 
             <motion.div {...trail(2)} className="mb-16 text-center">
-              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap break-words shrink-0">
+              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
                 {L[language].pageTitle}
               </h1>
               <div className="mt-8 flex items-center justify-center">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border/60 bg-background/60 px-2.5 py-1 text-[0.70rem]/[1rem] text-foreground/60 backdrop-blur-sm">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border/60 bg-background/60 px-2.5 py-1 text-[0.70rem]/[1rem] text-foreground/60 backdrop-blur-xs">
                   {updatedLabel}:{" "}
-                  <span className="bg-gradient-to-r from-foreground/60 via-primary to-foreground/60 bg-[length:200%_100%] bg-clip-text text-transparent animate-shine">
+                  <span className="bg-linear-to-r from-foreground/60 via-primary to-foreground/60 bg-size-[200%_100%] bg-clip-text text-transparent animate-shine">
                     {formattedUpdated}
                   </span>
                 </span>
@@ -754,7 +754,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                  className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].intro.title}
@@ -787,7 +787,7 @@ const Privacy = () => {
                     variants={cardIn}
                     initial="hidden"
                     animate="visible"
-                    className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                    className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                   >
                     <h2 className="text-xl font-semibold text-foreground mb-4">
                       {L[language].hosting.title}
@@ -812,7 +812,7 @@ const Privacy = () => {
                     variants={cardIn}
                     initial="hidden"
                     animate="visible"
-                    className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                    className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                   >
                     <h2 className="text-xl font-semibold text-foreground mb-4">
                       {L[language].analytics.title}
@@ -838,7 +838,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                  className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].cookies.title}
@@ -853,7 +853,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                  className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].contact.title}
@@ -878,7 +878,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                  className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].github.title}
@@ -903,7 +903,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                  className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].processors.title}
@@ -918,7 +918,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                  className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].rights.title}
@@ -948,7 +948,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
+                  className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].changes.title}
@@ -965,7 +965,7 @@ const Privacy = () => {
                   variants={cardIn}
                   initial="hidden"
                   animate="visible"
-                  className="rounded-xl border  backdrop-blur-sm p-6"
+                  className="rounded-xl border  backdrop-blur-xs p-6"
                 >
                   <h2 className="text-xl font-semibold text-foreground mb-4">
                     {L[language].impressum.title}

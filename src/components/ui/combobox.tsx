@@ -62,7 +62,7 @@ export function Combobox({
             aria-expanded={open}
             disabled={disabled}
             className={cn(
-              "h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-all duration-300 ease-out outline-none",
+              "h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs transition-all duration-300 ease-out outline-hidden",
               "hover:border-ring/40 hover:bg-accent/10",
               "focus-visible:border-ring focus-visible:ring-[0.2rem] focus-visible:ring-ring/20 focus-visible:ring-offset-0 focus-visible:shadow-lg focus-visible:shadow-ring/10",
               "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
@@ -82,7 +82,7 @@ export function Combobox({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-[var(--radix-popover-trigger-width)] p-0 bg-background border-input shadow-md"
+          className="w-(--radix-popover-trigger-width) p-0 bg-background border-input shadow-md"
           align="start"
           sideOffset={4}
         >
