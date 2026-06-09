@@ -94,24 +94,14 @@ export default function AboutThisWebsite() {
           . Typography:{" "}
           <strong>
             <LinkPreview
-              href="https://fonts.google.com/specimen/Sora"
+              href="https://fonts.google.com/specimen/Geist"
               className="link"
               compact
             >
-              Sora
+              Geist
             </LinkPreview>
-          </strong>{" "}
-          for headings and{" "}
-          <strong>
-            <LinkPreview
-              href="https://fonts.google.com/specimen/Inter"
-              className="link"
-              compact
-            >
-              Inter
-            </LinkPreview>
-          </strong>{" "}
-          for body.
+          </strong>
+          .
         </p>
         <p>Designed for speed, clarity, and a personal touch.</p>
         <p>Thanks for stopping by.</p>
