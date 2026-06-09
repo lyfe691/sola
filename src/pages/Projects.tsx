@@ -609,7 +609,7 @@ const ProjectBody = ({ project, t }: { project: Project; t: any }) => (
 const ProjectCard = ({ project, t }: { project: Project; t: any }) =>
   project.image ? (
     <Card className={cardClassName}>
-      <div className="grid md:grid-cols-2">
+      <div className="grid grid-cols-1 md:grid-cols-2">
         <ProjectImage project={project} t={t} />
         <ProjectBody project={project} t={t} />
       </div>
@@ -711,7 +711,7 @@ const Projects = () => {
       </ScrollReveal>
 
       {/* Featured Projects */}
-      <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
           <ScrollReveal key={project.id} variant="default" delay={index * 10}>
             <ProjectCard project={project} t={t} />
@@ -740,7 +740,7 @@ const Projects = () => {
       </ScrollReveal>
 
       {/* Other Projects */}
-      <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {otherProjects.map((project) => (
           <ScrollReveal key={project.id} variant="default" className="h-full">
             <ProjectCard project={project} t={t} />
