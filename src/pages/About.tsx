@@ -45,7 +45,6 @@ import {
   Drawer,
   DrawerTrigger,
   DrawerContent,
-  DrawerHeader,
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
@@ -337,8 +336,8 @@ const TestimonialCard = ({
       <>
         {cardContent}
         <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerContent className="px-4 pb-4">
-            <DrawerHeader className="text-left px-0">
+          <DrawerContent>
+            <div className="flex flex-col gap-1.5 pt-2">
               <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
               <DrawerDescription>
                 <RichText
@@ -346,7 +345,8 @@ const TestimonialCard = ({
                   values={{ author }}
                 />
               </DrawerDescription>
-            </DrawerHeader>
+            </div>
+            <Separator className="my-4" />
             {fullTestimonialContent}
           </DrawerContent>
         </Drawer>
@@ -358,8 +358,8 @@ const TestimonialCard = ({
     <>
       {cardContent}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader className="pb-2">
+        <DialogContent>
+          <DialogHeader>
             <DialogTitle>{t.about.testimonials.modalTitle}</DialogTitle>
             <DialogDescription>
               <RichText
@@ -385,6 +385,47 @@ const ResumeModal = () => {
     language === "de" ? "de" : "en",
   );
 
+  const languagePicker = (
+    <div className="flex items-center justify-between gap-4">
+      <span className="text-sm font-medium">
+        {t.about.resume.languageLabel}
+      </span>
+      <ToggleGroup
+        value={[selectedLang]}
+        onValueChange={(value) =>
+          value[0] && setSelectedLang(value[0] as "en" | "de")
+        }
+        variant="outline"
+        size="sm"
+      >
+        <ToggleGroupItem value="en">EN</ToggleGroupItem>
+        <ToggleGroupItem value="de">DE</ToggleGroupItem>
+      </ToggleGroup>
+    </div>
+  );
+
+  const actions = (
+    <>
+      <Button
+        onClick={() => {
+          viewResume(selectedLang);
+          setOpen(false);
+        }}
+      >
+        {t.about.resume.viewButton}
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() => {
+          downloadResume(selectedLang);
+          setOpen(false);
+        }}
+      >
+        {t.about.resume.downloadButton}
+      </Button>
+    </>
+  );
+
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
@@ -392,67 +433,23 @@ const ResumeModal = () => {
           <IconButton
             variant="default"
             size="lg"
-            className="border-foreground/20 w-full"
+            className="w-full border-foreground/20"
             icon={<Download className="w-4 h-4" />}
             iconPosition="left"
             label={t.about.resume.buttonLabel}
             onClick={() => setOpen(true)}
           />
         </DrawerTrigger>
-        <DrawerContent className="px-4 pb-4">
-          <DrawerHeader className="text-left px-0">
+        <DrawerContent>
+          <div className="flex flex-col gap-1.5 pt-2">
             <DrawerTitle>{t.about.resume.title}</DrawerTitle>
             <DrawerDescription>
               <RichText text={t.about.resume.description} />
             </DrawerDescription>
-          </DrawerHeader>
-
-          {/* language selection */}
-          <div className="py-4 border-y border-foreground/10 mb-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">
-                {t.about.resume.languageLabel}
-              </span>
-              <ToggleGroup
-                value={[selectedLang]}
-                onValueChange={(value) =>
-                  value[0] && setSelectedLang(value[0] as "en" | "de")
-                }
-                variant="outline"
-                size="sm"
-              >
-                <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
-                  EN
-                </ToggleGroupItem>
-                <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
-                  DE
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
           </div>
-
-          <div className="flex flex-col gap-3">
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => {
-                viewResume(selectedLang);
-                setOpen(false);
-              }}
-            >
-              {t.about.resume.viewButton}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                downloadResume(selectedLang);
-                setOpen(false);
-              }}
-            >
-              {t.about.resume.downloadButton}
-            </Button>
-          </div>
+          <Separator className="my-4" />
+          {languagePicker}
+          <div className="mt-6 flex flex-col gap-2">{actions}</div>
         </DrawerContent>
       </Drawer>
     );
@@ -465,7 +462,7 @@ const ResumeModal = () => {
           <IconButton
             variant="default"
             size="lg"
-            className="border-foreground/20 w-1/3"
+            className="w-1/3 border-foreground/20"
             icon={<Download className="w-4 h-4" />}
             iconPosition="left"
             label={t.about.resume.buttonLabel}
@@ -473,60 +470,15 @@ const ResumeModal = () => {
           />
         }
       />
-      <DialogContent className="max-w-md">
-        <DialogHeader className="pb-2">
+      <DialogContent>
+        <DialogHeader>
           <DialogTitle>{t.about.resume.title}</DialogTitle>
           <DialogDescription>
             <RichText text={t.about.resume.description} />
           </DialogDescription>
         </DialogHeader>
-
-        {/* language selection */}
-        <div className="py-4 border-y border-foreground/10">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">
-              {t.about.resume.languageLabel}
-            </span>
-            <ToggleGroup
-              value={[selectedLang]}
-              onValueChange={(value) =>
-                value[0] && setSelectedLang(value[0] as "en" | "de")
-              }
-              variant="outline"
-              size="sm"
-            >
-              <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
-                EN
-              </ToggleGroupItem>
-              <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
-                DE
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3 pt-4">
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => {
-              viewResume(selectedLang);
-              setOpen(false);
-            }}
-          >
-            {t.about.resume.viewButton}
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              downloadResume(selectedLang);
-              setOpen(false);
-            }}
-          >
-            {t.about.resume.downloadButton}
-          </Button>
-        </div>
+        {languagePicker}
+        <div className="flex flex-col gap-2">{actions}</div>
       </DialogContent>
     </Dialog>
   );
