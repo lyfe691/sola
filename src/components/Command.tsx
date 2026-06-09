@@ -89,22 +89,37 @@ export function CommandMenu() {
     return t.nav[item.translationKey as keyof typeof t.nav];
   };
 
-  // command content that's shared between both mobile and desktop versions
+  const renderThemeItem = (option: (typeof THEMES)[number]) => {
+    const Icon = option.icon;
+    return (
+      <CommandItem
+        key={option.value}
+        value={option.label}
+        data-checked={theme === option.value ? "true" : undefined}
+        onSelect={() => handleThemeChange(option.value as ConfiguredTheme)}
+      >
+        <Icon />
+        <span>{option.label}</span>
+      </CommandItem>
+    );
+  };
+
+  // command content shared between mobile and desktop
   const commandContent = (
     <>
       <CommandInput
         placeholder={t.common.command.placeholder}
         className={isMobile ? "text-base" : undefined}
       />
-      <CommandList className="max-h-[60vh] overflow-y-auto">
+      <CommandList className="max-h-[60vh]">
         <CommandEmpty>{t.common.command.noResults}</CommandEmpty>
 
         <CommandGroup heading={t.common.command.groups.navigation}>
           {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
             <CommandItem
               key={item.key}
+              value={getNavLabel(item)}
               onSelect={() => handleNavigation(item.path)}
-              className="cursor-pointer"
             >
               <span>{getNavLabel(item)}</span>
               <CommandShortcut>↵</CommandShortcut>
@@ -115,65 +130,28 @@ export function CommandMenu() {
         <CommandSeparator />
 
         <CommandGroup heading={t.common.command.groups.theme}>
-          <div className="flex flex-wrap gap-2 px-2 pb-1">
-            {THEMES.map((themeOption) => {
-              if (themeOption.isCustom) return null; // Custom themes handled in next group
-              const IconComponent = themeOption.icon;
-              const isActive = theme === themeOption.value;
-              return (
-                <CommandItem
-                  key={themeOption.value}
-                  onSelect={() =>
-                    handleThemeChange(themeOption.value as ConfiguredTheme)
-                  }
-                  className={`cursor-pointer w-auto inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${isActive ? "bg-accent text-accent-foreground" : ""}`}
-                >
-                  <IconComponent className="h-3.5 w-3.5" />
-                  <span>{themeOption.label}</span>
-                </CommandItem>
-              );
-            })}
-          </div>
+          {THEMES.filter((o) => !o.isCustom).map(renderThemeItem)}
         </CommandGroup>
 
         <CommandSeparator />
 
         <CommandGroup heading={t.common.menu.customThemes}>
-          <div className="flex flex-wrap gap-2 px-2 pb-1">
-            {THEMES.map((themeOption) => {
-              if (!themeOption.isCustom) return null;
-              const IconComponent = themeOption.icon;
-              const isActive = theme === themeOption.value;
-              return (
-                <CommandItem
-                  key={themeOption.value}
-                  onSelect={() =>
-                    handleThemeChange(themeOption.value as ConfiguredTheme)
-                  }
-                  className={`cursor-pointer w-auto inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${isActive ? "bg-accent text-accent-foreground" : ""}`}
-                >
-                  <IconComponent className="h-3.5 w-3.5" />
-                  <span>{themeOption.label}</span>
-                </CommandItem>
-              );
-            })}
-          </div>
+          {THEMES.filter((o) => o.isCustom).map(renderThemeItem)}
         </CommandGroup>
 
         <CommandSeparator />
 
         <CommandGroup heading={t.common.command.groups.language}>
-          <div className="flex flex-wrap gap-2 px-2 pb-2">
-            {LANGUAGES.map(({ code, label }) => (
-              <CommandItem
-                key={code}
-                onSelect={() => handleLanguageChange(code)}
-                className={`cursor-pointer w-auto inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs ${language === code ? "bg-accent text-accent-foreground" : ""}`}
-              >
-                <span>{label}</span>
-              </CommandItem>
-            ))}
-          </div>
+          {LANGUAGES.map(({ code, label }) => (
+            <CommandItem
+              key={code}
+              value={label}
+              data-checked={language === code ? "true" : undefined}
+              onSelect={() => handleLanguageChange(code)}
+            >
+              <span>{label}</span>
+            </CommandItem>
+          ))}
         </CommandGroup>
 
         <CommandSeparator />
@@ -182,13 +160,13 @@ export function CommandMenu() {
           {backgroundOptions.map((option) => (
             <CommandItem
               key={option.id}
+              value={option.label}
+              data-checked={
+                activeBackground === option.id ? "true" : undefined
+              }
               onSelect={() => handleBackgroundChange(option.id)}
-              className="cursor-pointer"
             >
               <span>{option.label}</span>
-              {activeBackground === option.id && (
-                <CommandShortcut>{t.common.on}</CommandShortcut>
-              )}
             </CommandItem>
           ))}
         </CommandGroup>
@@ -211,7 +189,11 @@ export function CommandMenu() {
   }
 
   return (
-    <CommandDialog open={isOpen} onOpenChange={closeCommandMenu}>
+    <CommandDialog
+      open={isOpen}
+      onOpenChange={closeCommandMenu}
+      className="top-[15%]"
+    >
       <Command>{commandContent}</Command>
     </CommandDialog>
   );
