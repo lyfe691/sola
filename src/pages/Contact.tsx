@@ -73,6 +73,43 @@ function validateFile(file: File): FileValidationResult {
   return { ok: true };
 }
 
+function uploadToCloudinary(
+  file: File,
+  onProgress?: (progress: number) => void,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "unsigned_upload");
+
+    xhr.open("POST", "https://api.cloudinary.com/v1_1/dfgoxrimk/upload");
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && onProgress) {
+        onProgress(Math.round((event.loaded / event.total) * 100));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve(JSON.parse(xhr.responseText).secure_url as string);
+        } catch (err) {
+          reject(err);
+        }
+      } else {
+        reject(new Error(`Cloudinary upload failed with status ${xhr.status}`));
+      }
+    };
+
+    xhr.onerror = () =>
+      reject(new Error("Network error during Cloudinary upload"));
+
+    xhr.send(data);
+  });
+}
+
 const FieldError = ({ name, error }: { name: string; error?: string }) => (
   <AnimatePresence initial={false} mode="wait">
     {error && (
@@ -95,7 +132,6 @@ const FieldError = ({ name, error }: { name: string; error?: string }) => (
 const Contact = () => {
   const { language } = useLanguage();
   const t = translations[language] as Translation;
-  const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -142,30 +178,11 @@ const Contact = () => {
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const subject = params.get("subject");
-    const message = params.get("message");
-
+    const params = new URLSearchParams(location.search);
+    const subject = params.get("subject") ?? "";
+    const message = params.get("message") ?? "";
     if (subject || message) {
-      setFormValues((prev) => ({
-        ...prev,
-        subject: subject || "",
-        message: message || "",
-      }));
-
-      setTimeout(() => {
-        if (formRef.current) {
-          const subjectEl = formRef.current.querySelector(
-            '[name="subject"]',
-          ) as HTMLInputElement;
-          const messageEl = formRef.current.querySelector(
-            '[name="message"]',
-          ) as HTMLTextAreaElement;
-
-          if (subjectEl && subject) subjectEl.value = subject;
-          if (messageEl && message) messageEl.value = message;
-        }
-      }, 200);
+      setFormValues((prev) => ({ ...prev, subject, message }));
     }
   }, [location.search]);
 
@@ -196,7 +213,7 @@ const Contact = () => {
       }
     };
 
-    const onDrop = (e: DragEvent) => {
+    const onWindowDrop = (e: DragEvent) => {
       if (hasFiles(e)) {
         const file = e.dataTransfer?.files?.[0] ?? null;
         if (file) onSelectFile(file);
@@ -209,33 +226,22 @@ const Contact = () => {
     window.addEventListener("dragenter", onDragEnter);
     window.addEventListener("dragover", onDragOver);
     window.addEventListener("dragleave", onDragLeave);
-    window.addEventListener("drop", onDrop);
-    window.addEventListener("dragend", onDrop);
+    window.addEventListener("drop", onWindowDrop);
+    window.addEventListener("dragend", onWindowDrop);
 
     return () => {
       window.removeEventListener("dragenter", onDragEnter);
       window.removeEventListener("dragover", onDragOver);
       window.removeEventListener("dragleave", onDragLeave);
-      window.removeEventListener("drop", onDrop);
-      window.removeEventListener("dragend", onDrop);
+      window.removeEventListener("drop", onWindowDrop);
+      window.removeEventListener("dragend", onWindowDrop);
     };
   }, []);
 
   const clearForm = () => {
-    setFormValues({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+    setFormValues({ name: "", email: "", subject: "", message: "" });
     onSelectFile(null);
-    setUploadedUrl(null);
-
-    if (formRef.current) {
-      formRef.current.reset();
-    }
-
-    if (window.location.search) {
+    if (location.search) {
       navigate("/contact", { replace: true });
     }
   };
@@ -243,7 +249,7 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || isUploading) return;
-    // validate before any async work
+
     const newErrors: Partial<Record<FieldName, string>> = {};
     for (const name of FIELD_ORDER) {
       const err = validateField(name, formValues[name]);
@@ -260,23 +266,17 @@ const Contact = () => {
 
     setIsSubmitting(true);
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    const formData = new FormData(e.currentTarget);
 
-    // if a file is selected, upload to Cloudinary first, then include URL only
     try {
       if (selectedFile) {
-        // validate before uploading
         const v = validateFile(selectedFile);
-        if ("code" in v) {
-          const message =
+        if (!v.ok) {
+          toast.error(
             v.code === "too_large"
-              ? t.contact.fileTooLarge.replace(
-                  "{max}",
-                  formatBytes(MAX_FILE_BYTES),
-                )
-              : t.contact.unsupportedFileType;
-          toast.error(message);
+              ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
+              : t.contact.unsupportedFileType,
+          );
           setIsSubmitting(false);
           return;
         }
@@ -288,7 +288,6 @@ const Contact = () => {
         );
         setUploadedUrl(url);
         formData.append("fileUrl", url);
-        // ensure we don't send the original file to Formspree
         formData.delete("attachment");
       }
 
@@ -309,7 +308,7 @@ const Contact = () => {
       }
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error("Something went wrong. Please try again."); // not translating--only fallback
+      toast.error(t.contact.errorMessage);
     } finally {
       setIsSubmitting(false);
       setIsUploading(false);
@@ -317,67 +316,20 @@ const Contact = () => {
     }
   };
 
-  // upload helper using XHR for progress
-  function uploadToCloudinary(
-    file: File,
-    onProgress?: (progress: number) => void,
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "unsigned_upload");
-
-      xhr.open("POST", "https://api.cloudinary.com/v1_1/dfgoxrimk/upload");
-
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable && onProgress) {
-          const percent = Math.round((event.loaded / event.total) * 100);
-          onProgress(percent);
-        }
-      };
-
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try {
-            const json = JSON.parse(xhr.responseText);
-            resolve(json.secure_url as string);
-          } catch (err) {
-            reject(err);
-          }
-        } else {
-          reject(
-            new Error(`Cloudinary upload failed with status ${xhr.status}`),
-          );
-        }
-      };
-
-      xhr.onerror = () =>
-        reject(new Error("Network error during Cloudinary upload"));
-
-      xhr.send(data);
-    });
-  }
-
-  const onSelectFile = (file: File | null) => {
+  const onSelectFile = (incoming: File | null) => {
+    let file = incoming;
     if (file) {
       const v = validateFile(file);
-      if ("code" in v) {
-        const message =
+      if (!v.ok) {
+        toast.error(
           v.code === "too_large"
-            ? t.contact.fileTooLarge.replace(
-                "{max}",
-                formatBytes(MAX_FILE_BYTES),
-              )
-            : t.contact.unsupportedFileType;
-        toast.error(message);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        setSelectedFile(null);
-        setUploadedUrl(null);
-        setUploadProgress(null);
-        return;
+            ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
+            : t.contact.unsupportedFileType,
+        );
+        file = null;
       }
     }
+    if (!file && fileInputRef.current) fileInputRef.current.value = "";
     setSelectedFile(file);
     setUploadedUrl(null);
     setUploadProgress(null);
@@ -478,7 +430,6 @@ const Contact = () => {
         >
           <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
             <form
-              ref={formRef}
               onSubmit={handleSubmit}
               noValidate
               className="flex flex-col gap-5"
@@ -563,11 +514,7 @@ const Contact = () => {
                   e.preventDefault();
                   e.stopPropagation();
                 }}
-                onDrop={(e) => {
-                  onDrop(e);
-                  setIsPageDragActive(false);
-                  dragCounter.current = 0;
-                }}
+                onDrop={onDrop}
                 onClick={onClickDropzone}
                 className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed p-4 transition-colors sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
               >
@@ -581,7 +528,7 @@ const Contact = () => {
                   onChange={(e) => onSelectFile(e.target.files?.[0] ?? null)}
                 />
                 <div className="flex items-center gap-2 text-foreground/70">
-                  <UploadCloud className="h-4 w-4" />
+                  <UploadCloud className="size-4" />
                   <span className="text-sm">
                     {selectedFile
                       ? `${selectedFile.name}${selectedFile.size ? ` • ${formatBytes(selectedFile.size)}` : ""}`
@@ -624,7 +571,7 @@ const Contact = () => {
                     className="absolute top-2 right-2 rounded-full p-1 text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
                     aria-label="Remove file"
                   >
-                    <X className="h-4 w-4" />
+                    <X className="size-4" />
                   </button>
                 )}
               </div>
@@ -673,8 +620,8 @@ const Contact = () => {
                 <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 shadow-xl ring-1 ring-foreground/10 sm:px-6 sm:py-4">
                   <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-foreground/10 to-transparent blur-xl" />
                   <div className="relative flex items-center gap-2 text-foreground/80">
-                    <UploadCloud className="h-5 w-5 sm:h-6 sm:w-6" />
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-foreground/50" />
+                    <UploadCloud className="size-5 sm:size-6" />
+                    <div className="size-2 animate-pulse rounded-full bg-foreground/50" />
                     <span className="text-sm sm:text-base">
                       {t.contact.dropOverlay}
                     </span>

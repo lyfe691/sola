@@ -487,6 +487,7 @@ export const translations = {
       send: "Send Message",
       sending: "Sending...",
       successMessage: "Thanks for your message! I'll get back to you soon.",
+      errorMessage: "Something went wrong. Please try again.",
       subjectLabel: "Subject",
       subjectPlaceholder: "Enter your subject",
       attachmentLabel: "Attachment",
@@ -1059,6 +1060,7 @@ export const translations = {
       sending: "Wird gesendet...",
       successMessage:
         "Danke für Ihre Nachricht! Ich melde mich bald bei Ihnen.",
+      errorMessage: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       subjectLabel: "Betreff",
       subjectPlaceholder: "Betreff eingeben",
       attachmentLabel: "Anhang",
@@ -1632,6 +1634,7 @@ export const translations = {
       sending: "Enviando...",
       successMessage:
         "¡Gracias por tu mensaje! Me pondré en contacto contigo pronto.",
+      errorMessage: "Algo salió mal. Por favor, inténtalo de nuevo.",
       subjectLabel: "Asunto",
       subjectPlaceholder: "Ingresa el asunto",
       attachmentLabel: "Adjunto",
@@ -2197,6 +2200,7 @@ export const translations = {
       sending: "送信中...",
       successMessage:
         "メッセージをお送りいただき、ありがとうございます。近日中にご連絡させていただきます。",
+      errorMessage: "問題が発生しました。もう一度お試しください。",
       subjectLabel: "件名",
       subjectPlaceholder: "件名を入力",
       attachmentLabel: "添付ファイル",
@@ -2750,6 +2754,7 @@ export const translations = {
       send: "发送消息",
       sending: "发送中...",
       successMessage: "感谢您的消息！我会尽快回复您。",
+      errorMessage: "出现错误，请重试。",
       subjectLabel: "主题",
       subjectPlaceholder: "输入主题",
       attachmentLabel: "附件",
