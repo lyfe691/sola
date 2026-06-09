@@ -22,6 +22,9 @@ import {
   MoveRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -95,41 +98,29 @@ const InterestCard = ({
   description,
   icon: Icon,
   image,
-}: InterestCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  return (
-    <motion.div
-      className="group rounded-xl border-2 border-border/20 overflow-hidden relative"
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      <div className="h-36 overflow-hidden relative">
-        <motion.img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover"
-          loading="lazy"
-          initial={{ scale: 1 }}
-          animate={{ scale: isHovered ? 1.05 : 1 }}
-          transition={{ duration: 0.4 }}
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-background to-transparent" />
-      </div>
+}: InterestCardProps) => (
+  <Card className="group gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
+    <div className="relative h-36 overflow-hidden">
+      <img
+        src={image}
+        alt={title}
+        loading="lazy"
+        className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-background to-transparent" />
+    </div>
 
-      <div className="p-4 space-y-2">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
-            <Icon className="w-3.5 h-3.5 text-primary" />
-          </div>
-          <h3 className="font-medium">{title}</h3>
+    <div className="flex flex-col gap-2 p-4">
+      <div className="flex items-center gap-2">
+        <div className="flex size-7 items-center justify-center rounded-md bg-primary/10">
+          <Icon className="size-3.5 text-primary" />
         </div>
-        <p className="text-foreground/70 text-sm leading-relaxed">
-          {description}
-        </p>
+        <h3 className="font-medium">{title}</h3>
       </div>
-    </motion.div>
-  );
-};
+      <p className="text-sm leading-relaxed text-foreground/70">{description}</p>
+    </div>
+  </Card>
+);
 
 type TestimonialProps = {
   quote: string;
@@ -239,7 +230,7 @@ const TestimonialCard = ({
   );
 
   const cardContent = (
-    <motion.div className="group rounded-xl border-2 border-border/20 bg-background/50 backdrop-blur-xs p-6 space-y-4 relative overflow-hidden h-full flex flex-col">
+    <Card className="group relative flex h-full flex-col gap-4 overflow-hidden bg-card/40 p-6 backdrop-blur-md">
       {/* quote icon */}
       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
         <Quote className="w-4 h-4 text-primary" />
@@ -275,7 +266,8 @@ const TestimonialCard = ({
       </div>
 
       {/* author - always at bottom */}
-      <div className="pt-3 border-t border-foreground/10 mt-auto space-y-3">
+      <Separator className="mt-auto" />
+      <div className="space-y-3 pt-3">
         <div className="flex items-start gap-3">
           {avatar ? (
             <img
@@ -333,7 +325,7 @@ const TestimonialCard = ({
 
       {/* subtle background decoration */}
       <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-    </motion.div>
+    </Card>
   );
 
   if (!isLongQuote) {
@@ -689,18 +681,18 @@ const About = () => {
                 </Button>
               ))}
             </div>
-            <div className="rounded-xl border-2 border-border/20 p-4">
+            <Card className="gap-0 bg-card/40 p-4 backdrop-blur-md">
               <GitHubCalendar
                 username="lyfe691"
                 colorScheme={getThemeType(theme)}
                 fontSize={14}
                 year={selectedYear}
               />
-            </div>
+            </Card>
           </div>
 
           {loadingActivity ? (
-            <div className="border-2 border-border/20 rounded-xl p-4 h-48 animate-pulse mt-6" />
+            <Skeleton className="mt-6 h-48 rounded-xl" />
           ) : (
             <ContributionActivityFeed events={activity} />
           )}

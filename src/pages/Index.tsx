@@ -148,28 +148,6 @@ const Index = () => {
             <meta name="description" content={t.seo.home.description} />
           </Helmet>
 
-          {/* Squares background, remove for now 
-          <div className="absolute inset-0 z-1">
-            <Squares 
-              speed={0.1} 
-              squareSize={40}
-              direction="diagonal"
-            />
-          </div>
-          */}
-
-          {/* Threads background, remove for now 
-          <div className="absolute inset-0 z-1 pointer-events-none">
-            <div className="w-full h-full pointer-events-auto">
-              <Threads
-                amplitude={1.5}
-                distance={0.1}
-                enableMouseInteraction={true}
-              />
-            </div>
-          </div>
-          */}
-
           <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-16 sm:pt-18 md:pt-20 flex flex-col relative z-20">
             <div className="max-w-7xl mx-auto w-full flex flex-col h-full">
               <div className="mb-8 sm:mb-10 md:mb-14 lg:mb-16">

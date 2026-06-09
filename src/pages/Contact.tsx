@@ -13,6 +13,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -669,11 +670,8 @@ const Contact = () => {
             disabled={isSubmitting || isUploading}
             iconPosition="left"
             icon={
-              isSubmitting ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-foreground/20 border-t-foreground" />
-              ) : (
-                <Send className="w-4 h-4" />
-              )
+              isSubmitting ? <Spinner /> : <Send className="w-4 h-4" />
+
             }
             variant="default"
             className="group border-foreground/20"
