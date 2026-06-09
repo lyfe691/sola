@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -7,12 +7,13 @@
  */
 
 import { useState, useRef, useEffect } from "react";
-import { Send, UploadCloud, X } from "lucide-react";
+import { Check, Send, UploadCloud, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -60,6 +61,25 @@ function validateFile(file: File): FileValidationResult {
   if (!mimeOk && !extOk) return { ok: false, code: "unsupported_type" };
   return { ok: true };
 }
+
+const FieldError = ({ name, error }: { name: string; error?: string }) => (
+  <AnimatePresence initial={false} mode="wait">
+    {error && (
+      <motion.p
+        key={`${name}-error`}
+        className="text-sm text-destructive/90"
+        initial={{ opacity: 0, y: -4 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -4 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
+        role="alert"
+        aria-live="polite"
+      >
+        {error}
+      </motion.p>
+    )}
+  </AnimatePresence>
+);
 
 const Contact = () => {
   const { language } = useLanguage();
@@ -358,330 +378,288 @@ const Contact = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <Helmet>
         <title>{t.seo.contact.title}</title>
         <meta name="description" content={t.seo.contact.description} />
-        {/** reCAPTCHA removed for now
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        */}
       </Helmet>
 
-      <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.contact.title}</h1>
-      </ScrollReveal>
-
-      <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
-          {t.contact.description}
-        </p>
-      </ScrollReveal>
-
-      <ScrollReveal variant="default">
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          noValidate
-          className="space-y-6 sm:space-y-8 max-w-2xl"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                {t.contact.nameLabel}
-              </label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                required
-                appearance="glass"
-                radius="lg"
-                inputSize="lg"
-                placeholder={t.contact.namePlaceholder}
-                value={formValues.name}
-                onChange={(e) => {
-                  setFormValues((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name)
-                    setErrors((prev) => ({ ...prev, name: undefined }));
-                }}
-                onBlur={() => {
-                  const v = formValues.name.trim();
-                  setErrors((prev) => ({
-                    ...prev,
-                    name: v ? undefined : t.contact.validation.nameRequired,
-                  }));
-                }}
-                ref={nameRef}
-                invalid={!!errors.name}
-              />
-              <AnimatePresence initial={false} mode="wait">
-                {errors.name && (
-                  <motion.p
-                    key="name-error"
-                    className="text-sm text-destructive/90 mt-1"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    {errors.name}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                {t.contact.emailLabel}
-              </label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                appearance="glass"
-                radius="lg"
-                inputSize="lg"
-                placeholder={t.contact.emailPlaceholder}
-                value={formValues.email}
-                onChange={(e) => {
-                  setFormValues((prev) => ({ ...prev, email: e.target.value }));
-                  if (errors.email)
-                    setErrors((prev) => ({ ...prev, email: undefined }));
-                }}
-                onBlur={() => {
-                  const v = formValues.email.trim();
-                  const ok = /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
-                  setErrors((prev) => ({
-                    ...prev,
-                    email: v
-                      ? ok
-                        ? undefined
-                        : t.contact.validation.emailInvalid
-                      : t.contact.validation.emailRequired,
-                  }));
-                }}
-                ref={emailRef}
-                invalid={!!errors.email}
-              />
-              <AnimatePresence initial={false} mode="wait">
-                {errors.email && (
-                  <motion.p
-                    key="email-error"
-                    className="text-sm text-destructive/90 mt-1"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    {errors.email}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </div>
+      <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
+        {/* left: intro + what to expect */}
+        <ScrollReveal variant="default" className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              {t.contact.title}
+            </h1>
+            <p className="max-w-md text-foreground/60">
+              {t.contact.description}
+            </p>
           </div>
-          <div className="space-y-2">
-            <label htmlFor="subject" className="text-sm font-medium">
-              {t.contact.subjectLabel}
-            </label>
-            <Input
-              id="subject"
-              name="subject"
-              type="text"
-              required
-              appearance="glass"
-              radius="lg"
-              inputSize="lg"
-              placeholder={t.contact.subjectPlaceholder}
-              value={formValues.subject}
-              onChange={(e) => {
-                setFormValues((prev) => ({ ...prev, subject: e.target.value }));
-                if (errors.subject)
-                  setErrors((prev) => ({ ...prev, subject: undefined }));
-              }}
-              onBlur={() => {
-                const v = formValues.subject.trim();
-                setErrors((prev) => ({
-                  ...prev,
-                  subject: v ? undefined : t.contact.validation.subjectRequired,
-                }));
-              }}
-              ref={subjectRef}
-              invalid={!!errors.subject}
-            />
-            <AnimatePresence initial={false} mode="wait">
-              {errors.subject && (
-                <motion.p
-                  key="subject-error"
-                  className="text-sm text-destructive/90 mt-1"
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.18, ease: "easeOut" }}
-                  role="alert"
-                  aria-live="polite"
+
+          <div className="flex flex-col gap-4">
+            <h2 className="text-sm font-semibold">
+              {t.contact.expectations.title}
+            </h2>
+            <ul className="flex flex-col gap-3">
+              {t.contact.expectations.items.map((item, i) => (
+                <li
+                  key={i}
+                  className="flex items-start gap-3 text-sm text-foreground/70"
                 >
-                  {errors.subject}
-                </motion.p>
-              )}
-            </AnimatePresence>
+                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                    <Check className="size-3 text-primary" strokeWidth={3} />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="space-y-2">
-            <label htmlFor="message" className="text-sm font-medium">
-              {t.contact.messageLabel}
-            </label>
-            <Textarea
-              id="message"
-              name="message"
-              required
-              placeholder={t.contact.messagePlaceholder}
-              appearance="glass"
-              radius="lg"
-              minHeight="md"
-              resizable={true}
-              value={formValues.message}
-              onChange={(e) => {
-                setFormValues((prev) => ({ ...prev, message: e.target.value }));
-                if (errors.message)
-                  setErrors((prev) => ({ ...prev, message: undefined }));
-              }}
-              onBlur={() => {
-                const v = formValues.message.trim();
-                setErrors((prev) => ({
-                  ...prev,
-                  message: v ? undefined : t.contact.validation.messageRequired,
-                }));
-              }}
-              ref={messageRef}
-              invalid={!!errors.message}
-            />
-            <AnimatePresence initial={false} mode="wait">
-              {errors.message && (
-                <motion.p
-                  key="message-error"
-                  className="text-sm text-destructive/90 mt-1"
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.18, ease: "easeOut" }}
-                  role="alert"
-                  aria-live="polite"
-                >
-                  {errors.message}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
+        </ScrollReveal>
 
-          {/* attachment */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium flex items-center gap-2">
-              {t.contact.attachmentLabel}
-              <span className="text-xs text-foreground/50">
-                {t.contact.attachmentHint}
-              </span>
-            </label>
-            <div
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              onDrop={(e) => {
-                onDrop(e);
-                setIsPageDragActive(false);
-                dragCounter.current = 0;
-              }}
-              onClick={onClickDropzone}
-              className={`group relative flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed transition-colors cursor-pointer p-4 sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
+        {/* right: form card */}
+        <ScrollReveal variant="default">
+          <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
+            <form
+              ref={formRef}
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col gap-5"
             >
-              <input
-                ref={fileInputRef}
-                id="attachment"
-                name="attachment"
-                type="file"
-                className="hidden"
-                accept={ACCEPTED_EXT}
-                onChange={(e) => onSelectFile(e.target.files?.[0] ?? null)}
-              />
-              <div className="flex items-center gap-2 text-foreground/70">
-                <UploadCloud className="w-4 h-4" />
-                <span className="text-sm">
-                  {selectedFile
-                    ? `${selectedFile.name}${selectedFile.size ? ` • ${formatBytes(selectedFile.size)}` : ""}`
-                    : t.contact.attachmentPlaceholder}
-                </span>
+              <h2 className="text-lg font-semibold sm:text-xl">
+                {t.contact.formTitle}
+              </h2>
+
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    aria-label={t.contact.nameLabel}
+                    appearance="default"
+                    radius="lg"
+                    inputSize="lg"
+                    placeholder={t.contact.namePlaceholder}
+                    value={formValues.name}
+                    onChange={(e) => {
+                      setFormValues((prev) => ({
+                        ...prev,
+                        name: e.target.value,
+                      }));
+                      if (errors.name)
+                        setErrors((prev) => ({ ...prev, name: undefined }));
+                    }}
+                    onBlur={() => {
+                      const v = formValues.name.trim();
+                      setErrors((prev) => ({
+                        ...prev,
+                        name: v ? undefined : t.contact.validation.nameRequired,
+                      }));
+                    }}
+                    ref={nameRef}
+                    invalid={!!errors.name}
+                  />
+                  <FieldError name="name" error={errors.name} />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    aria-label={t.contact.emailLabel}
+                    appearance="default"
+                    radius="lg"
+                    inputSize="lg"
+                    placeholder={t.contact.emailPlaceholder}
+                    value={formValues.email}
+                    onChange={(e) => {
+                      setFormValues((prev) => ({
+                        ...prev,
+                        email: e.target.value,
+                      }));
+                      if (errors.email)
+                        setErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
+                    onBlur={() => {
+                      const v = formValues.email.trim();
+                      const ok = /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
+                      setErrors((prev) => ({
+                        ...prev,
+                        email: v
+                          ? ok
+                            ? undefined
+                            : t.contact.validation.emailInvalid
+                          : t.contact.validation.emailRequired,
+                      }));
+                    }}
+                    ref={emailRef}
+                    invalid={!!errors.email}
+                  />
+                  <FieldError name="email" error={errors.email} />
+                </div>
               </div>
-              {(isUploading || uploadProgress !== null) && (
-                <div className="w-full mt-2">
-                  <div className="h-1.5 w-full rounded-full bg-foreground/10 overflow-hidden">
-                    <div
-                      className="h-full bg-foreground transition-all"
-                      style={{ width: `${uploadProgress ?? 0}%` }}
-                    />
-                  </div>
-                  <div className="mt-1 text-xs text-foreground/60 text-center">
-                    {uploadProgress ?? 0}%
-                  </div>
-                </div>
-              )}
-              {uploadedUrl && !isUploading && (
-                <div className="mt-2 text-xs text-foreground/60">
-                  {t.contact.uploadedLabel}:{" "}
-                  <a
-                    className="underline"
-                    href={uploadedUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {t.contact.cloudinaryLinkLabel}
-                  </a>
-                </div>
-              )}
-              {selectedFile && !isUploading && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectFile(null);
+
+              <div className="flex flex-col gap-1.5">
+                <Input
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  required
+                  aria-label={t.contact.subjectLabel}
+                  appearance="default"
+                  radius="lg"
+                  inputSize="lg"
+                  placeholder={t.contact.subjectPlaceholder}
+                  value={formValues.subject}
+                  onChange={(e) => {
+                    setFormValues((prev) => ({
+                      ...prev,
+                      subject: e.target.value,
+                    }));
+                    if (errors.subject)
+                      setErrors((prev) => ({ ...prev, subject: undefined }));
                   }}
-                  className="absolute top-2 right-2 rounded-full p-1 text-foreground/60 hover:text-foreground hover:bg-foreground/10"
-                  aria-label="Remove file"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          </div>
+                  onBlur={() => {
+                    const v = formValues.subject.trim();
+                    setErrors((prev) => ({
+                      ...prev,
+                      subject: v
+                        ? undefined
+                        : t.contact.validation.subjectRequired,
+                    }));
+                  }}
+                  ref={subjectRef}
+                  invalid={!!errors.subject}
+                />
+                <FieldError name="subject" error={errors.subject} />
+              </div>
 
-          {/** reCAPTCHA removed for now
-            <div className="flex justify-start">
-              <div 
-                className="g-recaptcha" 
-                data-sitekey="6Lc2gGorAAAAAFIQ_9x58ZfCKpvUlx7jR5Qj5kqG"
-              ></div>
-            </div>
-            */}
+              <div className="flex flex-col gap-1.5">
+                <Textarea
+                  id="message"
+                  name="message"
+                  required
+                  aria-label={t.contact.messageLabel}
+                  placeholder={t.contact.messagePlaceholder}
+                  appearance="default"
+                  radius="lg"
+                  minHeight="md"
+                  resizable={true}
+                  value={formValues.message}
+                  onChange={(e) => {
+                    setFormValues((prev) => ({
+                      ...prev,
+                      message: e.target.value,
+                    }));
+                    if (errors.message)
+                      setErrors((prev) => ({ ...prev, message: undefined }));
+                  }}
+                  onBlur={() => {
+                    const v = formValues.message.trim();
+                    setErrors((prev) => ({
+                      ...prev,
+                      message: v
+                        ? undefined
+                        : t.contact.validation.messageRequired,
+                    }));
+                  }}
+                  ref={messageRef}
+                  invalid={!!errors.message}
+                />
+                <FieldError name="message" error={errors.message} />
+              </div>
 
-          <IconButton
-            type="submit"
-            disabled={isSubmitting || isUploading}
-            iconPosition="left"
-            icon={
-              isSubmitting ? <Spinner /> : <Send className="w-4 h-4" />
+              {/* attachment */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDrop={(e) => {
+                  onDrop(e);
+                  setIsPageDragActive(false);
+                  dragCounter.current = 0;
+                }}
+                onClick={onClickDropzone}
+                className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-4 transition-colors sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
+              >
+                <input
+                  ref={fileInputRef}
+                  id="attachment"
+                  name="attachment"
+                  type="file"
+                  className="hidden"
+                  accept={ACCEPTED_EXT}
+                  onChange={(e) => onSelectFile(e.target.files?.[0] ?? null)}
+                />
+                <div className="flex items-center gap-2 text-foreground/70">
+                  <UploadCloud className="h-4 w-4" />
+                  <span className="text-sm">
+                    {selectedFile
+                      ? `${selectedFile.name}${selectedFile.size ? ` • ${formatBytes(selectedFile.size)}` : ""}`
+                      : t.contact.attachmentPlaceholder}
+                  </span>
+                </div>
+                {(isUploading || uploadProgress !== null) && (
+                  <div className="mt-2 w-full">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
+                      <div
+                        className="h-full bg-foreground transition-all"
+                        style={{ width: `${uploadProgress ?? 0}%` }}
+                      />
+                    </div>
+                    <div className="mt-1 text-center text-xs text-foreground/60">
+                      {uploadProgress ?? 0}%
+                    </div>
+                  </div>
+                )}
+                {uploadedUrl && !isUploading && (
+                  <div className="mt-2 text-xs text-foreground/60">
+                    {t.contact.uploadedLabel}:{" "}
+                    <a
+                      className="underline"
+                      href={uploadedUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {t.contact.cloudinaryLinkLabel}
+                    </a>
+                  </div>
+                )}
+                {selectedFile && !isUploading && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectFile(null);
+                    }}
+                    className="absolute top-2 right-2 rounded-full p-1 text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
+                    aria-label="Remove file"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
 
-            }
-            variant="default"
-            className="group border-foreground/20"
-          >
-            <span className="flex items-center gap-2">
-              {isSubmitting || isUploading ? t.contact.sending : t.contact.send}
-            </span>
-          </IconButton>
-        </form>
-      </ScrollReveal>
+              <IconButton
+                type="submit"
+                disabled={isSubmitting || isUploading}
+                iconPosition="left"
+                icon={isSubmitting ? <Spinner /> : <Send className="h-4 w-4" />}
+                variant="default"
+                className="w-full"
+                label={
+                  isSubmitting || isUploading ? t.contact.sending : t.contact.send
+                }
+              />
+            </form>
+          </Card>
+        </ScrollReveal>
+      </div>
+
       {createPortal(
         <AnimatePresence>
           {isPageDragActive && (
@@ -704,11 +682,11 @@ const Contact = () => {
                 exit={{ scale: 0.98, opacity: 0, filter: "blur(6px)" }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 sm:px-6 sm:py-4 shadow-xl ring-1 ring-foreground/10">
+                <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 shadow-xl ring-1 ring-foreground/10 sm:px-6 sm:py-4">
                   <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-foreground/10 to-transparent blur-xl" />
                   <div className="relative flex items-center gap-2 text-foreground/80">
-                    <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" />
-                    <div className="h-2 w-2 rounded-full bg-foreground/50 animate-pulse" />
+                    <UploadCloud className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <div className="h-2 w-2 animate-pulse rounded-full bg-foreground/50" />
                     <span className="text-sm sm:text-base">
                       {t.contact.dropOverlay}
                     </span>
