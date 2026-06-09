@@ -79,11 +79,11 @@ const Footer = () => {
       <div
         className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"
         style={{
-          background: `linear-gradient(to top, 
-            hsl(var(--foreground) / 0.12) 0%, 
-            hsl(var(--foreground) / 0.08) 25%, 
-            hsl(var(--foreground) / 0.04) 50%, 
-            hsl(var(--foreground) / 0.02) 75%, 
+          background: `linear-gradient(to top,
+            color-mix(in oklab, var(--foreground) 12%, transparent) 0%,
+            color-mix(in oklab, var(--foreground) 8%, transparent) 25%,
+            color-mix(in oklab, var(--foreground) 4%, transparent) 50%,
+            color-mix(in oklab, var(--foreground) 2%, transparent) 75%,
             transparent 100%)`,
         }}
       />
@@ -249,7 +249,7 @@ const Footer = () => {
               letterSpacing: "0.15em",
               paddingLeft: "0.15em",
               textShadow:
-                "0 -1.5px 0 hsl(var(--foreground) / 0.45), 1.5px 0 0 hsl(var(--foreground) / 0.45), 0 1.5px 0 hsl(var(--foreground) / 0.45), -1.5px 0 0 hsl(var(--foreground) / 0.45), 1px 1px 0 hsl(var(--foreground) / 0.45), -1px -1px 0 hsl(var(--foreground) / 0.45), 1px -1px 0 hsl(var(--foreground) / 0.45), -1px 1px 0 hsl(var(--foreground) / 0.45)",
+                "0 -1.5px 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1.5px 0 0 color-mix(in oklab, var(--foreground) 45%, transparent), 0 1.5px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1.5px 0 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1px 1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1px -1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1px -1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1px 1px 0 color-mix(in oklab, var(--foreground) 45%, transparent)",
             }}
           >
             SOLA

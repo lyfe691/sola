@@ -20,7 +20,7 @@ interface Spark {
 
 // Simple function to resolve CSS custom properties for canvas
 const getCanvasColor = (color: string): string => {
-  // If it's a CSS custom property like 'hsl(var(--primary))'
+  // If it's a CSS custom property like 'var(--primary)'
   if (color.includes("var(--")) {
     const varName = color.match(/--[\w-]+/)?.[0];
     if (varName) {
@@ -28,7 +28,7 @@ const getCanvasColor = (color: string): string => {
         .getPropertyValue(varName)
         .trim();
       if (cssValue) {
-        return `hsl(${cssValue})`;
+        return cssValue;
       }
     }
   }

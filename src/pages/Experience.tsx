@@ -176,8 +176,8 @@ const Experience = () => {
                   animate={{
                     borderColor:
                       hoveredExp === exp.role
-                        ? "hsl(var(--primary))"
-                        : "hsl(var(--primary) / 0.4)",
+                        ? "var(--primary)"
+                        : "color-mix(in oklab, var(--primary) 40%, transparent)",
                     scale: hoveredExp === exp.role ? 1.1 : 1,
                   }}
                 />
@@ -281,8 +281,8 @@ const Experience = () => {
                   animate={{
                     borderColor:
                       hoveredExp === exp.role
-                        ? "hsl(var(--primary))"
-                        : "hsl(var(--primary) / 0.4)",
+                        ? "var(--primary)"
+                        : "color-mix(in oklab, var(--primary) 40%, transparent)",
                     scale: hoveredExp === exp.role ? 1.1 : 1,
                   }}
                 />

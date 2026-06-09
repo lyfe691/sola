@@ -94,11 +94,11 @@ export default function AboutThisWebsite() {
           . Typography:{" "}
           <strong>
             <LinkPreview
-              href="https://fonts.google.com/specimen/DM+Sans"
+              href="https://fonts.google.com/specimen/Sora"
               className="link"
               compact
             >
-              DM&nbsp;Sans
+              Sora
             </LinkPreview>
           </strong>{" "}
           for headings and{" "}

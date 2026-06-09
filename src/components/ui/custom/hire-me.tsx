@@ -56,9 +56,9 @@ const HireMe = () => {
             className="absolute inset-[-120%] rounded-[50%] blur-2xl opacity-70"
             style={{
               transformOrigin: "center",
-              background: `radial-gradient(circle, 
-                hsl(var(--primary)/40%) 0%, 
-                hsl(var(--secondary)/30%) 60%, 
+              background: `radial-gradient(circle,
+                color-mix(in oklab, var(--primary) 40%, transparent) 0%,
+                color-mix(in oklab, var(--secondary) 30%, transparent) 60%,
                 transparent 80%)`,
             }}
             animate={{ rotate: 360 }}

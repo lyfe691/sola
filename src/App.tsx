@@ -39,7 +39,7 @@ const App = () => (
           <TooltipProvider>
             <BackgroundLayer />
             <ClickSpark
-              sparkColor="hsl(var(--primary) / 0.30)"
+              sparkColor="var(--primary)"
               sparkSize={4}
               sparkCount={7}
               duration={450}
