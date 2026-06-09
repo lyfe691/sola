@@ -136,6 +136,7 @@ const Services = () => {
                   render={<Link to={getServiceContactUrl(service.key)} />}
                   variant="default"
                   className="w-full"
+                  size="lg"
                   label={t.services.getStarted || "Get Started"}
                 />
               </div>
