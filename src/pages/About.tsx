@@ -422,10 +422,9 @@ const ResumeModal = () => {
                 {t.about.resume.languageLabel}
               </span>
               <ToggleGroup
-                type="single"
-                value={selectedLang}
+                value={[selectedLang]}
                 onValueChange={(value) =>
-                  value && setSelectedLang(value as "en" | "de")
+                  value[0] && setSelectedLang(value[0] as "en" | "de")
                 }
                 variant="outline"
                 size="sm"
@@ -469,17 +468,19 @@ const ResumeModal = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <IconButton
-          variant="default"
-          size="lg"
-          className="border-foreground/20 w-1/3"
-          icon={<Download className="w-4 h-4" />}
-          iconPosition="left"
-          label={t.about.resume.buttonLabel}
-          onClick={() => setOpen(true)}
-        />
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <IconButton
+            variant="default"
+            size="lg"
+            className="border-foreground/20 w-1/3"
+            icon={<Download className="w-4 h-4" />}
+            iconPosition="left"
+            label={t.about.resume.buttonLabel}
+            onClick={() => setOpen(true)}
+          />
+        }
+      />
       <DialogContent className="max-w-md">
         <DialogHeader className="pb-2">
           <DialogTitle>{t.about.resume.title}</DialogTitle>
@@ -495,10 +496,9 @@ const ResumeModal = () => {
               {t.about.resume.languageLabel}
             </span>
             <ToggleGroup
-              type="single"
-              value={selectedLang}
+              value={[selectedLang]}
               onValueChange={(value) =>
-                value && setSelectedLang(value as "en" | "de")
+                value[0] && setSelectedLang(value[0] as "en" | "de")
               }
               variant="outline"
               size="sm"

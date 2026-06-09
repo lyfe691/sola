@@ -96,7 +96,7 @@ const Footer = () => {
             <div className="space-y-4">
               <Link
                 to="/"
-                className="group inline-flex items-center space-x-2 font-bold text-2xl text-foreground hover:text-primary transition-colors"
+                className="group inline-flex items-center space-x-2 font-heading font-bold text-2xl text-foreground hover:text-primary transition-colors"
               >
                 <span>YSZ</span>
                 <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -243,7 +243,7 @@ const Footer = () => {
           }}
         >
           <div
-            className="absolute inset-0 flex justify-center font-bold uppercase leading-none whitespace-nowrap text-background"
+            className="absolute inset-0 flex justify-center font-heading font-bold uppercase leading-none whitespace-nowrap text-background"
             style={{
               fontSize: "inherit",
               letterSpacing: "0.15em",

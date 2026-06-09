@@ -715,13 +715,15 @@ const Privacy = () => {
                 <Breadcrumb>
                   <BreadcrumbList>
                     <BreadcrumbItem>
-                      <BreadcrumbLink asChild>
-                        <Link to="/">
-                          <span className="text-muted-foreground hover:text-primary transition-colors">
-                            {t.common.home}
-                          </span>
-                        </Link>
-                      </BreadcrumbLink>
+                      <BreadcrumbLink
+                        render={
+                          <Link to="/">
+                            <span className="text-muted-foreground hover:text-primary transition-colors">
+                              {t.common.home}
+                            </span>
+                          </Link>
+                        }
+                      />
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>

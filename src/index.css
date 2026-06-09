@@ -1,6 +1,6 @@
 @import 'tailwindcss';
-
-@plugin 'tailwindcss-animate';
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -16,11 +16,20 @@
 }
 
 @theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
 
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
@@ -46,9 +55,13 @@
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
 
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -61,22 +74,6 @@
     }
     100% {
       background-position: -100%;
-    }
-  }
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
     }
   }
   @keyframes spinner-leaf-fade {
@@ -105,6 +102,15 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
@@ -170,7 +176,6 @@
     --border: 240 5% 28%;
     --input: 240 5% 18%;
     --ring: 0 0% 75%;
-    --radius: 0.5rem;
     --scrollbar-track: 240 6% 16%;
     --scrollbar-thumb: 240 5% 30%;
     --scrollbar-thumb-hover: 240 5% 38%;
@@ -204,7 +209,6 @@
     --border: 152 20% 62%;
     --input: 152 20% 62%;
     --ring: 151 64% 28%;
-    --radius: 0.5rem;
     --scrollbar-track: 152 26% 82%;
     --scrollbar-thumb: 151 24% 56%;
     --scrollbar-thumb-hover: 151 24% 52%;
@@ -230,7 +234,6 @@
     --border: 262 18% 24%;
     --input: 262 18% 20%;
     --ring: 285 85% 60%;
-    --radius: 0.375rem;
     --scrollbar-track: 262 24% 12%;
     --scrollbar-thumb: 285 70% 48%;
     --scrollbar-thumb-hover: 285 70% 56%;
@@ -256,7 +259,6 @@
     --border: 210 26% 78%;
     --input: 210 26% 78%;
     --ring: 212 92% 52%;
-    --radius: 1rem;
     --scrollbar-track: 210 42% 88%;
     --scrollbar-thumb: 212 36% 64%;
     --scrollbar-thumb-hover: 212 36% 58%;
@@ -282,7 +284,6 @@
     --border: 160 14% 24%;
     --input: 160 14% 20%;
     --ring: 145 35% 46%;
-    --radius: 0.375rem;
     --scrollbar-track: 160 16% 14%;
     --scrollbar-thumb: 145 22% 32%;
     --scrollbar-thumb-hover: 145 22% 38%;
@@ -308,7 +309,6 @@
     --border: 260 16% 24%;
     --input: 260 16% 20%;
     --ring: 270 60% 70%;
-    --radius: 0.5rem;
     --scrollbar-track: 260 20% 14%;
     --scrollbar-thumb: 270 40% 60%;
     --scrollbar-thumb-hover: 270 40% 66%;
@@ -334,7 +334,6 @@
     --border: 40 31% 79%;
     --input: 40 31% 79%;
     --ring: 30 34% 49%;
-    --radius: 0.25rem;
     --scrollbar-track: 42 100% 98%;
     --scrollbar-thumb: 30 34% 49%;
     --scrollbar-thumb-hover: 30 34% 49%;
@@ -360,7 +359,6 @@
     --border: 30 18% 78%;
     --input: 30 18% 78%;
     --ring: 25 45% 38%;
-    --radius: 0.375rem;
     --scrollbar-track: 35 24% 90%;
     --scrollbar-thumb: 25 24% 60%;
     --scrollbar-thumb-hover: 25 24% 52%;
@@ -386,7 +384,6 @@
     --border: 350 18% 82%;
     --input: 350 18% 82%;
     --ring: 350 70% 42%;
-    --radius: 0.5rem;
     --scrollbar-track: 350 22% 92%;
     --scrollbar-thumb: 350 26% 72%;
     --scrollbar-thumb-hover: 350 26% 66%;
@@ -421,9 +418,18 @@
       stroke 250ms ease;
   }
 
-  * {
-    @apply border-border outline-ring/50;
-    font-family: "Nunito Sans", system-ui, sans-serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+
+  button,
+  [role="button"] {
+    cursor: pointer;
   }
 
   code,

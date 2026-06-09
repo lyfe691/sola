@@ -21,6 +21,8 @@ import {
 import {
   Drawer,
   DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
 } from "@/components/ui/drawer";
 import { useCommandMenu } from "@/hooks/use-command-menu";
 import { useTheme } from "./theme-provider";
@@ -199,6 +201,9 @@ export function CommandMenu() {
     return (
       <Drawer open={isOpen} onOpenChange={closeCommandMenu}>
         <DrawerContent className="px-4 pb-4">
+          <DrawerHeader className="sr-only">
+            <DrawerTitle>{t.common.command.placeholder}</DrawerTitle>
+          </DrawerHeader>
           <Command>{commandContent}</Command>
         </DrawerContent>
       </Drawer>
@@ -207,7 +212,7 @@ export function CommandMenu() {
 
   return (
     <CommandDialog open={isOpen} onOpenChange={closeCommandMenu}>
-      {commandContent}
+      <Command>{commandContent}</Command>
     </CommandDialog>
   );
 }

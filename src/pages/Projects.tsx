@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, type ReactNode } from "react";
 import {
   ArrowUpRight,
   SortAsc,
@@ -19,13 +19,19 @@ import {
   Info,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import { Helmet } from "react-helmet-async";
-import { Combobox, type ComboboxOption } from "@/components/ui/combobox";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
@@ -35,6 +41,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 interface Project {
   id: string;
@@ -62,7 +72,13 @@ type SortOption =
   | "name-asc"
   | "name-desc";
 
-const buildSortOptions = (t: any): ComboboxOption[] => [
+type SortOptionItem = {
+  value: SortOption;
+  label: string;
+  icon: ReactNode;
+};
+
+const buildSortOptions = (t: any): SortOptionItem[] => [
   {
     value: "priority",
     label: t.projects.sortOptions.priority,
@@ -329,15 +345,7 @@ const createProjectsData = (t: any): Project[] => [
     title: t.projects.list.dockerService.title,
     description: t.projects.list.dockerService.description,
     github: "https://github.com/lyfe691/LB-WISS_169-347",
-    tags: [
-      "Docker",
-      "Docker Compose",
-      "MediaWiki",
-      "Nextcloud",
-      "Gogs",
-      "Teamwork",
-      "Documentation",
-    ],
+    tags: ["Docker", "Teamwork", "Documentation"],
     featured: false,
     date: {
       start: "2024-06",
@@ -373,250 +381,148 @@ const createProjectsData = (t: any): Project[] => [
   },
 ];
 
-// Extracted components for better organization
-const ProjectImage = ({
-  project,
-  hoveredProject,
-  t,
-}: {
-  project: Project;
-  hoveredProject: string | null;
-  t: any;
-}) => {
+const cardClassName =
+  "group h-full gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg";
+
+const ProjectImage = ({ project, t }: { project: Project; t: any }) => {
   const [loaded, setLoaded] = useState(false);
 
   if (!project.image) return null;
   const usesVercelSatori = project.vercelSatori ?? true;
 
   return (
-    <div className="relative h-[200px] md:min-h-[280px] md:h-full overflow-hidden bg-foreground/5">
-      {!loaded && (
-        <Skeleton className="absolute inset-0 rounded-none" />
-      )}
-      <motion.img
+    <div className="relative h-[200px] overflow-hidden bg-foreground/5 md:h-full md:min-h-[280px]">
+      {!loaded && <Skeleton className="absolute inset-0 rounded-none" />}
+      <img
         src={project.image}
         alt={project.title}
         loading="lazy"
         decoding="async"
         onLoad={() => setLoaded(true)}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
-        animate={{
-          scale: hoveredProject === project.id ? 1.05 : 1,
-        }}
-        transition={{
-          duration: 0.3,
-          ease: "easeOut",
-        }}
+        className={cn(
+          "h-full w-full object-cover transition-all duration-300 ease-out group-hover:scale-105",
+          loaded ? "opacity-100" : "opacity-0",
+        )}
       />
       <div className="absolute inset-0 bg-linear-to-t from-background/80 to-transparent md:hidden" />
       {usesVercelSatori && (
-        <motion.div
-          className="absolute left-2 bottom-2 md:left-3 md:bottom-3 pointer-events-none"
-          initial={{ opacity: 0, y: 2, filter: "blur(2px)" }}
-          animate={{
-            opacity: hoveredProject === project.id ? 1 : 0,
-            y: hoveredProject === project.id ? 0 : 2,
-            filter: hoveredProject === project.id ? "blur(0px)" : "blur(2px)",
-          }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-        >
-          <div className="inline-flex items-center px-2 py-[2px] md:px-2.5 md:py-1 rounded-full bg-background/60 backdrop-blur-xs ring-1 ring-foreground/10 shadow-xs pointer-events-auto">
-            <span className="text-[10px] md:text-xs font-medium leading-none text-foreground/80">
+        <div className="pointer-events-none absolute bottom-2 left-2 translate-y-0.5 opacity-0 blur-[2px] transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-hover:blur-[0px] md:bottom-3 md:left-3">
+          <div className="pointer-events-auto inline-flex items-center rounded-full bg-background/60 px-2 py-[2px] shadow-xs ring-1 ring-foreground/10 backdrop-blur-xs md:px-2.5 md:py-1">
+            <span className="text-[10px] font-medium leading-none text-foreground/80 md:text-xs">
               <RichText
                 text={t.projects.satoriAttribution}
                 linkClassName="text-foreground/80 hover:text-primary underline underline-offset-2 decoration-foreground/30 hover:decoration-primary transition-colors"
               />
             </span>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );
 };
 
-const ProjectHeader = ({
-  project,
-  hoveredProject,
-}: {
-  project: Project;
-  hoveredProject: string | null;
-}) => (
-  <div className="flex items-start justify-between mb-2">
-    <motion.h3
-      className="text-lg sm:text-xl font-medium text-foreground group-hover:text-primary transition-colors"
-      animate={{
-        color:
-          hoveredProject === project.id
-            ? "hsl(var(--primary))"
-            : "hsl(var(--foreground))",
-      }}
-    >
-      {project.title}
-    </motion.h3>
+const ProjectTags = ({ tags }: { tags: string[] }) => (
+  <div className="flex flex-wrap gap-1.5 sm:gap-2">
+    {tags.map((tag) => (
+      <Badge key={tag} variant="secondary" className="font-normal">
+        {tag}
+      </Badge>
+    ))}
   </div>
 );
-
-const ProjectDate = ({ date }: { date: Project["date"] }) => (
-  <div className="mb-3 text-xs font-mono text-foreground/60">
-    {date.display}
-  </div>
-);
-
-const ProjectDescription = ({ description }: { description: string }) => (
-  <p className="text-foreground/60 text-sm mb-4 sm:mb-6 grow">
-    <RichText text={description} />
-  </p>
-);
-
-const ProjectTags = ({ tags }: { tags: string[] }) => {
-  const tagVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { type: "spring" as const, stiffness: 300, damping: 20 },
-    },
-  };
-
-  return (
-    <motion.div
-      className="flex flex-wrap gap-1.5 sm:gap-2"
-      variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-    >
-      {tags.map((tag, i) => (
-        <motion.span
-          key={i}
-          variants={tagVariants}
-          className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 
-                   text-foreground/60 border border-foreground/10
-                   transition-colors duration-300
-                   hover:border-primary/20 hover:text-primary/80"
-        >
-          {tag}
-        </motion.span>
-      ))}
-    </motion.div>
-  );
-};
 
 const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
   if (!project.slug && !project.github && !project.link) return null;
 
   return (
-    <>
-      <div className="w-full h-px bg-foreground/10 mb-4"></div>
-      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
+    <div className="flex flex-col gap-4 pt-2">
+      <Separator />
+      <div className="flex flex-col gap-3 sm:flex-row">
         {project.slug ? (
-          <Link to={`/projects/${project.slug}`} className="w-full">
-            <IconButton
-              label={t.projects.viewDetails}
-              icon={<FileSearch className="w-4 h-4" />}
-              variant="default"
-              size="lg"
-              className="w-full flex items-center justify-center gap-2 shadow-xs transition-all"
-            />
-          </Link>
+          <IconButton
+            nativeButton={false}
+            render={<Link to={`/projects/${project.slug}`} />}
+            label={t.projects.viewDetails}
+            icon={<FileSearch className="h-4 w-4" />}
+            size="lg"
+            className="w-full"
+          />
         ) : (
           <>
             {project.github && (
               <Button
-                asChild
-                variant="default"
+                nativeButton={false}
                 size="lg"
-                className="w-full flex items-center justify-center gap-2 shadow-xs transition-all"
+                className="w-full gap-2 sm:flex-1"
+                render={
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
               >
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaGithubAlt className="w-4 h-4 mr-1" />
-                  {t.projects.viewGithub}
-                </a>
+                <FaGithubAlt className="h-4 w-4" />
+                {t.projects.viewGithub}
               </Button>
             )}
             {project.link && (
               <Button
-                asChild
-                variant="default"
+                nativeButton={false}
                 size="lg"
-                className="w-full flex items-center justify-center gap-2 shadow-xs transition-all"
+                className="w-full gap-2 sm:flex-1"
+                render={
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
               >
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ArrowUpRight className="w-4 h-4 mr-1" />
-                  {t.projects.visitProject}
-                </a>
+                <ArrowUpRight className="h-4 w-4" />
+                {t.projects.visitProject}
               </Button>
             )}
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
-const ProjectContent = ({ project, t }: { project: Project; t: any }) => (
-  <div className="p-4 sm:p-5 md:p-6 flex flex-col h-full">
-    <ProjectHeader project={project} hoveredProject={null} />
-    <ProjectDate date={project.date} />
-    <ProjectDescription description={project.description} />
-
-    <div className="space-y-4">
-      <ProjectTags tags={project.tags} />
-      <ProjectActions project={project} t={t} />
+const ProjectBody = ({ project, t }: { project: Project; t: any }) => (
+  <div className="flex h-full flex-col gap-4 p-5 sm:p-6">
+    <div className="flex flex-col gap-1">
+      <h3 className="text-lg font-medium text-foreground transition-colors duration-300 group-hover:text-primary sm:text-xl">
+        {project.title}
+      </h3>
+      <span className="font-mono text-xs text-foreground/60">
+        {project.date.display}
+      </span>
     </div>
+    <p className="flex-1 text-sm text-foreground/60">
+      <RichText text={project.description} />
+    </p>
+    {project.tags.length > 0 && <ProjectTags tags={project.tags} />}
+    <ProjectActions project={project} t={t} />
   </div>
 );
 
-const ProjectCard = ({
-  project,
-  hoveredProject,
-  onHover,
-  onHoverEnd,
-  t,
-}: {
-  project: Project;
-  hoveredProject: string | null;
-  onHover: () => void;
-  onHoverEnd: () => void;
-  t: any;
-}) => {
-  const cardClassName =
-    "group rounded-lg border-2 border-border/20 bg-foreground/5 backdrop-blur-xs hover:border-border/35 transition-all duration-300";
-
-  return (
-    <motion.div
-      key={project.id}
-      onHoverStart={onHover}
-      onHoverEnd={onHoverEnd}
-      className="relative"
-    >
-      {project.featured ? (
-        <div className={`${cardClassName} overflow-hidden`}>
-          <div className="grid md:grid-cols-2 h-full">
-            <ProjectImage
-              project={project}
-              hoveredProject={hoveredProject}
-              t={t}
-            />
-            <ProjectContent project={project} t={t} />
-          </div>
-        </div>
-      ) : (
-        <div className={cardClassName}>
-          <ProjectContent project={project} t={t} />
-        </div>
-      )}
-    </motion.div>
+const ProjectCard = ({ project, t }: { project: Project; t: any }) =>
+  project.image ? (
+    <Card className={cardClassName}>
+      <div className="grid md:grid-cols-2">
+        <ProjectImage project={project} t={t} />
+        <ProjectBody project={project} t={t} />
+      </div>
+    </Card>
+  ) : (
+    <Card className={cardClassName}>
+      <ProjectBody project={project} t={t} />
+    </Card>
   );
-};
 
 const Projects = () => {
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<SortOption>("priority");
   const { language } = useLanguage();
   const t = translations[language] as Translation;
@@ -672,15 +578,36 @@ const Projects = () => {
             <span className="text-sm text-foreground/60 font-medium">
               {t.projects.sortBy}:
             </span>
-            <Combobox
-              options={sortOptions}
+            <Select
               value={sortBy}
-              onValueChange={(value: string) => setSortBy(value as SortOption)}
-              placeholder={t.projects.selectSorting}
-              searchPlaceholder={t.projects.searchPlaceholder}
-              emptyMessage={t.projects.emptyMessage}
-              className="w-[160px] sm:w-[180px]"
-            />
+              onValueChange={(value) => setSortBy(value as SortOption)}
+            >
+              <SelectTrigger className="w-[160px] sm:w-[180px]">
+                <SelectValue placeholder={t.projects.selectSorting}>
+                  {() => {
+                    const current = sortOptions.find(
+                      (o) => o.value === sortBy,
+                    );
+                    return current ? (
+                      <>
+                        {current.icon}
+                        {current.label}
+                      </>
+                    ) : null;
+                  }}
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {sortOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.icon}
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </ScrollReveal>
@@ -689,13 +616,7 @@ const Projects = () => {
       <div className="grid gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
           <ScrollReveal key={project.id} variant="default" delay={index * 10}>
-            <ProjectCard
-              project={project}
-              hoveredProject={hoveredProject}
-              onHover={() => setHoveredProject(project.id)}
-              onHoverEnd={() => setHoveredProject(null)}
-              t={t}
-            />
+            <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}
       </div>
@@ -706,15 +627,13 @@ const Projects = () => {
             {t.projects.other}
           </h2>
           <div className="relative group shrink-0">
-            <Tooltip delayDuration={0}>
-              <TooltipTrigger asChild>
-                <Info className="w-4 h-4 hover:text-primary transition-colors duration-300 group-hover:text-primary cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent
-                className="bg-background/85 backdrop-blur-xs"
-                side="right"
-                align="center"
-              >
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Info className="w-4 h-4 hover:text-primary transition-colors duration-300 group-hover:text-primary cursor-help" />
+                }
+              />
+              <TooltipContent side="right" align="center">
                 {t.projects.otherInfo}
               </TooltipContent>
             </Tooltip>
@@ -723,16 +642,10 @@ const Projects = () => {
       </ScrollReveal>
 
       {/* Other Projects */}
-      <div className="grid gap-4 sm:gap-6">
+      <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {otherProjects.map((project) => (
-          <ScrollReveal key={project.id} variant="default">
-            <ProjectCard
-              project={project}
-              hoveredProject={hoveredProject}
-              onHover={() => setHoveredProject(project.id)}
-              onHoverEnd={() => setHoveredProject(null)}
-              t={t}
-            />
+          <ScrollReveal key={project.id} variant="default" className="h-full">
+            <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}
       </div>

@@ -71,15 +71,17 @@ export const LinkPreview: React.FC<LinkPreviewProps> = ({
 
   return (
     <HoverCard>
-      <HoverCardTrigger asChild>
-        <a
-          href={href}
-          className={className}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {children}
-        </a>
+      <HoverCardTrigger
+        render={
+          <a
+            href={href}
+            className={className}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        }
+      >
+        {children}
       </HoverCardTrigger>
       <HoverCardContent className="w-auto p-0 overflow-hidden bg-background/80 backdrop-blur-xs transition-all duration-150">
         <div className="relative">

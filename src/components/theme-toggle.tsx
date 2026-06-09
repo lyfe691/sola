@@ -70,14 +70,17 @@ export function ThemeToggle({
 
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
-        >
-          {/* show icon with smooth animation */}
-          {THEMES.map((t) => {
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+          />
+        }
+      >
+        {/* show icon with smooth animation */}
+        {THEMES.map((t) => {
             // We only render icons for themes that can actually be visually represented as the "current state"
             // i.e., "system" isn't a visual state itself, it resolves to light or dark.
             if (t.value === "system") return null;
@@ -97,8 +100,7 @@ export function ThemeToggle({
             );
           })}
 
-          <span className="sr-only">Toggle theme</span>
-        </Button>
+        <span className="sr-only">Toggle theme</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[180px]">
         <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
@@ -109,7 +111,12 @@ export function ThemeToggle({
           return (
             <DropdownMenuItem
               key={option.value}
-              onClick={(e) => setTheme(option.value as Theme, e)}
+              onClick={(e) => {
+                onOpenChange?.(false);
+                requestAnimationFrame(() =>
+                  setTheme(option.value as Theme, e),
+                );
+              }}
               className="flex justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>
@@ -135,7 +142,12 @@ export function ThemeToggle({
           return (
             <DropdownMenuItem
               key={option.value}
-              onClick={(e) => setTheme(option.value as Theme, e)}
+              onClick={(e) => {
+                onOpenChange?.(false);
+                requestAnimationFrame(() =>
+                  setTheme(option.value as Theme, e),
+                );
+              }}
               className="flex justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>
@@ -156,10 +168,8 @@ export function ThemeToggle({
           return (
             <DropdownMenuItem
               key={option.id}
-              onSelect={(e) => {
-                e.preventDefault();
-                setBackground(option.id);
-              }}
+              closeOnClick={false}
+              onClick={() => setBackground(option.id)}
               className="flex justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>

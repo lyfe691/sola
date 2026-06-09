@@ -94,14 +94,24 @@ export default function AboutThisWebsite() {
           . Typography:{" "}
           <strong>
             <LinkPreview
-              href="https://fonts.google.com/specimen/Nunito+Sans"
+              href="https://fonts.google.com/specimen/DM+Sans"
               className="link"
               compact
             >
-              Nunito Sans
+              DM&nbsp;Sans
             </LinkPreview>
-          </strong>
-          .
+          </strong>{" "}
+          for headings and{" "}
+          <strong>
+            <LinkPreview
+              href="https://fonts.google.com/specimen/Inter"
+              className="link"
+              compact
+            >
+              Inter
+            </LinkPreview>
+          </strong>{" "}
+          for body.
         </p>
         <p>Designed for speed, clarity, and a personal touch.</p>
         <p>Thanks for stopping by.</p>

@@ -32,15 +32,17 @@ export function LanguageToggle({
 
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
-        >
-          <Languages className="h-4 w-4" />
-          <span className="sr-only">Toggle language</span>
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+          />
+        }
+      >
+        <Languages className="h-4 w-4" />
+        <span className="sr-only">Toggle language</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {LANGUAGES.map(({ code, label }) => (
