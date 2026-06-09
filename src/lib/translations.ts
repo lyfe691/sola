@@ -468,6 +468,7 @@ export const translations = {
       description:
         "Have a question or want to work together? Feel free to reach out!",
       formTitle: "Send a message",
+      reachOut: "Or reach me directly",
       expectations: {
         title: "What to expect",
         items: [
@@ -1038,6 +1039,7 @@ export const translations = {
       description:
         "Haben Sie eine Frage oder möchten Sie zusammenarbeiten? Kontaktieren Sie mich!",
       formTitle: "Nachricht senden",
+      reachOut: "Oder erreiche mich direkt",
       expectations: {
         title: "Was dich erwartet",
         items: [
@@ -1610,6 +1612,7 @@ export const translations = {
       description:
         "¿Tienes una pregunta o quieres trabajar juntos? ¡No dudes en contactarme!",
       formTitle: "Enviar un mensaje",
+      reachOut: "O contáctame directamente",
       expectations: {
         title: "Qué esperar",
         items: [
@@ -2174,6 +2177,7 @@ export const translations = {
       description:
         "ご質問や協力のご提案などございましたら、お気軽にご連絡ください。",
       formTitle: "メッセージを送る",
+      reachOut: "直接連絡する",
       expectations: {
         title: "期待できること",
         items: [
@@ -2727,6 +2731,7 @@ export const translations = {
       title: "联系我",
       description: "有问题或想一起合作？随时联系我！",
       formTitle: "发送消息",
+      reachOut: "或直接联系我",
       expectations: {
         title: "您可以期待",
         items: [

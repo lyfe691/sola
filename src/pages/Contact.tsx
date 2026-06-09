@@ -7,7 +7,7 @@
  */
 
 import { useState, useRef, useEffect } from "react";
-import { Check, Send, UploadCloud, X } from "lucide-react";
+import { Check, Github, Linkedin, Mail, Send, UploadCloud, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -20,6 +20,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
+import { SOCIAL_LINKS } from "@/config/social";
 import { createPortal } from "react-dom";
 
 // file constraints
@@ -33,6 +34,12 @@ const ACCEPTED_MIME = new Set<string>([
 ]);
 const ACCEPTED_EXT = ".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx";
 const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
+
+const DIRECT_LINKS = [
+  { ...SOCIAL_LINKS.email, Icon: Mail },
+  { ...SOCIAL_LINKS.github, Icon: Github },
+  { ...SOCIAL_LINKS.linkedin, Icon: Linkedin },
+] as const;
 
 function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes)) return "";
@@ -385,39 +392,77 @@ const Contact = () => {
       </Helmet>
 
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
-        {/* left: intro + what to expect */}
-        <ScrollReveal variant="default" className="flex flex-col gap-8">
-          <div className="flex flex-col gap-4">
+        {/* left: intro, expectations, direct links */}
+        <div className="flex flex-col gap-8">
+          <ScrollReveal variant="pageTitle" className="flex flex-col gap-4">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
               {t.contact.title}
             </h1>
             <p className="max-w-md text-foreground/60">
               {t.contact.description}
             </p>
-          </div>
+          </ScrollReveal>
 
-          <div className="flex flex-col gap-4">
-            <h2 className="text-sm font-semibold">
-              {t.contact.expectations.title}
-            </h2>
-            <ul className="flex flex-col gap-3">
-              {t.contact.expectations.items.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 text-sm text-foreground/70"
-                >
-                  <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                    <Check className="size-3 text-primary" strokeWidth={3} />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </ScrollReveal>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="flex flex-col gap-8"
+          >
+            <div className="flex flex-col gap-4">
+              <h2 className="text-sm font-semibold">
+                {t.contact.expectations.title}
+              </h2>
+              <ul className="flex flex-col gap-3">
+                {t.contact.expectations.items.map((item, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -8 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: 0.1 + 0.08 * i }}
+                    className="flex items-start gap-3 text-sm text-foreground/70"
+                  >
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                      <Check className="size-3 text-primary" strokeWidth={3} />
+                    </span>
+                    {item}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <h2 className="text-sm font-semibold">{t.contact.reachOut}</h2>
+              <div className="flex flex-wrap gap-2">
+                {DIRECT_LINKS.map(({ id, label, href, Icon }) => {
+                  const external = href.startsWith("http");
+                  return (
+                    <a
+                      key={id}
+                      href={href}
+                      target={external ? "_blank" : undefined}
+                      rel={external ? "noopener noreferrer" : undefined}
+                      className="inline-flex items-center gap-2 rounded-full border border-border/60 px-3 py-1.5 text-sm text-foreground/70 transition-colors hover:border-foreground/40 hover:text-foreground"
+                    >
+                      <Icon className="size-4" />
+                      {label}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
         {/* right: form card */}
-        <ScrollReveal variant="default">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+        >
           <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
             <form
               ref={formRef}
@@ -437,9 +482,6 @@ const Contact = () => {
                     type="text"
                     required
                     aria-label={t.contact.nameLabel}
-                    appearance="default"
-                    radius="lg"
-                    inputSize="lg"
                     placeholder={t.contact.namePlaceholder}
                     value={formValues.name}
                     onChange={(e) => {
@@ -458,7 +500,7 @@ const Contact = () => {
                       }));
                     }}
                     ref={nameRef}
-                    invalid={!!errors.name}
+                    aria-invalid={!!errors.name || undefined}
                   />
                   <FieldError name="name" error={errors.name} />
                 </div>
@@ -470,9 +512,6 @@ const Contact = () => {
                     type="email"
                     required
                     aria-label={t.contact.emailLabel}
-                    appearance="default"
-                    radius="lg"
-                    inputSize="lg"
                     placeholder={t.contact.emailPlaceholder}
                     value={formValues.email}
                     onChange={(e) => {
@@ -496,7 +535,7 @@ const Contact = () => {
                       }));
                     }}
                     ref={emailRef}
-                    invalid={!!errors.email}
+                    aria-invalid={!!errors.email || undefined}
                   />
                   <FieldError name="email" error={errors.email} />
                 </div>
@@ -509,9 +548,6 @@ const Contact = () => {
                   type="text"
                   required
                   aria-label={t.contact.subjectLabel}
-                  appearance="default"
-                  radius="lg"
-                  inputSize="lg"
                   placeholder={t.contact.subjectPlaceholder}
                   value={formValues.subject}
                   onChange={(e) => {
@@ -532,7 +568,7 @@ const Contact = () => {
                     }));
                   }}
                   ref={subjectRef}
-                  invalid={!!errors.subject}
+                  aria-invalid={!!errors.subject || undefined}
                 />
                 <FieldError name="subject" error={errors.subject} />
               </div>
@@ -544,10 +580,7 @@ const Contact = () => {
                   required
                   aria-label={t.contact.messageLabel}
                   placeholder={t.contact.messagePlaceholder}
-                  appearance="default"
-                  radius="lg"
-                  minHeight="md"
-                  resizable={true}
+                  className="min-h-32"
                   value={formValues.message}
                   onChange={(e) => {
                     setFormValues((prev) => ({
@@ -567,7 +600,7 @@ const Contact = () => {
                     }));
                   }}
                   ref={messageRef}
-                  invalid={!!errors.message}
+                  aria-invalid={!!errors.message || undefined}
                 />
                 <FieldError name="message" error={errors.message} />
               </div>
@@ -584,7 +617,7 @@ const Contact = () => {
                   dragCounter.current = 0;
                 }}
                 onClick={onClickDropzone}
-                className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed p-4 transition-colors sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
+                className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed p-4 transition-colors sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
               >
                 <input
                   ref={fileInputRef}
@@ -650,14 +683,17 @@ const Contact = () => {
                 iconPosition="left"
                 icon={isSubmitting ? <Spinner /> : <Send className="h-4 w-4" />}
                 variant="default"
-                className="w-full"
+                size="lg"
+                className="mt-1 h-12 w-full text-base"
                 label={
-                  isSubmitting || isUploading ? t.contact.sending : t.contact.send
+                  isSubmitting || isUploading
+                    ? t.contact.sending
+                    : t.contact.send
                 }
               />
             </form>
           </Card>
-        </ScrollReveal>
+        </motion.div>
       </div>
 
       {createPortal(
