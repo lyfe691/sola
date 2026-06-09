@@ -111,7 +111,7 @@ export function CommandMenu() {
         placeholder={t.common.command.placeholder}
         className={isMobile ? "text-base" : undefined}
       />
-      <CommandList className="max-h-[60vh]">
+      <CommandList>
         <CommandEmpty>{t.common.command.noResults}</CommandEmpty>
 
         <CommandGroup heading={t.common.command.groups.navigation}>
@@ -189,11 +189,7 @@ export function CommandMenu() {
   }
 
   return (
-    <CommandDialog
-      open={isOpen}
-      onOpenChange={closeCommandMenu}
-      className="top-[15%]"
-    >
+    <CommandDialog open={isOpen} onOpenChange={closeCommandMenu}>
       <Command>{commandContent}</Command>
     </CommandDialog>
   );
