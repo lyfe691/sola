@@ -74,16 +74,16 @@ const Footer = () => {
   const e = "/a";
 
   return (
-    <footer className="relative w-full border-t border-foreground/5 bg-background/5 backdrop-blur-sm">
+    <footer className="relative w-full border-t border-foreground/5 bg-background/5 backdrop-blur-xs">
       {/* bottom glow effect */}
       <div
         className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"
         style={{
-          background: `linear-gradient(to top, 
-            hsl(var(--foreground) / 0.12) 0%, 
-            hsl(var(--foreground) / 0.08) 25%, 
-            hsl(var(--foreground) / 0.04) 50%, 
-            hsl(var(--foreground) / 0.02) 75%, 
+          background: `linear-gradient(to top,
+            color-mix(in oklab, var(--foreground) 12%, transparent) 0%,
+            color-mix(in oklab, var(--foreground) 8%, transparent) 25%,
+            color-mix(in oklab, var(--foreground) 4%, transparent) 50%,
+            color-mix(in oklab, var(--foreground) 2%, transparent) 75%,
             transparent 100%)`,
         }}
       />
@@ -96,7 +96,7 @@ const Footer = () => {
             <div className="space-y-4">
               <Link
                 to="/"
-                className="group inline-flex items-center space-x-2 font-bold text-2xl text-foreground hover:text-primary transition-colors"
+                className="group inline-flex items-center space-x-2 font-heading font-bold text-2xl text-foreground hover:text-primary transition-colors"
               >
                 <span>YSZ</span>
                 <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -164,7 +164,7 @@ const Footer = () => {
               >
                 {t.common.home}
               </Link>
-              <div className="w-8 h-px bg-gradient-to-r from-foreground/20 to-transparent" />
+              <div className="w-8 h-px bg-linear-to-r from-foreground/20 to-transparent" />
               {nav.map(({ text, path }) => (
                 <Link
                   key={path}
@@ -192,8 +192,8 @@ const Footer = () => {
                 }}
                 className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-all duration-300 hover:cursor-copy"
               >
-                <Mail className="w-4 h-4 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                <span className="leading-relaxed break-words">
+                <Mail className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform" />
+                <span className="leading-relaxed wrap-break-word">
                   yanis.sebastian.zuercher@gmail.com
                 </span>
               </button>
@@ -223,7 +223,7 @@ const Footer = () => {
                   className={`group relative p-2.5 rounded-lg border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-all duration-300 ${link.hoverClass}`}
                 >
                   <div className="relative z-10">{link.icon}</div>
-                  <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 rounded-lg bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </a>
               ))}
             </div>
@@ -243,13 +243,13 @@ const Footer = () => {
           }}
         >
           <div
-            className="absolute inset-0 flex justify-center font-bold uppercase leading-none whitespace-nowrap text-background"
+            className="absolute inset-0 flex justify-center font-heading font-bold uppercase leading-none whitespace-nowrap text-background"
             style={{
               fontSize: "inherit",
               letterSpacing: "0.15em",
               paddingLeft: "0.15em",
               textShadow:
-                "0 -1.5px 0 hsl(var(--foreground) / 0.45), 1.5px 0 0 hsl(var(--foreground) / 0.45), 0 1.5px 0 hsl(var(--foreground) / 0.45), -1.5px 0 0 hsl(var(--foreground) / 0.45), 1px 1px 0 hsl(var(--foreground) / 0.45), -1px -1px 0 hsl(var(--foreground) / 0.45), 1px -1px 0 hsl(var(--foreground) / 0.45), -1px 1px 0 hsl(var(--foreground) / 0.45)",
+                "0 -1.5px 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1.5px 0 0 color-mix(in oklab, var(--foreground) 45%, transparent), 0 1.5px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1.5px 0 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1px 1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1px -1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1px -1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1px 1px 0 color-mix(in oklab, var(--foreground) 45%, transparent)",
             }}
           >
             SOLA
@@ -258,7 +258,7 @@ const Footer = () => {
 
         {/* bottom section */}
         <div className="relative">
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
+          <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent" />
           <div className="pt-8 text-center">
             <p className="text-xs text-foreground/40 leading-relaxed">
               © {year}{" "}

@@ -66,7 +66,7 @@ export const AdvancedCodeBlock = ({
       <div className={cn("w-full px-1 pb-1", !hasFileName && "pt-1")}>
         <div
           className={cn(
-            "relative isolate overflow-hidden rounded-xl shadow-sm",
+            "relative isolate overflow-hidden rounded-xl shadow-xs",
             hasFileName && "border-border border-t",
           )}
         >

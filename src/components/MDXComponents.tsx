@@ -44,7 +44,7 @@ const ImageLightbox: React.FC<{
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed top-0 left-0 right-0 bottom-0 z-[100] flex items-center justify-center bg-black/90 p-6 cursor-zoom-out overflow-hidden"
+          className="fixed top-0 left-0 right-0 bottom-0 z-100 flex items-center justify-center bg-black/90 p-6 cursor-zoom-out overflow-hidden"
           onClick={onClose}
         >
           <motion.img
@@ -189,7 +189,7 @@ export const MDXComponents = {
       className="text-sm text-muted-foreground flex items-start gap-2"
       {...props}
     >
-      <div className="w-1.5 h-1.5 bg-primary rounded-full flex-shrink-0 mt-2" />
+      <div className="w-1.5 h-1.5 bg-primary rounded-full shrink-0 mt-2" />
       <span>{children}</span>
     </li>
   ),
@@ -243,7 +243,7 @@ export const MDXComponents = {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-muted/50 border border-border/50 rounded-lg p-4 overflow-x-auto text-xs mb-4"
+        className="bg-muted/50 border border-border rounded-lg p-4 overflow-x-auto text-xs mb-4"
         {...props}
       >
         {children}
@@ -271,7 +271,7 @@ export const MDXComponents = {
       <ExpandableImage
         src={src || ""}
         alt={alt || ""}
-        className="w-full rounded-lg border border-border/50 mb-2"
+        className="w-full rounded-lg border border-border mb-2"
       />
       {alt && (
         <p className="text-xs text-muted-foreground italic text-center">
@@ -320,7 +320,7 @@ export const MDXComponents = {
       initial={{ opacity: 0, scaleX: 0 }}
       animate={{ opacity: 1, scaleX: 1 }}
       transition={{ duration: 0.6 }}
-      className="border-border/30 my-8"
+      className="border-border my-8"
       {...props}
     />
   ),
@@ -334,7 +334,7 @@ export const MDXComponents = {
       className="overflow-x-auto mb-6"
     >
       <table
-        className="w-full border-collapse border border-border/50 text-xs"
+        className="w-full border-collapse border border-border text-xs"
         {...props}
       >
         {children}
@@ -344,7 +344,7 @@ export const MDXComponents = {
 
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <th
-      className="border border-border/50 px-3 py-2 bg-muted/30 text-left font-medium"
+      className="border border-border px-3 py-2 bg-muted/30 text-left font-medium"
       {...props}
     >
       {children}
@@ -353,7 +353,7 @@ export const MDXComponents = {
 
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td
-      className="border border-border/50 px-3 py-2 text-muted-foreground"
+      className="border border-border px-3 py-2 text-muted-foreground"
       {...props}
     >
       {children}
@@ -384,7 +384,7 @@ export const ProjectImage: React.FC<{
     <ExpandableImage
       src={src}
       alt={alt}
-      className="w-full rounded-lg border border-border/50"
+      className="w-full rounded-lg border border-border"
     />
     {caption && (
       <p className="text-xs text-muted-foreground italic text-center mt-2">
@@ -411,7 +411,7 @@ export const ProjectGallery: React.FC<{
         <ExpandableImage
           src={images[0].src}
           alt={images[0].alt}
-          className="w-full rounded-lg border border-border/50"
+          className="w-full rounded-lg border border-border"
         />
         {images[0].caption && (
           <p className="text-xs text-muted-foreground italic text-center mt-2">
@@ -440,7 +440,7 @@ export const ProjectGallery: React.FC<{
           <ExpandableImage
             src={image.src}
             alt={image.alt}
-            className="w-full rounded-lg border border-border/50"
+            className="w-full rounded-lg border border-border"
           />
           {image.caption && (
             <p className="text-xs text-muted-foreground italic">

@@ -163,7 +163,7 @@ export const NameMorpher = ({
           justifyContent: "center",
           padding: "0.1em",
           borderRadius: "0.25em",
-          backgroundColor: "hsl(var(--muted) / 0.65)",
+          backgroundColor: "color-mix(in oklab, var(--muted) 65%, transparent)",
           verticalAlign: "baseline",
         }}
       >
@@ -188,7 +188,8 @@ export const NameMorpher = ({
                 custom={index}
                 className="text-primary inline-block"
                 style={{
-                  textShadow: "0 0 12px hsl(var(--primary) / 0.2)",
+                  textShadow:
+                    "0 0 12px color-mix(in oklab, var(--primary) 20%, transparent)",
                   willChange: "transform, opacity, filter",
                 }}
               >

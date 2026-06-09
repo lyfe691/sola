@@ -77,9 +77,9 @@ const NotFound = () => {
       <div className="w-full max-w-2xl bg-muted border border-border rounded-xl shadow-2xl overflow-hidden">
         {/* Window bar */}
         <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-muted/60 backdrop-blur-md">
-          <span className="h-3 w-3 rounded-full bg-destructive shadow-sm" />
-          <span className="h-3 w-3 rounded-full bg-yellow-400 shadow-sm" />
-          <span className="h-3 w-3 rounded-full bg-primary shadow-sm" />
+          <span className="h-3 w-3 rounded-full bg-destructive shadow-xs" />
+          <span className="h-3 w-3 rounded-full bg-yellow-400 shadow-xs" />
+          <span className="h-3 w-3 rounded-full bg-primary shadow-xs" />
         </div>
 
         {/* Terminal */}

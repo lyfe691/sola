@@ -22,6 +22,9 @@ import {
   MoveRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -35,6 +38,7 @@ import {
   DialogTrigger,
   DialogContent,
   DialogHeader,
+  DialogFooter,
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
@@ -43,6 +47,7 @@ import {
   DrawerTrigger,
   DrawerContent,
   DrawerHeader,
+  DrawerFooter,
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
@@ -95,41 +100,29 @@ const InterestCard = ({
   description,
   icon: Icon,
   image,
-}: InterestCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-  return (
-    <motion.div
-      className="group rounded-xl border-2 border-border/20 overflow-hidden relative"
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-    >
-      <div className="h-36 overflow-hidden relative">
-        <motion.img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover"
-          loading="lazy"
-          initial={{ scale: 1 }}
-          animate={{ scale: isHovered ? 1.05 : 1 }}
-          transition={{ duration: 0.4 }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent" />
-      </div>
+}: InterestCardProps) => (
+  <Card className="group gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
+    <div className="relative h-36 overflow-hidden">
+      <img
+        src={image}
+        alt={title}
+        loading="lazy"
+        className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-background to-transparent" />
+    </div>
 
-      <div className="p-4 space-y-2">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center">
-            <Icon className="w-3.5 h-3.5 text-primary" />
-          </div>
-          <h3 className="font-medium">{title}</h3>
+    <div className="flex flex-col gap-2 p-4">
+      <div className="flex items-center gap-2">
+        <div className="flex size-7 items-center justify-center rounded-md bg-primary/10">
+          <Icon className="size-3.5 text-primary" />
         </div>
-        <p className="text-foreground/70 text-sm leading-relaxed">
-          {description}
-        </p>
+        <h3 className="font-medium">{title}</h3>
       </div>
-    </motion.div>
-  );
-};
+      <p className="text-sm leading-relaxed text-foreground/70">{description}</p>
+    </div>
+  </Card>
+);
 
 type TestimonialProps = {
   quote: string;
@@ -190,10 +183,10 @@ const TestimonialCard = ({
             <img
               src={avatar}
               alt={author}
-              className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+              className="w-14 h-14 rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
               <span className="text-lg font-medium text-primary">
                 {author
                   .split(" ")
@@ -239,7 +232,7 @@ const TestimonialCard = ({
   );
 
   const cardContent = (
-    <motion.div className="group rounded-xl border-2 border-border/20 bg-background/50 backdrop-blur-sm p-6 space-y-4 relative overflow-hidden h-full flex flex-col">
+    <Card className="group relative flex h-full flex-col gap-4 overflow-hidden bg-card/40 p-6 backdrop-blur-md">
       {/* quote icon */}
       <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
         <Quote className="w-4 h-4 text-primary" />
@@ -275,16 +268,17 @@ const TestimonialCard = ({
       </div>
 
       {/* author - always at bottom */}
-      <div className="pt-3 border-t border-foreground/10 mt-auto space-y-3">
+      <Separator className="mt-auto" />
+      <div className="space-y-3 pt-3">
         <div className="flex items-start gap-3">
           {avatar ? (
             <img
               src={avatar}
               alt={author}
-              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+              className="w-10 h-10 rounded-full object-cover shrink-0"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
               <span className="text-sm font-medium text-primary">
                 {author
                   .split(" ")
@@ -333,7 +327,7 @@ const TestimonialCard = ({
 
       {/* subtle background decoration */}
       <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-    </motion.div>
+    </Card>
   );
 
   if (!isLongQuote) {
@@ -345,8 +339,8 @@ const TestimonialCard = ({
       <>
         {cardContent}
         <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerContent className="px-4 pb-4">
-            <DrawerHeader className="text-left px-0">
+          <DrawerContent>
+            <DrawerHeader>
               <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
               <DrawerDescription>
                 <RichText
@@ -355,7 +349,7 @@ const TestimonialCard = ({
                 />
               </DrawerDescription>
             </DrawerHeader>
-            {fullTestimonialContent}
+            <div className="overflow-y-auto px-4">{fullTestimonialContent}</div>
           </DrawerContent>
         </Drawer>
       </>
@@ -366,8 +360,8 @@ const TestimonialCard = ({
     <>
       {cardContent}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader className="pb-2">
+        <DialogContent>
+          <DialogHeader>
             <DialogTitle>{t.about.testimonials.modalTitle}</DialogTitle>
             <DialogDescription>
               <RichText
@@ -393,6 +387,47 @@ const ResumeModal = () => {
     language === "de" ? "de" : "en",
   );
 
+  const languagePicker = (
+    <div className="flex items-center justify-between gap-4">
+      <span className="text-sm font-medium">
+        {t.about.resume.languageLabel}
+      </span>
+      <ToggleGroup
+        value={[selectedLang]}
+        onValueChange={(value) =>
+          value[0] && setSelectedLang(value[0] as "en" | "de")
+        }
+        variant="outline"
+        size="sm"
+      >
+        <ToggleGroupItem value="en">EN</ToggleGroupItem>
+        <ToggleGroupItem value="de">DE</ToggleGroupItem>
+      </ToggleGroup>
+    </div>
+  );
+
+  const actions = (
+    <>
+      <Button
+        onClick={() => {
+          viewResume(selectedLang);
+          setOpen(false);
+        }}
+      >
+        {t.about.resume.viewButton}
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() => {
+          downloadResume(selectedLang);
+          setOpen(false);
+        }}
+      >
+        {t.about.resume.downloadButton}
+      </Button>
+    </>
+  );
+
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={setOpen}>
@@ -400,68 +435,22 @@ const ResumeModal = () => {
           <IconButton
             variant="default"
             size="lg"
-            className="border-foreground/20 w-full"
+            className="w-1/2 border-foreground/20"
             icon={<Download className="w-4 h-4" />}
             iconPosition="left"
             label={t.about.resume.buttonLabel}
             onClick={() => setOpen(true)}
           />
         </DrawerTrigger>
-        <DrawerContent className="px-4 pb-4">
-          <DrawerHeader className="text-left px-0">
+        <DrawerContent>
+          <DrawerHeader>
             <DrawerTitle>{t.about.resume.title}</DrawerTitle>
             <DrawerDescription>
               <RichText text={t.about.resume.description} />
             </DrawerDescription>
           </DrawerHeader>
-
-          {/* language selection */}
-          <div className="py-4 border-y border-foreground/10 mb-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">
-                {t.about.resume.languageLabel}
-              </span>
-              <ToggleGroup
-                type="single"
-                value={selectedLang}
-                onValueChange={(value) =>
-                  value && setSelectedLang(value as "en" | "de")
-                }
-                variant="outline"
-                size="sm"
-              >
-                <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
-                  EN
-                </ToggleGroupItem>
-                <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
-                  DE
-                </ToggleGroupItem>
-              </ToggleGroup>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <Button
-              variant="default"
-              size="sm"
-              onClick={() => {
-                viewResume(selectedLang);
-                setOpen(false);
-              }}
-            >
-              {t.about.resume.viewButton}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                downloadResume(selectedLang);
-                setOpen(false);
-              }}
-            >
-              {t.about.resume.downloadButton}
-            </Button>
-          </div>
+          <div className="px-4">{languagePicker}</div>
+          <DrawerFooter>{actions}</DrawerFooter>
         </DrawerContent>
       </Drawer>
     );
@@ -469,72 +458,28 @@ const ResumeModal = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <IconButton
-          variant="default"
-          size="lg"
-          className="border-foreground/20 w-1/3"
-          icon={<Download className="w-4 h-4" />}
-          iconPosition="left"
-          label={t.about.resume.buttonLabel}
-          onClick={() => setOpen(true)}
-        />
-      </DialogTrigger>
-      <DialogContent className="max-w-md">
-        <DialogHeader className="pb-2">
+      <DialogTrigger
+        render={
+          <IconButton
+            variant="default"
+            size="lg"
+            className="w-1/3 border-foreground/20"
+            icon={<Download className="w-4 h-4" />}
+            iconPosition="left"
+            label={t.about.resume.buttonLabel}
+            onClick={() => setOpen(true)}
+          />
+        }
+      />
+      <DialogContent>
+        <DialogHeader>
           <DialogTitle>{t.about.resume.title}</DialogTitle>
           <DialogDescription>
             <RichText text={t.about.resume.description} />
           </DialogDescription>
         </DialogHeader>
-
-        {/* language selection */}
-        <div className="py-4 border-y border-foreground/10">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">
-              {t.about.resume.languageLabel}
-            </span>
-            <ToggleGroup
-              type="single"
-              value={selectedLang}
-              onValueChange={(value) =>
-                value && setSelectedLang(value as "en" | "de")
-              }
-              variant="outline"
-              size="sm"
-            >
-              <ToggleGroupItem value="en" className="px-3 py-1 h-7 text-xs">
-                EN
-              </ToggleGroupItem>
-              <ToggleGroupItem value="de" className="px-3 py-1 h-7 text-xs">
-                DE
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3 pt-4">
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => {
-              viewResume(selectedLang);
-              setOpen(false);
-            }}
-          >
-            {t.about.resume.viewButton}
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              downloadResume(selectedLang);
-              setOpen(false);
-            }}
-          >
-            {t.about.resume.downloadButton}
-          </Button>
-        </div>
+        {languagePicker}
+        <DialogFooter className="sm:flex-col">{actions}</DialogFooter>
       </DialogContent>
     </Dialog>
   );
@@ -640,7 +585,7 @@ const About = () => {
           {/* ------------------ Portrait ------------------ */}
 
           <div className="md:col-span-2 relative">
-            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border/20 shadow-sm">
+            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border shadow-xs">
               <motion.img
                 src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
                 alt="Yanis Sebastian Zürcher"
@@ -689,18 +634,18 @@ const About = () => {
                 </Button>
               ))}
             </div>
-            <div className="rounded-xl border-2 border-border/20 p-4">
+            <Card className="gap-0 bg-card/40 p-4 backdrop-blur-md">
               <GitHubCalendar
                 username="lyfe691"
                 colorScheme={getThemeType(theme)}
                 fontSize={14}
                 year={selectedYear}
               />
-            </div>
+            </Card>
           </div>
 
           {loadingActivity ? (
-            <div className="border-2 border-border/20 rounded-xl p-4 h-48 animate-pulse mt-6" />
+            <Skeleton className="mt-6 h-48 rounded-xl" />
           ) : (
             <ContributionActivityFeed events={activity} />
           )}
@@ -777,7 +722,7 @@ const About = () => {
       {/* ------------------- Philosophy ----------------- */}
 
       <ScrollReveal variant="default">
-        <div className="relative overflow-hidden rounded-xl border-2 border-border/20 bg-gradient-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
+        <div className="relative overflow-hidden rounded-xl border-2 border-border bg-linear-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
           <div className="relative z-10">
             <h2 className="text-xl font-bold mb-6 md:mb-8">
               {t.about.philosophy.title}

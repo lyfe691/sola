@@ -467,7 +467,17 @@ export const translations = {
       title: "Get in Touch",
       description:
         "Have a question or want to work together? Feel free to reach out!",
-      backHome: "Back Home",
+      formTitle: "Send a message",
+      reachOut: "Or reach me directly",
+      expectations: {
+        title: "What to expect",
+        items: [
+          "A reply within a day or two",
+          "A clear, no-pressure conversation about your idea",
+          "Honest thoughts on scope, timeline, and fit",
+          "Your details stay private — just a direct reply",
+        ],
+      },
       nameLabel: "Name",
       namePlaceholder: "Your name",
       emailLabel: "Email",
@@ -477,7 +487,7 @@ export const translations = {
       send: "Send Message",
       sending: "Sending...",
       successMessage: "Thanks for your message! I'll get back to you soon.",
-      recaptchaError: "Please complete the reCAPTCHA verification.",
+      errorMessage: "Something went wrong. Please try again.",
       subjectLabel: "Subject",
       subjectPlaceholder: "Enter your subject",
       attachmentLabel: "Attachment",
@@ -495,7 +505,6 @@ export const translations = {
         emailInvalid: "Please enter a valid email address.",
         subjectRequired: "Please enter a subject.",
         messageRequired: "Please enter a message.",
-        fixErrors: "Please fix the errors above.",
       },
     },
     services: {
@@ -1030,7 +1039,17 @@ export const translations = {
       title: "Kontakt",
       description:
         "Haben Sie eine Frage oder möchten Sie zusammenarbeiten? Kontaktieren Sie mich!",
-      backHome: "Zurück zur Startseite",
+      formTitle: "Nachricht senden",
+      reachOut: "Oder erreiche mich direkt",
+      expectations: {
+        title: "Was dich erwartet",
+        items: [
+          "Eine Antwort innerhalb von ein, zwei Tagen",
+          "Ein klares, unverbindliches Gespräch über deine Idee",
+          "Ehrliche Einschätzung zu Umfang, Zeitplan und Passung",
+          "Deine Daten bleiben privat – einfach eine direkte Antwort",
+        ],
+      },
       nameLabel: "Name",
       namePlaceholder: "Ihr Name",
       emailLabel: "E-Mail",
@@ -1041,7 +1060,7 @@ export const translations = {
       sending: "Wird gesendet...",
       successMessage:
         "Danke für Ihre Nachricht! Ich melde mich bald bei Ihnen.",
-      recaptchaError: "Bitte bestätigen Sie die reCAPTCHA-Verifizierung.",
+      errorMessage: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
       subjectLabel: "Betreff",
       subjectPlaceholder: "Betreff eingeben",
       attachmentLabel: "Anhang",
@@ -1059,7 +1078,6 @@ export const translations = {
         emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
         subjectRequired: "Bitte geben Sie einen Betreff ein.",
         messageRequired: "Bitte geben Sie eine Nachricht ein.",
-        fixErrors: "Bitte korrigieren Sie die Fehler oben.",
       },
     },
     services: {
@@ -1595,7 +1613,17 @@ export const translations = {
       title: "Contacto",
       description:
         "¿Tienes una pregunta o quieres trabajar juntos? ¡No dudes en contactarme!",
-      backHome: "Regresar",
+      formTitle: "Enviar un mensaje",
+      reachOut: "O contáctame directamente",
+      expectations: {
+        title: "Qué esperar",
+        items: [
+          "Una respuesta en uno o dos días",
+          "Una conversación clara y sin compromiso sobre tu idea",
+          "Opiniones honestas sobre alcance, plazos y encaje",
+          "Tus datos quedan privados — solo una respuesta directa",
+        ],
+      },
       nameLabel: "Nombre",
       namePlaceholder: "Tu nombre",
       emailLabel: "Correo electrónico",
@@ -1606,7 +1634,7 @@ export const translations = {
       sending: "Enviando...",
       successMessage:
         "¡Gracias por tu mensaje! Me pondré en contacto contigo pronto.",
-      recaptchaError: "Por favor, complete la verificación de reCAPTCHA.",
+      errorMessage: "Algo salió mal. Por favor, inténtalo de nuevo.",
       subjectLabel: "Asunto",
       subjectPlaceholder: "Ingresa el asunto",
       attachmentLabel: "Adjunto",
@@ -1624,7 +1652,6 @@ export const translations = {
         emailInvalid: "Por favor, escribe un correo electrónico válido.",
         subjectRequired: "Por favor, escribe un asunto.",
         messageRequired: "Por favor, escribe un mensaje.",
-        fixErrors: "Por favor, corrige los errores arriba.",
       },
     },
     services: {
@@ -2152,7 +2179,17 @@ export const translations = {
       title: "お問い合わせ",
       description:
         "ご質問や協力のご提案などございましたら、お気軽にご連絡ください。",
-      backHome: "ホームに戻る",
+      formTitle: "メッセージを送る",
+      reachOut: "直接連絡する",
+      expectations: {
+        title: "期待できること",
+        items: [
+          "1〜2日以内の返信",
+          "あなたのアイデアについての気軽で明確な会話",
+          "範囲・スケジュール・相性についての率直な意見",
+          "あなたの情報は非公開 — 直接お返事するだけです",
+        ],
+      },
       nameLabel: "お名前",
       namePlaceholder: "あなたのお名前",
       emailLabel: "メールアドレス",
@@ -2163,7 +2200,7 @@ export const translations = {
       sending: "送信中...",
       successMessage:
         "メッセージをお送りいただき、ありがとうございます。近日中にご連絡させていただきます。",
-      recaptchaError: "reCAPTCHAの検証を完了してください。",
+      errorMessage: "問題が発生しました。もう一度お試しください。",
       subjectLabel: "件名",
       subjectPlaceholder: "件名を入力",
       attachmentLabel: "添付ファイル",
@@ -2181,7 +2218,6 @@ export const translations = {
         emailInvalid: "有効なメールアドレスを入力してください。",
         subjectRequired: "件名を入力してください。",
         messageRequired: "メッセージを入力してください。",
-        fixErrors: "上記のエラーを修正してください。",
       },
     },
     services: {
@@ -2698,7 +2734,17 @@ export const translations = {
     contact: {
       title: "联系我",
       description: "有问题或想一起合作？随时联系我！",
-      backHome: "返回首页",
+      formTitle: "发送消息",
+      reachOut: "或直接联系我",
+      expectations: {
+        title: "您可以期待",
+        items: [
+          "一两天内回复",
+          "就您的想法进行清晰、无压力的交流",
+          "关于范围、时间和契合度的坦诚意见",
+          "您的信息将保密 — 只会直接回复",
+        ],
+      },
       nameLabel: "姓名",
       namePlaceholder: "您的姓名",
       emailLabel: "电子邮件",
@@ -2708,7 +2754,7 @@ export const translations = {
       send: "发送消息",
       sending: "发送中...",
       successMessage: "感谢您的消息！我会尽快回复您。",
-      recaptchaError: "请完成 reCAPTCHA 验证。",
+      errorMessage: "出现错误，请重试。",
       subjectLabel: "主题",
       subjectPlaceholder: "输入主题",
       attachmentLabel: "附件",
@@ -2726,7 +2772,6 @@ export const translations = {
         emailInvalid: "请输入有效的电子邮件地址。",
         subjectRequired: "请输入主题。",
         messageRequired: "请输入消息。",
-        fixErrors: "请修正上面的错误。",
       },
     },
     services: {

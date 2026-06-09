@@ -11,12 +11,18 @@ import { useTheme } from "./theme-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
@@ -37,7 +43,8 @@ export function ThemeToggle({
   const { theme, setTheme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
-  const { active: activeBackground, setActive: setBackground } = useBackground();
+  const { active: activeBackground, setActive: setBackground } =
+    useBackground();
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -70,11 +77,19 @@ export function ThemeToggle({
 
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+                />
+              }
+            />
+          }
         >
           {/* show icon with smooth animation */}
           {THEMES.map((t) => {
@@ -98,79 +113,89 @@ export function ThemeToggle({
           })}
 
           <span className="sr-only">Toggle theme</span>
-        </Button>
-      </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>{t.common.command.groups.theme}</TooltipContent>
+      </Tooltip>
       <DropdownMenuContent align="end" className="min-w-[180px]">
-        <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
-        {/* standard themes */}
-        {THEMES.map((option) => {
-          if (option.isCustom) return null;
-          const isSelected = theme === option.value;
-          return (
-            <DropdownMenuItem
-              key={option.value}
-              onClick={(e) => setTheme(option.value as Theme, e)}
-              className="flex justify-between"
-            >
-              <span className={isSelected ? "text-muted-foreground" : ""}>
-                {option.label}
-              </span>
-              {isSelected && (
-                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
+          {THEMES.map((option) => {
+            if (option.isCustom) return null;
+            const isSelected = theme === option.value;
+            return (
+              <DropdownMenuItem
+                key={option.value}
+                onClick={(e) => {
+                  onOpenChange?.(false);
+                  requestAnimationFrame(() =>
+                    setTheme(option.value as Theme, e),
+                  );
+                }}
+                className="justify-between"
+              >
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {option.label}
+                </span>
+                {isSelected && (
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
 
-        {/* separator */}
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="px-2 pb-1 pt-1 text-xs font-medium uppercase text-muted-foreground/70">
-          {t.common.menu.customThemes}
-        </DropdownMenuLabel>
-        {/* custom themes */}
-        {THEMES.map((option) => {
-          if (!option.isCustom) return null;
-          const isSelected = theme === option.value;
-          return (
-            <DropdownMenuItem
-              key={option.value}
-              onClick={(e) => setTheme(option.value as Theme, e)}
-              className="flex justify-between"
-            >
-              <span className={isSelected ? "text-muted-foreground" : ""}>
-                {option.label}
-              </span>
-              {isSelected && (
-                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t.common.menu.customThemes}</DropdownMenuLabel>
+          {THEMES.map((option) => {
+            if (!option.isCustom) return null;
+            const isSelected = theme === option.value;
+            return (
+              <DropdownMenuItem
+                key={option.value}
+                onClick={(e) => {
+                  onOpenChange?.(false);
+                  requestAnimationFrame(() =>
+                    setTheme(option.value as Theme, e),
+                  );
+                }}
+                className="justify-between"
+              >
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {option.label}
+                </span>
+                {isSelected && (
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
 
-        {/* background */}
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>{t.common.menu.background}</DropdownMenuLabel>
-        {backgroundOptions.map((option) => {
-          const isSelected = activeBackground === option.id;
-          return (
-            <DropdownMenuItem
-              key={option.id}
-              onSelect={(e) => {
-                e.preventDefault();
-                setBackground(option.id);
-              }}
-              className="flex justify-between"
-            >
-              <span className={isSelected ? "text-muted-foreground" : ""}>
-                {option.label}
-              </span>
-              {isSelected && (
-                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t.common.menu.background}</DropdownMenuLabel>
+          {backgroundOptions.map((option) => {
+            const isSelected = activeBackground === option.id;
+            return (
+              <DropdownMenuItem
+                key={option.id}
+                closeOnClick={false}
+                onClick={() => setBackground(option.id)}
+                className="justify-between"
+              >
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {option.label}
+                </span>
+                {isSelected && (
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );

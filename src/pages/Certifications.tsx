@@ -15,6 +15,7 @@ import { ExternalLink } from "lucide-react";
 import { getAllCertifications, isExpired } from "@/config/certifications";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 const Certifications: React.FC = () => {
   const { language } = useLanguage();
@@ -60,7 +61,7 @@ const Certifications: React.FC = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
-        className="min-h-screen bg-gradient-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
+        className="min-h-screen bg-linear-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
       >
         <Helmet>
           <title>
@@ -75,7 +76,7 @@ const Certifications: React.FC = () => {
 
         <div className="max-w-7xl mx-auto">
           <motion.div {...trail(1)} className="mb-16 text-center">
-            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap break-words shrink-0">
+            <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
               {t.certifications?.title ?? "Certifications"}
             </h1>
           </motion.div>
@@ -92,7 +93,7 @@ const Certifications: React.FC = () => {
                   return (
                     <motion.article
                       key={c.id}
-                      className="group rounded-xl border bg-card/60 backdrop-blur-sm p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20"
+                      className="group rounded-xl border bg-card/60 backdrop-blur-xs p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20"
                       variants={cardIn}
                       initial="hidden"
                       animate="visible"
@@ -103,13 +104,13 @@ const Certifications: React.FC = () => {
                             <img
                               src={c.issuerLogo}
                               alt={`${c.issuer} logo`}
-                              className="w-10 h-10 rounded border border-border/40 object-cover"
+                              className="w-10 h-10 rounded border border-border object-cover"
                               loading="lazy"
                             />
                           ) : null}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
-                              <h2 className="text-lg font-medium text-foreground break-words">
+                              <h2 className="text-lg font-medium text-foreground wrap-break-word">
                                 {c.title}
                               </h2>
                               {expired && (
@@ -160,7 +161,7 @@ const Certifications: React.FC = () => {
                               <object
                                 data={maybePdf}
                                 type="application/pdf"
-                                className="w-full h-[420px] sm:h-[560px] rounded-lg border border-border/40"
+                                className="w-full h-[420px] sm:h-[560px] rounded-lg border border-border"
                               >
                                 <a
                                   href={maybePdf}
@@ -180,7 +181,7 @@ const Certifications: React.FC = () => {
                               <img
                                 src={c.certificateImage}
                                 alt={`${c.title} certificate`}
-                                className="w-full rounded-lg border border-border/40"
+                                className="w-full rounded-lg border border-border"
                                 loading="lazy"
                               />
                             </div>
@@ -192,12 +193,13 @@ const Certifications: React.FC = () => {
                       {c.skills && c.skills.length > 0 ? (
                         <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
                           {c.skills.map((s, idx) => (
-                            <span
+                            <Badge
                               key={idx}
-                              className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 text-foreground/60 border border-foreground/10"
+                              variant="secondary"
+                              className="font-normal"
                             >
                               {s}
-                            </span>
+                            </Badge>
                           ))}
                         </div>
                       ) : null}

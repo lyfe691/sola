@@ -25,19 +25,21 @@ export function SearchToggle() {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
-          onClick={toggleCommandMenu}
-          aria-label="Search"
-        >
-          <Search className="h-4 w-4" />
-          <span className="sr-only">Search</span>
-        </Button>
+      <TooltipTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+            onClick={toggleCommandMenu}
+            aria-label="Search"
+          />
+        }
+      >
+        <Search className="h-4 w-4" />
+        <span className="sr-only">Search</span>
       </TooltipTrigger>
-      <TooltipContent className="bg-background/85 backdrop-blur-sm">
+      <TooltipContent>
         <KbdGroup>
           <p className="text-sm">{t.common.search}</p>
           <Kbd>⌘</Kbd>

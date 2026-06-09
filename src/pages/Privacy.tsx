@@ -8,9 +8,7 @@
  * WARNING: Copying this file is strictly prohibited - it will lead to legal action.
  */
 
-// independent page in simplelayout
-
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +20,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
@@ -31,11 +28,6 @@ import { ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const Privacy = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
-    const t = setTimeout(() => setIsLoaded(true), 80);
-    return () => clearTimeout(t);
-  }, []);
   const n = useNavigate();
   const { language } = useLanguage();
   const t = translations[language];
@@ -695,324 +687,301 @@ const Privacy = () => {
   });
 
   return (
-    <AnimatePresence>
-      {isLoaded && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className="min-h-screen bg-gradient-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
-        >
-          <Helmet>
-            <title>{t.seo.privacy.title}</title>
-            <meta name="description" content={t.seo.privacy.description} />
-          </Helmet>
+    <>
+      <Helmet>
+        <title>{t.seo.privacy.title}</title>
+        <meta name="description" content={t.seo.privacy.description} />
+      </Helmet>
 
-          <div className="max-w-7xl mx-auto">
-            <div className="max-w-4xl mx-auto">
-              <motion.div {...trail(1)} className="mb-8">
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem>
-                      <BreadcrumbLink asChild>
-                        <Link to="/">
-                          <span className="text-muted-foreground hover:text-primary transition-colors">
-                            {t.common.home}
-                          </span>
-                        </Link>
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                      <BreadcrumbPage>{t.footer.privacy}</BreadcrumbPage>
-                    </BreadcrumbItem>
-                  </BreadcrumbList>
-                </Breadcrumb>
-              </motion.div>
-            </div>
-
-            <motion.div {...trail(2)} className="mb-16 text-center">
-              <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap break-words shrink-0">
-                {L[language].pageTitle}
-              </h1>
-              <div className="mt-8 flex items-center justify-center">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border/60 bg-background/60 px-2.5 py-1 text-[0.70rem]/[1rem] text-foreground/60 backdrop-blur-sm">
-                  {updatedLabel}:{" "}
-                  <span className="bg-gradient-to-r from-foreground/60 via-primary to-foreground/60 bg-[length:200%_100%] bg-clip-text text-transparent animate-shine">
-                    {formattedUpdated}
-                  </span>
-                </span>
-              </div>
-            </motion.div>
-
-            <div className="max-w-4xl mx-auto">
-              <div className="space-y-8">
-                {/* Intro card */}
-                <motion.section
-                  id="introduction"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].intro.title}
-                  </h2>
-                  <div className="space-y-4 text-muted-foreground leading-relaxed text-base">
-                    <p>{L[language].intro.p1}</p>
-                    <p>
-                      <strong className="text-foreground">
-                        {L[language].intro.controller}
-                      </strong>{" "}
-                      {L[language].intro.controllerVal}
-                      <br />
-                      <strong className="text-foreground">
-                        {L[language].intro.contact}
-                      </strong>{" "}
-                      <a
-                        href="mailto:yanis.sebastian.zuercher@gmail.com"
-                        className="link"
-                      >
-                        {L[language].intro.email}
-                      </a>
-                    </p>
-                  </div>
-                </motion.section>
-
-                {/* Two-column cards where space allows */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <motion.section
-                    id="hosting"
-                    variants={cardIn}
-                    initial="hidden"
-                    animate="visible"
-                    className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                  >
-                    <h2 className="text-xl font-semibold text-foreground mb-4">
-                      {L[language].hosting.title}
-                    </h2>
-                    <p className="text-muted-foreground leading-relaxed text-base">
-                      {L[language].hosting.p1}
-                    </p>
-                    <p className="text-muted-foreground leading-relaxed text-base mt-3">
-                      <strong className="text-foreground">
-                        {L[language].hosting.legal.split(":")[0]}:
-                      </strong>{" "}
-                      {L[language].hosting.legal
-                        .split(":")
-                        .slice(1)
-                        .join(":")
-                        .trim()}
-                    </p>
-                  </motion.section>
-
-                  <motion.section
-                    id="analytics"
-                    variants={cardIn}
-                    initial="hidden"
-                    animate="visible"
-                    className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                  >
-                    <h2 className="text-xl font-semibold text-foreground mb-4">
-                      {L[language].analytics.title}
-                    </h2>
-                    <p className="text-muted-foreground leading-relaxed text-base">
-                      {L[language].analytics.p1}
-                    </p>
-                    <p className="text-muted-foreground leading-relaxed text-base mt-3">
-                      <strong className="text-foreground">
-                        {L[language].hosting.legal.split(":")[0]}:
-                      </strong>{" "}
-                      {L[language].analytics.legal
-                        .split(":")
-                        .slice(1)
-                        .join(":")
-                        .trim()}
-                    </p>
-                  </motion.section>
-                </div>
-
-                <motion.section
-                  id="cookies"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].cookies.title}
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-base">
-                    {L[language].cookies.p1}
-                  </p>
-                </motion.section>
-
-                <motion.section
-                  id="contact"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].contact.title}
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-base">
-                    {L[language].contact.p1}
-                  </p>
-                  <p className="text-muted-foreground leading-relaxed text-base mt-3">
-                    <strong className="text-foreground">
-                      {L[language].hosting.legal.split(":")[0]}:
-                    </strong>{" "}
-                    {L[language].contact.legal
-                      .split(":")
-                      .slice(1)
-                      .join(":")
-                      .trim()}
-                  </p>
-                </motion.section>
-
-                <motion.section
-                  id="github"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].github.title}
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-base">
-                    {L[language].github.p1}
-                  </p>
-                  <p className="text-muted-foreground leading-relaxed text-base mt-3">
-                    <strong className="text-foreground">
-                      {L[language].hosting.legal.split(":")[0]}:
-                    </strong>{" "}
-                    {L[language].github.legal
-                      .split(":")
-                      .slice(1)
-                      .join(":")
-                      .trim()}
-                  </p>
-                </motion.section>
-
-                <motion.section
-                  id="processors"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].processors.title}
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-base">
-                    {L[language].processors.p1}
-                  </p>
-                </motion.section>
-
-                <motion.section
-                  id="rights"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].rights.title}
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-base">
-                    {L[language].rights.p1}
-                  </p>
-                  {"items" in L[language].rights && Array.isArray(L[language].rights.items) && (
-                    <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                      {(L[language].rights.items as string[]).map(
-                        (item) => (
-                          <li key={item} className="flex items-start gap-2">
-                            <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary/70" />
-                            <span>{item}</span>
-                          </li>
-                        ),
-                      )}
-                    </ul>
-                  )}
-                  <p className="text-muted-foreground leading-relaxed text-base mt-4">
-                    {L[language].rights.p2}
-                  </p>
-                </motion.section>
-
-                <motion.section
-                  id="changes"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border bg-card/60 backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].changes.title}
-                  </h2>
-                  <p className="text-muted-foreground leading-relaxed text-base">
-                    {L[language].changes.p1}
-                  </p>
-                </motion.section>
-
-                <Separator className="my-12" />
-
-                <motion.section
-                  id="impressum"
-                  variants={cardIn}
-                  initial="hidden"
-                  animate="visible"
-                  className="rounded-xl border  backdrop-blur-sm p-6"
-                >
-                  <h2 className="text-xl font-semibold text-foreground mb-4">
-                    {L[language].impressum.title}
-                  </h2>
-                  <div className="text-muted-foreground leading-relaxed space-y-2 text-base">
-                    <p>
-                      <span className="font-semibold text-foreground">
-                        {L[language].impressum.responsible}
+      <div className="max-w-4xl mx-auto">
+        <motion.div {...trail(1)} className="mb-8">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink
+                  render={
+                    <Link to="/">
+                      <span className="text-muted-foreground hover:text-primary transition-colors">
+                        {t.common.home}
                       </span>
-                    </p>
-                    <p>{L[language].impressum.name}</p>
-                    <p>{L[language].impressum.location}</p>
-                    <p>
-                      <span className="font-semibold text-foreground">
-                        {L[language].impressum.emailLabel}
-                      </span>{" "}
-                      <a
-                        href="mailto:yanis.sebastian.zuercher@gmail.com"
-                        className="link"
-                      >
-                        yanis.sebastian.zuercher@gmail.com
-                      </a>
-                    </p>
-                  </div>
-                </motion.section>
-              </div>
-
-              <motion.div
-                {...trail(20)}
-                className="mt-16 pt-8 border-t border-border"
-                onClick={h}
-              >
-                <IconButton
-                  icon={<ArrowLeft className="w-4 h-4" />}
-                  variant="ghost"
-                  size="sm"
-                  iconPosition="left"
-                  className="inline-flex items-center gap-2 text-sm "
-                >
-                  {L[language].back}
-                </IconButton>
-              </motion.div>
-            </div>
-          </div>
+                    </Link>
+                  }
+                />
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{t.footer.privacy}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         </motion.div>
-      )}
-    </AnimatePresence>
+      </div>
+
+      <motion.div {...trail(2)} className="mb-16 text-center">
+        <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
+          {L[language].pageTitle}
+        </h1>
+        <div className="mt-8 flex items-center justify-center">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border bg-background/60 px-2.5 py-1 text-[0.70rem]/[1rem] text-foreground/60 backdrop-blur-xs">
+            {updatedLabel}:{" "}
+            <span className="bg-linear-to-r from-foreground/60 via-primary to-foreground/60 bg-size-[200%_100%] bg-clip-text text-transparent animate-shine">
+              {formattedUpdated}
+            </span>
+          </span>
+        </div>
+      </motion.div>
+
+      <div className="max-w-4xl mx-auto">
+        <div className="space-y-8">
+          {/* Intro card */}
+          <motion.section
+            id="introduction"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].intro.title}
+            </h2>
+            <div className="space-y-4 text-muted-foreground leading-relaxed text-base">
+              <p>{L[language].intro.p1}</p>
+              <p>
+                <strong className="text-foreground">
+                  {L[language].intro.controller}
+                </strong>{" "}
+                {L[language].intro.controllerVal}
+                <br />
+                <strong className="text-foreground">
+                  {L[language].intro.contact}
+                </strong>{" "}
+                <a
+                  href="mailto:yanis.sebastian.zuercher@gmail.com"
+                  className="link"
+                >
+                  {L[language].intro.email}
+                </a>
+              </p>
+            </div>
+          </motion.section>
+
+          {/* Two-column cards where space allows */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <motion.section
+              id="hosting"
+              variants={cardIn}
+              initial="hidden"
+              animate="visible"
+              className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+            >
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].hosting.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].hosting.p1}
+              </p>
+              <p className="text-muted-foreground leading-relaxed text-base mt-3">
+                <strong className="text-foreground">
+                  {L[language].hosting.legal.split(":")[0]}:
+                </strong>{" "}
+                {L[language].hosting.legal.split(":").slice(1).join(":").trim()}
+              </p>
+            </motion.section>
+
+            <motion.section
+              id="analytics"
+              variants={cardIn}
+              initial="hidden"
+              animate="visible"
+              className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+            >
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].analytics.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].analytics.p1}
+              </p>
+              <p className="text-muted-foreground leading-relaxed text-base mt-3">
+                <strong className="text-foreground">
+                  {L[language].hosting.legal.split(":")[0]}:
+                </strong>{" "}
+                {L[language].analytics.legal
+                  .split(":")
+                  .slice(1)
+                  .join(":")
+                  .trim()}
+              </p>
+            </motion.section>
+          </div>
+
+          <motion.section
+            id="cookies"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].cookies.title}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed text-base">
+              {L[language].cookies.p1}
+            </p>
+          </motion.section>
+
+          <motion.section
+            id="contact"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].contact.title}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed text-base">
+              {L[language].contact.p1}
+            </p>
+            <p className="text-muted-foreground leading-relaxed text-base mt-3">
+              <strong className="text-foreground">
+                {L[language].hosting.legal.split(":")[0]}:
+              </strong>{" "}
+              {L[language].contact.legal.split(":").slice(1).join(":").trim()}
+            </p>
+          </motion.section>
+
+          <motion.section
+            id="github"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].github.title}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed text-base">
+              {L[language].github.p1}
+            </p>
+            <p className="text-muted-foreground leading-relaxed text-base mt-3">
+              <strong className="text-foreground">
+                {L[language].hosting.legal.split(":")[0]}:
+              </strong>{" "}
+              {L[language].github.legal.split(":").slice(1).join(":").trim()}
+            </p>
+          </motion.section>
+
+          <motion.section
+            id="processors"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].processors.title}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed text-base">
+              {L[language].processors.p1}
+            </p>
+          </motion.section>
+
+          <motion.section
+            id="rights"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].rights.title}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed text-base">
+              {L[language].rights.p1}
+            </p>
+            {"items" in L[language].rights &&
+              Array.isArray(L[language].rights.items) && (
+                <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                  {(L[language].rights.items as string[]).map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary/70" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            <p className="text-muted-foreground leading-relaxed text-base mt-4">
+              {L[language].rights.p2}
+            </p>
+          </motion.section>
+
+          <motion.section
+            id="changes"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].changes.title}
+            </h2>
+            <p className="text-muted-foreground leading-relaxed text-base">
+              {L[language].changes.p1}
+            </p>
+          </motion.section>
+
+          <Separator className="my-12" />
+
+          <motion.section
+            id="impressum"
+            variants={cardIn}
+            initial="hidden"
+            animate="visible"
+            className="rounded-xl border  backdrop-blur-xs p-6"
+          >
+            <h2 className="text-xl font-semibold text-foreground mb-4">
+              {L[language].impressum.title}
+            </h2>
+            <div className="text-muted-foreground leading-relaxed space-y-2 text-base">
+              <p>
+                <span className="font-semibold text-foreground">
+                  {L[language].impressum.responsible}
+                </span>
+              </p>
+              <p>{L[language].impressum.name}</p>
+              <p>{L[language].impressum.location}</p>
+              <p>
+                <span className="font-semibold text-foreground">
+                  {L[language].impressum.emailLabel}
+                </span>{" "}
+                <a
+                  href="mailto:yanis.sebastian.zuercher@gmail.com"
+                  className="link"
+                >
+                  yanis.sebastian.zuercher@gmail.com
+                </a>
+              </p>
+            </div>
+          </motion.section>
+        </div>
+
+        <motion.div
+          {...trail(20)}
+          className="mt-16 pt-8 border-t border-border"
+          onClick={h}
+        >
+          <IconButton
+            icon={<ArrowLeft className="w-4 h-4" />}
+            variant="ghost"
+            size="sm"
+            iconPosition="left"
+            className="inline-flex items-center gap-2 text-sm "
+          >
+            {L[language].back}
+          </IconButton>
+        </motion.div>
+      </div>
+    </>
   );
 };
 

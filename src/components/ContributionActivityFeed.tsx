@@ -36,7 +36,7 @@ interface ContributionActivityFeedProps {
 
 // refined mapping with subtle colors
 const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
-  const iconClass = "w-3.5 h-3.5 flex-shrink-0";
+  const iconClass = "w-3.5 h-3.5 shrink-0";
 
   switch (activity.type) {
     case "push":
@@ -171,7 +171,7 @@ const ActivityMetadata = ({
       {items.slice(0, 2).map((item, index) => (
         <span
           key={index}
-          className="text-[11px] text-foreground/50 bg-foreground/[0.05] px-2 py-0.5 rounded-md font-medium"
+          className="text-[11px] text-foreground/50 bg-foreground/5 px-2 py-0.5 rounded-md font-medium"
         >
           {item}
         </span>
@@ -234,10 +234,10 @@ const ActivityItem = ({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03, duration: 0.4, ease: "easeOut" }}
-      className="group px-4 py-3 hover:bg-foreground/[0.02] transition-all duration-300"
+      className="group px-4 py-3 hover:bg-foreground/2 transition-all duration-300"
     >
       <div className="flex items-start gap-3">
-        <div className="mt-1 p-1.5 rounded-lg bg-foreground/[0.04] group-hover:bg-foreground/[0.08] transition-colors duration-300">
+        <div className="mt-1 p-1.5 rounded-lg bg-foreground/4 group-hover:bg-foreground/8 transition-colors duration-300">
           <ActivityIcon activity={activity} />
         </div>
 
@@ -310,15 +310,15 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({
         <h3 className="text-lg font-semibold text-foreground">
           {t.feed.recentActivity}
         </h3>
-        <span className="text-xs text-foreground/40 bg-foreground/[0.04] px-2.5 py-1 rounded-full">
+        <span className="text-xs text-foreground/40 bg-foreground/4 px-2.5 py-1 rounded-full">
           {t.feed.lastEvents}
         </span>
       </div>
 
       <div className="relative">
-        <div className="border border-foreground/[0.08] rounded-2xl bg-gradient-to-b from-foreground/[0.02] to-foreground/[0.01] backdrop-blur-sm overflow-hidden">
+        <div className="border border-foreground/8 rounded-2xl bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs overflow-hidden">
           {eventsToShow.length > 0 ? (
-            <div className="divide-y divide-foreground/[0.06]">
+            <div className="divide-y divide-foreground/6">
               {eventsToShow.map((activity, index) => (
                 <ActivityItem
                   key={activity.id}
@@ -331,7 +331,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({
             </div>
           ) : (
             <div className="p-12 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-foreground/[0.04] flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 rounded-2xl bg-foreground/4 flex items-center justify-center mx-auto mb-4">
                 <GitCommit className="w-6 h-6 text-foreground/30" />
               </div>
               <p className="text-sm text-foreground/70 mb-1">
@@ -344,7 +344,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({
 
         {/* Subtle fade effect */}
         {events.length > 6 && (
-          <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-background/30 to-transparent pointer-events-none rounded-b-2xl" />
+          <div className="absolute bottom-0 left-0 w-full h-8 bg-linear-to-t from-background/30 to-transparent pointer-events-none rounded-b-2xl" />
         )}
       </div>
 

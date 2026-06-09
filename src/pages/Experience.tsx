@@ -13,6 +13,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Helmet } from "react-helmet-async";
 import ScrollReveal from "@/components/ScrollReveal";
+import { Badge } from "@/components/ui/badge";
 
 const Experience = () => {
   const [hoveredExp, setHoveredExp] = useState<string | null>(null);
@@ -176,8 +177,8 @@ const Experience = () => {
                   animate={{
                     borderColor:
                       hoveredExp === exp.role
-                        ? "hsl(var(--primary))"
-                        : "hsl(var(--primary) / 0.4)",
+                        ? "var(--primary)"
+                        : "color-mix(in oklab, var(--primary) 40%, transparent)",
                     scale: hoveredExp === exp.role ? 1.1 : 1,
                   }}
                 />
@@ -205,20 +206,19 @@ const Experience = () => {
                 <p className="text-sm text-foreground/40 mb-2">
                   {exp.location}
                 </p>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-foreground/50 mb-4">
+                <div className="flex flex-wrap items-center gap-2 mb-4">
                   {(() => {
                     const chips = t.experience.chips as Record<string, string>;
                     const loc = chips[exp.locationType] || exp.locationType;
                     const emp = chips[exp.employmentType] || exp.employmentType;
                     return (
                       <>
-                        <span className="px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10">
+                        <Badge variant="secondary" className="font-normal">
                           {loc}
-                        </span>
-                        <span className="px-1 text-foreground/40">•</span>
-                        <span className="px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10">
+                        </Badge>
+                        <Badge variant="secondary" className="font-normal">
                           {emp}
-                        </span>
+                        </Badge>
                       </>
                     );
                   })()}
@@ -281,8 +281,8 @@ const Experience = () => {
                   animate={{
                     borderColor:
                       hoveredExp === exp.role
-                        ? "hsl(var(--primary))"
-                        : "hsl(var(--primary) / 0.4)",
+                        ? "var(--primary)"
+                        : "color-mix(in oklab, var(--primary) 40%, transparent)",
                     scale: hoveredExp === exp.role ? 1.1 : 1,
                   }}
                 />

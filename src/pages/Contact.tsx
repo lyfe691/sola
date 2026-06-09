@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -7,17 +7,20 @@
  */
 
 import { useState, useRef, useEffect } from "react";
-import { Send, UploadCloud, X } from "lucide-react";
+import { Check, Github, Linkedin, Mail, Send, UploadCloud, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
+import { SOCIAL_LINKS } from "@/config/social";
 import { createPortal } from "react-dom";
 
 // file constraints
@@ -31,6 +34,16 @@ const ACCEPTED_MIME = new Set<string>([
 ]);
 const ACCEPTED_EXT = ".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx";
 const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
+
+type FieldName = "name" | "email" | "subject" | "message";
+const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+const DIRECT_LINKS = [
+  { ...SOCIAL_LINKS.email, Icon: Mail },
+  { ...SOCIAL_LINKS.github, Icon: Github },
+  { ...SOCIAL_LINKS.linkedin, Icon: Linkedin },
+] as const;
 
 function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes)) return "";
@@ -60,10 +73,67 @@ function validateFile(file: File): FileValidationResult {
   return { ok: true };
 }
 
+function uploadToCloudinary(
+  file: File,
+  onProgress?: (progress: number) => void,
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", "unsigned_upload");
+
+    xhr.open("POST", "https://api.cloudinary.com/v1_1/dfgoxrimk/upload");
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable && onProgress) {
+        onProgress(Math.round((event.loaded / event.total) * 100));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve(JSON.parse(xhr.responseText).secure_url as string);
+        } catch (err) {
+          reject(err);
+        }
+      } else {
+        reject(new Error(`Cloudinary upload failed with status ${xhr.status}`));
+      }
+    };
+
+    xhr.onerror = () =>
+      reject(new Error("Network error during Cloudinary upload"));
+
+    xhr.send(data);
+  });
+}
+
+const FieldError = ({ name, error }: { name: string; error?: string }) => (
+  <div className="min-h-6">
+    <AnimatePresence initial={false}>
+      {error && (
+        <motion.p
+          key={`${name}-error`}
+          initial={{ opacity: 0, y: -2 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -2 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+          className="pt-1 text-sm leading-5 text-destructive/90"
+          role="alert"
+          aria-live="polite"
+        >
+          {error}
+        </motion.p>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
 const Contact = () => {
   const { language } = useLanguage();
   const t = translations[language] as Translation;
-  const formRef = useRef<HTMLFormElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -78,9 +148,7 @@ const Contact = () => {
     subject: "",
     message: "",
   });
-  const [errors, setErrors] = useState<
-    Partial<Record<"name" | "email" | "subject" | "message", string>>
-  >({});
+  const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const nameRef = useRef<HTMLInputElement | null>(null);
   const emailRef = useRef<HTMLInputElement | null>(null);
   const subjectRef = useRef<HTMLInputElement | null>(null);
@@ -88,31 +156,35 @@ const Contact = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const validateField = (name: FieldName, value: string): string | undefined => {
+    const v = value.trim();
+    if (!v) return t.contact.validation[`${name}Required`];
+    if (name === "email" && !EMAIL_RE.test(v))
+      return t.contact.validation.emailInvalid;
+    return undefined;
+  };
+
+  const handleFieldChange =
+    (name: FieldName) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { value } = e.target;
+      setFormValues((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
+    };
+
+  const handleFieldBlur = (name: FieldName) => () => {
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, formValues[name]),
+    }));
+  };
+
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const subject = params.get("subject");
-    const message = params.get("message");
-
+    const params = new URLSearchParams(location.search);
+    const subject = params.get("subject") ?? "";
+    const message = params.get("message") ?? "";
     if (subject || message) {
-      setFormValues((prev) => ({
-        ...prev,
-        subject: subject || "",
-        message: message || "",
-      }));
-
-      setTimeout(() => {
-        if (formRef.current) {
-          const subjectEl = formRef.current.querySelector(
-            '[name="subject"]',
-          ) as HTMLInputElement;
-          const messageEl = formRef.current.querySelector(
-            '[name="message"]',
-          ) as HTMLTextAreaElement;
-
-          if (subjectEl && subject) subjectEl.value = subject;
-          if (messageEl && message) messageEl.value = message;
-        }
-      }, 200);
+      setFormValues((prev) => ({ ...prev, subject, message }));
     }
   }, [location.search]);
 
@@ -143,7 +215,7 @@ const Contact = () => {
       }
     };
 
-    const onDrop = (e: DragEvent) => {
+    const onWindowDrop = (e: DragEvent) => {
       if (hasFiles(e)) {
         const file = e.dataTransfer?.files?.[0] ?? null;
         if (file) onSelectFile(file);
@@ -156,33 +228,22 @@ const Contact = () => {
     window.addEventListener("dragenter", onDragEnter);
     window.addEventListener("dragover", onDragOver);
     window.addEventListener("dragleave", onDragLeave);
-    window.addEventListener("drop", onDrop);
-    window.addEventListener("dragend", onDrop);
+    window.addEventListener("drop", onWindowDrop);
+    window.addEventListener("dragend", onWindowDrop);
 
     return () => {
       window.removeEventListener("dragenter", onDragEnter);
       window.removeEventListener("dragover", onDragOver);
       window.removeEventListener("dragleave", onDragLeave);
-      window.removeEventListener("drop", onDrop);
-      window.removeEventListener("dragend", onDrop);
+      window.removeEventListener("drop", onWindowDrop);
+      window.removeEventListener("dragend", onWindowDrop);
     };
   }, []);
 
   const clearForm = () => {
-    setFormValues({
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    });
+    setFormValues({ name: "", email: "", subject: "", message: "" });
     onSelectFile(null);
-    setUploadedUrl(null);
-
-    if (formRef.current) {
-      formRef.current.reset();
-    }
-
-    if (window.location.search) {
+    if (location.search) {
       navigate("/contact", { replace: true });
     }
   };
@@ -190,26 +251,14 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || isUploading) return;
-    // validate before any async work
-    const newErrors: Partial<
-      Record<"name" | "email" | "subject" | "message", string>
-    > = {};
-    const trim = (v: string) => v.trim();
-    const isEmail = (v: string) =>
-      /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
-    if (!trim(formValues.name))
-      newErrors.name = t.contact.validation.nameRequired;
-    if (!trim(formValues.email))
-      newErrors.email = t.contact.validation.emailRequired;
-    else if (!isEmail(formValues.email))
-      newErrors.email = t.contact.validation.emailInvalid;
-    if (!trim(formValues.subject))
-      newErrors.subject = t.contact.validation.subjectRequired;
-    if (!trim(formValues.message))
-      newErrors.message = t.contact.validation.messageRequired;
+
+    const newErrors: Partial<Record<FieldName, string>> = {};
+    for (const name of FIELD_ORDER) {
+      const err = validateField(name, formValues[name]);
+      if (err) newErrors[name] = err;
+    }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      // focus first invalid field
       if (newErrors.name) nameRef.current?.focus();
       else if (newErrors.email) emailRef.current?.focus();
       else if (newErrors.subject) subjectRef.current?.focus();
@@ -219,23 +268,17 @@ const Contact = () => {
 
     setIsSubmitting(true);
 
-    const form = e.currentTarget;
-    const formData = new FormData(form);
+    const formData = new FormData(e.currentTarget);
 
-    // if a file is selected, upload to Cloudinary first, then include URL only
     try {
       if (selectedFile) {
-        // validate before uploading
         const v = validateFile(selectedFile);
-        if ("code" in v) {
-          const message =
+        if (!v.ok) {
+          toast.error(
             v.code === "too_large"
-              ? t.contact.fileTooLarge.replace(
-                  "{max}",
-                  formatBytes(MAX_FILE_BYTES),
-                )
-              : t.contact.unsupportedFileType;
-          toast.error(message);
+              ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
+              : t.contact.unsupportedFileType,
+          );
           setIsSubmitting(false);
           return;
         }
@@ -247,7 +290,6 @@ const Contact = () => {
         );
         setUploadedUrl(url);
         formData.append("fileUrl", url);
-        // ensure we don't send the original file to Formspree
         formData.delete("attachment");
       }
 
@@ -268,7 +310,7 @@ const Contact = () => {
       }
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error("Something went wrong. Please try again."); // not translating--only fallback
+      toast.error(t.contact.errorMessage);
     } finally {
       setIsSubmitting(false);
       setIsUploading(false);
@@ -276,67 +318,20 @@ const Contact = () => {
     }
   };
 
-  // upload helper using XHR for progress
-  function uploadToCloudinary(
-    file: File,
-    onProgress?: (progress: number) => void,
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      const data = new FormData();
-      data.append("file", file);
-      data.append("upload_preset", "unsigned_upload");
-
-      xhr.open("POST", "https://api.cloudinary.com/v1_1/dfgoxrimk/upload");
-
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable && onProgress) {
-          const percent = Math.round((event.loaded / event.total) * 100);
-          onProgress(percent);
-        }
-      };
-
-      xhr.onload = () => {
-        if (xhr.status >= 200 && xhr.status < 300) {
-          try {
-            const json = JSON.parse(xhr.responseText);
-            resolve(json.secure_url as string);
-          } catch (err) {
-            reject(err);
-          }
-        } else {
-          reject(
-            new Error(`Cloudinary upload failed with status ${xhr.status}`),
-          );
-        }
-      };
-
-      xhr.onerror = () =>
-        reject(new Error("Network error during Cloudinary upload"));
-
-      xhr.send(data);
-    });
-  }
-
-  const onSelectFile = (file: File | null) => {
+  const onSelectFile = (incoming: File | null) => {
+    let file = incoming;
     if (file) {
       const v = validateFile(file);
-      if ("code" in v) {
-        const message =
+      if (!v.ok) {
+        toast.error(
           v.code === "too_large"
-            ? t.contact.fileTooLarge.replace(
-                "{max}",
-                formatBytes(MAX_FILE_BYTES),
-              )
-            : t.contact.unsupportedFileType;
-        toast.error(message);
-        if (fileInputRef.current) fileInputRef.current.value = "";
-        setSelectedFile(null);
-        setUploadedUrl(null);
-        setUploadProgress(null);
-        return;
+            ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
+            : t.contact.unsupportedFileType,
+        );
+        file = null;
       }
     }
+    if (!file && fileInputRef.current) fileInputRef.current.value = "";
     setSelectedFile(file);
     setUploadedUrl(null);
     setUploadProgress(null);
@@ -357,338 +352,256 @@ const Contact = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-1 flex-col justify-center">
       <Helmet>
         <title>{t.seo.contact.title}</title>
         <meta name="description" content={t.seo.contact.description} />
-        {/** reCAPTCHA removed for now
-        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        */}
       </Helmet>
 
-      <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.contact.title}</h1>
-      </ScrollReveal>
+      <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
+        {/* left: intro, expectations, direct links */}
+        <div className="flex flex-col gap-8">
+          <ScrollReveal variant="pageTitle" className="flex flex-col gap-4">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+              {t.contact.title}
+            </h1>
+            <p className="max-w-md text-foreground/60">
+              {t.contact.description}
+            </p>
+          </ScrollReveal>
 
-      <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
-          {t.contact.description}
-        </p>
-      </ScrollReveal>
-
-      <ScrollReveal variant="default">
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          noValidate
-          className="space-y-6 sm:space-y-8 max-w-2xl"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                {t.contact.nameLabel}
-              </label>
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                required
-                appearance="glass"
-                radius="lg"
-                inputSize="lg"
-                placeholder={t.contact.namePlaceholder}
-                value={formValues.name}
-                onChange={(e) => {
-                  setFormValues((prev) => ({ ...prev, name: e.target.value }));
-                  if (errors.name)
-                    setErrors((prev) => ({ ...prev, name: undefined }));
-                }}
-                onBlur={() => {
-                  const v = formValues.name.trim();
-                  setErrors((prev) => ({
-                    ...prev,
-                    name: v ? undefined : t.contact.validation.nameRequired,
-                  }));
-                }}
-                ref={nameRef}
-                invalid={!!errors.name}
-              />
-              <AnimatePresence initial={false} mode="wait">
-                {errors.name && (
-                  <motion.p
-                    key="name-error"
-                    className="text-sm text-destructive/90 mt-1"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    {errors.name}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                {t.contact.emailLabel}
-              </label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                required
-                appearance="glass"
-                radius="lg"
-                inputSize="lg"
-                placeholder={t.contact.emailPlaceholder}
-                value={formValues.email}
-                onChange={(e) => {
-                  setFormValues((prev) => ({ ...prev, email: e.target.value }));
-                  if (errors.email)
-                    setErrors((prev) => ({ ...prev, email: undefined }));
-                }}
-                onBlur={() => {
-                  const v = formValues.email.trim();
-                  const ok = /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
-                  setErrors((prev) => ({
-                    ...prev,
-                    email: v
-                      ? ok
-                        ? undefined
-                        : t.contact.validation.emailInvalid
-                      : t.contact.validation.emailRequired,
-                  }));
-                }}
-                ref={emailRef}
-                invalid={!!errors.email}
-              />
-              <AnimatePresence initial={false} mode="wait">
-                {errors.email && (
-                  <motion.p
-                    key="email-error"
-                    className="text-sm text-destructive/90 mt-1"
-                    initial={{ opacity: 0, y: -4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -4 }}
-                    transition={{ duration: 0.18, ease: "easeOut" }}
-                    role="alert"
-                    aria-live="polite"
-                  >
-                    {errors.email}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="subject" className="text-sm font-medium">
-              {t.contact.subjectLabel}
-            </label>
-            <Input
-              id="subject"
-              name="subject"
-              type="text"
-              required
-              appearance="glass"
-              radius="lg"
-              inputSize="lg"
-              placeholder={t.contact.subjectPlaceholder}
-              value={formValues.subject}
-              onChange={(e) => {
-                setFormValues((prev) => ({ ...prev, subject: e.target.value }));
-                if (errors.subject)
-                  setErrors((prev) => ({ ...prev, subject: undefined }));
-              }}
-              onBlur={() => {
-                const v = formValues.subject.trim();
-                setErrors((prev) => ({
-                  ...prev,
-                  subject: v ? undefined : t.contact.validation.subjectRequired,
-                }));
-              }}
-              ref={subjectRef}
-              invalid={!!errors.subject}
-            />
-            <AnimatePresence initial={false} mode="wait">
-              {errors.subject && (
-                <motion.p
-                  key="subject-error"
-                  className="text-sm text-destructive/90 mt-1"
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.18, ease: "easeOut" }}
-                  role="alert"
-                  aria-live="polite"
-                >
-                  {errors.subject}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="message" className="text-sm font-medium">
-              {t.contact.messageLabel}
-            </label>
-            <Textarea
-              id="message"
-              name="message"
-              required
-              placeholder={t.contact.messagePlaceholder}
-              appearance="glass"
-              radius="lg"
-              minHeight="md"
-              resizable={true}
-              value={formValues.message}
-              onChange={(e) => {
-                setFormValues((prev) => ({ ...prev, message: e.target.value }));
-                if (errors.message)
-                  setErrors((prev) => ({ ...prev, message: undefined }));
-              }}
-              onBlur={() => {
-                const v = formValues.message.trim();
-                setErrors((prev) => ({
-                  ...prev,
-                  message: v ? undefined : t.contact.validation.messageRequired,
-                }));
-              }}
-              ref={messageRef}
-              invalid={!!errors.message}
-            />
-            <AnimatePresence initial={false} mode="wait">
-              {errors.message && (
-                <motion.p
-                  key="message-error"
-                  className="text-sm text-destructive/90 mt-1"
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.18, ease: "easeOut" }}
-                  role="alert"
-                  aria-live="polite"
-                >
-                  {errors.message}
-                </motion.p>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* attachment */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium flex items-center gap-2">
-              {t.contact.attachmentLabel}
-              <span className="text-xs text-foreground/50">
-                {t.contact.attachmentHint}
-              </span>
-            </label>
-            <div
-              onDragOver={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-              onDrop={(e) => {
-                onDrop(e);
-                setIsPageDragActive(false);
-                dragCounter.current = 0;
-              }}
-              onClick={onClickDropzone}
-              className={`group relative flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed transition-colors cursor-pointer p-4 sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
-            >
-              <input
-                ref={fileInputRef}
-                id="attachment"
-                name="attachment"
-                type="file"
-                className="hidden"
-                accept={ACCEPTED_EXT}
-                onChange={(e) => onSelectFile(e.target.files?.[0] ?? null)}
-              />
-              <div className="flex items-center gap-2 text-foreground/70">
-                <UploadCloud className="w-4 h-4" />
-                <span className="text-sm">
-                  {selectedFile
-                    ? `${selectedFile.name}${selectedFile.size ? ` • ${formatBytes(selectedFile.size)}` : ""}`
-                    : t.contact.attachmentPlaceholder}
-                </span>
-              </div>
-              {(isUploading || uploadProgress !== null) && (
-                <div className="w-full mt-2">
-                  <div className="h-1.5 w-full rounded-full bg-foreground/10 overflow-hidden">
-                    <div
-                      className="h-full bg-foreground transition-all"
-                      style={{ width: `${uploadProgress ?? 0}%` }}
-                    />
-                  </div>
-                  <div className="mt-1 text-xs text-foreground/60 text-center">
-                    {uploadProgress ?? 0}%
-                  </div>
-                </div>
-              )}
-              {uploadedUrl && !isUploading && (
-                <div className="mt-2 text-xs text-foreground/60">
-                  {t.contact.uploadedLabel}:{" "}
-                  <a
-                    className="underline"
-                    href={uploadedUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {t.contact.cloudinaryLinkLabel}
-                  </a>
-                </div>
-              )}
-              {selectedFile && !isUploading && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectFile(null);
-                  }}
-                  className="absolute top-2 right-2 rounded-full p-1 text-foreground/60 hover:text-foreground hover:bg-foreground/10"
-                  aria-label="Remove file"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/** reCAPTCHA removed for now
-            <div className="flex justify-start">
-              <div 
-                className="g-recaptcha" 
-                data-sitekey="6Lc2gGorAAAAAFIQ_9x58ZfCKpvUlx7jR5Qj5kqG"
-              ></div>
-            </div>
-            */}
-
-          <IconButton
-            type="submit"
-            disabled={isSubmitting || isUploading}
-            iconPosition="left"
-            icon={
-              isSubmitting ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-foreground/20 border-t-foreground" />
-              ) : (
-                <Send className="w-4 h-4" />
-              )
-            }
-            variant="default"
-            className="group border-foreground/20"
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="flex flex-col gap-8"
           >
-            <span className="flex items-center gap-2">
-              {isSubmitting || isUploading ? t.contact.sending : t.contact.send}
-            </span>
-          </IconButton>
-        </form>
-      </ScrollReveal>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-sm font-semibold">
+                {t.contact.expectations.title}
+              </h2>
+              <ul className="flex flex-col gap-3">
+                {t.contact.expectations.items.map((item, i) => (
+                  <motion.li
+                    key={i}
+                    initial={{ opacity: 0, x: -8 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: 0.1 + 0.08 * i }}
+                    className="flex items-start gap-3 text-sm text-foreground/70"
+                  >
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                      <Check className="size-3 text-primary" strokeWidth={3} />
+                    </span>
+                    {item}
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <h2 className="text-sm font-semibold">{t.contact.reachOut}</h2>
+              <div className="flex flex-wrap gap-2">
+                {DIRECT_LINKS.map(({ id, label, href, Icon }) => {
+                  const external = href.startsWith("http");
+                  return (
+                    <a
+                      key={id}
+                      href={href}
+                      target={external ? "_blank" : undefined}
+                      rel={external ? "noopener noreferrer" : undefined}
+                      className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm text-foreground/70 transition-colors hover:border-foreground/40 hover:text-foreground"
+                    >
+                      <Icon className="size-4" />
+                      {label}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* right: form card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: 0.15 }}
+        >
+          <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
+            <form
+              onSubmit={handleSubmit}
+              noValidate
+              className="flex flex-col gap-5"
+            >
+              <h2 className="text-lg font-semibold sm:text-xl">
+                {t.contact.formTitle}
+              </h2>
+
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="flex flex-col">
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    aria-label={t.contact.nameLabel}
+                    placeholder={t.contact.namePlaceholder}
+                    value={formValues.name}
+                    onChange={handleFieldChange("name")}
+                    onBlur={handleFieldBlur("name")}
+                    ref={nameRef}
+                    aria-invalid={!!errors.name || undefined}
+                  />
+                  <FieldError name="name" error={errors.name} />
+                </div>
+
+                <div className="flex flex-col">
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    aria-label={t.contact.emailLabel}
+                    placeholder={t.contact.emailPlaceholder}
+                    value={formValues.email}
+                    onChange={handleFieldChange("email")}
+                    onBlur={handleFieldBlur("email")}
+                    ref={emailRef}
+                    aria-invalid={!!errors.email || undefined}
+                  />
+                  <FieldError name="email" error={errors.email} />
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <Input
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  required
+                  aria-label={t.contact.subjectLabel}
+                  placeholder={t.contact.subjectPlaceholder}
+                  value={formValues.subject}
+                  onChange={handleFieldChange("subject")}
+                  onBlur={handleFieldBlur("subject")}
+                  ref={subjectRef}
+                  aria-invalid={!!errors.subject || undefined}
+                />
+                <FieldError name="subject" error={errors.subject} />
+              </div>
+
+              <div className="flex flex-col">
+                <Textarea
+                  id="message"
+                  name="message"
+                  required
+                  aria-label={t.contact.messageLabel}
+                  placeholder={t.contact.messagePlaceholder}
+                  className="min-h-32"
+                  value={formValues.message}
+                  onChange={handleFieldChange("message")}
+                  onBlur={handleFieldBlur("message")}
+                  ref={messageRef}
+                  aria-invalid={!!errors.message || undefined}
+                />
+                <FieldError name="message" error={errors.message} />
+              </div>
+
+              {/* attachment */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onDrop={onDrop}
+                onClick={onClickDropzone}
+                className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed p-4 transition-colors sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
+              >
+                <input
+                  ref={fileInputRef}
+                  id="attachment"
+                  name="attachment"
+                  type="file"
+                  className="hidden"
+                  accept={ACCEPTED_EXT}
+                  onChange={(e) => onSelectFile(e.target.files?.[0] ?? null)}
+                />
+                <div className="flex items-center gap-2 text-foreground/70">
+                  <UploadCloud className="size-4" />
+                  <span className="text-sm">
+                    {selectedFile
+                      ? `${selectedFile.name}${selectedFile.size ? ` • ${formatBytes(selectedFile.size)}` : ""}`
+                      : t.contact.attachmentPlaceholder}
+                  </span>
+                </div>
+                {(isUploading || uploadProgress !== null) && (
+                  <div className="mt-2 w-full">
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
+                      <div
+                        className="h-full bg-foreground transition-all"
+                        style={{ width: `${uploadProgress ?? 0}%` }}
+                      />
+                    </div>
+                    <div className="mt-1 text-center text-xs text-foreground/60">
+                      {uploadProgress ?? 0}%
+                    </div>
+                  </div>
+                )}
+                {uploadedUrl && !isUploading && (
+                  <div className="mt-2 text-xs text-foreground/60">
+                    {t.contact.uploadedLabel}:{" "}
+                    <a
+                      className="underline"
+                      href={uploadedUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {t.contact.cloudinaryLinkLabel}
+                    </a>
+                  </div>
+                )}
+                {selectedFile && !isUploading && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectFile(null);
+                    }}
+                    className="absolute top-2 right-2 rounded-full p-1 text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
+                    aria-label="Remove file"
+                  >
+                    <X className="size-4" />
+                  </button>
+                )}
+              </div>
+
+              <IconButton
+                type="submit"
+                disabled={isSubmitting || isUploading}
+                iconPosition="left"
+                icon={isSubmitting ? <Spinner /> : <Send className="h-4 w-4" />}
+                variant="default"
+                size="lg"
+                className="mt-1 w-full"
+                label={
+                  isSubmitting || isUploading
+                    ? t.contact.sending
+                    : t.contact.send
+                }
+              />
+            </form>
+          </Card>
+        </motion.div>
+      </div>
+
       {createPortal(
         <AnimatePresence>
           {isPageDragActive && (
             <motion.div
-              className="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center"
+              className="fixed inset-0 z-100 pointer-events-none flex items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -706,11 +619,11 @@ const Contact = () => {
                 exit={{ scale: 0.98, opacity: 0, filter: "blur(6px)" }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 sm:px-6 sm:py-4 shadow-xl ring-1 ring-foreground/10">
-                  <div className="absolute -inset-4 rounded-3xl bg-gradient-to-tr from-foreground/10 to-transparent blur-xl" />
+                <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 shadow-xl ring-1 ring-foreground/10 sm:px-6 sm:py-4">
+                  <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-foreground/10 to-transparent blur-xl" />
                   <div className="relative flex items-center gap-2 text-foreground/80">
-                    <UploadCloud className="w-5 h-5 sm:w-6 sm:h-6" />
-                    <div className="h-2 w-2 rounded-full bg-foreground/50 animate-pulse" />
+                    <UploadCloud className="size-5 sm:size-6" />
+                    <div className="size-2 animate-pulse rounded-full bg-foreground/50" />
                     <span className="text-sm sm:text-base">
                       {t.contact.dropOverlay}
                     </span>
