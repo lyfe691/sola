@@ -111,22 +111,24 @@ function uploadToCloudinary(
 }
 
 const FieldError = ({ name, error }: { name: string; error?: string }) => (
-  <AnimatePresence initial={false} mode="wait">
-    {error && (
-      <motion.p
-        key={`${name}-error`}
-        className="text-sm text-destructive/90"
-        initial={{ opacity: 0, y: -4 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -4 }}
-        transition={{ duration: 0.18, ease: "easeOut" }}
-        role="alert"
-        aria-live="polite"
-      >
-        {error}
-      </motion.p>
-    )}
-  </AnimatePresence>
+  <div className="min-h-6">
+    <AnimatePresence initial={false}>
+      {error && (
+        <motion.p
+          key={`${name}-error`}
+          initial={{ opacity: 0, y: -2 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -2 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+          className="pt-1 text-sm leading-5 text-destructive/90"
+          role="alert"
+          aria-live="polite"
+        >
+          {error}
+        </motion.p>
+      )}
+    </AnimatePresence>
+  </div>
 );
 
 const Contact = () => {
@@ -350,7 +352,7 @@ const Contact = () => {
   };
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-1 flex-col justify-center">
       <Helmet>
         <title>{t.seo.contact.title}</title>
         <meta name="description" content={t.seo.contact.description} />
@@ -439,7 +441,7 @@ const Contact = () => {
               </h2>
 
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col">
                   <Input
                     id="name"
                     name="name"
@@ -456,7 +458,7 @@ const Contact = () => {
                   <FieldError name="name" error={errors.name} />
                 </div>
 
-                <div className="flex flex-col gap-1.5">
+                <div className="flex flex-col">
                   <Input
                     id="email"
                     name="email"
@@ -474,7 +476,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col">
                 <Input
                   id="subject"
                   name="subject"
@@ -491,7 +493,7 @@ const Contact = () => {
                 <FieldError name="subject" error={errors.subject} />
               </div>
 
-              <div className="flex flex-col gap-1.5">
+              <div className="flex flex-col">
                 <Textarea
                   id="message"
                   name="message"

@@ -120,7 +120,7 @@ const Index = () => {
 
   return (
     <motion.div
-      className="relative z-20 flex flex-1 flex-col items-start justify-center"
+      className="relative z-20 flex flex-1 flex-col items-start justify-center pt-12 sm:pt-16 lg:pt-20"
       variants={homeAnimations.container}
       initial="hidden"
       animate="show"
