@@ -395,6 +395,7 @@
 
   html {
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
     /* Firefox */
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-thumb) transparent;

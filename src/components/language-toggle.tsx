@@ -14,10 +14,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-// no section label needed for languages
 
 export function LanguageToggle({
   open,
@@ -44,22 +45,27 @@ export function LanguageToggle({
         <Languages className="h-4 w-4" />
         <span className="sr-only">Toggle language</span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {LANGUAGES.map(({ code, label }) => (
-          <DropdownMenuItem
-            key={code}
-            onClick={() => setLanguage(code)}
-            className="flex justify-between"
-          >
-            <span className={language === code ? "text-muted-foreground" : ""}>
-              {label}
-            </span>
-            {language === code && (
-              <Check className="h-4 w-4 text-muted-foreground" />
-            )}
-          </DropdownMenuItem>
-        ))}
-        <div className="px-2 py-1.5 text-xs text-foreground/50 border-t border-foreground/10 mt-1">
+      <DropdownMenuContent align="end" className="min-w-[180px]">
+        <DropdownMenuLabel>{t.common.command.groups.language}</DropdownMenuLabel>
+        {LANGUAGES.map(({ code, label }) => {
+          const isSelected = language === code;
+          return (
+            <DropdownMenuItem
+              key={code}
+              onClick={() => setLanguage(code)}
+              className="justify-between"
+            >
+              <span className={isSelected ? "text-muted-foreground" : ""}>
+                {label}
+              </span>
+              {isSelected && (
+                <Check className="h-4 w-4 text-muted-foreground" />
+              )}
+            </DropdownMenuItem>
+          );
+        })}
+        <DropdownMenuSeparator />
+        <div className="px-3 py-1.5 text-xs text-muted-foreground/70">
           {t.i18n?.detectedNote.replace(
             "{lang}",
             detectedLanguageCode || detectedLanguage,

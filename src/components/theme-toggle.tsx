@@ -117,13 +117,13 @@ export function ThemeToggle({
                   setTheme(option.value as Theme, e),
                 );
               }}
-              className="flex justify-between"
+              className="justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>
                 {option.label}
               </span>
               {isSelected && (
-                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
+                <Check className="h-4 w-4 text-muted-foreground" />
               )}
             </DropdownMenuItem>
           );
@@ -132,9 +132,7 @@ export function ThemeToggle({
         {/* separator */}
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel className="px-2 pb-1 pt-1 text-xs font-medium uppercase text-muted-foreground/70">
-          {t.common.menu.customThemes}
-        </DropdownMenuLabel>
+        <DropdownMenuLabel>{t.common.menu.customThemes}</DropdownMenuLabel>
         {/* custom themes */}
         {THEMES.map((option) => {
           if (!option.isCustom) return null;
@@ -148,13 +146,13 @@ export function ThemeToggle({
                   setTheme(option.value as Theme, e),
                 );
               }}
-              className="flex justify-between"
+              className="justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>
                 {option.label}
               </span>
               {isSelected && (
-                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
+                <Check className="h-4 w-4 text-muted-foreground" />
               )}
             </DropdownMenuItem>
           );
@@ -170,13 +168,13 @@ export function ThemeToggle({
               key={option.id}
               closeOnClick={false}
               onClick={() => setBackground(option.id)}
-              className="flex justify-between"
+              className="justify-between"
             >
               <span className={isSelected ? "text-muted-foreground" : ""}>
                 {option.label}
               </span>
               {isSelected && (
-                <Check className="h-4 w-4 ml-2 text-muted-foreground" />
+                <Check className="h-4 w-4 text-muted-foreground" />
               )}
             </DropdownMenuItem>
           );
