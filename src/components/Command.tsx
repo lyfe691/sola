@@ -7,6 +7,7 @@
  */
 
 import { useNavigate } from "react-router-dom";
+import { SearchX } from "lucide-react";
 import {
   Command,
   CommandDialog,
@@ -18,6 +19,12 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
+import {
+  Empty,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import {
   Drawer,
   DrawerContent,
@@ -112,7 +119,16 @@ export function CommandMenu() {
         className={isMobile ? "text-base" : undefined}
       />
       <CommandList>
-        <CommandEmpty>{t.common.command.noResults}</CommandEmpty>
+        <CommandEmpty className="py-0">
+          <Empty className="p-8">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <SearchX />
+              </EmptyMedia>
+              <EmptyTitle>{t.common.command.noResults}</EmptyTitle>
+            </EmptyHeader>
+          </Empty>
+        </CommandEmpty>
 
         <CommandGroup heading={t.common.command.groups.navigation}>
           {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
