@@ -40,6 +40,11 @@ export const BACKGROUNDS: BackgroundDef[] = [
     label: "Side Rays",
     component: lazy(() => import("./side-rays/SideRays")),
   },
+  {
+    id: "dot-field",
+    label: "Dot Field",
+    component: lazy(() => import("./dot-field/DotField")),
+  },
 ];
 
 /** true when `value` is a currently-registered background id */
