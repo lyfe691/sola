@@ -35,6 +35,10 @@ const ACCEPTED_MIME = new Set<string>([
 const ACCEPTED_EXT = ".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx";
 const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
 
+type FieldName = "name" | "email" | "subject" | "message";
+const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
 const DIRECT_LINKS = [
   { ...SOCIAL_LINKS.email, Icon: Mail },
   { ...SOCIAL_LINKS.github, Icon: Github },
@@ -106,15 +110,36 @@ const Contact = () => {
     subject: "",
     message: "",
   });
-  const [errors, setErrors] = useState<
-    Partial<Record<"name" | "email" | "subject" | "message", string>>
-  >({});
+  const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const nameRef = useRef<HTMLInputElement | null>(null);
   const emailRef = useRef<HTMLInputElement | null>(null);
   const subjectRef = useRef<HTMLInputElement | null>(null);
   const messageRef = useRef<HTMLTextAreaElement | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const validateField = (name: FieldName, value: string): string | undefined => {
+    const v = value.trim();
+    if (!v) return t.contact.validation[`${name}Required`];
+    if (name === "email" && !EMAIL_RE.test(v))
+      return t.contact.validation.emailInvalid;
+    return undefined;
+  };
+
+  const handleFieldChange =
+    (name: FieldName) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { value } = e.target;
+      setFormValues((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
+    };
+
+  const handleFieldBlur = (name: FieldName) => () => {
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, formValues[name]),
+    }));
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -219,25 +244,13 @@ const Contact = () => {
     e.preventDefault();
     if (isSubmitting || isUploading) return;
     // validate before any async work
-    const newErrors: Partial<
-      Record<"name" | "email" | "subject" | "message", string>
-    > = {};
-    const trim = (v: string) => v.trim();
-    const isEmail = (v: string) =>
-      /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
-    if (!trim(formValues.name))
-      newErrors.name = t.contact.validation.nameRequired;
-    if (!trim(formValues.email))
-      newErrors.email = t.contact.validation.emailRequired;
-    else if (!isEmail(formValues.email))
-      newErrors.email = t.contact.validation.emailInvalid;
-    if (!trim(formValues.subject))
-      newErrors.subject = t.contact.validation.subjectRequired;
-    if (!trim(formValues.message))
-      newErrors.message = t.contact.validation.messageRequired;
+    const newErrors: Partial<Record<FieldName, string>> = {};
+    for (const name of FIELD_ORDER) {
+      const err = validateField(name, formValues[name]);
+      if (err) newErrors[name] = err;
+    }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      // focus first invalid field
       if (newErrors.name) nameRef.current?.focus();
       else if (newErrors.email) emailRef.current?.focus();
       else if (newErrors.subject) subjectRef.current?.focus();
@@ -484,21 +497,8 @@ const Contact = () => {
                     aria-label={t.contact.nameLabel}
                     placeholder={t.contact.namePlaceholder}
                     value={formValues.name}
-                    onChange={(e) => {
-                      setFormValues((prev) => ({
-                        ...prev,
-                        name: e.target.value,
-                      }));
-                      if (errors.name)
-                        setErrors((prev) => ({ ...prev, name: undefined }));
-                    }}
-                    onBlur={() => {
-                      const v = formValues.name.trim();
-                      setErrors((prev) => ({
-                        ...prev,
-                        name: v ? undefined : t.contact.validation.nameRequired,
-                      }));
-                    }}
+                    onChange={handleFieldChange("name")}
+                    onBlur={handleFieldBlur("name")}
                     ref={nameRef}
                     aria-invalid={!!errors.name || undefined}
                   />
@@ -514,26 +514,8 @@ const Contact = () => {
                     aria-label={t.contact.emailLabel}
                     placeholder={t.contact.emailPlaceholder}
                     value={formValues.email}
-                    onChange={(e) => {
-                      setFormValues((prev) => ({
-                        ...prev,
-                        email: e.target.value,
-                      }));
-                      if (errors.email)
-                        setErrors((prev) => ({ ...prev, email: undefined }));
-                    }}
-                    onBlur={() => {
-                      const v = formValues.email.trim();
-                      const ok = /^(?:[^\s@]+)@(?:[^\s@]+)\.[^\s@]{2,}$/i.test(v);
-                      setErrors((prev) => ({
-                        ...prev,
-                        email: v
-                          ? ok
-                            ? undefined
-                            : t.contact.validation.emailInvalid
-                          : t.contact.validation.emailRequired,
-                      }));
-                    }}
+                    onChange={handleFieldChange("email")}
+                    onBlur={handleFieldBlur("email")}
                     ref={emailRef}
                     aria-invalid={!!errors.email || undefined}
                   />
@@ -550,23 +532,8 @@ const Contact = () => {
                   aria-label={t.contact.subjectLabel}
                   placeholder={t.contact.subjectPlaceholder}
                   value={formValues.subject}
-                  onChange={(e) => {
-                    setFormValues((prev) => ({
-                      ...prev,
-                      subject: e.target.value,
-                    }));
-                    if (errors.subject)
-                      setErrors((prev) => ({ ...prev, subject: undefined }));
-                  }}
-                  onBlur={() => {
-                    const v = formValues.subject.trim();
-                    setErrors((prev) => ({
-                      ...prev,
-                      subject: v
-                        ? undefined
-                        : t.contact.validation.subjectRequired,
-                    }));
-                  }}
+                  onChange={handleFieldChange("subject")}
+                  onBlur={handleFieldBlur("subject")}
                   ref={subjectRef}
                   aria-invalid={!!errors.subject || undefined}
                 />
@@ -582,23 +549,8 @@ const Contact = () => {
                   placeholder={t.contact.messagePlaceholder}
                   className="min-h-32"
                   value={formValues.message}
-                  onChange={(e) => {
-                    setFormValues((prev) => ({
-                      ...prev,
-                      message: e.target.value,
-                    }));
-                    if (errors.message)
-                      setErrors((prev) => ({ ...prev, message: undefined }));
-                  }}
-                  onBlur={() => {
-                    const v = formValues.message.trim();
-                    setErrors((prev) => ({
-                      ...prev,
-                      message: v
-                        ? undefined
-                        : t.contact.validation.messageRequired,
-                    }));
-                  }}
+                  onChange={handleFieldChange("message")}
+                  onBlur={handleFieldBlur("message")}
                   ref={messageRef}
                   aria-invalid={!!errors.message || undefined}
                 />
