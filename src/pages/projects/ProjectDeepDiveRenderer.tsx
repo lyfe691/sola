@@ -23,6 +23,9 @@ import { MDXComponents } from "@/components/MDXComponents";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 
 // dynamic mdx component
 const getMDXComponent = (mdxPath: string) => {
@@ -286,7 +289,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
             <Suspense
               fallback={
                 <div className="flex items-center justify-center py-8">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                  <Spinner className="size-6 text-muted-foreground" />
                 </div>
               }
             >
@@ -312,37 +315,35 @@ const ProjectDeepDiveRenderer: React.FC = () => {
                 <Link
                   key={projectSlug}
                   to={`/projects/${projectSlug}`}
-                  className="group block p-4 rounded-lg border border-border/40 bg-foreground/5 
-                             transition-all duration-700 ease-out hover:bg-foreground/10 hover:border-border 
-                             focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-foreground/20"
+                  className="group block rounded-4xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/40"
                 >
-                  <div className="mb-3">
-                    <h3 className="font-medium text-foreground group-hover:underline underline-offset-4 decoration-foreground/20 transition-colors duration-300 ease-out">
+                  <Card className="h-full gap-2 bg-card/40 p-4 backdrop-blur-md transition-shadow duration-300 group-hover:shadow-lg">
+                    <h3 className="font-medium text-foreground underline-offset-4 decoration-foreground/20 transition-colors duration-300 group-hover:underline">
                       {project.title}
                     </h3>
-                  </div>
-                  <time className="block text-[11px] text-muted-foreground mb-2">
-                    {project.date}
-                  </time>
-                  <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.techStack.slice(0, 3).map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-0.5 bg-foreground/5 text-foreground/60 border border-foreground/10 
-                                   text-xs rounded"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                    {project.techStack.length > 3 && (
-                      <span className="px-2 py-1 text-xs text-muted-foreground">
-                        +{project.techStack.length - 3} more
-                      </span>
-                    )}
-                  </div>
+                    <time className="block text-[11px] text-muted-foreground">
+                      {project.date}
+                    </time>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {project.techStack.slice(0, 3).map((tech) => (
+                        <Badge
+                          key={tech}
+                          variant="secondary"
+                          className="font-normal"
+                        >
+                          {tech}
+                        </Badge>
+                      ))}
+                      {project.techStack.length > 3 && (
+                        <span className="text-xs text-muted-foreground">
+                          +{project.techStack.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  </Card>
                 </Link>
               );
             })}

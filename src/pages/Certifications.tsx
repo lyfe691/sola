@@ -15,6 +15,7 @@ import { ExternalLink } from "lucide-react";
 import { getAllCertifications, isExpired } from "@/config/certifications";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 const Certifications: React.FC = () => {
   const { language } = useLanguage();
@@ -192,12 +193,13 @@ const Certifications: React.FC = () => {
                       {c.skills && c.skills.length > 0 ? (
                         <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
                           {c.skills.map((s, idx) => (
-                            <span
+                            <Badge
                               key={idx}
-                              className="text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md bg-foreground/5 text-foreground/60 border border-foreground/10"
+                              variant="secondary"
+                              className="font-normal"
                             >
                               {s}
-                            </span>
+                            </Badge>
                           ))}
                         </div>
                       ) : null}
