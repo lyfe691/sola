@@ -13,6 +13,7 @@ import { LANGUAGES } from "@/config/languages";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -46,24 +47,28 @@ export function LanguageToggle({
         <span className="sr-only">Toggle language</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[180px]">
-        <DropdownMenuLabel>{t.common.command.groups.language}</DropdownMenuLabel>
-        {LANGUAGES.map(({ code, label }) => {
-          const isSelected = language === code;
-          return (
-            <DropdownMenuItem
-              key={code}
-              onClick={() => setLanguage(code)}
-              className="justify-between"
-            >
-              <span className={isSelected ? "text-muted-foreground" : ""}>
-                {label}
-              </span>
-              {isSelected && (
-                <Check className="h-4 w-4 text-muted-foreground" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>
+            {t.common.command.groups.language}
+          </DropdownMenuLabel>
+          {LANGUAGES.map(({ code, label }) => {
+            const isSelected = language === code;
+            return (
+              <DropdownMenuItem
+                key={code}
+                onClick={() => setLanguage(code)}
+                className="justify-between"
+              >
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {label}
+                </span>
+                {isSelected && (
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <div className="px-3 py-1.5 text-xs text-muted-foreground/70">
           {t.i18n?.detectedNote.replace(

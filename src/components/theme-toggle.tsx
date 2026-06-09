@@ -11,6 +11,7 @@ import { useTheme } from "./theme-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
@@ -103,82 +104,85 @@ export function ThemeToggle({
         <span className="sr-only">Toggle theme</span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[180px]">
-        <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
-        {/* standard themes */}
-        {THEMES.map((option) => {
-          if (option.isCustom) return null;
-          const isSelected = theme === option.value;
-          return (
-            <DropdownMenuItem
-              key={option.value}
-              onClick={(e) => {
-                onOpenChange?.(false);
-                requestAnimationFrame(() =>
-                  setTheme(option.value as Theme, e),
-                );
-              }}
-              className="justify-between"
-            >
-              <span className={isSelected ? "text-muted-foreground" : ""}>
-                {option.label}
-              </span>
-              {isSelected && (
-                <Check className="h-4 w-4 text-muted-foreground" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
+          {THEMES.map((option) => {
+            if (option.isCustom) return null;
+            const isSelected = theme === option.value;
+            return (
+              <DropdownMenuItem
+                key={option.value}
+                onClick={(e) => {
+                  onOpenChange?.(false);
+                  requestAnimationFrame(() =>
+                    setTheme(option.value as Theme, e),
+                  );
+                }}
+                className="justify-between"
+              >
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {option.label}
+                </span>
+                {isSelected && (
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
 
-        {/* separator */}
         <DropdownMenuSeparator />
 
-        <DropdownMenuLabel>{t.common.menu.customThemes}</DropdownMenuLabel>
-        {/* custom themes */}
-        {THEMES.map((option) => {
-          if (!option.isCustom) return null;
-          const isSelected = theme === option.value;
-          return (
-            <DropdownMenuItem
-              key={option.value}
-              onClick={(e) => {
-                onOpenChange?.(false);
-                requestAnimationFrame(() =>
-                  setTheme(option.value as Theme, e),
-                );
-              }}
-              className="justify-between"
-            >
-              <span className={isSelected ? "text-muted-foreground" : ""}>
-                {option.label}
-              </span>
-              {isSelected && (
-                <Check className="h-4 w-4 text-muted-foreground" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t.common.menu.customThemes}</DropdownMenuLabel>
+          {THEMES.map((option) => {
+            if (!option.isCustom) return null;
+            const isSelected = theme === option.value;
+            return (
+              <DropdownMenuItem
+                key={option.value}
+                onClick={(e) => {
+                  onOpenChange?.(false);
+                  requestAnimationFrame(() =>
+                    setTheme(option.value as Theme, e),
+                  );
+                }}
+                className="justify-between"
+              >
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {option.label}
+                </span>
+                {isSelected && (
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
 
-        {/* background */}
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>{t.common.menu.background}</DropdownMenuLabel>
-        {backgroundOptions.map((option) => {
-          const isSelected = activeBackground === option.id;
-          return (
-            <DropdownMenuItem
-              key={option.id}
-              closeOnClick={false}
-              onClick={() => setBackground(option.id)}
-              className="justify-between"
-            >
-              <span className={isSelected ? "text-muted-foreground" : ""}>
-                {option.label}
-              </span>
-              {isSelected && (
-                <Check className="h-4 w-4 text-muted-foreground" />
-              )}
-            </DropdownMenuItem>
-          );
-        })}
+
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t.common.menu.background}</DropdownMenuLabel>
+          {backgroundOptions.map((option) => {
+            const isSelected = activeBackground === option.id;
+            return (
+              <DropdownMenuItem
+                key={option.id}
+                closeOnClick={false}
+                onClick={() => setBackground(option.id)}
+                className="justify-between"
+              >
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {option.label}
+                </span>
+                {isSelected && (
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                )}
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   );
