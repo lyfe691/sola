@@ -6,19 +6,21 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
-
-interface BlankLayoutProps {
-  children: React.ReactNode;
-}
+import { useOutlet } from "react-router-dom";
+import PageShell from "./PageShell";
 
 /**
- * BlankLayout - minimal layout without any UI elements
- * used for standalone pages like AboutThisWebsite where no navigation,
- * toggles, or other UI elements should be displayed
+ * BlankLayout - standalone pages with no navigation and no footer.
+ * Used for /404, /a, and project deep dives.
  */
-const BlankLayout: React.FC<BlankLayoutProps> = ({ children }) => {
-  return <main className="min-h-screen">{children}</main>;
+const BlankLayout = () => {
+  const outlet = useOutlet();
+
+  return (
+    <main className="flex min-h-screen flex-col">
+      <PageShell>{outlet}</PageShell>
+    </main>
+  );
 };
 
 export default BlankLayout;

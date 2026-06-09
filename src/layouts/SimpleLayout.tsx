@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary software project.
@@ -6,20 +6,23 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
-
-interface SimpleLayoutProps {
-  children: React.ReactNode;
-}
+import { useOutlet } from "react-router-dom";
+import Footer from "@/components/Footer";
+import PageShell from "./PageShell";
 
 /**
- * simpleLayout - minimal layout without navigation
- * used for pages like home and not found where navigation is not displayed
+ * SimpleLayout - standalone content pages without navigation, with footer.
+ * Used for /privacy and /certifications.
  */
-const SimpleLayout: React.FC<SimpleLayoutProps> = ({ children }) => {
+const SimpleLayout = () => {
+  const outlet = useOutlet();
+
   return (
-    <main className="min-h-screen flex flex-col">
-      <div className="flex-1 flex flex-col">{children}</div>
+    <main className="flex min-h-screen flex-col">
+      <PageShell>
+        <div className="flex min-h-screen flex-1 flex-col">{outlet}</div>
+        <Footer />
+      </PageShell>
     </main>
   );
 };

@@ -15,7 +15,6 @@ import ScrollToTop from "./components/ScrollToTop";
 import { LanguageProvider } from "./lib/language-provider";
 import { CommandMenu } from "./components/Command";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
-import { Conditionals } from "./components/Conditionals";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import ClickSpark from "./components/ui/custom/click-spark";
 import { BackgroundProvider } from "./components/backgrounds/background-provider";
@@ -51,7 +50,6 @@ const App = () => (
                   <CommandMenu />
                   <AnimatedRoutes />
                   <ScrollToTop />
-                  <Conditionals />
                 </BrowserRouter>
               </div>
             </ClickSpark>
