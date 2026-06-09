@@ -150,9 +150,7 @@ const Index = () => {
 
           <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-16 sm:pt-18 md:pt-20 flex flex-col relative z-20">
             <div className="max-w-7xl mx-auto w-full flex flex-col h-full">
-              <div className="mb-8 sm:mb-10 md:mb-14 lg:mb-16">
-                <Navigation />
-              </div>
+              <Navigation />
 
               {/* Hero section | head */}
               <LayoutGroup>

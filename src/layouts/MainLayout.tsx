@@ -20,7 +20,7 @@ interface MainLayoutProps {
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <main className="min-h-[120vh] flex flex-col">
-      <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-20 sm:pt-24 md:pt-20 flex flex-col">
+      <div className="flex-1 p-5 sm:p-6 md:p-8 lg:p-12 pt-20 sm:pt-24 md:pt-20 lg:pt-28 flex flex-col">
         <div className="max-w-7xl mx-auto w-full flex flex-col flex-1">
           <Navigation />
           {children}

@@ -7,8 +7,8 @@
  */
 
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, LayoutGroup } from "motion/react";
-import { useEffect, useState, useCallback, memo, forwardRef } from "react";
+import { motion, AnimatePresence, type Variants } from "motion/react";
+import { useEffect, useState, useCallback, useRef, memo } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -19,28 +19,6 @@ import { ThemeToggle } from "./theme-toggle";
 
 const STANDARD_EASE = [0.4, 0, 0.2, 1] as const;
 const EMPHASIZED_EASE = [0.22, 1, 0.36, 1] as const;
-const NAV_ITEM_LAYOUT = {
-  type: "spring",
-  stiffness: 320,
-  damping: 36,
-  mass: 0.82,
-} as const;
-const DESKTOP_ITEM_TRANSITION = { layout: NAV_ITEM_LAYOUT } as const;
-
-// define types for the navitem component
-interface NavItemProps {
-  item: {
-    text: string;
-    path: string;
-    icon?: React.ElementType;
-  };
-  index: number;
-  isActive: (path: string) => boolean;
-  isMobile?: boolean;
-  onClick?: () => void;
-  shouldAnimateInitial?: boolean;
-}
-
 
 const mobileItemVariants = {
   initial: { opacity: 0, y: 20 },
@@ -82,105 +60,9 @@ const mobileNavContainerVariants = {
   },
 };
 
-// class constants
-const DESKTOP_CONTAINER_CLASSES =
-  "hidden lg:flex items-center justify-center mx-auto gap-x-1 rounded-full border border-foreground/10 bg-background/55 backdrop-blur-3xl py-3.5 px-4 shadow-lg shadow-black/5";
-
 const MOBILE_OVERLAY_CLASSES =
   "fixed inset-0 bg-background/80 backdrop-blur-xl z-60 lg:hidden mobile-menu";
 
-// memoized navigation item for better performance
-const NavItem = memo(
-  forwardRef<HTMLAnchorElement, NavItemProps>(
-    (
-      {
-        item,
-        index,
-        isActive,
-        isMobile = false,
-        onClick = () => {},
-        shouldAnimateInitial: _shouldAnimateInitial = true,
-      },
-      ref,
-    ) => {
-      const isItemActive = isActive(item.path);
-      const linkBaseClass = isMobile
-        ? "relative flex items-center w-full p-2 transition-colors duration-300 rounded-md text-2xl font-medium tracking-tight"
-        : "relative px-6 py-3 text-base font-medium rounded-full transition-colors duration-300 z-10 flex items-center gap-2";
-      const linkClassName = cn(
-        linkBaseClass,
-        isItemActive
-          ? "text-primary"
-          : "text-foreground/60 hover:text-foreground",
-      );
-
-      if (isMobile) {
-        return (
-          <motion.div
-            layout
-            key={item.path}
-            custom={index}
-            variants={mobileItemVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="w-full"
-          >
-            <Link
-              to={item.path}
-              onClick={onClick}
-              ref={ref}
-              className={linkClassName}
-              aria-current={isItemActive ? "page" : undefined}
-            >
-              {item.icon && <item.icon className="w-6 h-6 mr-3" />}
-              {item.text}
-            </Link>
-          </motion.div>
-        );
-      }
-
-      return (
-        <motion.div layout key={item.path} transition={DESKTOP_ITEM_TRANSITION}>
-          <Link
-            to={item.path}
-            onClick={onClick}
-            ref={ref}
-            className={linkClassName}
-            aria-current={isItemActive ? "page" : undefined}
-          >
-            {isItemActive && (
-              <motion.div
-                layoutId="nav-active"
-                className="absolute inset-0 rounded-full bg-foreground/10"
-                initial={false}
-                transition={{
-                  type: "spring",
-                  stiffness: 320,
-                  damping: 30,
-                  mass: 0.85,
-                }}
-              />
-            )}
-            {item.icon && <item.icon className="w-4 h-4" />}
-            <motion.span
-              layout
-              transition={{ layout: NAV_ITEM_LAYOUT }}
-              className="relative z-10"
-            >
-              {item.text}
-            </motion.span>
-          </Link>
-        </motion.div>
-      );
-    },
-  ),
-);
-
-// ensure display name is set for devtools
-NavItem.displayName = "NavItem";
-
-// toggle group for theme, language, and search
 interface ToggleGroupProps {
   className?: string;
   gap?: "tight" | "normal";
@@ -192,8 +74,7 @@ const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
   );
 
   return (
-    <motion.div
-      layout
+    <div
       className={cn(
         "flex items-center",
         gap === "tight" ? "gap-1" : "gap-2",
@@ -209,12 +90,49 @@ const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
         open={openDropdown === "theme"}
         onOpenChange={(isOpen) => setOpenDropdown(isOpen ? "theme" : null)}
       />
-    </motion.div>
+    </div>
   );
 });
 ToggleGroup.displayName = "ToggleGroup";
 
-// mobile menu button with animated hamburger
+interface MobileNavItemProps {
+  item: { text: string; path: string; icon?: React.ElementType };
+  index: number;
+  isActive: (path: string) => boolean;
+  onClick?: () => void;
+}
+
+const MobileNavItem = memo(
+  ({ item, index, isActive, onClick }: MobileNavItemProps) => {
+    const active = isActive(item.path);
+    return (
+      <motion.div
+        layout
+        custom={index}
+        variants={mobileItemVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="w-full"
+      >
+        <Link
+          to={item.path}
+          onClick={onClick}
+          aria-current={active ? "page" : undefined}
+          className={cn(
+            "relative flex w-full items-center rounded-md p-2 text-2xl font-medium tracking-tight transition-colors duration-300",
+            active ? "text-primary" : "text-foreground/60 hover:text-foreground",
+          )}
+        >
+          {item.icon && <item.icon className="mr-3 size-6" />}
+          {item.text}
+        </Link>
+      </motion.div>
+    );
+  },
+);
+MobileNavItem.displayName = "MobileNavItem";
+
 const MobileMenuButton = ({
   isOpen,
   onClick,
@@ -234,7 +152,6 @@ const MobileMenuButton = ({
     >
       <div className="w-5 h-4 relative flex flex-col items-center justify-center">
         <div className="relative w-[18px] h-[10px] flex flex-col justify-between">
-          {/* Top bar */}
           <motion.span
             className="h-[1.4px] bg-current rounded-full w-full absolute top-0"
             initial={false}
@@ -251,7 +168,6 @@ const MobileMenuButton = ({
             }}
           />
 
-          {/* Bottom bar */}
           <motion.span
             className="h-[1.4px] bg-current rounded-full w-full absolute bottom-0"
             initial={false}
@@ -273,58 +189,167 @@ const MobileMenuButton = ({
   );
 };
 
+const DesktopNav = () => {
+  const { language } = useLanguage();
+  const t = translations[language];
+  const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const linksRef = useRef<HTMLElement>(null);
+  const highlightRef = useRef<HTMLSpanElement>(null);
+
+  const links = MAIN_NAVIGATION.slice(1).map((item) => ({
+    label: (t.nav[item.translationKey as keyof typeof t.nav] as string) ||
+      item.key,
+    path: item.path,
+  }));
+
+  const isActive = useCallback(
+    (path: string) =>
+      location.pathname === path || location.pathname.startsWith(`${path}/`),
+    [location.pathname],
+  );
+
+  const positionHighlight = useCallback((el: HTMLElement | null) => {
+    const highlight = highlightRef.current;
+    const container = linksRef.current;
+    if (!highlight || !container || !el) return;
+    const link = el.getBoundingClientRect();
+    const box = container.getBoundingClientRect();
+    highlight.style.width = `${link.width}px`;
+    highlight.style.height = `${link.height}px`;
+    highlight.style.transform = `translate(${link.left - box.left}px, ${link.top - box.top}px)`;
+    highlight.style.opacity = "1";
+  }, []);
+
+  const snapToActive = useCallback(() => {
+    const active = linksRef.current?.querySelector<HTMLElement>(
+      "[data-active='true']",
+    );
+    if (active) positionHighlight(active);
+    else if (highlightRef.current) highlightRef.current.style.opacity = "0";
+  }, [positionHighlight]);
+
+  useEffect(() => {
+    const raf = requestAnimationFrame(snapToActive);
+    return () => cancelAnimationFrame(raf);
+  }, [location.pathname, language, snapToActive]);
+
+  useEffect(() => {
+    window.addEventListener("resize", snapToActive);
+    return () => window.removeEventListener("resize", snapToActive);
+  }, [snapToActive]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  return (
+    <header className="pointer-events-none fixed inset-x-0 top-0 z-40 hidden lg:block">
+      <motion.div
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: EMPHASIZED_EASE }}
+        className={cn(
+          "pointer-events-auto mx-auto flex items-center justify-between gap-6 transition-[max-width,margin,padding,border-radius,background-color,border-color,box-shadow] duration-300 ease-out",
+          scrolled
+            ? "mt-3 max-w-5xl rounded-full border border-foreground/10 bg-background/70 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
+            : "mt-0 max-w-7xl rounded-none border border-transparent bg-transparent px-6 py-5 lg:px-8",
+        )}
+      >
+        <div className="flex min-w-0 items-center gap-3">
+          <Link
+            to="/"
+            aria-label={t.common.home}
+            className="flex shrink-0 items-center gap-2 text-foreground transition-opacity hover:opacity-80"
+          >
+            <span
+              aria-hidden
+              className="size-6 shrink-0 bg-foreground"
+              style={{
+                mask: "url(/apple-touch-icon.png) center / contain no-repeat",
+                WebkitMask:
+                  "url(/apple-touch-icon.png) center / contain no-repeat",
+              }}
+            />
+            <span className="font-heading text-lg font-bold tracking-tight">
+              Sola
+            </span>
+          </Link>
+
+          <span aria-hidden className="select-none text-lg text-foreground/25">
+            /
+          </span>
+
+          <nav
+            ref={linksRef}
+            aria-label="Primary"
+            onMouseLeave={snapToActive}
+            className="relative flex items-center"
+          >
+            <span
+              ref={highlightRef}
+              aria-hidden
+              className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-all duration-300 ease-out"
+            />
+            {links.map((link) => {
+              const active = isActive(link.path);
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  data-active={active}
+                  aria-current={active ? "page" : undefined}
+                  onMouseEnter={(e) => positionHighlight(e.currentTarget)}
+                  className={cn(
+                    "relative z-10 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                    active
+                      ? "text-foreground"
+                      : "text-foreground/60 hover:text-foreground",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        <ToggleGroup />
+      </motion.div>
+    </header>
+  );
+};
+
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hasMounted, setHasMounted] = useState(false);
   const { language } = useLanguage();
   const t = translations[language];
   const location = useLocation();
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  const shouldAnimateInitial = !hasMounted;
-
   const closeMenu = useCallback(() => {
-    // Allow animations to play out smoothly
-    setTimeout(() => {
-      setIsMenuOpen(false);
-      window.dispatchEvent(
-        new CustomEvent("mobile-menu-toggle", { detail: { open: false } }),
-      );
-    }, 100);
+    setTimeout(() => setIsMenuOpen(false), 100);
   }, []);
-  const toggleMenu = useCallback(() => {
-    setIsMenuOpen((prev) => {
-      const next = !prev;
-      window.dispatchEvent(
-        new CustomEvent("mobile-menu-toggle", { detail: { open: next } }),
-      );
-      return next;
-    });
-  }, []);
+  const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
 
-  // memoized navigation items
   const homeItem = {
     text: t.common.home,
     path: "/",
     icon: MAIN_NAVIGATION[0].icon,
   };
   const navItems = MAIN_NAVIGATION.slice(1).map((item) => ({
-    text: t.nav[item.translationKey as keyof typeof t.nav] || item.key,
+    text: (t.nav[item.translationKey as keyof typeof t.nav] as string) ||
+      item.key,
     path: item.path,
   }));
 
-  // memoized isactive check
   const isActive = useCallback(
-    (path: string) => {
-      return location.pathname === path;
-    },
+    (path: string) => location.pathname === path,
     [location.pathname],
   );
 
-  // effect to handle clicks outside the menu
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isMenuOpen) {
@@ -346,95 +371,37 @@ const Navigation = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isMenuOpen, closeMenu]);
 
-  // prevent body scrolling when menu is open
   useEffect(() => {
     if (isMenuOpen) {
-      // prevent scrolling on body when menu is open
       document.body.style.overflow = "hidden";
     } else {
-      // restore scrolling
       document.body.style.overflow = "";
     }
 
     return () => {
-      // cleanup in case component unmounts while menu is open
       document.body.style.overflow = "";
     };
   }, [isMenuOpen]);
 
   return (
-    <header className="w-full mb-4 sm:mb-6 md:mb-8 lg:mb-12 sticky top-4 z-40 px-4 pointer-events-none">
-      {/* desktop navigation */}
-      <div className="flex justify-center items-center">
-        <LayoutGroup>
-          <motion.nav
-            layout
-            className={cn(DESKTOP_CONTAINER_CLASSES, "pointer-events-auto")}
-            initial={shouldAnimateInitial ? { opacity: 0, scale: 0.97 } : false}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: 0.4,
-              ease: [0.22, 1, 0.36, 1],
-              layout: {
-                type: "spring",
-                stiffness: 150,
-                damping: 25,
-                mass: 0.8,
-              },
-            }}
-            style={{
-              backdropFilter: "blur(28px) saturate(160%)",
-              WebkitBackdropFilter: "blur(28px) saturate(160%)",
-            }}
-            aria-label="Primary"
-          >
-            {/* home navigation */}
-            <NavItem
-              item={homeItem}
-              index={0}
-              isActive={isActive}
-              shouldAnimateInitial={shouldAnimateInitial}
-            />
+    <>
+      <DesktopNav />
 
-            <motion.div layout className="h-8 w-px bg-border/30 mx-3" />
-
-            {/* main navigation */}
-            {navItems.map((item, i) => (
-              <NavItem
-                key={item.path}
-                item={item}
-                index={i}
-                isActive={isActive}
-                shouldAnimateInitial={shouldAnimateInitial}
-              />
-            ))}
-
-            <motion.div layout className="h-8 w-px bg-border/30 mx-3" />
-
-            {/* toggles */}
-            <ToggleGroup />
-          </motion.nav>
-        </LayoutGroup>
-      </div>
-
-      {/* mobile menu button */}
       <div className="lg:hidden fixed top-5 left-5 z-70 menu-button pointer-events-auto">
         <MobileMenuButton isOpen={isMenuOpen} onClick={toggleMenu} />
       </div>
 
-      {/* mobile toggles - fixed top right, aligned with hamburger */}
       <div className="lg:hidden fixed top-5 right-5 z-70 pointer-events-auto">
         <ToggleGroup gap="normal" />
       </div>
 
-      {/* mobile navigation menu */}
       <AnimatePresence mode="wait" initial={false}>
         {isMenuOpen && (
           <motion.div
             initial="hidden"
             animate="visible"
             exit="hidden"
-            variants={mobileMenuVariants as import("motion/react").Variants}
+            variants={mobileMenuVariants as Variants}
             className={cn(MOBILE_OVERLAY_CLASSES, "pointer-events-auto")}
             style={{
               backdropFilter: "blur(20px) saturate(180%)",
@@ -451,25 +418,21 @@ const Navigation = () => {
               className="flex flex-col h-full max-w-sm mx-auto px-8 pt-24 pb-12 relative z-10"
             >
               <div className="grow">
-                <NavItem
+                <MobileNavItem
                   item={homeItem}
                   index={0}
                   isActive={isActive}
-                  isMobile={true}
                   onClick={closeMenu}
-                  shouldAnimateInitial={shouldAnimateInitial}
                 />
                 <div className="my-4 h-px w-full bg-border" />
                 <div className="space-y-2">
                   {navItems.map((item, i) => (
-                    <NavItem
+                    <MobileNavItem
                       key={item.path}
                       item={item}
                       index={i + 1}
                       isActive={isActive}
-                      isMobile={true}
                       onClick={closeMenu}
-                      shouldAnimateInitial={shouldAnimateInitial}
                     />
                   ))}
                 </div>
@@ -478,7 +441,7 @@ const Navigation = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };
 
