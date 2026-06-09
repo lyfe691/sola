@@ -38,7 +38,7 @@ const SkillChip = ({
   icon: React.ComponentType<{ className?: string; size?: number }>;
   level: Proficiency;
 }) => (
-  <div className="group flex items-center justify-between gap-3 px-4 py-3 rounded-lg bg-foreground/5 border-2 border-border/20 hover:border-border/40 hover:bg-foreground/10 transition-all duration-200">
+  <div className="group flex items-center justify-between gap-3 px-4 py-3 rounded-lg bg-foreground/5 border-2 border-border hover:border-border hover:bg-foreground/10 transition-all duration-200">
     <div className="flex items-center gap-2.5">
       <Icon
         className="w-5 h-5 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"

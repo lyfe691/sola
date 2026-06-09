@@ -444,7 +444,7 @@ const Contact = () => {
                       href={href}
                       target={external ? "_blank" : undefined}
                       rel={external ? "noopener noreferrer" : undefined}
-                      className="inline-flex items-center gap-2 rounded-full border border-border/60 px-3 py-1.5 text-sm text-foreground/70 transition-colors hover:border-foreground/40 hover:text-foreground"
+                      className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-sm text-foreground/70 transition-colors hover:border-foreground/40 hover:text-foreground"
                     >
                       <Icon className="size-4" />
                       {label}

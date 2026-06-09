@@ -585,7 +585,7 @@ const About = () => {
           {/* ------------------ Portrait ------------------ */}
 
           <div className="md:col-span-2 relative">
-            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border/20 shadow-xs">
+            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border shadow-xs">
               <motion.img
                 src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
                 alt="Yanis Sebastian Zürcher"
@@ -722,7 +722,7 @@ const About = () => {
       {/* ------------------- Philosophy ----------------- */}
 
       <ScrollReveal variant="default">
-        <div className="relative overflow-hidden rounded-xl border-2 border-border/20 bg-linear-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
+        <div className="relative overflow-hidden rounded-xl border-2 border-border bg-linear-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
           <div className="relative z-10">
             <h2 className="text-xl font-bold mb-6 md:mb-8">
               {t.about.philosophy.title}

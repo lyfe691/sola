@@ -104,7 +104,7 @@ const Certifications: React.FC = () => {
                             <img
                               src={c.issuerLogo}
                               alt={`${c.issuer} logo`}
-                              className="w-10 h-10 rounded border border-border/40 object-cover"
+                              className="w-10 h-10 rounded border border-border object-cover"
                               loading="lazy"
                             />
                           ) : null}
@@ -161,7 +161,7 @@ const Certifications: React.FC = () => {
                               <object
                                 data={maybePdf}
                                 type="application/pdf"
-                                className="w-full h-[420px] sm:h-[560px] rounded-lg border border-border/40"
+                                className="w-full h-[420px] sm:h-[560px] rounded-lg border border-border"
                               >
                                 <a
                                   href={maybePdf}
@@ -181,7 +181,7 @@ const Certifications: React.FC = () => {
                               <img
                                 src={c.certificateImage}
                                 alt={`${c.title} certificate`}
-                                className="w-full rounded-lg border border-border/40"
+                                className="w-full rounded-lg border border-border"
                                 loading="lazy"
                               />
                             </div>

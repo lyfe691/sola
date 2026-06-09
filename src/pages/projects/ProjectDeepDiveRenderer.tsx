@@ -303,7 +303,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="border-t border-border/30 pt-12"
+          className="border-t border-border pt-12"
         >
           <h2 className="text-lg font-semibold mb-6 text-foreground">
             {t.common.moreProjects}

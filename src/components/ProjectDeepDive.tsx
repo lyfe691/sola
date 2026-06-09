@@ -83,7 +83,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
       </Helmet>
 
       {/* hero section */}
-      <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6 border-4 border-border/50 shadow-lg shadow-black/5">
+      <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6 border-4 border-border shadow-lg shadow-black/5">
         {/* silk background - fades in when ready */}
         <div
           className="absolute inset-0 transition-opacity duration-700 ease-out"
@@ -135,7 +135,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
       </div>
 
       {/* navigation */}
-      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-xs border-b border-border/50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-xs border-b border-border -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto py-4">
           <div className="flex items-center justify-between">
             <Breadcrumb>
