@@ -20,6 +20,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function LanguageToggle({
   open,
@@ -34,18 +39,25 @@ export function LanguageToggle({
 
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
-          />
-        }
-      >
-        <Languages className="h-4 w-4" />
-        <span className="sr-only">Toggle language</span>
-      </DropdownMenuTrigger>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+                />
+              }
+            />
+          }
+        >
+          <Languages className="h-4 w-4" />
+          <span className="sr-only">Toggle language</span>
+        </TooltipTrigger>
+        <TooltipContent>{t.common.command.groups.language}</TooltipContent>
+      </Tooltip>
       <DropdownMenuContent align="end" className="min-w-[180px]">
         <DropdownMenuGroup>
           <DropdownMenuLabel>

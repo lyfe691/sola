@@ -18,6 +18,11 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useEffect, useState } from "react";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
@@ -38,7 +43,8 @@ export function ThemeToggle({
   const { theme, setTheme } = useTheme();
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
   const [mounted, setMounted] = useState(false);
-  const { active: activeBackground, setActive: setBackground } = useBackground();
+  const { active: activeBackground, setActive: setBackground } =
+    useBackground();
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -71,17 +77,22 @@ export function ThemeToggle({
 
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <DropdownMenuTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
-          />
-        }
-      >
-        {/* show icon with smooth animation */}
-        {THEMES.map((t) => {
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+                />
+              }
+            />
+          }
+        >
+          {/* show icon with smooth animation */}
+          {THEMES.map((t) => {
             // We only render icons for themes that can actually be visually represented as the "current state"
             // i.e., "system" isn't a visual state itself, it resolves to light or dark.
             if (t.value === "system") return null;
@@ -101,8 +112,10 @@ export function ThemeToggle({
             );
           })}
 
-        <span className="sr-only">Toggle theme</span>
-      </DropdownMenuTrigger>
+          <span className="sr-only">Toggle theme</span>
+        </TooltipTrigger>
+        <TooltipContent>{t.common.command.groups.theme}</TooltipContent>
+      </Tooltip>
       <DropdownMenuContent align="end" className="min-w-[180px]">
         <DropdownMenuGroup>
           <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
