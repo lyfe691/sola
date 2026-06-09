@@ -583,7 +583,7 @@ const Contact = () => {
                 icon={isSubmitting ? <Spinner /> : <Send className="h-4 w-4" />}
                 variant="default"
                 size="lg"
-                className="mt-1 h-12 w-full text-base"
+                className="mt-1 w-full"
                 label={
                   isSubmitting || isUploading
                     ? t.contact.sending
