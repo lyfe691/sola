@@ -38,6 +38,7 @@ import {
   DialogTrigger,
   DialogContent,
   DialogHeader,
+  DialogFooter,
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
@@ -45,6 +46,8 @@ import {
   Drawer,
   DrawerTrigger,
   DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
@@ -337,7 +340,7 @@ const TestimonialCard = ({
         {cardContent}
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerContent>
-            <div className="flex flex-col gap-1.5 pt-2">
+            <DrawerHeader>
               <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
               <DrawerDescription>
                 <RichText
@@ -345,9 +348,8 @@ const TestimonialCard = ({
                   values={{ author }}
                 />
               </DrawerDescription>
-            </div>
-            <Separator className="my-4" />
-            {fullTestimonialContent}
+            </DrawerHeader>
+            <div className="overflow-y-auto px-4">{fullTestimonialContent}</div>
           </DrawerContent>
         </Drawer>
       </>
@@ -433,7 +435,7 @@ const ResumeModal = () => {
           <IconButton
             variant="default"
             size="lg"
-            className="w-full border-foreground/20"
+            className="w-1/2 border-foreground/20"
             icon={<Download className="w-4 h-4" />}
             iconPosition="left"
             label={t.about.resume.buttonLabel}
@@ -441,15 +443,14 @@ const ResumeModal = () => {
           />
         </DrawerTrigger>
         <DrawerContent>
-          <div className="flex flex-col gap-1.5 pt-2">
+          <DrawerHeader>
             <DrawerTitle>{t.about.resume.title}</DrawerTitle>
             <DrawerDescription>
               <RichText text={t.about.resume.description} />
             </DrawerDescription>
-          </div>
-          <Separator className="my-4" />
-          {languagePicker}
-          <div className="mt-6 flex flex-col gap-2">{actions}</div>
+          </DrawerHeader>
+          <div className="px-4">{languagePicker}</div>
+          <DrawerFooter>{actions}</DrawerFooter>
         </DrawerContent>
       </Drawer>
     );
@@ -478,7 +479,7 @@ const ResumeModal = () => {
           </DialogDescription>
         </DialogHeader>
         {languagePicker}
-        <div className="flex flex-col gap-2">{actions}</div>
+        <DialogFooter className="sm:flex-col">{actions}</DialogFooter>
       </DialogContent>
     </Dialog>
   );
