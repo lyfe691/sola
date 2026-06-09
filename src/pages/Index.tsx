@@ -250,7 +250,7 @@ const Index = () => {
                               <IconButton
                                 icon={<Contact className="w-4 h-4" />}
                                 variant="default"
-                                className="h-auto text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5 font-medium"
+                                size="lg"
                                 label={t.index.contactMe}
                               />
                             </Link>
@@ -261,7 +261,7 @@ const Index = () => {
                               <IconButton
                                 icon={<FolderGit2 className="w-4 h-4" />}
                                 variant="secondary"
-                                className="h-auto text-sm px-4 py-2 sm:text-base sm:px-6 sm:py-3 md:px-7 md:py-3.5"
+                                size="lg"
                                 label={t.index.viewProjects}
                               />
                             </Link>
