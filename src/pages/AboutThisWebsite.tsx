@@ -94,11 +94,31 @@ export default function AboutThisWebsite() {
           . Typography:{" "}
           <strong>
             <LinkPreview
-              href="https://fonts.google.com/specimen/Geist"
+              href="https://fonts.google.com/specimen/Instrument+Sans"
               className="link"
               compact
             >
-              Geist
+              Instrument&nbsp;Sans
+            </LinkPreview>
+          </strong>
+          ,{" "}
+          <strong>
+            <LinkPreview
+              href="https://fonts.google.com/specimen/Bricolage+Grotesque"
+              className="link"
+              compact
+            >
+              Bricolage&nbsp;Grotesque
+            </LinkPreview>
+          </strong>
+          , and{" "}
+          <strong>
+            <LinkPreview
+              href="https://fonts.google.com/specimen/JetBrains+Mono"
+              className="link"
+              compact
+            >
+              JetBrains&nbsp;Mono
             </LinkPreview>
           </strong>
           .
