@@ -82,7 +82,8 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col gap-1.5", className)}
+      // pr-8 keeps text clear of the absolutely-positioned size-8 close button
+      className={cn("flex flex-col gap-1.5 pr-8", className)}
       {...props}
     />
   )
