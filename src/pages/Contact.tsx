@@ -188,6 +188,31 @@ const Contact = () => {
     }
   }, [location.search]);
 
+  const onSelectFile = useCallback(
+    (incoming: File | null) => {
+      let file = incoming;
+      if (file) {
+        const v = validateFile(file);
+        if (!v.ok) {
+          toast.error(
+            v.code === "too_large"
+              ? t.contact.fileTooLarge.replace(
+                  "{max}",
+                  formatBytes(MAX_FILE_BYTES),
+                )
+              : t.contact.unsupportedFileType,
+          );
+          file = null;
+        }
+      }
+      if (!file && fileInputRef.current) fileInputRef.current.value = "";
+      setSelectedFile(file);
+      setUploadedUrl(null);
+      setUploadProgress(null);
+    },
+    [t],
+  );
+
   // global drag overlay activation
   useEffect(() => {
     const hasFiles = (e: DragEvent) =>
@@ -317,31 +342,6 @@ const Contact = () => {
       setUploadProgress(null);
     }
   };
-
-  const onSelectFile = useCallback(
-    (incoming: File | null) => {
-      let file = incoming;
-      if (file) {
-        const v = validateFile(file);
-        if (!v.ok) {
-          toast.error(
-            v.code === "too_large"
-              ? t.contact.fileTooLarge.replace(
-                  "{max}",
-                  formatBytes(MAX_FILE_BYTES),
-                )
-              : t.contact.unsupportedFileType,
-          );
-          file = null;
-        }
-      }
-      if (!file && fileInputRef.current) fileInputRef.current.value = "";
-      setSelectedFile(file);
-      setUploadedUrl(null);
-      setUploadProgress(null);
-    },
-    [t],
-  );
 
   const onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
