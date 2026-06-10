@@ -91,6 +91,11 @@ export function LanguageProvider({
     [storageKey],
   );
 
+  // keep <html lang> in sync for screen readers, browser translation, SEO
+  useEffect(() => {
+    document.documentElement.lang = language;
+  }, [language]);
+
   // cross-tab sync
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
