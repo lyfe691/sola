@@ -19,7 +19,7 @@ import {
   getAllProjectSlugs,
   projectPagesConfig,
 } from "@/config/project-deep-dive";
-import { MDXComponents } from "@/components/MDXComponents";
+import { MDXComponents, TechStack } from "@/components/mdx";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Separator } from "@/components/ui/separator";
@@ -214,18 +214,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.techStack}
           </h2>
-          <div className="flex flex-wrap gap-2.5">
-            {config.techStack.map((tech) => (
-              <span
-                key={tech}
-                className="px-3 py-1.5 bg-primary/5 text-primary border border-primary/20 
-                         text-xs rounded-lg font-medium transition-all duration-200
-                         hover:bg-primary/10 hover:border-primary/30"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
+          <TechStack technologies={config.techStack} />
         </motion.section>
 
         {/* links - hero call-to-action tiles */}
@@ -280,8 +269,9 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         {/* mdx content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.05 }}
+          transition={{ duration: 0.6 }}
           className="prose prose-sm max-w-none"
         >
           <MDXProvider components={MDXComponents}>
@@ -300,8 +290,9 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         {/* related projects */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6 }}
           className="border-t border-border pt-12"
         >
           <h2 className="text-lg font-semibold mb-6 text-foreground">

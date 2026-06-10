@@ -7,18 +7,18 @@
  */
 
 import type { HTMLAttributes } from "react";
-import type { BundledLanguage, BundledTheme } from "shiki";
+import type { BundledTheme } from "shiki";
 import { motion } from "motion/react";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
-import ShikiCode from "./code-highlighter";
+import ShikiCode, { type CodeBlockLanguage } from "./code-highlighter";
 import CopyToClipboard from "./copy-to-clipboard";
 import { cn } from "@/lib/utils";
 
 type AdvancedBlockProps = {
   code: string;
   fileName?: string;
-  lang?: BundledLanguage;
+  lang?: CodeBlockLanguage;
   theme?: BundledTheme;
   className?: string;
 };
@@ -42,7 +42,8 @@ export const AdvancedCodeBlock = ({
   return (
     <motion.figure
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6 }}
       className={cn(
         "relative flex w-full flex-col flex-wrap rounded-2xl bg-card border border-border leading-6 mb-6",

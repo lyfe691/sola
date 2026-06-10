@@ -8,11 +8,13 @@
 
 import { useEffect, useState } from "react";
 import { codeToHtml } from "shiki";
-import type { BundledLanguage, BundledTheme } from "shiki";
+import type { BundledLanguage, BundledTheme, SpecialLanguage } from "shiki";
+
+export type CodeBlockLanguage = BundledLanguage | SpecialLanguage;
 
 interface ShikiCodeProps {
   code: string;
-  lang: BundledLanguage;
+  lang: CodeBlockLanguage;
   theme: BundledTheme;
 }
 
@@ -42,7 +44,11 @@ export default function ShikiCode({ code, lang, theme }: ShikiCodeProps) {
       } catch (error) {
         console.error("Error highlighting code:", error);
         // Fallback to plain text
-        setHighlightedCode(`<code>${code}</code>`);
+        const escaped = code
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+        setHighlightedCode(`<code>${escaped}</code>`);
       }
     };
 
