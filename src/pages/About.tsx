@@ -472,7 +472,8 @@ const ResumeModal = () => {
         }
       />
       <DialogContent>
-        <DialogHeader>
+        {/* pr-8 keeps longer locales clear of the absolute close button */}
+        <DialogHeader className="pr-8">
           <DialogTitle>{t.about.resume.title}</DialogTitle>
           <DialogDescription>
             <RichText text={t.about.resume.description} />
