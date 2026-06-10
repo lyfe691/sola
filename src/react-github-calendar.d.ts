@@ -1,4 +1,10 @@
 declare module "react-github-calendar" {
+  export interface Activity {
+    date: string;
+    count: number;
+    level: 0 | 1 | 2 | 3 | 4;
+  }
+
   export interface GitHubCalendarProps {
     username: string;
     /**
@@ -59,7 +65,7 @@ declare module "react-github-calendar" {
     /**
      * Transform data function
      */
-    transformData?: (data: any) => any;
+    transformData?: (data: Activity[]) => Activity[];
     /**
      * Week start day (0 = Sunday, 1 = Monday)
      */

@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Check, Github, Linkedin, Mail, Send, UploadCloud, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
@@ -238,7 +238,7 @@ const Contact = () => {
       window.removeEventListener("drop", onWindowDrop);
       window.removeEventListener("dragend", onWindowDrop);
     };
-  }, []);
+  }, [onSelectFile]);
 
   const clearForm = () => {
     setFormValues({ name: "", email: "", subject: "", message: "" });
@@ -318,24 +318,30 @@ const Contact = () => {
     }
   };
 
-  const onSelectFile = (incoming: File | null) => {
-    let file = incoming;
-    if (file) {
-      const v = validateFile(file);
-      if (!v.ok) {
-        toast.error(
-          v.code === "too_large"
-            ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
-            : t.contact.unsupportedFileType,
-        );
-        file = null;
+  const onSelectFile = useCallback(
+    (incoming: File | null) => {
+      let file = incoming;
+      if (file) {
+        const v = validateFile(file);
+        if (!v.ok) {
+          toast.error(
+            v.code === "too_large"
+              ? t.contact.fileTooLarge.replace(
+                  "{max}",
+                  formatBytes(MAX_FILE_BYTES),
+                )
+              : t.contact.unsupportedFileType,
+          );
+          file = null;
+        }
       }
-    }
-    if (!file && fileInputRef.current) fileInputRef.current.value = "";
-    setSelectedFile(file);
-    setUploadedUrl(null);
-    setUploadProgress(null);
-  };
+      if (!file && fileInputRef.current) fileInputRef.current.value = "";
+      setSelectedFile(file);
+      setUploadedUrl(null);
+      setUploadProgress(null);
+    },
+    [t],
+  );
 
   const onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();

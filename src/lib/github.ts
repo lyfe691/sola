@@ -179,7 +179,7 @@ async function processEvent(
         fallbackHeaders,
       );
 
-    case "PullRequestEvent":
+    case "PullRequestEvent": {
       const pr = event.payload.pull_request!;
       const prAction = event.payload.action;
 
@@ -196,8 +196,9 @@ async function processEvent(
           deletions: pr.deletions,
         },
       };
+    }
 
-    case "IssuesEvent":
+    case "IssuesEvent": {
       const issue = event.payload.issue!;
       const issueAction = event.payload.action;
 
@@ -212,8 +213,9 @@ async function processEvent(
           issueNumber: issue.id,
         },
       };
+    }
 
-    case "CreateEvent":
+    case "CreateEvent": {
       const refType = event.payload.ref_type;
       const refName = event.payload.ref;
 
@@ -246,8 +248,9 @@ async function processEvent(
         };
       }
       break;
+    }
 
-    case "DeleteEvent":
+    case "DeleteEvent": {
       const delRefType = event.payload.ref_type;
       const delRefName = event.payload.ref;
 
@@ -261,8 +264,9 @@ async function processEvent(
           tag: delRefType === "tag" ? delRefName : undefined,
         },
       };
+    }
 
-    case "ForkEvent":
+    case "ForkEvent": {
       const fork = event.payload.forkee!;
       return {
         ...baseActivity,
@@ -271,6 +275,7 @@ async function processEvent(
         description: fork.description || "No description",
         url: fork.html_url,
       };
+    }
 
     case "WatchEvent":
       return {
@@ -280,7 +285,7 @@ async function processEvent(
         description: `Added ${event.repo.name} to starred repositories`,
       };
 
-    case "ReleaseEvent":
+    case "ReleaseEvent": {
       const release = event.payload.release!;
       return {
         ...baseActivity,
@@ -293,8 +298,9 @@ async function processEvent(
           tag: release.tag_name,
         },
       };
+    }
 
-    case "MemberEvent":
+    case "MemberEvent": {
       const member = event.payload.member!;
       return {
         ...baseActivity,
@@ -304,6 +310,7 @@ async function processEvent(
         description: `${member.login} was ${event.payload.action} as collaborator`,
         url: member.html_url,
       };
+    }
 
     default:
       return null;

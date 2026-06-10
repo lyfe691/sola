@@ -46,7 +46,7 @@ const Privacy = () => {
             </LinkPreview>{" "}
             ) showcases my projects and freelance services. This privacy policy
             complies with the Swiss Federal Act on Data Protection
-            (revFADP 2023) and the EU General Data Protection Regulation (GDPR)
+            (revFADP 2023) and the EU General Data Protection Regulation (GDPR)
             and explains what data are processed and why.
           </>
         ),
@@ -187,7 +187,7 @@ const Privacy = () => {
               Vercel Inc.
             </LinkPreview>
             , 340 S Lemon Ave #4133, Walnut, CA 91789, USA. Vercel speichert
-            Verbindungsdaten (z. B. IP‑Adresse, Browsertyp, Zugriffszeit) in
+            Verbindungsdaten (z. B. IP‑Adresse, Browsertyp, Zugriffszeit) in
             Server‑Logs, um die Website sicher und zuverlässig bereitzustellen.
           </>
         ),
@@ -291,7 +291,7 @@ const Privacy = () => {
               {"https://sola.ysz.life"}
             </LinkPreview>{" "}
             ) presenta mis proyectos y servicios. Cumple con la LPD suiza
-            (revFADP 2023) y el RGPD de la UE, explicando qué datos se tratan y
+            (revFADP 2023) y el RGPD de la UE, explicando qué datos se tratan y
             por qué.
           </>
         ),
@@ -308,7 +308,7 @@ const Privacy = () => {
             <LinkPreview href="https://vercel.com" className="link" compact>
               Vercel Inc.
             </LinkPreview>{" "}
-            (EE. UU.). Vercel registra datos de conexión (IP, navegador, hora)
+            (EE. UU.). Vercel registra datos de conexión (IP, navegador, hora)
             para entregar el sitio de forma segura.
           </>
         ),
@@ -339,7 +339,7 @@ const Privacy = () => {
             <LinkPreview href="https://github.com" className="link" compact>
               GitHub, Inc.
             </LinkPreview>{" "}
-            (EE. UU.). Se transmite tu IP al solicitar dichos recursos. GitHub
+            (EE. UU.). Se transmite tu IP al solicitar dichos recursos. GitHub
             participa en el EU–US Data Privacy Framework.
           </>
         ),

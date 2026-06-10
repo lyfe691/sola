@@ -16,20 +16,22 @@ import { useLocation } from "react-router-dom";
 const TYPING_SPEED = 50;
 const RESPONSE_DELAY = 600;
 const INITIAL_DELAY = 1500;
+const RESPONSE_LINE_DELAY = 80;
+
+const ROOT_PROMPT = "root@~/dev/null$ ";
+const RESPONSE_LINES = [
+  "",
+  "HTTP/1.1 404 Not Found",
+  "{",
+  `  "error": "Resource not found"`,
+  "}",
+];
 
 const NotFound = () => {
   const location = useLocation();
   const { language } = useLanguage();
   const t = translations[language] as Translation;
-  const ROOT_PROMPT = "root@~/dev/null$ ";
   const PROMPT = `curl https://sola.ysz.life${location.pathname}`;
-  const RESPONSE_LINES = [
-    "",
-    "HTTP/1.1 404 Not Found",
-    "{",
-    `  "error": "Resource not found"`,
-    "}",
-  ];
 
   const [typedPrompt, setTypedPrompt] = useState("");
   const [typedResponse, setTypedResponse] = useState<string[]>([]);
@@ -50,21 +52,22 @@ const NotFound = () => {
       return () => clearTimeout(timeout);
     }
 
-    const responseTimeout = setTimeout(() => {
-      typeResponseLine(0);
-    }, RESPONSE_DELAY);
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    const typeResponseLine = (index: number) => {
+      if (index < RESPONSE_LINES.length) {
+        timeouts.push(
+          setTimeout(() => {
+            setTypedResponse((prev) => [...prev, RESPONSE_LINES[index]]);
+            typeResponseLine(index + 1);
+          }, RESPONSE_LINE_DELAY),
+        );
+      }
+    };
 
-    return () => clearTimeout(responseTimeout);
-  }, [typedPrompt, isInitialDelay]);
+    timeouts.push(setTimeout(() => typeResponseLine(0), RESPONSE_DELAY));
 
-  const typeResponseLine = (index: number) => {
-    if (index < RESPONSE_LINES.length) {
-      setTimeout(() => {
-        setTypedResponse((prev) => [...prev, RESPONSE_LINES[index]]);
-        typeResponseLine(index + 1);
-      }, 80);
-    }
-  };
+    return () => timeouts.forEach(clearTimeout);
+  }, [typedPrompt, isInitialDelay, PROMPT]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 bg-background text-foreground">
