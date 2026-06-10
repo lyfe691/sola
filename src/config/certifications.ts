@@ -103,12 +103,6 @@ export function getAllCertifications(): Certification[] {
   });
 }
 
-export function getCertificationsByIssuer(issuer: string): Certification[] {
-  return getAllCertifications().filter(
-    (c) => c.issuer.toLowerCase() === issuer.toLowerCase(),
-  );
-}
-
 export function isExpired(
   cert: Certification,
   now: Date = new Date(),

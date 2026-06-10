@@ -9,24 +9,22 @@
 /* This is the main page, therefore called index */
 
 import { Link } from "react-router-dom";
-import { Mail, Linkedin, FolderGit2, Contact } from "lucide-react";
-import { FaGithubAlt } from "react-icons/fa";
+import { FolderGit2, Contact } from "lucide-react";
 import { motion, LayoutGroup } from "motion/react";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
-import {
-  SiChessdotcom,
-  SiHackthebox,
-  SiLeetcode,
-  SiTiktok,
-} from "react-icons/si";
 import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
-import { SOCIAL_LINKS, SOCIAL_ORDER_HERO } from "@/config/social";
+import {
+  SOCIAL_LINKS,
+  SOCIAL_ORDER_HERO,
+  SOCIAL_ICONS,
+  SOCIAL_HOVER_ACCENTS,
+} from "@/config/social";
 
 const homeAnimations = {
   container: {
@@ -229,36 +227,9 @@ const Index = () => {
             >
               {SOCIAL_ORDER_HERO.map((id, index) => {
                 const s = SOCIAL_LINKS[id];
-                const icon =
-                  id === "github" ? (
-                    <FaGithubAlt className="w-full h-full" />
-                  ) : id === "email" ? (
-                    <Mail className="w-full h-full" />
-                  ) : id === "linkedin" ? (
-                    <Linkedin className="w-full h-full" />
-                  ) : id === "leetcode" ? (
-                    <SiLeetcode className="w-full h-full" />
-                  ) : id === "hackthebox" ? (
-                    <SiHackthebox className="w-full h-full" />
-                  ) : id === "tiktok" ? (
-                    <SiTiktok className="w-full h-full" />
-                  ) : (
-                    <SiChessdotcom className="w-full h-full" />
-                  );
-                const hoverClass =
-                  id === "github"
-                    ? "hover:border-foreground/30"
-                    : id === "email"
-                      ? "hover:bg-red-400/20 hover:border-red-400/30"
-                      : id === "linkedin"
-                        ? "hover:bg-cyan-400/20 hover:border-cyan-400/30"
-                        : id === "leetcode"
-                          ? "hover:bg-orange-400/20 hover:border-orange-400/30"
-                          : id === "hackthebox"
-                            ? "hover:bg-emerald-300/20 hover:border-emerald-400/30"
-                            : id === "tiktok"
-                              ? "hover:bg-pink-400/20 hover:border-pink-400/30"
-                              : "hover:bg-green-400/20 hover:border-green-400/30";
+                const Icon = SOCIAL_ICONS[id];
+                const icon = <Icon className="w-full h-full" />;
+                const hoverClass = SOCIAL_HOVER_ACCENTS[id];
                 const label = s.label;
                 const href = s.href;
                 return (

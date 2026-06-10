@@ -9,15 +9,13 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { Mail, Linkedin, Info, ChevronRight, ArrowUpRight } from "lucide-react";
-import { FaGithubAlt } from "react-icons/fa";
+import { Mail, Info, ChevronRight, ArrowUpRight } from "lucide-react";
 import {
-  SiChessdotcom,
-  SiHackthebox,
-  SiLeetcode,
-  SiTiktok,
-} from "react-icons/si";
-import { SOCIAL_LINKS, SOCIAL_ORDER_FOOTER } from "@/config/social";
+  SOCIAL_LINKS,
+  SOCIAL_ORDER_FOOTER,
+  SOCIAL_ICONS,
+  SOCIAL_HOVER_ACCENTS,
+} from "@/config/social";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -29,37 +27,15 @@ const Footer = () => {
 
   const social = SOCIAL_ORDER_FOOTER.map((id) => {
     const s = SOCIAL_LINKS[id];
-    const icon =
-      id === "github" ? (
-        <FaGithubAlt className="w-4 h-4" />
-      ) : id === "email" ? (
-        <Mail className="w-4 h-4" />
-      ) : id === "linkedin" ? (
-        <Linkedin className="w-4 h-4" />
-      ) : id === "leetcode" ? (
-        <SiLeetcode className="w-4 h-4" />
-      ) : id === "hackthebox" ? (
-        <SiHackthebox className="w-4 h-4" />
-      ) : id === "tiktok" ? (
-        <SiTiktok className="w-4 h-4" />
-      ) : (
-        <SiChessdotcom className="w-4 h-4" />
-      );
-    const hoverClass =
-      id === "github"
-        ? "hover:bg-foreground/10 hover:scale-110"
-        : id === "email"
-          ? "hover:bg-red-400/20 hover:border-red-400/30 hover:scale-110"
-          : id === "linkedin"
-            ? "hover:bg-cyan-400/20 hover:border-cyan-400/30 hover:scale-110"
-            : id === "leetcode"
-              ? "hover:bg-orange-400/20 hover:border-orange-400/30 hover:scale-110"
-              : id === "hackthebox"
-                ? "hover:bg-emerald-300/20 hover:border-emerald-400/30 hover:scale-110"
-                : id === "tiktok"
-                  ? "hover:bg-pink-400/20 hover:border-pink-400/30 hover:scale-110"
-                  : "hover:bg-green-400/20 hover:border-green-400/30 hover:scale-110";
-    return { icon, href: s.href, label: s.label, hoverClass };
+    const Icon = SOCIAL_ICONS[id];
+    const accent =
+      id === "github" ? "hover:bg-foreground/10" : SOCIAL_HOVER_ACCENTS[id];
+    return {
+      icon: <Icon className="w-4 h-4" />,
+      href: s.href,
+      label: s.label,
+      hoverClass: `${accent} hover:scale-110`,
+    };
   });
 
   const nav = [

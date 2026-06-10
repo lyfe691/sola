@@ -3,6 +3,16 @@
  * (c) 2025 Yanis Sebastian Zürcher
  */
 
+import type { ComponentType } from "react";
+import { Mail, Linkedin } from "lucide-react";
+import { FaGithubAlt } from "react-icons/fa";
+import {
+  SiChessdotcom,
+  SiHackthebox,
+  SiLeetcode,
+  SiTiktok,
+} from "react-icons/si";
+
 export type SocialId =
   | "github"
   | "email"
@@ -54,6 +64,29 @@ export const SOCIAL_LINKS: Record<SocialId, SocialLink> = {
     label: "TikTok",
     href: "https://www.tiktok.com/@seeyuh.0",
   },
+};
+
+export const SOCIAL_ICONS: Record<
+  SocialId,
+  ComponentType<{ className?: string }>
+> = {
+  github: FaGithubAlt,
+  email: Mail,
+  linkedin: Linkedin,
+  leetcode: SiLeetcode,
+  hackthebox: SiHackthebox,
+  chess: SiChessdotcom,
+  tiktok: SiTiktok,
+};
+
+export const SOCIAL_HOVER_ACCENTS: Record<SocialId, string> = {
+  github: "hover:border-foreground/30",
+  email: "hover:bg-red-400/20 hover:border-red-400/30",
+  linkedin: "hover:bg-cyan-400/20 hover:border-cyan-400/30",
+  leetcode: "hover:bg-orange-400/20 hover:border-orange-400/30",
+  hackthebox: "hover:bg-emerald-300/20 hover:border-emerald-400/30",
+  tiktok: "hover:bg-pink-400/20 hover:border-pink-400/30",
+  chess: "hover:bg-green-400/20 hover:border-green-400/30",
 };
 
 export const SOCIAL_ORDER_HERO: SocialId[] = [

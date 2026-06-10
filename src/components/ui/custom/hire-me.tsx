@@ -21,23 +21,6 @@ const HireMe = () => {
 
   const contactUrl = `/contact?subject=${encodeURIComponent(prefilledSubject)}&message=${encodeURIComponent(prefilledMessage)}`;
 
-  const handleHireClick = (_e: React.MouseEvent) => {
-    //  e.preventDefault();
-    //   if (isHired === true) {
-    //     toast.error(t.hire.hiretitle, {
-    //       duration: 7000,
-    //       description: t.hire.hiretxt,
-    //       action: {
-    //         label: t.hire.hirelbl,
-    //         onClick: () => {
-    //           navigate(contactUrl);
-    //           toast.dismiss();
-    //         },
-    //       },
-    //     });
-    //   }
-  };
-
   return (
     <div className="pointer-events-none fixed hidden lg:flex bottom-8 left-8 z-50">
       <motion.div
@@ -68,7 +51,6 @@ const HireMe = () => {
 
         <Link
           to={contactUrl}
-          onClick={handleHireClick}
           aria-label="Hire Yanis Sebastian Zürcher"
           className="relative inline-flex items-center gap-3 rounded-xl 
                      bg-background/30 backdrop-blur-md px-6 py-3
