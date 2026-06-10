@@ -2,6 +2,10 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/jetbrains-mono";
+
 @custom-variant dark (&:is(.dark *));
 
 @utility container {
@@ -16,8 +20,11 @@
 }
 
 @theme inline {
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Bricolage Grotesque Variable", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular,
+    monospace;
 
   --color-border: var(--border);
   --color-input: var(--input);
@@ -453,11 +460,7 @@
   pre,
   kbd,
   samp {
-    font-family: ui-monospace, SFMono-Regular, monospace;
-  }
-
-  .font-mono {
-    font-family: ui-monospace, SFMono-Regular, monospace;
+    font-family: var(--font-mono);
   }
 
   /* ---------- scrollbar styles ---------- */
