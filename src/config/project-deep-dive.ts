@@ -6,11 +6,12 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-export interface ProjectPageConfig {
+import { PROJECTS } from "./projects";
+
+interface ProjectDeepDiveContent {
   slug: string;
   title: string;
   description: string;
-  date: string;
   silkColor: string;
   silkSpeed?: number;
   silkScale?: number;
@@ -19,21 +20,26 @@ export interface ProjectPageConfig {
   overview: string;
   techStack: string[];
   features: string[];
+  demo?: string;
+  mdxPath: string;
+}
+
+export interface ProjectPageConfig extends ProjectDeepDiveContent {
+  date: string;
   links: {
     live?: string;
     github?: string;
     demo?: string;
   };
-  mdxPath: string; // required
 }
 
-export const projectPagesConfig: Record<string, ProjectPageConfig> = {
+// date and links come from PROJECTS (src/config/projects.ts) — single source of truth
+const deepDives: Record<string, ProjectDeepDiveContent> = {
   luma: {
     slug: "luma",
     title: "Luma",
     description:
       "A multi-model AI platform — bring your own keys, talk to any model",
-    date: "March 2026 - April 2026",
     silkColor: "#7a8a5c",
     silkSpeed: 3.5,
     silkScale: 1.15,
@@ -61,10 +67,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Built-in web search (Tavily) and image generation (Grok Imagine, DALL-E 3, Imagen 3)",
       "Command palette, keyboard shortcuts, and pinned chats",
     ],
-    links: {
-      live: "https://luma.ysz.life",
-      github: "https://github.com/lyfe691/luma",
-    },
     mdxPath: "luma",
   },
 
@@ -72,7 +74,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     slug: "sola",
     title: "Sola",
     description: "Modern portfolio website built with React and TypeScript",
-    date: "February 2025 - Present",
     silkColor: "#525252",
     silkSpeed: 3,
     silkScale: 1.2,
@@ -98,16 +99,12 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Fully responsive design",
       "Smooth page transitions",
       "Multiple theme support",
-      "Multilingual (EN/DE/ES/JP/CN/RU) i18n",
+      "Multilingual (EN/DE/ES/JA/ZH) i18n",
       "SEO optimized",
       "Interactive animations",
       "Command palette",
       "Custom 3D backgrounds",
     ],
-    links: {
-      live: "https://sola.ysz.life",
-      github: "https://github.com/lyfe691/sola",
-    },
     mdxPath: "sola",
   },
 
@@ -115,7 +112,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     slug: "applicare",
     title: "AppliCare",
     description: "Manage your job applications with ease.",
-    date: "Dec 2024 - Feb 2025",
     silkColor: "#007bff",
     silkSpeed: 4,
     silkScale: 1.1,
@@ -141,10 +137,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Responsive design",
       "Docker deployment",
     ],
-    links: {
-      live: "https://applicare.app",
-      github: "https://github.com/lyfe691/AppliCare",
-    },
     mdxPath: "applicare",
   },
 
@@ -153,27 +145,22 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     title: "Website Code Extractor",
     description:
       "Chrome extension for extracting and downloading website source code",
-    date: "November 2024",
     silkColor: "#f59e0b",
     silkSpeed: 5,
     silkScale: 0.9,
     silkNoiseIntensity: 2.0,
     silkRotation: -0.2,
     overview:
-      "A powerful Chrome extension that allows developers to easily extract and download the complete source code of any website. Used by 600+ developers worldwide.",
+      "A powerful Chrome extension that allows developers to easily extract and download the complete source code of any website. Used by 1000+ developers worldwide.",
     techStack: ["Chrome Extension", "JSZip", "HTML", "CSS", "JavaScript"],
     features: [
       "One-click extraction",
       "Complete source download",
       "ZIP file generation",
       "Clean folder structure",
-      "600+ active users",
+      "1000+ active users",
       "Chrome Web Store verified",
     ],
-    links: {
-      live: "https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm",
-      github: "https://github.com/lyfe691/Website-Code-Extractor",
-    },
     mdxPath: "code-extractor",
   },
 
@@ -182,7 +169,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     title: "Kinoa",
     description:
       "A free streaming website for films and series with a clean, distraction-free interface",
-    date: "November 2025 - January 2026",
     silkColor: "#a0785a",
     silkSpeed: 4.2,
     silkScale: 1.12,
@@ -207,10 +193,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Global search with instant feedback across movies and series",
       "Ad-supported with watchlist and watch history via Supabase",
     ],
-    links: {
-      live: "https://kinoa.to",
-      github: "https://github.com/lyfe691/kinoa",
-    },
     mdxPath: "kinoa",
   },
 
@@ -219,7 +201,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     title: "Self",
     description:
       "A customizable Windows system information display tool inspired by Neofetch",
-    date: "May 2025",
     silkColor: "#1f2937",
     silkSpeed: 3,
     silkScale: 1.1,
@@ -243,9 +224,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Easy installation via PowerShell",
       "Caching for performance",
     ],
-    links: {
-      github: "https://github.com/lyfe691/self",
-    },
     mdxPath: "self",
   },
 
@@ -254,7 +232,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     title: "Thoughts",
     description:
       "A minimal personal site for sharing reflections, fragments, and notes.",
-    date: "August 2025",
     silkColor: "#ffffff",
     silkSpeed: 3.8,
     silkScale: 1.05,
@@ -267,10 +244,6 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "MDX-based publishing system for reflections and notes",
       "Custom-built guestbook with moderation support",
     ],
-    links: {
-      live: "https://thoughts.ysz.life",
-      github: "https://github.com/lyfe691/thoughts",
-    },
     mdxPath: "thoughts",
   },
 
@@ -278,15 +251,14 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
     slug: "taco",
     title: "Taco",
     description:
-      "Production‑grade Next.js template with localization and blog (centered on Taco, my brother's dog)",
-    date: "April 2025",
+      "Production-grade Next.js template with localization and blog (centered on Taco, my brother's dog)",
     silkColor: "#66cc99",
     silkSpeed: 3.8,
     silkScale: 1.05,
     silkNoiseIntensity: 1.6,
     silkRotation: -0.15,
     overview:
-      "Taco is a clean, production‑ready template site centered around my brother's dog. It demonstrates localization with automatic detection, a simple blog system, and a modular architecture that can be adapted to real projects.",
+      "Taco is a clean, production-ready template site centered around my brother's dog. It demonstrates localization with automatic detection, a simple blog system, and a modular architecture that can be adapted to real projects.",
     techStack: [
       "Next.js",
       "TypeScript",
@@ -303,13 +275,35 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> = {
       "Clean routing and modular project structure",
       "Accessible semantics and fast TTFB",
     ],
-    links: {
-      live: "https://takitwo.vercel.app",
-      github: "https://github.com/lyfe691/taco",
-    },
     mdxPath: "taco",
   },
 };
+
+const projectBySlug = new Map(
+  PROJECTS.filter((p) => p.slug).map((p) => [p.slug!, p]),
+);
+
+export const projectPagesConfig: Record<string, ProjectPageConfig> =
+  Object.fromEntries(
+    Object.entries(deepDives).map(([slug, content]) => {
+      const base = projectBySlug.get(slug);
+      if (!base) {
+        throw new Error(`Deep dive "${slug}" has no matching entry in PROJECTS`);
+      }
+      return [
+        slug,
+        {
+          ...content,
+          date: base.date.display,
+          links: {
+            live: base.link,
+            github: base.github,
+            demo: content.demo,
+          },
+        },
+      ];
+    }),
+  );
 
 export const getProjectConfig = (slug: string): ProjectPageConfig | null => {
   return projectPagesConfig[slug] || null;

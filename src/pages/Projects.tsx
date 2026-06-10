@@ -51,24 +51,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { PROJECTS, type ProjectMeta } from "@/config/projects";
 
-interface Project {
-  id: string;
+interface Project extends ProjectMeta {
   title: string;
   description: string;
-  image?: string;
-  link?: string;
-  github?: string;
-  tags: string[];
-  featured: boolean;
-  date: {
-    start: string;
-    end?: string;
-    display: string;
-  };
-  priority: number;
-  slug?: string;
-  vercelSatori?: boolean;
 }
 
 type SortOption =
@@ -84,7 +71,7 @@ type SortOptionItem = {
   icon: ReactNode;
 };
 
-const buildSortOptions = (t: any): SortOptionItem[] => [
+const buildSortOptions = (t: Translation): SortOptionItem[] => [
   {
     value: "priority",
     label: t.projects.sortOptions.priority,
@@ -112,285 +99,18 @@ const buildSortOptions = (t: any): SortOptionItem[] => [
   },
 ];
 
-// slug = deepdive
-const createProjectsData = (t: any): Project[] => [
-  {
-    id: "kinoa",
-    title: t.projects.list.kinoa.title,
-    description: t.projects.list.kinoa.description,
-    image: "/projects/kinoa.png",
-    link: "https://kinoa.to",
-    github: "https://github.com/lyfe691/kinoa",
-    tags: [
-      "Next.js",
-      "shadcn/ui",
-      "TypeScript",
-      "Tailwind CSS",
-      "TMDB API",
-      "Streaming",
-    ],
-    featured: true,
-    date: {
-      start: "2025-11",
-      display: "Nov 2025 - Present",
-    },
-    priority: 1,
-    slug: "kinoa",
-    vercelSatori: true,
-  },
-  {
-    id: "luma",
-    title: t.projects.list.luma.title,
-    description: t.projects.list.luma.description,
-    image: "/projects/luma.png",
-    link: "https://luma.ysz.life",
-    github: "https://github.com/lyfe691/luma",
-    tags: [
-      "Next.js 16",
-      "Vercel AI SDK",
-      "TypeScript",
-      "Supabase",
-      "shadcn/ui",
-      "Tailwind CSS",
-    ],
-    featured: true,
-    date: {
-      start: "2026-03",
-      end: "2026-04",
-      display: "Mar 2026 - Apr 2026",
-    },
-    priority: 2,
-    slug: "luma",
-  },
-  {
-    id: "sola",
-    title: t.projects.list.sola.title,
-    description: t.projects.list.sola.description,
-    image: "/projects/sola.png",
-    link: "https://sola.ysz.life",
-    github: "https://github.com/lyfe691/sola",
-    tags: [
-      "Portfolio",
-      "shadcn/ui",
-      "TypeScript",
-      "React",
-      "Vite",
-      "Tailwind CSS",
-    ],
-    featured: true,
-    date: {
-      start: "2025-02",
-      display: "Feb 2025 - Present",
-    },
-    priority: 3,
-    slug: "sola",
-  },
-  {
-    id: "applicare",
-    title: t.projects.list.applicare.title,
-    description: t.projects.list.applicare.description,
-    image: "/projects/applicare.svg",
-    link: "https://applicare.app",
-    github: "https://github.com/lyfe691/AppliCare",
-    tags: [
-      "React (Vite)",
-      "Spring Boot",
-      "Ant Design",
-      "MongoDB",
-      "Java",
-      "JavaScript",
-      "Docker",
-    ],
-    featured: true,
-    date: {
-      start: "2024-12",
-      end: "2025-02",
-      display: "Dec 2024 - Feb 2025",
-    },
-    priority: 4,
-    slug: "applicare",
-  },
-  {
-    id: "self",
-    title: t.projects.list.self.title,
-    description: t.projects.list.self.description,
-    image: "/projects/self.png",
-    github: "https://github.com/lyfe691/self",
-    tags: ["Neofetch", "Python", "Terminal", "Windows"],
-    featured: true,
-    date: {
-      start: "2025-05",
-      display: "May 2025",
-    },
-    priority: 5,
-    slug: "self",
-  },
-  {
-    id: "code-extractor",
-    title: t.projects.list.codeExtractor.title,
-    description: t.projects.list.codeExtractor.description + "(1000+ Users)",
-    image: "/projects/website-code-extractor.svg",
-    link: "https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm",
-    github: "https://github.com/lyfe691/Website-Code-Extractor",
-    tags: ["Chrome Extension", "JSZip", "HTML", "CSS", "JavaScript"],
-    featured: true,
-    date: {
-      start: "2024-08",
-      display: "Aug 2024",
-    },
-    priority: 6,
-    slug: "code-extractor",
-  },
-  {
-    id: "thoughts",
-    title: t.projects.list.thoughts.title,
-    description: t.projects.list.thoughts.description,
-    image: "/projects/thoughts.svg",
-    link: "https://thoughts.ysz.life",
-    github: "https://github.com/lyfe691/thoughts",
-    tags: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
-    featured: true,
-    date: {
-      start: "2025-08",
-      display: "Aug 2025",
-    },
-    priority: 7,
-    slug: "thoughts",
-  },
-  {
-    id: "Taco",
-    title: t.projects.list.taco.title,
-    description: t.projects.list.taco.description,
-    image: "/projects/taco.png",
-    link: "https://takitwo.vercel.app",
-    github: "https://github.com/lyfe691/taco",
-    tags: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "i18n",
-      "Localization",
-      "Blog",
-      "Template",
-    ],
-    featured: true,
-    date: {
-      start: "2025-04",
-      display: "Apr 2025",
-    },
-    priority: 7,
-    slug: "taco",
-  },
-  {
-    id: "osint",
-    title: t.projects.list.osint.title,
-    description: t.projects.list.osint.description,
-    image: "/projects/osint-website.svg",
-    link: "https://osint.ysz.life",
-    github: "https://github.com/lyfe691/osint-ysz-life",
-    tags: ["React (Vite)", "shadcn/ui", "JavaScript"],
-    featured: true,
-    date: {
-      start: "2024-11",
-      end: "2024-12",
-      display: "Nov 2024 - Dec 2024",
-    },
-    priority: 8,
-  },
-  {
-    id: "chatapp",
-    title: t.projects.list.chatapp.title,
-    description: t.projects.list.chatapp.description,
-    image: "/projects/chatapp.svg",
-    link: "https://chat-app.ch",
-    github: "https://github.com/lyfe691/chatapp",
-    tags: [
-      "React",
-      "Spring Boot",
-      "MongoDB",
-      "Java",
-      "JavaScript",
-      "WebSocket",
-    ],
-    featured: true,
-    date: {
-      start: "2024-09",
-      display: "Sep 2024",
-    },
-    priority: 9,
-  },
-  // non-featured projects
-  {
-    id: "vm-detector",
-    title: t.projects.list.vmDetector.title,
-    description: t.projects.list.vmDetector.description,
-    github: "https://github.com/lyfe691/Virtual-Machine-Detector",
-    tags: ["Java", "Virtual Machine", "Detection"],
-    featured: false,
-    date: {
-      start: "2024-08",
-      display: "Aug 2024",
-    },
-    priority: 10,
-  },
-  {
-    id: "view-counter",
-    title: t.projects.list.viewCounter.title,
-    description: t.projects.list.viewCounter.description,
-    github: "https://github.com/lyfe691/View_Counter",
-    tags: ["Spring Boot", "Redis", "Java"],
-    featured: false,
-    date: {
-      start: "2024-08",
-      display: "Aug 2024",
-    },
-    priority: 11,
-  },
-  {
-    id: "docker-service",
-    title: t.projects.list.dockerService.title,
-    description: t.projects.list.dockerService.description,
-    github: "https://github.com/lyfe691/LB-WISS_169-347",
-    tags: ["Docker", "Teamwork", "Documentation"],
-    featured: false,
-    date: {
-      start: "2024-06",
-      display: "Jun 2024",
-    },
-    priority: 12,
-  },
-  {
-    id: "phishing",
-    title: t.projects.list.phishing.title,
-    description: t.projects.list.phishing.description,
-    github: "https://github.com/lyfe691/phishing-website-tutorial",
-    tags: ["HTML", "CSS", "JavaScript", "Node.js", "Tutorial"],
-    featured: false,
-    date: {
-      start: "2024-04",
-      display: "Apr 2024",
-    },
-    priority: 13,
-  },
-  {
-    id: "otw",
-    title: t.projects.list.otw.title,
-    description: t.projects.list.otw.description,
-    github: "https://github.com/lyfe691/OverTheWire-bandit",
-    tags: ["Kali Linux", "OverTheWire", "Linux", "Tutorial", "Ethical Hacking"],
-    featured: false,
-    date: {
-      start: "2024-04",
-      display: "Apr 2024",
-    },
-    priority: 14,
-  },
-];
+const localizeProjects = (t: Translation): Project[] =>
+  PROJECTS.map((p) => ({
+    ...p,
+    title: t.projects.list[p.i18nKey].title,
+    description:
+      t.projects.list[p.i18nKey].description + (p.descriptionSuffix ?? ""),
+  }));
 
 const cardClassName =
   "group h-full gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg";
 
-const ProjectImage = ({ project, t }: { project: Project; t: any }) => {
+const ProjectImage = ({ project, t }: { project: Project; t: Translation }) => {
   const [loaded, setLoaded] = useState(false);
 
   if (!project.image) return null;
@@ -529,7 +249,13 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
   );
 };
 
-const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
+const ProjectActions = ({
+  project,
+  t,
+}: {
+  project: Project;
+  t: Translation;
+}) => {
   if (!project.slug && !project.github && !project.link) return null;
 
   return (
@@ -588,7 +314,7 @@ const ProjectActions = ({ project, t }: { project: Project; t: any }) => {
   );
 };
 
-const ProjectBody = ({ project, t }: { project: Project; t: any }) => (
+const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
   <div className="flex h-full flex-col gap-4 p-5 sm:p-6">
     <div className="flex flex-col gap-1">
       <h3 className="text-lg font-medium text-foreground transition-colors duration-300 group-hover:text-primary sm:text-xl">
@@ -606,7 +332,7 @@ const ProjectBody = ({ project, t }: { project: Project; t: any }) => (
   </div>
 );
 
-const ProjectCard = ({ project, t }: { project: Project; t: any }) =>
+const ProjectCard = ({ project, t }: { project: Project; t: Translation }) =>
   project.image ? (
     <Card className={cardClassName}>
       <div className="grid grid-cols-1 md:grid-cols-2">
@@ -626,7 +352,7 @@ const Projects = () => {
   const t = translations[language] as Translation;
 
   const { featuredProjects, otherProjects, sortOptions } = useMemo(() => {
-    const projects = createProjectsData(t);
+    const projects = localizeProjects(t);
     const sortOptions = buildSortOptions(t);
 
     const sortedProjects = [...projects].sort((a, b) => {

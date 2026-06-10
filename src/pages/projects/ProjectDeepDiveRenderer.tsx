@@ -27,9 +27,128 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 
-// dynamic mdx component
+// dynamic mdx components, cached so each path keeps a stable lazy identity
+const mdxComponents = new Map<string, React.LazyExoticComponent<React.ComponentType>>();
 const getMDXComponent = (mdxPath: string) => {
-  return lazy(() => import(`@/content/projects/${mdxPath}.mdx`));
+  let component = mdxComponents.get(mdxPath);
+  if (!component) {
+    component = lazy(() => import(`@/content/projects/${mdxPath}.mdx`));
+    mdxComponents.set(mdxPath, component);
+  }
+  return component;
+};
+
+const getHostname = (href: string) => {
+  try {
+    return new URL(href).hostname.replace(/^www\./, "");
+  } catch {
+    return href;
+  }
+};
+
+const LinkTile: React.FC<{
+  href: string;
+  label: string;
+  icon: React.ReactNode;
+  variant?: "primary" | "outline";
+}> = ({ href, label, icon, variant = "primary" }) => (
+  <LinkPreview href={href} previewType="auto" compact={true} className="block">
+    <div
+      className={[
+        "group relative w-full h-full rounded-xl px-4 py-3",
+        "border transition-colors duration-150 ease-out",
+        variant === "primary"
+          ? "border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/40"
+          : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10",
+        "shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50",
+        "inline-flex items-center gap-3 text-foreground",
+      ].join(" ")}
+    >
+      {/* decorative shine */}
+      <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
+
+      {/* icon pill */}
+      <span className="shrink-0 grid place-items-center w-8 h-8 rounded-lg bg-foreground/10 text-foreground/70 group-hover:bg-primary/15 group-hover:text-primary transition-colors">
+        {icon}
+      </span>
+
+      {/* label */}
+      <span className="flex flex-col text-left leading-tight">
+        <span className="text-sm font-medium tracking-tight">{label}</span>
+        <span className="text-[11px] text-foreground/60">
+          {getHostname(href)}
+        </span>
+      </span>
+
+      {/* arrow cue */}
+      <ExternalLink className="ml-auto w-4 h-4 text-foreground/40 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-colors duration-150 ease-out" />
+    </div>
+  </LinkPreview>
+);
+
+// algorithmically recommend projects with overlapping tech stacks
+const getRecommendedProjectSlugs = (
+  currentSlug: string,
+  count: number,
+): string[] => {
+  const allSlugs = getAllProjectSlugs();
+  const current = projectPagesConfig[currentSlug];
+  if (!current)
+    return allSlugs.filter((s) => s !== currentSlug).slice(0, count);
+  const normalize = (s: string) => s.toLowerCase();
+  const currentTech = new Set((current.techStack || []).map(normalize));
+  const docFreq: Record<string, number> = {};
+  for (const sl of allSlugs) {
+    const seen = new Set<string>();
+    for (const t of (projectPagesConfig[sl].techStack || []).map(normalize)) {
+      if (!seen.has(t)) {
+        docFreq[t] = (docFreq[t] || 0) + 1;
+        seen.add(t);
+      }
+    }
+  }
+  const N = allSlugs.length;
+  const idf = (t: string) => {
+    const df = docFreq[t] || 0;
+    return Math.log((N + 1) / (df + 1));
+  };
+
+  const scored = allSlugs
+    .filter((s) => s !== currentSlug)
+    .map((sl) => {
+      const tech = new Set(
+        (projectPagesConfig[sl].techStack || []).map(normalize),
+      );
+      let score = 0;
+      for (const t of currentTech) {
+        if (tech.has(t)) score += idf(t);
+      }
+      return { slug: sl, score };
+    })
+    .sort((a, b) => b.score - a.score);
+  const pool = (
+    scored.some((s) => s.score > 0) ? scored.filter((s) => s.score > 0) : scored
+  ).slice(0, 4);
+  const dayKey = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const hash = (str: string) => {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
+    return Math.abs(h);
+  };
+  const rotation = pool.length ? hash(dayKey + currentSlug) % pool.length : 0;
+  const picks: string[] = [];
+  for (let i = 0; i < pool.length && picks.length < count; i++) {
+    const idx = (i + rotation) % pool.length;
+    const candidate = pool[idx].slug;
+    if (!picks.includes(candidate)) picks.push(candidate);
+  }
+  if (picks.length < count) {
+    for (const s of scored) {
+      if (picks.length >= count) break;
+      if (!picks.includes(s.slug)) picks.push(s.slug);
+    }
+  }
+  return picks.slice(0, count);
 };
 
 const ProjectDeepDiveRenderer: React.FC = () => {
@@ -48,126 +167,6 @@ const ProjectDeepDiveRenderer: React.FC = () => {
   }
 
   const MDXComponent = getMDXComponent(config.mdxPath);
-
-  const getHostname = (href: string) => {
-    try {
-      return new URL(href).hostname.replace(/^www\./, "");
-    } catch {
-      return href;
-    }
-  };
-
-  const LinkTile: React.FC<{
-    href: string;
-    label: string;
-    icon: React.ReactNode;
-    variant?: "primary" | "outline-solid";
-  }> = ({ href, label, icon, variant = "primary" }) => (
-    <LinkPreview
-      href={href}
-      previewType="auto"
-      compact={true}
-      className="block"
-    >
-      <div
-        className={[
-          "group relative w-full h-full rounded-xl px-4 py-3",
-          "border transition-colors duration-150 ease-out",
-          variant === "primary"
-            ? "border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/40"
-            : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10",
-          "shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50",
-          "inline-flex items-center gap-3 text-foreground",
-        ].join(" ")}
-      >
-        {/* decorative shine */}
-        <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-
-        {/* icon pill */}
-        <span className="shrink-0 grid place-items-center w-8 h-8 rounded-lg bg-foreground/10 text-foreground/70 group-hover:bg-primary/15 group-hover:text-primary transition-colors">
-          {icon}
-        </span>
-
-        {/* label */}
-        <span className="flex flex-col text-left leading-tight">
-          <span className="text-sm font-medium tracking-tight">{label}</span>
-          <span className="text-[11px] text-foreground/60">
-            {getHostname(href)}
-          </span>
-        </span>
-
-        {/* arrow cue */}
-        <ExternalLink className="ml-auto w-4 h-4 text-foreground/40 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-colors duration-150 ease-out" />
-      </div>
-    </LinkPreview>
-  );
-
-  // algorithmically recommend projects with overlapping tech stacks
-  const getRecommendedProjectSlugs = (
-    currentSlug: string,
-    count: number,
-  ): string[] => {
-    const allSlugs = getAllProjectSlugs();
-    const current = projectPagesConfig[currentSlug!];
-    if (!current)
-      return allSlugs.filter((s) => s !== currentSlug).slice(0, count);
-    const normalize = (s: string) => s.toLowerCase();
-    const currentTech = new Set((current.techStack || []).map(normalize));
-    const docFreq: Record<string, number> = {};
-    for (const sl of allSlugs) {
-      const seen = new Set<string>();
-      for (const t of (projectPagesConfig[sl].techStack || []).map(normalize)) {
-        if (!seen.has(t)) {
-          docFreq[t] = (docFreq[t] || 0) + 1;
-          seen.add(t);
-        }
-      }
-    }
-    const N = allSlugs.length;
-    const idf = (t: string) => {
-      const df = docFreq[t] || 0;
-      return Math.log((N + 1) / (df + 1));
-    };
-
-    const scored = allSlugs
-      .filter((s) => s !== currentSlug)
-      .map((sl) => {
-        const tech = new Set(
-          (projectPagesConfig[sl].techStack || []).map(normalize),
-        );
-        let score = 0;
-        for (const t of currentTech) {
-          if (tech.has(t)) score += idf(t);
-        }
-        return { slug: sl, score };
-      })
-      .sort((a, b) => b.score - a.score);
-    const pool = (
-      scored.some((s) => s.score > 0)
-        ? scored.filter((s) => s.score > 0)
-        : scored
-    ).slice(0, 4);
-    const dayKey = new Date().toISOString().slice(0, 10); // YYYY‑MM‑DD
-    const hash = (str: string) => {
-      let h = 0;
-      for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
-      return Math.abs(h);
-    };
-    const rotation = pool.length ? hash(dayKey + currentSlug) % pool.length : 0;
-    const picks: string[] = [];
-    for (let i = 0; i < pool.length && picks.length < count; i++) {
-      const idx = (i + rotation) % pool.length;
-      const candidate = pool[idx].slug;
-      if (!picks.includes(candidate)) picks.push(candidate);
-    }
-    if (picks.length < count) {
-      for (const s of scored) {
-        if (picks.length >= count) break;
-        if (!picks.includes(s.slug)) picks.push(s.slug);
-      }
-    }
-    return picks.slice(0, count);
-  };
 
   return (
     <ProjectPage
