@@ -10,10 +10,11 @@
 
 import * as React from "react";
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 type LinkPreviewProps = {
   href: string;
@@ -24,114 +25,163 @@ type LinkPreviewProps = {
   compact?: boolean;
 };
 
-function getHostname(input: string): string | null {
+type PreviewStatus = "idle" | "loading" | "ready" | "failed";
+
+const PREVIEW_TIMEOUT_MS = 4000;
+
+function getHostname(url: string): string | null {
   try {
-    const url = new URL(input);
-    return url.hostname;
+    return new URL(url).hostname;
   } catch {
     return null;
   }
 }
 
-export const LinkPreview: React.FC<LinkPreviewProps> = ({
+function getFaviconUrl(hostname: string): string {
+  return `https://icons.duckduckgo.com/ip3/${hostname}.ico`;
+}
+
+function getScreenshotUrl(href: string): string {
+  return `https://image.thum.io/get/width/600/crop/600/noanimate/${encodeURIComponent(href)}`;
+}
+
+function usePreviewPreload(
+  enabled: boolean,
+  screenshotUrl?: string,
+): PreviewStatus {
+  const [status, setStatus] = React.useState<PreviewStatus>("idle");
+
+  React.useEffect(() => {
+    if (!enabled || !screenshotUrl) {
+      setStatus("idle");
+      return;
+    }
+
+    setStatus("loading");
+
+    const img = new Image();
+    img.referrerPolicy = "no-referrer";
+
+    const finish = (next: PreviewStatus) => {
+      setStatus((current) => (current === "loading" ? next : current));
+    };
+
+    const timeoutId = window.setTimeout(
+      () => finish("failed"),
+      PREVIEW_TIMEOUT_MS,
+    );
+
+    img.onload = () => {
+      window.clearTimeout(timeoutId);
+      finish("ready");
+    };
+    img.onerror = () => {
+      window.clearTimeout(timeoutId);
+      finish("failed");
+    };
+    img.src = screenshotUrl;
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      img.onload = null;
+      img.onerror = null;
+      img.src = "";
+      setStatus("idle");
+    };
+  }, [enabled, screenshotUrl]);
+
+  return status;
+}
+
+export function LinkPreview({
   href,
   children,
   className,
   screenshot = true,
-  previewType = "auto",
+  previewType: _previewType = "auto",
   compact = true,
-}) => {
+}: LinkPreviewProps) {
   const hostname = getHostname(href);
-  const favicon = hostname
-    ? `https://icons.duckduckgo.com/ip3/${hostname}.ico`
-    : undefined;
-  const screenshotUrl = screenshot
-    ? `https://image.thum.io/get/width/600/crop/600/noanimate/${encodeURIComponent(href)}`
-    : undefined;
-  const [mode, setMode] = React.useState<"iframe" | "image">(
-    previewType === "iframe"
-      ? "iframe"
-      : previewType === "image"
-        ? "image"
-        : "iframe",
-  );
-  const fallbackTimer = React.useRef<number | null>(null);
-  const [imageFailed, setImageFailed] = React.useState(false);
+  const favicon = hostname ? getFaviconUrl(hostname) : undefined;
+  const label = hostname ?? href;
 
-  React.useEffect(() => {
-    if (previewType === "auto" && mode === "iframe") {
-      // fallback to image if iframe doesn't load within timeout
-      fallbackTimer.current = window.setTimeout(() => setMode("image"), 1500);
-      return () => {
-        if (fallbackTimer.current) window.clearTimeout(fallbackTimer.current);
-      };
-    }
-    return;
-  }, [previewType, mode]);
+  const wantsMedia = !compact && screenshot;
+  const screenshotUrl = wantsMedia ? getScreenshotUrl(href) : undefined;
+
+  const [active, setActive] = React.useState(false);
+  const previewStatus = usePreviewPreload(active && wantsMedia, screenshotUrl);
+
+  const previewSettled =
+    previewStatus === "ready" || previewStatus === "failed" || !wantsMedia;
+
+  const open = active && (compact || previewSettled);
+
+  const handleOpenChange = React.useCallback((next: boolean) => {
+    if (!next) setActive(false);
+  }, []);
+
+  const handleActivate = React.useCallback(() => {
+    setActive(true);
+  }, []);
+
+  const handleDeactivate = React.useCallback(() => {
+    setActive(false);
+  }, []);
 
   return (
-    <HoverCard>
-      <HoverCardTrigger
+    <Tooltip open={open} onOpenChange={handleOpenChange}>
+      <TooltipTrigger
         render={
           <a
             href={href}
             className={className}
             target="_blank"
             rel="noopener noreferrer"
+            onMouseEnter={handleActivate}
+            onMouseLeave={handleDeactivate}
+            onFocus={handleActivate}
+            onBlur={handleDeactivate}
           />
         }
       >
         {children}
-      </HoverCardTrigger>
-      <HoverCardContent className="w-auto p-0 overflow-hidden bg-background/80 backdrop-blur-xs transition-all duration-150">
-        <div className="relative">
-          {!compact &&
-            (mode === "iframe" ? (
-              <div className="relative w-full aspect-video bg-background/80">
-                <iframe
-                  src={href}
-                  className="absolute inset-0 w-full h-full rounded-sm border-0"
-                  loading="lazy"
-                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                  referrerPolicy="no-referrer"
-                  onLoad={() => {
-                    if (fallbackTimer.current)
-                      window.clearTimeout(fallbackTimer.current);
-                  }}
-                  onError={() => setMode("image")}
-                />
-              </div>
-            ) : screenshotUrl && !imageFailed ? (
-              <div className="relative w-full aspect-video bg-background/80">
-                <img
-                  src={screenshotUrl}
-                  alt={hostname || href}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-                  onError={() => setImageFailed(true)}
-                />
-              </div>
-            ) : null)}
-          <div className="px-2 py-1 flex items-center gap-2 min-w-0">
-            {favicon ? (
-              <img
-                src={favicon}
-                alt=""
-                className="w-4 h-4 rounded-sm"
-                loading="lazy"
-              />
-            ) : null}
-            <div className="min-w-0">
-              <div className="text-xs text-muted-foreground truncate">
-                {hostname || href}
-              </div>
-            </div>
+      </TooltipTrigger>
+
+      <TooltipContent
+        side="top"
+        className={cn(
+          !compact && "max-w-none flex-col items-stretch gap-0 p-0",
+        )}
+      >
+        {!compact && previewStatus === "ready" && screenshotUrl ? (
+          <div className="relative aspect-video w-64 bg-background/10">
+            <img
+              src={screenshotUrl}
+              alt={label}
+              className="absolute inset-0 size-full object-cover"
+              referrerPolicy="no-referrer"
+            />
           </div>
-        </div>
-      </HoverCardContent>
-    </HoverCard>
+        ) : null}
+        <span
+          className={cn(
+            "inline-flex min-w-0 items-center gap-1.5",
+            !compact && "px-3 py-1.5",
+          )}
+        >
+          {favicon ? (
+            <img
+              src={favicon}
+              alt=""
+              className="size-3.5 shrink-0 rounded-sm"
+              loading="lazy"
+            />
+          ) : null}
+          <span className="truncate">{label}</span>
+        </span>
+      </TooltipContent>
+    </Tooltip>
   );
-};
+}
 
 export default LinkPreview;
