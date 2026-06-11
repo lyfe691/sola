@@ -55,6 +55,12 @@ export const BACKGROUNDS: BackgroundDef[] = [
     component: lazy(() => import("./aurora-blur/AuroraBlurBackground")),
     prefersDarkTheme: true,
   },
+  {
+    id: "chroma-waves",
+    label: "Chroma Waves",
+    component: lazy(() => import("./chroma-waves/ChromaWavesBackground")),
+    prefersDarkTheme: true,
+  },
 ];
 
 export type BackgroundOption = {
