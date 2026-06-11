@@ -41,10 +41,10 @@ export function SearchToggle() {
       </TooltipTrigger>
       <TooltipContent>
         <KbdGroup>
-          <p className="text-sm">{t.common.search}</p>
-          <Kbd>⌘</Kbd>
+          <p>{t.common.search}</p>
+          <Kbd className="h-4 min-w-4 text-[10px]">⌘</Kbd>
           <span>+</span>
-          <Kbd>K</Kbd>
+          <Kbd className="h-4 min-w-4 text-[10px]">K</Kbd>
         </KbdGroup>
       </TooltipContent>
     </Tooltip>
