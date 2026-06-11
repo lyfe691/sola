@@ -393,6 +393,9 @@ export const en = {
       modalTitle: "Testimonial",
       modalDescription: "Full testimonial from {author}",
     },
+    certifications: {
+      link: "Certifications",
+    },
     resume: {
       title: "Request Full Resume",
       description:

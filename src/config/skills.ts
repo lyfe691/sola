@@ -2,33 +2,32 @@
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  */
 
-import {
-  ReactOriginal,
-  TypescriptOriginal,
-  DockerOriginal,
-  JavascriptOriginal,
-  TailwindcssOriginal,
-  NextjsOriginal,
-  MongodbOriginal,
-  SpringOriginal,
-  PostgresqlOriginal,
-  MysqlOriginal,
-  NodejsOriginal,
-  GitOriginal,
-  LinuxOriginal,
-  PythonOriginal,
-  JavaOriginal,
-  FigmaOriginal,
-  Html5Original,
-  Css3Original,
-  CplusplusOriginal,
-  KotlinOriginal,
-  FastapiOriginal,
-  DjangoPlain,
-  KubernetesOriginal,
-  NginxOriginal,
-  TerraformOriginal,
-} from "devicons-react";
+import ReactOriginal from "devicons-react/icons/ReactOriginal";
+import TypescriptOriginal from "devicons-react/icons/TypescriptOriginal";
+import DockerOriginal from "devicons-react/icons/DockerOriginal";
+import JavascriptOriginal from "devicons-react/icons/JavascriptOriginal";
+import TailwindcssOriginal from "devicons-react/icons/TailwindcssOriginal";
+import NextjsOriginal from "devicons-react/icons/NextjsOriginal";
+import MongodbOriginal from "devicons-react/icons/MongodbOriginal";
+import SpringOriginal from "devicons-react/icons/SpringOriginal";
+import PostgresqlOriginal from "devicons-react/icons/PostgresqlOriginal";
+import MysqlOriginal from "devicons-react/icons/MysqlOriginal";
+import NodejsOriginal from "devicons-react/icons/NodejsOriginal";
+import GitOriginal from "devicons-react/icons/GitOriginal";
+import LinuxOriginal from "devicons-react/icons/LinuxOriginal";
+import PythonOriginal from "devicons-react/icons/PythonOriginal";
+import JavaOriginal from "devicons-react/icons/JavaOriginal";
+import FigmaOriginal from "devicons-react/icons/FigmaOriginal";
+import Html5Original from "devicons-react/icons/Html5Original";
+import Css3Original from "devicons-react/icons/Css3Original";
+import CplusplusOriginal from "devicons-react/icons/CplusplusOriginal";
+import KotlinOriginal from "devicons-react/icons/KotlinOriginal";
+import FastapiOriginal from "devicons-react/icons/FastapiOriginal";
+import DjangoPlain from "devicons-react/icons/DjangoPlain";
+import KubernetesOriginal from "devicons-react/icons/KubernetesOriginal";
+import NginxOriginal from "devicons-react/icons/NginxOriginal";
+import TerraformOriginal from "devicons-react/icons/TerraformOriginal";
+import VscodeOriginal from "devicons-react/icons/VscodeOriginal";
 import {
   SiShadcnui,
   SiVercel,
@@ -52,7 +51,6 @@ import {
   SiSupabase,
   SiAmazonwebservices,
 } from "react-icons/si";
-import { VscodeOriginal } from "devicons-react";
 import { Terminal, MousePointer2 } from "lucide-react";
 import type { IconType } from "react-icons";
 import type { ComponentType } from "react";

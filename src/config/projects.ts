@@ -212,7 +212,7 @@ export const PROJECTS: ProjectMeta[] = [
       "Command Line Interface",
       "Package Management",
     ],
-    featured: true,
+    featured: false,
     date: {
       start: "2025-05",
       display: "May 2025",
@@ -268,7 +268,7 @@ export const PROJECTS: ProjectMeta[] = [
     link: "https://thoughts.ysz.life",
     github: "https://github.com/lyfe691/thoughts",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
-    featured: true,
+    featured: false,
     date: {
       start: "2025-08",
       display: "Aug 2025",
@@ -302,7 +302,7 @@ export const PROJECTS: ProjectMeta[] = [
       "Framer Motion",
       "i18n",
     ],
-    featured: true,
+    featured: false,
     date: {
       start: "2025-04",
       display: "Apr 2025",
@@ -330,7 +330,7 @@ export const PROJECTS: ProjectMeta[] = [
     link: "https://osint.ysz.life",
     github: "https://github.com/lyfe691/osint-ysz-life",
     technologies: ["React (Vite)", "shadcn/ui", "JavaScript"],
-    featured: true,
+    featured: false,
     date: {
       start: "2024-11",
       end: "2024-12",
@@ -352,7 +352,7 @@ export const PROJECTS: ProjectMeta[] = [
       "JavaScript",
       "WebSocket",
     ],
-    featured: true,
+    featured: false,
     date: {
       start: "2024-09",
       display: "Sep 2024",

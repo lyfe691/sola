@@ -395,6 +395,9 @@ export const de = {
       modalTitle: "Referenz",
       modalDescription: "Vollständige Referenz von {author}",
     },
+    certifications: {
+      link: "Zertifikate",
+    },
     resume: {
       title: "Vollständigen Lebenslauf anfordern",
       description:

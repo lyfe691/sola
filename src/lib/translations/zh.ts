@@ -384,6 +384,9 @@ export const zh = {
       modalTitle: "推荐",
       modalDescription: "来自 {author} 的完整推荐",
     },
+    certifications: {
+      link: "证书",
+    },
     resume: {
       title: "申请完整简历",
       description:

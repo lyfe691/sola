@@ -386,6 +386,9 @@ export const ja = {
       modalTitle: "推薦文",
       modalDescription: "{author} からの全文推薦",
     },
+    certifications: {
+      link: "認定資格",
+    },
     resume: {
       title: "完全版履歴書のリクエスト",
       description:
