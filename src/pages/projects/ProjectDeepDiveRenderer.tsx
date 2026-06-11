@@ -99,11 +99,11 @@ const getRecommendedProjectSlugs = (
   if (!current)
     return allSlugs.filter((s) => s !== currentSlug).slice(0, count);
   const normalize = (s: string) => s.toLowerCase();
-  const currentTech = new Set((current.techStack || []).map(normalize));
+  const currentTech = new Set((current.technologies || []).map(normalize));
   const docFreq: Record<string, number> = {};
   for (const sl of allSlugs) {
     const seen = new Set<string>();
-    for (const t of (projectPagesConfig[sl].techStack || []).map(normalize)) {
+    for (const t of (projectPagesConfig[sl].technologies || []).map(normalize)) {
       if (!seen.has(t)) {
         docFreq[t] = (docFreq[t] || 0) + 1;
         seen.add(t);
@@ -120,7 +120,7 @@ const getRecommendedProjectSlugs = (
     .filter((s) => s !== currentSlug)
     .map((sl) => {
       const tech = new Set(
-        (projectPagesConfig[sl].techStack || []).map(normalize),
+        (projectPagesConfig[sl].technologies || []).map(normalize),
       );
       let score = 0;
       for (const t of currentTech) {
@@ -170,16 +170,19 @@ const ProjectDeepDiveRenderer: React.FC = () => {
   }
 
   const MDXComponent = getMDXComponent(config.mdxPath);
+  const projectCopy = t.projects.list[config.i18nKey];
+  const title = projectCopy.title;
+  const description = config.tagline ?? projectCopy.description;
 
   return (
     <ProjectPage
-      title={config.title}
-      description={config.description}
-      silkColor={config.silkColor}
-      silkSpeed={config.silkSpeed}
-      silkScale={config.silkScale}
-      silkNoiseIntensity={config.silkNoiseIntensity}
-      silkRotation={config.silkRotation}
+      title={title}
+      description={description}
+      silkColor={config.silk.color}
+      silkSpeed={config.silk.speed}
+      silkScale={config.silk.scale}
+      silkNoiseIntensity={config.silk.noiseIntensity}
+      silkRotation={config.silk.rotation}
     >
       <div className="space-y-16">
         {/* date - article-like header */}
@@ -217,7 +220,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.techStack}
           </h2>
-          <TechStack technologies={config.techStack} />
+          <TechStack technologies={config.technologies} />
         </motion.section>
 
         {/* links - hero call-to-action tiles */}
@@ -304,6 +307,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
           <div className="grid sm:grid-cols-2 gap-6">
             {getRecommendedProjectSlugs(slug, 2).map((projectSlug) => {
               const project = projectPagesConfig[projectSlug];
+              const relatedCopy = t.projects.list[project.i18nKey];
               return (
                 <Link
                   key={projectSlug}
@@ -312,16 +316,16 @@ const ProjectDeepDiveRenderer: React.FC = () => {
                 >
                   <Card className="h-full gap-2 bg-card/40 p-4 backdrop-blur-md transition-shadow duration-300 group-hover:shadow-lg">
                     <h3 className="font-medium text-foreground underline-offset-4 decoration-foreground/20 transition-colors duration-300 group-hover:underline">
-                      {project.title}
+                      {relatedCopy.title}
                     </h3>
                     <time className="block text-[11px] text-muted-foreground">
                       {project.date}
                     </time>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      {project.description}
+                      {project.tagline ?? relatedCopy.description}
                     </p>
                     <div className="flex flex-wrap items-center gap-1.5">
-                      {project.techStack.slice(0, 3).map((tech) => (
+                      {project.technologies.slice(0, 3).map((tech) => (
                         <Badge
                           key={tech}
                           variant="secondary"
@@ -330,9 +334,9 @@ const ProjectDeepDiveRenderer: React.FC = () => {
                           {tech}
                         </Badge>
                       ))}
-                      {project.techStack.length > 3 && (
+                      {project.technologies.length > 3 && (
                         <span className="text-xs text-muted-foreground">
-                          +{project.techStack.length - 3} more
+                          +{project.technologies.length - 3} more
                         </span>
                       )}
                     </div>

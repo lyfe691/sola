@@ -103,8 +103,7 @@ const localizeProjects = (t: Translation): Project[] =>
   PROJECTS.map((p) => ({
     ...p,
     title: t.projects.list[p.i18nKey].title,
-    description:
-      t.projects.list[p.i18nKey].description + (p.descriptionSuffix ?? ""),
+    description: t.projects.list[p.i18nKey].description,
   }));
 
 const cardClassName =
@@ -149,9 +148,13 @@ const ProjectImage = ({ project, t }: { project: Project; t: Translation }) => {
 
 const TAG_GAP = 6;
 
-const ProjectTags = ({ tags }: { tags: string[] }) => {
+const ProjectTechnologies = ({
+  technologies,
+}: {
+  technologies: string[];
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [visibleCount, setVisibleCount] = useState(tags.length);
+  const [visibleCount, setVisibleCount] = useState(technologies.length);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
@@ -198,9 +201,9 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
       disposed = true;
       observer.disconnect();
     };
-  }, [tags]);
+  }, [technologies]);
 
-  const hiddenCount = tags.length - visibleCount;
+  const hiddenCount = technologies.length - visibleCount;
 
   return (
     <div ref={containerRef} className="relative flex gap-1.5 overflow-hidden">
@@ -208,24 +211,24 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
         aria-hidden
         className="pointer-events-none invisible absolute left-0 top-0 flex gap-1.5"
       >
-        {tags.map((tag) => (
+        {technologies.map((technology) => (
           <Badge
-            key={tag}
+            key={technology}
             data-measure="tag"
             variant="secondary"
             className="font-normal"
           >
-            {tag}
+            {technology}
           </Badge>
         ))}
         <Badge data-measure="more" variant="secondary" className="font-normal">
-          +{tags.length}
+          +{technologies.length}
         </Badge>
       </div>
 
-      {tags.slice(0, visibleCount).map((tag) => (
-        <Badge key={tag} variant="secondary" className="font-normal">
-          {tag}
+      {technologies.slice(0, visibleCount).map((technology) => (
+        <Badge key={technology} variant="secondary" className="font-normal">
+          {technology}
         </Badge>
       ))}
       {hiddenCount > 0 && (
@@ -238,7 +241,7 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
             }
           />
           <TooltipContent className="max-w-[220px] text-center">
-            {tags.slice(visibleCount).join(", ")}
+            {technologies.slice(visibleCount).join(", ")}
           </TooltipContent>
         </Tooltip>
       )}
@@ -324,7 +327,9 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
     <p className="flex-1 text-sm text-foreground/60">
       <RichText text={project.description} />
     </p>
-    {project.tags.length > 0 && <ProjectTags tags={project.tags} />}
+    {project.technologies.length > 0 && (
+      <ProjectTechnologies technologies={project.technologies} />
+    )}
     <ProjectActions project={project} t={t} />
   </div>
 );
