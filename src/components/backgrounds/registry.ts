@@ -46,6 +46,11 @@ export const BACKGROUNDS: BackgroundDef[] = [
     component: lazy(() => import("./dot-field/DotField")),
   },
   {
+    id: "dot-grid",
+    label: "Dot Grid",
+    component: lazy(() => import("./dot-grid/DotGridBackground")),
+  },
+  {
     id: "aurora-blur",
     label: "Aurora Blur",
     component: lazy(() => import("./aurora-blur/AuroraBlurBackground")),
