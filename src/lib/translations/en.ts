@@ -70,7 +70,8 @@ export const en = {
       background: "Background",
     },
     backgroundHints: {
-      prefersDarkTheme: "Best on darker themes",
+      section:
+        "Some backgrounds look significantly better in dark mode.",
     },
     none: "None",
     search: "Search",

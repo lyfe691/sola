@@ -72,7 +72,8 @@ export const es = {
       background: "Fondo",
     },
     backgroundHints: {
-      prefersDarkTheme: "Funciona mejor en temas oscuros",
+      section:
+        "Algunos fondos se ven mucho mejor en modo oscuro.",
     },
     none: "Ninguno",
     search: "Buscar",

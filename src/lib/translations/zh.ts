@@ -66,7 +66,7 @@ export const zh = {
       background: "背景",
     },
     backgroundHints: {
-      prefersDarkTheme: "更适合深色主题",
+      section: "部分背景在深色模式下效果更佳。",
     },
     none: "无",
     search: "搜索",

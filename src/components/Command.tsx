@@ -40,7 +40,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
-import { BackgroundOptionHint } from "@/components/backgrounds/BackgroundOptionHint";
+import { BackgroundSectionHint } from "@/components/backgrounds/BackgroundSectionHint";
 import { LANGUAGES, type Language } from "@/config/languages";
 import {
   MAIN_NAVIGATION,
@@ -59,7 +59,7 @@ export function CommandMenu() {
     useBackground();
 
   const backgroundOptions = buildBackgroundOptions(t.common.none);
-  const darkThemeHint = t.common.backgroundHints.prefersDarkTheme;
+  const backgroundHint = t.common.backgroundHints.section;
 
   const handleBackgroundChange = (id: string) => {
     setBackground(id);
@@ -172,7 +172,14 @@ export function CommandMenu() {
 
           <CommandSeparator />
 
-          <CommandGroup heading={t.common.command.groups.background}>
+          <CommandGroup
+            heading={
+              <span className="inline-flex items-center gap-1.5">
+                <span>{t.common.command.groups.background}</span>
+                <BackgroundSectionHint text={backgroundHint} />
+              </span>
+            }
+          >
             {backgroundOptions.map((option) => (
               <CommandItem
                 key={option.id}
@@ -182,12 +189,7 @@ export function CommandMenu() {
                 }
                 onSelect={() => handleBackgroundChange(option.id)}
               >
-                <span className="flex items-center gap-1.5">
-                  <span>{option.label}</span>
-                  {option.prefersDarkTheme && (
-                    <BackgroundOptionHint label={darkThemeHint} />
-                  )}
-                </span>
+                <span>{option.label}</span>
               </CommandItem>
             ))}
           </CommandGroup>

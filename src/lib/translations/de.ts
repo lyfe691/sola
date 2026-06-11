@@ -71,7 +71,8 @@ export const de = {
       background: "Hintergrund",
     },
     backgroundHints: {
-      prefersDarkTheme: "Am besten auf dunklen Designs",
+      section:
+        "Einige Hintergründe wirken deutlich besser im Dark Mode.",
     },
     none: "Keiner",
     search: "Suche",

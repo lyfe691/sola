@@ -27,7 +27,7 @@ import { useEffect, useState } from "react";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
-import { BackgroundOptionHint } from "@/components/backgrounds/BackgroundOptionHint";
+import { BackgroundSectionHint } from "@/components/backgrounds/BackgroundSectionHint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
@@ -47,7 +47,7 @@ export function ThemeToggle({
   const t = translations[language];
 
   const backgroundOptions = buildBackgroundOptions(t.common.none);
-  const darkThemeHint = t.common.backgroundHints.prefersDarkTheme;
+  const backgroundHint = t.common.backgroundHints.section;
 
   // monitor system theme changes
   useEffect(() => {
@@ -172,7 +172,10 @@ export function ThemeToggle({
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuLabel>{t.common.menu.background}</DropdownMenuLabel>
+          <DropdownMenuLabel className="flex items-center gap-1.5">
+            <span>{t.common.menu.background}</span>
+            <BackgroundSectionHint text={backgroundHint} />
+          </DropdownMenuLabel>
           {backgroundOptions.map((option) => {
             const isSelected = activeBackground === option.id;
             return (
@@ -182,13 +185,8 @@ export function ThemeToggle({
                 onClick={() => setBackground(option.id)}
                 className="justify-between"
               >
-                <span className="flex items-center gap-1.5">
-                  <span className={isSelected ? "text-muted-foreground" : ""}>
-                    {option.label}
-                  </span>
-                  {option.prefersDarkTheme && (
-                    <BackgroundOptionHint label={darkThemeHint} />
-                  )}
+                <span className={isSelected ? "text-muted-foreground" : ""}>
+                  {option.label}
                 </span>
                 {isSelected && (
                   <Check className="h-4 w-4 text-muted-foreground" />

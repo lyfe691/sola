@@ -27,8 +27,6 @@ export interface BackgroundDef {
   label: string;
   /** the full-screen effect, lazy-loaded */
   component: ComponentType;
-  /** show a hint that this effect reads best on darker themes */
-  prefersDarkTheme?: boolean;
 }
 
 export const BACKGROUNDS: BackgroundDef[] = [
@@ -36,13 +34,11 @@ export const BACKGROUNDS: BackgroundDef[] = [
     id: "aurora",
     label: "Aurora",
     component: lazy(() => import("./aurora/Aurora")),
-    prefersDarkTheme: true,
   },
   {
     id: "side-rays",
     label: "Side Rays",
     component: lazy(() => import("./side-rays/SideRays")),
-    prefersDarkTheme: true,
   },
   {
     id: "dot-field",
@@ -53,30 +49,38 @@ export const BACKGROUNDS: BackgroundDef[] = [
     id: "aurora-blur",
     label: "Aurora Blur",
     component: lazy(() => import("./aurora-blur/AuroraBlurBackground")),
-    prefersDarkTheme: true,
   },
   {
     id: "chroma-waves",
     label: "Chroma Waves",
     component: lazy(() => import("./chroma-waves/ChromaWavesBackground")),
-    prefersDarkTheme: true,
+  },
+  {
+    id: "frame-border",
+    label: "Frame Border",
+    component: lazy(() => import("./frame-border/FrameBorderBackground")),
+  },
+  {
+    id: "silk-waves",
+    label: "Silk Waves",
+    component: lazy(() => import("./silk-waves/SilkWavesBackground")),
+  },
+  {
+    id: "watercolor",
+    label: "Watercolor",
+    component: lazy(() => import("./watercolor/WatercolorBackground")),
   },
 ];
 
 export type BackgroundOption = {
   id: string;
   label: string;
-  prefersDarkTheme: boolean;
 };
 
 /** menu/command options: none + every registered background */
 export const buildBackgroundOptions = (noneLabel: string): BackgroundOption[] => [
-  { id: NONE_BACKGROUND, label: noneLabel, prefersDarkTheme: false },
-  ...BACKGROUNDS.map((b) => ({
-    id: b.id,
-    label: b.label,
-    prefersDarkTheme: b.prefersDarkTheme ?? false,
-  })),
+  { id: NONE_BACKGROUND, label: noneLabel },
+  ...BACKGROUNDS.map((b) => ({ id: b.id, label: b.label })),
 ];
 
 /** true when `value` is a currently-registered background id */

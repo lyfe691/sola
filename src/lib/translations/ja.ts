@@ -68,7 +68,7 @@ export const ja = {
       background: "背景",
     },
     backgroundHints: {
-      prefersDarkTheme: "ダークテーマ向け",
+      section: "一部の背景はダークモードの方が見栄えが良いです。",
     },
     none: "なし",
     search: "検索",
