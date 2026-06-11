@@ -248,77 +248,79 @@ const DesktopNav = () => {
 
   return (
     <header className="pointer-events-none fixed inset-x-0 top-0 z-40 hidden lg:block">
-      <motion.div
-        initial={{ opacity: 0, y: -12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: EMPHASIZED_EASE }}
-        className={cn(
-          "pointer-events-auto mx-auto flex items-center justify-between gap-6 transition-[max-width,margin,padding,border-radius,background-color,border-color,box-shadow] duration-300 ease-out",
-          scrolled
-            ? "mt-3 max-w-5xl rounded-full border border-foreground/10 bg-background/70 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
-            : "mt-0 max-w-7xl rounded-none border border-transparent bg-transparent px-6 py-5 lg:px-8",
-        )}
-      >
-        <div className="flex min-w-0 items-center gap-3">
-          <Link
-            to="/"
-            aria-label={t.common.home}
-            className="flex shrink-0 items-center gap-2 text-foreground transition-opacity hover:opacity-80"
-          >
-            <span
-              aria-hidden
-              className="size-6 shrink-0 bg-foreground"
-              style={{
-                mask: "url(/apple-touch-icon.png) center / contain no-repeat",
-                WebkitMask:
-                  "url(/apple-touch-icon.png) center / contain no-repeat",
-              }}
-            />
-            <span className="font-heading text-lg font-bold tracking-tight">
-              Sola
+      <div className="px-5 sm:px-6 md:px-8 lg:px-12">
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: EMPHASIZED_EASE }}
+          className={cn(
+            "pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 transition-[max-width,margin,padding,border-radius,background-color,border-color,box-shadow] duration-300 ease-out",
+            scrolled
+              ? "mt-3 max-w-7xl rounded-full border border-foreground/10 bg-background/70 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
+              : "mt-0 max-w-screen-2xl rounded-none border border-transparent bg-transparent px-6 py-5 lg:px-8",
+          )}
+        >
+          <div className="flex min-w-0 items-center gap-3">
+            <Link
+              to="/"
+              aria-label={t.common.home}
+              className="flex shrink-0 items-center gap-2 text-foreground transition-opacity hover:opacity-80"
+            >
+              <span
+                aria-hidden
+                className="size-6 shrink-0 bg-foreground"
+                style={{
+                  mask: "url(/apple-touch-icon.png) center / contain no-repeat",
+                  WebkitMask:
+                    "url(/apple-touch-icon.png) center / contain no-repeat",
+                }}
+              />
+              <span className="font-heading text-lg font-bold tracking-tight">
+                Sola
+              </span>
+            </Link>
+
+            <span aria-hidden className="select-none text-lg text-foreground/25">
+              /
             </span>
-          </Link>
 
-          <span aria-hidden className="select-none text-lg text-foreground/25">
-            /
-          </span>
+            <nav
+              ref={linksRef}
+              aria-label="Primary"
+              onMouseLeave={snapToActive}
+              className="relative flex items-center"
+            >
+              <span
+                ref={highlightRef}
+                aria-hidden
+                className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-all duration-300 ease-out"
+              />
+              {links.map((link) => {
+                const active = isActive(link.path);
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    data-active={active}
+                    aria-current={active ? "page" : undefined}
+                    onMouseEnter={(e) => positionHighlight(e.currentTarget)}
+                    className={cn(
+                      "relative z-10 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                      active
+                        ? "text-foreground"
+                        : "text-foreground/60 hover:text-foreground",
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
 
-          <nav
-            ref={linksRef}
-            aria-label="Primary"
-            onMouseLeave={snapToActive}
-            className="relative flex items-center"
-          >
-            <span
-              ref={highlightRef}
-              aria-hidden
-              className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-all duration-300 ease-out"
-            />
-            {links.map((link) => {
-              const active = isActive(link.path);
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  data-active={active}
-                  aria-current={active ? "page" : undefined}
-                  onMouseEnter={(e) => positionHighlight(e.currentTarget)}
-                  className={cn(
-                    "relative z-10 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
-                    active
-                      ? "text-foreground"
-                      : "text-foreground/60 hover:text-foreground",
-                  )}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
-
-        <ToggleGroup />
-      </motion.div>
+          <ToggleGroup />
+        </motion.div>
+      </div>
     </header>
   );
 };
