@@ -6,15 +6,13 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useLocation, useOutlet } from "react-router-dom";
+import { useOutlet } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PageShell from "./PageShell";
 
 const AppLayout = () => {
-  const location = useLocation();
   const outlet = useOutlet();
-  const isHome = location.pathname === "/";
 
   return (
     <main className="flex flex-1 flex-col">
@@ -25,7 +23,7 @@ const AppLayout = () => {
             {outlet}
           </div>
         </div>
-        {!isHome && <Footer />}
+        <Footer />
       </PageShell>
     </main>
   );
