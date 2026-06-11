@@ -415,7 +415,7 @@ const Projects = () => {
                     return current ? (
                       <>
                         {current.icon}
-                        {current.label}
+                        <span className="truncate">{current.label}</span>
                       </>
                     ) : null;
                   }}
@@ -426,7 +426,7 @@ const Projects = () => {
                   {sortOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.icon}
-                      {option.label}
+                      <span className="min-w-0 truncate">{option.label}</span>
                     </SelectItem>
                   ))}
                 </SelectGroup>
