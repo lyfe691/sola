@@ -117,19 +117,21 @@ function renderWithLinks(
   return nodes;
 }
 
-export const RichText: React.FC<RichTextProps> = React.memo(({
-  text,
-  values,
-  className,
-  linkClassName = "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors",
-  previewExternal = false,
-}) => {
-  const interpolated = interpolate(text, values);
-  const content = renderWithLinks(interpolated, linkClassName, {
-    previewExternal,
-  });
-  return <span className={className}>{content}</span>;
-});
+export const RichText: React.FC<RichTextProps> = React.memo(
+  ({
+    text,
+    values,
+    className,
+    linkClassName = "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors",
+    previewExternal = false,
+  }) => {
+    const interpolated = interpolate(text, values);
+    const content = renderWithLinks(interpolated, linkClassName, {
+      previewExternal,
+    });
+    return <span className={className}>{content}</span>;
+  },
+);
 
 RichText.displayName = "RichText";
 

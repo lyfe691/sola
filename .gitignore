@@ -26,6 +26,7 @@ dist-ssr
 
 # ai
 .agent/
+.agents/skills/
 .cursor/
 .codex/
 .claude/

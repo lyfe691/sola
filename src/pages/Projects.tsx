@@ -232,10 +232,7 @@ const ProjectTags = ({ tags }: { tags: string[] }) => {
         <Tooltip>
           <TooltipTrigger
             render={
-              <Badge
-                variant="secondary"
-                className="font-normal cursor-default"
-              >
+              <Badge variant="secondary" className="font-normal cursor-default">
                 +{hiddenCount}
               </Badge>
             }
@@ -409,9 +406,7 @@ const Projects = () => {
               <SelectTrigger className="w-[160px] sm:w-[180px]">
                 <SelectValue placeholder={t.projects.selectSorting}>
                   {() => {
-                    const current = sortOptions.find(
-                      (o) => o.value === sortBy,
-                    );
+                    const current = sortOptions.find((o) => o.value === sortBy);
                     return current ? (
                       <>
                         {current.icon}

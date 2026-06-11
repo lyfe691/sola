@@ -28,7 +28,10 @@ import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 
 // dynamic mdx components, cached so each path keeps a stable lazy identity
-const mdxComponents = new Map<string, React.LazyExoticComponent<React.ComponentType>>();
+const mdxComponents = new Map<
+  string,
+  React.LazyExoticComponent<React.ComponentType>
+>();
 const getMDXComponent = (mdxPath: string) => {
   let component = mdxComponents.get(mdxPath);
   if (!component) {

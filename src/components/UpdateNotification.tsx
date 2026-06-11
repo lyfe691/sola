@@ -96,10 +96,8 @@ export function UpdateNotification() {
     };
   }, [checkVersion]);
 
-  const hasUpdate =
-    latestVersion !== null && latestVersion !== CURRENT_VERSION;
-  const visible =
-    hasUpdate && !dismissed && dismissedFor !== latestVersion;
+  const hasUpdate = latestVersion !== null && latestVersion !== CURRENT_VERSION;
+  const visible = hasUpdate && !dismissed && dismissedFor !== latestVersion;
 
   function dismiss() {
     if (latestVersion) {

@@ -119,7 +119,9 @@ const InterestCard = ({
         </div>
         <h3 className="font-medium">{title}</h3>
       </div>
-      <p className="text-sm leading-relaxed text-foreground/70">{description}</p>
+      <p className="text-sm leading-relaxed text-foreground/70">
+        {description}
+      </p>
     </div>
   </Card>
 );

@@ -288,7 +288,9 @@ export const projectPagesConfig: Record<string, ProjectPageConfig> =
     Object.entries(deepDives).map(([slug, content]) => {
       const base = projectBySlug.get(slug);
       if (!base) {
-        throw new Error(`Deep dive "${slug}" has no matching entry in PROJECTS`);
+        throw new Error(
+          `Deep dive "${slug}" has no matching entry in PROJECTS`,
+        );
       }
       return [
         slug,

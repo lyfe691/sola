@@ -5,7 +5,6 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
-
 export const en = {
   seo: {
     home: {
@@ -64,16 +63,12 @@ export const en = {
   },
   common: {
     home: "Home",
-    projects: "Projects",
-    back: "Back",
     overview: "Overview",
     menu: {
       themes: "Themes",
       customThemes: "Custom themes",
       background: "Background",
     },
-    on: "On",
-    off: "Off",
     none: "None",
     search: "Search",
     command: {
@@ -84,9 +79,6 @@ export const en = {
         theme: "Theme",
         language: "Language",
         background: "Background",
-      },
-      shortcuts: {
-        search: "Search",
       },
       footer: {
         navigate: "Navigate",
@@ -120,10 +112,6 @@ export const en = {
   },
   hire: {
     hirebtn: "Hire Me",
-    hiretitle: "Currently Committed",
-    hiretxt:
-      "I'm currently tied to an internship. However, if your offer beats it, I'm open to a conversation. Feel free to explore what I can do.",
-    hirelbl: "Contact Me",
   },
   nav: {
     about: "About",
@@ -149,7 +137,6 @@ export const en = {
   },
   experience: {
     title: "Experience",
-    backHome: "Back home",
     subtitle:
       "My professional journey and educational experiences that have shaped my technical expertise.",
     sections: {
@@ -235,15 +222,12 @@ export const en = {
   },
   projects: {
     title: "Projects",
-    backHome: "Back home",
-    featured: "Featured Projects",
     other: "Other Projects",
     otherInfo:
       "Non‑featured projects: smaller tools, experiments, and utilities.",
     viewDetails: "View Details",
     viewAll: "View All Projects",
     viewGithub: "View Code",
-    technologies: "Technologies used",
     satoriAttribution:
       "Image created with [Vercel Satori](https://og-playground.vercel.app/)",
     sortBy: "Sort by",
@@ -256,7 +240,6 @@ export const en = {
     },
     selectSorting: "Select sorting...",
     visitProject: "Visit Project",
-    moreProjects: "More Projects",
     list: {
       codeExtractor: {
         title: "Website Code Extractor",
@@ -349,8 +332,6 @@ export const en = {
     },
   },
   notFound: {
-    title: "404",
-    subtitle: "Oops! The page you're looking for can't be found.",
     backHome: "Go back home",
   },
   footer: {
@@ -367,7 +348,6 @@ export const en = {
   },
   about: {
     title: "About Me",
-    backHome: "Back home",
     intro:
       "I'm Yanis Sebastian Zürcher, an 18-year-old software developer based in Zürich, Switzerland. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from building my own projects—not from school.",
     hobbies:
@@ -481,7 +461,6 @@ export const en = {
     title: "Services",
     subtitle:
       "Comprehensive software development services tailored to your needs.",
-    backHome: "Back home",
     getStarted: "Get Started",
     services: {
       fullstack: {

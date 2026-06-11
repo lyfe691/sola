@@ -117,4 +117,3 @@ export const getThemeType = (currentTheme: Theme): "light" | "dark" => {
   const cfg = THEMES.find((t) => t.value === currentTheme);
   return cfg?.type || "light";
 };
-

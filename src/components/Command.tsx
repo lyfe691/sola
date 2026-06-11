@@ -57,7 +57,8 @@ export function CommandMenu() {
   const t = translations[language];
   const { isOpen, closeCommandMenu } = useCommandMenu();
   const isMobile = useIsMobile();
-  const { active: activeBackground, setActive: setBackground } = useBackground();
+  const { active: activeBackground, setActive: setBackground } =
+    useBackground();
 
   // none + every registered background
   const backgroundOptions = [

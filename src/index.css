@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -20,12 +20,11 @@
 }
 
 @theme inline {
-  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui,
-    sans-serif;
-  --font-heading: "Bricolage Grotesque Variable", ui-sans-serif, system-ui,
-    sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular,
-    monospace;
+  --font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading:
+    "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
 
   --color-border: var(--border);
   --color-input: var(--input);

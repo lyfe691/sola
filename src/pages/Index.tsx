@@ -171,7 +171,10 @@ const Index = () => {
       </Helmet>
 
       <LayoutGroup>
-        <motion.div layout className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
+        <motion.div
+          layout
+          className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl"
+        >
           <motion.a
             layout
             variants={homeAnimations.badge}

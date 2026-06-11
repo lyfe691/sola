@@ -5,7 +5,6 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
-
 import type { Translation } from "./en";
 
 export const zh = {
@@ -60,16 +59,12 @@ export const zh = {
   },
   common: {
     home: "首页",
-    projects: "项目",
-    back: "返回",
     overview: "概览",
     menu: {
       themes: "主题",
       customThemes: "自定义主题",
       background: "背景",
     },
-    on: "开",
-    off: "关",
     none: "无",
     search: "搜索",
     command: {
@@ -80,9 +75,6 @@ export const zh = {
         theme: "主题",
         language: "语言",
         background: "背景",
-      },
-      shortcuts: {
-        search: "搜索",
       },
       footer: {
         navigate: "导航",
@@ -116,10 +108,6 @@ export const zh = {
   },
   hire: {
     hirebtn: "雇佣我",
-    hiretitle: "目前已承诺",
-    hiretxt:
-      "我目前正在进行实习。不过，如果您的报价更具吸引力，我愿意进行沟通。欢迎了解我的能力。",
-    hirelbl: "联系我",
   },
   nav: {
     about: "关于我",
@@ -144,7 +132,6 @@ export const zh = {
   },
   experience: {
     title: "经验",
-    backHome: "返回首页",
     subtitle: "塑造我技术专长的职业历程和教育经历。",
     sections: {
       work: "工作",
@@ -229,14 +216,11 @@ export const zh = {
   },
   projects: {
     title: "项目",
-    backHome: "返回首页",
-    featured: "精选项目",
     other: "其他项目",
     otherInfo: "非精选项目：小型工具与实验项目。",
     viewDetails: "查看详情",
     viewAll: "查看所有项目",
     viewGithub: "查看代码",
-    technologies: "使用的技术",
     satoriAttribution:
       "图像由 [Vercel Satori](https://og-playground.vercel.app/) 生成",
     sortBy: "排序",
@@ -249,7 +233,6 @@ export const zh = {
     },
     selectSorting: "选择排序...",
     visitProject: "访问项目",
-    moreProjects: "更多项目",
     list: {
       codeExtractor: {
         title: "网站代码提取器",
@@ -340,8 +323,6 @@ export const zh = {
     },
   },
   notFound: {
-    title: "404",
-    subtitle: "抱歉！您要找的页面不存在。",
     backHome: "返回首页",
   },
   footer: {
@@ -358,7 +339,6 @@ export const zh = {
   },
   about: {
     title: "关于我",
-    backHome: "返回首页",
     intro:
       "我是Yanis Sebastian Zürcher，一名来自瑞士苏黎世的18岁软件开发者。我在[WISS](https://www.wiss.ch)学习计算机科学，但我大部分的知识都是通过自己做项目学来的，而不是在学校里。",
     hobbies:
@@ -470,7 +450,6 @@ export const zh = {
     },
     title: "服务",
     subtitle: "根据您的需求定制的全面软件开发服务。",
-    backHome: "返回首页",
     getStarted: "开始",
     services: {
       fullstack: {

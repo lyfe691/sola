@@ -3,3 +3,5 @@ build
 coverage
 node_modules
 dist
+.agents/skills
+src/components/ui

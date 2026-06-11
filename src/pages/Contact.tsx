@@ -7,7 +7,15 @@
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Check, Github, Linkedin, Mail, Send, UploadCloud, X } from "lucide-react";
+import {
+  Check,
+  Github,
+  Linkedin,
+  Mail,
+  Send,
+  UploadCloud,
+  X,
+} from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -156,7 +164,10 @@ const Contact = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const validateField = (name: FieldName, value: string): string | undefined => {
+  const validateField = (
+    name: FieldName,
+    value: string,
+  ): string | undefined => {
     const v = value.trim();
     if (!v) return t.contact.validation[`${name}Required`];
     if (name === "email" && !EMAIL_RE.test(v))
@@ -301,7 +312,10 @@ const Contact = () => {
         if (!v.ok) {
           toast.error(
             v.code === "too_large"
-              ? t.contact.fileTooLarge.replace("{max}", formatBytes(MAX_FILE_BYTES))
+              ? t.contact.fileTooLarge.replace(
+                  "{max}",
+                  formatBytes(MAX_FILE_BYTES),
+                )
               : t.contact.unsupportedFileType,
           );
           setIsSubmitting(false);

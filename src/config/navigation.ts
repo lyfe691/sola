@@ -14,7 +14,10 @@ export interface NavigationItem {
   key: string;
   path: string;
   icon?: ElementType;
-  translationKey: keyof Translation["nav"] | keyof Translation["footer"] | "home";
+  translationKey:
+    | keyof Translation["nav"]
+    | keyof Translation["footer"]
+    | "home";
   isFooter?: boolean;
 }
 

@@ -113,15 +113,17 @@ const Services = () => {
                 </p>
 
                 <ul className="flex flex-1 flex-col gap-3">
-                  {t.services.services[service.key].features.map((feature, i) => (
-                    <li
-                      key={i}
-                      className="flex items-start gap-2.5 text-sm text-foreground/70 transition-colors group-hover:text-foreground/80"
-                    >
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary/80 transition-colors group-hover:text-primary" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
+                  {t.services.services[service.key].features.map(
+                    (feature, i) => (
+                      <li
+                        key={i}
+                        className="flex items-start gap-2.5 text-sm text-foreground/70 transition-colors group-hover:text-foreground/80"
+                      >
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary/80 transition-colors group-hover:text-primary" />
+                        <span>{feature}</span>
+                      </li>
+                    ),
+                  )}
                 </ul>
 
                 <div className="flex items-center justify-center gap-2 rounded-xl bg-foreground/5 px-3 py-2 text-sm text-foreground/90 sm:hidden">

@@ -95,7 +95,9 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const variants = customVariants || ANIMATION_VARIANTS[variant];
 
   // Create motion component
-  const MotionComponent = motion[Component] as React.ComponentType<Record<string, unknown>>;
+  const MotionComponent = motion[Component] as React.ComponentType<
+    Record<string, unknown>
+  >;
 
   return (
     <MotionComponent

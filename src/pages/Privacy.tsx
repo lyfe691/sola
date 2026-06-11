@@ -45,9 +45,9 @@ const Privacy = () => {
               {"https://sola.ysz.life"}
             </LinkPreview>{" "}
             ) showcases my projects and freelance services. This privacy policy
-            complies with the Swiss Federal Act on Data Protection
-            (revFADP 2023) and the EU General Data Protection Regulation (GDPR)
-            and explains what data are processed and why.
+            complies with the Swiss Federal Act on Data Protection (revFADP
+            2023) and the EU General Data Protection Regulation (GDPR) and
+            explains what data are processed and why.
           </>
         ),
         controller: "Data Controller:",

@@ -121,7 +121,9 @@ const MobileNavItem = memo(
           aria-current={active ? "page" : undefined}
           className={cn(
             "relative flex w-full items-center rounded-md p-2 text-2xl font-medium tracking-tight transition-colors duration-300",
-            active ? "text-primary" : "text-foreground/60 hover:text-foreground",
+            active
+              ? "text-primary"
+              : "text-foreground/60 hover:text-foreground",
           )}
         >
           {item.icon && <item.icon className="mr-3 size-6" />}
@@ -198,8 +200,8 @@ const DesktopNav = () => {
   const highlightRef = useRef<HTMLSpanElement>(null);
 
   const links = MAIN_NAVIGATION.slice(1).map((item) => ({
-    label: (t.nav[item.translationKey as keyof typeof t.nav] as string) ||
-      item.key,
+    label:
+      (t.nav[item.translationKey as keyof typeof t.nav] as string) || item.key,
     path: item.path,
   }));
 
@@ -280,7 +282,10 @@ const DesktopNav = () => {
               </span>
             </Link>
 
-            <span aria-hidden className="select-none text-lg text-foreground/25">
+            <span
+              aria-hidden
+              className="select-none text-lg text-foreground/25"
+            >
               /
             </span>
 
@@ -342,8 +347,8 @@ const Navigation = () => {
     icon: MAIN_NAVIGATION[0].icon,
   };
   const navItems = MAIN_NAVIGATION.slice(1).map((item) => ({
-    text: (t.nav[item.translationKey as keyof typeof t.nav] as string) ||
-      item.key,
+    text:
+      (t.nav[item.translationKey as keyof typeof t.nav] as string) || item.key,
     path: item.path,
   }));
 

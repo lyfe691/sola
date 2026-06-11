@@ -17,5 +17,10 @@ export const CodeBlock: React.FC<{
   lang?: CodeBlockLanguage;
   theme?: BundledTheme;
 }> = ({ code, fileName, lang = "typescript", theme }) => (
-  <AdvancedCodeBlock code={code} fileName={fileName} lang={lang} theme={theme} />
+  <AdvancedCodeBlock
+    code={code}
+    fileName={fileName}
+    lang={lang}
+    theme={theme}
+  />
 );

@@ -1,9 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
-import {
-  getAuroraPreset,
-  AURORA_THEME_CLASS_KEYS,
-} from "./presets";
+import { getAuroraPreset, AURORA_THEME_CLASS_KEYS } from "./presets";
 import { type Theme } from "@/config/themes";
 
 const VERT = `#version 300 es
@@ -159,7 +156,8 @@ export default function Aurora({
     };
 
     const preset = getAuroraPreset(detectThemeFromHtml());
-    gl.canvas.style.mixBlendMode = preset.blendMode as CSSStyleDeclaration["mixBlendMode"];
+    gl.canvas.style.mixBlendMode =
+      preset.blendMode as CSSStyleDeclaration["mixBlendMode"];
 
     const setRes = () => {
       if (program)
@@ -211,7 +209,8 @@ export default function Aurora({
     const applyTheme = () => {
       if (!program) return;
       const p = getAuroraPreset(detectThemeFromHtml());
-      gl.canvas.style.mixBlendMode = p.blendMode as CSSStyleDeclaration["mixBlendMode"];
+      gl.canvas.style.mixBlendMode =
+        p.blendMode as CSSStyleDeclaration["mixBlendMode"];
       program.uniforms.uIntensity.value = p.intensity;
       if (!propsRef.current.colorStops)
         program.uniforms.uColorStops.value = p.colorStops.map(toRGB);

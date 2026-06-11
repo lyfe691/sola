@@ -5,7 +5,6 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
-
 import type { Translation } from "./en";
 
 export const ja = {
@@ -62,16 +61,12 @@ export const ja = {
   },
   common: {
     home: "ホーム",
-    projects: "プロジェクト",
-    back: "戻る",
     overview: "概要",
     menu: {
       themes: "テーマ",
       customThemes: "カスタムテーマ",
       background: "背景",
     },
-    on: "オン",
-    off: "オフ",
     none: "なし",
     search: "検索",
     command: {
@@ -82,9 +77,6 @@ export const ja = {
         theme: "テーマ",
         language: "言語",
         background: "背景",
-      },
-      shortcuts: {
-        search: "検索",
       },
       footer: {
         navigate: "移動",
@@ -118,10 +110,6 @@ export const ja = {
   },
   hire: {
     hirebtn: "採用する",
-    hiretitle: "現在契約中",
-    hiretxt:
-      "現在インターンシップに従事しています。ただし、もしあなたのオファーがそれを上回るなら、話し合うことに前向きです。私ができることをぜひご覧ください。",
-    hirelbl: "お問い合わせ",
   },
   nav: {
     about: "私について",
@@ -146,7 +134,6 @@ export const ja = {
   },
   experience: {
     title: "経験",
-    backHome: "ホームに戻る",
     subtitle: "私の技術的専門知識を形成してきた職業経験と教育経験です。",
     sections: {
       work: "職務",
@@ -231,14 +218,11 @@ export const ja = {
   },
   projects: {
     title: "プロジェクト",
-    backHome: "ホームに戻る",
-    featured: "主要プロジェクト",
     other: "その他のプロジェクト",
     otherInfo: "注目外のプロジェクト：小さなツールや実験的なもの。",
     viewDetails: "詳細を見る",
     viewAll: "すべてのプロジェクトを見る",
     viewGithub: "コードを見る",
-    technologies: "使用技術",
     satoriAttribution:
       "この画像は [Vercel Satori](https://og-playground.vercel.app/) で生成",
     sortBy: "並べ替え",
@@ -251,7 +235,6 @@ export const ja = {
     },
     selectSorting: "並べ替えを選択...",
     visitProject: "プロジェクトを見る",
-    moreProjects: "他のプロジェクト",
     list: {
       codeExtractor: {
         title: "ウェブサイトコード抽出ツール",
@@ -342,8 +325,6 @@ export const ja = {
     },
   },
   notFound: {
-    title: "404",
-    subtitle: "お探しのページが見つかりませんでした。",
     backHome: "ホームに戻る",
   },
   footer: {
@@ -360,7 +341,6 @@ export const ja = {
   },
   about: {
     title: "私について",
-    backHome: "ホームに戻る",
     intro:
       "ヤニス・セバスチャン・ズルヒャー（Yanis Sebastian Zürcher）と申します。スイスのチューリッヒを拠点とする18歳のソフトウェア開発者です。[WISS](https://www.wiss.ch)でコンピュータサイエンスを学んでいますが、私の知識のほとんどは学校ではなく、自分でプロジェクトを作りながら身につけたものです。",
     hobbies:
@@ -474,7 +454,6 @@ export const ja = {
     },
     title: "サービス",
     subtitle: "お客様のニーズに合わせた包括的なソフトウェア開発サービス。",
-    backHome: "ホームに戻る",
     getStarted: "今すぐ始める",
     services: {
       fullstack: {
