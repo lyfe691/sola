@@ -65,6 +65,9 @@ export const zh = {
       customThemes: "自定义主题",
       background: "背景",
     },
+    backgroundHints: {
+      prefersDarkTheme: "更适合深色主题",
+    },
     none: "无",
     search: "搜索",
     command: {

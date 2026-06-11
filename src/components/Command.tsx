@@ -39,10 +39,8 @@ import { translations } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
-import {
-  BACKGROUNDS,
-  NONE_BACKGROUND,
-} from "@/components/backgrounds/registry";
+import { buildBackgroundOptions } from "@/components/backgrounds/registry";
+import { BackgroundOptionHint } from "@/components/backgrounds/BackgroundOptionHint";
 import { LANGUAGES, type Language } from "@/config/languages";
 import {
   MAIN_NAVIGATION,
@@ -60,11 +58,8 @@ export function CommandMenu() {
   const { active: activeBackground, setActive: setBackground } =
     useBackground();
 
-  // none + every registered background
-  const backgroundOptions = [
-    { id: NONE_BACKGROUND, label: t.common.none },
-    ...BACKGROUNDS.map((b) => ({ id: b.id, label: b.label })),
-  ];
+  const backgroundOptions = buildBackgroundOptions(t.common.none);
+  const darkThemeHint = t.common.backgroundHints.prefersDarkTheme;
 
   const handleBackgroundChange = (id: string) => {
     setBackground(id);
@@ -187,7 +182,12 @@ export function CommandMenu() {
                 }
                 onSelect={() => handleBackgroundChange(option.id)}
               >
-                <span>{option.label}</span>
+                <span className="flex items-center gap-1.5">
+                  <span>{option.label}</span>
+                  {option.prefersDarkTheme && (
+                    <BackgroundOptionHint label={darkThemeHint} />
+                  )}
+                </span>
               </CommandItem>
             ))}
           </CommandGroup>

@@ -69,6 +69,9 @@ export const en = {
       customThemes: "Custom themes",
       background: "Background",
     },
+    backgroundHints: {
+      prefersDarkTheme: "Best on darker themes",
+    },
     none: "None",
     search: "Search",
     command: {

@@ -26,10 +26,8 @@ import {
 import { useEffect, useState } from "react";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
-import {
-  BACKGROUNDS,
-  NONE_BACKGROUND,
-} from "@/components/backgrounds/registry";
+import { buildBackgroundOptions } from "@/components/backgrounds/registry";
+import { BackgroundOptionHint } from "@/components/backgrounds/BackgroundOptionHint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
@@ -48,10 +46,8 @@ export function ThemeToggle({
   const { language } = useLanguage();
   const t = translations[language];
 
-  const backgroundOptions = [
-    { id: NONE_BACKGROUND, label: t.common.none },
-    ...BACKGROUNDS.map((b) => ({ id: b.id, label: b.label })),
-  ];
+  const backgroundOptions = buildBackgroundOptions(t.common.none);
+  const darkThemeHint = t.common.backgroundHints.prefersDarkTheme;
 
   // monitor system theme changes
   useEffect(() => {
@@ -186,8 +182,13 @@ export function ThemeToggle({
                 onClick={() => setBackground(option.id)}
                 className="justify-between"
               >
-                <span className={isSelected ? "text-muted-foreground" : ""}>
-                  {option.label}
+                <span className="flex items-center gap-1.5">
+                  <span className={isSelected ? "text-muted-foreground" : ""}>
+                    {option.label}
+                  </span>
+                  {option.prefersDarkTheme && (
+                    <BackgroundOptionHint label={darkThemeHint} />
+                  )}
                 </span>
                 {isSelected && (
                   <Check className="h-4 w-4 text-muted-foreground" />

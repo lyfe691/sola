@@ -67,6 +67,9 @@ export const ja = {
       customThemes: "カスタムテーマ",
       background: "背景",
     },
+    backgroundHints: {
+      prefersDarkTheme: "ダークテーマ向け",
+    },
     none: "なし",
     search: "検索",
     command: {

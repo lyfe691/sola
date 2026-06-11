@@ -70,6 +70,9 @@ export const de = {
       customThemes: "Eigene Designs",
       background: "Hintergrund",
     },
+    backgroundHints: {
+      prefersDarkTheme: "Am besten auf dunklen Designs",
+    },
     none: "Keiner",
     search: "Suche",
     command: {

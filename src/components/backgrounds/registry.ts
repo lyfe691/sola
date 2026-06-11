@@ -27,6 +27,8 @@ export interface BackgroundDef {
   label: string;
   /** the full-screen effect, lazy-loaded */
   component: ComponentType;
+  /** show a hint that this effect reads best on darker themes */
+  prefersDarkTheme?: boolean;
 }
 
 export const BACKGROUNDS: BackgroundDef[] = [
@@ -34,17 +36,41 @@ export const BACKGROUNDS: BackgroundDef[] = [
     id: "aurora",
     label: "Aurora",
     component: lazy(() => import("./aurora/Aurora")),
+    prefersDarkTheme: true,
   },
   {
     id: "side-rays",
     label: "Side Rays",
     component: lazy(() => import("./side-rays/SideRays")),
+    prefersDarkTheme: true,
   },
   {
     id: "dot-field",
     label: "Dot Field",
     component: lazy(() => import("./dot-field/DotField")),
   },
+  {
+    id: "aurora-blur",
+    label: "Aurora Blur",
+    component: lazy(() => import("./aurora-blur/AuroraBlurBackground")),
+    prefersDarkTheme: true,
+  },
+];
+
+export type BackgroundOption = {
+  id: string;
+  label: string;
+  prefersDarkTheme: boolean;
+};
+
+/** menu/command options: none + every registered background */
+export const buildBackgroundOptions = (noneLabel: string): BackgroundOption[] => [
+  { id: NONE_BACKGROUND, label: noneLabel, prefersDarkTheme: false },
+  ...BACKGROUNDS.map((b) => ({
+    id: b.id,
+    label: b.label,
+    prefersDarkTheme: b.prefersDarkTheme ?? false,
+  })),
 ];
 
 /** true when `value` is a currently-registered background id */

@@ -71,6 +71,9 @@ export const es = {
       customThemes: "Temas personalizados",
       background: "Fondo",
     },
+    backgroundHints: {
+      prefersDarkTheme: "Funciona mejor en temas oscuros",
+    },
     none: "Ninguno",
     search: "Buscar",
     command: {
