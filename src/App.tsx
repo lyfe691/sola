@@ -19,6 +19,7 @@ import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import ClickSpark from "./components/ui/custom/click-spark";
 import { BackgroundProvider } from "./components/backgrounds/background-provider";
 import BackgroundLayer from "./components/backgrounds/BackgroundLayer";
+import { UpdateNotification } from "./components/UpdateNotification";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
             >
               <div className="min-h-screen flex flex-col relative">
                 <Toaster position="bottom-right" />
+                <UpdateNotification />
                 <BrowserRouter>
                   <KeyboardShortcuts />
                   <CommandMenu />

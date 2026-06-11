@@ -104,6 +104,13 @@ export const de = {
     moreProjects: "Weitere Projekte",
     moreOnGithub: "Mehr auf GitHub",
     view: "Ansehen",
+    update: {
+      title: "Kleines Update",
+      description: "Seite neu laden – dann siehst du, was neu ist.",
+      later: "Später",
+      refresh: "Aktualisieren",
+      dismiss: "Schließen",
+    },
   },
   feed: {
     recentActivity: "Aktuelle Aktivitäten",

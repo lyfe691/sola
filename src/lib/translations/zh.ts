@@ -99,6 +99,13 @@ export const zh = {
     moreProjects: "更多项目",
     moreOnGithub: "在 GitHub 上查看更多",
     view: "查看",
+    update: {
+      title: "网站更新了",
+      description: "刷新一下页面就能看到最新内容。",
+      later: "稍后",
+      refresh: "刷新",
+      dismiss: "关闭",
+    },
   },
   feed: {
     recentActivity: "最新活动",

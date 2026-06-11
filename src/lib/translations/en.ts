@@ -103,6 +103,13 @@ export const en = {
     moreProjects: "More Projects",
     moreOnGithub: "More on GitHub",
     view: "View",
+    update: {
+      title: "Site's been updated",
+      description: "Refresh the page to see what's new.",
+      later: "Later",
+      refresh: "Refresh",
+      dismiss: "Dismiss",
+    },
   },
   feed: {
     recentActivity: "Recent Activity",

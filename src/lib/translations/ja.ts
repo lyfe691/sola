@@ -101,6 +101,13 @@ export const ja = {
     moreProjects: "他のプロジェクト",
     moreOnGithub: "GitHub で見る",
     view: "表示",
+    update: {
+      title: "ちょっと更新しました",
+      description: "ページを再読み込みしてね。",
+      later: "後で",
+      refresh: "更新",
+      dismiss: "閉じる",
+    },
   },
   feed: {
     recentActivity: "最近のアクティビティ",
