@@ -86,6 +86,11 @@ export const ja = {
       shortcuts: {
         search: "検索",
       },
+      footer: {
+        navigate: "移動",
+        select: "選択",
+        close: "閉じる",
+      },
     },
     techStack: "技術スタック",
     links: "リンク",

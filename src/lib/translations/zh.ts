@@ -84,6 +84,11 @@ export const zh = {
       shortcuts: {
         search: "搜索",
       },
+      footer: {
+        navigate: "导航",
+        select: "选择",
+        close: "关闭",
+      },
     },
     techStack: "技术栈",
     links: "链接",

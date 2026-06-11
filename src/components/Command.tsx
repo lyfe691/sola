@@ -31,6 +31,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { useCommandMenu } from "@/hooks/use-command-menu";
 import { useTheme } from "./theme-provider";
 import { useLanguage } from "@/lib/language-provider";
@@ -118,76 +119,100 @@ export function CommandMenu() {
         placeholder={t.common.command.placeholder}
         className={isMobile ? "text-base" : undefined}
       />
-      <CommandList>
-        <CommandEmpty className="py-0">
-          <Empty className="p-8">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <SearchX />
-              </EmptyMedia>
-              <EmptyTitle>{t.common.command.noResults}</EmptyTitle>
-            </EmptyHeader>
-          </Empty>
-        </CommandEmpty>
+      <div className="relative">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-5 bg-gradient-to-b from-popover to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-5 bg-gradient-to-t from-popover to-transparent" />
+        <CommandList>
+          <CommandEmpty className="py-0">
+            <Empty className="p-8">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <SearchX />
+                </EmptyMedia>
+                <EmptyTitle>{t.common.command.noResults}</EmptyTitle>
+              </EmptyHeader>
+            </Empty>
+          </CommandEmpty>
 
-        <CommandGroup heading={t.common.command.groups.navigation}>
-          {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
-            <CommandItem
-              key={item.key}
-              value={getNavLabel(item)}
-              onSelect={() => handleNavigation(item.path)}
-            >
-              <span>{getNavLabel(item)}</span>
-              <CommandShortcut>↵</CommandShortcut>
-            </CommandItem>
-          ))}
-        </CommandGroup>
+          <CommandGroup heading={t.common.command.groups.navigation}>
+            {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
+              <CommandItem
+                key={item.key}
+                value={getNavLabel(item)}
+                onSelect={() => handleNavigation(item.path)}
+              >
+                <span>{getNavLabel(item)}</span>
+                <CommandShortcut>↵</CommandShortcut>
+              </CommandItem>
+            ))}
+          </CommandGroup>
 
-        <CommandSeparator />
+          <CommandSeparator />
 
-        <CommandGroup heading={t.common.command.groups.theme}>
-          {THEMES.filter((o) => !o.isCustom).map(renderThemeItem)}
-        </CommandGroup>
+          <CommandGroup heading={t.common.command.groups.theme}>
+            {THEMES.filter((o) => !o.isCustom).map(renderThemeItem)}
+          </CommandGroup>
 
-        <CommandSeparator />
+          <CommandSeparator />
 
-        <CommandGroup heading={t.common.menu.customThemes}>
-          {THEMES.filter((o) => o.isCustom).map(renderThemeItem)}
-        </CommandGroup>
+          <CommandGroup heading={t.common.menu.customThemes}>
+            {THEMES.filter((o) => o.isCustom).map(renderThemeItem)}
+          </CommandGroup>
 
-        <CommandSeparator />
+          <CommandSeparator />
 
-        <CommandGroup heading={t.common.command.groups.language}>
-          {LANGUAGES.map(({ code, label }) => (
-            <CommandItem
-              key={code}
-              value={label}
-              data-checked={language === code ? "true" : undefined}
-              onSelect={() => handleLanguageChange(code)}
-            >
-              <span>{label}</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
+          <CommandGroup heading={t.common.command.groups.language}>
+            {LANGUAGES.map(({ code, label }) => (
+              <CommandItem
+                key={code}
+                value={label}
+                data-checked={language === code ? "true" : undefined}
+                onSelect={() => handleLanguageChange(code)}
+              >
+                <span>{label}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
 
-        <CommandSeparator />
+          <CommandSeparator />
 
-        <CommandGroup heading={t.common.command.groups.background}>
-          {backgroundOptions.map((option) => (
-            <CommandItem
-              key={option.id}
-              value={option.label}
-              data-checked={
-                activeBackground === option.id ? "true" : undefined
-              }
-              onSelect={() => handleBackgroundChange(option.id)}
-            >
-              <span>{option.label}</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </CommandList>
+          <CommandGroup heading={t.common.command.groups.background}>
+            {backgroundOptions.map((option) => (
+              <CommandItem
+                key={option.id}
+                value={option.label}
+                data-checked={
+                  activeBackground === option.id ? "true" : undefined
+                }
+                onSelect={() => handleBackgroundChange(option.id)}
+              >
+                <span>{option.label}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      </div>
     </>
+  );
+
+  const commandFooter = (
+    <div className="-mx-1 -mb-1 mt-1 flex items-center gap-4 border-t border-border/50 px-4 py-2.5 text-xs text-muted-foreground">
+      <div className="flex items-center gap-1.5">
+        <KbdGroup>
+          <Kbd>↑</Kbd>
+          <Kbd>↓</Kbd>
+        </KbdGroup>
+        <span>{t.common.command.footer.navigate}</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <Kbd>↵</Kbd>
+        <span>{t.common.command.footer.select}</span>
+      </div>
+      <div className="ml-auto flex items-center gap-1.5">
+        <Kbd>esc</Kbd>
+        <span>{t.common.command.footer.close}</span>
+      </div>
+    </div>
   );
 
   // render drawer for mobile, dialog for desktop
@@ -206,7 +231,10 @@ export function CommandMenu() {
 
   return (
     <CommandDialog open={isOpen} onOpenChange={closeCommandMenu}>
-      <Command>{commandContent}</Command>
+      <Command>
+        {commandContent}
+        {commandFooter}
+      </Command>
     </CommandDialog>
   );
 }

@@ -88,6 +88,11 @@ export const en = {
       shortcuts: {
         search: "Search",
       },
+      footer: {
+        navigate: "Navigate",
+        select: "Select",
+        close: "Close",
+      },
     },
     techStack: "Tech Stack",
     links: "Links",

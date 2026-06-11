@@ -89,6 +89,11 @@ export const de = {
       shortcuts: {
         search: "Suche",
       },
+      footer: {
+        navigate: "Navigieren",
+        select: "Auswählen",
+        close: "Schließen",
+      },
     },
     techStack: "Technologie-Stack",
     links: "Links",
