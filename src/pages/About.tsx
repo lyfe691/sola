@@ -16,7 +16,6 @@ import {
   Linkedin,
   Mountain,
   Download,
-  Award,
   Quote,
   Star,
   Globe,
@@ -581,15 +580,8 @@ const About = () => {
 
             {/* ----------- Resume Button ---------- */}
 
-            <div className="flex flex-row flex-wrap items-center gap-3 pt-5">
+            <div className="pt-5">
               <ResumeModal />
-              <Link
-                to="/certifications"
-                className="inline-flex items-center gap-2 rounded-lg border border-foreground/15 bg-foreground/5 px-4 py-2.5 text-sm font-medium text-foreground/70 transition-colors hover:border-foreground/25 hover:bg-foreground/10 hover:text-foreground"
-              >
-                <Award className="size-4 shrink-0" />
-                {t.about.certifications.link}
-              </Link>
             </div>
           </div>
 

@@ -87,44 +87,6 @@ export const PROJECTS: ProjectMeta[] = [
     },
   },
   {
-    id: "luma",
-    i18nKey: "luma",
-    image: "/projects/luma.png",
-    link: "https://luma.ysz.life",
-    github: "https://github.com/lyfe691/luma",
-    technologies: [
-      "Next.js App Router",
-      "TypeScript",
-      "Vercel AI SDK",
-      "Supabase",
-      "PostgreSQL",
-      "Tailwind CSS",
-      "Framer Motion",
-      "Shiki",
-    ],
-    featured: true,
-    date: {
-      start: "2026-03",
-      end: "2026-04",
-      display: "Mar 2026 - Apr 2026",
-    },
-    priority: 2,
-    slug: "luma",
-    deepDive: {
-      tagline:
-        "A multi-model AI platform — bring your own keys, talk to any model",
-      overview:
-        "Luma is a multi-model AI platform where you bring your own API keys and talk to the best models from OpenAI, Anthropic, Google, xAI, Mistral, Cohere, DeepSeek, and more — all through a single, polished interface. Built with Next.js 16, the Vercel AI SDK, and Supabase, it features a tree-based conversation model with full branching support, encrypted key storage, streaming markdown rendering, web search, image generation, and rich content display including code highlighting, math, and diagrams.",
-      silk: {
-        color: "#7a8a5c",
-        speed: 3.5,
-        scale: 1.15,
-        noiseIntensity: 1.7,
-        rotation: -0.1,
-      },
-    },
-  },
-  {
     id: "sola",
     i18nKey: "sola",
     image: "/projects/sola.png",
@@ -147,7 +109,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2025-02",
       display: "Feb 2025 - Present",
     },
-    priority: 3,
+    priority: 2,
     slug: "sola",
     deepDive: {
       tagline: "Modern portfolio website built with React and TypeScript",
@@ -159,6 +121,44 @@ export const PROJECTS: ProjectMeta[] = [
         scale: 1.2,
         noiseIntensity: 1.8,
         rotation: 0.3,
+      },
+    },
+  },
+    {
+    id: "luma",
+    i18nKey: "luma",
+    image: "/projects/luma.png",
+    link: "https://luma.ysz.life",
+    github: "https://github.com/lyfe691/luma",
+    technologies: [
+      "Next.js App Router",
+      "TypeScript",
+      "Vercel AI SDK",
+      "Supabase",
+      "PostgreSQL",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Shiki",
+    ],
+    featured: true,
+    date: {
+      start: "2026-03",
+      end: "2026-04",
+      display: "Mar 2026 - Apr 2026",
+    },
+    priority: 3,
+    slug: "luma",
+    deepDive: {
+      tagline:
+        "A multi-model AI platform — bring your own keys, talk to any model",
+      overview:
+        "Luma is a multi-model AI platform where you bring your own API keys and talk to the best models from OpenAI, Anthropic, Google, xAI, Mistral, Cohere, DeepSeek, and more — all through a single, polished interface. Built with Next.js 16, the Vercel AI SDK, and Supabase, it features a tree-based conversation model with full branching support, encrypted key storage, streaming markdown rendering, web search, image generation, and rich content display including code highlighting, math, and diagrams.",
+      silk: {
+        color: "#7a8a5c",
+        speed: 3.5,
+        scale: 1.15,
+        noiseIntensity: 1.7,
+        rotation: -0.1,
       },
     },
   },
