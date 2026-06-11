@@ -212,7 +212,7 @@ export const PROJECTS: ProjectMeta[] = [
       "Command Line Interface",
       "Package Management",
     ],
-    featured: false,
+    featured: true,
     date: {
       start: "2025-05",
       display: "May 2025",
@@ -264,7 +264,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "thoughts",
     i18nKey: "thoughts",
-    image: "/projects/thoughts.svg",
     link: "https://thoughts.ysz.life",
     github: "https://github.com/lyfe691/thoughts",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
@@ -292,7 +291,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "taco",
     i18nKey: "taco",
-    image: "/projects/taco.png",
     link: "https://takitwo.vercel.app",
     github: "https://github.com/lyfe691/taco",
     technologies: [
@@ -326,7 +324,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "osint",
     i18nKey: "osint",
-    image: "/projects/osint-website.svg",
     link: "https://osint.ysz.life",
     github: "https://github.com/lyfe691/osint-ysz-life",
     technologies: ["React (Vite)", "shadcn/ui", "JavaScript"],
@@ -341,7 +338,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "chatapp",
     i18nKey: "chatapp",
-    image: "/projects/chatapp.svg",
     link: "https://chat-app.ch",
     github: "https://github.com/lyfe691/chatapp",
     technologies: [

@@ -335,7 +335,7 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
 );
 
 const ProjectCard = ({ project, t }: { project: Project; t: Translation }) =>
-  project.image ? (
+  project.featured && project.image ? (
     <Card className={cardClassName}>
       <div className="grid grid-cols-1 md:grid-cols-2">
         <ProjectImage project={project} t={t} />
