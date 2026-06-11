@@ -70,6 +70,11 @@ export const BACKGROUNDS: BackgroundDef[] = [
     label: "Watercolor",
     component: lazy(() => import("./watercolor/WatercolorBackground")),
   },
+  {
+    id: "liquid-ether",
+    label: "Liquid Ether",
+    component: lazy(() => import("./liquid-ether/LiquidEtherBackground")),
+  },
 ];
 
 export type BackgroundOption = {
