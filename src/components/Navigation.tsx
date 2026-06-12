@@ -263,26 +263,40 @@ const MobileNav = () => {
 
   const close = useCallback(() => setMenuOpen(false), []);
 
-  // while open: lock page scroll, move focus into the menu, and close on Escape
-  // (Escape returns focus to the trigger)
+  // while open: block page scroll (touch + wheel, but let the menu scroll if it
+  // overflows), move focus into the menu, and close on Escape (which returns
+  // focus to the trigger)
   useEffect(() => {
     if (!menuOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
 
-    const raf = requestAnimationFrame(() =>
-      navRef.current?.querySelector<HTMLAnchorElement>("a")?.focus(),
-    );
+    const blockScroll = (e: Event) => {
+      const el = navRef.current;
+      if (
+        el &&
+        el.contains(e.target as Node) &&
+        el.scrollHeight > el.clientHeight
+      ) {
+        return; // the menu itself can scroll — allow it
+      }
+      e.preventDefault();
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         triggerRef.current?.focus();
         setMenuOpen(false);
       }
     };
+
+    const raf = requestAnimationFrame(() =>
+      navRef.current?.querySelector<HTMLAnchorElement>("a")?.focus(),
+    );
+    window.addEventListener("touchmove", blockScroll, { passive: false });
+    window.addEventListener("wheel", blockScroll, { passive: false });
     window.addEventListener("keydown", onKey);
     return () => {
       cancelAnimationFrame(raf);
-      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("touchmove", blockScroll);
+      window.removeEventListener("wheel", blockScroll);
       window.removeEventListener("keydown", onKey);
     };
   }, [menuOpen]);
@@ -333,7 +347,7 @@ const MobileNav = () => {
               ref={navRef}
               variants={menuListVariants as Variants}
               aria-label="Primary"
-              className="flex h-full flex-col justify-center gap-1 px-8"
+              className="flex h-full flex-col justify-center gap-1 overflow-y-auto overscroll-contain px-8"
             >
               {links.map((link) => {
                 const active = isActive(link.path);
