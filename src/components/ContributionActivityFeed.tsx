@@ -139,7 +139,7 @@ const ActivityMetadata = ({
 }) => {
   if (!activity.metadata) return null;
 
-  const items = [];
+  const items: string[] = [];
 
   if (activity.metadata.commits) {
     items.push(
@@ -156,7 +156,7 @@ const ActivityMetadata = ({
   }
 
   if (activity.metadata.additions || activity.metadata.deletions) {
-    const changes = [];
+    const changes: string[] = [];
     if (activity.metadata.additions)
       changes.push(`+${activity.metadata.additions}`);
     if (activity.metadata.deletions)

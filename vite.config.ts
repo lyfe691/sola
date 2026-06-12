@@ -47,6 +47,18 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // split the eager React/runtime libs into a long-lived vendor chunk so
+        // they cache across deploys instead of riding in the app entry. Heavy
+        // libs (three, shiki, recharts) are already lazy-split per route/feature.
+        manualChunks: {
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+        },
+      },
+    },
+  },
   // These libs are only used inside lazily-imported background modules, so
   // Vite's initial dep scan never sees them and would re-optimize on first
   // select (causing a "504 Outdated Optimize Dep" reload). Pre-bundle them.

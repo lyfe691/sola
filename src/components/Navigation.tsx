@@ -352,7 +352,7 @@ const MobileNav = () => {
               {links.map((link) => {
                 const active = isActive(link.path);
                 return (
-                  <motion.div key={link.path} variants={menuItemVariants}>
+                  <motion.div key={link.path} variants={menuItemVariants as Variants}>
                     <Link
                       to={link.path}
                       onClick={close}
