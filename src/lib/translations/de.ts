@@ -68,7 +68,7 @@ export const de = {
     menu: {
       themes: "Designs",
       customThemes: "Eigene Designs",
-      background: "Hintergrund",
+      background: "Hintergründe",
     },
     backgroundHints: {
       section:

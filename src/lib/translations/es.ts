@@ -69,7 +69,7 @@ export const es = {
     menu: {
       themes: "Temas",
       customThemes: "Temas personalizados",
-      background: "Fondo",
+      background: "Fondos",
     },
     backgroundHints: {
       section:

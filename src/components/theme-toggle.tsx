@@ -6,16 +6,19 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Check } from "lucide-react";
+import { type ElementType, useEffect, useState } from "react";
+import {
+  ChevronRight,
+  Check,
+  Palette,
+  Sparkles,
+  Image as ImageIcon,
+} from "lucide-react";
 import { useTheme } from "./theme-provider";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
-  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,13 +26,107 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { BackgroundSectionHint } from "@/components/backgrounds/BackgroundSectionHint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { cn } from "@/lib/utils";
+
+const iconClass = "size-4 shrink-0 text-muted-foreground";
+
+/**
+ * An expandable tree node: a header that toggles an indented list of children.
+ * The list collapses by animating grid rows from 0fr → 1fr, which stays smooth
+ * (no height jump) and nests cleanly. Children always render so the collapse
+ * can animate; `inert` keeps them out of tab order while closed.
+ */
+function TreeBranch({
+  icon: Icon,
+  label,
+  accessory,
+  isOpen,
+  onToggle,
+  children,
+}: {
+  icon: ElementType;
+  label: string;
+  accessory?: React.ReactNode;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-center">
+        <button
+          type="button"
+          aria-expanded={isOpen}
+          onClick={onToggle}
+          className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground"
+        >
+          <ChevronRight
+            className={cn(
+              "size-3.5 shrink-0 text-muted-foreground transition-transform duration-200",
+              isOpen && "rotate-90",
+            )}
+          />
+          <Icon className={iconClass} />
+          <span className="truncate">{label}</span>
+        </button>
+        {accessory && <span className="px-1.5">{accessory}</span>}
+      </div>
+
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-out",
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden" inert={!isOpen}>
+          <div className="ml-[1.4rem] flex flex-col gap-0.5 border-l border-border/60 pt-0.5 pb-1 pl-1.5">
+            {children}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** a selectable leaf row, marked with a check when active */
+function TreeLeaf({
+  icon: Icon,
+  label,
+  isSelected,
+  onClick,
+}: {
+  icon?: ElementType;
+  label: string;
+  isSelected: boolean;
+  onClick: (event: React.MouseEvent) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex w-full items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground"
+    >
+      <span
+        className={cn(
+          "flex min-w-0 flex-1 items-center gap-2",
+          isSelected && "text-muted-foreground",
+        )}
+      >
+        {Icon && <Icon className={iconClass} />}
+        <span className="truncate">{label}</span>
+      </span>
+      {isSelected && <Check className={iconClass} />}
+    </button>
+  );
+}
+
+type BranchId = "themes" | "custom" | "background";
 
 export function ThemeToggle({
   open,
@@ -39,37 +136,59 @@ export function ThemeToggle({
   onOpenChange?: (open: boolean) => void;
 }) {
   const { theme, setTheme } = useTheme();
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
-  const { active: activeBackground, setActive: setBackground } =
-    useBackground();
+  const { active: activeBackground, setActive: setBackground } = useBackground();
   const { language } = useLanguage();
   const t = translations[language];
 
-  const backgroundOptions = buildBackgroundOptions(t.common.none);
-  const backgroundHint = t.common.backgroundHints.section;
+  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
+  const [expanded, setExpanded] = useState<Set<BranchId>>(
+    () => new Set(["themes"]),
+  );
 
-  // monitor system theme changes
+  // mirror the OS preference so the trigger shows the right icon under "system"
   useEffect(() => {
     setMounted(true);
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     setSystemTheme(mediaQuery.matches ? "dark" : "light");
 
-    const handler = (e: MediaQueryListEvent) => {
+    const handler = (e: MediaQueryListEvent) =>
       setSystemTheme(e.matches ? "dark" : "light");
-    };
-
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
-  // don't render anything until mounted to prevent hydration mismatch
+  // don't render until mounted, so the trigger icon never flashes the wrong state
   if (!mounted) {
     return null;
   }
 
   const resolvedTheme = theme === "system" ? systemTheme : theme;
+
+  const isExpanded = (id: BranchId) => expanded.has(id);
+
+  const toggleBranch = (id: BranchId) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  // apply the theme but keep the menu open so themes can be tried in place
+  const selectTheme = (value: string) => (event: React.MouseEvent) =>
+    setTheme(value as Theme, event);
+
+  const renderThemeLeaf = (option: (typeof THEMES)[number]) => (
+    <TreeLeaf
+      key={option.value}
+      icon={option.icon}
+      label={option.label}
+      isSelected={theme === option.value}
+      onClick={selectTheme(option.value)}
+    />
+  );
 
   return (
     <DropdownMenu open={open} onOpenChange={onOpenChange}>
@@ -88,22 +207,20 @@ export function ThemeToggle({
             />
           }
         >
-          {/* show icon with smooth animation */}
-          {THEMES.map((t) => {
-            // We only render icons for themes that can actually be visually represented as the "current state"
-            // i.e., "system" isn't a visual state itself, it resolves to light or dark.
-            if (t.value === "system") return null;
+          {/* crossfade between the active light/dark icon */}
+          {THEMES.map((option) => {
+            // "system" isn't a visual state itself — it resolves to light/dark.
+            if (option.value === "system") return null;
 
-            const IconComponent = t.icon;
-            // Determine if this specific theme icon should be shown
+            const Icon = option.icon;
             const isVisible =
               theme === "system"
-                ? t.value === resolvedTheme
-                : theme === t.value;
+                ? option.value === resolvedTheme
+                : theme === option.value;
 
             return (
-              <IconComponent
-                key={t.value}
+              <Icon
+                key={option.value}
                 className={`absolute h-4 w-4 transition-all ${isVisible ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
               />
             );
@@ -113,89 +230,44 @@ export function ThemeToggle({
         </TooltipTrigger>
         <TooltipContent>{t.common.command.groups.theme}</TooltipContent>
       </Tooltip>
-      <DropdownMenuContent align="end" className="min-w-[180px]">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>{t.common.menu.themes}</DropdownMenuLabel>
-          {THEMES.map((option) => {
-            if (option.isCustom) return null;
-            const isSelected = theme === option.value;
-            return (
-              <DropdownMenuItem
-                key={option.value}
-                onClick={(e) => {
-                  onOpenChange?.(false);
-                  requestAnimationFrame(() =>
-                    setTheme(option.value as Theme, e),
-                  );
-                }}
-                className="justify-between"
-              >
-                <span className={isSelected ? "text-muted-foreground" : ""}>
-                  {option.label}
-                </span>
-                {isSelected && (
-                  <Check className="h-4 w-4 text-muted-foreground" />
-                )}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuGroup>
 
-        <DropdownMenuSeparator />
+      <DropdownMenuContent align="end" className="min-w-[224px] p-1.5">
+        <TreeBranch
+          icon={Palette}
+          label={t.common.menu.themes}
+          isOpen={isExpanded("themes")}
+          onToggle={() => toggleBranch("themes")}
+        >
+          {THEMES.filter((o) => !o.isCustom).map(renderThemeLeaf)}
 
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>{t.common.menu.customThemes}</DropdownMenuLabel>
-          {THEMES.map((option) => {
-            if (!option.isCustom) return null;
-            const isSelected = theme === option.value;
-            return (
-              <DropdownMenuItem
-                key={option.value}
-                onClick={(e) => {
-                  onOpenChange?.(false);
-                  requestAnimationFrame(() =>
-                    setTheme(option.value as Theme, e),
-                  );
-                }}
-                className="justify-between"
-              >
-                <span className={isSelected ? "text-muted-foreground" : ""}>
-                  {option.label}
-                </span>
-                {isSelected && (
-                  <Check className="h-4 w-4 text-muted-foreground" />
-                )}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuGroup>
+          <TreeBranch
+            icon={Sparkles}
+            label={t.common.menu.customThemes}
+            isOpen={isExpanded("custom")}
+            onToggle={() => toggleBranch("custom")}
+          >
+            {THEMES.filter((o) => o.isCustom).map(renderThemeLeaf)}
+          </TreeBranch>
+        </TreeBranch>
 
-        <DropdownMenuSeparator />
-
-        <DropdownMenuGroup>
-          <DropdownMenuLabel className="flex items-center gap-1.5">
-            <span>{t.common.menu.background}</span>
-            <BackgroundSectionHint text={backgroundHint} />
-          </DropdownMenuLabel>
-          {backgroundOptions.map((option) => {
-            const isSelected = activeBackground === option.id;
-            return (
-              <DropdownMenuItem
-                key={option.id}
-                closeOnClick={false}
-                onClick={() => setBackground(option.id)}
-                className="justify-between"
-              >
-                <span className={isSelected ? "text-muted-foreground" : ""}>
-                  {option.label}
-                </span>
-                {isSelected && (
-                  <Check className="h-4 w-4 text-muted-foreground" />
-                )}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuGroup>
+        <TreeBranch
+          icon={ImageIcon}
+          label={t.common.menu.background}
+          accessory={
+            <BackgroundSectionHint text={t.common.backgroundHints.section} />
+          }
+          isOpen={isExpanded("background")}
+          onToggle={() => toggleBranch("background")}
+        >
+          {buildBackgroundOptions(t.common.none).map((option) => (
+            <TreeLeaf
+              key={option.id}
+              label={option.label}
+              isSelected={activeBackground === option.id}
+              onClick={() => setBackground(option.id)}
+            />
+          ))}
+        </TreeBranch>
       </DropdownMenuContent>
     </DropdownMenu>
   );

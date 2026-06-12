@@ -485,6 +485,14 @@
 }
 
 /* ---------- theme transition (view transitions api) ---------- */
+/* the transition overlay must not intercept clicks: while it plays (~900ms),
+   interacting again — e.g. switching themes in an open menu — would otherwise
+   land on the overlay and read as an outside-click, closing the menu.
+   pointer-events is inherited, so the pseudo-root covers the whole tree. */
+::view-transition {
+  pointer-events: none;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
   mix-blend-mode: normal;

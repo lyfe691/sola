@@ -67,7 +67,7 @@ export const en = {
     menu: {
       themes: "Themes",
       customThemes: "Custom themes",
-      background: "Background",
+      background: "Backgrounds",
     },
     backgroundHints: {
       section:
