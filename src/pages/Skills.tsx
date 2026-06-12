@@ -8,12 +8,19 @@
 
 import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { translations } from "@/lib/translations";
 import {
   SKILL_GROUPS,
+  type Skill,
   type SkillGroup,
   type Proficiency,
 } from "@/config/skills";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const ProficiencyDots = ({ level }: { level: Proficiency }) => (
@@ -21,7 +28,7 @@ const ProficiencyDots = ({ level }: { level: Proficiency }) => (
     {[1, 2, 3, 4, 5].map((dot) => (
       <div
         key={dot}
-        className={`w-1.5 h-1.5 rounded-full transition-colors ${
+        className={`size-1.5 rounded-full transition-colors ${
           dot <= level ? "bg-primary/70" : "bg-foreground/10"
         }`}
       />
@@ -29,22 +36,11 @@ const ProficiencyDots = ({ level }: { level: Proficiency }) => (
   </div>
 );
 
-const SkillChip = ({
-  name,
-  icon: Icon,
-  level,
-}: {
-  name: string;
-  icon: React.ComponentType<{ className?: string; size?: number }>;
-  level: Proficiency;
-}) => (
-  <div className="group flex items-center justify-between gap-3 px-4 py-3 rounded-lg bg-foreground/5 border-2 border-border hover:border-border hover:bg-foreground/10 transition-all duration-200">
-    <div className="flex items-center gap-2.5">
-      <Icon
-        className="w-5 h-5 shrink-0 opacity-70 group-hover:opacity-100 transition-opacity"
-        size={20}
-      />
-      <span className="text-sm font-medium text-foreground/70 group-hover:text-foreground/90 transition-colors">
+const SkillRow = ({ skill: { name, icon: Icon, level } }: { skill: Skill }) => (
+  <div className="-mx-2 flex items-center justify-between gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-muted/50">
+    <div className="flex min-w-0 items-center gap-2.5">
+      <Icon className="size-5 shrink-0" size={20} />
+      <span className="truncate text-sm font-medium text-foreground/80">
         {name}
       </span>
     </div>
@@ -52,7 +48,7 @@ const SkillChip = ({
   </div>
 );
 
-const SkillSection = ({
+const SkillCard = ({
   group,
   title,
   delay,
@@ -62,38 +58,23 @@ const SkillSection = ({
   delay: number;
 }) => (
   <ScrollReveal variant="default" delay={delay}>
-    <div className="space-y-4">
-      <div className="flex items-center gap-3">
-        <h2 className="text-lg font-semibold text-foreground/90">{title}</h2>
-        <div className="h-px flex-1 bg-border/30" />
-      </div>
-      <div className="grid gap-2">
+    <Card className="bg-card/40 backdrop-blur-md">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-0.5">
         {group.skills.map((skill) => (
-          <SkillChip
-            key={skill.name}
-            name={skill.name}
-            icon={skill.icon}
-            level={skill.level}
-          />
+          <SkillRow key={skill.name} skill={skill} />
         ))}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   </ScrollReveal>
 );
 
 const Skills = () => {
   const { language } = useLanguage();
-  const t = translations[language] as Translation;
-
+  const t = translations[language];
   const groups = t.skills.groups as Record<string, string>;
-  const groupTitles: Record<string, string> = {
-    languages: groups.languages || "Languages",
-    frontend: groups.frontend,
-    backend: groups.backend,
-    infrastructure: groups.infrastructure || "Infrastructure",
-    security: groups.security || "Security",
-    tools: groups.tools || "Tools",
-  };
 
   return (
     <div className="flex flex-col w-full">
@@ -107,18 +88,15 @@ const Skills = () => {
       </ScrollReveal>
 
       <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-10 max-w-2xl">
-          {(t.skills as { subtitle?: string }).subtitle ||
-            "Technologies and tools I work with regularly."}
-        </p>
+        <p className="text-foreground/60 mb-10 max-w-2xl">{t.skills.subtitle}</p>
       </ScrollReveal>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
         {SKILL_GROUPS.map((group, index) => (
-          <SkillSection
+          <SkillCard
             key={group.id}
             group={group}
-            title={groupTitles[group.id] || group.id}
+            title={groups[group.id] ?? group.id}
             delay={index * 80}
           />
         ))}
