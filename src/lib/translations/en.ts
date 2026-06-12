@@ -73,6 +73,14 @@ export const en = {
       section:
         "Some backgrounds look significantly better in dark mode.",
     },
+    callout: {
+      background: {
+        title: "Make it yours",
+        content:
+          "Open this menu and pick a background that suits you — there are plenty to try.",
+      },
+      done: "Got it",
+    },
     none: "None",
     search: "Search",
     command: {

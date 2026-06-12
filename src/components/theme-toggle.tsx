@@ -82,6 +82,7 @@ export function ThemeToggle({
                   variant="ghost"
                   size="icon"
                   className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
+                  data-callout="theme"
                 />
               }
             />

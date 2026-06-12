@@ -74,6 +74,14 @@ export const de = {
       section:
         "Einige Hintergründe wirken deutlich besser im Dark Mode.",
     },
+    callout: {
+      background: {
+        title: "Mach es zu deinem",
+        content:
+          "Öffne dieses Menü und wähle einen Hintergrund, der zu dir passt – es gibt einige zum Ausprobieren.",
+      },
+      done: "Alles klar",
+    },
     none: "Keiner",
     search: "Suche",
     command: {

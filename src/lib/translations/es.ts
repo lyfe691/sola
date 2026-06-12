@@ -75,6 +75,14 @@ export const es = {
       section:
         "Algunos fondos se ven mucho mejor en modo oscuro.",
     },
+    callout: {
+      background: {
+        title: "Hazlo tuyo",
+        content:
+          "Abre este menú y elige un fondo que vaya contigo: hay muchos para probar.",
+      },
+      done: "Entendido",
+    },
     none: "Ninguno",
     search: "Buscar",
     command: {

@@ -10,6 +10,7 @@ import { useOutlet } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import PageShell from "./PageShell";
+import { ThemeCallout } from "@/components/theme-callout";
 
 const AppLayout = () => {
   const outlet = useOutlet();
@@ -17,6 +18,7 @@ const AppLayout = () => {
   return (
     <main className="flex flex-1 flex-col">
       <Navigation />
+      <ThemeCallout />
       <PageShell>
         <div className="flex min-h-screen flex-1 flex-col px-5 pb-5 pt-24 sm:px-6 sm:pb-6 sm:pt-28 md:px-8 md:pb-8 lg:px-12 lg:pb-12 lg:pt-36">
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col">

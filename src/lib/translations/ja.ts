@@ -70,6 +70,14 @@ export const ja = {
     backgroundHints: {
       section: "一部の背景はダークモードの方が見栄えが良いです。",
     },
+    callout: {
+      background: {
+        title: "自分好みに",
+        content:
+          "このメニューを開いて、好みの背景を選んでください。たくさん用意しています。",
+      },
+      done: "了解",
+    },
     none: "なし",
     search: "検索",
     command: {

@@ -68,6 +68,13 @@ export const zh = {
     backgroundHints: {
       section: "部分背景在深色模式下效果更佳。",
     },
+    callout: {
+      background: {
+        title: "打造你的风格",
+        content: "打开此菜单，挑选一个适合你的背景——有很多可以尝试。",
+      },
+      done: "知道了",
+    },
     none: "无",
     search: "搜索",
     command: {
