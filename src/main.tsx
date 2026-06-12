@@ -12,6 +12,18 @@ import App from "./App.tsx";
 import "./index.css";
 import { Analytics } from "@vercel/analytics/react";
 import { HelmetProvider } from "react-helmet-async";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+
+// After a redeploy, an already-open tab may request old chunk hashes that no
+// longer exist (the server then serves index.html → MIME error). Vite fires
+// this event when a lazy import fails to load — reload once to pick up the
+// fresh index.html + new chunks, time-guarded against reload loops.
+window.addEventListener("vite:preloadError", () => {
+  const last = Number(sessionStorage.getItem("preload-reload-at") ?? 0);
+  if (Date.now() - last < 10_000) return;
+  sessionStorage.setItem("preload-reload-at", String(Date.now()));
+  window.location.reload();
+});
 
 // get the root element
 const rootElement = document.getElementById("root");
@@ -27,9 +39,11 @@ const root = createRoot(rootElement);
 // render app with strict mode
 root.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <App />
-    </HelmetProvider>
-    <Analytics />
+    <ErrorBoundary>
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
+      <Analytics />
+    </ErrorBoundary>
   </React.StrictMode>,
 );
