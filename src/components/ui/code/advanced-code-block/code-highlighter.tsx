@@ -7,7 +7,10 @@
  */
 
 import { useEffect, useState } from "react";
-import { codeToHtml } from "shiki";
+// the `web` bundle ships only web languages (not cpp/wasm/emacs-lisp/etc.),
+// dropping ~2 MB of unused grammar chunks from the build. Anything it doesn't
+// cover falls back to plain text below.
+import { codeToHtml } from "shiki/bundle/web";
 import type { BundledLanguage, BundledTheme, SpecialLanguage } from "shiki";
 
 export type CodeBlockLanguage = BundledLanguage | SpecialLanguage;
