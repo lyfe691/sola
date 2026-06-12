@@ -25,20 +25,20 @@ const overlayVariants = {
 };
 
 const menuListVariants = {
-  hidden: { transition: { staggerChildren: 0.04, staggerDirection: -1 } },
-  visible: { transition: { delayChildren: 0.08, staggerChildren: 0.06 } },
+  hidden: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
+  visible: { transition: { delayChildren: 0.04, staggerChildren: 0.06 } },
 };
 
 const menuItemVariants = {
   hidden: {
     opacity: 0,
-    y: 18,
-    transition: { duration: 0.25, ease: STANDARD_EASE },
+    y: 12,
+    transition: { duration: 0.2, ease: STANDARD_EASE },
   },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: EMPHASIZED_EASE },
+    transition: { type: "spring", stiffness: 80, damping: 18, mass: 1 },
   },
 };
 
@@ -106,14 +106,11 @@ const useScrolled = () => {
   return scrolled;
 };
 
-const Logo = ({ label, className }: { label: string; className?: string }) => (
+const Logo = ({ label }: { label: string }) => (
   <Link
     to="/"
     aria-label={label}
-    className={cn(
-      "flex shrink-0 items-center gap-2 text-foreground transition-opacity hover:opacity-80",
-      className,
-    )}
+    className="flex shrink-0 items-center gap-2 text-foreground transition-opacity hover:opacity-80"
   >
     <span
       aria-hidden
@@ -261,18 +258,30 @@ const MobileNav = () => {
       ? location.pathname === "/"
       : location.pathname === path || location.pathname.startsWith(`${path}/`);
 
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+
   const close = useCallback(() => setMenuOpen(false), []);
 
-  // lock page scroll + close on Escape while the full-screen menu is open
+  // while open: lock page scroll, move focus into the menu, and close on Escape
+  // (Escape returns focus to the trigger)
   useEffect(() => {
     if (!menuOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    const raf = requestAnimationFrame(() =>
+      navRef.current?.querySelector<HTMLAnchorElement>("a")?.focus(),
+    );
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false);
+      if (e.key === "Escape") {
+        triggerRef.current?.focus();
+        setMenuOpen(false);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => {
+      cancelAnimationFrame(raf);
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKey);
     };
@@ -295,6 +304,7 @@ const MobileNav = () => {
             )}
           >
             <button
+              ref={triggerRef}
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -320,6 +330,7 @@ const MobileNav = () => {
             className="fixed inset-0 z-40 bg-background/80 backdrop-blur-2xl lg:hidden"
           >
             <motion.nav
+              ref={navRef}
               variants={menuListVariants as Variants}
               aria-label="Primary"
               className="flex h-full flex-col justify-center gap-1 px-8"
