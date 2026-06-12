@@ -6,89 +6,59 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Check, Languages } from "lucide-react";
+import { Check } from "lucide-react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { LANGUAGES } from "@/config/languages";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
-export function LanguageToggle({
-  open,
-  onOpenChange,
-}: {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-}) {
+/** The language picker — the content of the appearance menu. */
+export function LanguageMenuContent({ onClose }: { onClose: () => void }) {
   const { language, setLanguage, detectedLanguage, detectedLanguageCode } =
     useLanguage();
   const t = translations[language];
 
   return (
-    <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
-                />
-              }
-            />
-          }
-        >
-          <Languages className="h-4 w-4" />
-          <span className="sr-only">Toggle language</span>
-        </TooltipTrigger>
-        <TooltipContent>{t.common.command.groups.language}</TooltipContent>
-      </Tooltip>
-      <DropdownMenuContent align="end" className="min-w-[180px]">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>
-            {t.common.command.groups.language}
-          </DropdownMenuLabel>
-          {LANGUAGES.map(({ code, label }) => {
-            const isSelected = language === code;
-            return (
-              <DropdownMenuItem
-                key={code}
-                onClick={() => setLanguage(code)}
-                className="justify-between"
-              >
-                <span className={isSelected ? "text-muted-foreground" : ""}>
-                  {label}
-                </span>
-                {isSelected && (
-                  <Check className="h-4 w-4 text-muted-foreground" />
-                )}
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <div className="px-3 py-1.5 text-xs text-muted-foreground/70">
-          {t.i18n?.detectedNote.replace(
-            "{lang}",
-            detectedLanguageCode || detectedLanguage,
-          )}
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="min-w-[168px]">
+      <div className="px-3 py-2 text-xs text-muted-foreground">
+        {t.common.command.groups.language}
+      </div>
+
+      {LANGUAGES.map(({ code, label }) => {
+        const isSelected = language === code;
+        return (
+          <button
+            key={code}
+            type="button"
+            onClick={() => {
+              setLanguage(code);
+              onClose();
+            }}
+            className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
+          >
+            <span
+              className={cn(
+                "min-w-0 flex-1 truncate text-left",
+                isSelected && "text-muted-foreground",
+              )}
+            >
+              {label}
+            </span>
+            {isSelected && (
+              <Check className="size-4 shrink-0 text-muted-foreground" />
+            )}
+          </button>
+        );
+      })}
+
+      <div className="my-1.5 h-px bg-border/50" />
+
+      <div className="px-3 py-1.5 text-xs text-muted-foreground/70">
+        {t.i18n?.detectedNote.replace(
+          "{lang}",
+          detectedLanguageCode || detectedLanguage,
+        )}
+      </div>
+    </div>
   );
 }

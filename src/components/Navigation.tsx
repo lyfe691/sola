@@ -14,8 +14,7 @@ import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { SearchToggle } from "./search-toggle";
-import { LanguageToggle } from "./language-toggle";
-import { ThemeToggle } from "./theme-toggle";
+import { AppearanceMenu } from "./appearance-menu";
 
 const STANDARD_EASE = [0.4, 0, 0.2, 1] as const;
 const EMPHASIZED_EASE = [0.22, 1, 0.36, 1] as const;
@@ -69,10 +68,6 @@ interface ToggleGroupProps {
 }
 
 const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
-  const [openDropdown, setOpenDropdown] = useState<"language" | "theme" | null>(
-    null,
-  );
-
   return (
     <div
       className={cn(
@@ -82,14 +77,7 @@ const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
       )}
     >
       <SearchToggle />
-      <LanguageToggle
-        open={openDropdown === "language"}
-        onOpenChange={(isOpen) => setOpenDropdown(isOpen ? "language" : null)}
-      />
-      <ThemeToggle
-        open={openDropdown === "theme"}
-        onOpenChange={(isOpen) => setOpenDropdown(isOpen ? "theme" : null)}
-      />
+      <AppearanceMenu />
     </div>
   );
 });

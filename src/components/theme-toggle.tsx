@@ -15,17 +15,6 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { useTheme } from "./theme-provider";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
@@ -64,7 +53,7 @@ function TreeBranch({
           type="button"
           aria-expanded={isOpen}
           onClick={onToggle}
-          className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground"
+          className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
         >
           <ChevronRight
             className={cn(
@@ -110,7 +99,7 @@ function TreeLeaf({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground"
+      className="flex w-full items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
     >
       <span
         className={cn(
@@ -128,43 +117,16 @@ function TreeLeaf({
 
 type BranchId = "themes" | "custom" | "background";
 
-export function ThemeToggle({
-  open,
-  onOpenChange,
-}: {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-}) {
+/** The theme/background picker tree — the content of the appearance menu. */
+export function ThemeMenuContent() {
   const { theme, setTheme } = useTheme();
   const { active: activeBackground, setActive: setBackground } = useBackground();
   const { language } = useLanguage();
   const t = translations[language];
 
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
   const [expanded, setExpanded] = useState<Set<BranchId>>(
     () => new Set(["themes"]),
   );
-
-  // mirror the OS preference so the trigger shows the right icon under "system"
-  useEffect(() => {
-    setMounted(true);
-
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    setSystemTheme(mediaQuery.matches ? "dark" : "light");
-
-    const handler = (e: MediaQueryListEvent) =>
-      setSystemTheme(e.matches ? "dark" : "light");
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
-
-  // don't render until mounted, so the trigger icon never flashes the wrong state
-  if (!mounted) {
-    return null;
-  }
-
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
 
   const isExpanded = (id: BranchId) => expanded.has(id);
 
@@ -191,84 +153,94 @@ export function ThemeToggle({
   );
 
   return (
-    <DropdownMenu open={open} onOpenChange={onOpenChange}>
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
-                  data-callout="theme"
-                />
-              }
-            />
-          }
-        >
-          {/* crossfade between the active light/dark icon */}
-          {THEMES.map((option) => {
-            // "system" isn't a visual state itself — it resolves to light/dark.
-            if (option.value === "system") return null;
-
-            const Icon = option.icon;
-            const isVisible =
-              theme === "system"
-                ? option.value === resolvedTheme
-                : theme === option.value;
-
-            return (
-              <Icon
-                key={option.value}
-                className={`absolute h-4 w-4 transition-all ${isVisible ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
-              />
-            );
-          })}
-
-          <span className="sr-only">Toggle theme</span>
-        </TooltipTrigger>
-        <TooltipContent>{t.common.command.groups.theme}</TooltipContent>
-      </Tooltip>
-
-      <DropdownMenuContent align="end" className="min-w-[224px] p-1.5">
-        <TreeBranch
-          icon={Palette}
-          label={t.common.menu.themes}
-          isOpen={isExpanded("themes")}
-          onToggle={() => toggleBranch("themes")}
-        >
-          {THEMES.filter((o) => !o.isCustom).map(renderThemeLeaf)}
-
-          <TreeBranch
-            icon={Sparkles}
-            label={t.common.menu.customThemes}
-            isOpen={isExpanded("custom")}
-            onToggle={() => toggleBranch("custom")}
-          >
-            {THEMES.filter((o) => o.isCustom).map(renderThemeLeaf)}
-          </TreeBranch>
-        </TreeBranch>
+    <div className="min-w-[212px]">
+      <TreeBranch
+        icon={Palette}
+        label={t.common.menu.themes}
+        isOpen={isExpanded("themes")}
+        onToggle={() => toggleBranch("themes")}
+      >
+        {THEMES.filter((o) => !o.isCustom).map(renderThemeLeaf)}
 
         <TreeBranch
-          icon={ImageIcon}
-          label={t.common.menu.background}
-          accessory={
-            <BackgroundSectionHint text={t.common.backgroundHints.section} />
-          }
-          isOpen={isExpanded("background")}
-          onToggle={() => toggleBranch("background")}
+          icon={Sparkles}
+          label={t.common.menu.customThemes}
+          isOpen={isExpanded("custom")}
+          onToggle={() => toggleBranch("custom")}
         >
-          {buildBackgroundOptions(t.common.none).map((option) => (
-            <TreeLeaf
-              key={option.id}
-              label={option.label}
-              isSelected={activeBackground === option.id}
-              onClick={() => setBackground(option.id)}
-            />
-          ))}
+          {THEMES.filter((o) => o.isCustom).map(renderThemeLeaf)}
         </TreeBranch>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </TreeBranch>
+
+      <TreeBranch
+        icon={ImageIcon}
+        label={t.common.menu.background}
+        accessory={
+          <BackgroundSectionHint text={t.common.backgroundHints.section} />
+        }
+        isOpen={isExpanded("background")}
+        onToggle={() => toggleBranch("background")}
+      >
+        {buildBackgroundOptions(t.common.none).map((option) => (
+          <TreeLeaf
+            key={option.id}
+            label={option.label}
+            isSelected={activeBackground === option.id}
+            onClick={() => setBackground(option.id)}
+          />
+        ))}
+      </TreeBranch>
+    </div>
+  );
+}
+
+/**
+ * The animated sun/moon glyph for the appearance-menu trigger. Renders nothing
+ * until mounted so it never flashes the wrong state, then crossfades between the
+ * active light/dark icon.
+ */
+export function ThemeTriggerIcon() {
+  const { theme } = useTheme();
+  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    setSystemTheme(mediaQuery.matches ? "dark" : "light");
+
+    const handler = (e: MediaQueryListEvent) =>
+      setSystemTheme(e.matches ? "dark" : "light");
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  const resolvedTheme = theme === "system" ? systemTheme : theme;
+
+  return (
+    <>
+      {THEMES.map((option) => {
+        // "system" isn't a visual state itself — it resolves to light/dark.
+        if (option.value === "system") return null;
+
+        const Icon = option.icon;
+        const isVisible =
+          theme === "system"
+            ? option.value === resolvedTheme
+            : theme === option.value;
+
+        return (
+          <Icon
+            key={option.value}
+            className={`absolute h-4 w-4 transition-all ${isVisible ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
+          />
+        );
+      })}
+    </>
   );
 }
