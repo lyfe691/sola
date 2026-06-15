@@ -53,8 +53,16 @@ export default defineConfig({
         // split the eager React/runtime libs into a long-lived vendor chunk so
         // they cache across deploys instead of riding in the app entry. Heavy
         // libs (three, shiki, recharts) are already lazy-split per route/feature.
-        manualChunks: {
-          "react-vendor": ["react", "react-dom", "react-router-dom"],
+        // Rolldown (Vite 8) only accepts the function form of manualChunks.
+        manualChunks(id) {
+          if (
+            id.includes("/node_modules/react/") ||
+            id.includes("/node_modules/react-dom/") ||
+            id.includes("/node_modules/react-router/") ||
+            id.includes("/node_modules/react-router-dom/")
+          ) {
+            return "react-vendor";
+          }
         },
       },
     },
