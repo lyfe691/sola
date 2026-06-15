@@ -149,33 +149,23 @@ const Services = () => {
 
       {/* custom requirements */}
       <ScrollReveal variant="default">
-        <div
-          className="relative overflow-hidden rounded-xl p-5 sm:p-6 md:p-8
-                       bg-linear-to-br from-primary/20 via-primary/10 to-background
-                       border border-primary/20 backdrop-blur-xs"
-        >
-          <div className="relative z-10">
-            <h2 className="text-xl font-medium mb-3 text-foreground">
-              {t.services.customRequirements.title}
-            </h2>
-            <p className="text-sm text-foreground/70 mb-6 max-w-2xl">
-              {t.services.customRequirements.description}
-            </p>
-            <IconButton
-              nativeButton={false}
-              render={
-                <Link to="/contact?subject=Custom%20Development%20Requirements&message=Hi%20Yanis%2C%0A%0AI%20have%20specific%20requirements%20that%20don%27t%20fit%20standard%20service%20categories.%20I%27d%20like%20to%20discuss%20a%20custom%20solution.%0A%0AProject%20details%3A%0A-%20%0A-%20%0A-%20%0A%0ALooking%20forward%20to%20discussing%20this%20further%21" />
-              }
-              className="transition-all duration-300"
-            >
-              {t.services.customRequirements.button}
-            </IconButton>
-          </div>
-
-          {/* decorative elemets */}
-          <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-        </div>
+        <Card className="bg-linear-to-br from-primary/20 via-primary/10 to-card p-5 sm:p-6 md:p-8">
+          <h2 className="text-xl font-medium text-foreground">
+            {t.services.customRequirements.title}
+          </h2>
+          <p className="max-w-2xl text-sm text-foreground/70">
+            {t.services.customRequirements.description}
+          </p>
+          <IconButton
+            nativeButton={false}
+            render={
+              <Link to="/contact?subject=Custom%20Development%20Requirements&message=Hi%20Yanis%2C%0A%0AI%20have%20specific%20requirements%20that%20don%27t%20fit%20standard%20service%20categories.%20I%27d%20like%20to%20discuss%20a%20custom%20solution.%0A%0AProject%20details%3A%0A-%20%0A-%20%0A-%20%0A%0ALooking%20forward%20to%20discussing%20this%20further%21" />
+            }
+            className="self-start transition-all duration-300"
+          >
+            {t.services.customRequirements.button}
+          </IconButton>
+        </Card>
       </ScrollReveal>
     </div>
   );

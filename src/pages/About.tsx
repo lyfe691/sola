@@ -557,6 +557,24 @@ const About = () => {
     workspace: "/about/sesh.jpg",
   } as const;
 
+  const approach = [
+    {
+      icon: Code2,
+      label: t.about.philosophyLabels.clean,
+      text: t.about.philosophy.clean,
+    },
+    {
+      icon: Coffee,
+      label: t.about.philosophyLabels.simplicity,
+      text: t.about.philosophy.simplicity,
+    },
+    {
+      icon: Book,
+      label: t.about.philosophyLabels.learning,
+      text: t.about.philosophy.learning,
+    },
+  ];
+
   return (
     <div className="flex flex-col w-full">
       <Helmet>
@@ -729,52 +747,22 @@ const About = () => {
       {/* ------------------- Philosophy ----------------- */}
 
       <ScrollReveal variant="default">
-        <div className="relative overflow-hidden rounded-xl border-2 border-border bg-linear-to-br from-foreground/5 to-transparent p-6 md:p-8 mb-10">
-          <div className="relative z-10">
-            <h2 className="text-xl font-bold mb-6 md:mb-8">
-              {t.about.philosophy.title}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                  <Code2 className="w-4 h-4 text-primary" />
+        <Card className="mb-10 bg-linear-to-br from-foreground/5 to-card p-6 md:p-8">
+          <h2 className="text-xl font-bold">{t.about.philosophy.title}</h2>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {approach.map(({ icon: Icon, label, text }) => (
+              <div key={label} className="space-y-2">
+                <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                  <Icon className="h-4 w-4 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold">
-                  {t.about.philosophyLabels.clean}
-                </h3>
-                <p className="text-sm text-foreground/80 leading-relaxed">
-                  <RichText text={t.about.philosophy.clean} />
+                <h3 className="text-lg font-semibold">{label}</h3>
+                <p className="text-sm leading-relaxed text-foreground/80">
+                  <RichText text={text} />
                 </p>
               </div>
-              <div className="space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                  <Coffee className="w-4 h-4 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold">
-                  {t.about.philosophyLabels.simplicity}
-                </h3>
-                <p className="text-sm text-foreground/80 leading-relaxed">
-                  <RichText text={t.about.philosophy.simplicity} />
-                </p>
-              </div>
-              <div className="space-y-2">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                  <Book className="w-4 h-4 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold">
-                  {t.about.philosophyLabels.learning}
-                </h3>
-                <p className="text-sm text-foreground/80 leading-relaxed">
-                  <RichText text={t.about.philosophy.learning} />
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
-
-          {/* Decorative circles */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-primary/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-        </div>
+        </Card>
       </ScrollReveal>
     </div>
   );
