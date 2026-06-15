@@ -51,7 +51,7 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
-import GitHubCalendar from "react-github-calendar";
+import GitHubCalendarDefault from "react-github-calendar";
 import type { ProcessedActivity } from "@/lib/github";
 import { getUserActivity } from "@/lib/github";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
@@ -59,6 +59,10 @@ import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
+
+const GitHubCalendar =
+  (GitHubCalendarDefault as unknown as { default?: typeof GitHubCalendarDefault })
+    .default ?? GitHubCalendarDefault;
 
 // --------------------------------- Helpers ---------------------------------
 
