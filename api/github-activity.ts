@@ -100,8 +100,9 @@ async function fetchCommitMessage(
   sha: string,
   headers: Headers,
 ): Promise<string | null> {
+  const repoPath = repoFullName.split("/").map(encodeURIComponent).join("/");
   const data = await fetchJson<{ commit?: { message?: string } }>(
-    `${GITHUB_API}/repos/${repoFullName}/commits/${sha}`,
+    `${GITHUB_API}/repos/${repoPath}/commits/${encodeURIComponent(sha)}`,
     headers,
   );
   const message = data?.commit?.message;
@@ -113,8 +114,9 @@ async function fetchLatestCommitMessage(
   branch: string,
   headers: Headers,
 ): Promise<string | null> {
+  const repoPath = repoFullName.split("/").map(encodeURIComponent).join("/");
   const data = await fetchJson<Array<{ commit?: { message?: string } }>>(
-    `${GITHUB_API}/repos/${repoFullName}/commits?sha=${encodeURIComponent(branch)}&per_page=1`,
+    `${GITHUB_API}/repos/${repoPath}/commits?sha=${encodeURIComponent(branch)}&per_page=1`,
     headers,
   );
   const message = data?.[0]?.commit?.message;
@@ -311,10 +313,12 @@ async function processEvent(
   }
 }
 
+const ALLOWED_USERNAMES = new Set(["lyfe691"]);
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const raw = req.query.username;
   const username = Array.isArray(raw) ? raw[0] : raw;
-  if (!username) {
+  if (!username || !ALLOWED_USERNAMES.has(username)) {
     res.status(400).json({ error: "username is required" });
     return;
   }

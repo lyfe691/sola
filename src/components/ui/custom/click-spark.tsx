@@ -47,7 +47,8 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
-  const startTimeRef = useRef<number | null>(null);
+  const animationRef = useRef<number | null>(null);
+  const drawRef = useRef<((timestamp: number) => void) | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -56,7 +57,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     const parent = canvas.parentElement;
     if (!parent) return;
 
-    let resizeTimeout: NodeJS.Timeout;
+    let resizeTimeout: ReturnType<typeof setTimeout>;
 
     const resizeCanvas = () => {
       const { width, height } = parent.getBoundingClientRect();
@@ -104,13 +105,8 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animationId: number;
-
     const draw = (timestamp: number) => {
-      if (!startTimeRef.current) {
-        startTimeRef.current = timestamp;
-      }
-      ctx?.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       sparksRef.current = sparksRef.current.filter((spark: Spark) => {
         const elapsed = timestamp - spark.startTime;
@@ -139,13 +135,25 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
         return true;
       });
 
-      animationId = requestAnimationFrame(draw);
+      if (sparksRef.current.length > 0) {
+        animationRef.current = requestAnimationFrame(draw);
+      } else {
+        animationRef.current = null;
+      }
     };
 
-    animationId = requestAnimationFrame(draw);
+    drawRef.current = draw;
+
+    if (sparksRef.current.length > 0 && animationRef.current === null) {
+      animationRef.current = requestAnimationFrame(draw);
+    }
 
     return () => {
-      cancelAnimationFrame(animationId);
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+      drawRef.current = null;
     };
   }, [
     sparkSize,
@@ -173,6 +181,10 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     }));
 
     sparksRef.current.push(...newSparks);
+
+    if (animationRef.current === null && drawRef.current) {
+      animationRef.current = requestAnimationFrame(drawRef.current);
+    }
   };
 
   return (

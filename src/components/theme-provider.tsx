@@ -90,17 +90,19 @@ export function ThemeProvider({
       root.style.setProperty("--theme-transition-y", `${y}px`);
       root.style.setProperty("--theme-transition-radius", `${maxRadius}px`);
 
+      const clearTransitionVars = () => {
+        root.style.removeProperty("--theme-transition-x");
+        root.style.removeProperty("--theme-transition-y");
+        root.style.removeProperty("--theme-transition-radius");
+      };
+
       (
         document as Document & {
           startViewTransition: (cb: () => void) => { finished: Promise<void> };
         }
       )
         .startViewTransition(applyTheme)
-        .finished.then(() => {
-          root.style.removeProperty("--theme-transition-x");
-          root.style.removeProperty("--theme-transition-y");
-          root.style.removeProperty("--theme-transition-radius");
-        });
+        .finished.then(clearTransitionVars, clearTransitionVars);
     },
     [storageKey, theme],
   );

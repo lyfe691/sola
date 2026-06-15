@@ -484,6 +484,21 @@
   }
 }
 
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ---------- theme transition (view transitions api) ---------- */
 /* the transition overlay must not intercept clicks: while it plays (~900ms),
    interacting again — e.g. switching themes in an open menu — would otherwise

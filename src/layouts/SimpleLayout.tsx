@@ -18,12 +18,14 @@ const SimpleLayout = () => {
   const outlet = useOutlet();
 
   return (
-    <main className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <PageShell>
-        <div className="flex min-h-screen flex-1 flex-col">{outlet}</div>
+        <main id="main" className="flex min-h-screen flex-1 flex-col">
+          {outlet}
+        </main>
         <Footer />
       </PageShell>
-    </main>
+    </div>
   );
 };
 

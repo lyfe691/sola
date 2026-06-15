@@ -16,18 +16,27 @@ const AppLayout = () => {
   const outlet = useOutlet();
 
   return (
-    <main className="flex flex-1 flex-col">
+    <div className="flex flex-1 flex-col">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        Skip to content
+      </a>
       <Navigation />
       <ThemeCallout />
       <PageShell>
-        <div className="flex min-h-screen flex-1 flex-col px-5 pb-5 pt-24 sm:px-6 sm:pb-6 sm:pt-28 md:px-8 md:pb-8 lg:px-12 lg:pb-12 lg:pt-36">
+        <main
+          id="main"
+          className="flex min-h-screen flex-1 flex-col px-5 pb-5 pt-24 sm:px-6 sm:pb-6 sm:pt-28 md:px-8 md:pb-8 lg:px-12 lg:pb-12 lg:pt-36"
+        >
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col">
             {outlet}
           </div>
-        </div>
+        </main>
         <Footer />
       </PageShell>
-    </main>
+    </div>
   );
 };
 

@@ -14,12 +14,18 @@ import { motion, AnimatePresence } from "motion/react";
 const SCROLL_THRESHOLD = 120;
 const SCROLL_DEBOUNCE_DELAY = 120;
 
+const prefersReducedMotion = () =>
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   }, [pathname]);
 
   const handleScroll = useCallback(() => {
@@ -27,7 +33,7 @@ export default function ScrollToTop() {
   }, []);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
     const debouncedScroll = () => {
       clearTimeout(timeoutId);
@@ -42,7 +48,10 @@ export default function ScrollToTop() {
   }, [handleScroll]);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   };
 
   return (

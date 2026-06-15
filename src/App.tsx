@@ -20,6 +20,8 @@ import ClickSpark from "./components/ui/custom/click-spark";
 import { BackgroundProvider } from "./components/backgrounds/background-provider";
 import BackgroundLayer from "./components/backgrounds/BackgroundLayer";
 import { UpdateNotification } from "./components/UpdateNotification";
+import { MotionConfig } from "motion/react";
+import { CanonicalUrl } from "./components/CanonicalUrl";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -33,32 +35,35 @@ function KeyboardShortcuts() {
 // app
 const App = () => (
   <ThemeProvider defaultTheme="system">
-    <LanguageProvider>
-      <BackgroundProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
-            <BackgroundLayer />
-            <ClickSpark
-              sparkColor="var(--primary)"
-              sparkSize={4}
-              sparkCount={7}
-              duration={450}
-            >
-              <div className="min-h-screen flex flex-col relative">
-                <Toaster position="bottom-right" />
-                <UpdateNotification />
-                <BrowserRouter>
-                  <KeyboardShortcuts />
-                  <CommandMenu />
-                  <AnimatedRoutes />
-                  <ScrollToTop />
-                </BrowserRouter>
-              </div>
-            </ClickSpark>
-          </TooltipProvider>
-        </QueryClientProvider>
-      </BackgroundProvider>
-    </LanguageProvider>
+    <MotionConfig reducedMotion="user">
+      <LanguageProvider>
+        <BackgroundProvider>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider>
+              <BackgroundLayer />
+              <ClickSpark
+                sparkColor="var(--primary)"
+                sparkSize={4}
+                sparkCount={7}
+                duration={450}
+              >
+                <div className="min-h-screen flex flex-col relative">
+                  <Toaster position="bottom-right" />
+                  <UpdateNotification />
+                  <BrowserRouter>
+                    <CanonicalUrl />
+                    <KeyboardShortcuts />
+                    <CommandMenu />
+                    <AnimatedRoutes />
+                    <ScrollToTop />
+                  </BrowserRouter>
+                </div>
+              </ClickSpark>
+            </TooltipProvider>
+          </QueryClientProvider>
+        </BackgroundProvider>
+      </LanguageProvider>
+    </MotionConfig>
   </ThemeProvider>
 );
 
