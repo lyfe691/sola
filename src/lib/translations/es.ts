@@ -327,6 +327,11 @@ export const es = {
         description:
           "Un sitio personal minimalista donde comparto reflexiones, fragmentos y notas. Inspirado por el sitio web personal de [Shu Ding](https://shud.in), construido con Next.js, MDX y Tailwind. Incluye un libro de visitas personalizado donde los visitantes pueden dejar sus propios pensamientos.",
       },
+      magi: {
+        title: "magi",
+        description:
+          "magi es un escáner de puertos TCP y UDP rápido y asíncrono escrito en Rust. Hace connect scanning — un handshake normal por puerto — así que no necesita root y funciona en cualquier sitio donde funcione tokio. Nunca informa de un estado de puerto que no haya establecido realmente: cuando un probe no puede ejecutarse, se marca como untestable en lugar de suponerlo closed. La concurrencia acotada mantiene la memoria plana, desde un solo host hasta un /16 entero, con captura de banners, escaneo UDP y salida JSON para scripting.",
+      },
       luma: {
         title: "Luma",
         description:

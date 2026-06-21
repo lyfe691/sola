@@ -315,6 +315,11 @@ export const ja = {
         description:
           "考えや断片、メモを共有するミニマルな個人サイトです。[Shu Ding](https://shud.in) の個人サイトに触発され、Next.js・MDX・Tailwind CSS で構築しました。訪問者が自分の想いを書き残せる独自のゲストブック機能を備えています。",
       },
+      magi: {
+        title: "magi",
+        description:
+          "magi は Rust で書かれた高速・非同期の TCP/UDP ポートスキャナーです。コネクトスキャン（各ポートへの通常のハンドシェイク）を行うため root は不要で、tokio が動く環境ならどこでも動作します。実際に確立していないポート状態を報告することは決してありません。プローブを実行できない場合は closed と決めつけず untestable として扱います。有界な並行処理により、単一ホストから /16 全体までメモリ使用量を一定に保ち、バナー取得、UDP スキャン、スクリプト連携向けの JSON 出力に対応します。",
+      },
       luma: {
         title: "Luma",
         description:

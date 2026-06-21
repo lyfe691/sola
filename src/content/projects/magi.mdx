@@ -1,0 +1,99 @@
+import { ProjectImage, CodeBlock } from "@/components/mdx";
+
+# A port scanner built to be correct
+
+**magi** is a fast, asynchronous TCP and UDP port scanner written in Rust. It does _connect_ scanning — a normal handshake on each port, the same thing any client does — so it needs no root, no raw sockets, and no special capabilities. It runs anywhere `tokio` does.
+
+> The premise is simple but unusual: a scanner should never claim something it didn't observe. magi only ever reports a port state it actually established.
+
+<ProjectImage
+  src="/projects/magi/hero.png"
+  alt="magi — a fast, async TCP/UDP port scanner"
+  caption="magi at magi.ysz.life"
+  size="large"
+/>
+
+## Why "correct"?
+
+Most scanners optimize for speed and breadth. magi optimizes for _trust_. The worst thing a scanner can do is call a port `closed` when it was never actually tested — a silent false negative that hides exactly what you were looking for.
+
+So magi draws a hard line between "I tested this and it's closed" and "I couldn't test this." When a probe can't run — the process is out of file descriptors, or the host is unreachable — magi reports that port as **untestable** on stderr instead of folding it into the closed count. The results mean what they say.
+
+## Installation
+
+One line installs the latest release and puts `magi` on your `PATH`:
+
+<CodeBlock
+  code={`# Linux / macOS
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/lyfe691/magi/releases/latest/download/magi-installer.sh | sh
+
+# Windows (PowerShell)
+powershell -ExecutionPolicy Bypass -c "irm https://github.com/lyfe691/magi/releases/latest/download/magi-installer.ps1 | iex"`}
+  fileName="install.sh"
+  lang="bash"
+/>
+
+Prebuilt binaries cover Linux and macOS on x86-64 and arm64, and Windows on x86-64. There are no system libraries to install — with the stable Rust toolchain, `cargo install --path .` builds it the same on every platform.
+
+## Usage
+
+The target is a hostname, an IP address, or a CIDR block:
+
+<CodeBlock
+  code={`$ magi 45.33.32.156 --ports 22,80,443 --banner
+scanning 45.33.32.156 — 3 port(s), up to 512 at a time
+
+2 open port(s):
+
+45.33.32.156
+     22/tcp  ssh         SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13
+     80/tcp  http`}
+  fileName="scan.console"
+  lang="console"
+/>
+
+A few more shapes — subnets group by host, and `--json` keeps stdout clean for piping:
+
+<CodeBlock
+  code={`magi 192.168.1.0/24 --ports 22,80,443      # a whole subnet, grouped by host
+magi 10.0.0.5 --ports 1-65535 -c 1024      # every port, 1024 probes in flight
+magi 192.168.1.1 --ports 53,123,161 --udp  # UDP instead of TCP
+magi scanme.nmap.org -p 22,80 --json | jq  # JSON on stdout, progress on stderr`}
+  fileName="examples.sh"
+  lang="bash"
+/>
+
+## Fast, and flat under load
+
+magi holds at most `--concurrency` probes in flight by taking a semaphore permit before spawning each one, and reaps finished probes as it goes. Memory stays flat whether you scan a single host or a whole `/16` — the in-flight set is bounded, not the total work. Hundreds of connections run concurrently over `tokio`, and a `--rate` cap can throttle how many probes start per second when you need to tread lightly.
+
+A CIDR block expands to its host addresses, but anything larger than a `/16` is refused, so a mistyped prefix can't quietly turn into millions of probes.
+
+## UDP is honest about uncertainty
+
+UDP has no handshake, so there's no clean "connected" signal. magi derives the verdict from how the host reacts:
+
+- a reply is **open**
+- an ICMP port-unreachable is **closed**
+- silence is **open|filtered** — an open-but-quiet service and a dropped probe look identical from outside
+
+That last distinction relies on the OS delivering ICMP errors on a connected socket, which is reliable on Linux. macOS and Windows rate-limit ICMP, so some closed ports there read as `open|filtered`. magi surfaces that caveat instead of pretending the result is definitive.
+
+## Architecture
+
+magi is a thin binary over a small library, so the core is testable on its own:
+
+- `src/main.rs` — the CLI: parse args, expand the target, print results.
+- `src/scanner.rs` — the core: port parsing, the scan, banner grabbing, UDP, service hints.
+- `src/lib.rs` — the library root, exposing `scanner`.
+- `tests/scan.rs` — integration tests that bind real loopback sockets.
+
+Keeping the engine in a library means the interesting logic — the concurrency bound, banner reads, the untestable accounting — is exercised by tests that talk to real sockets rather than mocks.
+
+## The site
+
+magi has its own home at [magi.ysz.life](https://magi.ysz.life): a localized landing page in five languages with a live install block, a frosted-glass terminal demo, and the same burlywood accent the CLI wears — built with Next.js and next-intl.
+
+## Scanning responsibly
+
+Only scan hosts you own or have written permission to scan. [`scanme.nmap.org`](http://scanme.nmap.org) is a sanctioned target for testing. Unsolicited scanning is illegal in many places — in Switzerland it falls under Art. 143bis of the Criminal Code.

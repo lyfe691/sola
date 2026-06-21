@@ -50,6 +50,42 @@ export interface ProjectMeta {
 
 export const PROJECTS: ProjectMeta[] = [
   {
+    id: "magi",
+    i18nKey: "magi",
+    image: "/projects/magi/hero.png",
+    link: "https://magi.ysz.life",
+    github: "https://github.com/lyfe691/magi",
+    technologies: [
+      "Rust",
+      "tokio",
+      "Async",
+      "CLI",
+      "TCP/UDP",
+      "Networking",
+      "cargo-dist",
+    ],
+    featured: true,
+    date: {
+      start: "2026-06",
+      display: "Jun 2026 - Present",
+    },
+    priority: 3,
+    slug: "magi",
+    vercelSatori: false,
+    deepDive: {
+      tagline: "A fast, async TCP/UDP port scanner built to be correct",
+      overview:
+        "magi is a fast, asynchronous TCP and UDP port scanner written in Rust. It does connect scanning — a normal handshake on each port — so it needs no root and runs anywhere tokio does. Within that scope it is built to be trustworthy: it never reports a port state it didn't actually establish, and when a probe can't run it says so (untestable) rather than guessing closed. Bounded concurrency over tokio keeps memory flat whether you scan a single host or a whole /16, with banner grabbing, UDP probing, CIDR expansion, and JSON output for piping into tools like jq.",
+      silk: {
+        color: "#dea584",
+        speed: 4,
+        scale: 1.1,
+        noiseIntensity: 1.6,
+        rotation: -0.2,
+      },
+    },
+  },
+  {
     id: "kinoa",
     i18nKey: "kinoa",
     image: "/projects/kinoa.png",
@@ -146,7 +182,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "2026-04",
       display: "Mar 2026 - Apr 2026",
     },
-    priority: 3,
+    priority: 4,
     slug: "luma",
     deepDive: {
       tagline:
@@ -184,7 +220,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "2025-02",
       display: "Dec 2024 - Feb 2025",
     },
-    priority: 4,
+    priority: 5,
     slug: "applicare",
     deepDive: {
       tagline: "Manage your job applications with ease.",
@@ -217,7 +253,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2025-05",
       display: "May 2025",
     },
-    priority: 5,
+    priority: 6,
     slug: "self",
     deepDive: {
       tagline:
@@ -245,7 +281,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 6,
+    priority: 7,
     slug: "code-extractor",
     deepDive: {
       tagline:
@@ -272,7 +308,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2025-08",
       display: "Aug 2025",
     },
-    priority: 7,
+    priority: 8,
     slug: "thoughts",
     deepDive: {
       tagline:
@@ -305,7 +341,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2025-04",
       display: "Apr 2025",
     },
-    priority: 8,
+    priority: 9,
     slug: "taco",
     deepDive: {
       tagline:
@@ -333,7 +369,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "2024-12",
       display: "Nov 2024 - Dec 2024",
     },
-    priority: 9,
+    priority: 10,
   },
   {
     id: "chatapp",
@@ -353,7 +389,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-09",
       display: "Sep 2024",
     },
-    priority: 10,
+    priority: 11,
   },
   // non-featured projects
   {
@@ -366,7 +402,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 11,
+    priority: 12,
   },
   {
     id: "view-counter",
@@ -378,7 +414,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-08",
       display: "Aug 2024",
     },
-    priority: 12,
+    priority: 13,
   },
   {
     id: "docker-service",
@@ -390,7 +426,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-06",
       display: "Jun 2024",
     },
-    priority: 13,
+    priority: 14,
   },
   {
     id: "phishing",
@@ -402,7 +438,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-04",
       display: "Apr 2024",
     },
-    priority: 14,
+    priority: 15,
   },
   {
     id: "otw",
@@ -420,6 +456,6 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-04",
       display: "Apr 2024",
     },
-    priority: 15,
+    priority: 16,
   },
 ];

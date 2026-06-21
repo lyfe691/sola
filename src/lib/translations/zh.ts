@@ -312,6 +312,11 @@ export const zh = {
         description:
           "一个极简的个人网站，用来分享我的思考、片段与笔记。受 [Shu Ding](https://shud.in) 个人网站启发，使用 Next.js、MDX 和 Tailwind 构建。包含自定义留言簿功能，访客可以留下自己的想法。",
       },
+      magi: {
+        title: "magi",
+        description:
+          "magi 是一款用 Rust 编写的快速、异步的 TCP/UDP 端口扫描器。它执行 connect 扫描——对每个端口进行一次正常握手——因此无需 root，并且可以在任何 tokio 能运行的地方运行。它绝不报告自己并未真正建立过的端口状态：当探测无法执行时，会标记为 untestable，而不是臆断为 closed。有界并发让内存保持平稳——从单个主机到整个 /16——并支持 banner 抓取、UDP 扫描以及便于脚本处理的 JSON 输出。",
+      },
       luma: {
         title: "Luma",
         description:
