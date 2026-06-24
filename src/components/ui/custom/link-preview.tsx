@@ -23,6 +23,7 @@ type LinkPreviewProps = {
   screenshot?: boolean;
   previewType?: "image" | "iframe" | "auto";
   compact?: boolean;
+  "aria-label"?: string;
 };
 
 type PreviewStatus = "idle" | "loading" | "ready" | "failed";
@@ -100,6 +101,7 @@ export function LinkPreview({
   screenshot = true,
   previewType: _previewType = "auto",
   compact = true,
+  "aria-label": ariaLabel,
 }: LinkPreviewProps) {
   const hostname = getHostname(href);
   const favicon = hostname ? getFaviconUrl(hostname) : undefined;
@@ -134,6 +136,7 @@ export function LinkPreview({
         render={
           <a
             href={href}
+            aria-label={ariaLabel}
             className={className}
             target="_blank"
             rel="noopener noreferrer"
