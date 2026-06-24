@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState } from "react";
 import {
   ArrowUpRight,
   Briefcase,
@@ -17,9 +16,8 @@ import {
   Blend,
   type LucideIcon,
 } from "lucide-react";
-import { motion } from "motion/react";
-import { Badge } from "@/components/ui/badge";
 import CompanyLogo from "@/components/experience/CompanyLogo";
+import { TagRow } from "@/components/ui/custom/tag-row";
 import type { ExperienceEntry, LocationType } from "@/lib/experience";
 
 interface ExperienceItemProps {
@@ -49,7 +47,7 @@ const MetaItem = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) =>
 /**
  * One logo-led experience row. The role + company sit beside the logo, with a
  * single icon-led meta row beneath (type · dates · location · mode) that wraps
- * cleanly on small screens. The whole row eases onto a muted panel on hover.
+ * cleanly on small screens. The whole row tints onto a muted panel on hover.
  */
 const ExperienceItem = ({
   entry,
@@ -58,24 +56,10 @@ const ExperienceItem = ({
   employmentLabel,
   locationLabel,
 }: ExperienceItemProps) => {
-  const [hovered, setHovered] = useState(false);
   const ModeIcon = LOCATION_TYPE_ICON[entry.locationType] ?? Building2;
 
   return (
-    <motion.article
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      className="group relative isolate -mx-3 flex gap-4 rounded-2xl px-3 py-6 sm:-mx-4 sm:gap-5 sm:px-4"
-    >
-      {/* hover panel — eased opacity rather than an instant color swap */}
-      <motion.span
-        aria-hidden="true"
-        initial={false}
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
-        className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-muted/60 ring-1 ring-foreground/5"
-      />
-
+    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-muted/50 sm:-mx-4 sm:gap-5 sm:px-4">
       <CompanyLogo
         company={entry.company}
         logo={entry.logo}
@@ -128,18 +112,12 @@ const ExperienceItem = ({
           </ul>
         )}
 
-        {/* skills */}
+        {/* skills — single line, overflow collapses into a tooltipped +N */}
         {entry.technologies.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {entry.technologies.map((tech) => (
-              <Badge key={tech} variant="secondary" className="font-normal">
-                {tech}
-              </Badge>
-            ))}
-          </div>
+          <TagRow tags={entry.technologies} className="mt-4 max-w-2xl" />
         )}
       </div>
-    </motion.article>
+    </article>
   );
 };
 
