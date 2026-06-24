@@ -15,9 +15,16 @@ import {
   Blend,
   type LucideIcon,
 } from "lucide-react";
+import { motion, type Variants } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import CompanyLogo from "@/components/experience/CompanyLogo";
 import type { ExperienceEntry, LocationType } from "@/lib/experience";
+
+/** Hover panel behind a row — eased fade rather than an instant color swap. */
+const panelVariants: Variants = {
+  rest: { opacity: 0 },
+  hover: { opacity: 1 },
+};
 
 interface ExperienceItemProps {
   entry: ExperienceEntry;
@@ -59,7 +66,19 @@ const ExperienceItem = ({
   const ModeIcon = LOCATION_TYPE_ICON[entry.locationType] ?? Building2;
 
   return (
-    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-muted/50 sm:-mx-4 sm:gap-5 sm:px-4">
+    <motion.article
+      initial="rest"
+      animate="rest"
+      whileHover="hover"
+      className="group relative isolate -mx-3 flex gap-4 rounded-2xl px-3 py-6 sm:-mx-4 sm:gap-5 sm:px-4"
+    >
+      <motion.span
+        aria-hidden="true"
+        variants={panelVariants}
+        transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+        className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-muted/60 ring-1 ring-foreground/5"
+      />
+
       <CompanyLogo
         company={entry.company}
         logo={entry.logo}
@@ -125,7 +144,7 @@ const ExperienceItem = ({
           </div>
         )}
       </div>
-    </article>
+    </motion.article>
   );
 };
 
