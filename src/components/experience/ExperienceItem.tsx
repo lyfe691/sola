@@ -6,25 +6,21 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import { useState } from "react";
 import {
   ArrowUpRight,
   Briefcase,
+  CalendarDays,
   MapPin,
   Building2,
   House,
   Blend,
   type LucideIcon,
 } from "lucide-react";
-import { motion, type Variants } from "motion/react";
+import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
 import CompanyLogo from "@/components/experience/CompanyLogo";
 import type { ExperienceEntry, LocationType } from "@/lib/experience";
-
-/** Hover panel behind a row — eased fade rather than an instant color swap. */
-const panelVariants: Variants = {
-  rest: { opacity: 0 },
-  hover: { opacity: 1 },
-};
 
 interface ExperienceItemProps {
   entry: ExperienceEntry;
@@ -44,17 +40,16 @@ const LOCATION_TYPE_ICON: Record<LocationType, LucideIcon> = {
 
 /** A small muted icon + label pair used across the meta row. */
 const MetaItem = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) => (
-  <span className="inline-flex items-center gap-1.5">
+  <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
     <Icon className="size-3.5 shrink-0 text-muted-foreground/70" />
     {label}
   </span>
 );
 
 /**
- * One logo-led experience row. The role + company sit beside the logo, with an
- * icon-led meta row beneath; the date range and duration form a quiet stamp that
- * floats to the right on desktop and folds under the role on mobile. The whole
- * row lifts onto a muted panel on hover.
+ * One logo-led experience row. The role + company sit beside the logo, with a
+ * single icon-led meta row beneath (type · dates · location · mode) that wraps
+ * cleanly on small screens. The whole row eases onto a muted panel on hover.
  */
 const ExperienceItem = ({
   entry,
@@ -63,19 +58,21 @@ const ExperienceItem = ({
   employmentLabel,
   locationLabel,
 }: ExperienceItemProps) => {
+  const [hovered, setHovered] = useState(false);
   const ModeIcon = LOCATION_TYPE_ICON[entry.locationType] ?? Building2;
 
   return (
     <motion.article
-      initial="rest"
-      animate="rest"
-      whileHover="hover"
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
       className="group relative isolate -mx-3 flex gap-4 rounded-2xl px-3 py-6 sm:-mx-4 sm:gap-5 sm:px-4"
     >
+      {/* hover panel — eased opacity rather than an instant color swap */}
       <motion.span
         aria-hidden="true"
-        variants={panelVariants}
-        transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+        initial={false}
+        animate={{ opacity: hovered ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
         className="pointer-events-none absolute inset-0 -z-10 rounded-2xl bg-muted/60 ring-1 ring-foreground/5"
       />
 
@@ -86,35 +83,33 @@ const ExperienceItem = ({
       />
 
       <div className="min-w-0 flex-1">
-        {/* role + identity, with the date stamp aligned right on desktop */}
-        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
-          <div className="min-w-0">
-            <h3 className="text-base font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary sm:text-lg">
-              {entry.role}
-            </h3>
-            <a
-              href={entry.companyLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${entry.company} (opens in a new tab)`}
-              className="group/link mt-1 inline-flex items-center gap-1 rounded-sm text-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-            >
-              {entry.company}
-              <ArrowUpRight className="size-3 shrink-0 text-muted-foreground transition-colors group-hover/link:text-primary" />
-            </a>
+        <h3 className="text-base font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary sm:text-lg">
+          {entry.role}
+        </h3>
 
-            {/* meta — icon-led, never bare middot text */}
-            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-              {isWork && <MetaItem icon={Briefcase} label={employmentLabel} />}
-              <MetaItem icon={MapPin} label={entry.location} />
-              {isWork && <MetaItem icon={ModeIcon} label={locationLabel} />}
-            </div>
-          </div>
+        <a
+          href={entry.companyLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${entry.company} (opens in a new tab)`}
+          className="group/link mt-1 inline-flex items-center gap-1 rounded-sm text-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+        >
+          {entry.company}
+          <ArrowUpRight className="size-3 shrink-0 text-muted-foreground transition-colors group-hover/link:text-primary" />
+        </a>
 
-          <p className="shrink-0 font-mono text-xs leading-snug text-muted-foreground sm:text-right">
-            {entry.period}
-            <span className="block">{duration}</span>
-          </p>
+        {/* meta — icon-led, wraps as whole units on small screens */}
+        <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+          {isWork && <MetaItem icon={Briefcase} label={employmentLabel} />}
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono">
+            <CalendarDays className="size-3.5 shrink-0 text-muted-foreground/70" />
+            <span>
+              {entry.period}
+              <span className="text-muted-foreground/60"> · {duration}</span>
+            </span>
+          </span>
+          <MetaItem icon={MapPin} label={entry.location} />
+          {isWork && <MetaItem icon={ModeIcon} label={locationLabel} />}
         </div>
 
         {/* description */}
