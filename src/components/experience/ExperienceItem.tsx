@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import CompanyLogo from "@/components/experience/CompanyLogo";
 import { TagRow } from "@/components/ui/custom/tag-row";
+import { LinkPreview } from "@/components/ui/custom/link-preview";
 import type { ExperienceEntry, LocationType } from "@/lib/experience";
 
 interface ExperienceItemProps {
@@ -71,16 +72,16 @@ const ExperienceItem = ({
           {entry.role}
         </h3>
 
-        <a
+        <LinkPreview
           href={entry.companyLink}
-          target="_blank"
-          rel="noopener noreferrer"
           aria-label={`${entry.company} (opens in a new tab)`}
-          className="group/link mt-1 inline-flex items-center gap-1 rounded-sm text-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          className="group/link mt-1 inline-flex w-fit items-center gap-1 rounded-sm text-sm font-medium text-foreground transition-colors duration-200 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
         >
-          {entry.company}
-          <ArrowUpRight className="size-3 shrink-0 text-muted-foreground transition-colors group-hover/link:text-primary" />
-        </a>
+          <span className="underline decoration-muted-foreground/30 decoration-1 underline-offset-4 transition-colors duration-200 group-hover/link:decoration-primary">
+            {entry.company}
+          </span>
+          <ArrowUpRight aria-hidden="true" className="size-3.5 shrink-0" />
+        </LinkPreview>
 
         {/* meta — icon-led, wraps as whole units on small screens */}
         <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
@@ -89,7 +90,10 @@ const ExperienceItem = ({
             <CalendarDays className="size-3.5 shrink-0 text-muted-foreground/70" />
             <span>
               {entry.period}
-              <span className="text-muted-foreground/60"> · {duration}</span>
+              <span className="text-muted-foreground/60">
+                <span aria-hidden="true"> · </span>
+                {duration}
+              </span>
             </span>
           </span>
           <MetaItem icon={MapPin} label={entry.location} />

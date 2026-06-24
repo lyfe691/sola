@@ -46,7 +46,6 @@ export interface ExperienceCopy {
 /** A fully resolved entry: static facts + translated copy + localized range. */
 export interface ExperienceEntry extends ExperienceFact, ExperienceCopy {
   period: string;
-  isCurrent: boolean;
 }
 
 export const WORK: ExperienceFact[] = [
@@ -155,7 +154,6 @@ export const resolveEntries = (
     ...fact,
     ...copy[fact.key],
     period: periods[fact.key],
-    isCurrent: fact.end === "present",
   }));
 };
 
