@@ -6,10 +6,18 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  Briefcase,
+  MapPin,
+  Building2,
+  House,
+  Blend,
+  type LucideIcon,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import CompanyLogo from "@/components/experience/CompanyLogo";
-import type { ExperienceEntry } from "@/lib/experience";
+import type { ExperienceEntry, LocationType } from "@/lib/experience";
 
 interface ExperienceItemProps {
   entry: ExperienceEntry;
@@ -21,10 +29,25 @@ interface ExperienceItemProps {
   locationLabel: string;
 }
 
+const LOCATION_TYPE_ICON: Record<LocationType, LucideIcon> = {
+  onsite: Building2,
+  remote: House,
+  hybrid: Blend,
+};
+
+/** A small muted icon + label pair used across the meta row. */
+const MetaItem = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) => (
+  <span className="inline-flex items-center gap-1.5">
+    <Icon className="size-3.5 shrink-0 text-muted-foreground/70" />
+    {label}
+  </span>
+);
+
 /**
- * One logo-led experience row. The role + company sit beside the logo; the date
- * range and duration form a quiet stamp that floats to the right on desktop and
- * folds under the role on mobile. The whole row lifts onto a muted panel on hover.
+ * One logo-led experience row. The role + company sit beside the logo, with an
+ * icon-led meta row beneath; the date range and duration form a quiet stamp that
+ * floats to the right on desktop and folds under the role on mobile. The whole
+ * row lifts onto a muted panel on hover.
  */
 const ExperienceItem = ({
   entry,
@@ -33,6 +56,8 @@ const ExperienceItem = ({
   employmentLabel,
   locationLabel,
 }: ExperienceItemProps) => {
+  const ModeIcon = LOCATION_TYPE_ICON[entry.locationType] ?? Building2;
+
   return (
     <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-muted/50 sm:-mx-4 sm:gap-5 sm:px-4">
       <CompanyLogo
@@ -42,30 +67,29 @@ const ExperienceItem = ({
       />
 
       <div className="min-w-0 flex-1">
-        {/* role + company, with the date stamp aligned right on desktop */}
+        {/* role + identity, with the date stamp aligned right on desktop */}
         <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
           <div className="min-w-0">
             <h3 className="text-base font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary sm:text-lg">
               {entry.role}
             </h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              <a
-                href={entry.companyLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${entry.company} (opens in a new tab)`}
-                className="group/link inline-flex items-center gap-1 rounded-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-              >
-                {entry.company}
-                <ArrowUpRight className="size-3 shrink-0 text-muted-foreground transition-colors group-hover/link:text-primary" />
-              </a>
-              {isWork && (
-                <span>
-                  <span aria-hidden="true"> · </span>
-                  {employmentLabel}
-                </span>
-              )}
-            </p>
+            <a
+              href={entry.companyLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${entry.company} (opens in a new tab)`}
+              className="group/link mt-1 inline-flex items-center gap-1 rounded-sm text-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              {entry.company}
+              <ArrowUpRight className="size-3 shrink-0 text-muted-foreground transition-colors group-hover/link:text-primary" />
+            </a>
+
+            {/* meta — icon-led, never bare middot text */}
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+              {isWork && <MetaItem icon={Briefcase} label={employmentLabel} />}
+              <MetaItem icon={MapPin} label={entry.location} />
+              {isWork && <MetaItem icon={ModeIcon} label={locationLabel} />}
+            </div>
           </div>
 
           <p className="shrink-0 font-mono text-xs leading-snug text-muted-foreground sm:text-right">
@@ -73,17 +97,6 @@ const ExperienceItem = ({
             <span className="block">{duration}</span>
           </p>
         </div>
-
-        {/* location */}
-        <p className="mt-1.5 text-xs text-muted-foreground">
-          {entry.location}
-          {isWork && (
-            <>
-              <span aria-hidden="true"> · </span>
-              {locationLabel}
-            </>
-          )}
-        </p>
 
         {/* description */}
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted-foreground">
