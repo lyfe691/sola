@@ -30,11 +30,11 @@ const ExperienceSection = ({
   return (
     <section>
       <ScrollReveal variant="default">
-        <div className="mb-5 flex items-center gap-2.5 sm:mb-6">
-          <h2 className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-foreground/70">
+        <div className="mb-6 flex items-center gap-2.5">
+          <h2 className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
             {title}
           </h2>
-          <span className="font-mono text-[11px] text-foreground/45">
+          <span className="font-mono text-[11px] text-muted-foreground/50">
             {String(entries.length).padStart(2, "0")}
           </span>
         </div>
@@ -42,7 +42,7 @@ const ExperienceSection = ({
 
       <div className="flex flex-col">
         {entries.map((entry, index) => (
-          <ScrollReveal key={entry.key} variant="default" delay={index * 120}>
+          <ScrollReveal key={entry.key} variant="default" delay={index * 80}>
             <ExperienceItem
               entry={entry}
               isWork={isWork}

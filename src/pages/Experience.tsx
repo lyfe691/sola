@@ -33,7 +33,7 @@ const Experience = () => {
       </ScrollReveal>
 
       <ScrollReveal variant="default">
-        <p className="mb-8 max-w-2xl text-foreground/60 sm:mb-12">
+        <p className="mb-8 max-w-2xl text-muted-foreground sm:mb-12">
           {t.experience.subtitle}
         </p>
       </ScrollReveal>
