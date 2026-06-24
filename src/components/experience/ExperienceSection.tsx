@@ -19,7 +19,7 @@ interface ExperienceSectionProps {
   chips: Record<string, string>;
 }
 
-/** Section header + a list of logo-led rows. Reused for Work and Education. */
+/** A quiet mono section label + a list of logo-led rows. Reused for Work and Education. */
 const ExperienceSection = ({
   title,
   entries,
@@ -30,22 +30,23 @@ const ExperienceSection = ({
   return (
     <section>
       <ScrollReveal variant="default">
-        <div className="mb-2 flex items-center gap-3">
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <div className="h-px flex-1 bg-foreground/10" />
+        <div className="mb-5 flex items-center gap-2.5 sm:mb-6">
+          <h2 className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-foreground/70">
+            {title}
+          </h2>
+          <span className="font-mono text-[11px] text-foreground/45">
+            {String(entries.length).padStart(2, "0")}
+          </span>
         </div>
       </ScrollReveal>
 
-      <div>
+      <div className="flex flex-col">
         {entries.map((entry, index) => (
-          <ScrollReveal key={entry.key} variant="default" delay={index * 160}>
+          <ScrollReveal key={entry.key} variant="default" delay={index * 120}>
             <ExperienceItem
               entry={entry}
               isWork={isWork}
-              isLast={index === entries.length - 1}
-              duration={
-                isWork ? formatDuration(language, entry.start, entry.end) : null
-              }
+              duration={formatDuration(language, entry.start, entry.end)}
               employmentLabel={chips[entry.employmentType] ?? entry.employmentType}
               locationLabel={chips[entry.locationType] ?? entry.locationType}
             />

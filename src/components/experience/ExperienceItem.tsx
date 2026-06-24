@@ -6,43 +6,35 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import CompanyLogo from "@/components/experience/CompanyLogo";
 import type { ExperienceEntry } from "@/lib/experience";
 
 interface ExperienceItemProps {
   entry: ExperienceEntry;
-  /** Work rows carry chips + a computed duration; education rows stay lighter. */
+  /** Work rows carry an employment + location type; education rows stay lighter. */
   isWork: boolean;
-  /** Last row in its section drops the bottom divider. */
-  isLast: boolean;
-  /** Localized duration string, or null for education. */
-  duration: string | null;
+  /** Localized duration string (e.g. "1 yr 2 mos"). */
+  duration: string;
   employmentLabel: string;
   locationLabel: string;
 }
 
-/** One logo-led experience row. */
+/**
+ * One logo-led experience row. Identity sits beside the logo; the date range +
+ * duration float to a quiet right rail on desktop and fold under the role on
+ * mobile. The whole row lifts into a soft panel on hover.
+ */
 const ExperienceItem = ({
   entry,
   isWork,
-  isLast,
   duration,
   employmentLabel,
   locationLabel,
 }: ExperienceItemProps) => {
   return (
-    <div
-      className={[
-        "group relative flex gap-4 sm:gap-5",
-        "-mx-3 rounded-xl px-3 py-5 sm:-mx-4 sm:px-4 sm:py-6",
-        "transition-colors duration-300 hover:bg-foreground/[0.03]",
-        !isLast && "border-b border-foreground/10",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
+    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-all duration-300 hover:bg-foreground/[0.04] hover:ring-1 hover:ring-foreground/5 sm:-mx-4 sm:gap-5 sm:px-4">
       <CompanyLogo
         company={entry.company}
         logo={entry.logo}
@@ -51,86 +43,86 @@ const ExperienceItem = ({
       />
 
       <div className="min-w-0 flex-1">
-        {/* role + employment chip (work only) */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <h3 className="text-lg font-medium text-primary">{entry.role}</h3>
-          {isWork && (
-            <Badge variant="secondary" className="font-normal">
-              {employmentLabel}
-            </Badge>
-          )}
+        {/* identity + date rail */}
+        <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
+          <div className="min-w-0">
+            <h3 className="text-base font-medium text-foreground transition-colors duration-300 group-hover:text-primary sm:text-lg">
+              {entry.role}
+            </h3>
+            <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-sm text-foreground/60">
+              <a
+                href={entry.companyLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${entry.company} (opens in a new tab)`}
+                className="group/link inline-flex items-center gap-0.5 rounded-sm font-medium text-foreground/75 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+              >
+                {entry.company}
+                <ArrowUpRight className="size-3.5 -translate-x-1 translate-y-px opacity-0 transition-all duration-300 group-hover/link:translate-x-0 group-hover/link:opacity-100 group-focus-within/link:translate-x-0 group-focus-within/link:opacity-100" />
+              </a>
+              {isWork && (
+                <>
+                  <span aria-hidden="true" className="text-foreground/40">
+                    ·
+                  </span>
+                  <span>{employmentLabel}</span>
+                </>
+              )}
+            </p>
+          </div>
+
+          <div className="shrink-0 font-mono text-xs leading-snug sm:pt-1 sm:text-right">
+            <p className="whitespace-nowrap text-foreground/70">{entry.period}</p>
+            <p className="whitespace-nowrap text-foreground/60">{duration}</p>
+          </div>
         </div>
 
-        {/* company link · location · location type (location type: work only) */}
-        <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-foreground/40">
-          <a
-            href={entry.companyLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${entry.company} (opens in a new tab)`}
-            className="group/link inline-flex items-center gap-1.5 font-medium text-foreground/70 underline decoration-foreground/30 underline-offset-2 transition-colors hover:text-primary hover:decoration-primary"
-          >
-            {entry.company}
-            <ExternalLink className="h-3 w-3 -translate-y-1 opacity-0 transition-all duration-300 group-hover/link:translate-y-0 group-hover/link:opacity-100" />
-          </a>
-          <span aria-hidden="true" className="text-foreground/25">
-            ·
-          </span>
-          <span>{entry.location}</span>
+        {/* location */}
+        <p className="mt-1 text-xs text-foreground/60">
+          {entry.location}
           {isWork && (
             <>
-              <span aria-hidden="true" className="text-foreground/25">
-                ·
-              </span>
-              <span>{locationLabel}</span>
+              <span aria-hidden="true"> · </span>
+              {locationLabel}
             </>
-          )}
-        </div>
-
-        {/* date range + computed duration (work only) */}
-        <p className="mt-1.5 font-mono text-xs text-foreground/40">
-          {entry.period}
-          {isWork && duration && (
-            <span className="text-foreground/30"> · {duration}</span>
           )}
         </p>
 
         {/* description */}
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-foreground/70">
+        <p className="mt-3.5 max-w-2xl text-sm leading-relaxed text-foreground/70">
           {entry.description}
         </p>
 
-        {/* achievements */}
+        {/* achievements — dot markers with a real hanging indent */}
         {entry.achievements.length > 0 && (
-          <div className="mt-4 space-y-2">
+          <ul className="mt-3.5 max-w-2xl space-y-2">
             {entry.achievements.map((achievement, i) => (
-              <div
+              <li
                 key={i}
-                className="flex items-start gap-2 text-sm leading-relaxed text-foreground/70"
+                className="flex gap-2.5 text-sm leading-relaxed text-foreground/65"
               >
-                <span aria-hidden="true" className="mt-px text-primary">
-                  -
-                </span>
+                <span
+                  aria-hidden="true"
+                  className="mt-[0.55em] size-1 shrink-0 rounded-full bg-primary/50"
+                />
                 <span>{achievement}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* tech tags — kept visually distinct from the pill chips above */}
-        {entry.technologies.length > 0 && (
-          <ul className="mt-5 flex flex-wrap gap-2">
-            {entry.technologies.map((tech, i) => (
-              <li key={i}>
-                <span className="inline-block rounded-md border border-foreground/10 bg-foreground/5 px-2 py-1 text-xs text-foreground/60 transition-colors duration-300 hover:border-primary/20 hover:text-primary">
-                  {tech}
-                </span>
               </li>
             ))}
           </ul>
         )}
+
+        {/* skills */}
+        {entry.technologies.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {entry.technologies.map((tech) => (
+              <Badge key={tech} variant="secondary" className="font-normal">
+                {tech}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </article>
   );
 };
 

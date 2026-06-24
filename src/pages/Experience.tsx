@@ -38,7 +38,7 @@ const Experience = () => {
         </p>
       </ScrollReveal>
 
-      <div className="mb-12 sm:mb-16">
+      <div className="mb-16 sm:mb-24">
         <ExperienceSection
           title={t.experience.sections?.work ?? "Work"}
           entries={work}
