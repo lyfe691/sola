@@ -11,8 +11,8 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { MDXProvider } from "@mdx-js/react";
 import ProjectPage from "@/components/ProjectDeepDive";
-import { ExternalLink, Globe, ArrowUpRight } from "lucide-react";
-import { LinkPreview } from "@/components/ui/custom/link-preview";
+import { ExternalLink, Globe } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { FaGithubAlt } from "react-icons/fa";
 import {
   getProjectConfig,
@@ -42,56 +42,6 @@ const getMDXComponent = (mdxPath: string) => {
   return component;
 };
 
-const getHostname = (href: string) => {
-  try {
-    return new URL(href).hostname.replace(/^www\./, "");
-  } catch {
-    return href;
-  }
-};
-
-const LinkTile: React.FC<{
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-  variant?: "primary" | "outline";
-}> = ({ href, label, icon, variant = "primary" }) => (
-  <LinkPreview href={href} previewType="auto" compact={true} className="block">
-    <div
-      className={[
-        "group relative flex h-full items-center gap-3 rounded-xl border px-4 py-3.5",
-        "transition-[background-color,border-color] duration-200 ease-out",
-        "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50",
-        variant === "primary"
-          ? "border-primary/25 bg-primary/[0.06] hover:border-primary/40 hover:bg-primary/10"
-          : "border-border bg-foreground/[0.02] hover:border-foreground/25 hover:bg-foreground/[0.05]",
-      ].join(" ")}
-    >
-      <span
-        className={[
-          "shrink-0 transition-colors duration-200",
-          variant === "primary"
-            ? "text-primary"
-            : "text-foreground/55 group-hover:text-foreground",
-        ].join(" ")}
-      >
-        {icon}
-      </span>
-
-      <span className="flex min-w-0 flex-col leading-tight">
-        <span className="truncate text-sm font-medium text-foreground">
-          {label}
-        </span>
-        <span className="truncate text-xs text-foreground/45">
-          {getHostname(href)}
-        </span>
-      </span>
-
-      <ArrowUpRight className="ml-auto size-4 shrink-0 text-foreground/30 transition-[color,transform] duration-200 ease-out group-hover:text-primary can-hover:group-hover:-translate-y-0.5 can-hover:group-hover:translate-x-0.5" />
-    </div>
-  </LinkPreview>
-);
-
 // algorithmically recommend projects with overlapping tech stacks
 const getRecommendedProjectSlugs = (
   currentSlug: string,
@@ -106,7 +56,9 @@ const getRecommendedProjectSlugs = (
   const docFreq: Record<string, number> = {};
   for (const sl of allSlugs) {
     const seen = new Set<string>();
-    for (const t of (projectPagesConfig[sl].technologies || []).map(normalize)) {
+    for (const t of (projectPagesConfig[sl].technologies || []).map(
+      normalize,
+    )) {
       if (!seen.has(t)) {
         docFreq[t] = (docFreq[t] || 0) + 1;
         seen.add(t);
@@ -193,7 +145,9 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         animate="visible"
         variants={{
           hidden: {},
-          visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
+          visible: {
+            transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+          },
         }}
       >
         {/* date - article-like header */}
@@ -263,40 +217,65 @@ const ProjectDeepDiveRenderer: React.FC = () => {
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.links}
           </h2>
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
+          <div className="flex flex-wrap gap-3">
             {config.links.live && (
-              <LinkTile
-                href={config.links.live}
-                label={
-                  config.links.live.includes("chromewebstore")
-                    ? t.common.chromeStore
-                    : t.common.visitSite
+              <Button
+                nativeButton={false}
+                size="lg"
+                className="gap-2"
+                render={
+                  <a
+                    href={config.links.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
                 }
-                icon={
-                  config.links.live.includes("chromewebstore") ? (
-                    <Globe className="w-4 h-4" />
-                  ) : (
-                    <ExternalLink className="w-4 h-4" />
-                  )
-                }
-                variant="primary"
-              />
+              >
+                {config.links.live.includes("chromewebstore") ? (
+                  <Globe className="h-4 w-4" />
+                ) : (
+                  <ExternalLink className="h-4 w-4" />
+                )}
+                {config.links.live.includes("chromewebstore")
+                  ? t.common.chromeStore
+                  : t.common.visitSite}
+              </Button>
             )}
             {config.links.github && (
-              <LinkTile
-                href={config.links.github}
-                label={t.common.sourceCode}
-                icon={<FaGithubAlt className="w-4 h-4" />}
+              <Button
+                nativeButton={false}
+                size="lg"
                 variant="outline"
-              />
+                className="gap-2"
+                render={
+                  <a
+                    href={config.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
+              >
+                <FaGithubAlt className="h-4 w-4" />
+                {t.common.sourceCode}
+              </Button>
             )}
             {config.links.demo && (
-              <LinkTile
-                href={config.links.demo}
-                label={t.common.demo}
-                icon={<ExternalLink className="w-4 h-4" />}
+              <Button
+                nativeButton={false}
+                size="lg"
                 variant="outline"
-              />
+                className="gap-2"
+                render={
+                  <a
+                    href={config.links.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
+              >
+                <ExternalLink className="h-4 w-4" />
+                {t.common.demo}
+              </Button>
             )}
           </div>
         </motion.section>
