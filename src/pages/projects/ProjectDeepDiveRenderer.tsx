@@ -150,7 +150,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
           },
         }}
       >
-        {/* date - article-like header */}
+        {/* date */}
         <motion.div
           variants={{
             hidden: { opacity: 0, y: 12 },
@@ -160,9 +160,9 @@ const ProjectDeepDiveRenderer: React.FC = () => {
               transition: { duration: 0.45, ease: EASE_OUT },
             },
           }}
-          className="text-center -mb-8"
+          className="text-center"
         >
-          <time className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
+          <time className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
             {config.date}
           </time>
         </motion.div>
