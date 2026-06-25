@@ -11,7 +11,7 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { MDXProvider } from "@mdx-js/react";
 import ProjectPage from "@/components/ProjectDeepDive";
-import { ExternalLink, Globe } from "lucide-react";
+import { ExternalLink, Globe, ArrowUpRight } from "lucide-react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { FaGithubAlt } from "react-icons/fa";
 import {
@@ -59,33 +59,35 @@ const LinkTile: React.FC<{
   <LinkPreview href={href} previewType="auto" compact={true} className="block">
     <div
       className={[
-        "group relative w-full h-full rounded-xl px-4 py-3",
-        "border transition-colors duration-150 ease-out",
+        "group relative flex h-full items-center gap-3 rounded-xl border px-4 py-3.5",
+        "transition-[background-color,border-color] duration-200 ease-out",
+        "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50",
         variant === "primary"
-          ? "border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/40"
-          : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10",
-        "shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50",
-        "inline-flex items-center gap-3 text-foreground",
+          ? "border-primary/25 bg-primary/[0.06] hover:border-primary/40 hover:bg-primary/10"
+          : "border-border bg-foreground/[0.02] hover:border-foreground/25 hover:bg-foreground/[0.05]",
       ].join(" ")}
     >
-      {/* decorative shine */}
-      <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-
-      {/* icon pill */}
-      <span className="shrink-0 grid place-items-center w-8 h-8 rounded-lg bg-foreground/10 text-foreground/70 group-hover:bg-primary/15 group-hover:text-primary transition-colors">
+      <span
+        className={[
+          "shrink-0 transition-colors duration-200",
+          variant === "primary"
+            ? "text-primary"
+            : "text-foreground/55 group-hover:text-foreground",
+        ].join(" ")}
+      >
         {icon}
       </span>
 
-      {/* label */}
-      <span className="flex flex-col text-left leading-tight">
-        <span className="text-sm font-medium tracking-tight">{label}</span>
-        <span className="text-[11px] text-foreground/60">
+      <span className="flex min-w-0 flex-col leading-tight">
+        <span className="truncate text-sm font-medium text-foreground">
+          {label}
+        </span>
+        <span className="truncate text-xs text-foreground/45">
           {getHostname(href)}
         </span>
       </span>
 
-      {/* arrow cue */}
-      <ExternalLink className="ml-auto w-4 h-4 text-foreground/40 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-colors duration-150 ease-out" />
+      <ArrowUpRight className="ml-auto size-4 shrink-0 text-foreground/30 transition-[color,transform] duration-200 ease-out group-hover:text-primary can-hover:group-hover:-translate-y-0.5 can-hover:group-hover:translate-x-0.5" />
     </div>
   </LinkPreview>
 );
@@ -191,16 +193,19 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         animate="visible"
         variants={{
           hidden: {},
-          visible: { transition: { staggerChildren: 0.07 } },
+          visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
         }}
       >
         {/* date - article-like header */}
         <motion.div
           variants={{
             hidden: { opacity: 0, y: 12 },
-            visible: { opacity: 1, y: 0 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
           }}
-          transition={{ duration: 0.45, ease: EASE_OUT }}
           className="text-center -mb-8"
         >
           <time className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
@@ -212,9 +217,12 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         <motion.section
           variants={{
             hidden: { opacity: 0, y: 12 },
-            visible: { opacity: 1, y: 0 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
           }}
-          transition={{ duration: 0.45, ease: EASE_OUT }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.overview}
@@ -228,9 +236,12 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         <motion.section
           variants={{
             hidden: { opacity: 0, y: 12 },
-            visible: { opacity: 1, y: 0 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
           }}
-          transition={{ duration: 0.45, ease: EASE_OUT }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.techStack}
@@ -242,9 +253,12 @@ const ProjectDeepDiveRenderer: React.FC = () => {
         <motion.section
           variants={{
             hidden: { opacity: 0, y: 12 },
-            visible: { opacity: 1, y: 0 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
           }}
-          transition={{ duration: 0.45, ease: EASE_OUT }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.links}
