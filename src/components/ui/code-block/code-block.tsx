@@ -66,16 +66,16 @@ export const CodeBlock = ({
         className,
       )}
     >
-      {fileName && (
-        <figcaption className="flex items-center border-b border-border px-4 py-2.5 font-mono text-xs text-muted-foreground">
-          {fileName}
+      {fileName ? (
+        // filename present → header row with the copy button laid out inside it
+        <figcaption className="flex items-center justify-between gap-2 border-b border-border py-1.5 pl-4 pr-2 font-mono text-xs text-muted-foreground">
+          <span className="truncate">{fileName}</span>
+          <CopyButton value={value} />
         </figcaption>
+      ) : (
+        // no header → quiet copy button floats in the corner
+        <CopyButton value={value} className="absolute right-2.5 top-2.5" />
       )}
-
-      <CopyButton
-        value={value}
-        className={cn("absolute right-2.5", fileName ? "top-2" : "top-2.5")}
-      />
 
       <div className="overflow-x-auto py-4">
         {html ? (

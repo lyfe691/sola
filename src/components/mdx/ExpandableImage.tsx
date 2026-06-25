@@ -7,6 +7,7 @@
  */
 
 import React, { useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";
@@ -35,7 +36,12 @@ const ImageLightbox: React.FC<{
     };
   }, [isOpen, onClose]);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  // Portal to <body> so the fixed overlay escapes any ancestor that creates a
+  // containing block (e.g. the page transition's filter/transform on PageShell),
+  // which would otherwise position it off-screen on a scrolled article.
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -64,7 +70,8 @@ const ImageLightbox: React.FC<{
           </button>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 };
 
