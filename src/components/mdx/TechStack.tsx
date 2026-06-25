@@ -18,7 +18,7 @@ export const TechStack: React.FC<{
       <span
         key={tech}
         className="px-3 py-1.5 bg-primary/5 text-primary border border-primary/20
-                 text-xs rounded-lg font-medium transition-all duration-200
+                 text-xs rounded-lg font-medium transition-colors duration-200
                  hover:bg-primary/10 hover:border-primary/30"
       >
         {tech}

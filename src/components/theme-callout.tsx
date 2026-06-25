@@ -83,16 +83,17 @@ export function ThemeCallout() {
     setOpen(false);
   }, []);
 
-  // re-measure every frame: tracks the nav's scroll morph, resizes, and
-  // breakpoint swaps between the two toggle instances
+  // re-measure only on layout-affecting events (resize/scroll + toggle
+  // resize from the nav's scroll morph and breakpoint swaps) instead of
+  // every frame; coalesced into a single rAF
   useEffect(() => {
     if (!open) return;
     let raf = 0;
     let last = "";
-    const start = performance.now();
-    const track = (now: number) => {
-      raf = requestAnimationFrame(track);
-      if (now - start < APPEAR_DELAY) return; // let the nav entrance settle
+    let settled = false;
+
+    const remeasure = () => {
+      if (!settled) return; // let the nav entrance settle first
       const next = document.querySelector(OVERLAY_SELECTOR) ? null : measure();
       const key = next ? `${next.top},${next.right},${next.arrowRight}` : "";
       if (key !== last) {
@@ -100,8 +101,47 @@ export function ThemeCallout() {
         setPos(next);
       }
     };
-    raf = requestAnimationFrame(track);
-    return () => cancelAnimationFrame(raf);
+
+    const schedule = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        remeasure();
+      });
+    };
+
+    const settle = window.setTimeout(() => {
+      settled = true;
+      remeasure();
+    }, APPEAR_DELAY);
+
+    const ro = new ResizeObserver(schedule);
+    let observed: HTMLElement | null = null;
+    const observeToggle = () => {
+      const el = visibleToggle();
+      if (el && el !== observed) {
+        if (observed) ro.unobserve(observed);
+        ro.observe(el);
+        observed = el;
+      }
+    };
+    observeToggle();
+    // re-bind to the visible toggle on layout shifts (breakpoint swap)
+    const onLayout = () => {
+      observeToggle();
+      schedule();
+    };
+
+    window.addEventListener("resize", onLayout);
+    window.addEventListener("scroll", schedule, true);
+
+    return () => {
+      window.clearTimeout(settle);
+      if (raf) cancelAnimationFrame(raf);
+      ro.disconnect();
+      window.removeEventListener("resize", onLayout);
+      window.removeEventListener("scroll", schedule, true);
+    };
   }, [open]);
 
   // opening the toggle is the dismissal; Esc works too

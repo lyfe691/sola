@@ -30,6 +30,7 @@ import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { SOCIAL_LINKS } from "@/config/social";
 import { createPortal } from "react-dom";
+import { EASE_OUT } from "@/utils/transitions";
 
 // file constraints
 const ACCEPTED_MIME = new Set<string>([
@@ -127,7 +128,7 @@ const FieldError = ({ name, error }: { name: string; error?: string }) => (
           initial={{ opacity: 0, y: -2 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -2 }}
-          transition={{ duration: 0.15, ease: "easeOut" }}
+          transition={{ duration: 0.15, ease: EASE_OUT }}
           className="pt-1 text-sm leading-5 text-destructive/90"
           role="alert"
           aria-live="polite"
@@ -394,7 +395,7 @@ const Contact = () => {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.1 }}
+            transition={{ duration: 0.4, delay: 0.1, ease: EASE_OUT }}
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-4">
@@ -408,7 +409,7 @@ const Contact = () => {
                     initial={{ opacity: 0, x: -8 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: 0.1 + 0.08 * i }}
+                    transition={{ duration: 0.3, delay: 0.1 + 0.08 * i, ease: EASE_OUT }}
                     className="flex items-start gap-3 text-sm text-foreground/70"
                   >
                     <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
@@ -448,7 +449,7 @@ const Contact = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.15 }}
+          transition={{ duration: 0.4, delay: 0.15, ease: EASE_OUT }}
         >
           <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
             <form
@@ -561,7 +562,7 @@ const Contact = () => {
                   <div className="mt-2 w-full">
                     <div className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
                       <div
-                        className="h-full bg-foreground transition-all"
+                        className="h-full bg-foreground transition-[width]"
                         style={{ width: `${uploadProgress ?? 0}%` }}
                       />
                     </div>
@@ -637,7 +638,7 @@ const Contact = () => {
                 initial={{ scale: 0.96, opacity: 0, filter: "blur(6px)" }}
                 animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
                 exit={{ scale: 0.98, opacity: 0, filter: "blur(6px)" }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
               >
                 <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 shadow-xl ring-1 ring-foreground/10 sm:px-6 sm:py-4">
                   <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-foreground/10 to-transparent blur-xl" />

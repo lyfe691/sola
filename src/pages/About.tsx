@@ -7,7 +7,6 @@
  */
 
 import React, { useState, useEffect } from "react";
-import { motion } from "motion/react";
 import {
   Book,
   Code2,
@@ -111,7 +110,7 @@ const InterestCard = ({
         src={image}
         alt={title}
         loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
+        className="h-full w-full object-cover transition-transform duration-200 ease-out can-hover:group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-linear-to-t from-background to-transparent" />
     </div>
@@ -611,12 +610,10 @@ const About = () => {
 
           <div className="md:col-span-2 relative">
             <div className="aspect-square overflow-hidden rounded-xl border-2 border-border shadow-xs">
-              <motion.img
+              <img
                 src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
                 alt="Yanis Sebastian Zürcher"
-                className="w-full h-full object-cover"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.4 }}
+                className="w-full h-full object-cover transition-transform duration-200 ease-out can-hover:scale-[1.02]"
               />
             </div>
             <div className="absolute -z-10 -bottom-3 -right-3 w-full h-full bg-primary/5 rounded-xl -rotate-2" />

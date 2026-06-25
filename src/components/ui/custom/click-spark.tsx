@@ -49,6 +49,18 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   const sparksRef = useRef<Spark[]>([]);
   const animationRef = useRef<number | null>(null);
   const drawRef = useRef<((timestamp: number) => void) | null>(null);
+  const prefersReducedMotion = useRef(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      prefersReducedMotion.current = mq.matches;
+    };
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -166,6 +178,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
   ]);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    if (prefersReducedMotion.current) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();

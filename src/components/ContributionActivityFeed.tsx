@@ -29,6 +29,7 @@ import {
   Clock,
 } from "lucide-react";
 import { IconButton } from "./ui/custom/icon-button";
+import { EASE_OUT } from "@/utils/transitions";
 
 interface ContributionActivityFeedProps {
   events: ProcessedActivity[];
@@ -191,11 +192,13 @@ const ActivityItem = ({
   index,
   locale,
   t,
+  play,
 }: {
   activity: ProcessedActivity;
   index: number;
   locale: string;
   t: TranslationAny;
+  play: boolean;
 }) => {
   const formatDate = (timestamp: string, locale: string) => {
     const date = new Date(timestamp);
@@ -231,10 +234,14 @@ const ActivityItem = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8 }}
+      initial={play ? { opacity: 0, y: 8 } : false}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.03, duration: 0.4, ease: "easeOut" }}
-      className="group px-4 py-3 hover:bg-foreground/2 transition-all duration-300"
+      transition={
+        play
+          ? { delay: index * 0.03, duration: 0.4, ease: EASE_OUT }
+          : { duration: 0 }
+      }
+      className="group px-4 py-3 hover:bg-foreground/2 transition-colors duration-150"
     >
       <div className="flex items-start gap-3">
         <div className="mt-1 p-1.5 rounded-lg bg-foreground/4 group-hover:bg-foreground/8 transition-colors duration-300">
@@ -304,6 +311,14 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({
   const locale = localeMap[language] || "en";
   const eventsToShow = events.slice(0, 6);
 
+  // play the entrance cascade only once; a refetch or locale switch
+  // must not restart the 6-item stagger.
+  const hasAnimated = React.useRef(false);
+  const play = !hasAnimated.current;
+  React.useEffect(() => {
+    hasAnimated.current = true;
+  }, []);
+
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between mb-6">
@@ -326,6 +341,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({
                   index={index}
                   locale={locale}
                   t={t}
+                  play={play}
                 />
               ))}
             </div>
@@ -355,7 +371,7 @@ const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({
             variant="default"
             icon={<ArrowUpRight className="w-3.5 h-3.5" />}
             size="lg"
-            className="transition-all duration-300 group border-foreground/20 rounded-full"
+            className="transition-colors duration-200 group border-foreground/20 rounded-full"
             label={t.common.moreOnGithub}
             onClick={() =>
               window.open(

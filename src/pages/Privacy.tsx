@@ -9,6 +9,7 @@
  */
 
 import { motion } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -669,22 +670,28 @@ const Privacy = () => {
   // bespoke motion variants
   const fadeUp = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({
+    visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.4, delay: 0.04 * i },
-    }),
+      transition: { duration: 0.32, ease: EASE_OUT },
+    },
   } as const;
   const cardIn = {
-    hidden: { opacity: 0, scale: 0.985 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.45 } },
+    hidden: { opacity: 0, y: 12, scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.35, ease: EASE_OUT },
+    },
   } as const;
-  const trail = (index: number) => ({
-    custom: index,
-    variants: fadeUp,
-    initial: "hidden",
-    animate: "visible" as const,
-  });
+  // Reveal-on-scroll props shared by every section card.
+  const reveal = {
+    variants: cardIn,
+    initial: "hidden" as const,
+    whileInView: "visible" as const,
+    viewport: { once: true, margin: "-10% 0px" },
+  };
 
   return (
     <>
@@ -694,7 +701,13 @@ const Privacy = () => {
       </Helmet>
 
       <div className="max-w-4xl mx-auto">
-        <motion.div {...trail(1)} className="mb-8">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10% 0px" }}
+          className="mb-8"
+        >
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -717,14 +730,20 @@ const Privacy = () => {
         </motion.div>
       </div>
 
-      <motion.div {...trail(2)} className="mb-16 text-center">
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-10% 0px" }}
+        className="mb-16 text-center"
+      >
         <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
           {L[language].pageTitle}
         </h1>
         <div className="mt-8 flex items-center justify-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border bg-background/60 px-2.5 py-1 text-[0.70rem]/[1rem] text-foreground/60 backdrop-blur-xs">
             {updatedLabel}:{" "}
-            <span className="bg-linear-to-r from-foreground/60 via-primary to-foreground/60 bg-size-[200%_100%] bg-clip-text text-transparent animate-shine">
+            <span className="font-medium text-foreground">
               {formattedUpdated}
             </span>
           </span>
@@ -736,9 +755,7 @@ const Privacy = () => {
           {/* Intro card */}
           <motion.section
             id="introduction"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -769,9 +786,7 @@ const Privacy = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <motion.section
               id="hosting"
-              variants={cardIn}
-              initial="hidden"
-              animate="visible"
+              {...reveal}
               className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
             >
               <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -790,9 +805,7 @@ const Privacy = () => {
 
             <motion.section
               id="analytics"
-              variants={cardIn}
-              initial="hidden"
-              animate="visible"
+              {...reveal}
               className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
             >
               <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -816,9 +829,7 @@ const Privacy = () => {
 
           <motion.section
             id="cookies"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -831,9 +842,7 @@ const Privacy = () => {
 
           <motion.section
             id="contact"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -852,9 +861,7 @@ const Privacy = () => {
 
           <motion.section
             id="github"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -873,9 +880,7 @@ const Privacy = () => {
 
           <motion.section
             id="processors"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -888,9 +893,7 @@ const Privacy = () => {
 
           <motion.section
             id="rights"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -917,9 +920,7 @@ const Privacy = () => {
 
           <motion.section
             id="changes"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -934,9 +935,7 @@ const Privacy = () => {
 
           <motion.section
             id="impressum"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
+            {...reveal}
             className="rounded-xl border  backdrop-blur-xs p-6"
           >
             <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -966,7 +965,10 @@ const Privacy = () => {
         </div>
 
         <motion.div
-          {...trail(20)}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10% 0px" }}
           className="mt-16 pt-8 border-t border-border"
           onClick={h}
         >

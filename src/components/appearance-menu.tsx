@@ -30,10 +30,9 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { ThemeMenuContent, ThemeTriggerIcon } from "./theme-toggle";
 import { LanguageMenuContent } from "./language-toggle";
+import { EASE_OUT } from "@/utils/transitions";
 
 type MenuId = "language" | "theme";
-
-const EASE = [0.22, 1, 0.36, 1] as const;
 
 export function AppearanceMenu() {
   const { language } = useLanguage();
@@ -225,9 +224,9 @@ export function AppearanceMenu() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{
-                layout: { duration: 0.34, ease: EASE },
+                layout: { duration: 0.24, ease: EASE_OUT },
                 duration: 0.16,
-                ease: EASE,
+                ease: EASE_OUT,
               }}
               style={{ position: "fixed", top: anchor.top, right: anchor.right }}
               className="z-50 overflow-hidden rounded-3xl bg-popover p-1.5 text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-none dark:ring-foreground/10"
@@ -244,7 +243,7 @@ export function AppearanceMenu() {
                 initial={{ scale: 0.95 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.95 }}
-                transition={{ duration: 0.16, ease: EASE }}
+                transition={{ duration: 0.16, ease: EASE_OUT }}
                 style={{ transformOrigin: "top right" }}
                 className="max-h-[calc(100dvh-5rem)] overflow-x-hidden overflow-y-auto overscroll-contain"
               >

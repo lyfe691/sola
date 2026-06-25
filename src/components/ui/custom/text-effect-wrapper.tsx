@@ -10,6 +10,8 @@ import {
   type Variants,
 } from "motion/react";
 import React, { useState, useEffect, useRef } from "react";
+import { useReducedMotion } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
 
 export type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
 
@@ -87,9 +89,9 @@ const presetVariants: Record<
   scale: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, scale: 0 },
+      hidden: { opacity: 0, scale: 0.9 },
       visible: { opacity: 1, scale: 1 },
-      exit: { opacity: 0, scale: 0 },
+      exit: { opacity: 0, scale: 0.9 },
     },
   },
   fade: {
@@ -284,6 +286,7 @@ export function TextEffectWrapper({
     ),
     item: createVariantsWithTransition(variants?.item || baseVariants.item, {
       duration: baseDuration,
+      ease: EASE_OUT,
       ...segmentTransition,
     }),
   };
@@ -338,75 +341,107 @@ export function CyclingTextEffect({
   style?: React.CSSProperties;
   useCurve?: boolean;
 }) {
+  const prefersReducedMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [height, setHeight] = useState<number | "auto">("auto");
-  const contentRef = useRef<HTMLDivElement>(null);
-  const lastStableHeight = useRef<number>(0);
-  const HEIGHT_THRESHOLD = 10; // Only animate if height changes by more than this
+  const [isPaused, setIsPaused] = useState(false);
+  const completedRef = useRef(false);
 
+  // Cycle through the sentences once, then stop. Pause on hover/focus and in
+  // background tabs. When reduced, show one sentence and never start a timer.
   useEffect(() => {
-    if (texts.length <= 1) return;
+    if (prefersReducedMotion || texts.length <= 1) return;
+    if (isPaused || completedRef.current) return;
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % texts.length);
-    }, displayDuration);
+    let interval: ReturnType<typeof setInterval> | undefined;
 
-    return () => clearInterval(interval);
-  }, [texts.length, displayDuration]);
-
-  // Use ResizeObserver to track content height after text animation completes
-  useEffect(() => {
-    if (!contentRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const newHeight = entry.contentRect.height;
-
-        // Only update if height changed significantly from last stable height
-        if (Math.abs(newHeight - lastStableHeight.current) > HEIGHT_THRESHOLD) {
-          lastStableHeight.current = newHeight;
-          setHeight(newHeight);
-        } else if (lastStableHeight.current === 0) {
-          // Initialize on first render
-          lastStableHeight.current = newHeight;
-          setHeight(newHeight);
+    const tick = () => {
+      setCurrentIndex((prev) => {
+        const next = prev + 1;
+        if (next >= texts.length - 1) {
+          completedRef.current = true;
+          if (interval) clearInterval(interval);
         }
-      }
-    });
+        return next % texts.length;
+      });
+    };
 
-    observer.observe(contentRef.current);
-    return () => observer.disconnect();
-  }, []);
+    const start = () => {
+      if (interval || completedRef.current) return;
+      interval = setInterval(tick, displayDuration);
+    };
+
+    const stop = () => {
+      if (interval) clearInterval(interval);
+      interval = undefined;
+    };
+
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    if (!document.hidden) start();
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      stop();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [prefersReducedMotion, texts.length, displayDuration, isPaused]);
 
   if (texts.length === 0) return null;
 
+  if (prefersReducedMotion) {
+    return (
+      <div style={style} className={className}>
+        <TextEffectWrapper
+          per="word"
+          preset="fade"
+          as={as || "span"}
+          delay={delay}
+          style={{ display: "block" }}
+        >
+          {texts[0]}
+        </TextEffectWrapper>
+      </div>
+    );
+  }
+
   return (
-    <motion.div
+    <div
       style={style}
       className={className}
-      animate={{ height }}
-      transition={{
-        height: { type: "spring", stiffness: 300, damping: 30 },
-      }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocus={() => setIsPaused(true)}
+      onBlur={() => setIsPaused(false)}
     >
-      <div ref={contentRef}>
-        <AnimatePresence mode="wait">
-          <motion.div key={currentIndex}>
-            <TextEffectWrapper
-              per={per}
-              preset={preset}
-              as={as || "span"}
-              delay={delay}
-              speedReveal={speedReveal}
-              speedSegment={speedSegment}
-              trigger={true}
-              style={{ display: "block" }}
-            >
-              {texts[currentIndex]}
-            </TextEffectWrapper>
-          </motion.div>
-        </AnimatePresence>
+      {/* Reserved line band: an invisible sizer holding the longest sentence
+          keeps the height stable so we never animate a layout prop. The
+          visible item is absolutely positioned on top and swapped in place. */}
+      <div className="relative">
+        <span aria-hidden="true" className="invisible block whitespace-pre-line">
+          {texts.reduce((a, b) => (b.length > a.length ? b : a), "")}
+        </span>
+        <div className="absolute inset-0">
+          <AnimatePresence mode="wait">
+            <motion.div key={currentIndex}>
+              <TextEffectWrapper
+                per={per}
+                preset={preset}
+                as={as || "span"}
+                delay={delay}
+                speedReveal={speedReveal}
+                speedSegment={speedSegment}
+                trigger={true}
+                style={{ display: "block" }}
+              >
+                {texts[currentIndex]}
+              </TextEffectWrapper>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

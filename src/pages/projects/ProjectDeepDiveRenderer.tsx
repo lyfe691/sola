@@ -26,6 +26,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
+import { EASE_OUT } from "@/utils/transitions";
 
 // dynamic mdx components, cached so each path keeps a stable lazy identity
 const mdxComponents = new Map<
@@ -184,12 +185,22 @@ const ProjectDeepDiveRenderer: React.FC = () => {
       silkNoiseIntensity={config.silk.noiseIntensity}
       silkRotation={config.silk.rotation}
     >
-      <div className="space-y-16">
+      <motion.div
+        className="space-y-16"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.07 } },
+        }}
+      >
         {/* date - article-like header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.05 }}
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: 0.45, ease: EASE_OUT }}
           className="text-center -mb-8"
         >
           <time className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
@@ -199,9 +210,11 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* overview */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: 0.45, ease: EASE_OUT }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.overview}
@@ -213,9 +226,11 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* tech stack */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: 0.45, ease: EASE_OUT }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.techStack}
@@ -225,9 +240,11 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* links - hero call-to-action tiles */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: { opacity: 1, y: 0 },
+          }}
+          transition={{ duration: 0.45, ease: EASE_OUT }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.links}
@@ -274,10 +291,10 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* mdx content */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.05 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4, ease: EASE_OUT }}
           className="prose prose-sm max-w-none"
         >
           <MDXProvider components={MDXComponents}>
@@ -295,10 +312,10 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* related projects */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.45, ease: EASE_OUT }}
           className="border-t border-border pt-12"
         >
           <h2 className="text-lg font-semibold mb-6 text-foreground">
@@ -346,7 +363,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
             })}
           </div>
         </motion.section>
-      </div>
+      </motion.div>
     </ProjectPage>
   );
 };

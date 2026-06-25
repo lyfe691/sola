@@ -54,7 +54,7 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       >
         {!hideLabel && (
           <span
-            className="relative z-10 text-center transition-all duration-300 ease-out group-hover/btn:scale-95 group-hover/btn:opacity-0"
+            className="relative z-10 text-center transition-[transform,translate,scale,rotate,opacity] duration-300 ease-out can-hover:group-hover/btn:scale-95 can-hover:group-hover/btn:opacity-0"
             style={{
               [isRight ? "paddingRight" : "paddingLeft"]:
                 "calc(max(28%, 2.25rem) + 0.25rem)",
@@ -67,12 +67,12 @@ export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         <span
           aria-hidden
           className={cn(
-            "absolute inset-y-1 flex w-[max(28%,2.25rem)] items-center justify-center rounded-[inherit] transition-all duration-300 ease-out group-hover/btn:w-[calc(100%-0.5rem)] group-active/btn:scale-95",
+            "absolute inset-y-1 flex w-[max(28%,2.25rem)] items-center justify-center rounded-[inherit] transition-[width,background-color] duration-300 ease-out can-hover:group-hover/btn:w-[calc(100%-0.5rem)]",
             isRight ? "right-1" : "left-1",
             pillBg,
           )}
         >
-          <span className="flex transition-transform duration-300 ease-out group-hover/btn:scale-110">
+          <span className="flex transition-transform duration-300 ease-out can-hover:group-hover/btn:scale-110 group-active/btn:scale-95 group-active/btn:duration-[120ms]">
             {icon}
           </span>
         </span>

@@ -7,7 +7,8 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
-import { AnimatePresence, motion, Variants } from "motion/react";
+import { AnimatePresence, motion, Variants, useReducedMotion } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
 
 interface NameMorpherProps {
   greeting: string;
@@ -27,88 +28,34 @@ const ANIMATION_CONFIG = {
 const letterVariants: Variants = {
   initial: {
     opacity: 0,
-    x: 25,
     y: 8,
-    rotateX: 30,
-    rotateY: -60,
-    scale: 0.85,
     filter: "blur(4px)",
   },
   animate: (custom: number) => ({
     opacity: 1,
-    x: 0,
     y: 0,
-    rotateX: 0,
-    rotateY: 0,
-    scale: 1,
     filter: "blur(0px)",
     transition: {
-      x: {
-        ...ANIMATION_CONFIG.SPRING,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
       y: {
         ...ANIMATION_CONFIG.SPRING,
         delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
       },
-      rotateX: {
-        type: "spring",
-        stiffness: 250,
-        damping: 20,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      rotateY: {
-        type: "spring",
-        stiffness: 250,
-        damping: 20,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      scale: {
-        type: "spring",
-        stiffness: 280,
-        damping: 18,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      opacity: { duration: 0.3, ease: "easeIn", delay: custom * 0.05 },
-      filter: { duration: 0.3, ease: "easeIn", delay: custom * 0.05 },
+      opacity: { duration: 0.3, ease: EASE_OUT, delay: custom * 0.05 },
+      filter: { duration: 0.3, ease: EASE_OUT, delay: custom * 0.05 },
     },
   }),
   exit: (custom: number) => ({
     opacity: 0,
-    x: -25,
     y: -8,
-    rotateX: -30,
-    rotateY: 60,
-    scale: 0.85,
     filter: "blur(4px)",
     transition: {
-      x: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
       y: {
         duration: 0.35,
         ease: ANIMATION_CONFIG.EASE_CURVE,
         delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
       },
-      rotateX: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      rotateY: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      scale: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      opacity: { duration: 0.25, ease: "easeOut", delay: custom * 0.03 },
-      filter: { duration: 0.25, ease: "easeOut", delay: custom * 0.03 },
+      opacity: { duration: 0.25, ease: EASE_OUT, delay: custom * 0.03 },
+      filter: { duration: 0.25, ease: EASE_OUT, delay: custom * 0.03 },
     },
   }),
 };
@@ -124,6 +71,7 @@ export const NameMorpher = ({
   names = ["Yanis", "Sebi", "lyfe691"],
   cycleInterval = ANIMATION_CONFIG.CYCLE_INTERVAL,
 }: NameMorpherProps) => {
+  const prefersReducedMotion = useReducedMotion();
   const [currentNameIndex, setCurrentNameIndex] = useState(0);
 
   const currentName = useMemo(
@@ -136,15 +84,68 @@ export const NameMorpher = ({
     [currentName.length],
   );
 
+  // Cycle through the alternate names a couple of times, then settle on the
+  // real (first) name. Pause in background tabs; skip entirely when reduced.
   useEffect(() => {
-    if (names.length <= 1) return;
+    if (prefersReducedMotion || names.length <= 1) return;
 
-    const interval = setInterval(() => {
-      setCurrentNameIndex((prev) => (prev + 1) % names.length);
-    }, cycleInterval);
+    // One full pass through the names, then back to the first.
+    const totalSteps = names.length;
+    let step = 0;
+    let interval: ReturnType<typeof setInterval> | undefined;
 
-    return () => clearInterval(interval);
-  }, [names.length, cycleInterval]);
+    const tick = () => {
+      step += 1;
+      setCurrentNameIndex(step % names.length);
+      if (step >= totalSteps) {
+        // settled on the first (real) name
+        if (interval) clearInterval(interval);
+        interval = undefined;
+      }
+    };
+
+    const start = () => {
+      if (interval || step >= totalSteps) return;
+      interval = setInterval(tick, cycleInterval);
+    };
+
+    const stop = () => {
+      if (interval) clearInterval(interval);
+      interval = undefined;
+    };
+
+    const onVisibility = () => {
+      if (document.hidden) stop();
+      else start();
+    };
+
+    if (!document.hidden) start();
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      stop();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [prefersReducedMotion, names.length, cycleInterval]);
+
+  if (prefersReducedMotion) {
+    return (
+      <>
+        <span className="text-foreground inline-block">{greeting}</span>
+        <span
+          className="relative inline-flex items-center justify-center align-baseline"
+          style={{
+            padding: "0.1em",
+            borderRadius: "0.25em",
+            backgroundColor:
+              "color-mix(in oklab, var(--muted) 65%, transparent)",
+          }}
+        >
+          <span className="text-primary inline-block">{names[0]}</span>
+        </span>
+      </>
+    );
+  }
 
   return (
     <>
@@ -152,12 +153,8 @@ export const NameMorpher = ({
       <motion.span
         className="relative inline-block overflow-hidden align-baseline"
         initial={false}
-        animate={{ width: containerWidth }}
-        transition={{
-          type: "spring",
-          stiffness: 200,
-          damping: 25,
-        }}
+        layout
+        transition={{ layout: { duration: 0.35, ease: EASE_OUT } }}
         style={{
           display: "inline-flex",
           justifyContent: "center",
@@ -165,6 +162,7 @@ export const NameMorpher = ({
           borderRadius: "0.25em",
           backgroundColor: "color-mix(in oklab, var(--muted) 65%, transparent)",
           verticalAlign: "baseline",
+          width: containerWidth,
         }}
       >
         <AnimatePresence mode="popLayout">
@@ -174,9 +172,8 @@ export const NameMorpher = ({
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.35, ease: EASE_OUT }}
             className="inline-flex"
-            style={{ perspective: "500px" }}
           >
             {currentName.split("").map((letter, index) => (
               <motion.span
@@ -190,7 +187,7 @@ export const NameMorpher = ({
                 style={{
                   textShadow:
                     "0 0 12px color-mix(in oklab, var(--primary) 20%, transparent)",
-                  willChange: "transform, opacity, filter",
+                  willChange: "opacity, filter",
                 }}
               >
                 {letter}

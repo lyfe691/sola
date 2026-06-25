@@ -80,7 +80,7 @@ const Services = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
         {servicesList.map((service, index) => (
-          <ScrollReveal key={service.key} variant="default" delay={index * 140}>
+          <ScrollReveal key={service.key} variant="default" delay={index * 60}>
             <Card className="group relative h-full gap-0 overflow-visible bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
               {service.highlight && (
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 shadow-xs">
@@ -161,7 +161,7 @@ const Services = () => {
             render={
               <Link to="/contact?subject=Custom%20Development%20Requirements&message=Hi%20Yanis%2C%0A%0AI%20have%20specific%20requirements%20that%20don%27t%20fit%20standard%20service%20categories.%20I%27d%20like%20to%20discuss%20a%20custom%20solution.%0A%0AProject%20details%3A%0A-%20%0A-%20%0A-%20%0A%0ALooking%20forward%20to%20discussing%20this%20further%21" />
             }
-            className="self-start transition-all duration-300"
+            className="self-start transition-colors duration-150"
           >
             {t.services.customRequirements.button}
           </IconButton>

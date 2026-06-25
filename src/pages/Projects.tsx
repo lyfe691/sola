@@ -119,13 +119,13 @@ const ProjectImage = ({ project, t }: { project: Project; t: Translation }) => {
         decoding="async"
         onLoad={() => setLoaded(true)}
         className={cn(
-          "h-full w-full object-cover transition-all duration-300 ease-out group-hover:scale-105",
+          "h-full w-full object-cover transition-[transform,translate,scale,rotate,opacity,filter] duration-200 ease-out can-hover:group-hover:scale-105",
           loaded ? "opacity-100" : "opacity-0",
         )}
       />
       <div className="absolute inset-0 bg-linear-to-t from-background/80 to-transparent md:hidden" />
       {usesVercelSatori && (
-        <div className="pointer-events-none absolute bottom-2 left-2 translate-y-0.5 opacity-0 blur-[2px] transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 group-hover:blur-[0px] md:bottom-3 md:left-3">
+        <div className="pointer-events-none absolute bottom-2 left-2 translate-y-0.5 opacity-0 blur-[2px] transition-[opacity,filter,transform,translate,scale,rotate] duration-300 ease-out can-hover:group-hover:translate-y-0 can-hover:group-hover:opacity-100 can-hover:group-hover:blur-[0px] md:bottom-3 md:left-3">
           <div className="pointer-events-auto inline-flex items-center rounded-full bg-background/60 px-2 py-[2px] shadow-xs ring-1 ring-foreground/10 backdrop-blur-xs md:px-2.5 md:py-1">
             <span className="text-[10px] font-medium leading-none text-foreground/80 md:text-xs">
               <RichText
@@ -330,7 +330,11 @@ const Projects = () => {
       {/* Featured Projects */}
       <div className="grid grid-cols-1 gap-6 sm:gap-8 mb-12 sm:mb-16">
         {featuredProjects.map((project, index) => (
-          <ScrollReveal key={project.id} variant="default" delay={index * 10}>
+          <ScrollReveal
+            key={project.id}
+            variant="default"
+            delay={Math.min(index * 60, 360)}
+          >
             <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}
@@ -358,8 +362,13 @@ const Projects = () => {
 
       {/* Other Projects */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-        {otherProjects.map((project) => (
-          <ScrollReveal key={project.id} variant="default" className="h-full">
+        {otherProjects.map((project, index) => (
+          <ScrollReveal
+            key={project.id}
+            variant="default"
+            delay={Math.min(index * 60, 360)}
+            className="h-full"
+          >
             <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}
@@ -372,7 +381,7 @@ const Projects = () => {
             variant="default"
             size="lg"
             icon={<ArrowUpRight className="w-4 h-4" />}
-            className="transition-all duration-300 group border-foreground/20 rounded-full"
+            className="transition-colors duration-150 group border-foreground/20 rounded-full"
             label={t.projects.viewAll}
             onClick={() =>
               window.open(

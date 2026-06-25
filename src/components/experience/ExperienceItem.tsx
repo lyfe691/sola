@@ -80,7 +80,10 @@ const ExperienceItem = ({
           <span className="underline decoration-muted-foreground/30 decoration-1 underline-offset-4 transition-colors duration-200 group-hover/link:decoration-primary">
             {entry.company}
           </span>
-          <ArrowUpRight aria-hidden="true" className="size-3.5 shrink-0" />
+          <ArrowUpRight
+            aria-hidden="true"
+            className="size-3.5 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover/link:-translate-y-0.5 can-hover:group-hover/link:translate-x-0.5"
+          />
         </LinkPreview>
 
         {/* meta — icon-led, wraps as whole units on small screens */}

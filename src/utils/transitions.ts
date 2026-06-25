@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
  * This file is part of a proprietary project and is governed by the terms in LICENSE.
@@ -6,164 +6,145 @@
  * For permissions, contact yanis.sebastian.zuercher@gmail.com
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useInView } from "motion/react";
 
 /**
- * Smooth and polished scroll animation system
- * Balanced timing for elegant user experience
+ * Central motion system.
+ *
+ * Two registers, deliberately different:
+ *   - UI controls (dropdowns, tooltips, hover) want to feel RESPONSIVE -> short + EASE_OUT.
+ *   - Content reveals / page transitions want to feel SMOOTH -> longer + a buttery
+ *     deceleration curve (SMOOTH), a subtle scale, and a blur-bridge where it helps.
+ *
+ * Easing curves mirror the CSS custom properties in src/index.css (@theme). In markup use
+ * the `ease-*` utilities; in JS import these consts. Never inline a cubic-bezier or use a
+ * built-in "easeOut"/"easeInOut" string.
  */
 
-// CONSISTENT ANIMATION FOUNDATION
-const STANDARD_EASING = [0.25, 0.1, 0.25, 1] as const; // Perfect cubic-bezier
-const STANDARD_THRESHOLD = 0.15; // Trigger when 15% visible - optimal balance
-const FAST_DURATION = 0.6;
-const STANDARD_DURATION = 0.8;
-const SMOOTH_DURATION = 1.0;
+// Custom easing curves
+// EASE_OUT is a gentle easeOutCubic (not a front-loaded quint) so short hover/UI
+// transitions glide instead of snapping. Mirrors --ease-out in index.css.
+export const EASE_OUT = [0.33, 1, 0.68, 1] as const; // responsive-but-smooth UI (dropdowns/hover)
+export const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const; // on-screen movement / FLIP
+export const EASE_DRAWER = [0.32, 0.72, 0, 1] as const; // edge-sliding panels
+export const EASE_EXPO = [0.16, 1, 0.3, 1] as const; // lush hero entrances
 
-// Page transition variants - restored smooth transitions
+// Page transition: a punchy expo. The blur masks its front-loading, so it's fine here.
+export const SMOOTH = [0.16, 1, 0.3, 1] as const;
+// Content reveals: a SYMMETRIC ease-in-out (easeInOutQuad). The gentle ease-IN start (y1=0) is
+// what reads as smooth for this site — the element eases up from rest rather than launching at
+// full speed. User-validated: "responsive" fast-start curves (expo y1≈1, the Vaul drawer) read
+// as snappy/ugly here no matter the best-practice; this gentle in-out is the one that feels right.
+// Scroll reveals + hero use this.
+export const REVEAL = [0.45, 0, 0.55, 1] as const;
+// Exit/consume: accelerate away (ease-in is correct for a leaving element collapsing in)
+const CONSUME_IN = [0.5, 0, 0.75, 0] as const;
+
+// Durations (seconds) — smooth, leaning long (smoothness beats speed for this site)
+const D_REVEAL = 0.5;
+const D_TITLE = 0.6;
+const D_SUBTLE = 0.42;
+const STANDARD_THRESHOLD = 0.15;
+
+// ---- Page (route) transition: "consumes itself" ----
+// The old page shrinks + blurs as it accelerates away (consumed inward); the new page
+// re-emerges from that same blurred, slightly-scaled state and settles. Because exit ends
+// exactly where enter begins (scale 0.96 / blur 8 / opacity 0), the swap under
+// AnimatePresence mode="wait" reads as ONE continuous implode->reform, and the blur masks
+// the content change so it feels smooth, not like a hard cut.
 export const pageTransitionVariants = {
-  initial: { opacity: 0, y: 8 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
-};
-
-export const pageTransition = {
-  duration: 0.5, // Much smoother page transitions
-  ease: STANDARD_EASING,
-};
-
-// SCROLL ANIMATION VARIANTS - Balanced and Polished
-
-// Main scroll animation - smooth and elegant
-export const scrollRevealVariants = {
-  hidden: {
-    opacity: 0,
-    y: 24,
-    scale: 0.97,
-  },
-  visible: {
+  initial: { opacity: 0, scale: 0.96, filter: "blur(8px)" },
+  animate: {
     opacity: 1,
-    y: 0,
     scale: 1,
-    transition: {
-      duration: STANDARD_DURATION,
-      ease: STANDARD_EASING,
-    },
-  },
-};
-
-// For page titles - clean slide from left (truly different!)
-export const scrollPageTitleVariants = {
-  hidden: {
-    opacity: 0,
-    x: -20,
-    filter: "blur(2px)",
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
     filter: "blur(0px)",
-    transition: {
-      duration: SMOOTH_DURATION,
-      ease: STANDARD_EASING,
-    },
+    transition: { duration: 0.5, ease: SMOOTH },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.96,
+    filter: "blur(8px)",
+    transition: { duration: 0.32, ease: CONSUME_IN },
   },
 };
 
-// For section titles - subtle upward reveal
-export const scrollTitleVariants = {
-  hidden: {
-    opacity: 0,
-    y: 28,
-    scale: 0.96,
-  },
+// kept for back-compat (enter timing)
+export const pageTransition = { duration: 0.5, ease: SMOOTH };
+
+// ---- Scroll-reveal variants ----
+// Opacity + a graceful translate + a subtle scale, on the SMOOTH curve. Movement is
+// stripped under prefers-reduced-motion globally by <MotionConfig reducedMotion="user">.
+
+export const scrollRevealVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: {
-      duration: STANDARD_DURATION,
-      ease: STANDARD_EASING,
-    },
+    transition: { duration: D_REVEAL, ease: REVEAL },
   },
 };
 
-// For subtle elements - still fast but not rushed
-export const scrollSubtleVariants = {
-  hidden: {
-    opacity: 0,
-    y: 16,
-  },
+export const scrollTitleVariants = {
+  hidden: { opacity: 0, y: 24, scale: 0.985 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: FAST_DURATION,
-      ease: STANDARD_EASING,
-    },
+    scale: 1,
+    transition: { duration: D_TITLE, ease: REVEAL },
   },
 };
 
-// For containers - elegant staggering
+// Page titles: a soft blur-bridge focus-in (one element per page, so the blur is cheap)
+export const scrollPageTitleVariants = {
+  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: D_TITLE, ease: REVEAL },
+  },
+};
+
+export const scrollSubtleVariants = {
+  hidden: { opacity: 0, y: 12, scale: 0.99 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: D_SUBTLE, ease: REVEAL },
+  },
+};
+
+// Container/child: a gentle cascade from one in-view parent
 export const scrollContainerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1, // More elegant staggering
-      delayChildren: 0.15,
-      duration: 0.4,
-      ease: STANDARD_EASING,
-    },
+    transition: { staggerChildren: 0.1, delayChildren: 0.06 },
   },
 };
 
-// For container children - smooth reveals
 export const scrollChildVariants = {
-  hidden: {
-    opacity: 0,
-    y: 20,
-  },
+  hidden: { opacity: 0, y: 16, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: FAST_DURATION,
-      ease: STANDARD_EASING,
-    },
+    scale: 1,
+    transition: { duration: D_REVEAL, ease: REVEAL },
   },
 };
 
-// PERFECTED SCROLL HOOKS - Optimized for elegance
-// Unified hook to rule them all
-export const useScrollReveal = (
-  delay: number = 0,
-  options?: {
-    threshold?: number;
-    once?: boolean;
-  },
-) => {
+// ---- In-view latch (fires once). Delay is applied by ScrollReveal to the variant. ----
+export const useScrollReveal = (options?: {
+  threshold?: number;
+  once?: boolean;
+}) => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
-    amount: options?.threshold || STANDARD_THRESHOLD,
+    amount: options?.threshold ?? STANDARD_THRESHOLD,
     once: options?.once ?? true,
   });
-
-  const [shouldAnimate, setShouldAnimate] = useState(false);
-
-  useEffect(() => {
-    if (delay > 0) {
-      if (isInView && !shouldAnimate) {
-        const timer = setTimeout(() => {
-          setShouldAnimate(true);
-        }, delay);
-        return () => clearTimeout(timer);
-      }
-    } else {
-      setShouldAnimate(isInView);
-    }
-  }, [isInView, shouldAnimate, delay]);
-
-  return { ref, isInView: shouldAnimate };
+  return { ref, isInView };
 };

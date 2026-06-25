@@ -7,6 +7,8 @@
 @import "@fontsource-variable/jetbrains-mono";
 
 @custom-variant dark (&:is(.dark *));
+/* gate hover-movement utilities so touch taps don't fire phantom hovers */
+@custom-variant can-hover (@media (hover: hover) and (pointer: fine));
 
 @utility container {
   margin-inline: auto;
@@ -76,8 +78,22 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
+  /* motion — custom easing curves; these override Tailwind's built-in ease-*
+     utilities, so every `ease-out` / `ease-in-out` class uses the intended curve.
+     Mirror in src/utils/transitions.ts.
+     --ease-out is intentionally a gentle easeOutCubic (NOT a front-loaded quint):
+     short hover/UI transitions must glide, not snap. Content reveals + the page
+     transition use the separate SMOOTH (expo) curve in JS. */
+  --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* gentle ease-in-out (matches the JS REVEAL curve) for on-screen morphs that should
+     glide rather than snap — nav scroll-pill, link highlight, etc. */
+  --ease-smooth: cubic-bezier(0.45, 0, 0.55, 1);
+
+  --animate-accordion-down: accordion-down 0.2s var(--ease-out);
+  --animate-accordion-up: accordion-up 0.2s var(--ease-out);
   --animate-shine: shine 5s linear infinite;
   --animate-spinner-leaf-fade: spinner-leaf-fade 800ms linear infinite;
 
@@ -435,11 +451,11 @@
   #root,
   .app-theme-surface {
     transition:
-      background-color 250ms ease,
-      color 250ms ease,
-      border-color 250ms ease,
-      fill 250ms ease,
-      stroke 250ms ease;
+      background-color 250ms var(--ease-out),
+      color 250ms var(--ease-out),
+      border-color 250ms var(--ease-out),
+      fill 250ms var(--ease-out),
+      stroke 250ms var(--ease-out);
   }
 
   h1,
@@ -497,6 +513,21 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  /* reduced motion is gentler, not zero: let looping loaders keep breathing
+     instead of freezing on a single frame */
+  [data-slot="spinner"],
+  [data-slot="spinner"] *,
+  [data-slot="skeleton"],
+  .animate-spin,
+  .animate-pulse {
+    animation-duration: 1s !important;
+    animation-iteration-count: infinite !important;
+  }
+  /* skip the theme view-transition clip-path sweep — it is pure movement */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
 }
 
 /* ---------- theme transition (view transitions api) ---------- */
@@ -515,12 +546,12 @@
 
 ::view-transition-old(root) {
   z-index: 1;
-  animation: theme-fade-out 900ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: theme-fade-out 700ms var(--ease-out) forwards;
 }
 
 ::view-transition-new(root) {
   z-index: 9999;
-  animation: theme-reveal 850ms cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: theme-reveal 700ms var(--ease-drawer) forwards;
 }
 
 @keyframes theme-reveal {
@@ -545,4 +576,49 @@
   100% {
     opacity: 0;
   }
+}
+
+/* ---------- code block (shiki) ---------- */
+/* Styles target Shiki's generated `pre.shiki > code > span.line` markup and the
+   plain-text fallback, which mirrors it. Unlayered so it wins over utilities. */
+.code-block .shiki {
+  margin: 0;
+  background-color: transparent;
+  font-family: var(--font-mono);
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+/* one grid row per line — collapses Shiki's "\n" separators and aligns numbers */
+.code-block .shiki code {
+  display: grid;
+  counter-reset: sh-line;
+}
+
+.code-block .shiki .line {
+  counter-increment: sh-line;
+  padding-inline: 1.25rem;
+}
+
+.code-block .shiki .line::before {
+  content: counter(sh-line);
+  display: inline-block;
+  width: 1.25rem;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* dual-theme token colors, switched by the block's resolved light/dark type */
+.code-block .shiki,
+.code-block .shiki span {
+  color: var(--shiki-light);
+}
+
+.code-block[data-code-theme="dark"] .shiki,
+.code-block[data-code-theme="dark"] .shiki span {
+  color: var(--shiki-dark);
 }

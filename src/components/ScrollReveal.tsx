@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
+import React, { useMemo } from "react";
 import { motion, Variants } from "motion/react";
 import {
   useScrollReveal,
@@ -88,11 +88,26 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   delay = 0,
   as: Component = "div",
 }) => {
-  // Optimized hook selection for performance
-  const { ref, isInView } = useScrollReveal(delay, options);
+  const { ref, isInView } = useScrollReveal(options);
 
-  // Get animation variants
-  const variants = customVariants || ANIMATION_VARIANTS[variant];
+  // Apply the stagger delay (ms) natively to the variant's visible transition —
+  // no bespoke timer. Reduced motion is handled globally by MotionConfig.
+  const baseVariants = customVariants || ANIMATION_VARIANTS[variant];
+  const variants = useMemo<Variants>(() => {
+    if (!delay) return baseVariants as Variants;
+    const v = baseVariants as Record<string, Record<string, unknown>>;
+    const visible = v.visible ?? {};
+    return {
+      ...v,
+      visible: {
+        ...visible,
+        transition: {
+          ...((visible.transition as Record<string, unknown>) ?? {}),
+          delay: delay / 1000,
+        },
+      },
+    } as Variants;
+  }, [baseVariants, delay]);
 
   // Create motion component
   const MotionComponent = motion[Component] as React.ComponentType<

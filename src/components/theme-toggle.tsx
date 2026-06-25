@@ -237,7 +237,7 @@ export function ThemeTriggerIcon() {
         return (
           <Icon
             key={option.value}
-            className={`absolute h-4 w-4 transition-all ${isVisible ? "rotate-0 scale-100" : "rotate-90 scale-0"}`}
+            className={`absolute h-4 w-4 transition-[transform,translate,scale,rotate,opacity] duration-200 ${isVisible ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-90 opacity-0"}`}
           />
         );
       })}

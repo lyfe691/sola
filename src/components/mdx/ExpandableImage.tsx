@@ -9,6 +9,7 @@
 import React, { useState, useCallback } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
 
 const ImageLightbox: React.FC<{
   src: string;
@@ -49,7 +50,7 @@ const ImageLightbox: React.FC<{
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.28, ease: EASE_OUT }}
             src={src}
             alt={alt}
             className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg cursor-zoom-out"
@@ -78,14 +79,12 @@ export const ExpandableImage: React.FC<{
 
   return (
     <>
-      <motion.img
+      <img
         src={src}
         alt={alt}
-        className={`cursor-zoom-in ${className}`}
+        className={`cursor-zoom-in can-hover:scale-[1.02] transition-transform duration-200 ease-out ${className}`}
         loading="lazy"
         onClick={handleOpen}
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
       />
       <ImageLightbox
         src={src}

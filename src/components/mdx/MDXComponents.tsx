@@ -10,8 +10,7 @@ import React from "react";
 import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
-import { AdvancedCodeBlock } from "@/components/ui/code/advanced-code-block";
-import type { CodeBlockLanguage } from "@/components/ui/code/advanced-code-block";
+import { CodeBlock, type CodeBlockLanguage } from "@/components/ui/code-block";
 import { ExpandableImage } from "./ExpandableImage";
 import { blockReveal } from "./reveal";
 
@@ -120,10 +119,9 @@ export const MDXComponents = {
       const code = codeElement.props.children;
 
       return (
-        <AdvancedCodeBlock
+        <CodeBlock
           code={typeof code === "string" ? code : String(code)}
           lang={language as CodeBlockLanguage}
-          {...props}
         />
       );
     }
