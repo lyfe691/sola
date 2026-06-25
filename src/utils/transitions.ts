@@ -96,14 +96,15 @@ export const scrollTitleVariants = {
   },
 };
 
-// Page titles: a soft blur-bridge focus-in (one element per page, so the blur is cheap)
+// Page titles: crisp and quick so the heading LANDS FIRST, before the content below it.
+// (No blur — the blur clears slowly under the ease-in start and made the title look like it
+// loaded after the content. Shorter than D_REVEAL so it leads when both fire on page load.)
 export const scrollPageTitleVariants = {
-  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: D_TITLE, ease: REVEAL },
+    transition: { duration: 0.4, ease: REVEAL },
   },
 };
 
