@@ -152,7 +152,7 @@ const ProjectActions = ({
   return (
     <div className="flex flex-col gap-4 pt-2">
       <Separator />
-      <div className="flex flex-col gap-3 sm:flex-row">
+      <div className="flex flex-wrap gap-3">
         {project.slug ? (
           <IconButton
             nativeButton={false}
@@ -168,7 +168,7 @@ const ProjectActions = ({
               <Button
                 nativeButton={false}
                 size="lg"
-                className="w-full gap-2 sm:flex-1"
+                className="flex-1 gap-2"
                 render={
                   <a
                     href={project.github}
@@ -185,7 +185,7 @@ const ProjectActions = ({
               <Button
                 nativeButton={false}
                 size="lg"
-                className="w-full gap-2 sm:flex-1"
+                className="flex-1 gap-2"
                 render={
                   <a
                     href={project.link}
