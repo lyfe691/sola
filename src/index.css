@@ -471,7 +471,9 @@
   }
 
   button,
-  [role="button"] {
+  [role="button"],
+  a[href],
+  [data-slot="button"] {
     cursor: pointer;
   }
 
@@ -730,4 +732,12 @@
 
 .contribution-calendar__legend-block[data-level="4"] {
   background: var(--contrib-4);
+}
+
+/* ---------- Site custom cursor ---------- */
+html.sola-custom-cursor,
+html.sola-custom-cursor *,
+html.sola-custom-cursor *::before,
+html.sola-custom-cursor *::after {
+  cursor: none !important;
 }

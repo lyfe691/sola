@@ -22,6 +22,7 @@ import BackgroundLayer from "./components/backgrounds/BackgroundLayer";
 import { UpdateNotification } from "./components/UpdateNotification";
 import { MotionConfig } from "motion/react";
 import { CanonicalUrl } from "./components/CanonicalUrl";
+import SiteCursor from "./components/SiteCursor";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ function KeyboardShortcuts() {
 // app
 const App = () => (
   <ThemeProvider defaultTheme="system">
+    <SiteCursor />
     <MotionConfig reducedMotion="user">
       <LanguageProvider>
         <BackgroundProvider>
