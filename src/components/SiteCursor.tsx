@@ -41,13 +41,13 @@ const SiteCursor = () => {
       tilt={-12}
       showLabel
       hideNativeCursor
+      followInstant
       directionAwareTilt
       labelTiltStrength={6}
       pressScale={0.88}
       offset={{ x: 1, y: 1 }}
       labelOffset={{ x: 20, y: 10 }}
-      spring={{ stiffness: 400, damping: 30, mass: 0.55 }}
-      labelSpring={{ stiffness: 170, damping: 22, mass: 0.9 }}
+      labelSpring={{ stiffness: 340, damping: 30, mass: 0.45 }}
       classNames={{
         labelText: "font-heading uppercase tracking-[0.14em]",
       }}

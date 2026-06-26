@@ -70,6 +70,8 @@ export interface UserCursorProps
   adaptToNativeCursor?: boolean;
   spring?: SpringOptions;
   labelSpring?: SpringOptions;
+  /** Arrow tracks the pointer directly — label keeps spring lag. */
+  followInstant?: boolean;
   offset?: { x?: number; y?: number };
   labelOffset?: { x?: number; y?: number };
   pressScale?: number;
@@ -452,6 +454,7 @@ const UserCursor = forwardRef<HTMLDivElement, UserCursorProps>(
       adaptToNativeCursor = false,
       spring,
       labelSpring,
+      followInstant = false,
       offset,
       labelOffset,
       pressScale = 0.92,
@@ -509,16 +512,12 @@ const UserCursor = forwardRef<HTMLDivElement, UserCursorProps>(
 
     const velocityX = useVelocity(rawX);
     const velocityY = useVelocity(rawY);
-    const smoothVx = useSpring(velocityX, {
-      stiffness: 120,
-      damping: 26,
-      mass: 0.5,
-    });
-    const smoothVy = useSpring(velocityY, {
-      stiffness: 120,
-      damping: 26,
-      mass: 0.5,
-    });
+    const tiltVelocitySpring = followInstant
+      ? { stiffness: 520, damping: 38, mass: 0.28 }
+      : { stiffness: 120, damping: 26, mass: 0.5 };
+
+    const smoothVx = useSpring(velocityX, tiltVelocitySpring);
+    const smoothVy = useSpring(velocityY, tiltVelocitySpring);
 
     const glyphRotate = useTransform([smoothVx, smoothVy], ([vx, vy]) => {
       if (adaptToNativeCursor) {
@@ -546,16 +545,17 @@ const UserCursor = forwardRef<HTMLDivElement, UserCursorProps>(
       );
     });
 
-    const smoothGlyphRotate = useSpring(glyphRotate, {
-      stiffness: 220,
-      damping: 24,
-      mass: 0.5,
-    });
-    const smoothLabelRotate = useSpring(labelRotate, {
-      stiffness: 160,
-      damping: 22,
-      mass: 0.6,
-    });
+    const tiltRotateSpring = followInstant
+      ? { stiffness: 480, damping: 34, mass: 0.3 }
+      : { stiffness: 220, damping: 24, mass: 0.5 };
+
+    const smoothGlyphRotate = useSpring(glyphRotate, tiltRotateSpring);
+    const smoothLabelRotate = useSpring(
+      labelRotate,
+      followInstant
+        ? { stiffness: 400, damping: 30, mass: 0.35 }
+        : { stiffness: 160, damping: 22, mass: 0.6 },
+    );
 
     const disabled = coarsePointer || reducedMotion;
     const restingTilt = restingTiltForMode(activeMode, tilt);
@@ -752,8 +752,8 @@ const UserCursor = forwardRef<HTMLDivElement, UserCursorProps>(
                     classNames?.cursor,
                   )}
                   style={{
-                    x: cursorX,
-                    y: cursorY,
+                    x: followInstant ? rawX : cursorX,
+                    y: followInstant ? rawY : cursorY,
                     rotate: directionAwareTilt
                       ? smoothGlyphRotate
                       : restingTilt,
