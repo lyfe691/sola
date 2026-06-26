@@ -34,7 +34,7 @@ const SiteCursor = () => {
     <UserCursor
       fullScreen
       trigger="always"
-      name="YSZ"
+      name="sola"
       color={colors.color || "var(--primary)"}
       textColor={colors.textColor || "var(--primary-foreground)"}
       size={24}
@@ -43,13 +43,13 @@ const SiteCursor = () => {
       hideNativeCursor
       followInstant
       directionAwareTilt
-      labelTiltStrength={6}
+      labelTiltStrength={5}
       pressScale={0.88}
       offset={{ x: 1, y: 1 }}
-      labelOffset={{ x: 20, y: 10 }}
-      labelSpring={{ stiffness: 340, damping: 30, mass: 0.45 }}
+      labelOffset={{ x: 12, y: 6 }}
+      labelSpring={{ stiffness: 400, damping: 34, mass: 0.38 }}
       classNames={{
-        labelText: "font-heading uppercase tracking-[0.14em]",
+        labelText: "font-heading lowercase tracking-normal opacity-90",
       }}
     />
   );

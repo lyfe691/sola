@@ -850,18 +850,17 @@ const UserCursor = forwardRef<HTMLDivElement, UserCursorProps>(
                     {label ?? (
                       <div
                         className={cn(
-                          "inline-flex items-center rounded-full font-semibold leading-none backdrop-blur-[3px] ring-1 ring-white/25",
+                          "inline-flex items-center rounded-full font-medium leading-none",
                           classNames?.labelText,
                         )}
                         style={
                           {
-                            background: `linear-gradient(145deg, ${color}, color-mix(in oklch, ${color} 82%, black))`,
+                            background: color,
                             color: textColor,
-                            fontSize: `${Math.max(9, size * 0.46)}px`,
-                            paddingInline: `${size * 0.48}px`,
-                            paddingBlock: `${size * 0.2}px`,
-                            boxShadow:
-                              "0 4px 14px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.22)",
+                            fontSize: `${Math.max(8, size * 0.34)}px`,
+                            paddingInline: `${size * 0.3}px`,
+                            paddingBlock: `${size * 0.11}px`,
+                            boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                             transform: `translate(${labelOffsetX}px, ${labelOffsetY}px)`,
                           } as CSSProperties
                         }
