@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
@@ -46,11 +45,10 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
-import type { ProcessedActivity } from "@/lib/github";
-import { getUserActivity } from "@/lib/github";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
 import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
 import { fetchGitHubContributions } from "@/lib/github-contributions";
+import { fetchUserActivity } from "@/lib/github-activity";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
@@ -239,8 +237,6 @@ const About = () => {
   const t = translations[language];
   const { theme } = useTheme();
   const [contributionTab, setContributionTab] = useState("last");
-  const [activity, setActivity] = useState<ProcessedActivity[]>([]);
-  const [loadingActivity, setLoadingActivity] = useState(true);
 
   const contributionYears = [2026, 2025] as const;
   const contributionTabs = [
@@ -262,6 +258,7 @@ const About = () => {
       ...contributionYears.map((year) =>
         fetchGitHubContributions("lyfe691", year),
       ),
+      fetchUserActivity("lyfe691"),
     ]);
   }, []);
 
@@ -296,17 +293,6 @@ const About = () => {
       linkedin: "https://linkedin.com/in/patrick-venzin-68314a100",
     },
   ];
-
-  useEffect(() => {
-    const fetchAllData = async () => {
-      setLoadingActivity(true);
-      const activityResult = await getUserActivity("lyfe691");
-      setActivity(activityResult);
-      setLoadingActivity(false);
-    };
-
-    fetchAllData();
-  }, []);
 
   // automatically determine if current theme is dark - handles ALL themes dynamically
   const isDarkTheme = () => getThemeType(theme) === "dark";
@@ -424,11 +410,7 @@ const About = () => {
             </Tabs>
           </Card>
 
-          {loadingActivity ? (
-            <Skeleton className="mt-6 h-48 rounded-xl" />
-          ) : (
-            <ContributionActivityFeed events={activity} />
-          )}
+          <ContributionActivityFeed />
         </div>
       </ScrollReveal>
 

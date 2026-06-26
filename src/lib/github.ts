@@ -43,17 +43,10 @@ export interface ProcessedActivity {
   };
 }
 
+import { fetchUserActivity } from "@/lib/github-activity";
+
 export async function getUserActivity(
   username: string,
 ): Promise<ProcessedActivity[]> {
-  try {
-    const res = await fetch(
-      `/api/github-activity?username=${encodeURIComponent(username)}`,
-    );
-    if (!res.ok) return [];
-    return (await res.json()) as ProcessedActivity[];
-  } catch (error) {
-    console.error("Failed to fetch user activity:", error);
-    return [];
-  }
+  return (await fetchUserActivity(username)) ?? [];
 }

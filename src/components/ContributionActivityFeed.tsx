@@ -6,11 +6,15 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type TranslationAny } from "@/lib/translations";
 import { motion } from "motion/react";
 import type { ProcessedActivity } from "@/lib/github";
+import {
+  fetchUserActivity,
+  peekUserActivity,
+} from "@/lib/github-activity";
 import {
   GitCommit,
   GitPullRequest,
@@ -28,14 +32,21 @@ import {
   ArrowUpRight,
   Clock,
 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { IconButton } from "./ui/custom/icon-button";
 import { EASE_OUT } from "@/utils/transitions";
 
-interface ContributionActivityFeedProps {
-  events: ProcessedActivity[];
-}
+const USERNAME = "lyfe691";
+const VISIBLE_EVENTS = 6;
 
-// refined mapping with subtle colors
+const INTL_LOCALE: Record<string, string> = {
+  en: "en",
+  de: "de",
+  es: "es",
+  ja: "ja",
+  zh: "zh-CN",
+};
+
 const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
   const iconClass = "w-3.5 h-3.5 shrink-0";
 
@@ -130,7 +141,6 @@ const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
   }
 };
 
-// cleaner, more subtle metadata display
 const ActivityMetadata = ({
   activity,
   t,
@@ -158,21 +168,23 @@ const ActivityMetadata = ({
 
   if (activity.metadata.additions || activity.metadata.deletions) {
     const changes: string[] = [];
-    if (activity.metadata.additions)
+    if (activity.metadata.additions) {
       changes.push(`+${activity.metadata.additions}`);
-    if (activity.metadata.deletions)
+    }
+    if (activity.metadata.deletions) {
       changes.push(`-${activity.metadata.deletions}`);
+    }
     items.push(changes.join(" "));
   }
 
   if (items.length === 0) return null;
 
   return (
-    <div className="flex items-center gap-2 mt-2">
-      {items.slice(0, 2).map((item, index) => (
+    <div className="mt-2 flex items-center gap-2">
+      {items.slice(0, 2).map((item) => (
         <span
-          key={index}
-          className="text-[11px] text-foreground/50 bg-foreground/5 px-2 py-0.5 rounded-md font-medium"
+          key={item}
+          className="rounded-md bg-foreground/5 px-2 py-0.5 text-[11px] font-medium text-foreground/50"
         >
           {item}
         </span>
@@ -186,7 +198,39 @@ const ActivityMetadata = ({
   );
 };
 
-// clean, refined activity item
+const formatDate = (timestamp: string, locale: string) => {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diffInHours = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60 * 60),
+  );
+
+  if (diffInHours < 1) {
+    return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(
+      -1,
+      "hour",
+    );
+  }
+  if (diffInHours < 24) {
+    return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(
+      -diffInHours,
+      "hour",
+    );
+  }
+  if (diffInHours < 48) {
+    return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(
+      -1,
+      "day",
+    );
+  }
+
+  return date.toLocaleDateString(locale, {
+    month: "short",
+    day: "numeric",
+    year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
+  });
+};
+
 const ActivityItem = ({
   activity,
   index,
@@ -200,95 +244,63 @@ const ActivityItem = ({
   t: TranslationAny;
   play: boolean;
 }) => {
-  const formatDate = (timestamp: string, locale: string) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInHours = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60),
-    );
-
-    if (diffInHours < 1)
-      return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(
-        -1,
-        "hour",
-      );
-    if (diffInHours < 24)
-      return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(
-        -diffInHours,
-        "hour",
-      );
-    if (diffInHours < 48)
-      return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(
-        -1,
-        "day",
-      );
-
-    return date.toLocaleDateString(locale, {
-      month: "short",
-      day: "numeric",
-      year: date.getFullYear() !== now.getFullYear() ? "numeric" : undefined,
-    });
-  };
-
   const repoName = activity.repo.split("/")[1];
 
   return (
     <motion.div
-      initial={play ? { opacity: 0, y: 8 } : false}
+      initial={play ? { opacity: 0, y: 4 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={
         play
-          ? { delay: index * 0.03, duration: 0.4, ease: EASE_OUT }
+          ? { delay: index * 0.02, duration: 0.25, ease: EASE_OUT }
           : { duration: 0 }
       }
-      className="group px-4 py-3 hover:bg-foreground/2 transition-colors duration-150"
+      className="group px-4 py-3 transition-colors duration-150 can-hover:hover:bg-foreground/2"
     >
       <div className="flex items-start gap-3">
-        <div className="mt-1 p-1.5 rounded-lg bg-foreground/4 group-hover:bg-foreground/8 transition-colors duration-300">
+        <div className="mt-1 rounded-lg bg-foreground/4 p-1.5 transition-colors duration-200 can-hover:group-hover:bg-foreground/8">
           <ActivityIcon activity={activity} />
         </div>
 
-        <div className="flex-1 min-w-0 space-y-1">
-          {/* Title */}
-          <p className="text-sm font-medium text-foreground leading-snug">
+        <div className="min-w-0 flex-1 space-y-1">
+          <p className="text-sm font-medium leading-snug text-foreground">
             {activity.title}
           </p>
 
-          {/* Description */}
-          <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">
+          <p className="line-clamp-2 text-sm leading-relaxed text-foreground/70">
             {activity.description}
           </p>
 
-          {/* Metadata */}
           <ActivityMetadata activity={activity} t={t} />
 
-          {/* Footer with time and repo */}
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2 text-xs text-foreground/50">
-              <Clock className="w-3 h-3" />
-              <span>{formatDate(activity.timestamp, locale)}</span>
-              <span>•</span>
+              <Clock className="h-3 w-3" />
+              <time dateTime={activity.timestamp}>
+                {formatDate(activity.timestamp, locale)}
+              </time>
+              <span aria-hidden>•</span>
               <a
                 href={activity.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 hover:text-foreground/70 transition-colors"
+                className="inline-flex items-center gap-1 transition-colors hover:text-foreground/70"
               >
                 {repoName}
-                <ArrowUpRight className="w-2.5 h-2.5" />
+                <ArrowUpRight className="h-2.5 w-2.5" />
               </a>
             </div>
 
-            {activity.url && (
+            {activity.url ? (
               <a
                 href={activity.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs text-primary hover:text-primary/80 transition-colors opacity-0 group-hover:opacity-100"
+                className="text-xs text-primary transition-colors opacity-100 can-hover:opacity-0 can-hover:group-hover:opacity-100 hover:text-primary/80"
               >
                 {t.common.view}
               </a>
-            )}
+            ) : null}
           </div>
         </div>
       </div>
@@ -296,92 +308,126 @@ const ActivityItem = ({
   );
 };
 
-const ContributionActivityFeed: React.FC<ContributionActivityFeedProps> = ({
-  events,
-}) => {
+const ActivityFeedSkeleton = () => (
+  <div
+    className="divide-y divide-foreground/6 overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs"
+    aria-hidden
+  >
+    {Array.from({ length: 5 }).map((_, index) => (
+      <div key={index} className="flex items-start gap-3 px-4 py-3">
+        <Skeleton className="mt-1 size-7 shrink-0 rounded-lg" />
+        <div className="min-w-0 flex-1 space-y-2">
+          <Skeleton className="h-4 w-2/5 max-w-44" />
+          <Skeleton className="h-3.5 w-full max-w-md" />
+          <Skeleton className="h-3 w-28" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
+const ContributionActivityFeed = () => {
   const { language } = useLanguage();
   const t = translations[language];
-  const localeMap: Record<string, string> = {
-    en: "en",
-    de: "de",
-    es: "es",
-    ja: "ja",
-    zh: "zh-CN",
-  };
-  const locale = localeMap[language] || "en";
-  const eventsToShow = events.slice(0, 6);
+  const locale = INTL_LOCALE[language] ?? "en";
 
-  // play the entrance cascade only once; a refetch or locale switch
-  // must not restart the 6-item stagger.
+  const [events, setEvents] = useState<ProcessedActivity[]>(
+    () => peekUserActivity(USERNAME) ?? [],
+  );
+  const [loading, setLoading] = useState(() => !peekUserActivity(USERNAME));
+
+  useEffect(() => {
+    let cancelled = false;
+    const cached = peekUserActivity(USERNAME);
+
+    if (cached) {
+      setEvents(cached);
+      setLoading(false);
+    }
+
+    const load = async () => {
+      const result = await fetchUserActivity(USERNAME);
+      if (cancelled) return;
+      setEvents(result ?? []);
+      setLoading(false);
+    };
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const eventsToShow = events.slice(0, VISIBLE_EVENTS);
+
   const hasAnimated = React.useRef(false);
   const play = !hasAnimated.current;
-  React.useEffect(() => {
+  useEffect(() => {
     hasAnimated.current = true;
   }, []);
 
   return (
-    <div className="mt-8">
-      <div className="flex items-center justify-between mb-6">
+    <div className="mt-6">
+      <div className="mb-6 flex items-center justify-between">
         <h3 className="text-lg font-semibold text-foreground">
           {t.feed.recentActivity}
         </h3>
-        <span className="text-xs text-foreground/40 bg-foreground/4 px-2.5 py-1 rounded-full">
+        <span className="rounded-full bg-foreground/4 px-2.5 py-1 text-xs text-foreground/40">
           {t.feed.lastEvents}
         </span>
       </div>
 
-      <div className="relative">
-        <div className="border border-foreground/8 rounded-2xl bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs overflow-hidden">
-          {eventsToShow.length > 0 ? (
-            <div className="divide-y divide-foreground/6">
-              {eventsToShow.map((activity, index) => (
-                <ActivityItem
-                  key={activity.id}
-                  activity={activity}
-                  index={index}
-                  locale={locale}
-                  t={t}
-                  play={play}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="p-12 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-foreground/4 flex items-center justify-center mx-auto mb-4">
-                <GitCommit className="w-6 h-6 text-foreground/30" />
+      <div className="relative min-h-[18rem]">
+        {loading ? (
+          <ActivityFeedSkeleton />
+        ) : (
+          <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs">
+            {eventsToShow.length > 0 ? (
+              <div className="divide-y divide-foreground/6">
+                {eventsToShow.map((activity, index) => (
+                  <ActivityItem
+                    key={activity.id}
+                    activity={activity}
+                    index={index}
+                    locale={locale}
+                    t={t}
+                    play={play}
+                  />
+                ))}
               </div>
-              <p className="text-sm text-foreground/70 mb-1">
-                {t.feed.noActivity}
-              </p>
-              <p className="text-xs text-foreground/50">{t.feed.checkBack}</p>
-            </div>
-          )}
-        </div>
-
-        {/* Subtle fade effect */}
-        {events.length > 6 && (
-          <div className="absolute bottom-0 left-0 w-full h-8 bg-linear-to-t from-background/30 to-transparent pointer-events-none rounded-b-2xl" />
+            ) : (
+              <div className="p-12 text-center">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
+                  <GitCommit className="h-6 w-6 text-foreground/30" />
+                </div>
+                <p className="mb-1 text-sm text-foreground/70">
+                  {t.feed.noActivity}
+                </p>
+                <p className="text-xs text-foreground/50">{t.feed.checkBack}</p>
+              </div>
+            )}
+          </div>
         )}
+
+        {!loading && events.length > VISIBLE_EVENTS ? (
+          <div className="pointer-events-none absolute bottom-0 left-0 h-8 w-full rounded-b-2xl bg-linear-to-t from-background/30 to-transparent" />
+        ) : null}
       </div>
 
-      {/* refined view all link */}
-      {events.length > 0 && (
+      {!loading && events.length > 0 ? (
         <div className="mt-6 flex justify-center">
           <IconButton
             variant="default"
-            icon={<ArrowUpRight className="w-3.5 h-3.5" />}
+            icon={<ArrowUpRight className="h-3.5 w-3.5" />}
             size="lg"
-            className="transition-colors duration-200 group border-foreground/20 rounded-full"
+            className="rounded-full border-foreground/20 transition-colors duration-200"
             label={t.common.moreOnGithub}
             onClick={() =>
-              window.open(
-                "https://github.com/lyfe691?tab=repositories",
-                "_blank",
-              )
+              window.open("https://github.com/lyfe691?tab=events", "_blank")
             }
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
