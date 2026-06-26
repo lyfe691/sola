@@ -433,7 +433,10 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Programmatic smooth scrolling is owned in JS (ScrollToTop's rAF tween).
+       A global CSS smooth would re-animate every per-frame scrollTo and fight it,
+       so route/FAB scrolls must run against an instant baseline. */
+    scroll-behavior: auto;
     scrollbar-gutter: stable;
     /* Firefox */
     scrollbar-width: thin;
