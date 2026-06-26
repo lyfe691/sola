@@ -37,19 +37,18 @@ const SiteCursor = () => {
       name="sola"
       color={colors.color || "var(--primary)"}
       textColor={colors.textColor || "var(--primary-foreground)"}
-      size={24}
-      tilt={-12}
+      size={22}
+      tilt={-14}
       showLabel
       hideNativeCursor
       followInstant
       directionAwareTilt
-      labelTiltStrength={5}
-      pressScale={0.88}
-      offset={{ x: 1, y: 1 }}
-      labelOffset={{ x: 12, y: 6 }}
+      labelTiltStrength={8}
+      pressScale={0.85}
+      offset={{ x: 2, y: 2 }}
       labelSpring={{ stiffness: 400, damping: 34, mass: 0.38 }}
       classNames={{
-        labelText: "font-heading lowercase tracking-normal opacity-90",
+        labelText: "font-heading lowercase tracking-wide opacity-90",
       }}
     />
   );
