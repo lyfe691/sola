@@ -8,7 +8,7 @@
  * Vercel serverless entry for /api/github-activity.
  */
 
-import { getGitHubActivity } from "../src/server/github-activity-handler";
+import { getGitHubActivity } from "./github-activity-handler";
 
 type VercelRequest = { query: Record<string, string | string[] | undefined> };
 type VercelResponse = {

@@ -6,10 +6,40 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Shared GitHub activity logic for Vercel (`api/github-activity.ts`) and the
- * Vite dev middleware. Keeps the token server-side only.
+ * Vite dev middleware. Lives under `api/` so Vercel can bundle it. The shape
+ * mirrors `ProcessedActivity` in src/lib/github.ts (kept in sync deliberately).
  */
 
-import type { ProcessedActivity } from "../lib/github";
+export interface ProcessedActivity {
+  id: string;
+  type:
+    | "push"
+    | "pull_request"
+    | "issues"
+    | "create"
+    | "delete"
+    | "fork"
+    | "star"
+    | "release"
+    | "member"
+    | "watch";
+  action?: string;
+  title: string;
+  description: string;
+  repo: string;
+  repoUrl: string;
+  url?: string;
+  timestamp: string;
+  metadata?: {
+    commits?: number;
+    additions?: number;
+    deletions?: number;
+    branch?: string;
+    tag?: string;
+    issueNumber?: number;
+    pullNumber?: number;
+  };
+}
 
 const GITHUB_API = "https://api.github.com";
 

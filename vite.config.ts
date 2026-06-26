@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 import path from "path";
 import type { IncomingMessage, ServerResponse } from "http";
 import type { Connect } from "vite";
-import { getGitHubActivity } from "./src/server/github-activity-handler";
+import { getGitHubActivity } from "./api/github-activity-handler";
 
 const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
 
