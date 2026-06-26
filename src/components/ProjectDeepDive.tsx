@@ -20,6 +20,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { IconButton } from "./ui/custom/icon-button";
+import { EASE_OUT } from "@/utils/transitions";
 
 const Silk = lazy(() => import("@/components/backgrounds/Silk"));
 
@@ -74,7 +75,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+      transition={{ duration: 0.4, ease: EASE_OUT }}
       className="min-h-screen bg-background p-4 sm:p-6 lg:p-8"
     >
       <Helmet>
@@ -111,26 +112,38 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
 
         {/* hero content */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center px-6 max-w-4xl">
+          <motion.div
+            className="text-center px-6 max-w-4xl"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
+            }}
+          >
             <motion.h1
-              initial={{ opacity: 0, y: 25, skewY: 3 }}
-              animate={{ opacity: 1, y: 0, skewY: 0 }}
-              transition={{ duration: 0.7, ease: "easeInOut", delay: 0.2 }}
+              variants={{
+                hidden: { opacity: 0, y: 25, skewY: 3 },
+                visible: { opacity: 1, y: 0, skewY: 0 },
+              }}
+              transition={{ duration: 0.55, ease: EASE_OUT }}
               className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6"
             >
               {title}
             </motion.h1>
             {description && (
               <motion.p
-                initial={{ opacity: 0, y: 25 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: "easeInOut", delay: 0.3 }}
+                variants={{
+                  hidden: { opacity: 0, y: 25 },
+                  visible: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.5, ease: EASE_OUT }}
                 className="text-base sm:text-lg md:text-xl text-white/90 font-light"
               >
                 {description}
               </motion.p>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
 

@@ -15,9 +15,9 @@ export function ChevronToArrowIcon({ className }: { className?: string }) {
       className={cn(
         "size-4",
         // The line (first path): starts invisible, scales/fades in on hover
-        "[&>path:first-child]:origin-left [&>path:first-child]:scale-x-0 [&>path:first-child]:opacity-0 [&>path:first-child]:transition-all [&>path:first-child]:duration-300 [&>path:first-child]:group-hover:scale-x-100 [&>path:first-child]:group-hover:opacity-100",
+        "[&>path:first-child]:origin-left [&>path:first-child]:scale-x-0 [&>path:first-child]:opacity-0 [&>path:first-child]:transition-[transform,translate,scale,rotate,opacity] [&>path:first-child]:duration-200 can-hover:[&>path:first-child]:group-hover:scale-x-100 can-hover:[&>path:first-child]:group-hover:opacity-100",
         // The chevron/arrowhead (second path): shifts right on hover
-        "[&>path:last-child]:-translate-x-1 [&>path:last-child]:transition-transform [&>path:last-child]:duration-300 [&>path:last-child]:group-hover:translate-x-0",
+        "[&>path:last-child]:-translate-x-1 [&>path:last-child]:transition-[transform,translate,scale,rotate,opacity] [&>path:last-child]:duration-200 can-hover:[&>path:last-child]:group-hover:translate-x-0",
         className,
       )}
     />

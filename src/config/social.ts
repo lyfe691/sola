@@ -52,7 +52,7 @@ export const SOCIAL_LINKS: Record<SocialId, SocialLink> = {
   hackthebox: {
     id: "hackthebox",
     label: "Hack The Box",
-    href: "https://app.hackthebox.com/profile/2350832",
+    href: "https://profile.hackthebox.com/profile/019ebdeb-cfb3-708a-9d67-dde825d9bfb3",
   },
   chess: {
     id: "chess",

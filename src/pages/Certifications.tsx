@@ -7,7 +7,8 @@
  */
 
 import React from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Helmet } from "react-helmet-async";
@@ -35,32 +36,30 @@ const Certifications: React.FC = () => {
       day: "numeric",
     });
 
+  const containerIn = {
+    hidden: {},
+    visible: { transition: { staggerChildren: 0.06 } },
+  } as const;
   const fadeUp = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({
+    visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.4, delay: 0.04 * i },
-    }),
+      transition: { duration: 0.32, ease: EASE_OUT },
+    },
   } as const;
   const cardIn = {
-    hidden: { opacity: 0, scale: 0.985 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.45 } },
+    hidden: { opacity: 0, y: 12, scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.35, ease: EASE_OUT },
+    },
   } as const;
-  const trail = (index: number) => ({
-    custom: index,
-    variants: fadeUp,
-    initial: "hidden",
-    animate: "visible" as const,
-  });
 
   return (
-    <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
         className="min-h-screen bg-linear-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
       >
         <Helmet>
@@ -75,7 +74,13 @@ const Certifications: React.FC = () => {
         </Helmet>
 
         <div className="max-w-7xl mx-auto">
-          <motion.div {...trail(1)} className="mb-16 text-center">
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10% 0px" }}
+            className="mb-16 text-center"
+          >
             <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
               {t.certifications?.title ?? "Certifications"}
             </h1>
@@ -87,7 +92,13 @@ const Certifications: React.FC = () => {
                 {t.certifications?.empty ?? "No certifications published yet."}
               </p>
             ) : (
-              <div className="grid gap-4 sm:gap-6">
+              <motion.div
+                className="grid gap-4 sm:gap-6"
+                variants={containerIn}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-10% 0px" }}
+              >
                 {items.map((c) => {
                   const expired = isExpired(c);
                   return (
@@ -95,8 +106,6 @@ const Certifications: React.FC = () => {
                       key={c.id}
                       className="group rounded-xl border bg-card/60 backdrop-blur-xs p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20"
                       variants={cardIn}
-                      initial="hidden"
-                      animate="visible"
                     >
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
                         <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -228,12 +237,11 @@ const Certifications: React.FC = () => {
                     </motion.article>
                   );
                 })}
-              </div>
+              </motion.div>
             )}
           </div>
         </div>
       </motion.div>
-    </AnimatePresence>
   );
 };
 

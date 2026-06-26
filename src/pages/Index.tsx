@@ -24,90 +24,95 @@ import {
   type SocialId,
 } from "@/config/social";
 import { cn } from "@/lib/utils";
-
-const EASE = [0.22, 1, 0.36, 1] as const;
+import { REVEAL } from "@/utils/transitions";
 
 const homeAnimations = {
   container: {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { duration: 0.9, staggerChildren: 0.12, delayChildren: 0.1 },
+      transition: { duration: 0.5, staggerChildren: 0.08, delayChildren: 0.06 },
     },
   },
   badge: {
-    hidden: { opacity: 0, y: -6, scale: 0.99 },
+    hidden: { opacity: 0, y: 16, scale: 0.98 },
     show: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.9, ease: EASE },
+      transition: { duration: 0.48, ease: REVEAL },
     },
   },
   heading: {
-    hidden: { opacity: 0, x: -14 },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 1.1, ease: EASE },
-    },
-  },
-  description: {
-    hidden: { opacity: 0, x: 14 },
-    show: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 1.2, ease: EASE },
-    },
-  },
-  buttons: {
-    hidden: { opacity: 0, y: 8 },
+    hidden: { opacity: 0, y: 20, scale: 0.985 },
     show: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.9, ease: EASE },
+      scale: 1,
+      transition: { duration: 0.55, ease: REVEAL },
+    },
+  },
+  description: {
+    hidden: { opacity: 0, y: 18, scale: 0.99 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.55, ease: REVEAL },
+    },
+  },
+  buttons: {
+    hidden: { opacity: 0, y: 16, scale: 0.98 },
+    show: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.48, ease: REVEAL },
     },
   },
   ctaLeft: {
-    hidden: { opacity: 0, x: -12 },
+    hidden: { opacity: 0, y: 16, scale: 0.98 },
     show: {
       opacity: 1,
-      x: 0,
-      transition: { duration: 0.9, ease: EASE },
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.48, ease: REVEAL },
     },
   },
   ctaRight: {
-    hidden: { opacity: 0, x: 12 },
+    hidden: { opacity: 0, y: 16, scale: 0.98 },
     show: {
       opacity: 1,
-      x: 0,
-      transition: { duration: 0.9, ease: EASE },
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.48, ease: REVEAL },
     },
   },
   socialsContainer: {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.12, when: "beforeChildren" as const },
+      transition: { staggerChildren: 0.07, when: "beforeChildren" as const },
     },
   },
   socialItem: {
-    hidden: (i: number) => ({ opacity: 0, x: i % 2 === 0 ? -10 : 10 }),
+    hidden: { opacity: 0, y: 14, scale: 0.98 },
     show: {
       opacity: 1,
-      x: 0,
-      transition: { duration: 0.8, ease: EASE },
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.45, ease: REVEAL },
     },
   },
 } as const;
 
 function socialHoverWidth(label: string) {
-  if (label === "LeetCode") return "md:hover:w-32 lg:hover:w-32";
-  if (label.length <= 5) return "md:hover:w-[6.3rem] lg:hover:w-[6.3rem]";
-  if (label.length <= 7) return "md:hover:w-[6.8rem] lg:hover:w-[6.8rem]";
-  if (label.length <= 8) return "md:hover:w-30 lg:hover:w-30";
-  if (label.length <= 10) return "md:hover:w-34 lg:hover:w-34";
-  return "md:hover:w-38 lg:hover:w-38";
+  if (label === "LeetCode") return "md:can-hover:hover:w-32 lg:can-hover:hover:w-32";
+  if (label.length <= 5) return "md:can-hover:hover:w-[6.3rem] lg:can-hover:hover:w-[6.3rem]";
+  if (label.length <= 7) return "md:can-hover:hover:w-[6.8rem] lg:can-hover:hover:w-[6.8rem]";
+  if (label.length <= 8) return "md:can-hover:hover:w-30 lg:can-hover:hover:w-30";
+  if (label.length <= 10) return "md:can-hover:hover:w-34 lg:can-hover:hover:w-34";
+  return "md:can-hover:hover:w-38 lg:can-hover:hover:w-38";
 }
 
 function SocialLink({ id, index }: { id: SocialId; index: number }) {
@@ -124,9 +129,9 @@ function SocialLink({ id, index }: { id: SocialId; index: number }) {
       custom={index}
       variants={homeAnimations.socialItem}
       className={cn(
-        "group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset transition-all duration-200 ease-out will-change-transform transform-gpu",
-        "size-10 active:scale-95 active:bg-foreground/12",
-        "md:size-12 md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-500 md:active:scale-100",
+        "group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset transition-[width,color] duration-200 ease-out will-change-transform transform-gpu",
+        "size-10 active:bg-foreground/12",
+        "md:size-12 md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-300",
         "hover:text-foreground",
         hoverClass,
         socialHoverWidth(social.label),
@@ -139,7 +144,7 @@ function SocialLink({ id, index }: { id: SocialId; index: number }) {
         <Icon className="size-full" />
       </div>
       <div className="pointer-events-none absolute top-1/2 right-1 left-12 hidden -translate-y-1/2 items-center md:flex">
-        <span className="translate-x-4 text-sm font-medium whitespace-nowrap opacity-0 blur-xs transition-all duration-500 ease-out delay-100 group-hover:translate-x-0 group-hover:opacity-100 group-hover:blur-none">
+        <span className="translate-x-4 text-sm font-medium whitespace-nowrap opacity-0 blur-xs transition-[transform,translate,scale,rotate,opacity,filter] duration-200 ease-out delay-100 can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100 can-hover:group-hover:blur-none">
           {social.label}
         </span>
       </div>
@@ -172,22 +177,20 @@ const Index = () => {
 
       <LayoutGroup>
         <motion.div
-          layout
           className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl"
         >
           <motion.a
-            layout
             variants={homeAnimations.badge}
             href="https://kinoa.to"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Visit Kinoa"
-            className="group relative z-30 mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 backdrop-blur-xs transition-all duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:mb-3 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
+            className="group relative z-30 mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 backdrop-blur-xs transition-[background-color,box-shadow] duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:mb-3 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
           >
             <span className="text-[11px] font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-[13px]">
               {t.index.currentlyWorkingOn}
             </span>
-            <span className="animate-[shine_4s_ease-in-out_infinite] bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-[11px] font-semibold text-transparent sm:text-[13px]">
+            <span className="animate-shine bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-[11px] font-semibold text-transparent sm:text-[13px]">
               Kinoa
             </span>
             <ChevronToArrowIcon className="size-3 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60 sm:size-3.5" />
@@ -218,11 +221,10 @@ const Index = () => {
           </motion.div>
 
           <motion.div
-            layout
             variants={homeAnimations.buttons}
             className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4"
           >
-            <motion.div layout variants={homeAnimations.ctaLeft}>
+            <motion.div variants={homeAnimations.ctaLeft}>
               <Link to="/contact">
                 <IconButton
                   icon={<Contact className="size-4" />}
@@ -232,7 +234,7 @@ const Index = () => {
                 />
               </Link>
             </motion.div>
-            <motion.div layout variants={homeAnimations.ctaRight}>
+            <motion.div variants={homeAnimations.ctaRight}>
               <Link to="/projects">
                 <IconButton
                   icon={<FolderGit2 className="size-4" />}
@@ -245,7 +247,6 @@ const Index = () => {
           </motion.div>
 
           <motion.div
-            layout
             variants={homeAnimations.socialsContainer}
             className="flex flex-wrap items-center gap-3 sm:gap-4"
           >

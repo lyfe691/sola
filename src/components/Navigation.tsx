@@ -15,13 +15,11 @@ import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { SearchToggle } from "./search-toggle";
 import { AppearanceMenu } from "./appearance-menu";
-
-const STANDARD_EASE = [0.4, 0, 0.2, 1] as const;
-const EMPHASIZED_EASE = [0.22, 1, 0.36, 1] as const;
+import { EASE_OUT } from "@/utils/transitions";
 
 const overlayVariants = {
-  hidden: { opacity: 0, transition: { duration: 0.25, ease: STANDARD_EASE } },
-  visible: { opacity: 1, transition: { duration: 0.3, ease: EMPHASIZED_EASE } },
+  hidden: { opacity: 0, transition: { duration: 0.25, ease: EASE_OUT } },
+  visible: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
 };
 
 const menuListVariants = {
@@ -33,12 +31,12 @@ const menuItemVariants = {
   hidden: {
     opacity: 0,
     y: 12,
-    transition: { duration: 0.2, ease: STANDARD_EASE },
+    transition: { duration: 0.2, ease: EASE_OUT },
   },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 80, damping: 18, mass: 1 },
+    transition: { type: "spring", stiffness: 120, damping: 20, mass: 1 },
   },
 };
 
@@ -68,28 +66,24 @@ const MenuGlyph = ({ open }: { open: boolean }) => (
   <div className="relative flex h-4 w-5 items-center justify-center">
     <div className="relative h-[10px] w-[18px]">
       <motion.span
-        className="absolute left-0 top-0 h-[1.4px] w-full rounded-full bg-current"
+        className="absolute left-0 h-[1.4px] w-full rounded-full bg-current"
         initial={false}
         animate={{
-          top: "50%",
-          marginTop: "-0.7px",
           rotate: open ? 45 : 0,
           y: open ? 0 : -3,
         }}
-        style={{ transformOrigin: "center" }}
-        transition={{ duration: 0.3, ease: EMPHASIZED_EASE }}
+        style={{ top: "50%", marginTop: "-0.7px", transformOrigin: "center" }}
+        transition={{ duration: 0.3, ease: EASE_OUT }}
       />
       <motion.span
-        className="absolute bottom-0 left-0 h-[1.4px] w-full rounded-full bg-current"
+        className="absolute left-0 h-[1.4px] w-full rounded-full bg-current"
         initial={false}
         animate={{
-          bottom: "50%",
-          marginBottom: "-0.7px",
           rotate: open ? -45 : 0,
           y: open ? 0 : 3,
         }}
-        style={{ transformOrigin: "center" }}
-        transition={{ duration: 0.3, ease: EMPHASIZED_EASE }}
+        style={{ bottom: "50%", marginBottom: "-0.7px", transformOrigin: "center" }}
+        transition={{ duration: 0.3, ease: EASE_OUT }}
       />
     </div>
   </div>
@@ -180,9 +174,9 @@ const DesktopNav = () => {
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: EMPHASIZED_EASE }}
+          transition={{ duration: 0.4, ease: EASE_OUT }}
           className={cn(
-            "pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 transition-[max-width,margin,padding,border-radius,background-color,border-color,box-shadow] duration-300 ease-out",
+            "pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 transition-[max-width,margin,padding,border-radius,background-color,border-color,box-shadow] duration-200 ease-out",
             scrolled
               ? "mt-3 max-w-7xl rounded-full border border-foreground/10 bg-background/70 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
               : "mt-0 max-w-screen-2xl rounded-none border border-transparent bg-transparent px-6 py-5 lg:px-8",
@@ -204,7 +198,7 @@ const DesktopNav = () => {
               <span
                 ref={highlightRef}
                 aria-hidden
-                className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-all duration-300 ease-out"
+                className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-[transform,translate,scale,rotate,width,height,opacity] duration-300 ease-out"
               />
               {links.map((link) => {
                 const active = isActive(link.path);
@@ -309,9 +303,9 @@ const MobileNav = () => {
           <motion.div
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: EMPHASIZED_EASE }}
+            transition={{ duration: 0.4, ease: EASE_OUT }}
             className={cn(
-              "pointer-events-auto mx-auto flex items-center justify-between gap-2 transition-[margin,padding,border-radius,background-color,border-color,box-shadow] duration-300 ease-out",
+              "pointer-events-auto mx-auto flex items-center justify-between gap-2 transition-[margin,padding,border-radius,background-color,border-color,box-shadow] duration-200 ease-out",
               scrolled && !menuOpen
                 ? "mt-3 rounded-full border border-foreground/10 bg-background/70 px-2 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
                 : "mt-0 rounded-none border border-transparent bg-transparent px-1 py-4",

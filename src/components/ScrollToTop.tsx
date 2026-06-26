@@ -10,22 +10,29 @@ import { useEffect, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
+import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
 
 const SCROLL_THRESHOLD = 120;
 const SCROLL_DEBOUNCE_DELAY = 120;
-
-const prefersReducedMotion = () =>
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
 
+  // Own scroll position fully; stop the browser from also restoring it on
+  // back/forward and racing the tween.
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-    });
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  // Glide to the top on every route change, and abort any in-flight tween if
+  // this (singleton) component ever unmounts.
+  useEffect(() => {
+    smoothScrollToTop();
+    return stopScrollToTop;
   }, [pathname]);
 
   const handleScroll = useCallback(() => {
@@ -47,26 +54,19 @@ export default function ScrollToTop() {
     };
   }, [handleScroll]);
 
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-    });
-  };
-
   return (
     <AnimatePresence>
       {visible && (
         <motion.button
           key="scroll-to-top"
-          onClick={scrollToTop}
+          onClick={smoothScrollToTop}
           aria-label="Scroll to top"
           initial={{ opacity: 0, scale: 0.85, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.85, y: 10 }}
           whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
+          whileTap={{ scale: 0.95, transition: { duration: 0.1, ease: EASE_OUT } }}
+          transition={{ duration: 0.25, ease: EASE_OUT }}
           className="fixed bottom-6 right-6 z-50 flex items-center justify-center
                      h-11 w-11 rounded-full
                      bg-background/70 text-foreground

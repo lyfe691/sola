@@ -6,7 +6,5 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-export { AdvancedCodeBlock } from "./advanced-code-block";
-export { default as ShikiCode } from "./code-highlighter";
-export type { CodeBlockLanguage } from "./code-highlighter";
-export { default as CopyToClipboard } from "./copy-to-clipboard";
+export { CodeBlock } from "./code-block";
+export type { CodeBlockLanguage } from "./use-shiki";

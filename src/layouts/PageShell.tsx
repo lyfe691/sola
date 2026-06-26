@@ -9,7 +9,7 @@
 import { Suspense, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { pageTransitionVariants, pageTransition } from "@/utils/transitions";
+import { pageTransitionVariants } from "@/utils/transitions";
 
 const PageShell = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
@@ -22,7 +22,7 @@ const PageShell = ({ children }: { children: ReactNode }) => {
         initial="initial"
         animate="animate"
         exit="exit"
-        transition={pageTransition}
+        style={{ transformOrigin: "50% 42%" }}
         className="flex flex-1 flex-col"
       >
         <Suspense fallback={<div className="flex-1" />}>{children}</Suspense>

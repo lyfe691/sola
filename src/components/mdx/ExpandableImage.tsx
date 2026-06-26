@@ -7,8 +7,10 @@
  */
 
 import React, { useState, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
 
 const ImageLightbox: React.FC<{
   src: string;
@@ -34,7 +36,12 @@ const ImageLightbox: React.FC<{
     };
   }, [isOpen, onClose]);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  // Portal to <body> so the fixed overlay escapes any ancestor that creates a
+  // containing block (e.g. the page transition's filter/transform on PageShell),
+  // which would otherwise position it off-screen on a scrolled article.
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -42,28 +49,29 @@ const ImageLightbox: React.FC<{
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed top-0 left-0 right-0 bottom-0 z-100 flex items-center justify-center bg-black/90 p-6 cursor-zoom-out overflow-hidden"
+          className="fixed inset-0 z-100 flex cursor-zoom-out items-center justify-center bg-black/80 p-4 backdrop-blur-md sm:p-10"
           onClick={onClose}
         >
           <motion.img
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            exit={{ opacity: 0, scale: 0.97 }}
+            transition={{ duration: 0.3, ease: EASE_OUT }}
             src={src}
             alt={alt}
-            className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg cursor-zoom-out"
+            className="max-h-[88vh] max-w-[92vw] rounded-xl object-contain shadow-2xl ring-1 ring-white/10"
           />
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 p-3 rounded-full bg-background hover:bg-muted text-foreground transition-colors shadow-lg"
             aria-label="Close"
+            className="absolute right-5 top-5 grid size-9 place-items-center rounded-full bg-white/5 text-white/70 backdrop-blur-md transition hover:bg-white/15 hover:text-white"
           >
-            <X className="w-5 h-5" strokeWidth={2} />
+            <X className="size-5" />
           </button>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 };
 
@@ -78,14 +86,12 @@ export const ExpandableImage: React.FC<{
 
   return (
     <>
-      <motion.img
+      <img
         src={src}
         alt={alt}
-        className={`cursor-zoom-in ${className}`}
+        className={`cursor-zoom-in can-hover:scale-[1.02] transition-transform duration-200 ease-out ${className}`}
         loading="lazy"
         onClick={handleOpen}
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
       />
       <ImageLightbox
         src={src}

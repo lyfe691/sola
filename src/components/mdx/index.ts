@@ -11,4 +11,4 @@ export { ExpandableImage } from "./ExpandableImage";
 export { ProjectImage } from "./ProjectImage";
 export { ProjectGallery } from "./ProjectGallery";
 export { TechStack } from "./TechStack";
-export { CodeBlock } from "./CodeBlock";
+export { CodeBlock } from "@/components/ui/code-block";

@@ -9,6 +9,7 @@
  */
 
 import { motion } from "motion/react";
+import { EASE_OUT } from "@/utils/transitions";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +27,7 @@ import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ArrowLeft } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 
 const Privacy = () => {
   const n = useNavigate();
@@ -669,22 +671,28 @@ const Privacy = () => {
   // bespoke motion variants
   const fadeUp = {
     hidden: { opacity: 0, y: 10 },
-    visible: (i: number) => ({
+    visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.4, delay: 0.04 * i },
-    }),
+      transition: { duration: 0.32, ease: EASE_OUT },
+    },
   } as const;
   const cardIn = {
-    hidden: { opacity: 0, scale: 0.985 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.45 } },
+    hidden: { opacity: 0, y: 12, scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.35, ease: EASE_OUT },
+    },
   } as const;
-  const trail = (index: number) => ({
-    custom: index,
-    variants: fadeUp,
-    initial: "hidden",
-    animate: "visible" as const,
-  });
+  // Reveal-on-scroll props shared by every section card.
+  const reveal = {
+    variants: cardIn,
+    initial: "hidden" as const,
+    whileInView: "visible" as const,
+    viewport: { once: true, margin: "-10% 0px" },
+  };
 
   return (
     <>
@@ -694,7 +702,13 @@ const Privacy = () => {
       </Helmet>
 
       <div className="max-w-4xl mx-auto">
-        <motion.div {...trail(1)} className="mb-8">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10% 0px" }}
+          className="mb-8"
+        >
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -717,14 +731,20 @@ const Privacy = () => {
         </motion.div>
       </div>
 
-      <motion.div {...trail(2)} className="mb-16 text-center">
-        <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
+      <motion.div
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-10% 0px" }}
+        className="mb-16 text-center"
+      >
+        <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-wrap wrap-break-word">
           {L[language].pageTitle}
         </h1>
         <div className="mt-8 flex items-center justify-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border bg-background/60 px-2.5 py-1 text-[0.70rem]/[1rem] text-foreground/60 backdrop-blur-xs">
             {updatedLabel}:{" "}
-            <span className="bg-linear-to-r from-foreground/60 via-primary to-foreground/60 bg-size-[200%_100%] bg-clip-text text-transparent animate-shine">
+            <span className="font-medium text-foreground">
               {formattedUpdated}
             </span>
           </span>
@@ -734,239 +754,211 @@ const Privacy = () => {
       <div className="max-w-4xl mx-auto">
         <div className="space-y-8">
           {/* Intro card */}
-          <motion.section
-            id="introduction"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].intro.title}
-            </h2>
-            <div className="space-y-4 text-muted-foreground leading-relaxed text-base">
-              <p>{L[language].intro.p1}</p>
-              <p>
-                <strong className="text-foreground">
-                  {L[language].intro.controller}
-                </strong>{" "}
-                {L[language].intro.controllerVal}
-                <br />
-                <strong className="text-foreground">
-                  {L[language].intro.contact}
-                </strong>{" "}
-                <a
-                  href="mailto:yanis.sebastian.zuercher@gmail.com"
-                  className="link"
-                >
-                  {L[language].intro.email}
-                </a>
-              </p>
-            </div>
+          <motion.section id="introduction" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].intro.title}
+              </h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed text-base">
+                <p>{L[language].intro.p1}</p>
+                <p>
+                  <strong className="text-foreground">
+                    {L[language].intro.controller}
+                  </strong>{" "}
+                  {L[language].intro.controllerVal}
+                  <br />
+                  <strong className="text-foreground">
+                    {L[language].intro.contact}
+                  </strong>{" "}
+                  <a
+                    href="mailto:yanis.sebastian.zuercher@gmail.com"
+                    className="link"
+                  >
+                    {L[language].intro.email}
+                  </a>
+                </p>
+              </div>
+            </Card>
           </motion.section>
 
           {/* Two-column cards where space allows */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.section
-              id="hosting"
-              variants={cardIn}
-              initial="hidden"
-              animate="visible"
-              className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-            >
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].hosting.title}
-              </h2>
-              <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].hosting.p1}
-              </p>
-              <p className="text-muted-foreground leading-relaxed text-base mt-3">
-                <strong className="text-foreground">
-                  {L[language].hosting.legal.split(":")[0]}:
-                </strong>{" "}
-                {L[language].hosting.legal.split(":").slice(1).join(":").trim()}
-              </p>
+            <motion.section id="hosting" {...reveal}>
+              <Card className="gap-0 h-full px-6">
+                <h2 className="text-xl font-semibold text-foreground mb-4">
+                  {L[language].hosting.title}
+                </h2>
+                <p className="text-muted-foreground leading-relaxed text-base">
+                  {L[language].hosting.p1}
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-base mt-3">
+                  <strong className="text-foreground">
+                    {L[language].hosting.legal.split(":")[0]}:
+                  </strong>{" "}
+                  {L[language].hosting.legal
+                    .split(":")
+                    .slice(1)
+                    .join(":")
+                    .trim()}
+                </p>
+              </Card>
             </motion.section>
 
-            <motion.section
-              id="analytics"
-              variants={cardIn}
-              initial="hidden"
-              animate="visible"
-              className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-            >
-              <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].analytics.title}
-              </h2>
-              <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].analytics.p1}
-              </p>
-              <p className="text-muted-foreground leading-relaxed text-base mt-3">
-                <strong className="text-foreground">
-                  {L[language].hosting.legal.split(":")[0]}:
-                </strong>{" "}
-                {L[language].analytics.legal
-                  .split(":")
-                  .slice(1)
-                  .join(":")
-                  .trim()}
-              </p>
+            <motion.section id="analytics" {...reveal}>
+              <Card className="gap-0 h-full px-6">
+                <h2 className="text-xl font-semibold text-foreground mb-4">
+                  {L[language].analytics.title}
+                </h2>
+                <p className="text-muted-foreground leading-relaxed text-base">
+                  {L[language].analytics.p1}
+                </p>
+                <p className="text-muted-foreground leading-relaxed text-base mt-3">
+                  <strong className="text-foreground">
+                    {L[language].hosting.legal.split(":")[0]}:
+                  </strong>{" "}
+                  {L[language].analytics.legal
+                    .split(":")
+                    .slice(1)
+                    .join(":")
+                    .trim()}
+                </p>
+              </Card>
             </motion.section>
           </div>
 
-          <motion.section
-            id="cookies"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].cookies.title}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed text-base">
-              {L[language].cookies.p1}
-            </p>
+          <motion.section id="cookies" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].cookies.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].cookies.p1}
+              </p>
+            </Card>
           </motion.section>
 
-          <motion.section
-            id="contact"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].contact.title}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed text-base">
-              {L[language].contact.p1}
-            </p>
-            <p className="text-muted-foreground leading-relaxed text-base mt-3">
-              <strong className="text-foreground">
-                {L[language].hosting.legal.split(":")[0]}:
-              </strong>{" "}
-              {L[language].contact.legal.split(":").slice(1).join(":").trim()}
-            </p>
+          <motion.section id="contact" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].contact.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].contact.p1}
+              </p>
+              <p className="text-muted-foreground leading-relaxed text-base mt-3">
+                <strong className="text-foreground">
+                  {L[language].hosting.legal.split(":")[0]}:
+                </strong>{" "}
+                {L[language].contact.legal.split(":").slice(1).join(":").trim()}
+              </p>
+            </Card>
           </motion.section>
 
-          <motion.section
-            id="github"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].github.title}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed text-base">
-              {L[language].github.p1}
-            </p>
-            <p className="text-muted-foreground leading-relaxed text-base mt-3">
-              <strong className="text-foreground">
-                {L[language].hosting.legal.split(":")[0]}:
-              </strong>{" "}
-              {L[language].github.legal.split(":").slice(1).join(":").trim()}
-            </p>
+          <motion.section id="github" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].github.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].github.p1}
+              </p>
+              <p className="text-muted-foreground leading-relaxed text-base mt-3">
+                <strong className="text-foreground">
+                  {L[language].hosting.legal.split(":")[0]}:
+                </strong>{" "}
+                {L[language].github.legal.split(":").slice(1).join(":").trim()}
+              </p>
+            </Card>
           </motion.section>
 
-          <motion.section
-            id="processors"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].processors.title}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed text-base">
-              {L[language].processors.p1}
-            </p>
+          <motion.section id="processors" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].processors.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].processors.p1}
+              </p>
+            </Card>
           </motion.section>
 
-          <motion.section
-            id="rights"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].rights.title}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed text-base">
-              {L[language].rights.p1}
-            </p>
-            {"items" in L[language].rights &&
-              Array.isArray(L[language].rights.items) && (
-                <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                  {(L[language].rights.items as string[]).map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary/70" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            <p className="text-muted-foreground leading-relaxed text-base mt-4">
-              {L[language].rights.p2}
-            </p>
+          <motion.section id="rights" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].rights.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].rights.p1}
+              </p>
+              {"items" in L[language].rights &&
+                Array.isArray(L[language].rights.items) && (
+                  <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
+                    {(L[language].rights.items as string[]).map((item) => (
+                      <li key={item} className="flex items-start gap-2.5">
+                        <span
+                          aria-hidden
+                          className="flex h-5 shrink-0 items-center"
+                        >
+                          <span className="size-1.5 rounded-full bg-primary/70" />
+                        </span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              <p className="text-muted-foreground leading-relaxed text-base mt-4">
+                {L[language].rights.p2}
+              </p>
+            </Card>
           </motion.section>
 
-          <motion.section
-            id="changes"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border bg-card/60 backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].changes.title}
-            </h2>
-            <p className="text-muted-foreground leading-relaxed text-base">
-              {L[language].changes.p1}
-            </p>
+          <motion.section id="changes" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].changes.title}
+              </h2>
+              <p className="text-muted-foreground leading-relaxed text-base">
+                {L[language].changes.p1}
+              </p>
+            </Card>
           </motion.section>
 
           <Separator className="my-12" />
 
-          <motion.section
-            id="impressum"
-            variants={cardIn}
-            initial="hidden"
-            animate="visible"
-            className="rounded-xl border  backdrop-blur-xs p-6"
-          >
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {L[language].impressum.title}
-            </h2>
-            <div className="text-muted-foreground leading-relaxed space-y-2 text-base">
-              <p>
-                <span className="font-semibold text-foreground">
-                  {L[language].impressum.responsible}
-                </span>
-              </p>
-              <p>{L[language].impressum.name}</p>
-              <p>{L[language].impressum.location}</p>
-              <p>
-                <span className="font-semibold text-foreground">
-                  {L[language].impressum.emailLabel}
-                </span>{" "}
-                <a
-                  href="mailto:yanis.sebastian.zuercher@gmail.com"
-                  className="link"
-                >
-                  yanis.sebastian.zuercher@gmail.com
-                </a>
-              </p>
-            </div>
+          <motion.section id="impressum" {...reveal}>
+            <Card className="gap-0 h-full px-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {L[language].impressum.title}
+              </h2>
+              <div className="text-muted-foreground leading-relaxed space-y-2 text-base">
+                <p>
+                  <span className="font-semibold text-foreground">
+                    {L[language].impressum.responsible}
+                  </span>
+                </p>
+                <p>{L[language].impressum.name}</p>
+                <p>{L[language].impressum.location}</p>
+                <p>
+                  <span className="font-semibold text-foreground">
+                    {L[language].impressum.emailLabel}
+                  </span>{" "}
+                  <a
+                    href="mailto:yanis.sebastian.zuercher@gmail.com"
+                    className="link"
+                  >
+                    yanis.sebastian.zuercher@gmail.com
+                  </a>
+                </p>
+              </div>
+            </Card>
           </motion.section>
         </div>
 
         <motion.div
-          {...trail(20)}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-10% 0px" }}
           className="mt-16 pt-8 border-t border-border"
           onClick={h}
         >

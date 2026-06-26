@@ -12,7 +12,7 @@ import { motion } from "motion/react";
 import { MDXProvider } from "@mdx-js/react";
 import ProjectPage from "@/components/ProjectDeepDive";
 import { ExternalLink, Globe } from "lucide-react";
-import { LinkPreview } from "@/components/ui/custom/link-preview";
+import { Button } from "@/components/ui/button";
 import { FaGithubAlt } from "react-icons/fa";
 import {
   getProjectConfig,
@@ -26,6 +26,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
+import { EASE_OUT } from "@/utils/transitions";
 
 // dynamic mdx components, cached so each path keeps a stable lazy identity
 const mdxComponents = new Map<
@@ -41,54 +42,6 @@ const getMDXComponent = (mdxPath: string) => {
   return component;
 };
 
-const getHostname = (href: string) => {
-  try {
-    return new URL(href).hostname.replace(/^www\./, "");
-  } catch {
-    return href;
-  }
-};
-
-const LinkTile: React.FC<{
-  href: string;
-  label: string;
-  icon: React.ReactNode;
-  variant?: "primary" | "outline";
-}> = ({ href, label, icon, variant = "primary" }) => (
-  <LinkPreview href={href} previewType="auto" compact={true} className="block">
-    <div
-      className={[
-        "group relative w-full h-full rounded-xl px-4 py-3",
-        "border transition-colors duration-150 ease-out",
-        variant === "primary"
-          ? "border-primary/30 bg-primary/5 hover:bg-primary/10 hover:border-primary/40"
-          : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10",
-        "shadow-xs focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50",
-        "inline-flex items-center gap-3 text-foreground",
-      ].join(" ")}
-    >
-      {/* decorative shine */}
-      <span className="pointer-events-none absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-linear-to-br from-primary/10 via-transparent to-transparent" />
-
-      {/* icon pill */}
-      <span className="shrink-0 grid place-items-center w-8 h-8 rounded-lg bg-foreground/10 text-foreground/70 group-hover:bg-primary/15 group-hover:text-primary transition-colors">
-        {icon}
-      </span>
-
-      {/* label */}
-      <span className="flex flex-col text-left leading-tight">
-        <span className="text-sm font-medium tracking-tight">{label}</span>
-        <span className="text-[11px] text-foreground/60">
-          {getHostname(href)}
-        </span>
-      </span>
-
-      {/* arrow cue */}
-      <ExternalLink className="ml-auto w-4 h-4 text-foreground/40 opacity-0 group-hover:opacity-100 group-hover:text-primary transition-colors duration-150 ease-out" />
-    </div>
-  </LinkPreview>
-);
-
 // algorithmically recommend projects with overlapping tech stacks
 const getRecommendedProjectSlugs = (
   currentSlug: string,
@@ -103,7 +56,9 @@ const getRecommendedProjectSlugs = (
   const docFreq: Record<string, number> = {};
   for (const sl of allSlugs) {
     const seen = new Set<string>();
-    for (const t of (projectPagesConfig[sl].technologies || []).map(normalize)) {
+    for (const t of (projectPagesConfig[sl].technologies || []).map(
+      normalize,
+    )) {
       if (!seen.has(t)) {
         docFreq[t] = (docFreq[t] || 0) + 1;
         seen.add(t);
@@ -184,24 +139,44 @@ const ProjectDeepDiveRenderer: React.FC = () => {
       silkNoiseIntensity={config.silk.noiseIntensity}
       silkRotation={config.silk.rotation}
     >
-      <div className="space-y-16">
-        {/* date - article-like header */}
+      <motion.div
+        className="space-y-16"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+          },
+        }}
+      >
+        {/* date */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.05 }}
-          className="text-center -mb-8"
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
+          }}
+          className="text-center"
         >
-          <time className="text-xs text-muted-foreground font-medium tracking-wide uppercase">
+          <time className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
             {config.date}
           </time>
         </motion.div>
 
         {/* overview */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
+          }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.overview}
@@ -213,9 +188,14 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* tech stack */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
+          }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.techStack}
@@ -225,47 +205,77 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* links - hero call-to-action tiles */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
+          variants={{
+            hidden: { opacity: 0, y: 12 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { duration: 0.45, ease: EASE_OUT },
+            },
+          }}
         >
           <h2 className="text-lg font-semibold mb-4 text-foreground">
             {t.common.links}
           </h2>
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
+          <div className="flex flex-wrap gap-3">
             {config.links.live && (
-              <LinkTile
-                href={config.links.live}
-                label={
-                  config.links.live.includes("chromewebstore")
-                    ? t.common.chromeStore
-                    : t.common.visitSite
+              <Button
+                nativeButton={false}
+                size="lg"
+                className="gap-2"
+                render={
+                  <a
+                    href={config.links.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
                 }
-                icon={
-                  config.links.live.includes("chromewebstore") ? (
-                    <Globe className="w-4 h-4" />
-                  ) : (
-                    <ExternalLink className="w-4 h-4" />
-                  )
-                }
-                variant="primary"
-              />
+              >
+                {config.links.live.includes("chromewebstore") ? (
+                  <Globe className="h-4 w-4" />
+                ) : (
+                  <ExternalLink className="h-4 w-4" />
+                )}
+                {config.links.live.includes("chromewebstore")
+                  ? t.common.chromeStore
+                  : t.common.visitSite}
+              </Button>
             )}
             {config.links.github && (
-              <LinkTile
-                href={config.links.github}
-                label={t.common.sourceCode}
-                icon={<FaGithubAlt className="w-4 h-4" />}
+              <Button
+                nativeButton={false}
+                size="lg"
                 variant="outline"
-              />
+                className="gap-2"
+                render={
+                  <a
+                    href={config.links.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
+              >
+                <FaGithubAlt className="h-4 w-4" />
+                {t.common.sourceCode}
+              </Button>
             )}
             {config.links.demo && (
-              <LinkTile
-                href={config.links.demo}
-                label={t.common.demo}
-                icon={<ExternalLink className="w-4 h-4" />}
+              <Button
+                nativeButton={false}
+                size="lg"
                 variant="outline"
-              />
+                className="gap-2"
+                render={
+                  <a
+                    href={config.links.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  />
+                }
+              >
+                <ExternalLink className="h-4 w-4" />
+                {t.common.demo}
+              </Button>
             )}
           </div>
         </motion.section>
@@ -274,10 +284,10 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* mdx content */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 8 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.05 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4, ease: EASE_OUT }}
           className="prose prose-sm max-w-none"
         >
           <MDXProvider components={MDXComponents}>
@@ -295,10 +305,10 @@ const ProjectDeepDiveRenderer: React.FC = () => {
 
         {/* related projects */}
         <motion.section
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.45, ease: EASE_OUT }}
           className="border-t border-border pt-12"
         >
           <h2 className="text-lg font-semibold mb-6 text-foreground">
@@ -346,7 +356,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
             })}
           </div>
         </motion.section>
-      </div>
+      </motion.div>
     </ProjectPage>
   );
 };

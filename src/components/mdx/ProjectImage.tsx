@@ -20,7 +20,7 @@ export const ProjectImage: React.FC<{
 }> = ({ src, alt, caption, className = "", size = "normal" }) => (
   <motion.div
     {...blockReveal}
-    className={`mb-6 ${className} ${
+    className={`my-8 ${className} ${
       size === "large"
         ? "max-w-4xl mx-auto"
         : size === "full"

@@ -42,7 +42,7 @@ const ExperienceSection = ({
 
       <div className="flex flex-col">
         {entries.map((entry, index) => (
-          <ScrollReveal key={entry.key} variant="default" delay={index * 80}>
+          <ScrollReveal key={entry.key} variant="default" delay={index * 60}>
             <ExperienceItem
               entry={entry}
               isWork={isWork}

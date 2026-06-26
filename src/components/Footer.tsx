@@ -34,7 +34,7 @@ const Footer = () => {
       icon: <Icon className="w-4 h-4" />,
       href: s.href,
       label: s.label,
-      hoverClass: `${accent} hover:scale-110`,
+      hoverClass: `${accent} can-hover:hover:scale-110`,
     };
   });
 
@@ -79,7 +79,7 @@ const Footer = () => {
               </Link>
               <p className="text-sm text-foreground/70 leading-relaxed">
                 {t.footer.madeWith}{" "}
-                <span className="text-primary animate-pulse">♥</span>{" "}
+                <span className="text-primary">♥</span>{" "}
                 {t.footer.by} {/* or <br />*/}
                 <span className="font-medium">Yanis Sebastian Zürcher</span>
               </p>
@@ -88,9 +88,9 @@ const Footer = () => {
             {/* 這個網站是怎麼造出來的 */}
             <Link
               to={e}
-              className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-all duration-300"
+              className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
             >
-              <Info className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform duration-300" />
+              <Info className="w-3.5 h-3.5 can-hover:group-hover:rotate-12 transition-transform duration-300 ease-out" />
               <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
                 {t.footer.atw}
               </span>
@@ -100,10 +100,10 @@ const Footer = () => {
             <div className="space-y-2">
               <button
                 onClick={() => setIsLegalExpanded(!isLegalExpanded)}
-                className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-all duration-300"
+                className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
               >
                 <div
-                  className={`transition-transform duration-300 ${isLegalExpanded ? "rotate-90" : ""}`}
+                  className={`transition-transform duration-300 ease-out ${isLegalExpanded ? "rotate-90" : ""}`}
                 >
                   <ChevronRight className="w-3.5 h-3.5" />
                 </div>
@@ -111,18 +111,20 @@ const Footer = () => {
               </button>
 
               <div
-                className={`overflow-hidden transition-all duration-300 ${isLegalExpanded ? "max-h-20 opacity-100" : "max-h-0 opacity-0"}`}
+                className={`grid transition-[grid-template-rows,opacity] duration-300 ease-out ${isLegalExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
               >
-                <div className="ml-5 pt-2">
-                  <Link
-                    to="/privacy"
-                    className="group flex items-center gap-1 text-xs text-foreground/50 hover:text-primary transition-all duration-300 w-fit"
-                  >
-                    <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
-                      {t.footer.privacy}
-                    </span>
-                    <ArrowUpRight className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </Link>
+                <div className="overflow-hidden">
+                  <div className="ml-5 pt-2">
+                    <Link
+                      to="/privacy"
+                      className="group flex items-center gap-1 text-xs text-foreground/50 hover:text-primary transition-colors duration-300 ease-out w-fit"
+                    >
+                      <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
+                        {t.footer.privacy}
+                      </span>
+                      <ArrowUpRight className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -136,7 +138,7 @@ const Footer = () => {
             <div className="space-y-3">
               <Link
                 to="/"
-                className="block text-sm text-foreground/60 hover:text-foreground hover:translate-x-1 transition-all duration-300"
+                className="block text-sm text-foreground/60 hover:text-foreground can-hover:hover:translate-x-1 transition-[color,transform,translate,scale,rotate] duration-300 ease-out"
               >
                 {t.common.home}
               </Link>
@@ -145,7 +147,7 @@ const Footer = () => {
                 <Link
                   key={path}
                   to={path}
-                  className="block text-sm text-foreground/60 hover:text-foreground hover:translate-x-1 transition-all duration-300"
+                  className="block text-sm text-foreground/60 hover:text-foreground can-hover:hover:translate-x-1 transition-[color,transform,translate,scale,rotate] duration-300 ease-out"
                 >
                   {text}
                 </Link>
@@ -166,16 +168,16 @@ const Footer = () => {
                   );
                   toast.success("Copied.");
                 }}
-                className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-all duration-300 hover:cursor-copy"
+                className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-300 ease-out hover:cursor-copy"
               >
-                <Mail className="w-4 h-4 shrink-0 group-hover:scale-110 transition-transform" />
+                <Mail className="w-4 h-4 shrink-0 can-hover:group-hover:scale-110 transition-transform duration-300 ease-out" />
                 <span className="leading-relaxed wrap-break-word">
                   yanis.sebastian.zuercher@gmail.com
                 </span>
               </button>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-1 text-sm text-foreground/60 hover:text-foreground hover:translate-x-1 transition-all duration-300"
+                className="inline-flex items-center gap-1 text-sm text-foreground/60 hover:text-foreground can-hover:hover:translate-x-1 transition-[color,transform,translate,scale,rotate] duration-300 ease-out"
               >
                 {t.footer.contactForm}
                 <ArrowUpRight className="w-3 h-3" />
@@ -196,7 +198,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className={`group relative p-2.5 rounded-lg border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-all duration-300 ${link.hoverClass}`}
+                  className={`group relative p-2.5 rounded-lg border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-[color,background-color,transform,translate,scale,rotate] duration-300 ease-out ${link.hoverClass}`}
                 >
                   <div className="relative z-10">{link.icon}</div>
                   <div className="absolute inset-0 rounded-lg bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

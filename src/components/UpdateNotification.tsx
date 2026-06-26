@@ -119,7 +119,12 @@ export function UpdateNotification() {
           aria-live="polite"
           initial={{ y: 32, opacity: 0, scale: 0.96 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
-          exit={{ y: 16, opacity: 0, scale: 0.98 }}
+          exit={{
+            y: 16,
+            opacity: 0,
+            scale: 0.98,
+            transition: { duration: 0.22, ease: EASE_EXPO },
+          }}
           transition={{ duration: 0.4, ease: EASE_EXPO }}
           className={cn(
             "fixed right-4 bottom-4 left-4 z-[60] sm:left-auto sm:w-[360px]",
