@@ -1,22 +1,81 @@
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@mdx-js/rollup";
 import remarkGfm from "remark-gfm";
 import path from "path";
+import type { IncomingMessage, ServerResponse } from "http";
+import type { Connect } from "vite";
+import { getGitHubActivity } from "./src/server/github-activity-handler";
+
 const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
 
-function versionApiDevPlugin(): Plugin {
-  const payload = JSON.stringify({ version: "dev" });
+function applyLocalEnv(mode: string) {
+  const env = loadEnv(mode, process.cwd(), "");
+  if (env.GITHUB_TOKEN) {
+    process.env.GITHUB_TOKEN = env.GITHUB_TOKEN;
+  }
+}
+
+function apiDevPlugin(): Plugin {
+  const versionPayload = JSON.stringify({ version: "dev" });
 
   return {
-    name: "version-api-dev",
+    name: "api-dev",
+    enforce: "pre",
+    config(_, { mode }) {
+      applyLocalEnv(mode);
+    },
     configureServer(server) {
-      server.middlewares.use("/api/version", (_req, res) => {
-        res.setHeader("Content-Type", "application/json");
-        res.setHeader("Cache-Control", "no-store");
-        res.end(payload);
-      });
+      applyLocalEnv(server.config.mode);
+
+      const handleApi = async (
+        req: IncomingMessage,
+        res: ServerResponse,
+        next: Connect.NextFunction,
+      ) => {
+        const pathname = req.url?.split("?")[0];
+
+        if (pathname === "/api/version" && req.method === "GET") {
+          res.setHeader("Content-Type", "application/json");
+          res.setHeader("Cache-Control", "no-store");
+          res.end(versionPayload);
+          return;
+        }
+
+        if (pathname !== "/api/github-activity" || req.method !== "GET") {
+          next();
+          return;
+        }
+
+        try {
+          const url = new URL(req.url ?? "/", "http://localhost");
+          const username = url.searchParams.get("username");
+          if (!username) {
+            res.statusCode = 400;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ error: "username is required" }));
+            return;
+          }
+
+          const processed = await getGitHubActivity(username);
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.setHeader(
+            "Cache-Control",
+            "public, s-maxage=300, stale-while-revalidate=600",
+          );
+          res.end(JSON.stringify(processed));
+        } catch (error) {
+          console.error("[github-activity dev]", error);
+          res.statusCode = 400;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ error: "username is required" }));
+        }
+      };
+
+      // Vite serves `api/github-activity.ts` as source unless we intercept first.
+      server.middlewares.stack.unshift({ route: "", handle: handleApi });
     },
   };
 }
@@ -31,6 +90,7 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [
+    apiDevPlugin(),
     {
       enforce: "pre",
       ...mdx({
@@ -40,7 +100,6 @@ export default defineConfig({
     },
     react(),
     tailwindcss(),
-    versionApiDevPlugin(),
   ],
   resolve: {
     alias: {
@@ -71,6 +130,12 @@ export default defineConfig({
   // Vite's initial dep scan never sees them and would re-optimize on first
   // select (causing a "504 Outdated Optimize Dep" reload). Pre-bundle them.
   optimizeDeps: {
-    include: ["ogl", "three", "@react-three/fiber", "gsap"],
+    include: [
+      "ogl",
+      "three",
+      "@react-three/fiber",
+      "gsap",
+      "react-activity-calendar",
+    ],
   },
 });

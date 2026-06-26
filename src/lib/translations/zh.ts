@@ -414,6 +414,12 @@ export const zh = {
     github: {
       title: "GitHub 活动",
       overview: "概览",
+      totalCount: "{{year}} 年共 {{count}} 次贡献",
+      totalCountLastYear: "过去一年共 {{count}} 次贡献",
+      legendLess: "少",
+      legendMore: "多",
+      dayTooltip: "{date}：{count} 次贡献",
+      loadError: "暂时无法加载贡献数据。",
     },
     philosophyLabels: {
       clean: "干净代码",

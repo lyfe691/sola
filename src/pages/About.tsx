@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -45,19 +46,16 @@ import {
   DrawerTitle,
   DrawerDescription,
 } from "@/components/ui/drawer";
-import GitHubCalendarDefault from "react-github-calendar";
 import type { ProcessedActivity } from "@/lib/github";
 import { getUserActivity } from "@/lib/github";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
+import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
+import { fetchGitHubContributions } from "@/lib/github-contributions";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
-
-const GitHubCalendar =
-  (GitHubCalendarDefault as unknown as { default?: typeof GitHubCalendarDefault })
-    .default ?? GitHubCalendarDefault;
 
 // --------------------------------- Helpers ---------------------------------
 
@@ -240,11 +238,32 @@ const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const { theme } = useTheme();
-  const [selectedYear, setSelectedYear] = useState<number | "last">("last");
+  const [contributionTab, setContributionTab] = useState("last");
   const [activity, setActivity] = useState<ProcessedActivity[]>([]);
   const [loadingActivity, setLoadingActivity] = useState(true);
 
-  const years = [2026, 2025];
+  const contributionYears = [2026, 2025] as const;
+  const contributionTabs = [
+    { value: "last", label: t.about.github.overview, year: "last" as const },
+    ...contributionYears.map((year) => ({
+      value: String(year),
+      label: String(year),
+      year,
+    })),
+  ];
+  const selectedContributionYear =
+    contributionTab === "last"
+      ? "last"
+      : (Number(contributionTab) as (typeof contributionYears)[number]);
+
+  useEffect(() => {
+    void Promise.all([
+      fetchGitHubContributions("lyfe691", "last"),
+      ...contributionYears.map((year) =>
+        fetchGitHubContributions("lyfe691", year),
+      ),
+    ]);
+  }, []);
 
   // testimonials - untranslatable due to respective copyrights
   const testimonials = [
@@ -377,37 +396,33 @@ const About = () => {
             </LinkPreview>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-[120px_1fr] gap-6">
-            <div className="flex flex-col gap-2">
-              <Button
-                variant={selectedYear === "last" ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setSelectedYear("last")}
-                className="text-sm w-full justify-start"
+          <Card className="gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md">
+            <Tabs
+              value={contributionTab}
+              onValueChange={setContributionTab}
+              className="gap-0"
+            >
+              <div className="border-b border-foreground/8 px-4 py-3">
+                <TabsList className="h-8">
+                  {contributionTabs.map(({ value, label }) => (
+                    <TabsTrigger
+                      key={value}
+                      value={value}
+                      className="px-3 text-xs"
+                    >
+                      {label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+              <TabsContent
+                value={contributionTab}
+                className="mt-0 overflow-hidden p-4 sm:p-5"
               >
-                {t.about.github.overview}
-              </Button>
-              {years.map((year) => (
-                <Button
-                  key={year}
-                  variant={selectedYear === year ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setSelectedYear(year)}
-                  className="text-sm w-full justify-start"
-                >
-                  {year}
-                </Button>
-              ))}
-            </div>
-            <Card className="gap-0 bg-card/40 p-4 backdrop-blur-md">
-              <GitHubCalendar
-                username="lyfe691"
-                colorScheme={getThemeType(theme)}
-                fontSize={14}
-                year={selectedYear}
-              />
-            </Card>
-          </div>
+                <GitHubContributionCalendar year={selectedContributionYear} />
+              </TabsContent>
+            </Tabs>
+          </Card>
 
           {loadingActivity ? (
             <Skeleton className="mt-6 h-48 rounded-xl" />

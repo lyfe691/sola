@@ -429,6 +429,12 @@ export const es = {
     github: {
       title: "Actividad de GitHub",
       overview: "Resumen",
+      totalCount: "{{count}} contribuciones en {{year}}",
+      totalCountLastYear: "{{count}} contribuciones en el último año",
+      legendLess: "Menos",
+      legendMore: "Más",
+      dayTooltip: "{count} contribuciones el {date}",
+      loadError: "No se pudieron cargar los datos de contribuciones.",
     },
     philosophyLabels: {
       clean: "Código limpio",

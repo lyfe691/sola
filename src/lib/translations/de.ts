@@ -427,6 +427,12 @@ export const de = {
     github: {
       title: "GitHub-Aktivität",
       overview: "Übersicht",
+      totalCount: "{{count}} Beiträge in {{year}}",
+      totalCountLastYear: "{{count}} Beiträge im letzten Jahr",
+      legendLess: "Weniger",
+      legendMore: "Mehr",
+      dayTooltip: "{count} Beiträge am {date}",
+      loadError: "Beitragsdaten konnten gerade nicht geladen werden.",
     },
     philosophyLabels: {
       clean: "Sauberer Code",

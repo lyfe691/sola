@@ -417,6 +417,12 @@ export const ja = {
     github: {
       title: "GitHub アクティビティ",
       overview: "概要",
+      totalCount: "{{year}}年のコントリビューション {{count}} 件",
+      totalCountLastYear: "過去1年のコントリビューション {{count}} 件",
+      legendLess: "少",
+      legendMore: "多",
+      dayTooltip: "{date}: {count} 件",
+      loadError: "コントリビューションデータを読み込めませんでした。",
     },
     philosophyLabels: {
       clean: "クリーンコード",

@@ -39,7 +39,7 @@
     "ogl": "^1.0.11",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-github-calendar": "^4.1.6",
+    "react-activity-calendar": "^2.7.12",
     "react-helmet-async": "^2.0.5",
     "react-icons": "^5.4.0",
     "react-router-dom": "^6.26.2",

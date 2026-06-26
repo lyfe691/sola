@@ -625,3 +625,109 @@
 .code-block[data-code-theme="dark"] .shiki span {
   color: var(--shiki-dark);
 }
+
+/* ---------- GitHub contribution heatmap ---------- */
+.contribution-calendar {
+  --contrib-0: color-mix(in oklab, var(--foreground) 6%, transparent);
+  --contrib-1: color-mix(in oklab, var(--primary) 22%, var(--contrib-0));
+  --contrib-2: color-mix(in oklab, var(--primary) 48%, var(--contrib-0));
+  --contrib-3: color-mix(in oklab, var(--primary) 72%, var(--contrib-0));
+  --contrib-4: var(--primary);
+}
+
+.contribution-calendar[data-scheme="dark"] {
+  --contrib-0: color-mix(in oklab, var(--foreground) 11%, transparent);
+  --contrib-1: color-mix(in oklab, var(--primary) 28%, var(--contrib-0));
+  --contrib-2: color-mix(in oklab, var(--primary) 52%, var(--contrib-0));
+  --contrib-3: color-mix(in oklab, var(--primary) 76%, var(--contrib-0));
+  --contrib-4: var(--primary);
+}
+
+.contribution-calendar .react-activity-calendar {
+  width: 100% !important;
+  max-width: 100%;
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+}
+
+.contribution-calendar__body {
+  min-height: 118px;
+}
+
+.contribution-calendar .react-activity-calendar__scroll-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+  min-height: inherit;
+}
+
+.contribution-calendar .react-activity-calendar__scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.contribution-calendar .react-activity-calendar__calendar {
+  display: block;
+}
+
+.contribution-calendar .react-activity-calendar__legend-month text,
+.contribution-calendar .react-activity-calendar__legend-weekday text {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.contribution-calendar__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+.contribution-calendar__count {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.contribution-calendar__legend {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+}
+
+.contribution-calendar__legend-blocks {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.contribution-calendar__legend-block {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  background: var(--contrib-0);
+}
+
+.contribution-calendar__legend-block[data-level="1"] {
+  background: var(--contrib-1);
+}
+
+.contribution-calendar__legend-block[data-level="2"] {
+  background: var(--contrib-2);
+}
+
+.contribution-calendar__legend-block[data-level="3"] {
+  background: var(--contrib-3);
+}
+
+.contribution-calendar__legend-block[data-level="4"] {
+  background: var(--contrib-4);
+}
