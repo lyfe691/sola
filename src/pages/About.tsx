@@ -12,21 +12,16 @@ import {
   Code2,
   Coffee,
   Laptop,
-  Linkedin,
   Mountain,
   Download,
-  Quote,
-  Star,
-  Globe,
-  MoveRight,
+  ChevronRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { translations } from "@/lib/translations";
 import { Link } from "react-router-dom";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
@@ -58,6 +53,7 @@ import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
+import TestimonialCard from "@/components/testimonials/TestimonialCard";
 
 const GitHubCalendar =
   (GitHubCalendarDefault as unknown as { default?: typeof GitHubCalendarDefault })
@@ -128,259 +124,6 @@ const InterestCard = ({
     </div>
   </Card>
 );
-
-type TestimonialProps = {
-  quote: string;
-  author: string;
-  role: string;
-  company?: string;
-  avatar?: string;
-  rating?: number;
-  website?: string;
-  linkedin?: string;
-};
-
-const TestimonialCard = ({
-  quote,
-  author,
-  role,
-  company,
-  avatar,
-  rating = 5,
-  website,
-  linkedin,
-}: TestimonialProps) => {
-  const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
-  const { language } = useLanguage();
-  const t = translations[language] as Translation;
-  const MAX_QUOTE_LENGTH = 120;
-  const isLongQuote = quote.length > MAX_QUOTE_LENGTH;
-  const truncatedQuote = isLongQuote
-    ? quote.slice(0, MAX_QUOTE_LENGTH) + "..."
-    : quote;
-
-  const fullTestimonialContent = (
-    <div className="space-y-4">
-      {/* stars */}
-      <div className="flex gap-1">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star
-            key={i}
-            className={`w-4 h-4 ${
-              i < rating
-                ? "text-yellow-500 fill-yellow-500"
-                : "text-foreground/20"
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* full quote */}
-      <blockquote className="text-foreground/80 leading-relaxed italic text-base">
-        "{quote}"
-      </blockquote>
-
-      {/* author info */}
-      <div className="pt-4 border-t border-foreground/10 space-y-4">
-        <div className="flex items-start gap-4">
-          {avatar ? (
-            <img
-              src={avatar}
-              alt={author}
-              className="w-14 h-14 rounded-full object-cover shrink-0"
-            />
-          ) : (
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <span className="text-lg font-medium text-primary">
-                {author
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </span>
-            </div>
-          )}
-          <div className="flex-1">
-            <p className="font-medium text-base">{author}</p>
-            <p className="text-sm text-foreground/60 mb-3">
-              {role}
-              {company && ` at ${company}`}
-            </p>
-
-            {/* links */}
-            {(website || linkedin) && (
-              <div className="flex flex-wrap gap-2">
-                {website && (
-                  <LinkPreview
-                    href={website}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
-                  >
-                    <Globe className="w-3.5 h-3.5" />
-                    {t.about.testimonials.visitWebsite}
-                  </LinkPreview>
-                )}
-                {linkedin && (
-                  <LinkPreview
-                    href={linkedin}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm bg-foreground/5 hover:bg-foreground/10 rounded-md transition-colors"
-                  >
-                    <Linkedin className="w-3.5 h-3.5" />
-                    {t.about.testimonials.viewLinkedIn}
-                  </LinkPreview>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const cardContent = (
-    <Card className="group relative flex h-full flex-col gap-4 overflow-hidden bg-card/40 p-6 backdrop-blur-md">
-      {/* quote icon */}
-      <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-        <Quote className="w-4 h-4 text-primary" />
-      </div>
-
-      {/* stars */}
-      <div className="flex gap-1">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <Star
-            key={i}
-            className={`w-4 h-4 ${
-              i < rating
-                ? "text-yellow-500 fill-yellow-500"
-                : "text-foreground/20"
-            }`}
-          />
-        ))}
-      </div>
-
-      {/* quote with truncation */}
-      <div className="flex-1">
-        <blockquote className="text-foreground/80 leading-relaxed italic">
-          "{truncatedQuote}"
-        </blockquote>
-        {isLongQuote && (
-          <button
-            onClick={() => setOpen(true)}
-            className="text-primary hover:text-primary/80 text-sm mt-2 transition-colors"
-          >
-            {t.about.testimonials.viewMore}
-          </button>
-        )}
-      </div>
-
-      {/* author - always at bottom */}
-      <Separator className="mt-auto" />
-      <div className="space-y-3 pt-3">
-        <div className="flex items-start gap-3">
-          {avatar ? (
-            <img
-              src={avatar}
-              alt={author}
-              className="w-10 h-10 rounded-full object-cover shrink-0"
-            />
-          ) : (
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-              <span className="text-sm font-medium text-primary">
-                {author
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")}
-              </span>
-            </div>
-          )}
-          <div className="flex-1 min-w-0">
-            <p className="font-medium text-sm">{author}</p>
-            <p className="text-xs text-foreground/60">
-              {role}
-              {company && ` at ${company}`}
-            </p>
-
-            {/* social links (card only - no hover preview) */}
-            {(website || linkedin) && (
-              <div className="flex flex-wrap gap-1.5 mt-2">
-                {website && (
-                  <a
-                    href={website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-foreground/5 hover:bg-foreground/10 rounded transition-colors"
-                  >
-                    <Globe className="w-2.5 h-2.5" />
-                    Website
-                  </a>
-                )}
-                {linkedin && (
-                  <a
-                    href={linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-1.5 py-0.5 text-xs bg-foreground/5 hover:bg-foreground/10 rounded transition-colors"
-                  >
-                    <Linkedin className="w-2.5 h-2.5" />
-                    LinkedIn
-                  </a>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* subtle background decoration */}
-      <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50" />
-    </Card>
-  );
-
-  if (!isLongQuote) {
-    return cardContent;
-  }
-
-  if (isMobile) {
-    return (
-      <>
-        {cardContent}
-        <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
-              <DrawerDescription>
-                <RichText
-                  text={t.about.testimonials.modalDescription}
-                  values={{ author }}
-                />
-              </DrawerDescription>
-            </DrawerHeader>
-            <div className="overflow-y-auto px-4">{fullTestimonialContent}</div>
-          </DrawerContent>
-        </Drawer>
-      </>
-    );
-  }
-
-  return (
-    <>
-      {cardContent}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t.about.testimonials.modalTitle}</DialogTitle>
-            <DialogDescription>
-              <RichText
-                text={t.about.testimonials.modalDescription}
-                values={{ author }}
-              />
-            </DialogDescription>
-          </DialogHeader>
-          {fullTestimonialContent}
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
 
 // resume modal, use drawer for mobile
 const ResumeModal = () => {
@@ -717,10 +460,15 @@ const About = () => {
             <h2 className="text-2xl font-bold">{t.about.testimonials.title}</h2>
             <Link
               to="/contact"
-              className="text-sm text-foreground/70 hover:text-primary transition-colors"
+              className="group inline-flex items-center gap-1 text-sm text-foreground/50 transition-colors duration-300 ease-out hover:text-primary"
             >
-              {t.about.testimonials.link}{" "}
-              <MoveRight className="w-4 h-4 inline-block" />
+              <span className="border-b border-dotted border-foreground/20 transition-colors duration-300 group-hover:border-primary">
+                {t.about.testimonials.link}
+              </span>
+              <ChevronRight
+                aria-hidden
+                className="size-3.5 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:translate-x-0.5"
+              />
             </Link>
           </div>
 
