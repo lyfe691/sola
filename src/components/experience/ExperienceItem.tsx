@@ -75,14 +75,14 @@ const ExperienceItem = ({
         <LinkPreview
           href={entry.companyLink}
           aria-label={`${entry.company} (opens in a new tab)`}
-          className="group/link mt-1 inline-flex w-fit items-center gap-1 rounded-sm text-sm font-medium text-foreground transition-colors duration-200 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+          className="group mt-1 flex w-fit items-center gap-1 text-sm text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
         >
-          <span className="underline decoration-muted-foreground/30 decoration-1 underline-offset-4 transition-colors duration-200 group-hover/link:decoration-primary">
+          <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
             {entry.company}
           </span>
           <ArrowUpRight
             aria-hidden="true"
-            className="size-3.5 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover/link:-translate-y-0.5 can-hover:group-hover/link:translate-x-0.5"
+            className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           />
         </LinkPreview>
 
