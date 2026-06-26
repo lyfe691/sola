@@ -10,7 +10,10 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
+import { applyNativeCursorLock } from "@/lib/native-cursor-lock";
 import { Analytics } from "@vercel/analytics/react";
+
+applyNativeCursorLock(true);
 import { HelmetProvider } from "react-helmet-async";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 

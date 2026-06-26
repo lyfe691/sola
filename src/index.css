@@ -736,6 +736,7 @@
 
 /* ---------- Site custom cursor ---------- */
 html.sola-custom-cursor,
+html.sola-custom-cursor body,
 html.sola-custom-cursor *,
 html.sola-custom-cursor *::before,
 html.sola-custom-cursor *::after {

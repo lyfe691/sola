@@ -29,6 +29,7 @@ import {
 } from "motion/react";
 
 import { cn } from "@/lib/utils";
+import { applyNativeCursorLock } from "@/lib/native-cursor-lock";
 
 export type UserCursorTrigger = "always" | "hover" | "press";
 
@@ -309,22 +310,6 @@ const resolveCursorMode = (x: number, y: number): UserCursorMode => {
   return "default";
 };
 
-const applyNativeCursorLock = (enabled: boolean) => {
-  const root = document.documentElement;
-  const body = document.body;
-
-  if (enabled) {
-    root.classList.add("sola-custom-cursor");
-    root.style.cursor = "none";
-    body.style.cursor = "none";
-    return;
-  }
-
-  root.classList.remove("sola-custom-cursor");
-  root.style.removeProperty("cursor");
-  body.style.removeProperty("cursor");
-};
-
 const restingTiltForMode = (mode: UserCursorMode, baseTilt: number) => {
   switch (mode) {
     case "text":
@@ -588,11 +573,10 @@ const UserCursor = forwardRef<HTMLDivElement, UserCursorProps>(
     }, [hideOnTouch, hideOnReducedMotion]);
 
     useLayoutEffect(() => {
-      if (typeof document === "undefined" || disabled) return;
+      if (typeof document === "undefined") return;
       if (!fullScreen || !hideNativeCursor) return;
 
-      applyNativeCursorLock(true);
-      return () => applyNativeCursorLock(false);
+      applyNativeCursorLock(!disabled);
     }, [disabled, fullScreen, hideNativeCursor]);
 
     useEffect(() => {
