@@ -92,14 +92,16 @@ const ArrowGlyph = ({ color, size, ...rest }: GlyphProps) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden
+    style={{ filter: "drop-shadow(0 1.5px 2.5px rgba(0,0,0,0.22))" }}
     {...rest}
   >
     <path
       d="M5.2 3.4c-.7-.3-1.5.4-1.2 1.1l5.7 14.8c.3.8 1.5.8 1.8 0l2.4-6 6-2.4c.8-.3.8-1.5 0-1.8L5.2 3.4Z"
       fill={color}
-      stroke="rgba(0,0,0,0.18)"
-      strokeWidth={1.2}
+      stroke="rgba(255,255,255,0.42)"
+      strokeWidth={1.35}
       strokeLinejoin="round"
+      paintOrder="stroke fill"
     />
   </svg>
 );
@@ -848,16 +850,18 @@ const UserCursor = forwardRef<HTMLDivElement, UserCursorProps>(
                     {label ?? (
                       <div
                         className={cn(
-                          "inline-flex items-center rounded-full font-medium leading-none shadow-[0_2px_10px_rgba(0,0,0,0.15)]",
+                          "inline-flex items-center rounded-full font-semibold leading-none backdrop-blur-[3px] ring-1 ring-white/25",
                           classNames?.labelText,
                         )}
                         style={
                           {
-                            background: color,
+                            background: `linear-gradient(145deg, ${color}, color-mix(in oklch, ${color} 82%, black))`,
                             color: textColor,
-                            fontSize: `${size * 0.5}px`,
-                            paddingInline: `${size * 0.43}px`,
-                            paddingBlock: `${size * 0.18}px`,
+                            fontSize: `${Math.max(9, size * 0.46)}px`,
+                            paddingInline: `${size * 0.48}px`,
+                            paddingBlock: `${size * 0.2}px`,
+                            boxShadow:
+                              "0 4px 14px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.22)",
                             transform: `translate(${labelOffsetX}px, ${labelOffsetY}px)`,
                           } as CSSProperties
                         }

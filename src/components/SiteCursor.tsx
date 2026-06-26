@@ -37,16 +37,19 @@ const SiteCursor = () => {
       name="YSZ"
       color={colors.color || "var(--primary)"}
       textColor={colors.textColor || "var(--primary-foreground)"}
-      size={22}
-      tilt={-14}
+      size={24}
+      tilt={-12}
       showLabel
       hideNativeCursor
       directionAwareTilt
-      labelTiltStrength={8}
-      pressScale={0.85}
-      offset={{ x: 2, y: 2 }}
+      labelTiltStrength={6}
+      pressScale={0.88}
+      offset={{ x: 1, y: 1 }}
+      labelOffset={{ x: 20, y: 10 }}
+      spring={{ stiffness: 400, damping: 30, mass: 0.55 }}
+      labelSpring={{ stiffness: 170, damping: 22, mass: 0.9 }}
       classNames={{
-        labelText: "font-heading tracking-wide",
+        labelText: "font-heading uppercase tracking-[0.14em]",
       }}
     />
   );
