@@ -19,6 +19,7 @@ import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import ClickSpark from "./components/ui/custom/click-spark";
 import { BackgroundProvider } from "./components/backgrounds/background-provider";
 import BackgroundLayer from "./components/backgrounds/BackgroundLayer";
+import { WELCOME_PRESET } from "@/config/welcome-preset";
 import { UpdateNotification } from "./components/UpdateNotification";
 import { MotionConfig } from "motion/react";
 import { CanonicalUrl } from "./components/CanonicalUrl";
@@ -34,10 +35,10 @@ function KeyboardShortcuts() {
 
 // app
 const App = () => (
-  <ThemeProvider defaultTheme="system">
+  <ThemeProvider defaultTheme={WELCOME_PRESET.theme}>
     <MotionConfig reducedMotion="user">
       <LanguageProvider>
-        <BackgroundProvider>
+        <BackgroundProvider defaultBackground={WELCOME_PRESET.background}>
           <QueryClientProvider client={queryClient}>
             <TooltipProvider>
               <BackgroundLayer />

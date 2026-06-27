@@ -77,7 +77,7 @@ export const en = {
       background: {
         title: "Make it yours",
         content:
-          "Open this menu and pick a background that suits you — there are plenty to try.",
+          "I picked {background} with the {theme} theme — open this menu to explore more.",
       },
       done: "Got it",
     },

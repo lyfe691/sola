@@ -79,7 +79,7 @@ export const es = {
       background: {
         title: "Hazlo tuyo",
         content:
-          "Abre este menú y elige un fondo que vaya contigo: hay muchos para probar.",
+          "Elegí {background} con el tema {theme} — abre este menú para probar otras opciones.",
       },
       done: "Entendido",
     },

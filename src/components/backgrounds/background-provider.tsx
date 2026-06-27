@@ -11,6 +11,10 @@ import {
   NONE_BACKGROUND,
   resolveBackground,
 } from "@/components/backgrounds/registry";
+import {
+  shouldApplyWelcomePreset,
+  WELCOME_PRESET,
+} from "@/config/welcome-preset";
 
 type BackgroundProviderProps = {
   children: React.ReactNode;
@@ -36,6 +40,9 @@ const BackgroundContext = createContext<BackgroundProviderState>(initialState);
 
 const readInitial = (storageKey: string, fallback: string): string => {
   try {
+    if (shouldApplyWelcomePreset()) {
+      return resolveBackground(WELCOME_PRESET.background);
+    }
     const stored = localStorage.getItem(storageKey);
     if (stored !== null) return resolveBackground(stored);
     // migrate the old aurora boolean: enabled -> aurora

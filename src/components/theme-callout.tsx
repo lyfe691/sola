@@ -6,14 +6,17 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import {
+  CALLOUT_STORAGE_KEY,
+  getWelcomePresetLabels,
+} from "@/config/welcome-preset";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
-const STORAGE_KEY = "sola-theme-callout-v1";
 const APPEAR_DELAY = 1200;
 const GAP = 10;
 const ARROW_W = 20;
@@ -60,14 +63,53 @@ const measure = (): Position | null => {
   };
 };
 
+const PRESET_TOKEN = /\{(background|theme)\}/g;
+
+const renderPresetContent = (
+  template: string,
+  background: string,
+  theme: string,
+): ReactNode[] => {
+  const nodes: ReactNode[] = [];
+  let lastIndex = 0;
+  let key = 0;
+
+  for (const match of template.matchAll(PRESET_TOKEN)) {
+    const index = match.index ?? 0;
+    if (index > lastIndex) {
+      nodes.push(template.slice(lastIndex, index));
+    }
+
+    const label = match[1] === "background" ? background : theme;
+    nodes.push(
+      <strong key={key++} className="font-semibold text-foreground">
+        {label}
+      </strong>,
+    );
+    lastIndex = index + match[0].length;
+  }
+
+  if (lastIndex < template.length) {
+    nodes.push(template.slice(lastIndex));
+  }
+
+  return nodes;
+};
+
 export function ThemeCallout() {
   const { language } = useLanguage();
   const t = translations[language].common.callout;
+  const { themeLabel, backgroundLabel } = getWelcomePresetLabels();
+  const calloutContent = renderPresetContent(
+    t.background.content,
+    backgroundLabel,
+    themeLabel,
+  );
   const reduceMotion = useReducedMotion();
 
   const [open, setOpen] = useState(() => {
     try {
-      return !localStorage.getItem(STORAGE_KEY);
+      return !localStorage.getItem(CALLOUT_STORAGE_KEY);
     } catch {
       return false;
     }
@@ -76,7 +118,7 @@ export function ThemeCallout() {
 
   const dismiss = useCallback(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, "1");
+      localStorage.setItem(CALLOUT_STORAGE_KEY, "1");
     } catch {
       /* storage unavailable — fail silently */
     }
@@ -209,7 +251,7 @@ export function ThemeCallout() {
             {t.background.title}
           </p>
           <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
-            {t.background.content}
+            {calloutContent}
           </p>
           <div className="mt-3 flex justify-end">
             <Button

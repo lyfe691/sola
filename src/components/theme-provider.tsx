@@ -13,6 +13,10 @@ import {
   useState,
   useCallback,
 } from "react";
+import {
+  shouldApplyWelcomePreset,
+  WELCOME_PRESET,
+} from "@/config/welcome-preset";
 import { type Theme, ALL_THEME_VALUES } from "@/config/themes";
 
 type ThemeProviderProps = {
@@ -39,15 +43,36 @@ const getSystemTheme = () =>
 const resolveTheme = (theme: Theme) =>
   theme === "system" ? getSystemTheme() : theme;
 
+const readInitialTheme = (storageKey: string, defaultTheme: Theme): Theme => {
+  try {
+    if (shouldApplyWelcomePreset()) return WELCOME_PRESET.theme;
+    const stored = localStorage.getItem(storageKey) as Theme | null;
+    if (stored) return stored;
+    return defaultTheme;
+  } catch {
+    return defaultTheme;
+  }
+};
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
+  const [theme, setTheme] = useState<Theme>(() =>
+    readInitialTheme(storageKey, defaultTheme),
   );
+
+  // Theme is only persisted via setTheme; seed localStorage on the welcome pass.
+  useEffect(() => {
+    if (!shouldApplyWelcomePreset()) return;
+    try {
+      localStorage.setItem(storageKey, WELCOME_PRESET.theme);
+    } catch {
+      /* storage unavailable — fail silently */
+    }
+  }, [storageKey]);
 
   useEffect(() => {
     const root = document.documentElement;

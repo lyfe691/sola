@@ -78,7 +78,7 @@ export const de = {
       background: {
         title: "Mach es zu deinem",
         content:
-          "Öffne dieses Menü und wähle einen Hintergrund, der zu dir passt – es gibt einige zum Ausprobieren.",
+          "Ich habe {background} mit dem {theme}-Theme ausgewählt — in diesem Menü kannst du jederzeit wechseln.",
       },
       done: "Alles klar",
     },
