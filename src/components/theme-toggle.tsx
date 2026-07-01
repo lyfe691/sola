@@ -107,7 +107,7 @@ function TreeLeaf({
           isSelected && "text-muted-foreground",
         )}
       >
-        {Icon && <Icon className={iconClass} />}
+        {Icon && <Icon className={iconClass} aria-hidden="true" />}
         <span className="truncate">{label}</span>
       </span>
       {isSelected && <Check className={iconClass} />}
@@ -237,6 +237,7 @@ export function ThemeTriggerIcon() {
         return (
           <Icon
             key={option.value}
+            aria-hidden="true"
             className={`absolute h-4 w-4 transition-[transform,translate,scale,rotate,opacity] duration-200 ${isVisible ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-90 opacity-0"}`}
           />
         );

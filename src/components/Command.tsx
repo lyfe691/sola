@@ -102,7 +102,7 @@ export function CommandMenu() {
         data-checked={theme === option.value ? "true" : undefined}
         onSelect={() => handleThemeChange(option.value as ConfiguredTheme)}
       >
-        <Icon />
+        <Icon aria-hidden="true" />
         <span>{option.label}</span>
       </CommandItem>
     );

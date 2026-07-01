@@ -138,10 +138,10 @@ function SocialLink({ id, index }: { id: SocialId; index: number }) {
       )}
     >
       <div className="size-5 md:hidden">
-        <Icon className="size-full" />
+        <Icon className="size-full" aria-hidden="true" />
       </div>
       <div className="absolute top-[0.7rem] left-[11.47px] z-10 hidden size-6 items-center justify-center md:flex">
-        <Icon className="size-full" />
+        <Icon className="size-full" aria-hidden="true" />
       </div>
       <div className="pointer-events-none absolute top-1/2 right-1 left-12 hidden -translate-y-1/2 items-center md:flex">
         <span className="translate-x-4 text-sm font-medium whitespace-nowrap opacity-0 blur-xs transition-[transform,translate,scale,rotate,opacity,filter] duration-200 ease-out delay-100 can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100 can-hover:group-hover:blur-none">

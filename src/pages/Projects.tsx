@@ -177,7 +177,7 @@ const ProjectActions = ({
                   />
                 }
               >
-                <FaGithubAlt className="h-4 w-4" />
+                <FaGithubAlt className="h-4 w-4" aria-hidden="true" />
                 {t.projects.viewGithub}
               </Button>
             )}

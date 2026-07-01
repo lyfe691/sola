@@ -39,7 +39,7 @@ const ProficiencyDots = ({ level }: { level: Proficiency }) => (
 const SkillRow = ({ skill: { name, icon: Icon, level } }: { skill: Skill }) => (
   <div className="-mx-2 flex items-center justify-between gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-muted/50">
     <div className="flex min-w-0 items-center gap-2.5">
-      <Icon className="size-5 shrink-0" size={20} />
+      <Icon className="size-5 shrink-0" size={20} aria-hidden="true" />
       <span className="truncate text-sm font-medium text-foreground/80">
         {name}
       </span>

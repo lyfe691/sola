@@ -31,7 +31,7 @@ const Footer = () => {
     const accent =
       id === "github" ? "hover:bg-foreground/10" : SOCIAL_HOVER_ACCENTS[id];
     return {
-      icon: <Icon className="w-4 h-4" />,
+      icon: <Icon className="w-4 h-4" aria-hidden="true" />,
       href: s.href,
       label: s.label,
       hoverClass: `${accent} can-hover:hover:scale-110`,

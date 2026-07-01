@@ -55,7 +55,11 @@ import { Terminal, MousePointer2 } from "lucide-react";
 import type { IconType } from "react-icons";
 import type { ComponentType } from "react";
 
-type DevIcon = ComponentType<{ className?: string; size?: number }>;
+type DevIcon = ComponentType<{
+  className?: string;
+  size?: number;
+  "aria-hidden"?: boolean | "true" | "false";
+}>;
 
 // 1-5 scale: 1=learning, 2=familiar, 3=comfortable, 4=proficient, 5=advanced
 export type Proficiency = 1 | 2 | 3 | 4 | 5;

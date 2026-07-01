@@ -255,7 +255,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
                   />
                 }
               >
-                <FaGithubAlt className="h-4 w-4" />
+                <FaGithubAlt className="h-4 w-4" aria-hidden="true" />
                 {t.common.sourceCode}
               </Button>
             )}
