@@ -1,15 +1,15 @@
 # Yanis Sebastian Zürcher
 
-> Portfolio site of Yanis Sebastian Zürcher, a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies.
+> Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies.
 
-Also known as Sebi Zürcher. Works mainly with React, TypeScript, Spring Boot, and MongoDB, with a background in cybersecurity and identity and access management. This site documents his experience, skills, and personal projects. Content is available in English, German, Spanish, Japanese, and Chinese via a language switcher; the URLs below serve the English version.
+Also goes by Sebi Zürcher. Currently studying software engineering at WISS, working a software engineering internship at Nadlo (React, Next.js, NestJS, Supabase), and taking on freelance/contract web development (React, Next.js, Spring Boot) on the side. Has a background in identity & access management and cybersecurity from a prior IAM internship. Personal projects mostly run on React/Next.js/TypeScript on the frontend with Supabase/PostgreSQL for data, Spring Boot or Rust where a project calls for it, and a long-running interest in offensive security (OSINT, Kali Linux, Burp Suite). Content is available in English, German, Spanish, Japanese, and Chinese via a language switcher; the URLs below serve the English version.
 
 ## Pages
 
 - [Home](https://sola.ysz.life/): Introduction and quick links to socials and contact.
 - [About](https://sola.ysz.life/about): Background, interests, and personal story.
 - [Experience](https://sola.ysz.life/experience): Work history and professional roles.
-- [Projects](https://sola.ysz.life/projects): Overview of software projects.
+- [Projects](https://sola.ysz.life/projects): Full list of software projects, including smaller/archived ones not listed below.
 - [Skills](https://sola.ysz.life/skills): Technical skills and proficiency levels.
 - [Certifications](https://sola.ysz.life/certifications): Certificates and credentials earned.
 - [Services](https://sola.ysz.life/services): Freelance and contract services offered.
@@ -17,20 +17,22 @@ Also known as Sebi Zürcher. Works mainly with React, TypeScript, Spring Boot, a
 
 ## Projects
 
-- [magi](https://sola.ysz.life/projects/magi): Fast, asynchronous TCP/UDP port scanner written in Rust.
-- [Kinoa](https://sola.ysz.life/projects/kinoa): Free streaming site built with Next.js, shadcn/ui, and Supabase.
-- [Luma](https://sola.ysz.life/projects/luma): Multi-model, bring-your-own-key AI platform (Claude, GPT, Gemini, Grok, and more) built with Next.js 16, the Vercel AI SDK, and Supabase.
-- [Sola](https://sola.ysz.life/projects/sola): This portfolio site, built with React and TypeScript.
-- [AppliCare](https://sola.ysz.life/projects/applicare): Job application management platform built with Spring Boot, MongoDB Atlas, and React.
-- [Self](https://sola.ysz.life/projects/self): Customizable Windows system information display tool inspired by Neofetch, built with Python.
-- [Website Code Extractor](https://sola.ysz.life/projects/code-extractor): Tool for extracting code from websites.
-- [Thoughts](https://sola.ysz.life/projects/thoughts): Minimal personal site for reflections and notes, with a guestbook.
-- [Taco](https://sola.ysz.life/projects/taco): Production-ready template site built with Next.js, TypeScript, and Tailwind CSS.
+Ordered by current relevance. Each has its own deep-dive page.
+
+- [Kinoa](https://sola.ysz.life/projects/kinoa): Free streaming site for films and series, no subscription — Next.js App Router, Supabase, PostgreSQL.
+- [Sola](https://sola.ysz.life/projects/sola): This portfolio site — React (Vite), TypeScript, Tailwind CSS, shadcn/ui, Three.js.
+- [magi](https://sola.ysz.life/projects/magi): Fast, asynchronous TCP/UDP port scanner written in Rust with tokio.
+- [Luma](https://sola.ysz.life/projects/luma): Multi-model, bring-your-own-key AI chat platform — Next.js 16, Vercel AI SDK, Supabase.
+- [AppliCare](https://sola.ysz.life/projects/applicare): Job application tracking system — React (Vite), Spring Boot, MongoDB.
+- [Self](https://sola.ysz.life/projects/self): Customizable Windows system-info display tool inspired by Neofetch, built with Python.
+- [Website Code Extractor](https://sola.ysz.life/projects/code-extractor): Chrome extension for extracting and downloading a website's source code.
+- [Thoughts](https://sola.ysz.life/projects/thoughts): Minimal personal site for reflections and notes, with a custom guestbook.
+- [Taco](https://sola.ysz.life/projects/taco): Production-ready Next.js template site with localization and a blog, centered on my brother's dog.
 
 ## Optional
 
 - [Sitemap](https://sola.ysz.life/sitemap.xml): Full list of indexable URLs on this site.
-- [GitHub](https://github.com/lyfe691): Source code and open-source projects.
+- [GitHub](https://github.com/lyfe691): Source code, including smaller projects not listed above.
 - [LinkedIn](https://www.linkedin.com/in/yanis-sebastian-zürcher/): Professional profile.
 - [Resume (English)](https://sola.ysz.life/sola_en.pdf): Downloadable résumé.
 - [Resume (German)](https://sola.ysz.life/sola_de.pdf): Downloadable résumé in German.
