@@ -2,7 +2,7 @@
 
 > Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies.
 
-Also goes by Sebi Zürcher. Currently studying software engineering at WISS, working a software engineering internship at Nadlo (React, Next.js, NestJS, Supabase), and taking on freelance/contract web development (React, Next.js, Spring Boot) on the side. Has a background in identity & access management and cybersecurity from a prior IAM internship. Personal projects mostly run on React/Next.js/TypeScript on the frontend with Supabase/PostgreSQL for data, Spring Boot or Rust where a project calls for it, and a long-running interest in offensive security (OSINT, Kali Linux, Burp Suite). Content is available in English, German, Spanish, Japanese, and Chinese via a language switcher; the URLs below serve the English version.
+Currently studying software engineering at WISS, working a software engineering internship at Nadlo (React, Next.js, NestJS, Supabase), and taking on freelance/contract web development (React, Next.js, Spring Boot) on the side. Has a background in identity & access management and cybersecurity from a prior IAM internship. Personal projects mostly run on React/Next.js/TypeScript on the frontend with Supabase/PostgreSQL for data, Spring Boot or Rust where a project calls for it, and a long-running interest in offensive security (OSINT, Kali Linux, Burp Suite). Content is available in English, German, Spanish, Japanese, and Chinese via a language switcher; the URLs below serve the English version.
 
 ## Pages
 
