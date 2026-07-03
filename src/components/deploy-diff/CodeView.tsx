@@ -58,11 +58,18 @@ const DIFF_TOKENS: Record<"light" | "dark", CSSProperties> = {
   } as CSSProperties,
 };
 
-// Ready content settles in on the site's reveal curve.
+// Ready content settles in on the site's reveal curve. The header leads and
+// the diff follows a beat later — otherwise the diff's sheer mass makes it
+// read as arriving first (titles land first; see transitions.ts).
 const settle = {
   initial: { opacity: 0, y: 4 },
   animate: { opacity: 1, y: 0 },
   transition: { duration: 0.4, ease: REVEAL },
+};
+
+const settleAfterHeader = {
+  ...settle,
+  transition: { ...settle.transition, delay: 0.14 },
 };
 
 /**
@@ -258,7 +265,7 @@ export function CodeView() {
 
       {commit && (
         <motion.div
-          {...settle}
+          {...settleAfterHeader}
           className="flex flex-1 flex-col border-t border-border/60"
         >
           <CommitDiff commit={commit} scheme={scheme} t={t} />
