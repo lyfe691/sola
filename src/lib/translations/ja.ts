@@ -68,7 +68,7 @@ export const ja = {
       background: "背景",
     },
     diff: {
-      enter: "コードを見る",
+      codeView: "コードビュー",
       exit: "コードビューを閉じる",
       pageChange: "このページの最新の変更",
       latest: "最新のコミット",

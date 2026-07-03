@@ -13,12 +13,15 @@ import {
   Palette,
   Sparkles,
   Image as ImageIcon,
+  CodeXml,
 } from "lucide-react";
 import { useTheme } from "./theme-provider";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { BackgroundSectionHint } from "@/components/backgrounds/BackgroundSectionHint";
+import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -118,9 +121,15 @@ function TreeLeaf({
 type BranchId = "themes" | "custom" | "background";
 
 /** The theme/background picker tree — the content of the appearance menu. */
-export function ThemeMenuContent() {
+export function ThemeMenuContent({
+  onClose,
+}: {
+  /** called when a selection warrants closing the menu (the code-view flip) */
+  onClose?: () => void;
+}) {
   const { theme, setTheme } = useTheme();
   const { active: activeBackground, setActive: setBackground } = useBackground();
+  const { active: codeView, setActive: setCodeView } = useCodeView();
   const { language } = useLanguage();
   const t = translations[language];
 
@@ -190,6 +199,28 @@ export function ThemeMenuContent() {
           />
         ))}
       </TreeBranch>
+
+      <div className="mx-2 my-1 h-px bg-border/60" />
+
+      {/* flips the whole page into the code view; the label wraps the switch
+          so the row itself is clickable. Closing the menu lets the page
+          transition play unobstructed. */}
+      <label className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+        {/* spacer keeps the icon column aligned with the branch rows above */}
+        <span className="size-3.5 shrink-0" aria-hidden="true" />
+        <CodeXml className={iconClass} aria-hidden="true" />
+        <span className="min-w-0 flex-1 truncate text-left">
+          {t.common.diff.codeView}
+        </span>
+        <Switch
+          size="sm"
+          checked={codeView}
+          onCheckedChange={(checked) => {
+            setCodeView(checked);
+            onClose?.();
+          }}
+        />
+      </label>
     </div>
   );
 }

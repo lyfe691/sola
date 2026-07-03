@@ -71,7 +71,7 @@ export const de = {
       background: "Hintergründe",
     },
     diff: {
-      enter: "Code anzeigen",
+      codeView: "Codeansicht",
       exit: "Codeansicht verlassen",
       pageChange: "Letzte Änderung an dieser Seite",
       latest: "Neuester Commit",

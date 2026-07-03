@@ -72,7 +72,7 @@ export const es = {
       background: "Fondos",
     },
     diff: {
-      enter: "Ver código",
+      codeView: "Vista de código",
       exit: "Salir de la vista de código",
       pageChange: "Último cambio de esta página",
       latest: "Último commit",

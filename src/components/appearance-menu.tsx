@@ -248,7 +248,7 @@ export function AppearanceMenu() {
                 className="max-h-[calc(100dvh-5rem)] overflow-x-hidden overflow-y-auto overscroll-contain"
               >
                 {openId === "theme" ? (
-                  <ThemeMenuContent />
+                  <ThemeMenuContent onClose={close} />
                 ) : (
                   <LanguageMenuContent onClose={close} />
                 )}

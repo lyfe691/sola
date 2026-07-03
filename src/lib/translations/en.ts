@@ -70,7 +70,7 @@ export const en = {
       background: "Backgrounds",
     },
     diff: {
-      enter: "View code",
+      codeView: "Code view",
       exit: "Exit code view",
       pageChange: "Latest change to this page",
       latest: "Latest commit",

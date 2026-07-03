@@ -14,13 +14,19 @@
 
 import { useMemo, type CSSProperties } from "react";
 import { useLocation } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { CommitDiff } from "./CommitDiff";
+import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
 import { resolvePagePath } from "./page-sources";
 import { githubFallbackUrl, usePageDiff } from "./use-page-diff";
@@ -82,6 +88,7 @@ export function CodeView() {
   const t = translations[language].common.diff;
   const isDark = useIsDarkScheme();
   const location = useLocation();
+  const { setActive } = useCodeView();
 
   const pagePath = resolvePagePath(location.pathname);
   const { state, retry } = usePageDiff(true, pagePath);
@@ -106,6 +113,24 @@ export function CodeView() {
       style={DIFF_TOKENS[isDark ? "dark" : "light"]}
       className="flex min-h-screen flex-1 flex-col bg-background"
     >
+      {/* the nav is gone in this mode — this is the only UI above the code */}
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setActive(false)}
+              className="fixed top-5 right-5 z-50 h-9 w-9 rounded-full transition-colors hover:bg-muted sm:top-6 sm:right-8"
+            />
+          }
+        >
+          <X className="h-4 w-4" aria-hidden="true" />
+          <span className="sr-only">{t.exit}</span>
+        </TooltipTrigger>
+        <TooltipContent>{t.exit}</TooltipContent>
+      </Tooltip>
+
       <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
         <div className="flex min-w-0 flex-col gap-1.5">
           <p className="text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
