@@ -74,8 +74,9 @@ export const es = {
     diff: {
       enter: "Ver código",
       exit: "Salir de la vista de código",
-      deployed: "Commit desplegado",
+      pageChange: "Último cambio de esta página",
       latest: "Último commit",
+      noChanges: "No hay cambios registrados para esta página.",
       viewOnGitHub: "Ver en GitHub",
       error: "No se pudo cargar el diff.",
       retry: "Reintentar",

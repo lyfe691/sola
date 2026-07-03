@@ -68,8 +68,9 @@ export const zh = {
     diff: {
       enter: "查看代码",
       exit: "退出代码视图",
-      deployed: "当前部署的提交",
+      pageChange: "此页面的最新更改",
       latest: "最新提交",
+      noChanges: "此页面暂无更改记录。",
       viewOnGitHub: "在 GitHub 上查看",
       error: "无法加载 diff。",
       retry: "重试",

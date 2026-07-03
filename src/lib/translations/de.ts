@@ -73,8 +73,9 @@ export const de = {
     diff: {
       enter: "Code anzeigen",
       exit: "Codeansicht verlassen",
-      deployed: "Deployter Commit",
+      pageChange: "Letzte Änderung an dieser Seite",
       latest: "Neuester Commit",
+      noChanges: "Keine erfassten Änderungen für diese Seite.",
       viewOnGitHub: "Auf GitHub ansehen",
       error: "Diff konnte nicht geladen werden.",
       retry: "Erneut versuchen",

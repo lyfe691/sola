@@ -5,12 +5,15 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * The code view page: rendered by PageShell in place of the routed page while
- * the mode is active, so entering/leaving rides the site's page transition.
- * Shows the commit that is live on this deployment as a full-width git diff.
+ * The code view: a full-bleed takeover rendered by PageShell in place of the
+ * routed page (entering/leaving rides the site's page transition). Shows the
+ * latest change to THIS page — the diff is scoped to the current route's
+ * source files (see page-sources.ts); unmapped routes fall back to the
+ * repo-wide latest commit. The only UI above it is the nav toggle.
  */
 
 import { useMemo, type CSSProperties } from "react";
+import { useLocation } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,12 +22,8 @@ import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { CommitDiff } from "./CommitDiff";
 import { useIsDarkScheme } from "./use-scheme";
-import {
-  DEPLOY_FALLBACK_URL,
-  DEPLOY_LABEL,
-  IS_DEV_DEPLOY,
-  useDeployCommit,
-} from "./use-deploy-commit";
+import { resolvePagePath } from "./page-sources";
+import { githubFallbackUrl, usePageDiff } from "./use-page-diff";
 
 /**
  * Diff accent colors, resolved against the active theme's type. Custom dark
@@ -49,8 +48,7 @@ const DIFF_TOKENS: Record<"light" | "dark", CSSProperties> = {
 function HeaderSkeleton() {
   return (
     <div className="flex flex-col gap-3">
-      <Skeleton className="h-3 w-28" />
-      <Skeleton className="h-7 w-3/5" />
+      <Skeleton className="h-7 w-72 max-w-full" />
       <Skeleton className="h-4 w-44" />
     </div>
   );
@@ -68,9 +66,9 @@ function BodySkeleton() {
     "w-3/4",
   ];
   return (
-    <div className="p-6">
+    <div className="px-5 py-6 sm:px-8">
       <Skeleton className="mb-5 h-4 w-2/5" />
-      <div className="space-y-2.5">
+      <div className="max-w-3xl space-y-2.5">
         {widths.map((width, i) => (
           <Skeleton key={i} className={cn("h-3", width)} />
         ))}
@@ -83,9 +81,13 @@ export function CodeView() {
   const { language } = useLanguage();
   const t = translations[language].common.diff;
   const isDark = useIsDarkScheme();
-  const { state, retry } = useDeployCommit(true);
+  const location = useLocation();
+
+  const pagePath = resolvePagePath(location.pathname);
+  const { state, retry } = usePageDiff(true, pagePath);
 
   const commit = state.status === "ready" ? state.commit : null;
+  const githubUrl = commit?.htmlUrl ?? githubFallbackUrl(pagePath);
 
   const formattedDate = useMemo(() => {
     if (!commit?.date) return null;
@@ -102,12 +104,12 @@ export function CodeView() {
     <main
       id="main"
       style={DIFF_TOKENS[isDark ? "dark" : "light"]}
-      className="flex min-h-screen flex-1 flex-col px-5 pt-24 pb-10 sm:px-6 sm:pt-28 md:px-8 lg:px-12 lg:pt-36"
+      className="flex min-h-screen flex-1 flex-col bg-background"
     >
-      <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6">
-        <header className="flex min-w-0 flex-col gap-2">
+      <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
+        <div className="flex min-w-0 flex-col gap-1.5">
           <p className="text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
-            {IS_DEV_DEPLOY ? t.latest : t.deployed}
+            {pagePath ? t.pageChange : t.latest}
           </p>
 
           {commit ? (
@@ -136,37 +138,41 @@ export function CodeView() {
             <HeaderSkeleton />
           ) : (
             <p className="font-mono text-xs text-muted-foreground">
-              {DEPLOY_LABEL}
+              {pagePath ?? "…"}
             </p>
           )}
-        </header>
-
-        <div className="overflow-hidden rounded-3xl border border-border/60 bg-card/80 shadow-sm backdrop-blur-xl">
-          {state.status === "loading" && <BodySkeleton />}
-
-          {state.status === "error" && (
-            <div className="flex flex-col items-center gap-3 p-12 text-center">
-              <p className="text-sm text-muted-foreground">{t.error}</p>
-              <Button variant="outline" size="sm" onClick={retry}>
-                {t.retry}
-              </Button>
-            </div>
-          )}
-
-          {commit && <CommitDiff commit={commit} t={t} />}
         </div>
 
-        <div className="flex justify-end">
-          <a
-            href={commit?.htmlUrl ?? DEPLOY_FALLBACK_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            {t.viewOnGitHub}
-            <ArrowUpRight className="size-3.5" aria-hidden="true" />
-          </a>
-        </div>
+        <a
+          href={githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex shrink-0 items-center gap-1 pb-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          {t.viewOnGitHub}
+          <ArrowUpRight className="size-3.5" aria-hidden="true" />
+        </a>
+      </header>
+
+      <div className="flex flex-1 flex-col border-t border-border/60">
+        {state.status === "loading" && <BodySkeleton />}
+
+        {state.status === "error" && (
+          <div className="flex flex-col items-center gap-3 px-5 py-16 text-center">
+            <p className="text-sm text-muted-foreground">{t.error}</p>
+            <Button variant="outline" size="sm" onClick={retry}>
+              {t.retry}
+            </Button>
+          </div>
+        )}
+
+        {state.status === "empty" && (
+          <p className="px-5 py-16 text-center font-mono text-xs text-muted-foreground">
+            {t.noChanges}
+          </p>
+        )}
+
+        {commit && <CommitDiff commit={commit} t={t} />}
       </div>
     </main>
   );

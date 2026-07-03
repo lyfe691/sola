@@ -70,8 +70,9 @@ export const ja = {
     diff: {
       enter: "コードを見る",
       exit: "コードビューを閉じる",
-      deployed: "デプロイ済みのコミット",
+      pageChange: "このページの最新の変更",
       latest: "最新のコミット",
+      noChanges: "このページの変更履歴はありません。",
       viewOnGitHub: "GitHub で見る",
       error: "diff を読み込めませんでした。",
       retry: "再試行",

@@ -15,7 +15,7 @@ import { useMemo } from "react";
 import { cn } from "@/lib/utils";
 import type { Translation } from "@/lib/translations";
 import { parsePatch, type DiffLine } from "./parse-patch";
-import type { DeployCommit, DeployCommitFile } from "./use-deploy-commit";
+import type { PageCommit, PageCommitFile } from "./use-page-diff";
 
 export type DiffStrings = Translation["common"]["diff"];
 
@@ -81,7 +81,7 @@ function DiffLineRow({ line }: { line: DiffLine }) {
   );
 }
 
-function FileSection({ file, t }: { file: DeployCommitFile; t: DiffStrings }) {
+function FileSection({ file, t }: { file: PageCommitFile; t: DiffStrings }) {
   const { rows, truncated } = useMemo(() => {
     const hunks = file.patch ? parsePatch(file.patch) : [];
     const out: Row[] = [];
@@ -111,7 +111,7 @@ function FileSection({ file, t }: { file: DeployCommitFile; t: DiffStrings }) {
 
   return (
     <section className="border-t border-border/60 first:border-t-0">
-      <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/60 bg-card/95 px-4 py-2 font-mono text-xs backdrop-blur-sm">
+      <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/60 bg-background/95 px-5 py-2 font-mono text-xs backdrop-blur-sm sm:px-8">
         <span className={cn("w-3 shrink-0 font-semibold", badge.className)}>
           {badge.label}
         </span>
@@ -180,7 +180,7 @@ export function CommitDiff({
   commit,
   t,
 }: {
-  commit: DeployCommit;
+  commit: PageCommit;
   t: DiffStrings;
 }) {
   const files = commit.files.slice(0, MAX_FILES);
