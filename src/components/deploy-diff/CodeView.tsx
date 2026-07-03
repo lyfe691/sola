@@ -27,6 +27,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Kbd } from "@/components/ui/kbd";
 import { MenuHint } from "@/components/menu-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -168,7 +169,10 @@ export function CodeView() {
           <X className="size-4" aria-hidden="true" />
           <span className="sr-only">{t.exit}</span>
         </TooltipTrigger>
-        <TooltipContent side="bottom">{t.exit}</TooltipContent>
+        <TooltipContent side="bottom" className="flex items-center gap-1.5">
+          {t.exit}
+          <Kbd>esc</Kbd>
+        </TooltipContent>
       </Tooltip>
 
       <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
