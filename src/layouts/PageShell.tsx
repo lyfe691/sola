@@ -6,12 +6,19 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Suspense, useEffect, useRef, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { pageTransitionVariants } from "@/utils/transitions";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
-import { CodeView } from "@/components/deploy-diff/CodeView";
+
+// lazy like the route pages — the diff renderer (and shiki behind it) only
+// loads once someone actually flips the mode on
+const CodeView = lazy(() =>
+  import("@/components/deploy-diff/CodeView").then((m) => ({
+    default: m.CodeView,
+  })),
+);
 
 // Code view replaces the routed page under the SAME AnimatePresence that
 // drives route transitions, so flipping the mode plays the exact page

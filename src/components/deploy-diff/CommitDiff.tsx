@@ -12,9 +12,11 @@
  */
 
 import { useMemo } from "react";
+import type { ThemedToken } from "shiki";
 import { cn } from "@/lib/utils";
 import type { Translation } from "@/lib/translations";
 import { parsePatch, type DiffLine } from "./parse-patch";
+import { languageForFile, useDiffHighlight } from "./use-diff-highlight";
 import type { PageCommit, PageCommitFile } from "./use-page-diff";
 
 export type DiffStrings = Translation["common"]["diff"];
@@ -36,7 +38,13 @@ type Row =
   | { kind: "hunk"; key: string; text: string }
   | { kind: "line"; key: string; line: DiffLine };
 
-function DiffLineRow({ line }: { line: DiffLine }) {
+function DiffLineRow({
+  line,
+  tokens,
+}: {
+  line: DiffLine;
+  tokens?: ThemedToken[];
+}) {
   if (line.type === "meta") {
     return (
       <tr>
@@ -75,15 +83,38 @@ function DiffLineRow({ line }: { line: DiffLine }) {
         >
           {line.type === "add" ? "+" : line.type === "del" ? "−" : ""}
         </span>
-        {line.text}
+        {tokens
+          ? tokens.map((token, i) => (
+              <span key={i} style={{ color: token.color }}>
+                {token.content}
+              </span>
+            ))
+          : line.text}
       </td>
     </tr>
   );
 }
 
-function FileSection({ file, t }: { file: PageCommitFile; t: DiffStrings }) {
+function FileSection({
+  file,
+  scheme,
+  t,
+}: {
+  file: PageCommitFile;
+  scheme: "light" | "dark";
+  t: DiffStrings;
+}) {
+  const hunks = useMemo(
+    () => (file.patch ? parsePatch(file.patch) : []),
+    [file.patch],
+  );
+  const lineTokens = useDiffHighlight(
+    hunks,
+    languageForFile(file.filename),
+    scheme,
+  );
+
   const { rows, truncated } = useMemo(() => {
-    const hunks = file.patch ? parsePatch(file.patch) : [];
     const out: Row[] = [];
     let truncated = false;
 
@@ -104,7 +135,7 @@ function FileSection({ file, t }: { file: PageCommitFile; t: DiffStrings }) {
       if (truncated) break;
     }
     return { rows: out, truncated };
-  }, [file.patch]);
+  }, [hunks]);
 
   const badge = STATUS_BADGE[file.status] ?? STATUS_BADGE.modified;
   const hasChanges = file.additions > 0 || file.deletions > 0;
@@ -147,7 +178,11 @@ function FileSection({ file, t }: { file: PageCommitFile; t: DiffStrings }) {
                     </td>
                   </tr>
                 ) : (
-                  <DiffLineRow key={row.key} line={row.line} />
+                  <DiffLineRow
+                    key={row.key}
+                    line={row.line}
+                    tokens={lineTokens?.get(row.line)}
+                  />
                 ),
               )}
               {truncated && (
@@ -178,9 +213,11 @@ function FileSection({ file, t }: { file: PageCommitFile; t: DiffStrings }) {
 
 export function CommitDiff({
   commit,
+  scheme,
   t,
 }: {
   commit: PageCommit;
+  scheme: "light" | "dark";
   t: DiffStrings;
 }) {
   const files = commit.files.slice(0, MAX_FILES);
@@ -189,7 +226,7 @@ export function CommitDiff({
   return (
     <div>
       {files.map((file) => (
-        <FileSection key={file.filename} file={file} t={t} />
+        <FileSection key={file.filename} file={file} scheme={scheme} t={t} />
       ))}
       {hiddenCount > 0 && (
         <p className="border-t border-border/60 px-4 py-2.5 font-mono text-xs text-muted-foreground/70 italic">

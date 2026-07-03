@@ -74,8 +74,6 @@ export const es = {
     diff: {
       showDiff: "Mostrar git diff",
       exit: "Ocultar git diff",
-      pageChange: "Último cambio de esta página",
-      latest: "Último commit",
       noChanges: "No hay cambios registrados para esta página.",
       viewOnGitHub: "Ver en GitHub",
       error: "No se pudo cargar el diff.",
