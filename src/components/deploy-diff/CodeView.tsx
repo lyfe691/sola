@@ -12,14 +12,19 @@
  * the repo-wide latest commit. The only UI above it is the floating exit
  * button.
  *
- * Loading is a terminal beat: the view types `$ git show ` and blinks a
- * caret until the sha resolves, then the sha types in and the diff settles
- * beneath. The finished command line stays as the header artifact.
+ * Loading is a terminal ritual, centered and full-size: the view types
+ * `$ git show `, the caret blinks while the sha resolves, then the sha types
+ * in — the fetch completing the command is the payoff. The finished command
+ * holds a beat, is consumed the way a leaving page is (fade + scale + blur,
+ * CONSUME_IN), and the commit settles in beneath as its output. The ritual
+ * always plays to completion; a cached response replays it rather than
+ * cutting it short. Reduced motion skips straight to the content.
  */
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import { useLocation } from "react-router-dom";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +36,7 @@ import { Kbd } from "@/components/ui/kbd";
 import { MenuHint } from "@/components/menu-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { REVEAL } from "@/utils/transitions";
+import { CONSUME_IN, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { CommitDiff } from "./CommitDiff";
 import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
@@ -56,6 +61,25 @@ const DIFF_TOKENS: Record<"light" | "dark", CSSProperties> = {
     "--diff-mod-fg": "var(--color-amber-400)",
     "--diff-ren-fg": "var(--color-sky-400)",
   } as CSSProperties,
+};
+
+// The ritual's cadence: mechanical typing (a scripted terminal, not a human),
+// then a hold so the finished command registers before the content takes over.
+const TYPE_INTERVAL_MS = 35;
+const COMMAND_HOLD_MS = 450;
+
+// The command enters quietly under the page transition; once finished it is
+// consumed the way a leaving page is (see pageTransitionVariants), and the
+// content reforms beneath on the site's reveal curve.
+const commandPhase = {
+  initial: { opacity: 0 },
+  animate: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
+  exit: {
+    opacity: 0,
+    scale: 0.98,
+    filter: "blur(6px)",
+    transition: { duration: 0.28, ease: CONSUME_IN },
+  },
 };
 
 // Ready content settles in on the site's reveal curve. The header leads and
@@ -93,25 +117,29 @@ function useTypewriter(target: string): string {
         }
         return current + 1;
       });
-    }, 24);
+    }, TYPE_INTERVAL_MS);
     return () => window.clearInterval(id);
   }, [target]);
 
   return target.slice(0, Math.min(count, target.length));
 }
 
-function Caret() {
+/**
+ * Terminal caret, em-sized so it scales with the prompt. Solid while
+ * characters arrive, blinking while the command waits (on the fetch, or
+ * through the finished hold) — the way a real terminal idles.
+ */
+function Caret({ blinking }: { blinking: boolean }) {
   return (
     <motion.span
       aria-hidden
-      className="ml-px inline-block h-3 w-[6px] translate-y-[1.5px] rounded-[1px] bg-muted-foreground/70"
-      animate={{ opacity: [1, 1, 0, 0] }}
-      transition={{
-        duration: 1.1,
-        times: [0, 0.5, 0.5, 1],
-        repeat: Infinity,
-        ease: REVEAL,
-      }}
+      className="ml-[0.15em] inline-block h-[1em] w-[0.5ch] translate-y-[0.12em] rounded-[2px] bg-muted-foreground/70"
+      animate={blinking ? { opacity: [1, 1, 0, 0] } : { opacity: 1 }}
+      transition={
+        blinking
+          ? { duration: 1.1, times: [0, 0.5, 0.5, 1], repeat: Infinity, ease: REVEAL }
+          : { duration: 0.1 }
+      }
     />
   );
 }
@@ -121,6 +149,53 @@ function Dot() {
     <span aria-hidden className="text-muted-foreground/40">
       ·
     </span>
+  );
+}
+
+/**
+ * The floating exit control — the only UI above the code. Portaled to <body>:
+ * the page transition animates transform/filter on an ancestor, which turns
+ * `fixed` into `absolute` and would let the button scroll away with the diff.
+ * Fades against `active` so it swaps with the nav in step with the page.
+ */
+function ExitButton({
+  active,
+  onExit,
+  label,
+}: {
+  active: boolean;
+  onExit: () => void;
+  label: string;
+}) {
+  return createPortal(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: active ? 1 : 0 }}
+      transition={{ duration: 0.25, ease: EASE_OUT }}
+      className={active ? undefined : "pointer-events-none"}
+    >
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onExit}
+              className="fixed top-4 right-4 z-50 size-10 rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 backdrop-blur-2xl transition-colors hover:bg-muted sm:top-5 sm:right-6"
+            />
+          }
+        >
+          <X className="size-4" aria-hidden="true" />
+          <span className="sr-only">{label}</span>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          {label}
+          {/* h-4 keeps the keycap inside the text line so the tooltip doesn't grow */}
+          <Kbd className="h-4 min-w-4 px-1 text-[10px]">esc</Kbd>
+        </TooltipContent>
+      </Tooltip>
+    </motion.div>,
+    document.body,
   );
 }
 
@@ -148,7 +223,7 @@ export function CodeView() {
   const t = translations[language].common.diff;
   const isDark = useIsDarkScheme();
   const location = useLocation();
-  const { setActive } = useCodeView();
+  const { active, setActive } = useCodeView();
 
   const pagePath = resolvePagePath(location.pathname);
   const { state, retry } = usePageDiff(true, pagePath);
@@ -157,9 +232,30 @@ export function CodeView() {
   const githubUrl = commit?.htmlUrl ?? githubFallbackUrl(pagePath);
   const scheme = isDark ? "dark" : "light";
 
-  // the loading beat: the view "runs" the command, then the real header
-  // replaces it when the commit lands
-  const typed = useTypewriter("git show");
+  // The command grows once the sha lands; typing continues into it, so the
+  // ritual completes even when the response beats the typewriter (cache).
+  const command = commit ? `git show ${commit.shortSha}` : "git show";
+  const typed = useTypewriter(command);
+  const typedDone = typed === command;
+  const resolved = state.status !== "loading";
+
+  const [phase, setPhase] = useState<"command" | "content">("command");
+
+  useEffect(() => {
+    if (phase !== "command" || !resolved || !typedDone) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setPhase("content");
+      return;
+    }
+    const id = window.setTimeout(() => setPhase("content"), COMMAND_HOLD_MS);
+    return () => window.clearTimeout(id);
+  }, [phase, resolved, typedDone]);
+
+  // re-enter the ritual: the completed prefix stays, the new sha types in
+  const handleRetry = () => {
+    setPhase("command");
+    retry();
+  };
 
   const formattedBody = useMemo(
     () => (commit?.body ? formatCommitBody(commit.body) : null),
@@ -185,118 +281,117 @@ export function CodeView() {
     >
       {/* the nav is gone in this mode — its floating pill surface collapses
           to this single close button, the only UI above the code */}
-      <Tooltip>
-        <TooltipTrigger
-          render={
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setActive(false)}
-              className="fixed top-4 right-4 z-50 size-10 rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 backdrop-blur-2xl transition-colors hover:bg-muted sm:top-5 sm:right-6"
-            />
-          }
-        >
-          <X className="size-4" aria-hidden="true" />
-          <span className="sr-only">{t.exit}</span>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          {t.exit}
-          {/* h-4 keeps the keycap inside the text line so the tooltip doesn't grow */}
-          <Kbd className="h-4 min-w-4 px-1 text-[10px]">esc</Kbd>
-        </TooltipContent>
-      </Tooltip>
+      <ExitButton active={active} onExit={() => setActive(false)} label={t.exit} />
 
-      <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
-        {commit ? (
-          <motion.div {...settle} className="flex min-w-0 flex-col gap-2.5">
-            <h1 className="max-w-3xl font-heading text-2xl font-semibold tracking-tight break-words md:text-3xl line-clamp-2">
-              {commit.subject}
-            </h1>
-            {formattedBody && (
-              <p className="max-w-2xl text-sm leading-relaxed whitespace-pre-line text-muted-foreground line-clamp-4">
-                {formattedBody}
-              </p>
-            )}
-            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
-              <span>{commit.shortSha}</span>
-              {formattedDate && (
-                <>
-                  <Dot />
-                  <span>{formattedDate}</span>
-                </>
-              )}
-              <Dot />
-              <span>
-                {commit.files.length}{" "}
-                {commit.files.length === 1 ? t.file : t.files}
+      <AnimatePresence mode="wait">
+        {phase === "command" ? (
+          <motion.div
+            key="command"
+            {...commandPhase}
+            className="flex flex-1 items-center justify-center px-5"
+          >
+            <p className="font-mono text-2xl tracking-tight whitespace-nowrap sm:text-3xl md:text-4xl">
+              <span aria-hidden className="select-none text-muted-foreground/50">
+                ${" "}
               </span>
-              <Dot />
-              <span>
-                <span className="text-(--diff-add-fg)">
-                  +{commit.additions}
-                </span>{" "}
-                <span className="text-(--diff-del-fg)">
-                  −{commit.deletions}
-                </span>
-              </span>
-              {pagePath && <MenuHint text={t.hint} />}
+              {typed}
+              <Caret blinking={typedDone} />
             </p>
           </motion.div>
         ) : (
-          <p className="font-mono text-xs text-muted-foreground">
-            <span aria-hidden className="text-muted-foreground/50">
-              ${" "}
-            </span>
-            {typed}
-            {state.status === "loading" && <Caret />}
-          </p>
+          <motion.div
+            key="content"
+            exit={{ opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } }}
+            className="flex flex-1 flex-col"
+          >
+            {commit && (
+              <>
+                <motion.header
+                  {...settle}
+                  className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28"
+                >
+                  <div className="flex min-w-0 flex-col gap-2.5">
+                    <h1 className="max-w-3xl font-heading text-2xl font-semibold tracking-tight break-words md:text-3xl line-clamp-2">
+                      {commit.subject}
+                    </h1>
+                    {formattedBody && (
+                      <p className="max-w-2xl text-sm leading-relaxed whitespace-pre-line text-muted-foreground line-clamp-4">
+                        {formattedBody}
+                      </p>
+                    )}
+                    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
+                      <span>{commit.shortSha}</span>
+                      {formattedDate && (
+                        <>
+                          <Dot />
+                          <span>{formattedDate}</span>
+                        </>
+                      )}
+                      <Dot />
+                      <span>
+                        {commit.files.length}{" "}
+                        {commit.files.length === 1 ? t.file : t.files}
+                      </span>
+                      <Dot />
+                      <span>
+                        <span className="text-(--diff-add-fg)">
+                          +{commit.additions}
+                        </span>{" "}
+                        <span className="text-(--diff-del-fg)">
+                          −{commit.deletions}
+                        </span>
+                      </span>
+                      {pagePath && <MenuHint text={t.hint} />}
+                    </p>
+                  </div>
+
+                  <a
+                    href={githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex shrink-0 items-center gap-1 pb-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+                  >
+                    {t.viewOnGitHub}
+                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                  </a>
+                </motion.header>
+
+                <motion.div
+                  {...settleAfterHeader}
+                  className="flex flex-1 flex-col border-t border-border/60"
+                >
+                  <CommitDiff commit={commit} scheme={scheme} t={t} />
+                </motion.div>
+              </>
+            )}
+
+            {(state.status === "error" || state.status === "empty") && (
+              <motion.div
+                {...settle}
+                className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-24 text-center"
+              >
+                <p className="text-sm text-muted-foreground">
+                  {state.status === "error" ? t.error : t.noChanges}
+                </p>
+                {state.status === "error" && (
+                  <Button variant="outline" size="sm" onClick={handleRetry}>
+                    {t.retry}
+                  </Button>
+                )}
+                <a
+                  href={githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {t.viewOnGitHub}
+                  <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                </a>
+              </motion.div>
+            )}
+          </motion.div>
         )}
-
-        <a
-          href={githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center gap-1 pb-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-        >
-          {t.viewOnGitHub}
-          <ArrowUpRight className="size-3.5" aria-hidden="true" />
-        </a>
-      </header>
-
-      {commit && (
-        <motion.div
-          {...settleAfterHeader}
-          className="flex flex-1 flex-col border-t border-border/60"
-        >
-          <CommitDiff commit={commit} scheme={scheme} t={t} />
-        </motion.div>
-      )}
-
-      {(state.status === "error" || state.status === "empty") && (
-        <motion.div
-          {...settle}
-          className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-24 text-center"
-        >
-          <p className="text-sm text-muted-foreground">
-            {state.status === "error" ? t.error : t.noChanges}
-          </p>
-          {state.status === "error" ? (
-            <Button variant="outline" size="sm" onClick={retry}>
-              {t.retry}
-            </Button>
-          ) : (
-            <a
-              href={githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {t.viewOnGitHub}
-              <ArrowUpRight className="size-3.5" aria-hidden="true" />
-            </a>
-          )}
-        </motion.div>
-      )}
+      </AnimatePresence>
     </main>
   );
 }

@@ -38,8 +38,9 @@ export const SMOOTH = [0.16, 1, 0.3, 1] as const;
 // as snappy/ugly here no matter the best-practice; this gentle in-out is the one that feels right.
 // Scroll reveals + hero use this.
 export const REVEAL = [0.45, 0, 0.55, 1] as const;
-// Exit/consume: accelerate away (ease-in is correct for a leaving element collapsing in)
-const CONSUME_IN = [0.5, 0, 0.75, 0] as const;
+// Exit/consume: accelerate away (ease-in is correct for a leaving element collapsing in).
+// Exported for in-page elements that leave the way a page does (code view's command beat).
+export const CONSUME_IN = [0.5, 0, 0.75, 0] as const;
 
 // Durations (seconds) — smooth, leaning long (smoothness beats speed for this site)
 const D_REVEAL = 0.5;
