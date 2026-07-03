@@ -10,7 +10,8 @@
  * latest commit that touched THIS page's source (see page-sources.ts) —
  * whole and honest, page files sorted first; unmapped routes fall back to
  * the repo-wide latest commit. The only UI above it is the floating exit
- * button.
+ * button, which retreats while the reader scrolls down and returns on
+ * scroll up.
  *
  * Loading is a terminal ritual, centered and full-size: the view types
  * `$ git show `, the caret blinks while the sha resolves, then the sha types
@@ -178,10 +179,44 @@ function GitHubLink({
 }
 
 /**
+ * Retreats the exit control while the reader scrolls down into the diff and
+ * brings it back on any deliberate scroll up — the browser-chrome pattern.
+ * Near the top it always shows; Esc keeps working throughout. Without this
+ * the button collides with the sticky file headers, two layers of chrome
+ * fighting for the same corner.
+ */
+function useScrollRetreat(enabled: boolean): boolean {
+  const [retreated, setRetreated] = useState(false);
+
+  useEffect(() => {
+    if (!enabled) {
+      setRetreated(false);
+      return;
+    }
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      // sub-4px moves are scroll jitter, not intent
+      if (Math.abs(delta) < 4) return;
+      setRetreated(y > 64 && delta > 0);
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [enabled]);
+
+  return retreated;
+}
+
+/**
  * The floating exit control — the only UI above the code. Portaled to <body>:
  * the page transition animates transform/filter on an ancestor, which turns
  * `fixed` into `absolute` and would let the button scroll away with the diff.
- * Fades against `active` so it swaps with the nav in step with the page.
+ * The wrapper carries both the fixed position and the motion — a transform on
+ * anything above a fixed element would re-root it the same way. Fades against
+ * `active` so it swaps with the nav in step with the page, and retreats
+ * upward while the reader scrolls down (see useScrollRetreat).
  */
 function ExitButton({
   active,
@@ -192,12 +227,19 @@ function ExitButton({
   onExit: () => void;
   label: string;
 }) {
+  const retreated = useScrollRetreat(active);
+  const visible = active && !retreated;
+
   return createPortal(
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: active ? 1 : 0 }}
-      transition={{ duration: 0.25, ease: EASE_OUT }}
-      className={active ? undefined : "pointer-events-none"}
+      animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+      transition={{ duration: 0.3, ease: EASE_OUT }}
+      inert={!visible}
+      className={cn(
+        "fixed top-4 right-4 z-50 sm:top-5 sm:right-6",
+        !visible && "pointer-events-none",
+      )}
     >
       <Tooltip>
         <TooltipTrigger
@@ -206,7 +248,7 @@ function ExitButton({
               variant="ghost"
               size="icon"
               onClick={onExit}
-              className="fixed top-4 right-4 z-50 size-10 rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 backdrop-blur-2xl transition-colors hover:bg-muted sm:top-5 sm:right-6"
+              className="size-10 rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 backdrop-blur-2xl transition-colors hover:bg-muted"
             />
           }
         >
