@@ -39,13 +39,14 @@ const PageShell = ({ children }: { children: ReactNode }) => {
     }
   }, [location.pathname, active, setActive]);
 
-  // Preserve the page's scroll position across the flip.
+  // Preserve the page's scroll position across the flip. The reset to top
+  // waits for the exit to finish — scrolling while the old page is still
+  // blurring out makes its content visibly jump mid-transition.
   const savedScroll = useRef(0);
   useEffect(() => {
     if (active) {
       savedScroll.current = window.scrollY;
       wasActive.current = true;
-      window.scrollTo(0, 0);
     }
   }, [active]);
 
@@ -53,7 +54,10 @@ const PageShell = ({ children }: { children: ReactNode }) => {
     <AnimatePresence
       mode="wait"
       onExitComplete={() => {
-        if (!active && wasActive.current) {
+        if (!wasActive.current) return;
+        if (active) {
+          window.scrollTo(0, 0);
+        } else {
           wasActive.current = false;
           window.scrollTo(0, savedScroll.current);
         }
