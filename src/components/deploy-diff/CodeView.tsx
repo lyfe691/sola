@@ -10,7 +10,7 @@
  * latest commit that touched THIS page's source (see page-sources.ts) —
  * whole and honest, page files sorted first; unmapped routes fall back to
  * the repo-wide latest commit. The only UI above it is the exit bubble,
- * a frosted tab docked to the top-right edge.
+ * a frosted quarter-round wrapped around the top-right corner.
  *
  * Loading is a terminal ritual, centered and full-size: the view types
  * `$ git show `, the caret blinks while the sha resolves, then the sha types
@@ -37,7 +37,7 @@ import { MenuHint } from "@/components/menu-hint";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { CONSUME_IN, EASE_DRAWER, EASE_OUT, REVEAL } from "@/utils/transitions";
+import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { CommitDiff } from "./CommitDiff";
 import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
@@ -178,15 +178,15 @@ function GitHubLink({
 }
 
 /**
- * The exit control — a frosted bubble docked to the top edge, the only UI
- * above the code. Flush at the top, round bulge below, the same surface as
- * the old floating close button but belonging to the edge instead of
- * hovering over the diff (the sticky file headers reserve clearance
- * beneath it). Portaled to <body>: the page transition animates
- * transform/filter on an ancestor, which turns `fixed` into `absolute` —
- * so the wrapper carries both the fixed position and its own slide motion.
- * Slides in and out against `active`, in step with the page swap; hover
- * pulls it out a touch taller rather than detaching it from the edge.
+ * The exit control — a frosted bubble wrapped around the top-right corner,
+ * the only UI above the code. Flush with both edges, one quarter-round
+ * bulge curving toward the content: the old close button's surface, but
+ * belonging to the corner instead of hovering over the diff (the sticky
+ * file headers reserve clearance beneath it). Portaled to <body>: the page
+ * transition animates transform/filter on an ancestor, which turns `fixed`
+ * into `absolute` — so the wrapper carries both the fixed position and its
+ * own motion. Grows out of the corner against `active`, in step with the
+ * page swap; hover swells it slightly rather than moving it off the edges.
  */
 function ExitBubble({
   active,
@@ -199,12 +199,13 @@ function ExitBubble({
 }) {
   return createPortal(
     <motion.div
-      initial={{ y: "-110%" }}
-      animate={{ y: active ? 0 : "-110%" }}
-      transition={{ duration: 0.5, ease: EASE_DRAWER }}
+      initial={{ scale: 0 }}
+      animate={{ scale: active ? 1 : 0 }}
+      transition={{ duration: 0.5, ease: EASE_EXPO }}
+      style={{ transformOrigin: "top right" }}
       inert={!active}
       className={cn(
-        "fixed top-0 right-4 z-50 sm:right-6",
+        "fixed top-0 right-0 z-50",
         !active && "pointer-events-none",
       )}
     >
@@ -214,11 +215,16 @@ function ExitBubble({
             <button
               type="button"
               onClick={onExit}
-              className="flex h-11 w-14 items-center justify-center rounded-b-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[height,background-color] duration-300 ease-out hover:h-12 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex size-14 items-center justify-center rounded-bl-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[width,height,background-color] duration-300 ease-out hover:size-[4.5rem] hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50 sm:size-16"
             />
           }
         >
-          <X className="size-4" aria-hidden="true" />
+          {/* nudged toward the corner — the quarter-disc's optical center
+              sits up-right of the box center */}
+          <X
+            className="size-4 translate-x-[3px] -translate-y-[3px]"
+            aria-hidden="true"
+          />
           <span className="sr-only">{label}</span>
         </TooltipTrigger>
         <TooltipContent side="bottom">
