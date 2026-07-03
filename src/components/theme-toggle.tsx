@@ -19,7 +19,7 @@ import { useTheme } from "./theme-provider";
 import { THEMES, type Theme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
-import { BackgroundSectionHint } from "@/components/backgrounds/BackgroundSectionHint";
+import { MenuHint } from "@/components/menu-hint";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { Switch } from "@/components/ui/switch";
 import { useLanguage } from "@/lib/language-provider";
@@ -185,7 +185,7 @@ export function ThemeMenuContent({
         icon={ImageIcon}
         label={t.common.menu.background}
         accessory={
-          <BackgroundSectionHint text={t.common.backgroundHints.section} />
+          <MenuHint text={t.common.backgroundHints.section} />
         }
         isOpen={isExpanded("background")}
         onToggle={() => toggleBranch("background")}
@@ -210,6 +210,7 @@ export function ThemeMenuContent({
         <span className="min-w-0 flex-1 truncate text-left">
           {t.common.diff.showDiff}
         </span>
+        <MenuHint text={t.common.diff.hint} />
         <Switch
           size="sm"
           checked={codeView}

@@ -4,6 +4,9 @@
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ *
+ * A small info glyph that explains a menu row or section — tooltip on
+ * desktop, popover on touch. Clicks never reach the row it decorates.
  */
 
 import { Info } from "lucide-react";
@@ -19,11 +22,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-type BackgroundSectionHintProps = {
+type MenuHintProps = {
   text: string;
 };
 
-export function BackgroundSectionHint({ text }: BackgroundSectionHintProps) {
+export function MenuHint({ text }: MenuHintProps) {
   const isMobile = useIsMobile();
 
   const trigger = (

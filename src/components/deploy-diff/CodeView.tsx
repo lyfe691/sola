@@ -205,10 +205,6 @@ export function CodeView() {
                   </span>
                 </span>
               </p>
-              {/* one plain sentence so the choice of commit isn't a riddle */}
-              <p className="text-xs text-muted-foreground/80">
-                {pagePath ? t.context : t.contextSite}
-              </p>
             </motion.div>
           )}
         </div>

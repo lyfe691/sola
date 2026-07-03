@@ -68,8 +68,7 @@ export const zh = {
     diff: {
       showDiff: "显示 git diff",
       exit: "隐藏 git diff",
-      context: "最近一次更改此页面的提交。",
-      contextSite: "网站最新的提交。",
+      hint: "显示最近一次更改当前页面的提交。",
       noChanges: "此页面暂无更改记录。",
       viewOnGitHub: "在 GitHub 上查看",
       error: "无法加载 diff。",

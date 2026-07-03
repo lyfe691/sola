@@ -40,7 +40,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
-import { BackgroundSectionHint } from "@/components/backgrounds/BackgroundSectionHint";
+import { MenuHint } from "@/components/menu-hint";
 import { LANGUAGES, type Language } from "@/config/languages";
 import {
   MAIN_NAVIGATION,
@@ -176,7 +176,7 @@ export function CommandMenu() {
             heading={
               <span className="inline-flex items-center gap-1.5">
                 <span>{t.common.command.groups.background}</span>
-                <BackgroundSectionHint text={backgroundHint} />
+                <MenuHint text={backgroundHint} />
               </span>
             }
           >

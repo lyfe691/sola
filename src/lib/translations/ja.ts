@@ -70,8 +70,7 @@ export const ja = {
     diff: {
       showDiff: "git diff を表示",
       exit: "git diff を非表示",
-      context: "このページを最後に変更したコミット。",
-      contextSite: "サイトの最新コミット。",
+      hint: "現在のページを最後に変更したコミットを表示します。",
       noChanges: "このページの変更履歴はありません。",
       viewOnGitHub: "GitHub で見る",
       error: "diff を読み込めませんでした。",
