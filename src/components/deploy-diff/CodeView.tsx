@@ -9,9 +9,8 @@
  * routed page (entering/leaving rides the site's page transition). Shows the
  * latest commit that touched THIS page's source (see page-sources.ts) —
  * whole and honest, page files sorted first; unmapped routes fall back to
- * the repo-wide latest commit. The only UI above it is the exit bookmark,
- * a ribbon hanging from the top-right edge — the bookmark marks the page
- * you left; pull it to go back.
+ * the repo-wide latest commit. The only UI above it is the exit bubble,
+ * a frosted tab docked to the top-right edge.
  *
  * Loading is a terminal ritual, centered and full-size: the view types
  * `$ git show `, the caret blinks while the sha resolves, then the sha types
@@ -178,21 +177,18 @@ function GitHubLink({
   );
 }
 
-// classic bookmark silhouette: straight sides, notched V-cut bottom
-const BOOKMARK_CLIP =
-  "[clip-path:polygon(0_0,100%_0,100%_100%,50%_calc(100%_-_9px),0_100%)]";
-
 /**
- * The exit control — a bookmark ribbon hanging from the top edge, the only
- * UI above the code. Always visible: because it is flush with the viewport
- * edge (and the sticky file headers reserve clearance beneath it) it reads
- * as the mode's chrome, not a button floating over the diff. Portaled to
- * <body>: the page transition animates transform/filter on an ancestor,
- * which turns `fixed` into `absolute` — so the wrapper carries both the
- * fixed position and its own slide motion. Slides in and out against
- * `active`, in step with the page swap.
+ * The exit control — a frosted bubble docked to the top edge, the only UI
+ * above the code. Flush at the top, round bulge below, the same surface as
+ * the old floating close button but belonging to the edge instead of
+ * hovering over the diff (the sticky file headers reserve clearance
+ * beneath it). Portaled to <body>: the page transition animates
+ * transform/filter on an ancestor, which turns `fixed` into `absolute` —
+ * so the wrapper carries both the fixed position and its own slide motion.
+ * Slides in and out against `active`, in step with the page swap; hover
+ * pulls it out a touch taller rather than detaching it from the edge.
  */
-function ExitBookmark({
+function ExitBubble({
   active,
   onExit,
   label,
@@ -218,21 +214,11 @@ function ExitBookmark({
             <button
               type="button"
               onClick={onExit}
-              className="group block rounded-sm outline-none drop-shadow-md focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex h-11 w-14 items-center justify-center rounded-b-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[height,background-color] duration-300 ease-out hover:h-12 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50"
             />
           }
         >
-          {/* the clip lives on this inner span so the focus ring isn't cut;
-              hover pulls the ribbon out taller instead of detaching it from
-              the edge */}
-          <span
-            className={cn(
-              "flex h-12 w-8 items-start justify-center bg-primary pt-3 text-primary-foreground transition-[height] duration-300 ease-out group-hover:h-14",
-              BOOKMARK_CLIP,
-            )}
-          >
-            <X className="size-3.5" aria-hidden="true" />
-          </span>
+          <X className="size-4" aria-hidden="true" />
           <span className="sr-only">{label}</span>
         </TooltipTrigger>
         <TooltipContent side="bottom">
@@ -326,9 +312,9 @@ export function CodeView() {
       style={DIFF_TOKENS[scheme]}
       className="flex min-h-screen flex-1 flex-col bg-background"
     >
-      {/* the nav is gone in this mode — the exit bookmark is the only UI
+      {/* the nav is gone in this mode — the exit bubble is the only UI
           above the code */}
-      <ExitBookmark
+      <ExitBubble
         active={active}
         onExit={() => setActive(false)}
         label={t.exit}

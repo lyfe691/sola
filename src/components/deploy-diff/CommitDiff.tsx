@@ -142,9 +142,9 @@ function FileSection({
 
   return (
     <section className="border-t border-border/60 first:border-t-0">
-      {/* right padding clears the exit bookmark, so the +/- counts never
+      {/* right padding clears the exit bubble, so the +/- counts never
           sit under it while the header is stuck */}
-      <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/60 bg-background/95 py-2 pl-5 pr-16 font-mono text-xs backdrop-blur-sm sm:pl-8 sm:pr-20">
+      <div className="sticky top-0 z-10 flex items-center gap-2 border-b border-border/60 bg-background/95 py-2 pl-5 pr-20 font-mono text-xs backdrop-blur-sm sm:pl-8 sm:pr-24">
         <span className={cn("w-3 shrink-0 font-semibold", badge.className)}>
           {badge.label}
         </span>
