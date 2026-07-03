@@ -26,9 +26,11 @@ const AppLayout = () => {
       <Navigation />
       <ThemeCallout />
       <PageShell>
+        {/* tabIndex lets the skip link and the code-view exit hand focus here */}
         <main
           id="main"
-          className="flex min-h-screen flex-1 flex-col px-5 pb-5 pt-24 sm:px-6 sm:pb-6 sm:pt-28 md:px-8 md:pb-8 lg:px-12 lg:pb-12 lg:pt-36"
+          tabIndex={-1}
+          className="flex min-h-screen flex-1 flex-col px-5 pb-5 pt-24 outline-none sm:px-6 sm:pb-6 sm:pt-28 md:px-8 md:pb-8 lg:px-12 lg:pb-12 lg:pt-36"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col">
             {outlet}

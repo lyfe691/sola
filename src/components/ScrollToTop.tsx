@@ -6,12 +6,13 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";
 import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
+import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 
 const SCROLL_THRESHOLD = 120;
 const SCROLL_DEBOUNCE_DELAY = 120;
@@ -19,6 +20,14 @@ const SCROLL_DEBOUNCE_DELAY = 120;
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
+
+  // Read through a ref so the route-change effect below doesn't re-fire
+  // when the mode flips off mid-exit (that would glide anyway).
+  const { active: codeViewActive } = useCodeView();
+  const codeViewRef = useRef(codeViewActive);
+  useEffect(() => {
+    codeViewRef.current = codeViewActive;
+  }, [codeViewActive]);
 
   // Own scroll position fully; stop the browser from also restoring it on
   // back/forward and racing the tween.
@@ -29,8 +38,12 @@ export default function ScrollToTop() {
   }, []);
 
   // Glide to the top on every route change, and abort any in-flight tween if
-  // this (singleton) component ever unmounts.
+  // this (singleton) component ever unmounts. A route change under an active
+  // code view is the exception: PageShell owns that scroll (it snaps to top
+  // only after the exit finishes) — gliding now would visibly scroll the
+  // still-rendered diff mid-transition.
   useEffect(() => {
+    if (codeViewRef.current) return;
     smoothScrollToTop();
     return stopScrollToTop;
   }, [pathname]);

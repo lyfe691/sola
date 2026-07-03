@@ -10,10 +10,14 @@
  * shiki never enters the eager bundle. Each hunk is tokenized as one block
  * (multi-line constructs inside a hunk highlight correctly); lines render
  * plain until tokens arrive, and on any failure they simply stay plain.
+ *
+ * Tokenized ONCE with both themes (the same trick as use-shiki.ts): each
+ * token carries a light and a dark color, and the renderer picks per scheme
+ * — flipping the site theme never re-runs the highlighter.
  */
 
 import { useEffect, useState } from "react";
-import type { ThemedToken } from "shiki";
+import type { ThemedTokenWithVariants } from "shiki";
 import type { DiffHunk, DiffLine } from "./parse-patch";
 
 /** filename extension -> shiki lang; null means leave the text plain */
@@ -50,11 +54,10 @@ export function languageForFile(filename: string): string | null {
 export function useDiffHighlight(
   hunks: DiffHunk[],
   lang: string | null,
-  scheme: "light" | "dark",
-): Map<DiffLine, ThemedToken[]> | null {
+): Map<DiffLine, ThemedTokenWithVariants[]> | null {
   const [lineTokens, setLineTokens] = useState<Map<
     DiffLine,
-    ThemedToken[]
+    ThemedTokenWithVariants[]
   > | null>(null);
 
   useEffect(() => {
@@ -67,19 +70,20 @@ export function useDiffHighlight(
 
     (async () => {
       try {
-        const { codeToTokens } = await import("shiki/bundle/web");
-        const map = new Map<DiffLine, ThemedToken[]>();
+        const { codeToTokensWithThemes } = await import("shiki/bundle/web");
+        const map = new Map<DiffLine, ThemedTokenWithVariants[]>();
 
         for (const hunk of hunks) {
+          if (cancelled) return; // stop mid-commit, not just before the set
           const lines = hunk.lines.filter((line) => line.type !== "meta");
           if (lines.length === 0) continue;
 
-          const { tokens } = await codeToTokens(
+          const tokens = await codeToTokensWithThemes(
             lines.map((line) => line.text).join("\n"),
             {
               // the bundle rejects unknown grammars — caught below
-              lang: lang as Parameters<typeof codeToTokens>[1]["lang"],
-              theme: scheme === "dark" ? "github-dark" : "github-light",
+              lang: lang as Parameters<typeof codeToTokensWithThemes>[1]["lang"],
+              themes: { light: "github-light", dark: "github-dark" },
             },
           );
           lines.forEach((line, i) => map.set(line, tokens[i] ?? []));
@@ -95,7 +99,7 @@ export function useDiffHighlight(
     return () => {
       cancelled = true;
     };
-  }, [hunks, lang, scheme]);
+  }, [hunks, lang]);
 
   return lineTokens;
 }

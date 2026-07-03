@@ -8,6 +8,12 @@
  * Route -> repo source mapping for the code view: which path a page's diff is
  * scoped to. Directories are allowed (the GitHub commits API accepts them).
  * Unmapped routes fall back to the repo-wide latest commit.
+ *
+ * Only AppLayout routes are listed on purpose: the toggle lives in the nav's
+ * appearance menu (AppLayout is the only layout with a nav), and a route
+ * change force-exits the mode — so pages under SimpleLayout/BlankLayout
+ * (/certifications, /a, /projects/:slug, /404) can never show the code view.
+ * If the mode ever gets another entry point, re-add their mappings here.
  */
 
 const PAGE_PATHS: Record<string, string> = {
@@ -19,14 +25,9 @@ const PAGE_PATHS: Record<string, string> = {
   "/contact": "src/pages/Contact.tsx",
   "/services": "src/pages/Services.tsx",
   "/privacy": "src/pages/Privacy.tsx",
-  "/certifications": "src/pages/Certifications.tsx",
-  "/a": "src/pages/AboutThisWebsite.tsx",
 };
 
 export function resolvePagePath(pathname: string): string | null {
   const normalized = pathname.replace(/\/+$/, "") || "/";
-  if (PAGE_PATHS[normalized]) return PAGE_PATHS[normalized];
-  // project deep dives are MDX content files
-  if (normalized.startsWith("/projects/")) return "src/content/projects";
-  return null;
+  return PAGE_PATHS[normalized] ?? null;
 }

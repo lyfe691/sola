@@ -12,10 +12,10 @@
  */
 
 import { useMemo } from "react";
-import type { ThemedToken } from "shiki";
+import type { ThemedTokenWithVariants } from "shiki";
 import { cn } from "@/lib/utils";
 import type { Translation } from "@/lib/translations";
-import { parsePatch, type DiffLine } from "./parse-patch";
+import { parsePatch, type DiffHunk, type DiffLine } from "./parse-patch";
 import { languageForFile, useDiffHighlight } from "./use-diff-highlight";
 import type { PageCommit, PageCommitFile } from "./use-page-diff";
 
@@ -41,9 +41,11 @@ type Row =
 function DiffLineRow({
   line,
   tokens,
+  scheme,
 }: {
   line: DiffLine;
-  tokens?: ThemedToken[];
+  tokens?: ThemedTokenWithVariants[];
+  scheme: "light" | "dark";
 }) {
   if (line.type === "meta") {
     return (
@@ -85,7 +87,7 @@ function DiffLineRow({
         </span>
         {tokens
           ? tokens.map((token, i) => (
-              <span key={i} style={{ color: token.color }}>
+              <span key={i} style={{ color: token.variants[scheme]?.color }}>
                 {token.content}
               </span>
             ))
@@ -104,37 +106,45 @@ function FileSection({
   scheme: "light" | "dark";
   t: DiffStrings;
 }) {
-  const hunks = useMemo(
-    () => (file.patch ? parsePatch(file.patch) : []),
-    [file.patch],
-  );
-  const lineTokens = useDiffHighlight(
-    hunks,
-    languageForFile(file.filename),
-    scheme,
-  );
-
-  const { rows, truncated } = useMemo(() => {
-    const out: Row[] = [];
+  // Parse, then trim to the render cap BEFORE highlighting — shiki should
+  // never tokenize rows that can't render. Row math mirrors the flattening
+  // below (one row per hunk header, one per line), and never leaves an
+  // orphaned hunk header right at the cap.
+  const { hunks, truncated } = useMemo(() => {
+    const parsed = file.patch ? parsePatch(file.patch) : [];
+    const out: DiffHunk[] = [];
+    let rows = 0;
     let truncated = false;
 
-    for (const [hi, hunk] of hunks.entries()) {
-      // never leave an orphaned hunk header right at the cap
-      if (out.length + 1 >= MAX_ROWS_PER_FILE) {
+    for (const hunk of parsed) {
+      if (rows + 1 >= MAX_ROWS_PER_FILE) {
         truncated = true;
         break;
       }
+      rows += 1; // the hunk header's own row
+      const room = MAX_ROWS_PER_FILE - rows;
+      if (hunk.lines.length > room) {
+        out.push({ ...hunk, lines: hunk.lines.slice(0, room) });
+        truncated = true;
+        break;
+      }
+      out.push(hunk);
+      rows += hunk.lines.length;
+    }
+    return { hunks: out, truncated };
+  }, [file.patch]);
+
+  const lineTokens = useDiffHighlight(hunks, languageForFile(file.filename));
+
+  const rows = useMemo(() => {
+    const out: Row[] = [];
+    for (const [hi, hunk] of hunks.entries()) {
       out.push({ kind: "hunk", key: `h${hi}`, text: hunk.header });
       for (const [li, line] of hunk.lines.entries()) {
-        if (out.length >= MAX_ROWS_PER_FILE) {
-          truncated = true;
-          break;
-        }
         out.push({ kind: "line", key: `h${hi}l${li}`, line });
       }
-      if (truncated) break;
     }
-    return { rows: out, truncated };
+    return out;
   }, [hunks]);
 
   const badge = STATUS_BADGE[file.status] ?? STATUS_BADGE.modified;
@@ -168,6 +178,7 @@ function FileSection({
       {rows.length > 0 ? (
         <div className="overflow-x-auto">
           <table className="w-full border-separate border-spacing-0 font-mono text-xs leading-5">
+            <caption className="sr-only">{file.filename}</caption>
             <tbody>
               {rows.map((row) =>
                 row.kind === "hunk" ? (
@@ -184,6 +195,7 @@ function FileSection({
                     key={row.key}
                     line={row.line}
                     tokens={lineTokens?.get(row.line)}
+                    scheme={scheme}
                   />
                 ),
               )}

@@ -21,7 +21,7 @@
  * cutting it short. Reduced motion skips straight to the content.
  */
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
@@ -211,6 +211,14 @@ function ExitBubble({
   const shown = "translate(0%, 0%)";
   const hidden = "translate(110%, -110%)";
 
+  // The takeover unmounts whatever held focus; land it on the one control
+  // above the code so keyboard/SR users aren't dropped at <body>. (PageShell
+  // hands focus back to the page's main landmark on exit.)
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (active) buttonRef.current?.focus({ preventScroll: true });
+  }, [active]);
+
   return createPortal(
     <motion.div
       initial={{ transform: hidden }}
@@ -230,6 +238,7 @@ function ExitBubble({
         <TooltipTrigger
           render={
             <button
+              ref={buttonRef}
               type="button"
               onClick={onExit}
               className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[translate,background-color] duration-200 ease-out hover:-translate-x-1 hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"

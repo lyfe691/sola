@@ -27,14 +27,18 @@ const PageShell = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
   const { active, setActive } = useCodeView();
 
-  // A route change underneath the mode (command palette, logo) exits it.
+  // A route change underneath the mode (command palette, back/forward) exits
+  // it. The new page starts at the top, but only once the exit has finished —
+  // ScrollToTop skips its glide for this case (see there), so the snap in
+  // onExitComplete below is the single scroll for this path.
   const prevPath = useRef(location.pathname);
   const wasActive = useRef(false);
+  const routeExit = useRef(false);
   useEffect(() => {
     if (location.pathname === prevPath.current) return;
     prevPath.current = location.pathname;
     if (active) {
-      wasActive.current = false; // the new page starts at the top — drop the saved scroll
+      routeExit.current = true;
       setActive(false);
     }
   }, [location.pathname, active, setActive]);
@@ -54,12 +58,23 @@ const PageShell = ({ children }: { children: ReactNode }) => {
     <AnimatePresence
       mode="wait"
       onExitComplete={() => {
+        if (routeExit.current) {
+          // navigated away while the mode was up — the diff has fully left,
+          // snap the new page to the top now
+          routeExit.current = false;
+          wasActive.current = false;
+          window.scrollTo(0, 0);
+          return;
+        }
         if (!wasActive.current) return;
         if (active) {
           window.scrollTo(0, 0);
         } else {
           wasActive.current = false;
           window.scrollTo(0, savedScroll.current);
+          // the toggle that opened the mode lives in a long-closed menu —
+          // hand focus back to the page's main landmark instead
+          document.getElementById("main")?.focus({ preventScroll: true });
         }
       }}
     >

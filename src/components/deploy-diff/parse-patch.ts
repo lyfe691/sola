@@ -32,7 +32,12 @@ export function parsePatch(patch: string): DiffHunk[] {
   let oldNo = 0;
   let newNo = 0;
 
-  for (const raw of patch.split("\n")) {
+  const rawLines = patch.split("\n");
+  // a newline-terminated patch would otherwise yield one bogus empty
+  // context line at the end
+  if (rawLines.at(-1) === "") rawLines.pop();
+
+  for (const raw of rawLines) {
     const header = HUNK_HEADER.exec(raw);
     if (header) {
       oldNo = Number(header[1]);
