@@ -73,6 +73,8 @@ export const de = {
     diff: {
       showDiff: "Git-Diff anzeigen",
       exit: "Git-Diff ausblenden",
+      context: "Der letzte Commit, der diese Seite verändert hat.",
+      contextSite: "Der neueste Commit der Website.",
       noChanges: "Keine erfassten Änderungen für diese Seite.",
       viewOnGitHub: "Auf GitHub ansehen",
       error: "Diff konnte nicht geladen werden.",
