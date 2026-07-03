@@ -29,12 +29,20 @@ export function useIsDarkScheme(): boolean {
   const [isDark, setIsDark] = useState(detectIsDark);
 
   useEffect(() => {
-    const observer = new MutationObserver(() => setIsDark(detectIsDark()));
+    const update = () => setIsDark(detectIsDark());
+    const observer = new MutationObserver(update);
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
     });
-    return () => observer.disconnect();
+    // the system theme resolves through the OS scheme, which can flip
+    // without any class mutation on <html>
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    media.addEventListener("change", update);
+    return () => {
+      observer.disconnect();
+      media.removeEventListener("change", update);
+    };
   }, []);
 
   return isDark;
