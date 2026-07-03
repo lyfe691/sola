@@ -117,6 +117,25 @@ function Dot() {
   );
 }
 
+/**
+ * Commit bodies arrive hard-wrapped at ~72 columns; joining those breaks lets
+ * the text reflow to the container. Paragraph breaks and list lines survive.
+ */
+function formatCommitBody(body: string): string {
+  return body
+    .split(/\n{2,}/)
+    .map((paragraph) => {
+      let out = "";
+      for (const line of paragraph.split("\n")) {
+        if (!out) out = line.trim();
+        else if (/^\s*([-*•]|\d+\.)\s/.test(line)) out += `\n${line.trim()}`;
+        else out += ` ${line.trim()}`;
+      }
+      return out;
+    })
+    .join("\n\n");
+}
+
 export function CodeView() {
   const { language } = useLanguage();
   const t = translations[language].common.diff;
@@ -131,10 +150,14 @@ export function CodeView() {
   const githubUrl = commit?.htmlUrl ?? githubFallbackUrl(pagePath);
   const scheme = isDark ? "dark" : "light";
 
-  // the command this view is "running"; the sha argument types in on arrival
-  const command = `git show ${commit?.shortSha ?? ""}`;
-  const typed = useTypewriter(command);
-  const settled = commit !== null && typed.length >= command.length;
+  // the loading beat: the view "runs" the command, then the real header
+  // replaces it when the commit lands
+  const typed = useTypewriter("git show");
+
+  const formattedBody = useMemo(
+    () => (commit?.body ? formatCommitBody(commit.body) : null),
+    [commit],
+  );
 
   const formattedDate = useMemo(() => {
     if (!commit?.date) return null;
@@ -177,45 +200,50 @@ export function CodeView() {
       </Tooltip>
 
       <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
-        <div className="flex min-w-0 flex-col gap-2">
+        {commit ? (
+          <motion.div {...settle} className="flex min-w-0 flex-col gap-2.5">
+            <h1 className="max-w-3xl font-heading text-2xl font-semibold tracking-tight break-words md:text-3xl line-clamp-2">
+              {commit.subject}
+            </h1>
+            {formattedBody && (
+              <p className="max-w-2xl text-sm leading-relaxed whitespace-pre-line text-muted-foreground line-clamp-4">
+                {formattedBody}
+              </p>
+            )}
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
+              <span>{commit.shortSha}</span>
+              {formattedDate && (
+                <>
+                  <Dot />
+                  <span>{formattedDate}</span>
+                </>
+              )}
+              <Dot />
+              <span>
+                {commit.files.length}{" "}
+                {commit.files.length === 1 ? t.file : t.files}
+              </span>
+              <Dot />
+              <span>
+                <span className="text-(--diff-add-fg)">
+                  +{commit.additions}
+                </span>{" "}
+                <span className="text-(--diff-del-fg)">
+                  −{commit.deletions}
+                </span>
+              </span>
+              {pagePath && <MenuHint text={t.hint} />}
+            </p>
+          </motion.div>
+        ) : (
           <p className="font-mono text-xs text-muted-foreground">
             <span aria-hidden className="text-muted-foreground/50">
               ${" "}
             </span>
             {typed}
-            {!settled && state.status !== "error" && <Caret />}
+            {state.status === "loading" && <Caret />}
           </p>
-
-          {commit && (
-            <motion.div {...settle} className="flex min-w-0 flex-col gap-2">
-              <h1 className="font-heading text-2xl font-semibold tracking-tight break-words md:text-3xl">
-                {commit.subject}
-              </h1>
-              <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
-                {formattedDate && (
-                  <>
-                    <span>{formattedDate}</span>
-                    <Dot />
-                  </>
-                )}
-                <span>
-                  {commit.files.length}{" "}
-                  {commit.files.length === 1 ? t.file : t.files}
-                </span>
-                <Dot />
-                <span>
-                  <span className="text-(--diff-add-fg)">
-                    +{commit.additions}
-                  </span>{" "}
-                  <span className="text-(--diff-del-fg)">
-                    −{commit.deletions}
-                  </span>
-                </span>
-                {pagePath && <MenuHint text={t.hint} />}
-              </p>
-            </motion.div>
-          )}
-        </div>
+        )}
 
         <a
           href={githubUrl}

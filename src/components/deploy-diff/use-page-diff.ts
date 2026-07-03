@@ -50,6 +50,8 @@ export interface PageCommit {
   shortSha: string;
   /** first line of the commit message */
   subject: string;
+  /** rest of the commit message, git trailers stripped; "" when absent */
+  body: string;
   date: string;
   htmlUrl: string;
   additions: number;
@@ -82,11 +84,33 @@ interface GitHubCommitResponse {
 
 const HEADERS = { Accept: "application/vnd.github+json" };
 
+/**
+ * Drops the final trailer block (Co-Authored-By:, Signed-off-by:, …) — by
+ * convention a terminal paragraph whose every line is `Key: value`.
+ */
+function stripTrailers(body: string): string {
+  const paragraphs = body.trim().split(/\n{2,}/);
+  const last = paragraphs[paragraphs.length - 1];
+  if (
+    paragraphs.length > 0 &&
+    last.split("\n").every((line) => /^[A-Za-z][\w-]*:\s.+/.test(line.trim()))
+  ) {
+    paragraphs.pop();
+  }
+  return paragraphs.join("\n\n").trim();
+}
+
 function mapCommit(data: GitHubCommitResponse): PageCommit {
+  const message = data.commit.message;
+  const newlineIndex = message.indexOf("\n");
   return {
     sha: data.sha,
     shortSha: data.sha.slice(0, 7),
-    subject: data.commit.message.split("\n")[0],
+    subject: newlineIndex === -1 ? message : message.slice(0, newlineIndex),
+    body:
+      newlineIndex === -1
+        ? ""
+        : stripTrailers(message.slice(newlineIndex + 1)),
     date: data.commit.author?.date ?? "",
     htmlUrl: data.html_url,
     additions: data.stats?.additions ?? 0,
@@ -142,8 +166,8 @@ async function fetchPageDiff(path: string | null): Promise<PageCommit | null> {
 }
 
 function cacheKey(path: string | null): string {
-  // v2: full commits — pre-rework entries held filtered file lists
-  return `sola-page-diff:v2:${DEPLOY_REF}:${path ?? "@site"}`;
+  // v3: adds the commit body to the cached shape
+  return `sola-page-diff:v3:${DEPLOY_REF}:${path ?? "@site"}`;
 }
 
 function readCache(path: string | null): PageCommit | null {
