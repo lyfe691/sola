@@ -178,15 +178,26 @@ function GitHubLink({
 }
 
 /**
- * The exit control — a round bubble tucked into the top-right corner, the
- * only UI above the code. A full circle nudged past both edges, so its
- * silhouette stays round while it clearly belongs to the corner instead of
- * hovering over the diff (the sticky file headers reserve clearance
- * beneath it). Portaled to <body>: the page transition animates
- * transform/filter on an ancestor, which turns `fixed` into `absolute` —
- * so the wrapper carries both the fixed position and its own motion.
- * Grows out of the corner against `active`, in step with the page swap;
- * hover swells it slightly.
+ * The exit control — a bubble living around the top-right corner, the only
+ * UI above the code.
+ *
+ * Geometry (a 64px circle tucked 12px past both edges) is deliberate: a
+ * corner-tucked circle can only ever show 90–180° of arc, and these values
+ * sit at the readable end of that range — the two edge cuts merge into one,
+ * so the silhouette is a single clean half-bubble on the corner diagonal,
+ * and the viewport corner itself lies inside the circle (no page sliver
+ * peeking through the corner). The X sits at the visible region's centroid,
+ * ~4px down-left of the circle's center.
+ *
+ * Motion all happens on that same diagonal: it slides in from behind the
+ * corner (in step with the page reform; hardware-accelerated transform
+ * string, since shiki is busy on the main thread right then), hover peeks
+ * it out 4px, press recoils it to 2px, and exit tucks it back away faster
+ * than it entered.
+ *
+ * Portaled to <body>: the page transition animates transform/filter on an
+ * ancestor, which turns `fixed` into `absolute` — so this wrapper carries
+ * both the fixed position and its own motion.
  */
 function ExitBubble({
   active,
@@ -197,12 +208,18 @@ function ExitBubble({
   onExit: () => void;
   label: string;
 }) {
+  const shown = "translate(0%, 0%)";
+  const hidden = "translate(110%, -110%)";
+
   return createPortal(
     <motion.div
-      initial={{ scale: 0 }}
-      animate={{ scale: active ? 1 : 0 }}
-      transition={{ duration: 0.5, ease: EASE_EXPO }}
-      style={{ transformOrigin: "top right" }}
+      initial={{ transform: hidden }}
+      animate={{ transform: active ? shown : hidden }}
+      transition={
+        active
+          ? { duration: 0.5, ease: EASE_EXPO }
+          : { duration: 0.3, ease: CONSUME_IN }
+      }
       inert={!active}
       className={cn(
         "fixed -top-3 -right-3 z-50",
@@ -215,16 +232,11 @@ function ExitBubble({
             <button
               type="button"
               onClick={onExit}
-              className="flex size-14 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[transform,background-color] duration-300 ease-out hover:scale-105 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50 sm:size-16"
+              className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[translate,background-color] duration-200 ease-out hover:-translate-x-1 hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"
             />
           }
         >
-          {/* nudged down-left — the edges slice the circle's top-right, so
-              the visible region's optical center sits below the box center */}
-          <X
-            className="size-4 -translate-x-0.5 translate-y-0.5"
-            aria-hidden="true"
-          />
+          <X className="size-4 -translate-x-1 translate-y-1" aria-hidden="true" />
           <span className="sr-only">{label}</span>
         </TooltipTrigger>
         <TooltipContent side="bottom">
