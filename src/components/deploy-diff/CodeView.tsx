@@ -320,7 +320,11 @@ export function CodeView() {
                       </p>
                     )}
                     <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
-                      <span>{commit.shortSha}</span>
+                      {/* the sha reads as an identifier, not prose — chip it
+                          like GitHub does */}
+                      <span className="rounded-md bg-muted px-1.5 py-0.5 text-foreground/80">
+                        {commit.shortSha}
+                      </span>
                       {formattedDate && (
                         <>
                           <Dot />
