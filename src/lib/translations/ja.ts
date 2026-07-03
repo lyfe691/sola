@@ -69,7 +69,6 @@ export const ja = {
     },
     diff: {
       showDiff: "git diff を表示",
-      exit: "git diff を非表示",
       hint: "現在のページを最後に変更したコミットを表示します。",
       noChanges: "このページの変更履歴はありません。",
       viewOnGitHub: "GitHub で見る",

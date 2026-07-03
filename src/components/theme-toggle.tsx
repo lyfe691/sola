@@ -210,7 +210,6 @@ export function ThemeMenuContent({
         <span className="min-w-0 flex-1 truncate text-left">
           {t.common.diff.showDiff}
         </span>
-        <MenuHint text={t.common.diff.hint} />
         <Switch
           size="sm"
           checked={codeView}
