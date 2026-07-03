@@ -9,9 +9,9 @@
  * routed page (entering/leaving rides the site's page transition). Shows the
  * latest commit that touched THIS page's source (see page-sources.ts) —
  * whole and honest, page files sorted first; unmapped routes fall back to
- * the repo-wide latest commit. The only UI above it is the floating exit
- * button, which retreats while the reader scrolls down and returns on
- * scroll up.
+ * the repo-wide latest commit. The only UI above it is the exit bookmark,
+ * a ribbon hanging from the top-right edge — the bookmark marks the page
+ * you left; pull it to go back.
  *
  * Loading is a terminal ritual, centered and full-size: the view types
  * `$ git show `, the caret blinks while the sha resolves, then the sha types
@@ -38,7 +38,7 @@ import { MenuHint } from "@/components/menu-hint";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { CONSUME_IN, EASE_OUT, REVEAL } from "@/utils/transitions";
+import { CONSUME_IN, EASE_DRAWER, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { CommitDiff } from "./CommitDiff";
 import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
@@ -178,47 +178,21 @@ function GitHubLink({
   );
 }
 
-/**
- * Retreats the exit control while the reader scrolls down into the diff and
- * brings it back on any deliberate scroll up — the browser-chrome pattern.
- * Near the top it always shows; Esc keeps working throughout. Without this
- * the button collides with the sticky file headers, two layers of chrome
- * fighting for the same corner.
- */
-function useScrollRetreat(enabled: boolean): boolean {
-  const [retreated, setRetreated] = useState(false);
-
-  useEffect(() => {
-    if (!enabled) {
-      setRetreated(false);
-      return;
-    }
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      const delta = y - lastY;
-      // sub-4px moves are scroll jitter, not intent
-      if (Math.abs(delta) < 4) return;
-      setRetreated(y > 64 && delta > 0);
-      lastY = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [enabled]);
-
-  return retreated;
-}
+// classic bookmark silhouette: straight sides, notched V-cut bottom
+const BOOKMARK_CLIP =
+  "[clip-path:polygon(0_0,100%_0,100%_100%,50%_calc(100%_-_9px),0_100%)]";
 
 /**
- * The floating exit control — the only UI above the code. Portaled to <body>:
- * the page transition animates transform/filter on an ancestor, which turns
- * `fixed` into `absolute` and would let the button scroll away with the diff.
- * The wrapper carries both the fixed position and the motion — a transform on
- * anything above a fixed element would re-root it the same way. Fades against
- * `active` so it swaps with the nav in step with the page, and retreats
- * upward while the reader scrolls down (see useScrollRetreat).
+ * The exit control — a bookmark ribbon hanging from the top edge, the only
+ * UI above the code. Always visible: because it is flush with the viewport
+ * edge (and the sticky file headers reserve clearance beneath it) it reads
+ * as the mode's chrome, not a button floating over the diff. Portaled to
+ * <body>: the page transition animates transform/filter on an ancestor,
+ * which turns `fixed` into `absolute` — so the wrapper carries both the
+ * fixed position and its own slide motion. Slides in and out against
+ * `active`, in step with the page swap.
  */
-function ExitButton({
+function ExitBookmark({
   active,
   onExit,
   label,
@@ -227,32 +201,38 @@ function ExitButton({
   onExit: () => void;
   label: string;
 }) {
-  const retreated = useScrollRetreat(active);
-  const visible = active && !retreated;
-
   return createPortal(
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
-      transition={{ duration: 0.3, ease: EASE_OUT }}
-      inert={!visible}
+      initial={{ y: "-110%" }}
+      animate={{ y: active ? 0 : "-110%" }}
+      transition={{ duration: 0.5, ease: EASE_DRAWER }}
+      inert={!active}
       className={cn(
-        "fixed top-4 right-4 z-50 sm:top-5 sm:right-6",
-        !visible && "pointer-events-none",
+        "fixed top-0 right-4 z-50 sm:right-6",
+        !active && "pointer-events-none",
       )}
     >
       <Tooltip>
         <TooltipTrigger
           render={
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
+              type="button"
               onClick={onExit}
-              className="size-10 rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 backdrop-blur-2xl transition-colors hover:bg-muted"
+              className="group block rounded-sm outline-none drop-shadow-md focus-visible:ring-2 focus-visible:ring-ring/50"
             />
           }
         >
-          <X className="size-4" aria-hidden="true" />
+          {/* the clip lives on this inner span so the focus ring isn't cut;
+              hover pulls the ribbon out taller instead of detaching it from
+              the edge */}
+          <span
+            className={cn(
+              "flex h-12 w-8 items-start justify-center bg-primary pt-3 text-primary-foreground transition-[height] duration-300 ease-out group-hover:h-14",
+              BOOKMARK_CLIP,
+            )}
+          >
+            <X className="size-3.5" aria-hidden="true" />
+          </span>
           <span className="sr-only">{label}</span>
         </TooltipTrigger>
         <TooltipContent side="bottom">
@@ -346,9 +326,13 @@ export function CodeView() {
       style={DIFF_TOKENS[scheme]}
       className="flex min-h-screen flex-1 flex-col bg-background"
     >
-      {/* the nav is gone in this mode — its floating pill surface collapses
-          to this single close button, the only UI above the code */}
-      <ExitButton active={active} onExit={() => setActive(false)} label={t.exit} />
+      {/* the nav is gone in this mode — the exit bookmark is the only UI
+          above the code */}
+      <ExitBookmark
+        active={active}
+        onExit={() => setActive(false)}
+        label={t.exit}
+      />
 
       <AnimatePresence mode="wait">
         {phase === "command" ? (
