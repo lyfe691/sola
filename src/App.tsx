@@ -19,6 +19,7 @@ import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import ClickSpark from "./components/ui/custom/click-spark";
 import { BackgroundProvider } from "./components/backgrounds/background-provider";
 import BackgroundLayer from "./components/backgrounds/BackgroundLayer";
+import { CodeViewProvider } from "./components/deploy-diff/code-view-provider";
 import { WELCOME_PRESET } from "@/config/welcome-preset";
 import { UpdateNotification } from "./components/UpdateNotification";
 import { MotionConfig } from "motion/react";
@@ -52,11 +53,13 @@ const App = () => (
                   <Toaster position="bottom-right" />
                   <UpdateNotification />
                   <BrowserRouter>
-                    <CanonicalUrl />
-                    <KeyboardShortcuts />
-                    <CommandMenu />
-                    <AnimatedRoutes />
-                    <ScrollToTop />
+                    <CodeViewProvider>
+                      <CanonicalUrl />
+                      <KeyboardShortcuts />
+                      <CommandMenu />
+                      <AnimatedRoutes />
+                      <ScrollToTop />
+                    </CodeViewProvider>
                   </BrowserRouter>
                 </div>
               </ClickSpark>

@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { SearchToggle } from "./search-toggle";
 import { AppearanceMenu } from "./appearance-menu";
+import { CodeViewToggle } from "./deploy-diff/CodeViewToggle";
+import { useCodeView } from "./deploy-diff/code-view-provider";
 import { EASE_OUT } from "@/utils/transitions";
 
 const overlayVariants = {
@@ -46,16 +48,28 @@ interface ToggleGroupProps {
 }
 
 const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
+  const { active: codeView } = useCodeView();
+  const gapClass = gap === "tight" ? "gap-1" : "gap-2";
+
   return (
-    <div
-      className={cn(
-        "flex items-center",
-        gap === "tight" ? "gap-1" : "gap-2",
-        className,
-      )}
-    >
-      <SearchToggle />
-      <AppearanceMenu />
+    <div className={cn("flex items-center", gapClass, className)}>
+      {/* in code view the other toggles bow out; the code toggle stays as the only control */}
+      <AnimatePresence initial={false}>
+        {!codeView && (
+          <motion.div
+            key="site-toggles"
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.92 }}
+            transition={{ duration: 0.25, ease: EASE_OUT }}
+            className={cn("flex items-center", gapClass)}
+          >
+            <SearchToggle />
+            <AppearanceMenu />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <CodeViewToggle />
     </div>
   );
 });
@@ -123,6 +137,7 @@ const DesktopNav = () => {
   const t = translations[language];
   const location = useLocation();
   const scrolled = useScrolled();
+  const { active: codeView } = useCodeView();
   const linksRef = useRef<HTMLElement>(null);
   const highlightRef = useRef<HTMLSpanElement>(null);
 
@@ -159,9 +174,10 @@ const DesktopNav = () => {
   }, [positionHighlight]);
 
   useEffect(() => {
+    if (codeView) return; // links are unmounted; re-snap when they return
     const raf = requestAnimationFrame(snapToActive);
     return () => cancelAnimationFrame(raf);
-  }, [location.pathname, language, snapToActive]);
+  }, [location.pathname, language, snapToActive, codeView]);
 
   useEffect(() => {
     window.addEventListener("resize", snapToActive);
@@ -182,48 +198,62 @@ const DesktopNav = () => {
               : "mt-0 max-w-screen-2xl rounded-none border border-transparent bg-transparent px-6 py-5 lg:px-8",
           )}
         >
-          <div className="flex min-w-0 items-center gap-3">
-            <Logo label={t.common.home} />
+          <AnimatePresence initial={false}>
+            {!codeView && (
+              <motion.div
+                key="site-nav"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25, ease: EASE_OUT }}
+                className="flex min-w-0 items-center gap-3"
+              >
+                <Logo label={t.common.home} />
 
-            <span aria-hidden className="select-none text-lg text-foreground/25">
-              /
-            </span>
+                <span
+                  aria-hidden
+                  className="select-none text-lg text-foreground/25"
+                >
+                  /
+                </span>
 
-            <nav
-              ref={linksRef}
-              aria-label="Primary"
-              onMouseLeave={snapToActive}
-              className="relative flex items-center"
-            >
-              <span
-                ref={highlightRef}
-                aria-hidden
-                className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-[transform,translate,scale,rotate,width,height,opacity] duration-300 ease-out"
-              />
-              {links.map((link) => {
-                const active = isActive(link.path);
-                return (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    data-active={active}
-                    aria-current={active ? "page" : undefined}
-                    onMouseEnter={(e) => positionHighlight(e.currentTarget)}
-                    className={cn(
-                      "relative z-10 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
-                      active
-                        ? "text-foreground"
-                        : "text-foreground/60 hover:text-foreground",
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </nav>
-          </div>
+                <nav
+                  ref={linksRef}
+                  aria-label="Primary"
+                  onMouseLeave={snapToActive}
+                  className="relative flex items-center"
+                >
+                  <span
+                    ref={highlightRef}
+                    aria-hidden
+                    className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-[transform,translate,scale,rotate,width,height,opacity] duration-300 ease-out"
+                  />
+                  {links.map((link) => {
+                    const active = isActive(link.path);
+                    return (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        data-active={active}
+                        aria-current={active ? "page" : undefined}
+                        onMouseEnter={(e) => positionHighlight(e.currentTarget)}
+                        className={cn(
+                          "relative z-10 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
+                          active
+                            ? "text-foreground"
+                            : "text-foreground/60 hover:text-foreground",
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
+                </nav>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-          <ToggleGroup />
+          <ToggleGroup className="ml-auto" />
         </motion.div>
       </div>
     </header>
@@ -236,6 +266,12 @@ const MobileNav = () => {
   const location = useLocation();
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { active: codeView } = useCodeView();
+
+  // entering code view collapses the menu along with the rest of the chrome
+  useEffect(() => {
+    if (codeView) setMenuOpen(false);
+  }, [codeView]);
 
   const links = [
     { label: t.common.home, path: "/" },
@@ -311,18 +347,27 @@ const MobileNav = () => {
                 : "mt-0 rounded-none border border-transparent bg-transparent px-1 py-4",
             )}
           >
-            <button
-              ref={triggerRef}
-              type="button"
-              onClick={() => setMenuOpen((open) => !open)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              className="flex size-9 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
-            >
-              <MenuGlyph open={menuOpen} />
-            </button>
+            <AnimatePresence initial={false}>
+              {!codeView && (
+                <motion.button
+                  key="menu-trigger"
+                  ref={triggerRef}
+                  type="button"
+                  onClick={() => setMenuOpen((open) => !open)}
+                  aria-label={menuOpen ? "Close menu" : "Open menu"}
+                  aria-expanded={menuOpen}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25, ease: EASE_OUT }}
+                  className="flex size-9 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
+                >
+                  <MenuGlyph open={menuOpen} />
+                </motion.button>
+              )}
+            </AnimatePresence>
 
-            <ToggleGroup gap="normal" />
+            <ToggleGroup gap="normal" className="ml-auto" />
           </motion.div>
         </div>
       </header>

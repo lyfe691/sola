@@ -70,6 +70,19 @@ export const de = {
       customThemes: "Eigene Designs",
       background: "Hintergründe",
     },
+    diff: {
+      enter: "Code anzeigen",
+      exit: "Codeansicht verlassen",
+      deployed: "Deployter Commit",
+      latest: "Neuester Commit",
+      viewOnGitHub: "Auf GitHub ansehen",
+      error: "Diff konnte nicht geladen werden.",
+      retry: "Erneut versuchen",
+      unavailable: "Kein Text-Diff für diese Datei.",
+      truncated: "Gekürzt – vollständiger Diff auf GitHub.",
+      file: "Datei",
+      files: "Dateien",
+    },
     backgroundHints: {
       section:
         "Einige Hintergründe wirken deutlich besser im Dark Mode.",

@@ -71,6 +71,19 @@ export const es = {
       customThemes: "Temas personalizados",
       background: "Fondos",
     },
+    diff: {
+      enter: "Ver código",
+      exit: "Salir de la vista de código",
+      deployed: "Commit desplegado",
+      latest: "Último commit",
+      viewOnGitHub: "Ver en GitHub",
+      error: "No se pudo cargar el diff.",
+      retry: "Reintentar",
+      unavailable: "No hay diff de texto para este archivo.",
+      truncated: "Recortado: mira el diff completo en GitHub.",
+      file: "archivo",
+      files: "archivos",
+    },
     backgroundHints: {
       section:
         "Algunos fondos se ven mucho mejor en modo oscuro.",

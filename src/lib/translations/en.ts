@@ -69,6 +69,19 @@ export const en = {
       customThemes: "Custom themes",
       background: "Backgrounds",
     },
+    diff: {
+      enter: "View code",
+      exit: "Exit code view",
+      deployed: "Deployed commit",
+      latest: "Latest commit",
+      viewOnGitHub: "View on GitHub",
+      error: "Couldn't load the diff.",
+      retry: "Try again",
+      unavailable: "No text diff for this file.",
+      truncated: "Truncated — view the full diff on GitHub.",
+      file: "file",
+      files: "files",
+    },
     backgroundHints: {
       section:
         "Some backgrounds look significantly better in dark mode.",
