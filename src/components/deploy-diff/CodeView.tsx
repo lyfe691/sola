@@ -10,7 +10,7 @@
  * latest commit that touched THIS page's source (see page-sources.ts) —
  * whole and honest, page files sorted first; unmapped routes fall back to
  * the repo-wide latest commit. The only UI above it is the exit bubble,
- * a frosted quarter-round wrapped around the top-right corner.
+ * a frosted circle tucked into the top-right corner.
  *
  * Loading is a terminal ritual, centered and full-size: the view types
  * `$ git show `, the caret blinks while the sha resolves, then the sha types
@@ -178,15 +178,15 @@ function GitHubLink({
 }
 
 /**
- * The exit control — a frosted bubble wrapped around the top-right corner,
- * the only UI above the code. Flush with both edges, one quarter-round
- * bulge curving toward the content: the old close button's surface, but
- * belonging to the corner instead of hovering over the diff (the sticky
- * file headers reserve clearance beneath it). Portaled to <body>: the page
- * transition animates transform/filter on an ancestor, which turns `fixed`
- * into `absolute` — so the wrapper carries both the fixed position and its
- * own motion. Grows out of the corner against `active`, in step with the
- * page swap; hover swells it slightly rather than moving it off the edges.
+ * The exit control — a round bubble tucked into the top-right corner, the
+ * only UI above the code. A full circle nudged past both edges, so its
+ * silhouette stays round while it clearly belongs to the corner instead of
+ * hovering over the diff (the sticky file headers reserve clearance
+ * beneath it). Portaled to <body>: the page transition animates
+ * transform/filter on an ancestor, which turns `fixed` into `absolute` —
+ * so the wrapper carries both the fixed position and its own motion.
+ * Grows out of the corner against `active`, in step with the page swap;
+ * hover swells it slightly.
  */
 function ExitBubble({
   active,
@@ -205,7 +205,7 @@ function ExitBubble({
       style={{ transformOrigin: "top right" }}
       inert={!active}
       className={cn(
-        "fixed top-0 right-0 z-50",
+        "fixed -top-3 -right-3 z-50",
         !active && "pointer-events-none",
       )}
     >
@@ -215,14 +215,14 @@ function ExitBubble({
             <button
               type="button"
               onClick={onExit}
-              className="flex size-14 items-center justify-center rounded-bl-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[width,height,background-color] duration-300 ease-out hover:size-[4.5rem] hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50 sm:size-16"
+              className="flex size-14 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[transform,background-color] duration-300 ease-out hover:scale-105 hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50 sm:size-16"
             />
           }
         >
-          {/* nudged toward the corner — the quarter-disc's optical center
-              sits up-right of the box center */}
+          {/* nudged down-left — the edges slice the circle's top-right, so
+              the visible region's optical center sits below the box center */}
           <X
-            className="size-4 translate-x-[3px] -translate-y-[3px]"
+            className="size-4 -translate-x-0.5 translate-y-0.5"
             aria-hidden="true"
           />
           <span className="sr-only">{label}</span>
