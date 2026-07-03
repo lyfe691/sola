@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Kbd } from "@/components/ui/kbd";
 import { MenuHint } from "@/components/menu-hint";
+import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { CONSUME_IN, EASE_OUT, REVEAL } from "@/utils/transitions";
@@ -82,18 +83,17 @@ const commandPhase = {
   },
 };
 
-// Ready content settles in on the site's reveal curve. The header leads and
-// the diff follows a beat later — otherwise the diff's sheer mass makes it
-// read as arriving first (titles land first; see transitions.ts).
-const settle = {
-  initial: { opacity: 0, y: 4 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: REVEAL },
-};
-
-const settleAfterHeader = {
-  ...settle,
-  transition: { ...settle.transition, delay: 0.14 },
+// Ready content settles in as ONE block on the site's reveal curve — header
+// and diff together, the way a command's output arrives whole. No stagger:
+// piecemeal reveals read as loading, not settling.
+const contentPhase = {
+  initial: { opacity: 0, y: 6 },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: REVEAL },
+  },
+  exit: { opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } },
 };
 
 /**
@@ -149,6 +149,31 @@ function Dot() {
     <span aria-hidden className="text-muted-foreground/40">
       ·
     </span>
+  );
+}
+
+function GitHubLink({
+  href,
+  label,
+  className,
+}: {
+  href: string;
+  label: string;
+  className?: string;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        "inline-flex items-center gap-1 text-xs font-medium text-muted-foreground underline decoration-muted-foreground/40 decoration-dotted underline-offset-4 transition-colors hover:text-foreground hover:decoration-foreground/40",
+        className,
+      )}
+    >
+      {label}
+      <ArrowUpRight className="size-3.5" aria-hidden="true" />
+    </a>
   );
 }
 
@@ -299,17 +324,10 @@ export function CodeView() {
             </p>
           </motion.div>
         ) : (
-          <motion.div
-            key="content"
-            exit={{ opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } }}
-            className="flex flex-1 flex-col"
-          >
+          <motion.div key="content" {...contentPhase} className="flex flex-1 flex-col">
             {commit && (
               <>
-                <motion.header
-                  {...settle}
-                  className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28"
-                >
+                <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
                   <div className="flex min-w-0 flex-col gap-2.5">
                     <h1 className="max-w-3xl font-heading text-2xl font-semibold tracking-tight break-words md:text-3xl line-clamp-2">
                       {commit.subject}
@@ -319,61 +337,58 @@ export function CodeView() {
                         {formattedBody}
                       </p>
                     )}
-                    <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
+                    {/* each ·-item pair wraps as a unit (and the hint rides
+                        with the counts), so a narrow screen never strands a
+                        separator or the info glyph on its own line */}
+                    <p className="flex flex-wrap items-center gap-x-2 gap-y-1.5 font-mono text-xs text-muted-foreground">
                       {/* the sha reads as an identifier, not prose — chip it
                           like GitHub does */}
                       <span className="rounded-md bg-muted px-1.5 py-0.5 text-foreground/80">
                         {commit.shortSha}
                       </span>
                       {formattedDate && (
-                        <>
+                        <span className="inline-flex items-center gap-x-2 whitespace-nowrap">
                           <Dot />
                           <span>{formattedDate}</span>
-                        </>
+                        </span>
                       )}
-                      <Dot />
-                      <span>
-                        {commit.files.length}{" "}
-                        {commit.files.length === 1 ? t.file : t.files}
-                      </span>
-                      <Dot />
-                      <span>
-                        <span className="text-(--diff-add-fg)">
-                          +{commit.additions}
-                        </span>{" "}
-                        <span className="text-(--diff-del-fg)">
-                          −{commit.deletions}
+                      <span className="inline-flex items-center gap-x-2 whitespace-nowrap">
+                        <Dot />
+                        <span>
+                          {commit.files.length}{" "}
+                          {commit.files.length === 1 ? t.file : t.files}
                         </span>
                       </span>
-                      {pagePath && <MenuHint text={t.hint} />}
+                      <span className="inline-flex items-center gap-x-2 whitespace-nowrap">
+                        <Dot />
+                        <span>
+                          <span className="text-(--diff-add-fg)">
+                            +{commit.additions}
+                          </span>{" "}
+                          <span className="text-(--diff-del-fg)">
+                            −{commit.deletions}
+                          </span>
+                        </span>
+                        {pagePath && <MenuHint text={t.hint} />}
+                      </span>
                     </p>
                   </div>
 
-                  <a
+                  <GitHubLink
                     href={githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex shrink-0 items-center gap-1 pb-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {t.viewOnGitHub}
-                    <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                  </a>
-                </motion.header>
+                    label={t.viewOnGitHub}
+                    className="shrink-0 pb-1"
+                  />
+                </header>
 
-                <motion.div
-                  {...settleAfterHeader}
-                  className="flex flex-1 flex-col border-t border-border/60"
-                >
+                <div className="flex flex-1 flex-col border-t border-border/60">
                   <CommitDiff commit={commit} scheme={scheme} t={t} />
-                </motion.div>
+                </div>
               </>
             )}
 
             {(state.status === "error" || state.status === "empty") && (
-              <motion.div
-                {...settle}
-                className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-24 text-center"
-              >
+              <div className="flex flex-1 flex-col items-center justify-center gap-4 px-5 py-24 text-center">
                 <p className="text-sm text-muted-foreground">
                   {state.status === "error" ? t.error : t.noChanges}
                 </p>
@@ -382,16 +397,8 @@ export function CodeView() {
                     {t.retry}
                   </Button>
                 )}
-                <a
-                  href={githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {t.viewOnGitHub}
-                  <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                </a>
-              </motion.div>
+                <GitHubLink href={githubUrl} label={t.viewOnGitHub} />
+              </div>
             )}
           </motion.div>
         )}
