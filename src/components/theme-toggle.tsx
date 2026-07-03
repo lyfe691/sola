@@ -206,11 +206,9 @@ export function ThemeMenuContent({
           so the row itself is clickable. Closing the menu lets the page
           transition play unobstructed. */}
       <label className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-        {/* spacer keeps the icon column aligned with the branch rows above */}
-        <span className="size-3.5 shrink-0" aria-hidden="true" />
         <CodeXml className={iconClass} aria-hidden="true" />
         <span className="min-w-0 flex-1 truncate text-left">
-          {t.common.diff.codeView}
+          {t.common.diff.showDiff}
         </span>
         <Switch
           size="sm"

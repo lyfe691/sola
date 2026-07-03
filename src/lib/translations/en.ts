@@ -70,8 +70,8 @@ export const en = {
       background: "Backgrounds",
     },
     diff: {
-      codeView: "Code view",
-      exit: "Exit code view",
+      showDiff: "Show git diff",
+      exit: "Hide git diff",
       pageChange: "Latest change to this page",
       latest: "Latest commit",
       noChanges: "No recorded changes for this page.",

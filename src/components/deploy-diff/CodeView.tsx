@@ -9,14 +9,14 @@
  * routed page (entering/leaving rides the site's page transition). Shows the
  * latest change to THIS page — the diff is scoped to the current route's
  * source files (see page-sources.ts); unmapped routes fall back to the
- * repo-wide latest commit. The only UI above it is the nav toggle.
+ * repo-wide latest commit. The only UI above it is the floating exit button.
  */
 
 import { useMemo, type CSSProperties } from "react";
 import { useLocation } from "react-router-dom";
+import { motion } from "motion/react";
 import { ArrowUpRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +25,7 @@ import {
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
+import { REVEAL } from "@/utils/transitions";
 import { CommitDiff } from "./CommitDiff";
 import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
@@ -51,35 +52,73 @@ const DIFF_TOKENS: Record<"light" | "dark", CSSProperties> = {
   } as CSSProperties,
 };
 
-function HeaderSkeleton() {
+// A slow breathe (opacity only) instead of the stock skeleton pulse — calmer,
+// and the ghost is shaped like the real diff so nothing jumps when it loads.
+const breathe = {
+  animate: { opacity: [0.6, 1, 0.6] },
+  transition: { duration: 2.4, repeat: Infinity, ease: REVEAL },
+};
+
+// Ready content settles in on the site's reveal curve.
+const settle = {
+  initial: { opacity: 0, y: 4 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.4, ease: REVEAL },
+};
+
+function HeaderGhost() {
   return (
-    <div className="flex flex-col gap-3">
-      <Skeleton className="h-7 w-72 max-w-full" />
-      <Skeleton className="h-4 w-44" />
-    </div>
+    <motion.div className="flex flex-col gap-3" {...breathe}>
+      <div className="h-7 w-72 max-w-full rounded-lg bg-muted/60 md:h-8" />
+      <div className="flex items-center gap-3">
+        <div className="h-5 w-16 rounded-md bg-muted/60" />
+        <div className="h-3.5 w-24 rounded-full bg-muted/40" />
+        <div className="h-3.5 w-14 rounded-full bg-muted/40" />
+      </div>
+    </motion.div>
   );
 }
 
-function BodySkeleton() {
-  const widths = [
-    "w-full",
-    "w-11/12",
-    "w-4/5",
-    "w-full",
-    "w-2/3",
-    "w-5/6",
-    "w-1/2",
-    "w-3/4",
-  ];
+/** ghost rows silhouette a diff: gutter dashes, code bars, a hint of +/- */
+const GHOST_ROWS = [
+  { width: "w-2/5", tint: null },
+  { width: "w-7/12", tint: null },
+  { width: "w-1/2", tint: "del" },
+  { width: "w-1/2", tint: "add" },
+  { width: "w-2/3", tint: "add" },
+  { width: "w-1/3", tint: null },
+  { width: "w-3/4", tint: null },
+  { width: "w-5/12", tint: null },
+  { width: "w-3/5", tint: null },
+  { width: "w-1/4", tint: null },
+] as const;
+
+function DiffGhost() {
   return (
-    <div className="px-5 py-6 sm:px-8">
-      <Skeleton className="mb-5 h-4 w-2/5" />
-      <div className="max-w-3xl space-y-2.5">
-        {widths.map((width, i) => (
-          <Skeleton key={i} className={cn("h-3", width)} />
+    <motion.div {...breathe}>
+      <div className="flex items-center gap-2 border-b border-border/60 px-5 py-3 sm:px-8">
+        <div className="size-3 rounded bg-muted/60" />
+        <div className="h-3 w-44 max-w-[50%] rounded-full bg-muted/60" />
+        <div className="ml-auto h-3 w-10 rounded-full bg-muted/40" />
+      </div>
+      <div className="flex flex-col gap-[7px] px-5 py-4 sm:px-8">
+        {GHOST_ROWS.map((row, i) => (
+          <div key={i} className="flex items-center gap-4">
+            <div className="h-2.5 w-5 rounded-full bg-muted/40" />
+            <div className="h-2.5 w-5 rounded-full bg-muted/40" />
+            <div
+              className={cn(
+                "h-2.5 rounded-full",
+                row.width,
+                row.tint === "add" && "bg-emerald-500/20",
+                row.tint === "del" && "bg-rose-500/20",
+                row.tint === null && "bg-muted/50",
+              )}
+            />
+          </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -133,23 +172,25 @@ export function CodeView() {
 
       <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
         <div className="flex min-w-0 flex-col gap-1.5">
-          <p className="text-[10px] font-medium tracking-[0.14em] text-muted-foreground uppercase">
+          <p className="text-xs font-medium text-muted-foreground">
             {pagePath ? t.pageChange : t.latest}
           </p>
 
           {commit ? (
-            <>
+            <motion.div className="flex min-w-0 flex-col gap-1.5" {...settle}>
               <h1 className="font-heading text-2xl font-semibold tracking-tight break-words md:text-3xl">
                 {commit.subject}
               </h1>
-              <p className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs text-muted-foreground">
-                <span>{commit.shortSha}</span>
+              <p className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-sm text-muted-foreground">
+                <span className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs">
+                  {commit.shortSha}
+                </span>
                 {formattedDate && <span>{formattedDate}</span>}
                 <span>
                   {commit.files.length}{" "}
                   {commit.files.length === 1 ? t.file : t.files}
                 </span>
-                <span>
+                <span className="font-mono text-xs">
                   <span className="text-(--diff-add-fg)">
                     +{commit.additions}
                   </span>{" "}
@@ -158,9 +199,9 @@ export function CodeView() {
                   </span>
                 </span>
               </p>
-            </>
+            </motion.div>
           ) : state.status === "loading" ? (
-            <HeaderSkeleton />
+            <HeaderGhost />
           ) : (
             <p className="font-mono text-xs text-muted-foreground">
               {pagePath ?? "…"}
@@ -180,7 +221,7 @@ export function CodeView() {
       </header>
 
       <div className="flex flex-1 flex-col border-t border-border/60">
-        {state.status === "loading" && <BodySkeleton />}
+        {state.status === "loading" && <DiffGhost />}
 
         {state.status === "error" && (
           <div className="flex flex-col items-center gap-3 px-5 py-16 text-center">
@@ -192,12 +233,16 @@ export function CodeView() {
         )}
 
         {state.status === "empty" && (
-          <p className="px-5 py-16 text-center font-mono text-xs text-muted-foreground">
+          <p className="px-5 py-16 text-center text-sm text-muted-foreground">
             {t.noChanges}
           </p>
         )}
 
-        {commit && <CommitDiff commit={commit} t={t} />}
+        {commit && (
+          <motion.div {...settle}>
+            <CommitDiff commit={commit} t={t} />
+          </motion.div>
+        )}
       </div>
     </main>
   );

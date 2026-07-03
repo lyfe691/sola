@@ -66,8 +66,8 @@ export const zh = {
       background: "背景",
     },
     diff: {
-      codeView: "代码视图",
-      exit: "退出代码视图",
+      showDiff: "显示 git diff",
+      exit: "隐藏 git diff",
       pageChange: "此页面的最新更改",
       latest: "最新提交",
       noChanges: "此页面暂无更改记录。",

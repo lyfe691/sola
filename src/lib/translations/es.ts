@@ -72,8 +72,8 @@ export const es = {
       background: "Fondos",
     },
     diff: {
-      codeView: "Vista de código",
-      exit: "Salir de la vista de código",
+      showDiff: "Mostrar git diff",
+      exit: "Ocultar git diff",
       pageChange: "Último cambio de esta página",
       latest: "Último commit",
       noChanges: "No hay cambios registrados para esta página.",
