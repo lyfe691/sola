@@ -72,6 +72,7 @@ export const de = {
     },
     diff: {
       showDiff: "Git-Diff anzeigen",
+      exit: "Git-Diff ausblenden",
       hint: "Zeigt den letzten Commit, der die aktuelle Seite verändert hat.",
       noChanges: "Keine erfassten Änderungen für diese Seite.",
       viewOnGitHub: "Auf GitHub ansehen",

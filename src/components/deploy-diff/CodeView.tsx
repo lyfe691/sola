@@ -20,9 +20,13 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "motion/react";
-import { ArrowUpRight, CodeXml } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { MenuHint } from "@/components/menu-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -148,18 +152,24 @@ export function CodeView() {
       style={DIFF_TOKENS[scheme]}
       className="flex min-h-screen flex-1 flex-col bg-background"
     >
-      {/* the nav is gone in this mode — this floating chip is the only UI
-          above the code. It mirrors the menu row (same switch, same glyph),
-          so leaving the mode is the same gesture as entering it. */}
-      <label className="fixed top-4 right-4 z-50 flex items-center gap-2 rounded-full border border-foreground/10 bg-background/70 py-1.5 pr-2.5 pl-3 shadow-lg shadow-black/5 backdrop-blur-2xl transition-colors hover:bg-background/90 sm:top-5 sm:right-6">
-        <CodeXml className="size-3.5 text-muted-foreground" aria-hidden="true" />
-        <span className="font-mono text-xs text-foreground/80">git diff</span>
-        <Switch
-          size="sm"
-          checked
-          onCheckedChange={() => setActive(false)}
-        />
-      </label>
+      {/* the nav is gone in this mode — its floating pill surface collapses
+          to this single close button, the only UI above the code */}
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setActive(false)}
+              className="fixed top-4 right-4 z-50 size-10 rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 backdrop-blur-2xl transition-colors hover:bg-muted sm:top-5 sm:right-6"
+            />
+          }
+        >
+          <X className="size-4" aria-hidden="true" />
+          <span className="sr-only">{t.exit}</span>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">{t.exit}</TooltipContent>
+      </Tooltip>
 
       <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">
         <div className="flex min-w-0 flex-col gap-2">
