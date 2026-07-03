@@ -6,12 +6,14 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Data for the code view: the latest commit that touched the current page's
- * source (see page-sources.ts), with its diff filtered down to that scope.
- * Everything comes straight from the public GitHub API (CORS-enabled, no
- * proxy needed). The search is anchored at the deployed ref (VITE_APP_VERSION,
- * injected at build time from VERCEL_GIT_COMMIT_SHA; dev builds anchor at
- * `main`), so undeployed commits never show up. Responses are cached in
- * sessionStorage per scope to stay well inside the unauthenticated rate limit.
+ * source (see page-sources.ts), shown WHOLE — the page path only anchors the
+ * selection; the diff is the full, honest commit with in-scope files sorted
+ * first. Everything comes straight from the public GitHub API (CORS-enabled,
+ * no proxy needed). The search is anchored at the deployed ref
+ * (VITE_APP_VERSION, injected at build time from VERCEL_GIT_COMMIT_SHA; dev
+ * builds anchor at `main`), so undeployed commits never show up. Responses
+ * are cached in sessionStorage per scope to stay well inside the
+ * unauthenticated rate limit.
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -50,7 +52,6 @@ export interface PageCommit {
   subject: string;
   date: string;
   htmlUrl: string;
-  /** additions/deletions within the page scope (whole commit when unscoped) */
   additions: number;
   deletions: number;
   files: PageCommitFile[];
@@ -129,20 +130,20 @@ async function fetchPageDiff(path: string | null): Promise<PageCommit | null> {
 
   if (!path) return commit;
 
-  const files = commit.files.filter((file) => matchesScope(file, path));
-  // the list endpoint said this commit touches the scope; an empty filter
-  // means the detail response was truncated past our files
-  if (files.length === 0) return null;
+  // full commit, page-anchored: this page's files float to the top (stable
+  // sort keeps the original order within each group)
   return {
     ...commit,
-    files,
-    additions: files.reduce((sum, f) => sum + f.additions, 0),
-    deletions: files.reduce((sum, f) => sum + f.deletions, 0),
+    files: [...commit.files].sort(
+      (a, b) =>
+        Number(matchesScope(b, path)) - Number(matchesScope(a, path)),
+    ),
   };
 }
 
 function cacheKey(path: string | null): string {
-  return `sola-page-diff:${DEPLOY_REF}:${path ?? "@site"}`;
+  // v2: full commits — pre-rework entries held filtered file lists
+  return `sola-page-diff:v2:${DEPLOY_REF}:${path ?? "@site"}`;
 }
 
 function readCache(path: string | null): PageCommit | null {
