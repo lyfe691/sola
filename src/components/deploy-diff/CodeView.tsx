@@ -64,9 +64,16 @@ const DIFF_TOKENS: Record<"light" | "dark", CSSProperties> = {
   } as CSSProperties,
 };
 
-// The ritual's cadence: mechanical typing (a scripted terminal, not a human),
-// then a hold so the finished command registers before the content takes over.
-const TYPE_INTERVAL_MS = 35;
+// The ritual's cadence: brisk but typed by a hand, not printed — a steady
+// base beat, light per-key jitter, a breath at each word start. Backspacing
+// (a retry clearing a stale sha) runs quicker, like a held key. The prompt
+// rests a beat before the first keystroke, and the finished command holds
+// so it registers before the content takes over. (all ms)
+const TYPE_BASE_MS = 28;
+const TYPE_JITTER_MS = 26;
+const TYPE_WORD_PAUSE_MS = 70;
+const TYPE_DELETE_MS = 20;
+const TYPE_START_DELAY_MS = 240;
 const COMMAND_HOLD_MS = 450;
 
 // The command enters quietly under the page transition; once finished it is
@@ -97,31 +104,61 @@ const contentPhase = {
 };
 
 /**
- * Reveals `target` one character at a time. The target may grow (the sha
- * arrives after the fetch) — typing simply continues; the revealed prefix
- * never resets. Reduced-motion users get the full text immediately.
+ * Types the shown text toward `target` one keystroke at a time. The target
+ * may grow (the sha arrives after the fetch) — typing simply continues into
+ * it. If the shown text stops being a prefix of the target (a retry swapped
+ * the sha), it backspaces to the shared prefix first, then types the new
+ * tail — the way a person corrects a command line. Reduced-motion users get
+ * the full text immediately.
  */
 function useTypewriter(target: string): string {
-  const [count, setCount] = useState(0);
+  const [text, setText] = useState("");
+  const textRef = useRef("");
+  // the pre-typing rest happens once, on the first real keystroke
+  const startedRef = useRef(false);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setCount(target.length);
+      textRef.current = target;
+      setText(target);
       return;
     }
-    const id = window.setInterval(() => {
-      setCount((current) => {
-        if (current >= target.length) {
-          window.clearInterval(id);
-          return current;
-        }
-        return current + 1;
-      });
-    }, TYPE_INTERVAL_MS);
-    return () => window.clearInterval(id);
+
+    let cancelled = false;
+    let id: number | undefined;
+
+    const schedule = () => {
+      const current = textRef.current;
+      const deleting = !target.startsWith(current);
+      if (!deleting && current.length >= target.length) return; // settled
+
+      const delay = deleting
+        ? TYPE_DELETE_MS
+        : (startedRef.current ? 0 : TYPE_START_DELAY_MS) +
+          TYPE_BASE_MS +
+          Math.random() * TYPE_JITTER_MS +
+          (current.endsWith(" ") ? TYPE_WORD_PAUSE_MS : 0);
+
+      id = window.setTimeout(() => {
+        if (cancelled) return;
+        startedRef.current = true;
+        textRef.current = deleting
+          ? current.slice(0, -1)
+          : target.slice(0, current.length + 1);
+        setText(textRef.current);
+        schedule();
+      }, delay);
+    };
+
+    schedule();
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(id);
+    };
   }, [target]);
 
-  return target.slice(0, Math.min(count, target.length));
+  return text;
 }
 
 /**
@@ -311,7 +348,7 @@ export function CodeView() {
     return () => window.clearTimeout(id);
   }, [phase, resolved, typedDone]);
 
-  // re-enter the ritual: the completed prefix stays, the new sha types in
+  // re-enter the ritual: the stale sha backspaces away, the new one types in
   const handleRetry = () => {
     setPhase("command");
     retry();
