@@ -169,9 +169,10 @@ export function CodeView() {
           <X className="size-4" aria-hidden="true" />
           <span className="sr-only">{t.exit}</span>
         </TooltipTrigger>
-        <TooltipContent side="bottom" className="flex items-center gap-1.5">
+        <TooltipContent side="bottom">
           {t.exit}
-          <Kbd>esc</Kbd>
+          {/* h-4 keeps the keycap inside the text line so the tooltip doesn't grow */}
+          <Kbd className="h-4 min-w-4 px-1 text-[10px]">esc</Kbd>
         </TooltipContent>
       </Tooltip>
 
