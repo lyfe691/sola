@@ -24,6 +24,22 @@ window.addEventListener("vite:preloadError", () => {
   window.location.reload();
 });
 
+// index.html ships a static <title>/<meta name="description"> for the pre-boot
+// window and raw-HTML crawlers. Pages own them via React 19 native metadata,
+// which doesn't dedupe against static tags — so the statics are removed the
+// moment React hoists its first <title>. The observer fires as a microtask,
+// before paint, so there is never a visible gap or duplicate.
+const staticHeadTags = document.querySelectorAll("head > [data-react-managed]");
+if (staticHeadTags.length > 0) {
+  const headObserver = new MutationObserver(() => {
+    if (document.querySelector("head > title:not([data-react-managed])")) {
+      staticHeadTags.forEach((el) => el.remove());
+      headObserver.disconnect();
+    }
+  });
+  headObserver.observe(document.head, { childList: true });
+}
+
 // get the root element
 const rootElement = document.getElementById("root");
 

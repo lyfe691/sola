@@ -214,6 +214,11 @@ export function usePageDiff(
     staleTime: Infinity,
     gcTime: Infinity,
     retry: false,
+    // an errored query (no data) counts as always-stale, so default focus
+    // refetches would restart the fetch behind CodeView's phase machine and
+    // blank the pane; the explicit retry() below is the only re-trigger
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
     initialData: () => readCache(path) ?? undefined,
   });
 

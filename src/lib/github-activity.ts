@@ -28,4 +28,9 @@ export const userActivityQuery = (username: string) =>
     staleTime: Infinity,
     gcTime: Infinity,
     retry: false,
+    // staleTime Infinity does NOT stop focus refetches for a query that has
+    // only ever errored (no data yet == always stale) — pin them off to keep
+    // the old fetch-once semantics
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   });

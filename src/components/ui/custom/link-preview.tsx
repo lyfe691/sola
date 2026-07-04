@@ -91,6 +91,11 @@ function usePreviewPreload(
       img.onload = null;
       img.onerror = null;
       img.src = "";
+      // "ready" stays (the image is browser-cached; re-hover is instant), but
+      // a failure must re-prove itself on the next attempt
+      setResult((prev) =>
+        prev?.url === screenshotUrl && prev.status === "failed" ? null : prev,
+      );
     };
   }, [enabled, screenshotUrl]);
 

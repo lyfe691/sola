@@ -9,10 +9,19 @@
 
     <!-- =====================================
          PRIMARY META TAGS
-         <title> and <meta name="description"> are owned by React 19 native
-         metadata (each page renders its own); static copies here would
-         duplicate instead of being overridden.
+         data-react-managed tags cover the pre-boot window and raw-HTML
+         crawlers; main.tsx removes them before React mounts, because each
+         page renders its own <title>/<meta name="description"> via React 19
+         native metadata, which does not dedupe against static head tags.
     ====================================== -->
+    <title data-react-managed>
+      Yanis Sebastian Zürcher • Software Developer in Zürich
+    </title>
+    <meta
+      data-react-managed
+      name="description"
+      content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies."
+    />
     <meta name="author" content="Yanis Sebastian Zürcher" />
 
     <!-- keywords are long discontinued by Google and other search engines. However, I'll keep them here in case they are still used by others. -->
