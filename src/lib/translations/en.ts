@@ -8,47 +8,38 @@
 export const en = {
   seo: {
     home: {
-      title: "Yanis Sebastian Zürcher • Software Developer in Zürich",
       description:
         "Software developer based in Zürich, focusing on scalable, fast, and thoughtfully designed systems across infrastructure, identity, and interfaces.",
     },
     about: {
-      title: "About • Yanis Sebastian Zürcher",
       description:
         "Learn more about my background, values, and tools I use to build fast, clean, and minimal software.",
     },
     projects: {
-      title: "Projects • Yanis Sebastian Zürcher",
       description:
         "A curated selection of my projects across full‑stack, frontend, backend, and tooling.",
     },
     skills: {
-      title: "Skills • Yanis Sebastian Zürcher",
       description:
         "Technologies and tools I use, from React and TypeScript to Spring Boot and Docker.",
     },
     experience: {
-      title: "Experience • Yanis Sebastian Zürcher",
       description:
         "Timeline of education and roles, highlighting responsibilities, achievements, and technologies.",
     },
     contact: {
-      title: "Contact • Yanis Sebastian Zürcher",
       description:
         "Get in touch about projects, collaboration, or opportunities.",
     },
     services: {
-      title: "Services • Yanis Sebastian Zürcher",
       description:
         "Full‑stack, frontend, backend development and technical consulting tailored to your needs.",
     },
     privacy: {
-      title: "Privacy Policy • sola.ysz.life",
       description:
         "Privacy details for sola.ysz.life, covering hosting, analytics, processors, and your rights.",
     },
     notFound: {
-      title: "404 • Not Found",
       description: "The requested resource could not be found.",
     },
   },

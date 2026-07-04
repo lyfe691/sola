@@ -24,6 +24,7 @@ import { WELCOME_PRESET } from "@/config/welcome-preset";
 import { UpdateNotification } from "./components/UpdateNotification";
 import { MotionConfig } from "motion/react";
 import { CanonicalUrl } from "./components/CanonicalUrl";
+import { DocumentTitle } from "./components/DocumentTitle";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const App = () => (
                   <UpdateNotification />
                   <BrowserRouter>
                     <CodeViewProvider>
+                      <DocumentTitle />
                       <CanonicalUrl />
                       <KeyboardShortcuts />
                       <CommandMenu />

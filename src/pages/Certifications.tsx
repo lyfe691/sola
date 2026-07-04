@@ -59,9 +59,6 @@ const Certifications: React.FC = () => {
 
   return (
     <motion.div className="min-h-screen bg-linear-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8">
-      <title>
-        {t.certifications?.title ?? "Certifications • Yanis Sebastian Zürcher"}
-      </title>
       <meta
         name="description"
         content={"Professional certifications and credentials"}

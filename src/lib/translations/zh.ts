@@ -10,41 +10,32 @@ import type { Translation } from "./en";
 export const zh = {
   seo: {
     home: {
-      title: "Yanis Sebastian Zürcher • 苏黎世软件开发者",
       description:
         "专注于可扩展、快速且精心设计的系统，涉及基础设施、身份与访问以及界面设计。",
     },
     about: {
-      title: "关于我 • Yanis Sebastian Zürcher",
       description:
         "了解我的背景、价值观，以及用于构建快速、干净、极简软件的工具。",
     },
     projects: {
-      title: "项目 • Yanis Sebastian Zürcher",
       description: "精选项目合集：全栈、前端、后端与工具。",
     },
     skills: {
-      title: "技能 • Yanis Sebastian Zürcher",
       description: "技术与工具：React、TypeScript、Spring Boot、Docker 等。",
     },
     experience: {
-      title: "经历 • Yanis Sebastian Zürcher",
       description: "教育与岗位时间线，包含职责、成就与使用技术。",
     },
     contact: {
-      title: "联系 • Yanis Sebastian Zürcher",
       description: "关于项目、合作或机会，欢迎联系。",
     },
     services: {
-      title: "服务 • Yanis Sebastian Zürcher",
       description: "按需提供全栈、前端、后端开发与技术咨询。",
     },
     privacy: {
-      title: "隐私政策 • sola.ysz.life",
       description: "关于托管、分析、数据处理方与您的权利的隐私信息。",
     },
     notFound: {
-      title: "404 • 未找到",
       description: "未找到请求的资源。",
     },
   },

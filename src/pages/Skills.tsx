@@ -72,7 +72,6 @@ const Skills = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <title>{t.seo.skills.title}</title>
       <meta name="description" content={t.seo.skills.description} />
 
       <ScrollReveal variant="pageTitle">

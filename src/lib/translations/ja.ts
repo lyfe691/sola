@@ -10,43 +10,34 @@ import type { Translation } from "./en";
 export const ja = {
   seo: {
     home: {
-      title: "Yanis Sebastian Zürcher • チューリッヒのソフトウェア開発者",
       description:
         "スケーラブルで高速、丁寧に設計されたシステムに注力。インフラ、アイデンティティ、UI などの領域で活動。",
     },
     about: {
-      title: "概要 • Yanis Sebastian Zürcher",
       description: "背景、価値観、使用ツールなど、私について詳しく紹介します。",
     },
     projects: {
-      title: "プロジェクト • Yanis Sebastian Zürcher",
       description:
         "フルスタック、フロントエンド、バックエンド、ツールなどの制作物。",
     },
     skills: {
-      title: "スキル • Yanis Sebastian Zürcher",
       description:
         "React、TypeScript、Spring Boot、Docker などの技術スタック。",
     },
     experience: {
-      title: "経験 • Yanis Sebastian Zürcher",
       description: "学歴と職歴のタイムライン。責務、実績、使用技術を記載。",
     },
     contact: {
-      title: "お問い合わせ • Yanis Sebastian Zürcher",
       description: "案件、コラボレーション等のご連絡はこちらから。",
     },
     services: {
-      title: "サービス • Yanis Sebastian Zürcher",
       description:
         "フルスタック/フロントエンド/バックエンド開発、技術コンサルティング。",
     },
     privacy: {
-      title: "プライバシーポリシー",
       description: "ホスティング、分析、処理者、ユーザーの権利に関する詳細。",
     },
     notFound: {
-      title: "404 • 見つかりません",
       description: "要求されたリソースは見つかりませんでした。",
     },
   },

@@ -174,7 +174,6 @@ const Index = () => {
       initial="hidden"
       animate="show"
     >
-      <title>{t.seo.home.title}</title>
       <meta name="description" content={t.seo.home.description} />
 
       <LayoutGroup>

@@ -10,46 +10,37 @@ import type { Translation } from "./en";
 export const de = {
   seo: {
     home: {
-      title: "Yanis Sebastian Zürcher • Softwareentwickler in Zürich",
       description:
         "Softwareentwickler aus Zürich – mit Fokus auf skalierbare, schnelle und durchdachte Systeme in Infrastruktur, Identitätsmanagement und Benutzeroberflächen.",
     },
     about: {
-      title: "Über mich • Yanis Sebastian Zürcher",
       description:
         "Mehr über meinen Hintergrund, meine Werte und die Werkzeuge, mit denen ich schnelle, saubere und minimalistische Software baue.",
     },
     projects: {
-      title: "Projekte • Yanis Sebastian Zürcher",
       description:
         "Eine kuratierte Auswahl meiner Projekte – Full‑Stack, Frontend, Backend und Tools.",
     },
     skills: {
-      title: "Fähigkeiten • Yanis Sebastian Zürcher",
       description:
         "Technologien und Tools – von React und TypeScript bis Spring Boot und Docker.",
     },
     experience: {
-      title: "Erfahrung • Yanis Sebastian Zürcher",
       description:
         "Zeitleiste von Ausbildung und Rollen mit Verantwortlichkeiten, Erfolgen und Technologien.",
     },
     contact: {
-      title: "Kontakt • Yanis Sebastian Zürcher",
       description: "Kontakt für Projekte, Zusammenarbeit oder Möglichkeiten.",
     },
     services: {
-      title: "Dienstleistungen • Yanis Sebastian Zürcher",
       description:
         "Full‑Stack‑, Frontend‑, Backend‑Entwicklung sowie technologische Beratung nach Bedarf.",
     },
     privacy: {
-      title: "Datenschutzerklärung • sola.ysz.life",
       description:
         "Datenschutzhinweise zu sola.ysz.life – Hosting, Analytics, Auftragsverarbeiter und Ihre Rechte.",
     },
     notFound: {
-      title: "404 • Nicht gefunden",
       description: "Die angeforderte Ressource wurde nicht gefunden.",
     },
   },

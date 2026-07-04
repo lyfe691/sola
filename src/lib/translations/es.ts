@@ -10,47 +10,38 @@ import type { Translation } from "./en";
 export const es = {
   seo: {
     home: {
-      title: "Yanis Sebastian Zürcher • Desarrollador de software en Zúrich",
       description:
         "Desarrollador de software con enfoque en sistemas escalables, rápidos y bien diseñados: infraestructura, identidad e interfaces.",
     },
     about: {
-      title: "Sobre mí • Yanis Sebastian Zürcher",
       description:
         "Conoce mi trayectoria, valores y herramientas con las que construyo software rápido, limpio y minimalista.",
     },
     projects: {
-      title: "Proyectos • Yanis Sebastian Zürcher",
       description:
         "Selección de proyectos: full‑stack, frontend, backend y herramientas.",
     },
     skills: {
-      title: "Habilidades • Yanis Sebastian Zürcher",
       description:
         "Tecnologías y herramientas: React, TypeScript, Spring Boot, Docker y más.",
     },
     experience: {
-      title: "Experiencia • Yanis Sebastian Zürcher",
       description:
         "Cronología de educación y roles con responsabilidades, logros y tecnologías.",
     },
     contact: {
-      title: "Contacto • Yanis Sebastian Zürcher",
       description:
         "Ponte en contacto para proyectos, colaboración u oportunidades.",
     },
     services: {
-      title: "Servicios • Yanis Sebastian Zürcher",
       description:
         "Desarrollo full‑stack, frontend, backend y consultoría técnica a medida.",
     },
     privacy: {
-      title: "Política de privacidad • sola.ysz.life",
       description:
         "Detalles de privacidad: alojamiento, analíticas, encargados del tratamiento y tus derechos.",
     },
     notFound: {
-      title: "404 • No encontrado",
       description: "El recurso solicitado no se encontró.",
     },
   },

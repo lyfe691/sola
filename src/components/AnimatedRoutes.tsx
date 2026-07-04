@@ -7,49 +7,31 @@
  */
 
 import { Routes, Route, Navigate } from "react-router";
-import { lazy } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import SimpleLayout from "@/layouts/SimpleLayout";
 import BlankLayout from "@/layouts/BlankLayout";
+import { APP_ROUTES, type RouteLayout } from "@/config/routes";
 
-const Index = lazy(() => import("@/pages/Index"));
-const NotFound = lazy(() => import("@/pages/NotFound"));
-const About = lazy(() => import("@/pages/About"));
-const Projects = lazy(() => import("@/pages/Projects"));
-const Skills = lazy(() => import("@/pages/Skills"));
-const Experience = lazy(() => import("@/pages/Experience"));
-const Contact = lazy(() => import("@/pages/Contact"));
-const Services = lazy(() => import("@/pages/Services"));
-const AboutThisWebsite = lazy(() => import("@/pages/AboutThisWebsite"));
-const Privacy = lazy(() => import("@/pages/Privacy"));
-const ProjectDeepDiveRenderer = lazy(
-  () => import("@/pages/projects/ProjectDeepDiveRenderer"),
-);
-const Certifications = lazy(() => import("@/pages/Certifications"));
+// rendered straight from the manifest (src/config/routes.ts) — routes and
+// tab titles cannot drift apart because they share one source of truth
+const LAYOUTS: { layout: RouteLayout; element: React.ReactElement }[] = [
+  { layout: "app", element: <AppLayout /> },
+  { layout: "simple", element: <SimpleLayout /> },
+  { layout: "blank", element: <BlankLayout /> },
+];
 
 export const AnimatedRoutes = () => {
   return (
     <Routes>
-      <Route element={<AppLayout />}>
-        <Route path="/" element={<Index />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/skills" element={<Skills />} />
-        <Route path="/experience" element={<Experience />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/privacy" element={<Privacy />} />
-      </Route>
-
-      <Route element={<SimpleLayout />}>
-        <Route path="/certifications" element={<Certifications />} />
-      </Route>
-
-      <Route element={<BlankLayout />}>
-        <Route path="/404" element={<NotFound />} />
-        <Route path="/a" element={<AboutThisWebsite />} />
-        <Route path="/projects/:slug" element={<ProjectDeepDiveRenderer />} />
-      </Route>
+      {LAYOUTS.map(({ layout, element }) => (
+        <Route key={layout} element={element}>
+          {APP_ROUTES.filter((route) => route.layout === layout).map(
+            ({ path, Component }) => (
+              <Route key={path} path={path} element={<Component />} />
+            ),
+          )}
+        </Route>
+      ))}
 
       <Route path="*" element={<Navigate to="/404" />} />
     </Routes>

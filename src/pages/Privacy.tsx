@@ -695,7 +695,6 @@ const Privacy = () => {
 
   return (
     <>
-      <title>{t.seo.privacy.title}</title>
       <meta name="description" content={t.seo.privacy.description} />
 
       <div className="max-w-4xl mx-auto">

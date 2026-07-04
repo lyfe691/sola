@@ -368,7 +368,6 @@ const Contact = () => {
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center">
-      <title>{t.seo.contact.title}</title>
       <meta name="description" content={t.seo.contact.description} />
 
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">

@@ -326,7 +326,6 @@ const About = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <title>{t.seo.about.title}</title>
       <meta name="description" content={t.seo.about.description} />
 
       {/* ------------------- Title ------------------- */}

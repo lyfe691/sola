@@ -77,7 +77,6 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
       transition={{ duration: 0.4, ease: EASE_OUT }}
       className="min-h-screen bg-background p-4 sm:p-6 lg:p-8"
     >
-      <title>{title} • Yanis Sebastian Zürcher</title>
       {description && <meta name="description" content={description} />}
 
       {/* hero section */}

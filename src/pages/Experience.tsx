@@ -22,7 +22,6 @@ const Experience = () => {
 
   return (
     <div className="flex w-full flex-col">
-      <title>{t.seo.experience.title}</title>
       <meta name="description" content={t.seo.experience.description} />
 
       <ScrollReveal variant="pageTitle">
