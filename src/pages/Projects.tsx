@@ -19,7 +19,7 @@ import {
   Info,
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";

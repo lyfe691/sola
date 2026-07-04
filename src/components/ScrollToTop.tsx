@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";

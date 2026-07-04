@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
-import { AnimatePresence, motion, Variants } from "motion/react";
+import { AnimatePresence, motion, type Variants } from "motion/react";
 
 interface NameMorpherProps {
   greeting: string;

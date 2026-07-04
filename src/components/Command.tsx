@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { SearchX } from "lucide-react";
 import {
   Command,

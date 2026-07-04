@@ -9,7 +9,7 @@
 import React, { lazy, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { Helmet } from "react-helmet-async";
 import {
   Breadcrumb,

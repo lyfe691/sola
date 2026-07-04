@@ -22,7 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
 import { Helmet } from "react-helmet-async";

@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   Tag,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Helmet } from "react-helmet-async";

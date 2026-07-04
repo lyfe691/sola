@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { Mail, Info, ChevronRight, ArrowUpRight } from "lucide-react";

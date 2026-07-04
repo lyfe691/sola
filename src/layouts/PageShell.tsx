@@ -7,7 +7,7 @@
  */
 
 import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { pageTransitionVariants } from "@/utils/transitions";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";

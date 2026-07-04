@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { Helmet } from "react-helmet-async";
 
 const SITE_URL = "https://sola.ysz.life";

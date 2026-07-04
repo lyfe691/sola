@@ -7,7 +7,7 @@
  */
 
 import { motion } from "motion/react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Briefcase } from "lucide-react";
 import { translations } from "@/lib/translations";
 import { useLanguage } from "@/lib/language-provider";

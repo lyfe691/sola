@@ -11,7 +11,7 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 
 const TYPING_SPEED = 50;
 const RESPONSE_DELAY = 600;

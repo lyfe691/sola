@@ -49,8 +49,8 @@ import {
   SiInsomnia,
   SiObsidian,
   SiSupabase,
-  SiAmazonwebservices,
 } from "react-icons/si";
+import { FaAws } from "react-icons/fa6";
 import { Terminal, MousePointer2 } from "lucide-react";
 import type { IconType } from "react-icons";
 import type { ComponentType } from "react";
@@ -128,7 +128,7 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       { name: "Bash", icon: SiGnubash, level: 3 },
       { name: "Nginx", icon: NginxOriginal, level: 3 },
       { name: "Kubernetes", icon: KubernetesOriginal, level: 2 },
-      { name: "AWS", icon: SiAmazonwebservices, level: 2 },
+      { name: "AWS", icon: FaAws, level: 2 },
       { name: "Terraform", icon: TerraformOriginal, level: 2 },
     ],
   },

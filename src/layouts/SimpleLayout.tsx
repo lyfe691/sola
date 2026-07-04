@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useOutlet } from "react-router-dom";
+import { useOutlet } from "react-router";
 import Footer from "@/components/Footer";
 import PageShell from "./PageShell";
 

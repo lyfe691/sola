@@ -7,7 +7,7 @@
  */
 
 import React, { Suspense, lazy } from "react";
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Navigate, Link } from "react-router";
 import { motion } from "motion/react";
 import { MDXProvider } from "@mdx-js/react";
 import ProjectPage from "@/components/ProjectDeepDive";

@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router";
 import { lazy } from "react";
 import AppLayout from "@/layouts/AppLayout";
 import SimpleLayout from "@/layouts/SimpleLayout";

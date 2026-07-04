@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { Contact, FolderGit2 } from "lucide-react";
 import { motion, LayoutGroup } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";

@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useEffect, useState, useCallback, useRef, memo } from "react";
 import { useLanguage } from "@/lib/language-provider";

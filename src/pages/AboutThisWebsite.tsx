@@ -9,7 +9,7 @@
 /* 這個網站是怎麼造出來的 */
 
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronLeft } from "lucide-react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";

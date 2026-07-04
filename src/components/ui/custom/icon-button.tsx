@@ -28,57 +28,49 @@ export interface IconButtonProps extends React.ComponentProps<typeof Button> {
   iconPosition?: "left" | "right";
 }
 
-export const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  (
-    {
-      className,
-      variant = "default",
-      icon = <ChevronRight />,
-      label,
-      hideLabel = false,
-      iconPosition = "right",
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const isRight = iconPosition === "right";
-    const pillBg = PILL_BG[variant as keyof typeof PILL_BG] ?? PILL_BG.default;
+export function IconButton({
+  className,
+  variant = "default",
+  icon = <ChevronRight />,
+  label,
+  hideLabel = false,
+  iconPosition = "right",
+  children,
+  ...props
+}: IconButtonProps) {
+  const isRight = iconPosition === "right";
+  const pillBg = PILL_BG[variant as keyof typeof PILL_BG] ?? PILL_BG.default;
 
-    return (
-      <Button
-        ref={ref}
-        variant={variant}
-        className={cn("group/btn relative overflow-hidden", className)}
-        {...props}
-      >
-        {!hideLabel && (
-          <span
-            className="relative z-10 text-center transition-[transform,translate,scale,rotate,opacity] duration-300 ease-out can-hover:group-hover/btn:scale-95 can-hover:group-hover/btn:opacity-0"
-            style={{
-              [isRight ? "paddingRight" : "paddingLeft"]:
-                "calc(max(28%, 2.25rem) + 0.25rem)",
-            }}
-          >
-            {children ?? label}
-          </span>
-        )}
-
+  return (
+    <Button
+      variant={variant}
+      className={cn("group/btn relative overflow-hidden", className)}
+      {...props}
+    >
+      {!hideLabel && (
         <span
-          aria-hidden
-          className={cn(
-            "absolute inset-y-1 flex w-[max(28%,2.25rem)] items-center justify-center rounded-[inherit] transition-[width,background-color] duration-300 ease-out can-hover:group-hover/btn:w-[calc(100%-0.5rem)]",
-            isRight ? "right-1" : "left-1",
-            pillBg,
-          )}
+          className="relative z-10 text-center transition-[transform,translate,scale,rotate,opacity] duration-300 ease-out can-hover:group-hover/btn:scale-95 can-hover:group-hover/btn:opacity-0"
+          style={{
+            [isRight ? "paddingRight" : "paddingLeft"]:
+              "calc(max(28%, 2.25rem) + 0.25rem)",
+          }}
         >
-          <span className="flex transition-transform duration-300 ease-out can-hover:group-hover/btn:scale-110 group-active/btn:scale-95 group-active/btn:duration-[120ms]">
-            {icon}
-          </span>
+          {children ?? label}
         </span>
-      </Button>
-    );
-  },
-);
+      )}
 
-IconButton.displayName = "IconButton";
+      <span
+        aria-hidden
+        className={cn(
+          "absolute inset-y-1 flex w-[max(28%,2.25rem)] items-center justify-center rounded-[inherit] transition-[width,background-color] duration-300 ease-out can-hover:group-hover/btn:w-[calc(100%-0.5rem)]",
+          isRight ? "right-1" : "left-1",
+          pillBg,
+        )}
+      >
+        <span className="flex transition-transform duration-300 ease-out can-hover:group-hover/btn:scale-110 group-active/btn:scale-95 group-active/btn:duration-[120ms]">
+          {icon}
+        </span>
+      </span>
+    </Button>
+  );
+}

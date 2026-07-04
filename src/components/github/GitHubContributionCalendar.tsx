@@ -6,15 +6,13 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import { cloneElement, useCallback, useEffect, useMemo, useState } from "react";
 import {
-  cloneElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactElement,
-} from "react";
-import { ActivityCalendar } from "react-activity-calendar";
+  ActivityCalendar,
+  type Activity,
+  type BlockElement,
+  type ThemeInput,
+} from "react-activity-calendar";
 import { useTheme } from "@/components/theme-provider";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -39,7 +37,7 @@ const INTL_LOCALE: Record<string, string> = {
   zh: "zh-CN",
 };
 
-const heatmapTheme = {
+const heatmapTheme: ThemeInput = {
   light: [
     "var(--contrib-0)",
     "var(--contrib-1)",
@@ -54,7 +52,7 @@ const heatmapTheme = {
     "var(--contrib-3)",
     "var(--contrib-4)",
   ],
-} as const;
+};
 
 const BLOCK_SIZE = 11;
 const BLOCK_MARGIN = 3;
@@ -175,7 +173,7 @@ const GitHubContributionCalendar = ({
   );
 
   const renderBlock = useCallback(
-    (block: ReactElement, activity: ContributionActivity) => (
+    (block: BlockElement, activity: Activity) => (
       <g>
         {cloneElement(block, {
           style: {
@@ -218,9 +216,8 @@ const GitHubContributionCalendar = ({
             blockMargin={BLOCK_MARGIN}
             fontSize={FONT_SIZE}
             showWeekdayLabels={["mon", "wed", "fri"]}
-            hideTotalCount
-            hideColorLegend
-            totalCount={data ? getContributionTotal(data, year) : 0}
+            showTotalCount={false}
+            showColorLegend={false}
             renderBlock={renderBlock}
           />
         ) : null}

@@ -1,7 +1,7 @@
-import React, { forwardRef, useMemo, useRef, useLayoutEffect } from "react";
-import { Canvas, useFrame, useThree, RootState } from "@react-three/fiber";
-import { Color, Mesh, ShaderMaterial } from "three";
-import { IUniform } from "three";
+import React, { useMemo, useRef, useLayoutEffect } from "react";
+import { Canvas, useFrame, useThree, type RootState } from "@react-three/fiber";
+import { Color, ShaderMaterial, type Mesh } from "three";
+import type { IUniform } from "three";
 
 type NormalizedRGB = [number, number, number];
 
@@ -86,25 +86,21 @@ void main() {
 
 interface SilkPlaneProps {
   uniforms: SilkUniforms;
+  ref?: React.RefObject<Mesh | null>;
 }
 
-const SilkPlane = forwardRef<Mesh, SilkPlaneProps>(function SilkPlane(
-  { uniforms },
-  ref,
-) {
+function SilkPlane({ uniforms, ref }: SilkPlaneProps) {
   const { viewport } = useThree();
 
   useLayoutEffect(() => {
-    const mesh = ref as React.MutableRefObject<Mesh | null>;
-    if (mesh.current) {
-      mesh.current.scale.set(viewport.width, viewport.height, 1);
+    if (ref?.current) {
+      ref.current.scale.set(viewport.width, viewport.height, 1);
     }
   }, [ref, viewport]);
 
   useFrame((_state: RootState, delta: number) => {
-    const mesh = ref as React.MutableRefObject<Mesh | null>;
-    if (mesh.current) {
-      const material = mesh.current.material as ShaderMaterial & {
+    if (ref?.current) {
+      const material = ref.current.material as ShaderMaterial & {
         uniforms: SilkUniforms;
       };
       material.uniforms.uTime.value += 0.1 * delta;
@@ -121,8 +117,7 @@ const SilkPlane = forwardRef<Mesh, SilkPlaneProps>(function SilkPlane(
       />
     </mesh>
   );
-});
-SilkPlane.displayName = "SilkPlane";
+}
 
 export interface SilkProps {
   speed?: number;
