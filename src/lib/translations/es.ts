@@ -85,8 +85,7 @@ export const es = {
       files: "archivos",
     },
     backgroundHints: {
-      section:
-        "Algunos fondos se ven mucho mejor en modo oscuro.",
+      section: "Algunos fondos se ven mucho mejor en modo oscuro.",
     },
     callout: {
       background: {

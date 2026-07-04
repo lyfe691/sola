@@ -84,8 +84,7 @@ export const zh = {
     callout: {
       background: {
         title: "打造你的风格",
-        content:
-          "我选择了{background}和{theme}主题 — 随时可在此菜单中更换。",
+        content: "我选择了{background}和{theme}主题 — 随时可在此菜单中更换。",
       },
       done: "知道了",
     },

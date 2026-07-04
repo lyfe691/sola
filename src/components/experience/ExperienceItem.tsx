@@ -38,7 +38,13 @@ const LOCATION_TYPE_ICON: Record<LocationType, LucideIcon> = {
 };
 
 /** A small muted icon + label pair used across the meta row. */
-const MetaItem = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) => (
+const MetaItem = ({
+  icon: Icon,
+  label,
+}: {
+  icon: LucideIcon;
+  label: string;
+}) => (
   <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
     <Icon className="size-3.5 shrink-0 text-muted-foreground/70" />
     {label}

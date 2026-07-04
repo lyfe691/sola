@@ -6,10 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import {
-  BACKGROUNDS,
-  isBackgroundId,
-} from "@/components/backgrounds/registry";
+import { BACKGROUNDS, isBackgroundId } from "@/components/backgrounds/registry";
 import { ALL_THEME_VALUES, THEMES, type Theme } from "@/config/themes";
 
 /** Shown until the user dismisses the theme-menu callout. */

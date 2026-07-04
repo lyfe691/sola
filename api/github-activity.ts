@@ -129,7 +129,9 @@ async function buildPushActivity(
   const commits = event.payload.commits ?? [];
   const branch = event.payload.ref?.replace("refs/heads/", "") || "main";
   const size =
-    typeof event.payload.size === "number" ? event.payload.size : commits.length;
+    typeof event.payload.size === "number"
+      ? event.payload.size
+      : commits.length;
   const distinctSize =
     typeof event.payload.distinct_size === "number"
       ? event.payload.distinct_size
@@ -143,7 +145,8 @@ async function buildPushActivity(
 
   if (!description && headSha) {
     description =
-      (await fetchCommitMessage(event.repo.name, headSha, headers)) ?? undefined;
+      (await fetchCommitMessage(event.repo.name, headSha, headers)) ??
+      undefined;
   }
   if (!description) {
     description =

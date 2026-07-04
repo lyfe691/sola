@@ -23,8 +23,8 @@ export default function AboutThisWebsite() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-background text-foreground relative">
-        <title>這個網站是怎麼造出來的</title>
-        <meta name="robots" content="noindex, nofollow" />
+      <title>這個網站是怎麼造出來的</title>
+      <meta name="robots" content="noindex, nofollow" />
 
       <div className="max-w-2xl w-full text-sm leading-relaxed space-y-6">
         <h1 className="text-2xl font-bold mb-6 text-center">

@@ -106,11 +106,16 @@ const homeAnimations = {
 } as const;
 
 function socialHoverWidth(label: string) {
-  if (label === "LeetCode") return "md:can-hover:hover:w-32 lg:can-hover:hover:w-32";
-  if (label.length <= 5) return "md:can-hover:hover:w-[6.3rem] lg:can-hover:hover:w-[6.3rem]";
-  if (label.length <= 7) return "md:can-hover:hover:w-[6.8rem] lg:can-hover:hover:w-[6.8rem]";
-  if (label.length <= 8) return "md:can-hover:hover:w-30 lg:can-hover:hover:w-30";
-  if (label.length <= 10) return "md:can-hover:hover:w-34 lg:can-hover:hover:w-34";
+  if (label === "LeetCode")
+    return "md:can-hover:hover:w-32 lg:can-hover:hover:w-32";
+  if (label.length <= 5)
+    return "md:can-hover:hover:w-[6.3rem] lg:can-hover:hover:w-[6.3rem]";
+  if (label.length <= 7)
+    return "md:can-hover:hover:w-[6.8rem] lg:can-hover:hover:w-[6.8rem]";
+  if (label.length <= 8)
+    return "md:can-hover:hover:w-30 lg:can-hover:hover:w-30";
+  if (label.length <= 10)
+    return "md:can-hover:hover:w-34 lg:can-hover:hover:w-34";
   return "md:can-hover:hover:w-38 lg:can-hover:hover:w-38";
 }
 
@@ -169,13 +174,11 @@ const Index = () => {
       initial="hidden"
       animate="show"
     >
-        <title>{t.seo.home.title}</title>
-        <meta name="description" content={t.seo.home.description} />
+      <title>{t.seo.home.title}</title>
+      <meta name="description" content={t.seo.home.description} />
 
       <LayoutGroup>
-        <motion.div
-          className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl"
-        >
+        <motion.div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
           <motion.a
             variants={homeAnimations.badge}
             href="https://kinoa.to"

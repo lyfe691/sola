@@ -662,7 +662,8 @@
   min-height: inherit;
 }
 
-.contribution-calendar .react-activity-calendar__scroll-container::-webkit-scrollbar {
+.contribution-calendar
+  .react-activity-calendar__scroll-container::-webkit-scrollbar {
   display: none;
 }
 

@@ -52,11 +52,7 @@ interface Project extends ProjectMeta {
 }
 
 type SortOption =
-  | "priority"
-  | "date-newest"
-  | "date-oldest"
-  | "name-asc"
-  | "name-desc";
+  "priority" | "date-newest" | "date-oldest" | "name-asc" | "name-desc";
 
 type SortOptionItem = {
   value: SortOption;
@@ -217,9 +213,7 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
     <p className="flex-1 text-sm text-foreground/60">
       <RichText text={project.description} />
     </p>
-    {project.technologies.length > 0 && (
-      <TagRow tags={project.technologies} />
-    )}
+    {project.technologies.length > 0 && <TagRow tags={project.technologies} />}
     <ProjectActions project={project} t={t} />
   </div>
 );
@@ -277,8 +271,8 @@ const Projects = () => {
 
   return (
     <div className="flex flex-col w-full">
-        <title>{t.seo.projects.title}</title>
-        <meta name="description" content={t.seo.projects.description} />
+      <title>{t.seo.projects.title}</title>
+      <meta name="description" content={t.seo.projects.description} />
 
       <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.projects.title}</h1>

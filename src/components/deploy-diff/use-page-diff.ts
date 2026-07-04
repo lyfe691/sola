@@ -108,9 +108,7 @@ function mapCommit(data: GitHubCommitResponse): PageCommit {
     shortSha: data.sha.slice(0, 7),
     subject: newlineIndex === -1 ? message : message.slice(0, newlineIndex),
     body:
-      newlineIndex === -1
-        ? ""
-        : stripTrailers(message.slice(newlineIndex + 1)),
+      newlineIndex === -1 ? "" : stripTrailers(message.slice(newlineIndex + 1)),
     date: data.commit.author?.date ?? "",
     htmlUrl: data.html_url,
     additions: data.stats?.additions ?? 0,
@@ -159,8 +157,7 @@ async function fetchPageDiff(path: string | null): Promise<PageCommit | null> {
   return {
     ...commit,
     files: [...commit.files].sort(
-      (a, b) =>
-        Number(matchesScope(b, path)) - Number(matchesScope(a, path)),
+      (a, b) => Number(matchesScope(b, path)) - Number(matchesScope(a, path)),
     ),
   };
 }

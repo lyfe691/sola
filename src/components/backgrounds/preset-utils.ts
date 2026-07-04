@@ -8,9 +8,9 @@
 
 import { THEMES, type Theme, getThemeType } from "@/config/themes";
 
-export const BACKGROUND_THEME_CLASS_KEYS = THEMES.map(
-  (t) => t.value,
-).filter((v) => v !== "system") as Exclude<Theme, "system">[];
+export const BACKGROUND_THEME_CLASS_KEYS = THEMES.map((t) => t.value).filter(
+  (v) => v !== "system",
+) as Exclude<Theme, "system">[];
 
 export const resolveThemePreset = <T>(
   presets: Record<Exclude<Theme, "system">, T>,

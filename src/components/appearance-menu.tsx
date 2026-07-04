@@ -228,7 +228,11 @@ export function AppearanceMenu() {
                 duration: 0.16,
                 ease: EASE_OUT,
               }}
-              style={{ position: "fixed", top: anchor.top, right: anchor.right }}
+              style={{
+                position: "fixed",
+                top: anchor.top,
+                right: anchor.right,
+              }}
               className="z-50 overflow-hidden rounded-3xl bg-popover p-1.5 text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-none dark:ring-foreground/10"
             >
               {/*

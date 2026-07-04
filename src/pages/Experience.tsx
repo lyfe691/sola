@@ -22,11 +22,13 @@ const Experience = () => {
 
   return (
     <div className="flex w-full flex-col">
-        <title>{t.seo.experience.title}</title>
-        <meta name="description" content={t.seo.experience.description} />
+      <title>{t.seo.experience.title}</title>
+      <meta name="description" content={t.seo.experience.description} />
 
       <ScrollReveal variant="pageTitle">
-        <h1 className="mb-8 text-4xl font-bold sm:mb-12">{t.experience.title}</h1>
+        <h1 className="mb-8 text-4xl font-bold sm:mb-12">
+          {t.experience.title}
+        </h1>
       </ScrollReveal>
 
       <ScrollReveal variant="default">

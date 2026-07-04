@@ -14,24 +14,25 @@
 
 ## 1. Verdict & diagnosis
 
-**Review decision: BLOCK.** The current motion is not broken — it *runs* — but it fails the craft
+**Review decision: BLOCK.** The current motion is not broken — it _runs_ — but it fails the craft
 bar in a few systemic, repeating ways that no amount of per-component polish will fix. The wins are
 real (centralized foundation, trigger-anchored popovers, the click-anchored theme transition, the
 update toast, `vaul` drawer physics) and must be **preserved**. The losses are concentrated in five
 root causes:
 
-| # | Root cause | Where it bites | Severity |
-|---|---|---|---|
-| 1 | **One weak curve, multiplied everywhere.** `STANDARD_EASING = [0.25,0.1,0.25,1]` (a near-default ease-in-out) is the foundation curve for every reveal, page transition, and MDX block. It has an ease-*in* front half, so entrances start sluggish. | Every page | High — dominant complaint |
-| 2 | **Durations 2–3× over budget.** Scroll reveals run 0.6 / 0.8 / 1.0s; route transition 0.5s; deepdive hero 0.7s. The most-repeated motion in the product is also the slowest, so content visibly *trails the scroll* instead of settling as it enters view. | Every page | High |
-| 3 | **Reduced-motion is only half-covered.** `MotionConfig reducedMotion="user"` handles declarative Framer transforms, and the CSS block zeroes durations — but neither reaches the **imperative JS loops** (name-morph 3.2s cycle, text cycle, hire-me halo, theme-callout per-frame rAF) or the **11 WebGL/canvas backgrounds** (0/11 honor it). | Hero, backgrounds, flourishes | High (a11y) |
-| 4 | **Maximalist perpetual loops contradict the personality.** A name that re-morphs in 3D every 3.2s forever, an always-rotating halo, app-wide click-sparks, shimmer/pulse loops, and 10 of 11 uncapped-rAF backgrounds — restless, attention-stealing, and a battery/thermal liability. | Hero, footer, backgrounds, 404 | High |
-| 5 | **No shared primitives → smell sprawl.** No easing tokens exist (3 rival ad-hoc curves in the tree), no hover-capability gating exists at all (Tailwind v4 `hover:` does **not** gate to fine pointers by default), `transition: all` in 19 files, layout-property animation (width/height/max-height/top/margin) across 6+ surfaces, and `scale(0)` entrances in 4 places. | Sitewide | Medium–High |
+| #   | Root cause                                                                                                                                                                                                                                                                                                                                                                  | Where it bites                 | Severity                  |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ------------------------- |
+| 1   | **One weak curve, multiplied everywhere.** `STANDARD_EASING = [0.25,0.1,0.25,1]` (a near-default ease-in-out) is the foundation curve for every reveal, page transition, and MDX block. It has an ease-_in_ front half, so entrances start sluggish.                                                                                                                        | Every page                     | High — dominant complaint |
+| 2   | **Durations 2–3× over budget.** Scroll reveals run 0.6 / 0.8 / 1.0s; route transition 0.5s; deepdive hero 0.7s. The most-repeated motion in the product is also the slowest, so content visibly _trails the scroll_ instead of settling as it enters view.                                                                                                                  | Every page                     | High                      |
+| 3   | **Reduced-motion is only half-covered.** `MotionConfig reducedMotion="user"` handles declarative Framer transforms, and the CSS block zeroes durations — but neither reaches the **imperative JS loops** (name-morph 3.2s cycle, text cycle, hire-me halo, theme-callout per-frame rAF) or the **11 WebGL/canvas backgrounds** (0/11 honor it).                             | Hero, backgrounds, flourishes  | High (a11y)               |
+| 4   | **Maximalist perpetual loops contradict the personality.** A name that re-morphs in 3D every 3.2s forever, an always-rotating halo, app-wide click-sparks, shimmer/pulse loops, and 10 of 11 uncapped-rAF backgrounds — restless, attention-stealing, and a battery/thermal liability.                                                                                      | Hero, footer, backgrounds, 404 | High                      |
+| 5   | **No shared primitives → smell sprawl.** No easing tokens exist (3 rival ad-hoc curves in the tree), no hover-capability gating exists at all (Tailwind v4 `hover:` does **not** gate to fine pointers by default), `transition: all` in 19 files, layout-property animation (width/height/max-height/top/margin) across 6+ surfaces, and `scale(0)` entrances in 4 places. | Sitewide                       | Medium–High               |
 
 Two findings are **block-level on their own**: the **global `click-spark`** canvas firing on every
 click app-wide (frequency violation), and the **hero's imperative loops bypassing reduced-motion**.
 
 ### Findings tally
+
 `block: 2 · high: 43 · medium: 50 · low: 34` (129 total) across 12 audited lanes, **plus** an entire
 un-reviewed feature surface (`Experience` — the freshest motion in the repo per the last 3 commits),
 `Skills`, `NotFound`, the dead-code `sidebar.tsx`, and `progress.tsx`.
@@ -43,7 +44,7 @@ un-reviewed feature surface (`Experience` — the freshest motion in the repo pe
 > **"Crisp and present, not hazy and loading-in."**
 
 This is a developer's personal portfolio. It should read as **fast, quiet, and system-native**, with a
-few *rare, earned* moments of delight. Content settles into place on a strong ease-out the instant it
+few _rare, earned_ moments of delight. Content settles into place on a strong ease-out the instant it
 enters view (sub-300ms, ~8px travel, no scale) — it never drifts up over a luxurious second on a
 near-linear curve that lags the eye.
 
@@ -54,10 +55,10 @@ around them is restrained:
 - the **GitHub-update toast** on its expo curve,
 - the **appearance-menu morph** between language and theme (justified spatial motion).
 
-Everything all-day — nav links, buttons, scroll reveals, MDX prose — gets the *minimum* motion that
+Everything all-day — nav links, buttons, scroll reveals, MDX prose — gets the _minimum_ motion that
 still reads as intentional. The strongest motion statement a dev portfolio can make is knowing **when
-not to animate.** (This also satisfies the project's redesign principle: *replace every signature
-pattern, be decisive* — the maximalist signatures go; the tasteful ones stay and stand out.)
+not to animate.** (This also satisfies the project's redesign principle: _replace every signature
+pattern, be decisive_ — the maximalist signatures go; the tasteful ones stay and stand out.)
 
 ---
 
@@ -68,21 +69,21 @@ Define these **once** and reference them everywhere. Zero inline `cubic-bezier`,
 
 ### 3.1 Easing tokens → `src/index.css` `@theme` + JS mirror in `src/utils/transitions.ts`
 
-| Token | Value | Use |
-|---|---|---|
-| `--ease-out` | `cubic-bezier(0.23, 1, 0.32, 1)` | **THE default.** Every entrance, popover/dropdown/tooltip enter, hover settle, route enter, scroll reveal, color tween, toast. If unsure, use this. JS mirror: `REVEAL_EASE = [0.23, 1, 0.32, 1]`. |
-| `--ease-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | **Only** on-screen movement between two existing positions: FLIP reorders (Projects sort), the appearance-menu morph, exit curves of leaving overlay items. Never for entrances. |
-| `--ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` | iOS-style sheet/drawer enter + the theme clip-path reveal (already correct at `index.css:523`). Scoped to large edge-sliding surfaces only. |
-| `--ease-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | The "lush hero" curve — rare first-impression entrances only: the update toast (already correct) and the deepdive headline. Never on all-day UI. |
+| Token           | Value                             | Use                                                                                                                                                                                                |
+| --------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--ease-out`    | `cubic-bezier(0.23, 1, 0.32, 1)`  | **THE default.** Every entrance, popover/dropdown/tooltip enter, hover settle, route enter, scroll reveal, color tween, toast. If unsure, use this. JS mirror: `REVEAL_EASE = [0.23, 1, 0.32, 1]`. |
+| `--ease-in-out` | `cubic-bezier(0.77, 0, 0.175, 1)` | **Only** on-screen movement between two existing positions: FLIP reorders (Projects sort), the appearance-menu morph, exit curves of leaving overlay items. Never for entrances.                   |
+| `--ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)`  | iOS-style sheet/drawer enter + the theme clip-path reveal (already correct at `index.css:523`). Scoped to large edge-sliding surfaces only.                                                        |
+| `--ease-expo`   | `cubic-bezier(0.16, 1, 0.3, 1)`   | The "lush hero" curve — rare first-impression entrances only: the update toast (already correct) and the deepdive headline. Never on all-day UI.                                                   |
 
 ### 3.2 Duration scale
 
-| Token | ms | Use |
-|---|---|---|
-| `--dur-instant` | 100 | Press/active feedback; the press leg of any asymmetric press-and-release; immediate color-only hovers. |
-| `--dur-fast` | 150 | Tooltip/small-popover enter, switch thumb, copy-button glyph, nav-link highlight follow, field-error, **exit legs** of overlays/toasts. |
-| `--dur-base` | 200 | Dropdown/select/menu enter, accordion, hover settle (image zoom, card shadow, hover-pill), theme color tween. The everyday workhorse. |
-| `--dur-reveal` | 280 | **The single scroll-reveal tier** (cards, sections, MDX blocks), route enter, code-block. Lands as the element enters view. Replaces 0.6/0.8/1.0s. |
+| Token            | ms  | Use                                                                                                                                                                                                                 |
+| ---------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--dur-instant`  | 100 | Press/active feedback; the press leg of any asymmetric press-and-release; immediate color-only hovers.                                                                                                              |
+| `--dur-fast`     | 150 | Tooltip/small-popover enter, switch thumb, copy-button glyph, nav-link highlight follow, field-error, **exit legs** of overlays/toasts.                                                                             |
+| `--dur-base`     | 200 | Dropdown/select/menu enter, accordion, hover settle (image zoom, card shadow, hover-pill), theme color tween. The everyday workhorse.                                                                               |
+| `--dur-reveal`   | 280 | **The single scroll-reveal tier** (cards, sections, MDX blocks), route enter, code-block. Lands as the element enters view. Replaces 0.6/0.8/1.0s.                                                                  |
 | `--dur-emphasis` | 400 | **Hard cap for any UI motion.** Drawer/modal enter, lush toast/hero, pageTitle blur-bridge. Nothing exceeds this except the theme view-transition (marketing-grade exception; trim 900→~700ms, align old/new legs). |
 
 ### 3.3 Hover-capability gate → one custom variant
@@ -100,20 +101,31 @@ this, touch taps fire phantom hovers and leave pills/labels stuck open.
 ### 3.4 Reduced motion — two layers (today's single CSS nuke is both too blunt and too narrow)
 
 **Layer 1 — CSS** (`index.css:488` retune): stop the blanket `transition-duration: 0.01ms !important`.
-Suppress *movement* only and keep a short fade:
+Suppress _movement_ only and keep a short fade:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
-    transform: none !important; translate: none !important;
-    rotate: none !important; scale: none !important;
-    transition-duration: 150ms !important;          /* keep fades, drop motion */
+  *,
+  ::before,
+  ::after {
+    transform: none !important;
+    translate: none !important;
+    rotate: none !important;
+    scale: none !important;
+    transition-duration: 150ms !important; /* keep fades, drop motion */
     scroll-behavior: auto !important;
   }
   /* EXEMPT loaders — they should keep looping, not freeze on one frame */
-  [data-slot="skeleton"], [data-slot="spinner"], .animate-spin { animation-iteration-count: infinite !important; }
+  [data-slot="skeleton"],
+  [data-slot="spinner"],
+  .animate-spin {
+    animation-iteration-count: infinite !important;
+  }
   /* Disable the theme sweep under reduce */
-  ::view-transition-old(root), ::view-transition-new(root) { animation: none !important; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
 }
 ```
 
@@ -128,7 +140,7 @@ once and pass a `paused` prop the backgrounds honor by rendering **one frame the
 (`frameloop="never"`, freeze `uTime`, kill cursor reactivity + LiquidEther `autoDemo`). Gentler-not-zero:
 keep the color/composition, drop the temporal motion — never a blank screen.
 
-### 3.5 Springs — for *alive / gestured / dragged*, not content entrances
+### 3.5 Springs — for _alive / gestured / dragged_, not content entrances
 
 **Keep springs:** `vaul` drawer (native gesture physics), CSS-transition toggles (switch/slider thumb —
 interruptible), the mobile-menu item entrance (one tasteful overlay stagger; tighten to
@@ -159,16 +171,19 @@ bouncy `hire-me` hover (`stiffness:400/damping:10` → raise damping to ~18–20
 
 Each phase is independently shippable. Phases 0–1 deliver ~70% of the felt improvement.
 
-### Phase 0 — Define the token layer *(prerequisite for ~40 downstream fixes)*
+### Phase 0 — Define the token layer _(prerequisite for ~40 downstream fixes)_
+
 - Add the 4 easing tokens + 5 duration tokens to `index.css` `@theme`.
 - Add `@custom-variant can-hover`.
 - Mirror easings/durations as a typed const map in `src/utils/transitions.ts` (`REVEAL_EASE`, etc.).
-- *No behavior change yet — this just makes every later fix a one-line reference swap.* The most-cited
+- _No behavior change yet — this just makes every later fix a one-line reference swap._ The most-cited
   recommendation in the entire audit (`use var(--ease-out)`) is **uncompilable** until this lands.
 
-### Phase 1 — Rebuild the reveal foundation *(one edit, site-wide payoff)*
+### Phase 1 — Rebuild the reveal foundation _(one edit, site-wide payoff)_
+
 `src/utils/transitions.ts` → `ScrollReveal.tsx` → `mdx/reveal.ts` is the highest-leverage node; it also
 fixes the three **unaudited** pages (Experience, Skills, NotFound) for free.
+
 - Replace `STANDARD_EASING` with `REVEAL_EASE = [0.23,1,0.32,1]`; delete the "Perfect cubic-bezier" comment.
 - Collapse `FAST/STANDARD/SMOOTH` (0.6/0.8/1.0) → `D_REVEAL = 0.28`, `D_EMPHASIS = 0.4`.
 - Merge `scrollRevealVariants` + `scrollTitleVariants` + `scrollSubtleVariants` into one `revealVariants`:
@@ -184,6 +199,7 @@ fixes the three **unaudited** pages (Experience, Skills, NotFound) for free.
   dividing line: **CSS data-attributes for trigger-anchored primitives, Framer for in-view choreography.**
 
 ### Phase 2 — Delete / gate the maximalist signatures & perpetual loops
+
 - **`click-spark`** (`App.tsx:44`): **kept** per user — add a `prefers-reduced-motion` guard so it renders children without sparks when reduced; otherwise unchanged.
 - **`name-morpher`**: stop the 3.2s interval — settle on the real name after 1–2 cycles (or static); strip per-letter 3D `rotateX/rotateY/scale` → keep `opacity + y(8) + blur(4→0)`; fix `easeIn`-on-enter → `--ease-out`; move the **width** spring off the layout prop (FLIP/transform or snap); add `useReducedMotion` + pause on `document.hidden`. (Decision B.)
 - **`CyclingTextEffect`** (`text-effect-wrapper.tsx`): stop the 3s sentence interval (or pause on hover + after first rotation); reserve a fixed `min-height` instead of the **height** spring; fix the `scale:0` preset → `scale:0.9`; add reduced-motion gate.
@@ -192,12 +208,14 @@ fixes the three **unaudited** pages (Experience, Skills, NotFound) for free.
 - **`theme-callout`**: replace the per-frame `requestAnimationFrame` measure loop with `ResizeObserver` + scroll/resize listeners (measure only on layout-affecting events).
 
 ### Phase 3 — Backgrounds: ~~central perf + a11y contract~~ **OUT OF SCOPE**
+
 Dropped at the user's direction — the animated backgrounds are a separate concern from the motion
-*language* and are not touched in this rework. (The findings remain on record in the audit if revisited
+_language_ and are not touched in this rework. (The findings remain on record in the audit if revisited
 later: 10/11 lack tab-hidden pause, 0/11 honor reduced-motion, 4 miss the DPR cap, `LiquidEther` is the
 template.)
 
 ### Phase 4 — Site-wide sweep (mechanical, high-volume)
+
 - **`transition: all` → scoped properties** across the 19 files (Footer, Navigation, ContributionActivityFeed, TechStack, icon-button, hire-me, chevron-to-arrow, progress, Contact, Index, Projects, Services, theme-toggle, badge/tabs/accordion/switch/navigation-menu). Use `transition-colors` / `transition-[transform,opacity]` etc.
 - **Apply `can-hover:`** to every hover-transform (Footer scale/translate, social pills, IconButton, ExperienceItem, Skills rows, Projects/Services cards, About portrait, deepdive related cards, MDX images, hire-me, chevron-to-arrow).
 - **Gate the focus-ring `box-shadow` tweens** (`input`/`textarea`/`button`/`select`) — they fire on Tab/focus 100+/day; keep them instant or near-instant.
@@ -207,6 +225,7 @@ template.)
 - **`sidebar.tsx`: left untouched** (out of scope per the user — not part of the motion rework).
 
 ### Phase 5 — Per-surface polish
+
 - **Navigation:** mobile-menu exit easing → `--ease-out`; tighten the item spring (`stiffness ~120`); reduce `navigation-menu` enter 0.35→0.2–0.25s, drop `width,height` from its transition list; appearance-menu layout morph 0.34→0.22–0.26s.
 - **Route transitions:** verify scroll reset on route change (only ProjectDeepDive resets today — no global `ScrollRestoration`, so navigation can retain scroll and fight the page-enter). Check the lazy-route `Suspense` fallback doesn't flash between routes and undercut the cross-fade.
 - **MDX:** reveal **section groups** (heading + its blocks) with a 40–60ms stagger instead of per-paragraph; anchor the `ExpandableImage` zoom to the clicked thumbnail via shared `layoutId` (grows from the rect, not center); gate the `whileHover` image lift behind capability; `TechStack` chips → `transition-colors` (or drop the hover — chips aren't clickable).
@@ -214,6 +233,7 @@ template.)
 - **UI primitives:** the reduced-motion exemptions from Phase 0 fix skeleton/spinner; `sheet` `ease-in-out`→`--ease-drawer`; `switch` thumb explicit `200ms --ease-out`; `button` add `active:scale-[0.97]` (`--dur-instant`); `select` align-trigger mode keep `animate-none` but add a cheap opacity fade-in.
 
 ### Phase 6 — Verify (the skill's debugging discipline)
+
 - **Slow-motion / frame-by-frame** (Chrome Animations panel) on the reveal foundation, theme transition, and nav — confirm coordinated props stay in sync and origins are right.
 - **Reduced-motion pass:** toggle OS setting — confirm fades remain, movement/loops/backgrounds stop, loaders still spin, no blank background.
 - **Touch pass** on a real device — confirm no stuck hover pills, no phantom transforms.
@@ -224,23 +244,23 @@ template.)
 
 ## 5. Headline Before → After (review table)
 
-| Before | After | Why |
-|---|---|---|
-| `STANDARD_EASING = [0.25,0.1,0.25,1]` everywhere | `--ease-out: cubic-bezier(0.23,1,0.32,1)` / `REVEAL_EASE` | Near-default ease-in-out starts entrances sluggish; strong ease-out snaps in then settles |
-| Reveal durations `0.6 / 0.8 / 1.0s` | single `280ms` tier (cap `400ms`) | 2–3× over the UI budget; content trails the scroll instead of settling as it enters |
-| `pageTransition` symmetric `0.5s` | enter `0.28s` / exit `0.15s` | Under `mode="wait"` a slow exit gates the incoming view; exits should snap |
-| `useScrollReveal` `setTimeout(delay)` gate | `useInView({once:true})` + `transition.delay` | Bespoke non-interruptible timer driving motion state; library does this natively |
-| `scale(0)` (text-effect preset, theme-toggle icon, copy glyphs) | `scale(0.9)` + opacity | Nothing in the real world appears from nothing |
-| `name`/`text` re-morph forever (3.2s / 3s `setInterval`) | settle after 1–2 cycles; stop on reduce + hidden | Perpetual decorative loop on the most-seen surface; restless, bypasses reduced-motion |
-| `hire-me` halo `rotate:360` infinite | static glow / removed | 60fps perpetual decoration with no meaning |
-| global `click-spark` on every click | deleted (or scoped + reduced-motion) | Frequency violation — motion on a 100+/day action |
-| `transition: all` (19 files) | named properties (`transition-colors`, `transition-[transform,opacity]`) | Animates unintended/layout props off-GPU |
-| bare `hover:` transforms (no gating anywhere) | `@custom-variant can-hover` + `can-hover:` | Tailwind v4 doesn't gate to fine pointers; touch fires phantom hovers |
-| `width`/`max-height`/`top`/`margin` animations | transform / FLIP `layout` / `grid-template-rows` | Layout props trigger layout+paint; transform/opacity stay on the compositor |
-| 10/11 backgrounds: uncapped rAF, no pause, 0 reduced-motion | central `paused` prop + `visibilitychange` + `dpr={[1,2]}` | Battery/thermal liability + a11y gap; LiquidEther already proves the contract |
-| CSS reduced-motion zeroes spinner/skeleton to a frozen frame | suppress movement, keep fades, **exempt loaders** | Reduced-motion is gentler-not-zero; loaders should keep looping |
-| `sheet` `ease-in-out` | `--ease-drawer cubic-bezier(0.32,0.72,0,1)` | Edge-sliding panels want the iOS drawer curve |
-| `button` no press feedback | `active:scale-[0.97]` @ `100ms` | Pressables must feel responsive to press |
+| Before                                                          | After                                                                    | Why                                                                                       |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `STANDARD_EASING = [0.25,0.1,0.25,1]` everywhere                | `--ease-out: cubic-bezier(0.23,1,0.32,1)` / `REVEAL_EASE`                | Near-default ease-in-out starts entrances sluggish; strong ease-out snaps in then settles |
+| Reveal durations `0.6 / 0.8 / 1.0s`                             | single `280ms` tier (cap `400ms`)                                        | 2–3× over the UI budget; content trails the scroll instead of settling as it enters       |
+| `pageTransition` symmetric `0.5s`                               | enter `0.28s` / exit `0.15s`                                             | Under `mode="wait"` a slow exit gates the incoming view; exits should snap                |
+| `useScrollReveal` `setTimeout(delay)` gate                      | `useInView({once:true})` + `transition.delay`                            | Bespoke non-interruptible timer driving motion state; library does this natively          |
+| `scale(0)` (text-effect preset, theme-toggle icon, copy glyphs) | `scale(0.9)` + opacity                                                   | Nothing in the real world appears from nothing                                            |
+| `name`/`text` re-morph forever (3.2s / 3s `setInterval`)        | settle after 1–2 cycles; stop on reduce + hidden                         | Perpetual decorative loop on the most-seen surface; restless, bypasses reduced-motion     |
+| `hire-me` halo `rotate:360` infinite                            | static glow / removed                                                    | 60fps perpetual decoration with no meaning                                                |
+| global `click-spark` on every click                             | deleted (or scoped + reduced-motion)                                     | Frequency violation — motion on a 100+/day action                                         |
+| `transition: all` (19 files)                                    | named properties (`transition-colors`, `transition-[transform,opacity]`) | Animates unintended/layout props off-GPU                                                  |
+| bare `hover:` transforms (no gating anywhere)                   | `@custom-variant can-hover` + `can-hover:`                               | Tailwind v4 doesn't gate to fine pointers; touch fires phantom hovers                     |
+| `width`/`max-height`/`top`/`margin` animations                  | transform / FLIP `layout` / `grid-template-rows`                         | Layout props trigger layout+paint; transform/opacity stay on the compositor               |
+| 10/11 backgrounds: uncapped rAF, no pause, 0 reduced-motion     | central `paused` prop + `visibilitychange` + `dpr={[1,2]}`               | Battery/thermal liability + a11y gap; LiquidEther already proves the contract             |
+| CSS reduced-motion zeroes spinner/skeleton to a frozen frame    | suppress movement, keep fades, **exempt loaders**                        | Reduced-motion is gentler-not-zero; loaders should keep looping                           |
+| `sheet` `ease-in-out`                                           | `--ease-drawer cubic-bezier(0.32,0.72,0,1)`                              | Edge-sliding panels want the iOS drawer curve                                             |
+| `button` no press feedback                                      | `active:scale-[0.97]` @ `100ms`                                          | Pressables must feel responsive to press                                                  |
 
 **Verdict: BLOCK** until Phases 0–2 land (the weak-curve/over-duration foundation, the reduced-motion
 gaps, and the keyboard/high-frequency `click-spark` are all hard-block triggers).
@@ -249,20 +269,20 @@ gaps, and the keyboard/high-frequency `click-spark` are all hard-block triggers)
 
 ## 6. Per-lane disposition
 
-| Lane | Disposition | One-line |
-|---|---|---|
-| foundation | **retune** | Architecture right, values wrong — the single biggest liability; rebuild constants + a11y |
-| global-css | retune | Theme transition is good; swap weak `ease`→`--ease-out`, retune reduced-motion block |
-| home-hero | retune | Over-animated; 3 infinite loops, `easeIn` enters, layout-prop hovers, a11y block |
-| content-pages | retune | One weak curve at 0.6–1.0s; Certifications/Privacy fire on mount not in-view (bug) |
-| list-pages | retune | Tasteful vocab; fix shared curve/duration + 3 inconsistent stagger strategies |
-| navigation | retune | Coherent personality; layout-prop morphs + `scale(0)` icon + Framer reduced-motion gap |
-| layout-transitions | retune | Mechanisms right; asymmetric route timing + Footer `transition:all`/pulse cleanup |
-| mdx-content | retune | Over-animated/under-differentiated; group-stagger + `layoutId` zoom + gate hovers |
-| deepdive | retune | `easeInOut` on entrances (block-grade), 0.6–0.7s durations, `transition:all` in feed |
-| custom-flourishes | **retune + delete 2** | Delete `click-spark` + `hire-me` halo; retune name-morph/cycling; `theme-callout` is the bar |
-| ui-primitives | retune | Popover layer is excellent — preserve; fix reduced-motion nuke + code-block reveal + sheet curve |
-| backgrounds-perf | retune | Port LiquidEther's pause/DPR/reduced-motion contract to the other 10; central gate |
+| Lane               | Disposition           | One-line                                                                                         |
+| ------------------ | --------------------- | ------------------------------------------------------------------------------------------------ |
+| foundation         | **retune**            | Architecture right, values wrong — the single biggest liability; rebuild constants + a11y        |
+| global-css         | retune                | Theme transition is good; swap weak `ease`→`--ease-out`, retune reduced-motion block             |
+| home-hero          | retune                | Over-animated; 3 infinite loops, `easeIn` enters, layout-prop hovers, a11y block                 |
+| content-pages      | retune                | One weak curve at 0.6–1.0s; Certifications/Privacy fire on mount not in-view (bug)               |
+| list-pages         | retune                | Tasteful vocab; fix shared curve/duration + 3 inconsistent stagger strategies                    |
+| navigation         | retune                | Coherent personality; layout-prop morphs + `scale(0)` icon + Framer reduced-motion gap           |
+| layout-transitions | retune                | Mechanisms right; asymmetric route timing + Footer `transition:all`/pulse cleanup                |
+| mdx-content        | retune                | Over-animated/under-differentiated; group-stagger + `layoutId` zoom + gate hovers                |
+| deepdive           | retune                | `easeInOut` on entrances (block-grade), 0.6–0.7s durations, `transition:all` in feed             |
+| custom-flourishes  | **retune + delete 2** | Delete `click-spark` + `hire-me` halo; retune name-morph/cycling; `theme-callout` is the bar     |
+| ui-primitives      | retune                | Popover layer is excellent — preserve; fix reduced-motion nuke + code-block reveal + sheet curve |
+| backgrounds-perf   | retune                | Port LiquidEther's pause/DPR/reduced-motion contract to the other 10; central gate               |
 
 ---
 
@@ -285,4 +305,4 @@ morph-between-menus (justified spatial motion) · `theme-callout` (the reduced-m
 exemplar) · the entire trigger-origin popover/menu/modal layer (`origin-(--transform-origin)`,
 `zoom-in-95`, centered modals) · `vaul` drawer physics · `button`'s asymmetric press timing ·
 `LiquidEther`'s full perf contract (the template) · `passive` scroll listeners · WebGL context teardown ·
-`MotionConfig reducedMotion="user"` · `TagRow`'s correct *absence* of motion.
+`MotionConfig reducedMotion="user"` · `TagRow`'s correct _absence_ of motion.

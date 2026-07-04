@@ -30,12 +30,7 @@ interface ScrollRevealProps {
    * - child: For items within staggered containers
    */
   variant?:
-    | "default"
-    | "pageTitle"
-    | "title"
-    | "subtle"
-    | "container"
-    | "child";
+    "default" | "pageTitle" | "title" | "subtle" | "container" | "child";
   /**
    * Custom animation variants (overrides variant)
    */

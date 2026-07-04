@@ -128,7 +128,8 @@ export function ThemeMenuContent({
   onClose?: () => void;
 }) {
   const { theme, setTheme } = useTheme();
-  const { active: activeBackground, setActive: setBackground } = useBackground();
+  const { active: activeBackground, setActive: setBackground } =
+    useBackground();
   const { active: codeView, setActive: setCodeView } = useCodeView();
   const { language } = useLanguage();
   const t = translations[language];
@@ -184,9 +185,7 @@ export function ThemeMenuContent({
       <TreeBranch
         icon={ImageIcon}
         label={t.common.menu.background}
-        accessory={
-          <MenuHint text={t.common.backgroundHints.section} />
-        }
+        accessory={<MenuHint text={t.common.backgroundHints.section} />}
         isOpen={isExpanded("background")}
         onToggle={() => toggleBranch("background")}
       >

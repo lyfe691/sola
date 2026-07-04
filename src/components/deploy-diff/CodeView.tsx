@@ -21,7 +21,13 @@
  * cutting it short. Reduced motion skips straight to the content.
  */
 
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { createPortal } from "react-dom";
 import { useLocation } from "react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -176,7 +182,12 @@ function Caret({ blinking }: { blinking: boolean }) {
       animate={blinking ? { opacity: [1, 1, 0, 0] } : { opacity: 1 }}
       transition={
         blinking
-          ? { duration: 1.1, times: [0, 0.5, 0.5, 1], repeat: Infinity, ease: REVEAL }
+          ? {
+              duration: 1.1,
+              times: [0, 0.5, 0.5, 1],
+              repeat: Infinity,
+              ease: REVEAL,
+            }
           : { duration: 0.1 }
       }
     />
@@ -284,7 +295,10 @@ function ExitBubble({
             />
           }
         >
-          <X className="size-4 -translate-x-1 translate-y-1" aria-hidden="true" />
+          <X
+            className="size-4 -translate-x-1 translate-y-1"
+            aria-hidden="true"
+          />
           <span className="sr-only">{label}</span>
         </TooltipTrigger>
         <TooltipContent side="bottom">
@@ -394,7 +408,10 @@ export function CodeView() {
             className="flex flex-1 items-center justify-center px-5"
           >
             <p className="font-mono text-2xl tracking-tight whitespace-nowrap sm:text-3xl md:text-4xl">
-              <span aria-hidden className="select-none text-muted-foreground/50">
+              <span
+                aria-hidden
+                className="select-none text-muted-foreground/50"
+              >
                 ${" "}
               </span>
               {typed}
@@ -402,7 +419,11 @@ export function CodeView() {
             </p>
           </motion.div>
         ) : (
-          <motion.div key="content" {...contentPhase} className="flex flex-1 flex-col">
+          <motion.div
+            key="content"
+            {...contentPhase}
+            className="flex flex-1 flex-col"
+          >
             {commit && (
               <>
                 <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-5 px-5 pt-24 pb-6 sm:px-8 sm:pt-28">

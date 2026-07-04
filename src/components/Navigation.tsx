@@ -83,7 +83,11 @@ const MenuGlyph = ({ open }: { open: boolean }) => (
           rotate: open ? -45 : 0,
           y: open ? 0 : 3,
         }}
-        style={{ bottom: "50%", marginBottom: "-0.7px", transformOrigin: "center" }}
+        style={{
+          bottom: "50%",
+          marginBottom: "-0.7px",
+          transformOrigin: "center",
+        }}
         transition={{ duration: 0.3, ease: EASE_OUT }}
       />
     </div>
@@ -186,7 +190,10 @@ const DesktopNav = () => {
           <div className="flex min-w-0 items-center gap-3">
             <Logo label={t.common.home} />
 
-            <span aria-hidden className="select-none text-lg text-foreground/25">
+            <span
+              aria-hidden
+              className="select-none text-lg text-foreground/25"
+            >
               /
             </span>
 
@@ -347,7 +354,10 @@ const MobileNav = () => {
               {links.map((link) => {
                 const active = isActive(link.path);
                 return (
-                  <motion.div key={link.path} variants={menuItemVariants as Variants}>
+                  <motion.div
+                    key={link.path}
+                    variants={menuItemVariants as Variants}
+                  >
                     <Link
                       to={link.path}
                       onClick={close}

@@ -160,7 +160,7 @@ export const PROJECTS: ProjectMeta[] = [
       },
     },
   },
-    {
+  {
     id: "luma",
     i18nKey: "luma",
     image: "/projects/luma.png",

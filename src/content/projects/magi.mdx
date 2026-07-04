@@ -28,9 +28,10 @@ One line installs the latest release and puts `magi` on your `PATH`:
 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/lyfe691/magi/releases/latest/download/magi-installer.sh | sh
 
 # Windows (PowerShell)
+
 powershell -ExecutionPolicy Bypass -c "irm https://github.com/lyfe691/magi/releases/latest/download/magi-installer.ps1 | iex"`}
-  fileName="install.sh"
-  lang="bash"
+fileName="install.sh"
+lang="bash"
 />
 
 Prebuilt binaries cover Linux and macOS on x86-64 and arm64, and Windows on x86-64. There are no system libraries to install — with the stable Rust toolchain, `cargo install --path .` builds it the same on every platform.
@@ -46,10 +47,10 @@ scanning 45.33.32.156 — 3 port(s), up to 512 at a time
 2 open port(s):
 
 45.33.32.156
-     22/tcp  ssh         SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13
-     80/tcp  http`}
-  fileName="scan.console"
-  lang="console"
+22/tcp ssh SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13
+80/tcp http`}
+fileName="scan.console"
+lang="console"
 />
 
 A few more shapes — subnets group by host, and `--json` keeps stdout clean for piping:

@@ -14,12 +14,7 @@ import {
   type SkillGroup,
   type Proficiency,
 } from "@/config/skills";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ScrollReveal from "@/components/ScrollReveal";
 
 const ProficiencyDots = ({ level }: { level: Proficiency }) => (
@@ -77,15 +72,17 @@ const Skills = () => {
 
   return (
     <div className="flex flex-col w-full">
-        <title>{t.seo.skills.title}</title>
-        <meta name="description" content={t.seo.skills.description} />
+      <title>{t.seo.skills.title}</title>
+      <meta name="description" content={t.seo.skills.description} />
 
       <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-4">{t.skills.title}</h1>
       </ScrollReveal>
 
       <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-10 max-w-2xl">{t.skills.subtitle}</p>
+        <p className="text-foreground/60 mb-10 max-w-2xl">
+          {t.skills.subtitle}
+        </p>
       </ScrollReveal>
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">

@@ -68,7 +68,10 @@ export const SOCIAL_LINKS: Record<SocialId, SocialLink> = {
 
 export const SOCIAL_ICONS: Record<
   SocialId,
-  ComponentType<{ className?: string; "aria-hidden"?: boolean | "true" | "false" }>
+  ComponentType<{
+    className?: string;
+    "aria-hidden"?: boolean | "true" | "false";
+  }>
 > = {
   github: FaGithubAlt,
   email: Mail,

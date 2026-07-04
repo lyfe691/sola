@@ -47,7 +47,9 @@ const ExperienceSection = ({
               entry={entry}
               isWork={isWork}
               duration={formatDuration(language, entry.start, entry.end)}
-              employmentLabel={chips[entry.employmentType] ?? entry.employmentType}
+              employmentLabel={
+                chips[entry.employmentType] ?? entry.employmentType
+              }
               locationLabel={chips[entry.locationType] ?? entry.locationType}
             />
           </ScrollReveal>

@@ -78,8 +78,7 @@ const Footer = () => {
                 <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
               <p className="text-sm text-foreground/70 leading-relaxed">
-                {t.footer.madeWith}{" "}
-                <span className="text-primary">♥</span>{" "}
+                {t.footer.madeWith} <span className="text-primary">♥</span>{" "}
                 {t.footer.by} {/* or <br />*/}
                 <span className="font-medium">Yanis Sebastian Zürcher</span>
               </p>

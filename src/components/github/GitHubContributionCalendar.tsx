@@ -186,10 +186,7 @@ const GitHubContributionCalendar = ({
               <Skeleton className="h-3.5 w-8" />
               <div className="flex gap-[3px]">
                 {Array.from({ length: HEATMAP_LEVELS }).map((_, level) => (
-                  <Skeleton
-                    key={level}
-                    className="size-[11px] rounded-[3px]"
-                  />
+                  <Skeleton key={level} className="size-[11px] rounded-[3px]" />
                 ))}
               </div>
               <Skeleton className="h-3.5 w-8" />

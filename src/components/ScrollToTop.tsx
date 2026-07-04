@@ -78,7 +78,10 @@ export default function ScrollToTop() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.85, y: 10 }}
           whileHover={{ scale: 1.08 }}
-          whileTap={{ scale: 0.95, transition: { duration: 0.1, ease: EASE_OUT } }}
+          whileTap={{
+            scale: 0.95,
+            transition: { duration: 0.1, ease: EASE_OUT },
+          }}
           transition={{ duration: 0.25, ease: EASE_OUT }}
           className="fixed bottom-6 right-6 z-50 flex items-center justify-center
                      h-11 w-11 rounded-full

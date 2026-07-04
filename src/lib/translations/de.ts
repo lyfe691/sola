@@ -84,8 +84,7 @@ export const de = {
       files: "Dateien",
     },
     backgroundHints: {
-      section:
-        "Einige Hintergründe wirken deutlich besser im Dark Mode.",
+      section: "Einige Hintergründe wirken deutlich besser im Dark Mode.",
     },
     callout: {
       background: {

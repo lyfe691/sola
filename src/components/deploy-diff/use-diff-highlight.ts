@@ -79,7 +79,9 @@ export function useDiffHighlight(
             lines.map((line) => line.text).join("\n"),
             {
               // the bundle rejects unknown grammars — caught below
-              lang: lang as Parameters<typeof codeToTokensWithThemes>[1]["lang"],
+              lang: lang as Parameters<
+                typeof codeToTokensWithThemes
+              >[1]["lang"],
               themes: { light: "github-light", dark: "github-dark" },
             },
           );

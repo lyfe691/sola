@@ -67,8 +67,7 @@ function formatBytes(bytes: number): string {
 }
 
 type FileValidationResult =
-  | { ok: true }
-  | { ok: false; code: "too_large" | "unsupported_type" };
+  { ok: true } | { ok: false; code: "too_large" | "unsupported_type" };
 
 function validateFile(file: File): FileValidationResult {
   if (file.size > MAX_FILE_BYTES) return { ok: false, code: "too_large" };
@@ -369,8 +368,8 @@ const Contact = () => {
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center">
-        <title>{t.seo.contact.title}</title>
-        <meta name="description" content={t.seo.contact.description} />
+      <title>{t.seo.contact.title}</title>
+      <meta name="description" content={t.seo.contact.description} />
 
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
         {/* left: intro, expectations, direct links */}
@@ -402,7 +401,11 @@ const Contact = () => {
                     initial={{ opacity: 0, x: -8 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: 0.1 + 0.08 * i, ease: EASE_OUT }}
+                    transition={{
+                      duration: 0.3,
+                      delay: 0.1 + 0.08 * i,
+                      ease: EASE_OUT,
+                    }}
                     className="flex items-start gap-3 text-sm text-foreground/70"
                   >
                     <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">

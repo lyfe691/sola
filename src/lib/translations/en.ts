@@ -83,8 +83,7 @@ export const en = {
       files: "files",
     },
     backgroundHints: {
-      section:
-        "Some backgrounds look significantly better in dark mode.",
+      section: "Some backgrounds look significantly better in dark mode.",
     },
     callout: {
       background: {

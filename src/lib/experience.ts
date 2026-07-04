@@ -9,11 +9,7 @@
 import type { Translation } from "@/lib/translations";
 
 export type EmploymentType =
-  | "full_time"
-  | "part_time"
-  | "contract"
-  | "internship"
-  | "freelance";
+  "full_time" | "part_time" | "contract" | "internship" | "freelance";
 export type LocationType = "onsite" | "remote" | "hybrid";
 
 /** A point in time. `month` is 1-indexed (January = 1) to match `formatDuration`. */

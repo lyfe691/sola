@@ -77,8 +77,8 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
       transition={{ duration: 0.4, ease: EASE_OUT }}
       className="min-h-screen bg-background p-4 sm:p-6 lg:p-8"
     >
-        <title>{title} • Yanis Sebastian Zürcher</title>
-        {description && <meta name="description" content={description} />}
+      <title>{title} • Yanis Sebastian Zürcher</title>
+      {description && <meta name="description" content={description} />}
 
       {/* hero section */}
       <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6 border-4 border-border shadow-lg shadow-black/5">
@@ -115,7 +115,9 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
             animate="visible"
             variants={{
               hidden: {},
-              visible: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
+              visible: {
+                transition: { staggerChildren: 0.06, delayChildren: 0.15 },
+              },
             }}
           >
             <motion.h1

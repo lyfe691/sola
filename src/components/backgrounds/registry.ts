@@ -88,7 +88,9 @@ export type BackgroundOption = {
 };
 
 /** menu/command options: none + every registered background */
-export const buildBackgroundOptions = (noneLabel: string): BackgroundOption[] => [
+export const buildBackgroundOptions = (
+  noneLabel: string,
+): BackgroundOption[] => [
   { id: NONE_BACKGROUND, label: noneLabel },
   ...BACKGROUNDS.map((b) => ({ id: b.id, label: b.label })),
 ];

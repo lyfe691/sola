@@ -70,9 +70,9 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 bg-background text-foreground">
-        <title>{t.seo.notFound.title}</title>
-        <meta name="description" content={t.seo.notFound.description} />
-        <meta name="robots" content="noindex, nofollow" />
+      <title>{t.seo.notFound.title}</title>
+      <meta name="description" content={t.seo.notFound.description} />
+      <meta name="robots" content="noindex, nofollow" />
 
       <div className="w-full max-w-2xl bg-muted border border-border rounded-xl shadow-2xl overflow-hidden">
         {/* Window bar */}

@@ -8,10 +8,7 @@ import { useRef, useEffect, useState } from "react";
 import { Renderer, Program, Triangle, Mesh } from "ogl";
 
 export type SideRaysOrigin =
-  | "top-right"
-  | "top-left"
-  | "bottom-right"
-  | "bottom-left";
+  "top-right" | "top-left" | "bottom-right" | "bottom-left";
 
 export interface SideRaysCanvasProps {
   speed?: number;
