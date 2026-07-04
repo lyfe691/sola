@@ -46,8 +46,9 @@ import {
 } from "@/components/ui/drawer";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
 import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
-import { fetchGitHubContributions } from "@/lib/github-contributions";
-import { fetchUserActivity } from "@/lib/github-activity";
+import { useQueryClient } from "@tanstack/react-query";
+import { githubContributionsQuery } from "@/lib/github-contributions";
+import { userActivityQuery } from "@/lib/github-activity";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
@@ -231,16 +232,18 @@ const ResumeModal = () => {
 
 // render
 
+const CONTRIBUTION_YEARS = [2026, 2025] as const;
+
 const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const { theme } = useTheme();
   const [contributionTab, setContributionTab] = useState("last");
+  const queryClient = useQueryClient();
 
-  const contributionYears = [2026, 2025] as const;
   const contributionTabs = [
     { value: "last", label: t.about.github.overview, year: "last" as const },
-    ...contributionYears.map((year) => ({
+    ...CONTRIBUTION_YEARS.map((year) => ({
       value: String(year),
       label: String(year),
       year,
@@ -249,17 +252,17 @@ const About = () => {
   const selectedContributionYear =
     contributionTab === "last"
       ? "last"
-      : (Number(contributionTab) as (typeof contributionYears)[number]);
+      : (Number(contributionTab) as (typeof CONTRIBUTION_YEARS)[number]);
 
+  // warm the caches so the calendar tabs and the activity feed render
+  // instantly when scrolled into view / switched to
   useEffect(() => {
-    void Promise.all([
-      fetchGitHubContributions("lyfe691", "last"),
-      ...contributionYears.map((year) =>
-        fetchGitHubContributions("lyfe691", year),
-      ),
-      fetchUserActivity("lyfe691"),
-    ]);
-  }, []);
+    void queryClient.prefetchQuery(githubContributionsQuery("lyfe691", "last"));
+    for (const year of CONTRIBUTION_YEARS) {
+      void queryClient.prefetchQuery(githubContributionsQuery("lyfe691", year));
+    }
+    void queryClient.prefetchQuery(userActivityQuery("lyfe691"));
+  }, [queryClient]);
 
   // testimonials - untranslatable due to respective copyrights
   const testimonials = [

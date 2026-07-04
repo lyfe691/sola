@@ -6,33 +6,26 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import { queryOptions } from "@tanstack/react-query";
 import type { ProcessedActivity } from "@/lib/github";
-
-const activityCache = new Map<string, ProcessedActivity[]>();
-
-const cacheKey = (username: string) => username;
-
-export function peekUserActivity(username: string): ProcessedActivity[] | null {
-  return activityCache.get(cacheKey(username)) ?? null;
-}
 
 export async function fetchUserActivity(
   username: string,
-): Promise<ProcessedActivity[] | null> {
-  const key = cacheKey(username);
-  const cached = activityCache.get(key);
-  if (cached) return cached;
-
-  try {
-    const res = await fetch(
-      `/api/github-activity?username=${encodeURIComponent(username)}`,
-    );
-    if (!res.ok) return null;
-    const data = (await res.json()) as ProcessedActivity[];
-    activityCache.set(key, data);
-    return data;
-  } catch (error) {
-    console.error("Failed to fetch user activity:", error);
-    return null;
-  }
+): Promise<ProcessedActivity[]> {
+  const res = await fetch(
+    `/api/github-activity?username=${encodeURIComponent(username)}`,
+  );
+  if (!res.ok) throw new Error(`github-activity ${res.status}`);
+  return (await res.json()) as ProcessedActivity[];
 }
+
+// Activity is fetched once per session — cache forever, like the
+// module-level Map this replaced.
+export const userActivityQuery = (username: string) =>
+  queryOptions({
+    queryKey: ["github-activity", username],
+    queryFn: () => fetchUserActivity(username),
+    staleTime: Infinity,
+    gcTime: Infinity,
+    retry: false,
+  });

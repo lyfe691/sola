@@ -16,7 +16,7 @@
  * unauthenticated rate limit.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const REPO = "lyfe691/sola";
 const GITHUB_API = `https://api.github.com/repos/${REPO}`;
@@ -197,46 +197,40 @@ function writeCache(path: string | null, commit: PageCommit) {
 /**
  * Lazily loads the page-scoped diff once `enabled` first becomes true, then
  * keeps the result for the component's lifetime. `path` is fixed per mount
- * (the code view unmounts on route change).
+ * (the code view unmounts on route change). The sessionStorage layer feeds
+ * react-query via initialData so the GitHub rate-limit budget survives full
+ * page reloads, which the in-memory query cache alone would not.
  */
 export function usePageDiff(
   enabled: boolean,
   path: string | null,
 ): { state: PageDiffState; retry: () => void } {
-  const [state, setState] = useState<PageDiffState>({ status: "loading" });
-  const requestedRef = useRef(false);
-
-  const load = useCallback(async () => {
-    setState({ status: "loading" });
-
-    const cached = readCache(path);
-    if (cached) {
-      setState({ status: "ready", commit: cached });
-      return;
-    }
-
-    try {
+  const query = useQuery({
+    queryKey: ["page-diff", DEPLOY_REF, path ?? "@site"],
+    queryFn: async () => {
+      // null means: nothing in the commit history touches this scope
       const commit = await fetchPageDiff(path);
-      if (!commit) {
-        setState({ status: "empty" });
-        return;
-      }
-      writeCache(path, commit);
-      setState({ status: "ready", commit });
-    } catch {
-      setState({ status: "error" });
-    }
-  }, [path]);
+      if (commit) writeCache(path, commit);
+      return commit;
+    },
+    enabled,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    retry: false,
+    initialData: () => readCache(path) ?? undefined,
+  });
 
-  useEffect(() => {
-    if (!enabled || requestedRef.current) return;
-    requestedRef.current = true;
-    void load();
-  }, [enabled, load]);
+  let state: PageDiffState;
+  if (query.isError) {
+    // a manual retry shows the loading treatment again, not a frozen error
+    state = query.isFetching ? { status: "loading" } : { status: "error" };
+  } else if (query.data === undefined) {
+    state = { status: "loading" };
+  } else if (query.data === null) {
+    state = { status: "empty" };
+  } else {
+    state = { status: "ready", commit: query.data };
+  }
 
-  const retry = useCallback(() => {
-    void load();
-  }, [load]);
-
-  return { state, retry };
+  return { state, retry: () => void query.refetch() };
 }

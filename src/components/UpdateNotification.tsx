@@ -6,7 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -45,66 +46,36 @@ export function UpdateNotification() {
   const { language } = useLanguage();
   const t = translations[language].common.update;
 
-  const [latestVersion, setLatestVersion] = useState<string | null>(null);
-  const [dismissedFor, setDismissedFor] = useState<string | null>(null);
-  const [dismissed, setDismissed] = useState(false);
+  // refetchInterval keeps polling through errors (network hiccups just skip a
+  // tick), and refetchOnWindowFocus: "always" covers the old visibilitychange
+  // listener — react-query's focusManager subscribes to the same event.
+  const { data: latestVersion } = useQuery({
+    queryKey: ["app-version"],
+    queryFn: async ({ signal }) => {
+      const res = await fetch("/api/version", { cache: "no-store", signal });
+      if (!res.ok) throw new Error(`version check ${res.status}`);
+      const data = (await res.json()) as VersionPayload;
+      if (!data.version) throw new Error("empty version payload");
+      return data.version;
+    },
+    enabled: !import.meta.env.DEV && CURRENT_VERSION !== "dev",
+    refetchInterval: POLL_INTERVAL_MS,
+    refetchOnWindowFocus: "always",
+    staleTime: 0,
+    retry: false,
+  });
 
-  useEffect(() => {
-    setDismissedFor(sessionStorage.getItem(DISMISS_KEY));
-  }, []);
+  const [dismissedVersion, setDismissedVersion] = useState<string | null>(() =>
+    sessionStorage.getItem(DISMISS_KEY),
+  );
 
-  const checkVersion = useCallback(async (signal?: AbortSignal) => {
-    const res = await fetch("/api/version", {
-      cache: "no-store",
-      signal,
-    });
-    if (!res.ok) return;
-    const data = (await res.json()) as VersionPayload;
-    if (!data.version) return;
-
-    setLatestVersion((prev) => {
-      if (prev !== data.version) setDismissed(false);
-      return data.version!;
-    });
-  }, []);
-
-  useEffect(() => {
-    if (import.meta.env.DEV || CURRENT_VERSION === "dev") return;
-
-    const controller = new AbortController();
-
-    async function check() {
-      try {
-        await checkVersion(controller.signal);
-      } catch {
-        // network hiccup — try again on the next tick
-      }
-    }
-
-    check();
-    const interval = window.setInterval(check, POLL_INTERVAL_MS);
-
-    function onVisibility() {
-      if (document.visibilityState === "visible") check();
-    }
-    document.addEventListener("visibilitychange", onVisibility);
-
-    return () => {
-      controller.abort();
-      window.clearInterval(interval);
-      document.removeEventListener("visibilitychange", onVisibility);
-    };
-  }, [checkVersion]);
-
-  const hasUpdate = latestVersion !== null && latestVersion !== CURRENT_VERSION;
-  const visible = hasUpdate && !dismissed && dismissedFor !== latestVersion;
+  const hasUpdate = !!latestVersion && latestVersion !== CURRENT_VERSION;
+  const visible = hasUpdate && dismissedVersion !== latestVersion;
 
   function dismiss() {
-    if (latestVersion) {
-      sessionStorage.setItem(DISMISS_KEY, latestVersion);
-      setDismissedFor(latestVersion);
-    }
-    setDismissed(true);
+    if (!latestVersion) return;
+    sessionStorage.setItem(DISMISS_KEY, latestVersion);
+    setDismissedVersion(latestVersion);
   }
 
   function refresh() {

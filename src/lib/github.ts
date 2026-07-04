@@ -42,11 +42,3 @@ export interface ProcessedActivity {
     pullNumber?: number;
   };
 }
-
-import { fetchUserActivity } from "@/lib/github-activity";
-
-export async function getUserActivity(
-  username: string,
-): Promise<ProcessedActivity[]> {
-  return (await fetchUserActivity(username)) ?? [];
-}

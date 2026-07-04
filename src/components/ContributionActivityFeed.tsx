@@ -6,15 +6,13 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type TranslationAny } from "@/lib/translations";
 import { motion } from "motion/react";
 import type { ProcessedActivity } from "@/lib/github";
-import {
-  fetchUserActivity,
-  peekUserActivity,
-} from "@/lib/github-activity";
+import { userActivityQuery } from "@/lib/github-activity";
 import {
   GitCommit,
   GitPullRequest,
@@ -331,32 +329,8 @@ const ContributionActivityFeed = () => {
   const t = translations[language];
   const locale = INTL_LOCALE[language] ?? "en";
 
-  const [events, setEvents] = useState<ProcessedActivity[]>(
-    () => peekUserActivity(USERNAME) ?? [],
-  );
-  const [loading, setLoading] = useState(() => !peekUserActivity(USERNAME));
-
-  useEffect(() => {
-    let cancelled = false;
-    const cached = peekUserActivity(USERNAME);
-
-    if (cached) {
-      setEvents(cached);
-      setLoading(false);
-    }
-
-    const load = async () => {
-      const result = await fetchUserActivity(USERNAME);
-      if (cancelled) return;
-      setEvents(result ?? []);
-      setLoading(false);
-    };
-
-    void load();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  const { data, isPending: loading } = useQuery(userActivityQuery(USERNAME));
+  const events: ProcessedActivity[] = data ?? [];
 
   const eventsToShow = events.slice(0, VISIBLE_EVENTS);
 

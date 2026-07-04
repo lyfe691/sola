@@ -6,22 +6,21 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { cloneElement, useCallback, useEffect, useMemo, useState } from "react";
+import { cloneElement, useCallback, useMemo } from "react";
 import {
   ActivityCalendar,
   type Activity,
   type BlockElement,
   type ThemeInput,
 } from "react-activity-calendar";
+import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@/components/theme-provider";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { getThemeType } from "@/config/themes";
 import {
-  fetchGitHubContributions,
   getContributionTotal,
-  peekGitHubContributions,
-  type ContributionActivity,
+  githubContributionsQuery,
   type ContributionYear,
 } from "@/lib/github-contributions";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -63,11 +62,6 @@ const HEATMAP_LEVELS = 5;
 const CALENDAR_MIN_HEIGHT =
   FONT_SIZE + 8 + (BLOCK_SIZE + BLOCK_MARGIN) * 7 - BLOCK_MARGIN;
 
-type ContributionData = {
-  contributions: ContributionActivity[];
-  total: Record<string, number> & { lastYear: number };
-};
-
 type GitHubContributionCalendarProps = {
   year: ContributionYear;
   className?: string;
@@ -84,50 +78,11 @@ const GitHubContributionCalendar = ({
   const colorScheme = getThemeType(theme);
   const locale = INTL_LOCALE[language] ?? "en";
 
-  const [data, setData] = useState<ContributionData | null>(() =>
-    peekGitHubContributions(USERNAME, year),
-  );
-  const [loading, setLoading] = useState(
-    () => !peekGitHubContributions(USERNAME, year),
-  );
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    const cached = peekGitHubContributions(USERNAME, year);
-
-    setError(false);
-    if (cached) {
-      setData(cached);
-      setLoading(false);
-    } else {
-      setData(null);
-      setLoading(true);
-    }
-
-    const load = async () => {
-      const result = await fetchGitHubContributions(USERNAME, year);
-      if (cancelled) return;
-
-      if (!result) {
-        if (!cached) {
-          setError(true);
-          setData(null);
-        }
-        setLoading(false);
-        return;
-      }
-
-      setData(result);
-      setError(false);
-      setLoading(false);
-    };
-
-    void load();
-    return () => {
-      cancelled = true;
-    };
-  }, [year]);
+  const {
+    data,
+    isPending: loading,
+    isError: error,
+  } = useQuery(githubContributionsQuery(USERNAME, year));
 
   const labels = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) =>
