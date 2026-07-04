@@ -28,19 +28,18 @@ import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { EASE_OUT } from "@/utils/transitions";
 
-// dynamic mdx components, cached so each path keeps a stable lazy identity
-const mdxComponents = new Map<
+// every lazy MDX component is created once at module load (nothing fetches
+// until first render), so render only ever looks identities up — never
+// creates them
+const mdxComponents: Record<
   string,
   React.LazyExoticComponent<React.ComponentType>
->();
-const getMDXComponent = (mdxPath: string) => {
-  let component = mdxComponents.get(mdxPath);
-  if (!component) {
-    component = lazy(() => import(`@/content/projects/${mdxPath}.mdx`));
-    mdxComponents.set(mdxPath, component);
-  }
-  return component;
-};
+> = Object.fromEntries(
+  Object.values(projectPagesConfig).map((config) => [
+    config.mdxPath,
+    lazy(() => import(`@/content/projects/${config.mdxPath}.mdx`)),
+  ]),
+);
 
 // algorithmically recommend projects with overlapping tech stacks
 const getRecommendedProjectSlugs = (
@@ -114,17 +113,16 @@ const ProjectDeepDiveRenderer: React.FC = () => {
   const { language } = useLanguage();
   const t = translations[language];
 
+  const config = slug ? getProjectConfig(slug) : undefined;
+  const MDXComponent = config ? (mdxComponents[config.mdxPath] ?? null) : null;
+
   if (!slug) {
     return <Navigate to="/projects" replace />;
   }
 
-  const config = getProjectConfig(slug);
-
-  if (!config) {
+  if (!config || !MDXComponent) {
     return <Navigate to="/404" replace />;
   }
-
-  const MDXComponent = getMDXComponent(config.mdxPath);
   const projectCopy = t.projects.list[config.i18nKey];
   const title = projectCopy.title;
   const description = config.tagline ?? projectCopy.description;

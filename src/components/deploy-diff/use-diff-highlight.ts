@@ -61,10 +61,7 @@ export function useDiffHighlight(
   > | null>(null);
 
   useEffect(() => {
-    if (!lang || hunks.length === 0) {
-      setLineTokens(null);
-      return;
-    }
+    if (!lang || hunks.length === 0) return;
 
     let cancelled = false;
 

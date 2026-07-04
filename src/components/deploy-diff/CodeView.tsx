@@ -24,7 +24,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { useLocation } from "react-router";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -116,11 +116,13 @@ function useTypewriter(target: string): string {
   const textRef = useRef("");
   // the pre-typing rest happens once, on the first real keystroke
   const startedRef = useRef(false);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (reducedMotion) {
+      // no animation: render returns `target` directly; keep the ref in sync
+      // so typing resumes from the full text if the preference flips off
       textRef.current = target;
-      setText(target);
       return;
     }
 
@@ -156,9 +158,9 @@ function useTypewriter(target: string): string {
       cancelled = true;
       window.clearTimeout(id);
     };
-  }, [target]);
+  }, [target, reducedMotion]);
 
-  return text;
+  return reducedMotion ? target : text;
 }
 
 /**
@@ -337,16 +339,16 @@ export function CodeView() {
   const resolved = state.status !== "loading";
 
   const [phase, setPhase] = useState<"command" | "content">("command");
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     if (phase !== "command" || !resolved || !typedDone) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setPhase("content");
-      return;
-    }
-    const id = window.setTimeout(() => setPhase("content"), COMMAND_HOLD_MS);
+    const id = window.setTimeout(
+      () => setPhase("content"),
+      reducedMotion ? 0 : COMMAND_HOLD_MS,
+    );
     return () => window.clearTimeout(id);
-  }, [phase, resolved, typedDone]);
+  }, [phase, resolved, typedDone, reducedMotion]);
 
   // re-enter the ritual: the stale sha backspaces away, the new one types in
   const handleRetry = () => {

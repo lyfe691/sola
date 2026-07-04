@@ -18,14 +18,22 @@ import {
 } from "lucide-react";
 import { RoseIcon } from "@/components/ui/icons/RoseIcon";
 import { FaGem, FaMoneyBillAlt } from "react-icons/fa";
-import type { ElementType } from "react";
+import type { ComponentType } from "react";
+
+// every icon source used here (lucide, react-icons, custom svg components)
+// accepts this prop surface; a concrete type keeps <Icon className/aria-hidden>
+// call sites type-checkable, which bare ElementType unions are not
+export type ThemeIcon = ComponentType<{
+  className?: string;
+  "aria-hidden"?: boolean | "true" | "false";
+}>;
 
 // ---------------- Existing theme config ----------------
 
 export interface ThemeConfig {
   value: string;
   label: string;
-  icon: ElementType;
+  icon: ThemeIcon;
   isCustom: boolean;
   type: "light" | "dark"; // for automatic theme mapping
 }
@@ -98,7 +106,7 @@ export const THEMES: ThemeConfig[] = [
   {
     value: "rose",
     label: "Rose",
-    icon: RoseIcon as unknown as ElementType,
+    icon: RoseIcon,
     isCustom: true,
     type: "light",
   },

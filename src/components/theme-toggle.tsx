@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { type ElementType, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ChevronRight,
   Check,
@@ -16,7 +16,7 @@ import {
   CodeXml,
 } from "lucide-react";
 import { useTheme } from "./theme-provider";
-import { THEMES, type Theme } from "@/config/themes";
+import { THEMES, type Theme, type ThemeIcon } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { MenuHint } from "@/components/menu-hint";
@@ -42,7 +42,7 @@ function TreeBranch({
   onToggle,
   children,
 }: {
-  icon: ElementType;
+  icon: ThemeIcon;
   label: string;
   accessory?: React.ReactNode;
   isOpen: boolean;
@@ -93,7 +93,7 @@ function TreeLeaf({
   isSelected,
   onClick,
 }: {
-  icon?: ElementType;
+  icon?: ThemeIcon;
   label: string;
   isSelected: boolean;
   onClick: (event: React.MouseEvent) => void;
@@ -224,30 +224,27 @@ export function ThemeMenuContent({
 }
 
 /**
- * The animated sun/moon glyph for the appearance-menu trigger. Renders nothing
- * until mounted so it never flashes the wrong state, then crossfades between the
- * active light/dark icon.
+ * The animated sun/moon glyph for the appearance-menu trigger. Crossfades
+ * between the active light/dark icon; the system preference is read
+ * synchronously at first render so it never flashes the wrong state.
  */
 export function ThemeTriggerIcon() {
   const { theme } = useTheme();
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
-  const [mounted, setMounted] = useState(false);
+  // no SSR here, so the initial value can be read synchronously — no mounted
+  // guard, no wrong-state flash
+  const [systemTheme, setSystemTheme] = useState<"light" | "dark">(() =>
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light",
+  );
 
   useEffect(() => {
-    setMounted(true);
-
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    setSystemTheme(mediaQuery.matches ? "dark" : "light");
-
     const handler = (e: MediaQueryListEvent) =>
       setSystemTheme(e.matches ? "dark" : "light");
     mediaQuery.addEventListener("change", handler);
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   const resolvedTheme = theme === "system" ? systemTheme : theme;
 

@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type TranslationAny } from "@/lib/translations";
@@ -334,11 +334,10 @@ const ContributionActivityFeed = () => {
 
   const eventsToShow = events.slice(0, VISIBLE_EVENTS);
 
-  const hasAnimated = React.useRef(false);
-  const play = !hasAnimated.current;
-  useEffect(() => {
-    hasAnimated.current = true;
-  }, []);
+  // entrance stagger only when items are already there on first paint (query
+  // cache hit); after a skeleton phase they appear in place instead of
+  // replaying the entrance on a later render
+  const [play] = React.useState(() => !loading);
 
   return (
     <div className="mt-6">

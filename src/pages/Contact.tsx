@@ -150,11 +150,16 @@ const Contact = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isPageDragActive, setIsPageDragActive] = useState(false);
   const dragCounter = useRef(0);
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+  // prefill lands with the navigation (services deep-links); Contact remounts
+  // on every route change, so reading the query string once at mount is enough
+  const [formValues, setFormValues] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      name: "",
+      email: "",
+      subject: params.get("subject") ?? "",
+      message: params.get("message") ?? "",
+    };
   });
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -189,15 +194,6 @@ const Contact = () => {
       [name]: validateField(name, formValues[name]),
     }));
   };
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const subject = params.get("subject") ?? "";
-    const message = params.get("message") ?? "";
-    if (subject || message) {
-      setFormValues((prev) => ({ ...prev, subject, message }));
-    }
-  }, [location.search]);
 
   const onSelectFile = useCallback(
     (incoming: File | null) => {

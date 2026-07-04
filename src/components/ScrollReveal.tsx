@@ -7,7 +7,7 @@
  */
 
 import React, { useMemo } from "react";
-import { motion, type Variants } from "motion/react";
+import { motion, type DOMMotionComponents, type Variants } from "motion/react";
 import {
   useScrollReveal,
   scrollRevealVariants,
@@ -60,7 +60,7 @@ interface ScrollRevealProps {
   /**
    * HTML element to render as
    */
-  as?: keyof React.JSX.IntrinsicElements;
+  as?: keyof DOMMotionComponents;
 }
 
 // Variant mapping - perfectly organized

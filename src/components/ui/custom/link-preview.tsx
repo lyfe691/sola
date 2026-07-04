@@ -50,21 +50,24 @@ function usePreviewPreload(
   enabled: boolean,
   screenshotUrl?: string,
 ): PreviewStatus {
-  const [status, setStatus] = React.useState<PreviewStatus>("idle");
+  // only the async outcome lives in state; idle/loading are derived from the
+  // inputs so the effect never sets state synchronously
+  const [result, setResult] = React.useState<{
+    url: string;
+    status: "ready" | "failed";
+  } | null>(null);
 
   React.useEffect(() => {
-    if (!enabled || !screenshotUrl) {
-      setStatus("idle");
-      return;
-    }
+    if (!enabled || !screenshotUrl) return;
 
-    setStatus("loading");
-
+    let done = false;
     const img = new Image();
     img.referrerPolicy = "no-referrer";
 
-    const finish = (next: PreviewStatus) => {
-      setStatus((current) => (current === "loading" ? next : current));
+    const finish = (status: "ready" | "failed") => {
+      if (done) return;
+      done = true;
+      setResult({ url: screenshotUrl, status });
     };
 
     const timeoutId = window.setTimeout(
@@ -83,15 +86,16 @@ function usePreviewPreload(
     img.src = screenshotUrl;
 
     return () => {
+      done = true;
       window.clearTimeout(timeoutId);
       img.onload = null;
       img.onerror = null;
       img.src = "";
-      setStatus("idle");
     };
   }, [enabled, screenshotUrl]);
 
-  return status;
+  if (!enabled || !screenshotUrl) return "idle";
+  return result?.url === screenshotUrl ? result.status : "loading";
 }
 
 export function LinkPreview({

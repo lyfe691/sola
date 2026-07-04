@@ -22,12 +22,19 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import type { LucideIcon } from "lucide-react";
+
+type ServiceKey = keyof Translation["services"]["services"];
 
 const Services = () => {
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
-  const servicesList = [
+  const servicesList: {
+    icon: LucideIcon;
+    key: ServiceKey;
+    highlight?: string;
+  }[] = [
     {
       icon: Code2,
       key: "fullstack",
@@ -48,7 +55,7 @@ const Services = () => {
   ];
 
   // create service contact url using translated strings
-  const getServiceContactUrl = (serviceKey: string) => {
+  const getServiceContactUrl = (serviceKey: ServiceKey) => {
     const serviceTitle = t.services.services[serviceKey]?.title ?? serviceKey;
     const ct = t.services.contactTemplate;
     const features = t.services.services[serviceKey]?.features ?? [];

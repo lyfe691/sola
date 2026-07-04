@@ -125,7 +125,9 @@ export default function Aurora({
   ...over
 }: AuroraProps) {
   const propsRef = useRef({ amplitude, speed, ...over });
-  propsRef.current = { amplitude, speed, ...over };
+  useEffect(() => {
+    propsRef.current = { amplitude, speed, ...over };
+  });
 
   const ctnDom = useRef<HTMLDivElement>(null);
 

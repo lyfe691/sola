@@ -86,7 +86,7 @@ const viewResume = (language: string) => {
 type InterestCardProps = {
   title: string;
   description: string;
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   image: string;
 };
 
