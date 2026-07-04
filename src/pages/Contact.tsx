@@ -25,7 +25,6 @@ import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { useNavigate, useLocation } from "react-router";
-import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { SOCIAL_LINKS } from "@/config/social";
@@ -374,10 +373,8 @@ const Contact = () => {
 
   return (
     <div className="flex w-full flex-1 flex-col justify-center">
-      <Helmet>
         <title>{t.seo.contact.title}</title>
         <meta name="description" content={t.seo.contact.description} />
-      </Helmet>
 
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
         {/* left: intro, expectations, direct links */}

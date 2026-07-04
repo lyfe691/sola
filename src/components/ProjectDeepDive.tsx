@@ -10,7 +10,6 @@ import React, { lazy, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
-import { Helmet } from "react-helmet-async";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -78,10 +77,8 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
       transition={{ duration: 0.4, ease: EASE_OUT }}
       className="min-h-screen bg-background p-4 sm:p-6 lg:p-8"
     >
-      <Helmet>
         <title>{title} • Yanis Sebastian Zürcher</title>
         {description && <meta name="description" content={description} />}
-      </Helmet>
 
       {/* hero section */}
       <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6 border-4 border-border shadow-lg shadow-black/5">

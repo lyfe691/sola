@@ -23,7 +23,6 @@ import { Link } from "react-router";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
-import { Helmet } from "react-helmet-async";
 import {
   Select,
   SelectContent,
@@ -278,10 +277,8 @@ const Projects = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <Helmet>
         <title>{t.seo.projects.title}</title>
         <meta name="description" content={t.seo.projects.description} />
-      </Helmet>
 
       <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.projects.title}</h1>

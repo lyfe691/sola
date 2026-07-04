@@ -11,7 +11,6 @@ import { motion } from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { Helmet } from "react-helmet-async";
 import { ExternalLink } from "lucide-react";
 import { getAllCertifications, isExpired } from "@/config/certifications";
 import { IconButton } from "@/components/ui/custom/icon-button";
@@ -62,7 +61,6 @@ const Certifications: React.FC = () => {
       <motion.div
         className="min-h-screen bg-linear-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8"
       >
-        <Helmet>
           <title>
             {t.certifications?.title ??
               "Certifications • Yanis Sebastian Zürcher"}
@@ -71,7 +69,6 @@ const Certifications: React.FC = () => {
             name="description"
             content={"Professional certifications and credentials"}
           />
-        </Helmet>
 
         <div className="max-w-7xl mx-auto">
           <motion.div

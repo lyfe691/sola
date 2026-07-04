@@ -8,7 +8,6 @@
 
 /* 這個網站是怎麼造出來的 */
 
-import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronLeft } from "lucide-react";
@@ -24,10 +23,8 @@ export default function AboutThisWebsite() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 bg-background text-foreground relative">
-      <Helmet>
         <title>這個網站是怎麼造出來的</title>
         <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
 
       <div className="max-w-2xl w-full text-sm leading-relaxed space-y-6">
         <h1 className="text-2xl font-bold mb-6 text-center">

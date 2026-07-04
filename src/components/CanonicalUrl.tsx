@@ -7,20 +7,20 @@
  */
 
 import { useLocation } from "react-router";
-import { Helmet } from "react-helmet-async";
 
 const SITE_URL = "https://sola.ysz.life";
 
+// React 19 hoists <link>/<meta> rendered anywhere in the tree into <head>.
 export function CanonicalUrl() {
   const { pathname } = useLocation();
   const path = pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
   const url = `${SITE_URL}${path}`;
 
   return (
-    <Helmet>
+    <>
       <link rel="canonical" href={url} />
       <meta property="og:url" content={url} />
       <meta name="twitter:url" content={url} />
-    </Helmet>
+    </>
   );
 }

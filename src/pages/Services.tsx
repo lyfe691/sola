@@ -17,7 +17,6 @@ import {
 import { Link } from "react-router";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { Helmet } from "react-helmet-async";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { Card } from "@/components/ui/card";
@@ -63,10 +62,8 @@ const Services = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <Helmet>
         <title>{t.seo.services.title}</title>
         <meta name="description" content={t.seo.services.description} />
-      </Helmet>
 
       <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.services.title}</h1>

@@ -12,7 +12,6 @@ import { motion, LayoutGroup } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
-import { Helmet } from "react-helmet-async";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
@@ -170,10 +169,8 @@ const Index = () => {
       initial="hidden"
       animate="show"
     >
-      <Helmet>
         <title>{t.seo.home.title}</title>
         <meta name="description" content={t.seo.home.description} />
-      </Helmet>
 
       <LayoutGroup>
         <motion.div

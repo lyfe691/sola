@@ -25,7 +25,6 @@ import { translations } from "@/lib/translations";
 import { Link } from "react-router";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
-import { Helmet } from "react-helmet-async";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Dialog,
@@ -324,10 +323,8 @@ const About = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <Helmet>
         <title>{t.seo.about.title}</title>
         <meta name="description" content={t.seo.about.description} />
-      </Helmet>
 
       {/* ------------------- Title ------------------- */}
 

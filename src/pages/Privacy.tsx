@@ -10,7 +10,6 @@
 
 import { motion } from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";
-import { Helmet } from "react-helmet-async";
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
 import {
@@ -696,10 +695,8 @@ const Privacy = () => {
 
   return (
     <>
-      <Helmet>
         <title>{t.seo.privacy.title}</title>
         <meta name="description" content={t.seo.privacy.description} />
-      </Helmet>
 
       <div className="max-w-4xl mx-auto">
         <motion.div

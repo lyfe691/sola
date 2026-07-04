@@ -11,7 +11,6 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { Analytics } from "@vercel/analytics/react";
-import { HelmetProvider } from "react-helmet-async";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // After a redeploy, an already-open tab may request old chunk hashes that no
@@ -40,9 +39,7 @@ const root = createRoot(rootElement);
 root.render(
   <React.StrictMode>
     <ErrorBoundary>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
+      <App />
       <Analytics />
     </ErrorBoundary>
   </React.StrictMode>,

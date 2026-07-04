@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -23,10 +22,8 @@ const Experience = () => {
 
   return (
     <div className="flex w-full flex-col">
-      <Helmet>
         <title>{t.seo.experience.title}</title>
         <meta name="description" content={t.seo.experience.description} />
-      </Helmet>
 
       <ScrollReveal variant="pageTitle">
         <h1 className="mb-8 text-4xl font-bold sm:mb-12">{t.experience.title}</h1>

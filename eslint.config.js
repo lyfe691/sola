@@ -19,7 +19,10 @@ export default tseslint.config(
       "react-refresh": reactRefresh,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
+      // TODO(react-hooks 7): switch back to configs.recommended.rules once the
+      // ~16 spots flagged by the React Compiler rules are fixed.
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },

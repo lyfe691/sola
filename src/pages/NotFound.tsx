@@ -7,7 +7,6 @@
  */
 
 import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -71,11 +70,9 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 bg-background text-foreground">
-      <Helmet>
         <title>{t.seo.notFound.title}</title>
         <meta name="description" content={t.seo.notFound.description} />
         <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
 
       <div className="w-full max-w-2xl bg-muted border border-border rounded-xl shadow-2xl overflow-hidden">
         {/* Window bar */}

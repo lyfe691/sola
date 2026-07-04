@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Helmet } from "react-helmet-async";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import {
@@ -78,10 +77,8 @@ const Skills = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <Helmet>
         <title>{t.seo.skills.title}</title>
         <meta name="description" content={t.seo.skills.description} />
-      </Helmet>
 
       <ScrollReveal variant="pageTitle">
         <h1 className="text-4xl font-bold mb-4">{t.skills.title}</h1>
