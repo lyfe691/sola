@@ -146,8 +146,12 @@ export const de = {
   },
   index: {
     greeting: "Hallo, ich bin ",
-    description:
-      "18-jähriger Softwareentwickler aus Zürich – tätig in Infrastruktur, Identitätsmanagement und Benutzeroberflächen.",
+    description1: "18-jähriger Softwareentwickler aus Zürich, Schweiz.",
+    description2:
+      "Ich entwickle skalierbare, schnelle und durchdachte Systeme.",
+    description3:
+      "Tätig in Infrastruktur, Identitätsmanagement und Benutzeroberflächen.",
+    description4: "Fokus auf Struktur, Klarheit und Präzision.",
     nameSwitch: "Namen wechseln",
     currentlyWorkingOn: "Aktuell arbeite ich an",
     contactMe: "Kontakt aufnehmen",

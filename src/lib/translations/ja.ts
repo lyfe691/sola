@@ -143,8 +143,10 @@ export const ja = {
   },
   index: {
     greeting: "こんにちは、私は ",
-    description:
-      "チューリッヒ在住、18歳のソフトウェア開発者。インフラ、認証、インターフェースに取り組んでいます。",
+    description1: "スイス・チューリッヒ在住、18歳のソフトウェア開発者。",
+    description2: "スケーラブルで高速、考え抜かれたシステムを構築します。",
+    description3: "インフラ、認証、インターフェースに取り組んでいます。",
+    description4: "構造・明瞭さ・精度に重点を置いています。",
     nameSwitch: "名前を切り替える",
     currentlyWorkingOn: "現在取り組んでいること",
     contactMe: "お問い合わせ",

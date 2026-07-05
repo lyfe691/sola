@@ -11,6 +11,7 @@ import { Contact, FolderGit2 } from "lucide-react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
+import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
@@ -159,6 +160,13 @@ const Index = () => {
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
+  const descriptions = [
+    t.index.description1,
+    t.index.description2,
+    t.index.description3,
+    t.index.description4,
+  ];
+
   return (
     <motion.div
       className="relative z-20 flex min-h-[calc(100vh-14rem)] flex-1 flex-col items-start justify-center pt-12 sm:pt-16 lg:pt-20"
@@ -196,12 +204,21 @@ const Index = () => {
           />
         </motion.h1>
 
-        <motion.p
+        <motion.div
           variants={homeAnimations.description}
           className="mb-4 max-w-2xl text-base leading-relaxed text-foreground/70 sm:mb-5 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl"
         >
-          {t.index.description}
-        </motion.p>
+          <CyclingTextEffect
+            key={language}
+            texts={descriptions}
+            per="char"
+            preset="blur"
+            delay={0.1}
+            speedReveal={4}
+            displayDuration={3000}
+            useCurve
+          />
+        </motion.div>
 
         <motion.div
           variants={homeAnimations.buttons}

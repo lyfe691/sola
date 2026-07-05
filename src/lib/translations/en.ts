@@ -145,8 +145,11 @@ export const en = {
   },
   index: {
     greeting: "Hello, I'm ",
-    description:
-      "18-year-old software developer based in Zürich, working across infrastructure, identity, and interfaces.",
+    description1:
+      "18-year-old software developer based in Zurich, Switzerland.",
+    description2: "I build scalable, fast, and thoughtfully designed systems.",
+    description3: "Working across infrastructure, identity, and interfaces.",
+    description4: "Focused on structure, clarity, and precision.",
     nameSwitch: "switch name",
     currentlyWorkingOn: "Currently working on",
     contactMe: "Contact me",
