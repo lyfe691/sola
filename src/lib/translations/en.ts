@@ -86,6 +86,9 @@ export const en = {
     },
     none: "None",
     search: "Search",
+    copied: "Copied.",
+    copyCode: "Copy code",
+    copyFailed: "Couldn't copy code.",
     command: {
       placeholder: "Type a command or search...",
       noResults: "No results found.",
@@ -417,6 +420,8 @@ export const en = {
       link: "Work with me",
       viewMore: "View more",
       visitWebsite: "Visit Website",
+      website: "Website",
+      roleAtCompany: "{role} at {company}",
       viewLinkedIn: "View LinkedIn",
       modalTitle: "Testimonial",
       modalDescription: "Full testimonial from {author}",

@@ -10,6 +10,8 @@ import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 
 interface CopyButtonProps {
   value: string;
@@ -22,6 +24,8 @@ interface CopyButtonProps {
  */
 export const CopyButton = ({ value, className }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
 
   const onCopy = async () => {
     try {
@@ -29,7 +33,7 @@ export const CopyButton = ({ value, className }: CopyButtonProps) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Failed to copy code");
+      toast.error(t.common.copyFailed);
     }
   };
 
@@ -37,7 +41,7 @@ export const CopyButton = ({ value, className }: CopyButtonProps) => {
     <button
       type="button"
       onClick={onCopy}
-      aria-label={copied ? "Copied" : "Copy code"}
+      aria-label={copied ? t.common.copied : t.common.copyCode}
       className={cn(
         "relative inline-flex size-7 items-center justify-center rounded-md text-muted-foreground",
         "opacity-0 transition duration-200 hover:bg-foreground/10 hover:text-foreground",

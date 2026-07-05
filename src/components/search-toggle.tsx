@@ -32,12 +32,12 @@ export function SearchToggle() {
             size="icon"
             className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
             onClick={toggleCommandMenu}
-            aria-label="Search"
+            aria-label={t.common.search}
           />
         }
       >
         <Search className="h-4 w-4" />
-        <span className="sr-only">Search</span>
+        <span className="sr-only">{t.common.search}</span>
       </TooltipTrigger>
       <TooltipContent>
         <KbdGroup>

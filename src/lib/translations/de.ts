@@ -87,6 +87,9 @@ export const de = {
     },
     none: "Keiner",
     search: "Suche",
+    copied: "Kopiert.",
+    copyCode: "Code kopieren",
+    copyFailed: "Kopieren fehlgeschlagen.",
     command: {
       placeholder: "Befehl eingeben oder suchen...",
       noResults: "Keine Ergebnisse gefunden.",
@@ -419,6 +422,8 @@ export const de = {
       link: "Mit mir arbeiten",
       viewMore: "Mehr anzeigen",
       visitWebsite: "Website besuchen",
+      website: "Website",
+      roleAtCompany: "{role} bei {company}",
       viewLinkedIn: "LinkedIn ansehen",
       modalTitle: "Referenz",
       modalDescription: "Vollständige Referenz von {author}",

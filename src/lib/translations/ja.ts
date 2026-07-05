@@ -84,6 +84,9 @@ export const ja = {
     },
     none: "なし",
     search: "検索",
+    copied: "コピーしました。",
+    copyCode: "コードをコピー",
+    copyFailed: "コピーできませんでした。",
     command: {
       placeholder: "コマンドまたは検索を入力...",
       noResults: "該当なし",
@@ -410,6 +413,8 @@ export const ja = {
       link: "私と働く",
       viewMore: "もっと見る",
       visitWebsite: "ウェブサイトを見る",
+      website: "ウェブサイト",
+      roleAtCompany: "{company}・{role}",
       viewLinkedIn: "LinkedIn を見る",
       modalTitle: "推薦文",
       modalDescription: "{author} からの全文推薦",

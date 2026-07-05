@@ -80,7 +80,7 @@ const AuthorLinks = ({
             className="inline-flex items-center gap-1 rounded bg-foreground/5 px-1.5 py-0.5 text-xs transition-colors hover:bg-foreground/10"
           >
             <Globe className="size-2.5" />
-            Website
+            {t.about.testimonials.website}
           </a>
         ) : null}
         {linkedin ? (
@@ -152,8 +152,11 @@ const AuthorBlock = ({
     <div className="min-w-0 flex-1">
       <p className="font-medium text-sm sm:text-base">{author}</p>
       <p className="text-xs text-foreground/60 sm:mb-3 sm:text-sm">
-        {role}
-        {company ? ` at ${company}` : ""}
+        {company
+          ? t.about.testimonials.roleAtCompany
+              .replace("{role}", role)
+              .replace("{company}", company)
+          : role}
       </p>
       {showLinks ? (
         <AuthorLinks

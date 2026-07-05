@@ -81,6 +81,9 @@ export const zh = {
     },
     none: "无",
     search: "搜索",
+    copied: "已复制。",
+    copyCode: "复制代码",
+    copyFailed: "复制失败。",
     command: {
       placeholder: "输入命令或搜索...",
       noResults: "没有结果",
@@ -408,6 +411,8 @@ export const zh = {
       link: "与我合作",
       viewMore: "查看更多",
       visitWebsite: "访问网站",
+      website: "网站",
+      roleAtCompany: "{company}·{role}",
       viewLinkedIn: "查看 LinkedIn",
       modalTitle: "推荐",
       modalDescription: "来自 {author} 的完整推荐",

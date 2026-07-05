@@ -165,7 +165,7 @@ const Footer = () => {
                   navigator.clipboard.writeText(
                     "yanis.sebastian.zuercher@gmail.com",
                   );
-                  toast.success("Copied.");
+                  toast.success(t.common.copied);
                 }}
                 className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-300 ease-out hover:cursor-copy"
               >
