@@ -29,6 +29,7 @@ export const EASE_OUT = [0.33, 1, 0.68, 1] as const; // responsive-but-smooth UI
 export const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const; // on-screen movement / FLIP
 export const EASE_DRAWER = [0.32, 0.72, 0, 1] as const; // edge-sliding panels
 export const EASE_EXPO = [0.16, 1, 0.3, 1] as const; // lush hero entrances
+export const EASE_POP = [0.34, 1.56, 0.64, 1] as const; // press-release pop (button active scale); tiny overshoot, tiny deltas only
 
 // Page transition: a punchy expo. The blur masks its front-loading, so it's fine here.
 export const SMOOTH = [0.16, 1, 0.3, 1] as const;

@@ -4,7 +4,10 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-[filter,background-color,border-color,color,box-shadow,opacity] duration-200 ease-out outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:brightness-90 active:not-aria-[haspopup]:duration-100 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  // scale gets its own transition entry: the press snaps down clean (active
+  // forces 100ms + ease-out), the release pops back on --ease-pop, and the
+  // color/shadow properties keep the site's gentle --ease-out glide throughout
+  "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap [transition:filter_200ms_var(--ease-out),background-color_200ms_var(--ease-out),border-color_200ms_var(--ease-out),color_200ms_var(--ease-out),box-shadow_200ms_var(--ease-out),opacity_200ms_var(--ease-out),scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:brightness-90 active:not-aria-[haspopup]:duration-100 active:not-aria-[haspopup]:ease-out disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -31,6 +34,15 @@ const buttonVariants = cva(
         "icon-lg": "size-10",
       },
     },
+    compoundVariants: [
+      {
+        // press feedback for everything that reads as a button; link opts out
+        // of press effects (see its brightness reset) and popup triggers are
+        // excluded so anchored menus don't jitter against a moving anchor
+        variant: ["default", "outline", "secondary", "ghost", "destructive"],
+        className: "motion-safe:active:not-aria-[haspopup]:scale-[0.97]",
+      },
+    ],
     defaultVariants: {
       variant: "default",
       size: "default",
