@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any --
+   vendored WebGL fluid sim, loosely typed upstream; kept as-is the same way
+   src/components/ui keeps upstream formatting */
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 
