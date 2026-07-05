@@ -4,202 +4,101 @@
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ *
+ * The hero name breathes through the three identities (Yanis -> Sebi ->
+ * lyfe691) on a slow cycle: letters cascade out upward and the next name
+ * inks in beneath — one liquid glide, no box, no 3D. Pressing the name
+ * skips ahead (and restarts the clock so it doesn't double-fire).
  */
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { EASE_EXPO, EASE_IN_OUT, EASE_OUT } from "@/utils/transitions";
+import { EASE_OUT, SMOOTH } from "@/utils/transitions";
+
+const CYCLE_MS = 5600;
+const ENTER_STAGGER = 0.032;
+const EXIT_STAGGER = 0.016;
+
+const letterVariants: Variants = {
+  initial: { opacity: 0, y: "0.22em", filter: "blur(6px)" },
+  animate: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.6, ease: SMOOTH, delay: i * ENTER_STAGGER },
+  }),
+  exit: (i: number) => ({
+    opacity: 0,
+    y: "-0.16em",
+    filter: "blur(5px)",
+    transition: { duration: 0.3, ease: EASE_OUT, delay: i * EXIT_STAGGER },
+  }),
+};
 
 interface NameMorpherProps {
   greeting: string;
+  /** accessible hint appended to the identity list on the button label */
+  switchLabel: string;
   names?: string[];
-  cycleInterval?: number;
 }
-
-const ANIMATION_CONFIG = {
-  CYCLE_INTERVAL: 3200,
-  LETTER_DELAY: 0.055,
-  EXIT_DELAY: 0.035,
-  CHAR_WIDTH: 0.6,
-  SPRING: { stiffness: 300, damping: 20 },
-  EASE_CURVE: EASE_IN_OUT,
-} as const;
-
-const letterVariants: Variants = {
-  initial: {
-    opacity: 0,
-    x: 25,
-    y: 8,
-    rotateX: 30,
-    rotateY: -60,
-    scale: 0.85,
-    filter: "blur(4px)",
-  },
-  animate: (custom: number) => ({
-    opacity: 1,
-    x: 0,
-    y: 0,
-    rotateX: 0,
-    rotateY: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      x: {
-        ...ANIMATION_CONFIG.SPRING,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      y: {
-        ...ANIMATION_CONFIG.SPRING,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      rotateX: {
-        type: "spring",
-        stiffness: 250,
-        damping: 20,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      rotateY: {
-        type: "spring",
-        stiffness: 250,
-        damping: 20,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      scale: {
-        type: "spring",
-        stiffness: 280,
-        damping: 18,
-        delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
-      },
-      opacity: { duration: 0.3, ease: EASE_OUT, delay: custom * 0.05 },
-      filter: { duration: 0.3, ease: EASE_OUT, delay: custom * 0.05 },
-    },
-  }),
-  exit: (custom: number) => ({
-    opacity: 0,
-    x: -25,
-    y: -8,
-    rotateX: -30,
-    rotateY: 60,
-    scale: 0.85,
-    filter: "blur(4px)",
-    transition: {
-      x: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      y: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      rotateX: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      rotateY: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      scale: {
-        duration: 0.35,
-        ease: ANIMATION_CONFIG.EASE_CURVE,
-        delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
-      },
-      opacity: { duration: 0.25, ease: EASE_OUT, delay: custom * 0.03 },
-      filter: { duration: 0.25, ease: EASE_OUT, delay: custom * 0.03 },
-    },
-  }),
-};
-
-const containerVariants: Variants = {
-  initial: { opacity: 0.9, y: 5 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0.9, y: -5 },
-};
 
 export const NameMorpher = ({
   greeting,
+  switchLabel,
   names = ["Yanis", "Sebi", "lyfe691"],
-  cycleInterval = ANIMATION_CONFIG.CYCLE_INTERVAL,
 }: NameMorpherProps) => {
-  const [currentNameIndex, setCurrentNameIndex] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [clock, setClock] = useState(0);
+  const name = names[index];
 
-  const currentName = useMemo(
-    () => names[currentNameIndex],
-    [names, currentNameIndex],
-  );
-
-  const containerWidth = useMemo(
-    () => `${currentName.length * ANIMATION_CONFIG.CHAR_WIDTH}em`,
-    [currentName.length],
-  );
-
+  // one clock for both the cycle and manual skips: pressing advances
+  // immediately and bumps `clock`, so the next auto-swap counts from the press
   useEffect(() => {
     if (names.length <= 1) return;
-
-    const interval = setInterval(() => {
-      setCurrentNameIndex((prev) => (prev + 1) % names.length);
-    }, cycleInterval);
-
-    return () => clearInterval(interval);
-  }, [names.length, cycleInterval]);
+    const id = setInterval(
+      () => setIndex((i) => (i + 1) % names.length),
+      CYCLE_MS,
+    );
+    return () => clearInterval(id);
+  }, [names.length, clock]);
 
   return (
     <>
-      <span className="text-foreground inline-block">{greeting}</span>
-      <motion.span
-        className="relative inline-block overflow-hidden align-baseline"
-        initial={false}
-        animate={{ width: containerWidth }}
-        transition={{
-          type: "spring",
-          stiffness: 200,
-          damping: 25,
+      <span className="text-foreground">{greeting}</span>
+      <motion.button
+        type="button"
+        // FLIP the plate to the next name's real width — no char-count math
+        layout
+        transition={{ layout: { duration: 0.6, ease: SMOOTH } }}
+        onClick={() => {
+          setIndex((i) => (i + 1) % names.length);
+          setClock((c) => c + 1);
         }}
-        style={{
-          display: "inline-flex",
-          justifyContent: "center",
-          padding: "0.1em",
-          borderRadius: "0.25em",
-          backgroundColor: "color-mix(in oklab, var(--muted) 65%, transparent)",
-          verticalAlign: "baseline",
-        }}
+        aria-label={`${names.join(" · ")} — ${switchLabel}`}
+        className="relative inline-flex cursor-pointer touch-manipulation rounded-[0.25em] bg-muted/65 p-[0.1em] align-baseline text-primary ring-1 ring-foreground/5 ring-inset [transition:scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-safe:active:scale-[0.97] active:duration-100 active:ease-out"
       >
-        <AnimatePresence mode="popLayout">
-          <motion.div
-            key={currentName}
-            variants={containerVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            transition={{ duration: 0.35, ease: EASE_EXPO }}
-            className="inline-flex"
-            style={{ perspective: "500px" }}
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={name}
+            aria-hidden="true"
+            className="inline-flex whitespace-nowrap"
           >
-            {currentName.split("").map((letter, index) => (
+            {name.split("").map((letter, i) => (
               <motion.span
-                key={`${currentName}-${index}`}
+                key={`${name}-${i}`}
+                custom={i}
                 variants={letterVariants}
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                custom={index}
-                className="text-primary inline-block"
-                style={{
-                  textShadow:
-                    "0 0 12px color-mix(in oklab, var(--primary) 20%, transparent)",
-                  willChange: "transform, opacity, filter",
-                }}
+                className="inline-block"
               >
                 {letter}
               </motion.span>
             ))}
-          </motion.div>
+          </motion.span>
         </AnimatePresence>
-      </motion.span>
+      </motion.button>
     </>
   );
 };

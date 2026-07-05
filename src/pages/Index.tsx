@@ -8,10 +8,9 @@
 
 import { Link } from "react-router";
 import { Contact, FolderGit2 } from "lucide-react";
-import { motion, LayoutGroup } from "motion/react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
-import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
@@ -160,13 +159,6 @@ const Index = () => {
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
-  const descriptions = [
-    t.index.description1,
-    t.index.description2,
-    t.index.description3,
-    t.index.description4,
-  ];
-
   return (
     <motion.div
       className="relative z-20 flex min-h-[calc(100vh-14rem)] flex-1 flex-col items-start justify-center pt-12 sm:pt-16 lg:pt-20"
@@ -176,85 +168,76 @@ const Index = () => {
     >
       <meta name="description" content={t.seo.home.description} />
 
-      <LayoutGroup>
-        <motion.div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
-          <motion.a
-            variants={homeAnimations.badge}
-            href="https://kinoa.to"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Visit Kinoa"
-            className="group relative z-30 mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 backdrop-blur-xs transition-[background-color,box-shadow] duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:mb-3 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
-          >
-            <span className="text-2xs font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-[13px]">
-              {t.index.currentlyWorkingOn}
-            </span>
-            <span className="animate-shine bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-2xs font-semibold text-transparent sm:text-[13px]">
-              Kinoa
-            </span>
-            <ChevronToArrowIcon className="size-3 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60 sm:size-3.5" />
-          </motion.a>
+      <motion.div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
+        <motion.a
+          variants={homeAnimations.badge}
+          href="https://kinoa.to"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit Kinoa"
+          className="group relative z-30 mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 backdrop-blur-xs transition-[background-color,box-shadow] duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:mb-3 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
+        >
+          <span className="text-2xs font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-[13px]">
+            {t.index.currentlyWorkingOn}
+          </span>
+          <span className="bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-2xs font-semibold text-transparent [background-position:100%_0%] can-hover:group-hover:animate-shine sm:text-[13px]">
+            Kinoa
+          </span>
+          <ChevronToArrowIcon className="size-3 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60 sm:size-3.5" />
+        </motion.a>
 
-          <motion.h1
-            layout
-            variants={homeAnimations.heading}
-            className="mb-3 text-4xl font-bold sm:mb-4 sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl"
-          >
-            <NameMorpher greeting={`${t.index.greeting}\u00A0`} />
-          </motion.h1>
+        <motion.h1
+          variants={homeAnimations.heading}
+          className="mb-3 text-4xl font-bold sm:mb-4 sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl"
+        >
+          <NameMorpher
+            greeting={`${t.index.greeting}\u00A0`}
+            switchLabel={t.index.nameSwitch}
+          />
+        </motion.h1>
 
-          <motion.div
-            variants={homeAnimations.description}
-            className="mb-4 max-w-2xl text-base leading-relaxed text-foreground/70 sm:mb-5 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl"
-          >
-            <CyclingTextEffect
-              key={language}
-              texts={descriptions}
-              per="char"
-              preset="blur"
-              delay={0.1}
-              speedReveal={4}
-              displayDuration={3000}
-              useCurve
-            />
+        <motion.p
+          variants={homeAnimations.description}
+          className="mb-4 max-w-2xl text-base leading-relaxed text-foreground/70 sm:mb-5 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl"
+        >
+          {t.index.description}
+        </motion.p>
+
+        <motion.div
+          variants={homeAnimations.buttons}
+          className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4"
+        >
+          <motion.div variants={homeAnimations.ctaLeft}>
+            <Link to="/contact">
+              <IconButton
+                icon={<Contact className="size-4" />}
+                variant="default"
+                size="lg"
+                label={t.index.contactMe}
+              />
+            </Link>
           </motion.div>
-
-          <motion.div
-            variants={homeAnimations.buttons}
-            className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4"
-          >
-            <motion.div variants={homeAnimations.ctaLeft}>
-              <Link to="/contact">
-                <IconButton
-                  icon={<Contact className="size-4" />}
-                  variant="default"
-                  size="lg"
-                  label={t.index.contactMe}
-                />
-              </Link>
-            </motion.div>
-            <motion.div variants={homeAnimations.ctaRight}>
-              <Link to="/projects">
-                <IconButton
-                  icon={<FolderGit2 className="size-4" />}
-                  variant="secondary"
-                  size="lg"
-                  label={t.index.viewProjects}
-                />
-              </Link>
-            </motion.div>
-          </motion.div>
-
-          <motion.div
-            variants={homeAnimations.socialsContainer}
-            className="flex flex-wrap items-center gap-3 sm:gap-4"
-          >
-            {SOCIAL_ORDER_HERO.map((id, index) => (
-              <SocialLink key={id} id={id} index={index} />
-            ))}
+          <motion.div variants={homeAnimations.ctaRight}>
+            <Link to="/projects">
+              <IconButton
+                icon={<FolderGit2 className="size-4" />}
+                variant="secondary"
+                size="lg"
+                label={t.index.viewProjects}
+              />
+            </Link>
           </motion.div>
         </motion.div>
-      </LayoutGroup>
+
+        <motion.div
+          variants={homeAnimations.socialsContainer}
+          className="flex flex-wrap items-center gap-3 sm:gap-4"
+        >
+          {SOCIAL_ORDER_HERO.map((id, index) => (
+            <SocialLink key={id} id={id} index={index} />
+          ))}
+        </motion.div>
+      </motion.div>
     </motion.div>
   );
 };

@@ -148,13 +148,9 @@ export const es = {
   },
   index: {
     greeting: "Hola, soy ",
-    description1:
-      "Desarrollador de software de 18 años con base en Zúrich, Suiza.",
-    description2:
-      "Construyo sistemas escalables, rápidos y cuidadosamente diseñados.",
-    description3:
-      "Trabajo en infraestructura, identidad y diseño de interfaces.",
-    description4: "Enfocado en estructura, claridad y precisión.",
+    description:
+      "Desarrollador de software de 18 años en Zúrich; trabajo en infraestructura, identidad y diseño de interfaces.",
+    nameSwitch: "cambiar de nombre",
     currentlyWorkingOn: "Actualmente trabajando en",
     contactMe: "Contáctame",
     viewProjects: "Ver proyectos",

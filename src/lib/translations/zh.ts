@@ -140,10 +140,9 @@ export const zh = {
   },
   index: {
     greeting: "你好，我是 ",
-    description1: "来自瑞士苏黎世的18岁软件开发者。",
-    description2: "构建可扩展、高速、结构清晰的系统。",
-    description3: "涉及基础设施、身份管理和界面设计。",
-    description4: "注重结构、清晰性和精确性。",
+    description:
+      "来自苏黎世的18岁软件开发者，专注于基础设施、身份管理和界面设计。",
+    nameSwitch: "切换名字",
     currentlyWorkingOn: "目前正在进行",
     contactMe: "联系我",
     viewProjects: "查看项目",
