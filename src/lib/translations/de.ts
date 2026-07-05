@@ -43,6 +43,9 @@ export const de = {
     notFound: {
       description: "Die angeforderte Ressource wurde nicht gefunden.",
     },
+    certifications: {
+      description: "Zertifizierungen und Nachweise, mit Verifizierungslinks.",
+    },
   },
   certifications: {
     title: "Zertifikate",

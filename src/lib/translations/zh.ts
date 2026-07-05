@@ -38,6 +38,9 @@ export const zh = {
     notFound: {
       description: "未找到请求的资源。",
     },
+    certifications: {
+      description: "证书与资质，附验证链接。",
+    },
   },
   certifications: {
     title: "证书",

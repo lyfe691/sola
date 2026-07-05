@@ -40,6 +40,9 @@ export const ja = {
     notFound: {
       description: "要求されたリソースは見つかりませんでした。",
     },
+    certifications: {
+      description: "資格と認定の一覧。検証リンク付き。",
+    },
   },
   certifications: {
     title: "認定・資格",

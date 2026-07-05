@@ -44,6 +44,10 @@ export const es = {
     notFound: {
       description: "El recurso solicitado no se encontró.",
     },
+    certifications: {
+      description:
+        "Certificaciones y credenciales, con enlaces de verificación.",
+    },
   },
   certifications: {
     title: "Certificaciones",

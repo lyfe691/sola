@@ -59,10 +59,7 @@ const Certifications: React.FC = () => {
 
   return (
     <motion.div className="min-h-screen bg-linear-to-b from-background to-background/40 p-4 sm:p-6 lg:p-8">
-      <meta
-        name="description"
-        content={"Professional certifications and credentials"}
-      />
+      <meta name="description" content={t.seo.certifications.description} />
 
       <div className="max-w-7xl mx-auto">
         <motion.div
@@ -72,7 +69,7 @@ const Certifications: React.FC = () => {
           viewport={{ once: true, margin: "-10% 0px" }}
           className="mb-16 text-center"
         >
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
+          <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight mt-10 text-wrap wrap-break-word shrink-0">
             {t.certifications?.title ?? "Certifications"}
           </h1>
         </motion.div>

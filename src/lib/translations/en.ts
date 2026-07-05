@@ -42,6 +42,9 @@ export const en = {
     notFound: {
       description: "The requested resource could not be found.",
     },
+    certifications: {
+      description: "Certifications and credentials, with verification links.",
+    },
   },
   certifications: {
     title: "Certifications",
