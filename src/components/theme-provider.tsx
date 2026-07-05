@@ -17,7 +17,7 @@ import {
   shouldApplyWelcomePreset,
   WELCOME_PRESET,
 } from "@/config/welcome-preset";
-import { type Theme, ALL_THEME_VALUES } from "@/config/themes";
+import { type Theme, ALL_THEME_VALUES, getThemeType } from "@/config/themes";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -78,6 +78,9 @@ export function ThemeProvider({
     const root = document.documentElement;
     root.classList.remove(...ALL_THEME_VALUES.filter((t) => t !== "system"));
     root.classList.add(resolveTheme(theme));
+    // the dark: variant matches this attr too — custom dark themes
+    // (cyber, forest, amethyst) never carry the literal `dark` class
+    root.dataset.scheme = getThemeType(theme);
   }, [theme]);
 
   const handleSetTheme = useCallback(

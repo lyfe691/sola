@@ -6,7 +6,9 @@
 @import "@fontsource-variable/bricolage-grotesque";
 @import "@fontsource-variable/jetbrains-mono";
 
-@custom-variant dark (&:is(.dark *));
+/* scheme attr covers the custom dark themes (cyber/forest/amethyst), which
+   never carry the literal .dark class — theme-provider keeps it in sync */
+@custom-variant dark (&:is(.dark *, [data-scheme="dark"] *));
 /* gate hover-movement utilities so touch taps don't fire phantom hovers */
 @custom-variant can-hover (@media (hover: hover) and (pointer: fine));
 
