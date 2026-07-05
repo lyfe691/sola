@@ -23,13 +23,10 @@ function TooltipTrigger({ ...props }: TooltipPrimitive.Trigger.Props) {
   return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
 }
 
-/*
- * The droplet tail. One continuous silhouette: the first path fills the tail
- * with the popover surface, the second traces a hairline along its curved
- * shoulders that meets the popup's own border with no visible seam — which is
- * why this is an SVG and not a rotated square. Geometry from Base UI's arrow
- * demo; drawn pointing up, the Arrow element rotates it per side.
- */
+/* The droplet tail: path 1 fills it with the popover surface, path 2 traces
+   the hairline that hands off to the bubble's outline — an svg because a
+   rotated square can't carry a border around a curve. Drawn pointing up;
+   the Arrow element rotates it per side. */
 function ArrowSvg(props: React.ComponentProps<"svg">) {
   return (
     <svg width="20" height="10" viewBox="0 0 20 10" fill="none" {...props}>
@@ -70,21 +67,20 @@ function TooltipContent({
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
           className={cn(
-            // outline, not border: the arrow svg's hairline is drawn to meet a
-            // 1px line just OUTSIDE the box (Base UI's arrow geometry); an
-            // inside border leaves a 1px white seam between tail and bubble.
-            // Drop formation: transform-origin sits at the tail tip, so the
-            // bead (scale .5) swells out of the trigger and settles past full
-            // size on --ease-pop — surface tension. Opacity lands early so the
-            // swell plays at full ink; exit absorbs back fast on ease-out.
-            "z-50 inline-flex w-fit max-w-xs origin-[var(--transform-origin)] items-center gap-1.5 rounded-xl bg-popover px-3 py-1.5 text-xs font-medium text-popover-foreground shadow-md outline outline-1 outline-border [transition:scale_250ms_var(--ease-pop),opacity_150ms_var(--ease-out)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[ending-style]:duration-100 data-[ending-style]:ease-out motion-safe:data-[starting-style]:scale-[0.5] motion-safe:data-[ending-style]:scale-[0.9] data-[instant]:transition-none has-data-[slot=kbd]:pr-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-md",
+            // outline, not border: the tail's hairline terminates 1px outside
+            // the box, where an outline lives — a border leaves a white seam.
+            // drop-shadow, not box-shadow: the filter follows the composite
+            // silhouette, so bubble and tail cast one shadow as one object.
+            // Origin sits at the tail tip: the bead swells out of the trigger
+            // and settles past full size on --ease-pop; exit absorbs back.
+            "inline-flex w-fit max-w-xs origin-[var(--transform-origin)] items-center gap-1.5 rounded-xl bg-popover px-3 py-1.5 text-xs font-medium text-popover-foreground drop-shadow-md outline outline-1 outline-border [transition:scale_250ms_var(--ease-pop),opacity_150ms_var(--ease-out)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[ending-style]:duration-100 data-[ending-style]:ease-out motion-safe:data-[starting-style]:scale-[0.5] motion-safe:data-[ending-style]:scale-[0.9] data-[instant]:transition-none has-data-[slot=kbd]:pr-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-md",
             className
           )}
           {...props}
         >
           {children}
-          {/* flex kills the inline-svg baseline gap — without it the container
-              is taller than the svg and the tail sinks into the bubble */}
+          {/* flex kills the inline-svg baseline gap, which otherwise makes the
+              container taller than the svg and sinks the tail into the bubble */}
           <TooltipPrimitive.Arrow className="flex data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180">
             <ArrowSvg />
           </TooltipPrimitive.Arrow>
