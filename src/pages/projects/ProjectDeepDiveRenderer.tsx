@@ -326,7 +326,7 @@ const ProjectDeepDiveRenderer: React.FC = () => {
                     <h3 className="font-medium text-foreground underline-offset-4 decoration-foreground/20 transition-colors duration-300 group-hover:underline">
                       {relatedCopy.title}
                     </h3>
-                    <time className="block text-[11px] text-muted-foreground">
+                    <time className="block text-2xs text-muted-foreground">
                       {project.date}
                     </time>
                     <p className="text-xs text-muted-foreground leading-relaxed">

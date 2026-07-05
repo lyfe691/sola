@@ -34,6 +34,9 @@
     "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP",
     serif;
 
+  /* one micro step below text-xs — captions, chips, timestamps */
+  --text-2xs: 0.6875rem;
+
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);

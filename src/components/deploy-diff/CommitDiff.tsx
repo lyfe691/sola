@@ -185,7 +185,7 @@ function FileSection({
                   <tr key={row.key}>
                     <td
                       colSpan={3}
-                      className="bg-muted/40 px-4 py-1.5 text-[11px] whitespace-pre text-muted-foreground/70 select-none"
+                      className="bg-muted/40 px-4 py-1.5 text-2xs whitespace-pre text-muted-foreground/70 select-none"
                     >
                       {row.text}
                     </td>
@@ -203,7 +203,7 @@ function FileSection({
                 <tr>
                   <td
                     colSpan={3}
-                    className="px-4 py-2 text-[11px] text-muted-foreground/70 italic"
+                    className="px-4 py-2 text-2xs text-muted-foreground/70 italic"
                   >
                     {t.truncated}
                   </td>

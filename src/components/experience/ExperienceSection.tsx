@@ -34,7 +34,7 @@ const ExperienceSection = ({
           <h2 className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
             {title}
           </h2>
-          <span className="font-mono text-[11px] text-muted-foreground/50">
+          <span className="font-mono text-2xs text-muted-foreground/50">
             {String(entries.length).padStart(2, "0")}
           </span>
         </div>

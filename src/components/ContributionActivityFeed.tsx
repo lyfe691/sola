@@ -142,13 +142,13 @@ const ActivityMetadata = ({
       {items.slice(0, 2).map((item) => (
         <span
           key={item}
-          className="rounded-md bg-foreground/5 px-2 py-0.5 text-[11px] font-medium text-foreground/50"
+          className="rounded-md bg-foreground/5 px-2 py-0.5 text-2xs font-medium text-foreground/50"
         >
           {item}
         </span>
       ))}
       {items.length > 2 && (
-        <span className="text-[11px] text-foreground/40">
+        <span className="text-2xs text-foreground/40">
           +{items.length - 2} {t.feed.moreSuffix}
         </span>
       )}

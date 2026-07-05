@@ -738,7 +738,7 @@ const Privacy = () => {
           {L[language].pageTitle}
         </h1>
         <div className="mt-8 flex items-center justify-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border bg-background/60 px-2.5 py-1 text-[0.70rem]/[1rem] text-foreground/60 backdrop-blur-xs">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border bg-background/60 px-2.5 py-1 text-2xs/[1rem] text-foreground/60 backdrop-blur-xs">
             {updatedLabel}:{" "}
             <span className="font-medium text-foreground">
               {formattedUpdated}
