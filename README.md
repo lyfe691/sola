@@ -2,8 +2,13 @@
 
 ---
 
+Local dev reads `GITHUB_TOKEN` from `.env.local` (see `.env.example`) to raise
+the GitHub API rate limit for the activity feed — a classic token with
+`public_repo` from <https://github.com/settings/tokens>. Without it the feed
+still works, just unauthenticated.
+
 ```powershell
-'VITE_GITHUB_TOKEN="https://github.com/settings/tokens > classic > public_repo"' | Out-File -Encoding UTF8 -NoNewline .env.local
+'GITHUB_TOKEN=<your token>' | Out-File -Encoding UTF8 -NoNewline .env.local
 ```
 
 ## License
