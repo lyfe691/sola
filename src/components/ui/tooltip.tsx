@@ -72,8 +72,12 @@ function TooltipContent({
           className={cn(
             // outline, not border: the arrow svg's hairline is drawn to meet a
             // 1px line just OUTSIDE the box (Base UI's arrow geometry); an
-            // inside border leaves a 1px white seam between tail and bubble
-            "z-50 inline-flex w-fit max-w-xs origin-[var(--transform-origin)] items-center gap-1.5 rounded-xl bg-popover px-3 py-1.5 text-xs font-medium text-popover-foreground shadow-md outline outline-1 outline-border transition-[scale,opacity] duration-150 ease-out data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[ending-style]:duration-100 motion-safe:data-[starting-style]:scale-[0.97] motion-safe:data-[ending-style]:scale-[0.97] data-[instant]:transition-none has-data-[slot=kbd]:pr-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-md",
+            // inside border leaves a 1px white seam between tail and bubble.
+            // Drop formation: transform-origin sits at the tail tip, so the
+            // bead (scale .5) swells out of the trigger and settles past full
+            // size on --ease-pop — surface tension. Opacity lands early so the
+            // swell plays at full ink; exit absorbs back fast on ease-out.
+            "z-50 inline-flex w-fit max-w-xs origin-[var(--transform-origin)] items-center gap-1.5 rounded-xl bg-popover px-3 py-1.5 text-xs font-medium text-popover-foreground shadow-md outline outline-1 outline-border [transition:scale_250ms_var(--ease-pop),opacity_150ms_var(--ease-out)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[ending-style]:duration-100 data-[ending-style]:ease-out motion-safe:data-[starting-style]:scale-[0.5] motion-safe:data-[ending-style]:scale-[0.9] data-[instant]:transition-none has-data-[slot=kbd]:pr-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-md",
             className
           )}
           {...props}
