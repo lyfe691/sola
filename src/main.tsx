@@ -14,13 +14,16 @@ import { Analytics } from "@vercel/analytics/react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // After a redeploy, an already-open tab may request old chunk hashes that no
-// longer exist (the server then serves index.html → MIME error). Vite fires
-// this event when a lazy import fails to load — reload once to pick up the
-// fresh index.html + new chunks, time-guarded against reload loops.
-window.addEventListener("vite:preloadError", () => {
+// longer exist. Vite fires this event when a lazy import fails — reload once
+// to pick up the fresh index.html + new chunks. preventDefault stops Vite from
+// re-throwing, which would flash the error boundary during the reload; on a
+// repeat failure inside the guard window we skip both so the boundary shows
+// instead of reload-looping.
+window.addEventListener("vite:preloadError", (event) => {
   const last = Number(sessionStorage.getItem("preload-reload-at") ?? 0);
   if (Date.now() - last < 10_000) return;
   sessionStorage.setItem("preload-reload-at", String(Date.now()));
+  event.preventDefault();
   window.location.reload();
 });
 
