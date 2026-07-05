@@ -356,6 +356,14 @@ export const de = {
   notFound: {
     backHome: "Zurück zur Startseite",
   },
+  colophon: {
+    title: "Wie diese Website entstanden ist",
+    intro:
+      "In alten Büchern verrät die letzte Seite, wie das Ganze gemacht wurde. Das hier ist diese Seite.",
+    setByHand: "Von Hand gesetzt in Zürich.",
+    thanks: "Danke fürs Vorbeischauen.",
+    back: "Zurück",
+  },
   footer: {
     atw: "Über diese Website",
     madeWith: "Erstellt mit",

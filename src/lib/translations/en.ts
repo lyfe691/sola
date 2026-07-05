@@ -354,6 +354,14 @@ export const en = {
   notFound: {
     backHome: "Go back home",
   },
+  colophon: {
+    title: "How this website was made",
+    intro:
+      "In old books, the last page tells you how the thing was made. This is that page.",
+    setByHand: "Set by hand in Zürich.",
+    thanks: "Thanks for stopping by.",
+    back: "Go back",
+  },
   footer: {
     atw: "about this website",
     madeWith: "Made with",

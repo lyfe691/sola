@@ -24,6 +24,7 @@
     "@fontsource-variable/bricolage-grotesque": "^5.2.10",
     "@fontsource-variable/instrument-sans": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
+    "@fontsource/shippori-mincho-b1": "^5.2.8",
     "@mdx-js/react": "^3.1.0",
     "@mdx-js/rollup": "^3.1.0",
     "@react-three/fiber": "^9.6.1",

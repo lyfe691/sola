@@ -347,6 +347,14 @@ export const ja = {
   notFound: {
     backHome: "ホームに戻る",
   },
+  colophon: {
+    title: "このサイトができるまで",
+    intro:
+      "本の巻末には、どう作られたかを記した奥付があります。ここは、このサイトの奥付です。",
+    setByHand: "チューリッヒにて、手組み。",
+    thanks: "ご覧いただきありがとうございます。",
+    back: "戻る",
+  },
   footer: {
     atw: "このウェブサイトについて",
     madeWith: "制作",

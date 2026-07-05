@@ -98,7 +98,7 @@ export const APP_ROUTES: AppRoute[] = [
     path: "/a",
     layout: "blank",
     Component: lazy(() => import("@/pages/AboutThisWebsite")),
-    title: () => "這個網站是怎麼造出來的",
+    title: (t) => t.colophon.title,
   },
   {
     path: "/projects/:slug",

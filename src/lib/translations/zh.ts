@@ -344,6 +344,15 @@ export const zh = {
   notFound: {
     backHome: "返回首页",
   },
+  colophon: {
+    // deliberately Traditional in a Simplified file: it's the page's identity
+    // line, and Shippori Mincho B1 (a Japanese face) has no glyph for 这
+    title: "這個網站是怎麼造出來的",
+    intro: "旧书的最后一页，往往写着这本书是如何做成的。这里就是那一页。",
+    setByHand: "于苏黎世手工排版。",
+    thanks: "感谢到访。",
+    back: "返回",
+  },
   footer: {
     atw: "关于这个网站",
     madeWith: "由",

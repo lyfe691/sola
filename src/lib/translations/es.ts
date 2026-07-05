@@ -358,6 +358,14 @@ export const es = {
   notFound: {
     backHome: "Regresar al inicio",
   },
+  colophon: {
+    title: "Cómo se hizo este sitio",
+    intro:
+      "En los libros antiguos, la última página cuenta cómo se hizo todo. Esta es esa página.",
+    setByHand: "Compuesto a mano en Zúrich.",
+    thanks: "Gracias por la visita.",
+    back: "Volver",
+  },
   footer: {
     atw: "acerca de este sitio web",
     madeWith: "Hecho con",

@@ -27,6 +27,10 @@
     "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
+  /* faces load with the /a chunk only — the @fontsource imports live in that page */
+  --font-mincho:
+    "Shippori Mincho B1", "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP",
+    serif;
 
   --color-border: var(--border);
   --color-input: var(--input);
