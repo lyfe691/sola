@@ -48,7 +48,7 @@ const ImageLightbox: React.FC<{
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
           className="fixed inset-0 z-100 flex cursor-zoom-out items-center justify-center bg-black/80 p-4 backdrop-blur-md sm:p-10"
           onClick={onClose}
         >

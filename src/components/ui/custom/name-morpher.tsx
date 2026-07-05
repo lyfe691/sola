@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
+import { EASE_EXPO, EASE_IN_OUT, EASE_OUT } from "@/utils/transitions";
 
 interface NameMorpherProps {
   greeting: string;
@@ -21,7 +22,7 @@ const ANIMATION_CONFIG = {
   EXIT_DELAY: 0.035,
   CHAR_WIDTH: 0.6,
   SPRING: { stiffness: 300, damping: 20 },
-  EASE_CURVE: [0.76, 0, 0.24, 1] as const,
+  EASE_CURVE: EASE_IN_OUT,
 } as const;
 
 const letterVariants: Variants = {
@@ -69,8 +70,8 @@ const letterVariants: Variants = {
         damping: 18,
         delay: custom * ANIMATION_CONFIG.LETTER_DELAY,
       },
-      opacity: { duration: 0.3, ease: "easeIn", delay: custom * 0.05 },
-      filter: { duration: 0.3, ease: "easeIn", delay: custom * 0.05 },
+      opacity: { duration: 0.3, ease: EASE_OUT, delay: custom * 0.05 },
+      filter: { duration: 0.3, ease: EASE_OUT, delay: custom * 0.05 },
     },
   }),
   exit: (custom: number) => ({
@@ -107,8 +108,8 @@ const letterVariants: Variants = {
         ease: ANIMATION_CONFIG.EASE_CURVE,
         delay: custom * ANIMATION_CONFIG.EXIT_DELAY,
       },
-      opacity: { duration: 0.25, ease: "easeOut", delay: custom * 0.03 },
-      filter: { duration: 0.25, ease: "easeOut", delay: custom * 0.03 },
+      opacity: { duration: 0.25, ease: EASE_OUT, delay: custom * 0.03 },
+      filter: { duration: 0.25, ease: EASE_OUT, delay: custom * 0.03 },
     },
   }),
 };
@@ -174,7 +175,7 @@ export const NameMorpher = ({
             initial="initial"
             animate="animate"
             exit="exit"
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.35, ease: EASE_EXPO }}
             className="inline-flex"
             style={{ perspective: "500px" }}
           >
