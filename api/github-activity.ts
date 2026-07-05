@@ -121,10 +121,17 @@ async function fetchLatestCommitMessage(
   return message ? message.split("\n")[0].trim() : null;
 }
 
+// per request: how many extra GitHub calls may backfill missing commit
+// messages — without a cap, 20 push events can fan out to 40 upstream calls
+// against the shared token's rate limit
+const MAX_ENRICHMENT_FETCHES = 5;
+type EnrichmentBudget = { remaining: number };
+
 async function buildPushActivity(
   event: GitHubEvent,
   base: Pick<ProcessedActivity, "id" | "repo" | "repoUrl" | "timestamp">,
   headers: Headers,
+  budget: EnrichmentBudget,
 ): Promise<ProcessedActivity> {
   const commits = event.payload.commits ?? [];
   const branch = event.payload.ref?.replace("refs/heads/", "") || "main";
@@ -143,12 +150,14 @@ async function buildPushActivity(
   let description = commits.find((c) => c.message?.trim())?.message?.trim();
   const headSha = commits[0]?.sha || event.payload.head;
 
-  if (!description && headSha) {
+  if (!description && headSha && budget.remaining > 0) {
+    budget.remaining -= 1;
     description =
       (await fetchCommitMessage(event.repo.name, headSha, headers)) ??
       undefined;
   }
-  if (!description) {
+  if (!description && budget.remaining > 0) {
+    budget.remaining -= 1;
     description =
       (await fetchLatestCommitMessage(event.repo.name, branch, headers)) ??
       undefined;
@@ -183,6 +192,7 @@ async function buildPushActivity(
 async function processEvent(
   event: GitHubEvent,
   headers: Headers,
+  budget: EnrichmentBudget,
 ): Promise<ProcessedActivity | null> {
   const base = {
     id: event.id,
@@ -194,7 +204,7 @@ async function processEvent(
 
   switch (event.type) {
     case "PushEvent":
-      return buildPushActivity(event, base, headers);
+      return buildPushActivity(event, base, headers, budget);
 
     case "PullRequestEvent": {
       const pr = payload.pull_request;
@@ -325,12 +335,23 @@ async function processEvent(
 
 const ALLOWED_USERNAMES = new Set(["lyfe691"]);
 
+// warm-instance memo behind the CDN's s-maxage — same-instance requests
+// inside the TTL skip the upstream fan-out entirely
+const CACHE_TTL_MS = 5 * 60_000;
+const activityCache = new Map<
+  string,
+  { at: number; data: ProcessedActivity[] }
+>();
+
 export async function getGitHubActivity(
   username: string,
 ): Promise<ProcessedActivity[]> {
   if (!ALLOWED_USERNAMES.has(username)) {
     throw new Error("username is not allowed");
   }
+
+  const cached = activityCache.get(username);
+  if (cached && Date.now() - cached.at < CACHE_TTL_MS) return cached.data;
 
   const headers: Headers = {
     Accept: "application/vnd.github.v3+json",
@@ -346,13 +367,23 @@ export async function getGitHubActivity(
 
   if (!events) return [];
 
+  const budget: EnrichmentBudget = { remaining: MAX_ENRICHMENT_FETCHES };
+
   // one malformed event (stale, redacted, partial payload) drops alone
   // instead of rejecting the whole batch
-  return (
+  const processed = (
     await Promise.all(
-      events.map((event) => processEvent(event, headers).catch(() => null)),
+      events.map((event) =>
+        processEvent(event, headers, budget).catch(() => null),
+      ),
     )
   ).filter((activity): activity is ProcessedActivity => activity !== null);
+
+  // never memoize an empty result — it may be a transient upstream failure
+  if (processed.length > 0) {
+    activityCache.set(username, { at: Date.now(), data: processed });
+  }
+  return processed;
 }
 
 type VercelRequest = { query: Record<string, string | string[] | undefined> };
