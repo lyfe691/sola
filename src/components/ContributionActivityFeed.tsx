@@ -356,7 +356,11 @@ const ContributionActivityFeed = () => {
             className="rounded-full border-foreground/20 transition-colors duration-200"
             label={t.common.moreOnGithub}
             onClick={() =>
-              window.open("https://github.com/lyfe691?tab=events", "_blank")
+              window.open(
+                "https://github.com/lyfe691?tab=events",
+                "_blank",
+                "noopener,noreferrer",
+              )
             }
           />
         </div>

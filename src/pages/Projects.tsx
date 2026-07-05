@@ -377,6 +377,7 @@ const Projects = () => {
               window.open(
                 "https://github.com/lyfe691?tab=repositories",
                 "_blank",
+                "noopener,noreferrer",
               )
             }
           />
