@@ -291,7 +291,7 @@ function ExitBubble({
               ref={buttonRef}
               type="button"
               onClick={onExit}
-              className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[translate,background-color] duration-200 ease-out hover:-translate-x-1 hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[translate,background-color] duration-200 ease-out can-hover:hover:-translate-x-1 can-hover:hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"
             />
           }
         >
