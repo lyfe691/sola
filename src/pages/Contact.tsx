@@ -6,16 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import {
-  Check,
-  Github,
-  Linkedin,
-  Mail,
-  Send,
-  UploadCloud,
-  X,
-} from "lucide-react";
+import { useState, useRef } from "react";
+import { Check, Github, Linkedin, Mail, Send } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -28,20 +20,7 @@ import { useNavigate, useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { SOCIAL_LINKS } from "@/config/social";
-import { createPortal } from "react-dom";
 import { EASE_OUT } from "@/utils/transitions";
-
-// file constraints
-const ACCEPTED_MIME = new Set<string>([
-  "image/png",
-  "image/jpeg",
-  "image/webp",
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-]);
-const ACCEPTED_EXT = ".png,.jpg,.jpeg,.webp,.pdf,.doc,.docx";
-const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10 MB
 
 type FieldName = "name" | "email" | "subject" | "message";
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
@@ -52,70 +31,6 @@ const DIRECT_LINKS = [
   { ...SOCIAL_LINKS.github, Icon: Github },
   { ...SOCIAL_LINKS.linkedin, Icon: Linkedin },
 ] as const;
-
-function formatBytes(bytes: number): string {
-  if (!Number.isFinite(bytes)) return "";
-  const units = ["B", "KB", "MB", "GB"] as const;
-  let size = bytes;
-  let unitIndex = 0;
-  while (size >= 1024 && unitIndex < units.length - 1) {
-    size /= 1024;
-    unitIndex += 1;
-  }
-  const rounded = Math.round(size * 10) / 10;
-  return `${Number.isInteger(rounded) ? rounded : rounded.toFixed(1)} ${units[unitIndex]}`;
-}
-
-type FileValidationResult =
-  { ok: true } | { ok: false; code: "too_large" | "unsupported_type" };
-
-function validateFile(file: File): FileValidationResult {
-  if (file.size > MAX_FILE_BYTES) return { ok: false, code: "too_large" };
-  const mimeOk = file.type ? ACCEPTED_MIME.has(file.type) : true;
-  const ext = file.name.toLowerCase().split(".").pop() ?? "";
-  const extOk = ["png", "jpg", "jpeg", "webp", "pdf", "doc", "docx"].includes(
-    ext,
-  );
-  if (!mimeOk && !extOk) return { ok: false, code: "unsupported_type" };
-  return { ok: true };
-}
-
-function uploadToCloudinary(
-  file: File,
-  onProgress?: (progress: number) => void,
-): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "unsigned_upload");
-
-    xhr.open("POST", "https://api.cloudinary.com/v1_1/dfgoxrimk/upload");
-
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable && onProgress) {
-        onProgress(Math.round((event.loaded / event.total) * 100));
-      }
-    };
-
-    xhr.onload = () => {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        try {
-          resolve(JSON.parse(xhr.responseText).secure_url as string);
-        } catch (err) {
-          reject(err);
-        }
-      } else {
-        reject(new Error(`Cloudinary upload failed with status ${xhr.status}`));
-      }
-    };
-
-    xhr.onerror = () =>
-      reject(new Error("Network error during Cloudinary upload"));
-
-    xhr.send(data);
-  });
-}
 
 const FieldError = ({ name, error }: { name: string; error?: string }) => (
   <div className="min-h-6">
@@ -142,13 +57,6 @@ const Contact = () => {
   const { language } = useLanguage();
   const t = translations[language] as Translation;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [isPageDragActive, setIsPageDragActive] = useState(false);
-  const dragCounter = useRef(0);
   // prefill lands with the navigation (services deep-links); Contact remounts
   // on every route change, so reading the query string once at mount is enough
   const [formValues, setFormValues] = useState(() => {
@@ -194,86 +102,8 @@ const Contact = () => {
     }));
   };
 
-  const onSelectFile = useCallback(
-    (incoming: File | null) => {
-      let file = incoming;
-      if (file) {
-        const v = validateFile(file);
-        if (!v.ok) {
-          toast.error(
-            v.code === "too_large"
-              ? t.contact.fileTooLarge.replace(
-                  "{max}",
-                  formatBytes(MAX_FILE_BYTES),
-                )
-              : t.contact.unsupportedFileType,
-          );
-          file = null;
-        }
-      }
-      if (!file && fileInputRef.current) fileInputRef.current.value = "";
-      setSelectedFile(file);
-      setUploadedUrl(null);
-      setUploadProgress(null);
-    },
-    [t],
-  );
-
-  // global drag overlay activation
-  useEffect(() => {
-    const hasFiles = (e: DragEvent) =>
-      !!e.dataTransfer && Array.from(e.dataTransfer.types).includes("Files");
-
-    const onDragEnter = (e: DragEvent) => {
-      if (hasFiles(e)) {
-        dragCounter.current += 1;
-        setIsPageDragActive(true);
-        e.preventDefault();
-      }
-    };
-
-    const onDragOver = (e: DragEvent) => {
-      if (hasFiles(e)) {
-        e.preventDefault();
-      }
-    };
-
-    const onDragLeave = (e: DragEvent) => {
-      if (hasFiles(e)) {
-        dragCounter.current = Math.max(0, dragCounter.current - 1);
-        if (dragCounter.current === 0) setIsPageDragActive(false);
-        e.preventDefault();
-      }
-    };
-
-    const onWindowDrop = (e: DragEvent) => {
-      if (hasFiles(e)) {
-        const file = e.dataTransfer?.files?.[0] ?? null;
-        if (file) onSelectFile(file);
-        setIsPageDragActive(false);
-        dragCounter.current = 0;
-        e.preventDefault();
-      }
-    };
-
-    window.addEventListener("dragenter", onDragEnter);
-    window.addEventListener("dragover", onDragOver);
-    window.addEventListener("dragleave", onDragLeave);
-    window.addEventListener("drop", onWindowDrop);
-    window.addEventListener("dragend", onWindowDrop);
-
-    return () => {
-      window.removeEventListener("dragenter", onDragEnter);
-      window.removeEventListener("dragover", onDragOver);
-      window.removeEventListener("dragleave", onDragLeave);
-      window.removeEventListener("drop", onWindowDrop);
-      window.removeEventListener("dragend", onWindowDrop);
-    };
-  }, [onSelectFile]);
-
   const clearForm = () => {
     setFormValues({ name: "", email: "", subject: "", message: "" });
-    onSelectFile(null);
     if (location.search) {
       navigate("/contact", { replace: true });
     }
@@ -281,7 +111,7 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (isSubmitting || isUploading) return;
+    if (isSubmitting) return;
 
     const newErrors: Partial<Record<FieldName, string>> = {};
     for (const name of FIELD_ORDER) {
@@ -302,31 +132,6 @@ const Contact = () => {
     const formData = new FormData(e.currentTarget);
 
     try {
-      if (selectedFile) {
-        const v = validateFile(selectedFile);
-        if (!v.ok) {
-          toast.error(
-            v.code === "too_large"
-              ? t.contact.fileTooLarge.replace(
-                  "{max}",
-                  formatBytes(MAX_FILE_BYTES),
-                )
-              : t.contact.unsupportedFileType,
-          );
-          setIsSubmitting(false);
-          return;
-        }
-
-        setIsUploading(true);
-        setUploadProgress(0);
-        const url = await uploadToCloudinary(selectedFile, (p) =>
-          setUploadProgress(p),
-        );
-        setUploadedUrl(url);
-        formData.append("fileUrl", url);
-        formData.delete("attachment");
-      }
-
       const response = await fetch("https://formspree.io/f/xeqydavz", {
         method: "POST",
         body: formData,
@@ -347,23 +152,7 @@ const Contact = () => {
       toast.error(t.contact.errorMessage);
     } finally {
       setIsSubmitting(false);
-      setIsUploading(false);
-      setUploadProgress(null);
     }
-  };
-
-  const onDrop: React.DragEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      onSelectFile(e.dataTransfer.files[0]);
-    }
-    setIsPageDragActive(false);
-    dragCounter.current = 0;
-  };
-
-  const onClickDropzone = () => {
-    fileInputRef.current?.click();
   };
 
   return (
@@ -526,131 +315,20 @@ const Contact = () => {
                 <FieldError name="message" error={errors.message} />
               </div>
 
-              {/* attachment */}
-              <div
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-                onDrop={onDrop}
-                onClick={onClickDropzone}
-                className={`group relative flex cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border border-dashed p-4 transition-colors sm:p-6 ${isPageDragActive ? "border-foreground/40 bg-foreground/10 ring-2 ring-foreground/20" : "border-foreground/20 bg-foreground/5 hover:bg-foreground/10"}`}
-              >
-                <input
-                  ref={fileInputRef}
-                  id="attachment"
-                  name="attachment"
-                  type="file"
-                  className="hidden"
-                  accept={ACCEPTED_EXT}
-                  onChange={(e) => onSelectFile(e.target.files?.[0] ?? null)}
-                />
-                <div className="flex items-center gap-2 text-foreground/70">
-                  <UploadCloud className="size-4" />
-                  <span className="text-sm">
-                    {selectedFile
-                      ? `${selectedFile.name}${selectedFile.size ? ` • ${formatBytes(selectedFile.size)}` : ""}`
-                      : t.contact.attachmentPlaceholder}
-                  </span>
-                </div>
-                {(isUploading || uploadProgress !== null) && (
-                  <div className="mt-2 w-full">
-                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-foreground/10">
-                      <div
-                        className="h-full bg-foreground transition-[width]"
-                        style={{ width: `${uploadProgress ?? 0}%` }}
-                      />
-                    </div>
-                    <div className="mt-1 text-center text-xs text-foreground/60">
-                      {uploadProgress ?? 0}%
-                    </div>
-                  </div>
-                )}
-                {uploadedUrl && !isUploading && (
-                  <div className="mt-2 text-xs text-foreground/60">
-                    {t.contact.uploadedLabel}:{" "}
-                    <a
-                      className="underline"
-                      href={uploadedUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {t.contact.cloudinaryLinkLabel}
-                    </a>
-                  </div>
-                )}
-                {selectedFile && !isUploading && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onSelectFile(null);
-                    }}
-                    className="absolute top-2 right-2 rounded-full p-1 text-foreground/60 hover:bg-foreground/10 hover:text-foreground"
-                    aria-label="Remove file"
-                  >
-                    <X className="size-4" />
-                  </button>
-                )}
-              </div>
-
               <IconButton
                 type="submit"
-                disabled={isSubmitting || isUploading}
+                disabled={isSubmitting}
                 iconPosition="left"
                 icon={isSubmitting ? <Spinner /> : <Send className="h-4 w-4" />}
                 variant="default"
                 size="lg"
                 className="mt-1 w-full"
-                label={
-                  isSubmitting || isUploading
-                    ? t.contact.sending
-                    : t.contact.send
-                }
+                label={isSubmitting ? t.contact.sending : t.contact.send}
               />
             </form>
           </Card>
         </motion.div>
       </div>
-
-      {createPortal(
-        <AnimatePresence>
-          {isPageDragActive && (
-            <motion.div
-              className="fixed inset-0 z-100 pointer-events-none flex items-center justify-center"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="absolute inset-0 bg-foreground/5 backdrop-blur-[2px]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              />
-              <motion.div
-                className="relative"
-                initial={{ scale: 0.96, opacity: 0, filter: "blur(6px)" }}
-                animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
-                exit={{ scale: 0.98, opacity: 0, filter: "blur(6px)" }}
-                transition={{ duration: 0.2, ease: EASE_OUT }}
-              >
-                <div className="relative rounded-2xl border border-dashed border-foreground/30 bg-background/70 px-4 py-3 shadow-xl ring-1 ring-foreground/10 sm:px-6 sm:py-4">
-                  <div className="absolute -inset-4 rounded-3xl bg-linear-to-tr from-foreground/10 to-transparent blur-xl" />
-                  <div className="relative flex items-center gap-2 text-foreground/80">
-                    <UploadCloud className="size-5 sm:size-6" />
-                    <div className="size-2 animate-pulse rounded-full bg-foreground/50" />
-                    <span className="text-sm sm:text-base">
-                      {t.contact.dropOverlay}
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>,
-        document.body,
-      )}
     </div>
   );
 };

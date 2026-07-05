@@ -484,13 +484,6 @@ export const en = {
     errorMessage: "Something went wrong. Please try again.",
     subjectLabel: "Subject",
     subjectPlaceholder: "Enter your subject",
-    attachmentPlaceholder: "Click to choose or drag & drop a file",
-    uploadedLabel: "Uploaded",
-    cloudinaryLinkLabel: "Cloudinary link",
-    dropOverlay: "Drop to attach",
-    fileTooLarge: "File is too large (max {max}).",
-    unsupportedFileType:
-      "Unsupported file type. Allowed: PNG, JPG, WEBP, PDF, DOC, DOCX.",
     validation: {
       nameRequired: "Please enter your name.",
       emailRequired: "Please enter your email.",

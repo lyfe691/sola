@@ -486,13 +486,6 @@ export const de = {
     errorMessage: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
     subjectLabel: "Betreff",
     subjectPlaceholder: "Betreff eingeben",
-    attachmentPlaceholder: "Klicken oder Datei hierher ziehen",
-    uploadedLabel: "Hochgeladen",
-    cloudinaryLinkLabel: "Cloudinary‑Link",
-    dropOverlay: "Zum Anhängen ablegen",
-    fileTooLarge: "Datei ist zu gross (max. {max}).",
-    unsupportedFileType:
-      "Nicht unterstützter Dateityp. Erlaubt: PNG, JPG, WEBP, PDF, DOC, DOCX.",
     validation: {
       nameRequired: "Bitte geben Sie Ihren Namen ein.",
       emailRequired: "Bitte geben Sie Ihre E-Mail ein.",

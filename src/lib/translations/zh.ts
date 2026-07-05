@@ -474,13 +474,6 @@ export const zh = {
     errorMessage: "出现错误，请重试。",
     subjectLabel: "主题",
     subjectPlaceholder: "输入主题",
-    attachmentPlaceholder: "点击选择或拖拽文件",
-    uploadedLabel: "已上传",
-    cloudinaryLinkLabel: "Cloudinary 链接",
-    dropOverlay: "拖放到此处以附加",
-    fileTooLarge: "文件过大（最大 {max}）。",
-    unsupportedFileType:
-      "不支持的文件类型。允许：PNG、JPG、WEBP、PDF、DOC、DOCX。",
     validation: {
       nameRequired: "请输入您的姓名。",
       emailRequired: "请输入您的电子邮件。",

@@ -490,13 +490,6 @@ export const es = {
     errorMessage: "Algo salió mal. Por favor, inténtalo de nuevo.",
     subjectLabel: "Asunto",
     subjectPlaceholder: "Ingresa el asunto",
-    attachmentPlaceholder: "Haz clic para elegir o arrastra un archivo",
-    uploadedLabel: "Subido",
-    cloudinaryLinkLabel: "Enlace de Cloudinary",
-    dropOverlay: "Suelta para adjuntar",
-    fileTooLarge: "El archivo es demasiado grande (máx. {max}).",
-    unsupportedFileType:
-      "Tipo de archivo no soportado. Permitidos: PNG, JPG, WEBP, PDF, DOC, DOCX.",
     validation: {
       nameRequired: "Por favor, escribe tu nombre.",
       emailRequired: "Por favor, escribe tu correo electrónico.",

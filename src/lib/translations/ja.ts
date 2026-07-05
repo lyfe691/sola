@@ -478,13 +478,6 @@ export const ja = {
     errorMessage: "問題が発生しました。もう一度お試しください。",
     subjectLabel: "件名",
     subjectPlaceholder: "件名を入力",
-    attachmentPlaceholder: "クリックして選択、またはファイルをドロップ",
-    uploadedLabel: "アップロード済み",
-    cloudinaryLinkLabel: "Cloudinary リンク",
-    dropOverlay: "ここにドロップして添付",
-    fileTooLarge: "ファイルサイズが大きすぎます（最大 {max}）。",
-    unsupportedFileType:
-      "未対応のファイル形式です。PNG, JPG, WEBP, PDF, DOC, DOCX が使用できます。",
     validation: {
       nameRequired: "お名前を入力してください。",
       emailRequired: "メールアドレスを入力してください。",
