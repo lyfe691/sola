@@ -8,7 +8,6 @@
 
 import { Routes, Route, Navigate } from "react-router";
 import AppLayout from "@/layouts/AppLayout";
-import SimpleLayout from "@/layouts/SimpleLayout";
 import BlankLayout from "@/layouts/BlankLayout";
 import { APP_ROUTES, type RouteLayout } from "@/config/routes";
 
@@ -16,7 +15,6 @@ import { APP_ROUTES, type RouteLayout } from "@/config/routes";
 // tab titles cannot drift apart because they share one source of truth
 const LAYOUTS: { layout: RouteLayout; element: React.ReactElement }[] = [
   { layout: "app", element: <AppLayout /> },
-  { layout: "simple", element: <SimpleLayout /> },
   { layout: "blank", element: <BlankLayout /> },
 ];
 

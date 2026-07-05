@@ -11,9 +11,9 @@
  *
  * Only AppLayout routes are listed on purpose: the toggle lives in the nav's
  * appearance menu (AppLayout is the only layout with a nav), and a route
- * change force-exits the mode — so pages under SimpleLayout/BlankLayout
- * (/certifications, /a, /projects/:slug, /404) can never show the code view.
- * If the mode ever gets another entry point, re-add their mappings here.
+ * change force-exits the mode — so pages under BlankLayout (/a,
+ * /projects/:slug, /404) can never show the code view. If the mode ever
+ * gets another entry point, re-add their mappings here.
  */
 
 const PAGE_PATHS: Record<string, string> = {
@@ -25,6 +25,7 @@ const PAGE_PATHS: Record<string, string> = {
   "/contact": "src/pages/Contact.tsx",
   "/services": "src/pages/Services.tsx",
   "/privacy": "src/pages/Privacy.tsx",
+  "/certifications": "src/pages/Certifications.tsx",
 };
 
 export function resolvePagePath(pathname: string): string | null {

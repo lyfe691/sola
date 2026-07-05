@@ -19,7 +19,7 @@ import { matchRoutes } from "react-router";
 import type { Translation } from "@/lib/translations";
 import { getProjectConfig } from "@/config/project-deep-dive";
 
-export type RouteLayout = "app" | "simple" | "blank";
+export type RouteLayout = "app" | "blank";
 
 type RouteParams = Record<string, string | undefined>;
 
@@ -84,7 +84,7 @@ export const APP_ROUTES: AppRoute[] = [
   },
   {
     path: "/certifications",
-    layout: "simple",
+    layout: "app",
     Component: lazy(() => import("@/pages/Certifications")),
     title: (t) => t.certifications?.title ?? "Certifications",
   },
