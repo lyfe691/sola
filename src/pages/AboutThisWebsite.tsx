@@ -59,14 +59,32 @@ const MATERIALS: Array<{ name: string; href: string }> = [
 const INK_LINK =
   "whitespace-nowrap rounded-sm underline-offset-4 hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50";
 
+/* paper, not pigment: fiber grain + a lamplight vignette layered over the
+   theme's own background, so every theme (and dark mode) keeps its own
+   paper color instead of a hardcoded cream */
+const PAPER_GRAIN = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>")`;
+const PAPER_VIGNETTE =
+  "radial-gradient(120% 85% at 50% 40%, transparent 50%, color-mix(in oklab, var(--foreground) 9%, transparent))";
+
 export default function AboutThisWebsite() {
   const navigate = useNavigate();
   const { language } = useLanguage();
   const t = translations[language].colophon;
 
   return (
-    <div className="flex min-h-svh items-center justify-center bg-background px-6 py-16 text-foreground sm:px-8">
+    <div className="relative isolate flex min-h-svh items-center justify-center bg-background px-6 py-16 text-foreground sm:px-8">
       <meta name="robots" content="noindex, nofollow" />
+
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div
+          className="absolute inset-0"
+          style={{ backgroundImage: PAPER_VIGNETTE }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.05] dark:opacity-[0.07]"
+          style={{ backgroundImage: PAPER_GRAIN }}
+        />
+      </div>
 
       <div className="flex w-full max-w-3xl flex-col-reverse items-center gap-14 font-mincho sm:flex-row sm:justify-between sm:gap-16">
         <div className="w-full min-w-0 sm:max-w-lg">
