@@ -197,7 +197,8 @@ async function processEvent(
       return buildPushActivity(event, base, headers);
 
     case "PullRequestEvent": {
-      const pr = payload.pull_request!;
+      const pr = payload.pull_request;
+      if (!pr) return null;
       const a = payload.action;
       return {
         ...base,
@@ -215,7 +216,8 @@ async function processEvent(
     }
 
     case "IssuesEvent": {
-      const issue = payload.issue!;
+      const issue = payload.issue;
+      if (!issue) return null;
       const a = payload.action;
       return {
         ...base,
@@ -270,7 +272,8 @@ async function processEvent(
       };
 
     case "ForkEvent": {
-      const fork = payload.forkee!;
+      const fork = payload.forkee;
+      if (!fork) return null;
       return {
         ...base,
         type: "fork",
@@ -289,7 +292,8 @@ async function processEvent(
       };
 
     case "ReleaseEvent": {
-      const release = payload.release!;
+      const release = payload.release;
+      if (!release) return null;
       return {
         ...base,
         type: "release",
@@ -302,7 +306,8 @@ async function processEvent(
     }
 
     case "MemberEvent": {
-      const member = payload.member!;
+      const member = payload.member;
+      if (!member) return null;
       return {
         ...base,
         type: "member",
@@ -341,8 +346,12 @@ export async function getGitHubActivity(
 
   if (!events) return [];
 
+  // one malformed event (stale, redacted, partial payload) drops alone
+  // instead of rejecting the whole batch
   return (
-    await Promise.all(events.map((event) => processEvent(event, headers)))
+    await Promise.all(
+      events.map((event) => processEvent(event, headers).catch(() => null)),
+    )
   ).filter((activity): activity is ProcessedActivity => activity !== null);
 }
 
@@ -367,7 +376,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       "public, s-maxage=300, stale-while-revalidate=600",
     );
     res.status(200).json(processed);
-  } catch {
-    res.status(400).json({ error: "username is required" });
+  } catch (error) {
+    if (error instanceof Error && error.message === "username is not allowed") {
+      res.status(403).json({ error: "username is not allowed" });
+      return;
+    }
+    res.status(502).json({ error: "failed to load activity" });
   }
 }
