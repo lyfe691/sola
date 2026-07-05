@@ -69,8 +69,8 @@ function DiffLineRow({
   return (
     <tr
       className={cn(
-        line.type === "add" && "bg-emerald-500/10",
-        line.type === "del" && "bg-rose-500/10",
+        line.type === "add" && "bg-(--diff-add-fg)/10",
+        line.type === "del" && "bg-(--diff-del-fg)/10",
       )}
     >
       <td className={numberClass}>{line.oldNo}</td>

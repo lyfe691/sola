@@ -54,82 +54,42 @@ const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
 
     case "pull_request":
       if (activity.action === "opened") {
-        return (
-          <GitPullRequest
-            className={`${iconClass} text-emerald-600 dark:text-emerald-400`}
-          />
-        );
+        return <GitPullRequest className={`${iconClass} text-primary`} />;
       } else if (activity.action === "closed") {
-        return (
-          <GitMerge
-            className={`${iconClass} text-violet-600 dark:text-violet-400`}
-          />
-        );
+        return <GitMerge className={`${iconClass} text-primary`} />;
       }
       return <GitPullRequest className={`${iconClass} text-foreground/60`} />;
 
     case "issues":
       if (activity.action === "opened") {
-        return (
-          <AlertCircle
-            className={`${iconClass} text-red-600 dark:text-red-400`}
-          />
-        );
+        return <AlertCircle className={`${iconClass} text-destructive`} />;
       } else if (activity.action === "closed") {
-        return (
-          <CheckCircle2
-            className={`${iconClass} text-emerald-600 dark:text-emerald-400`}
-          />
-        );
+        return <CheckCircle2 className={`${iconClass} text-primary`} />;
       }
       return <AlertCircle className={`${iconClass} text-foreground/60`} />;
 
     case "create":
       if (activity.metadata?.branch) {
-        return (
-          <GitBranch
-            className={`${iconClass} text-emerald-600 dark:text-emerald-400`}
-          />
-        );
+        return <GitBranch className={`${iconClass} text-primary`} />;
       } else if (activity.metadata?.tag) {
-        return (
-          <Tag className={`${iconClass} text-blue-600 dark:text-blue-400`} />
-        );
+        return <Tag className={`${iconClass} text-primary`} />;
       }
-      return (
-        <Plus
-          className={`${iconClass} text-emerald-600 dark:text-emerald-400`}
-        />
-      );
+      return <Plus className={`${iconClass} text-primary`} />;
 
     case "delete":
-      return (
-        <Trash2 className={`${iconClass} text-red-600 dark:text-red-400`} />
-      );
+      return <Trash2 className={`${iconClass} text-destructive`} />;
 
     case "fork":
-      return (
-        <GitFork
-          className={`${iconClass} text-amber-600 dark:text-amber-400`}
-        />
-      );
+      return <GitFork className={`${iconClass} text-primary`} />;
 
     case "star":
-      return (
-        <Star className={`${iconClass} text-amber-600 dark:text-amber-400`} />
-      );
+      return <Star className={`${iconClass} text-primary`} />;
 
     case "release":
-      return (
-        <Tag className={`${iconClass} text-blue-600 dark:text-blue-400`} />
-      );
+      return <Tag className={`${iconClass} text-primary`} />;
 
     case "member":
-      return (
-        <Users
-          className={`${iconClass} text-violet-600 dark:text-violet-400`}
-        />
-      );
+      return <Users className={`${iconClass} text-foreground/60`} />;
 
     case "watch":
       return <Eye className={`${iconClass} text-foreground/60`} />;
