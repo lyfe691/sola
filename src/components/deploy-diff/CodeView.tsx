@@ -21,13 +21,7 @@
  * cutting it short. Reduced motion skips straight to the content.
  */
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation } from "react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -45,30 +39,11 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { CommitDiff } from "./CommitDiff";
+import { DIFF_TOKENS } from "./diff-tokens";
 import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
 import { resolvePagePath } from "./page-sources";
 import { githubFallbackUrl, usePageDiff } from "./use-page-diff";
-
-/**
- * Diff accent colors, resolved against the active theme's type. Custom dark
- * themes never match the `dark:` variant (see use-scheme.ts), so the palette
- * is chosen at runtime and exposed as custom properties for CommitDiff.
- */
-const DIFF_TOKENS: Record<"light" | "dark", CSSProperties> = {
-  light: {
-    "--diff-add-fg": "var(--color-emerald-600)",
-    "--diff-del-fg": "var(--color-rose-600)",
-    "--diff-mod-fg": "var(--color-amber-600)",
-    "--diff-ren-fg": "var(--color-sky-600)",
-  } as CSSProperties,
-  dark: {
-    "--diff-add-fg": "var(--color-emerald-400)",
-    "--diff-del-fg": "var(--color-rose-400)",
-    "--diff-mod-fg": "var(--color-amber-400)",
-    "--diff-ren-fg": "var(--color-sky-400)",
-  } as CSSProperties,
-};
 
 // The ritual's cadence: brisk but typed by a hand, not printed — a steady
 // base beat, light per-key jitter, a breath at each word start. Backspacing
