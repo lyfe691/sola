@@ -25,6 +25,7 @@ import { translations } from "@/lib/translations";
 import { Link } from "react-router";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
+import { testimonials } from "@/config/testimonials";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Dialog,
@@ -264,38 +265,6 @@ const About = () => {
     void queryClient.prefetchQuery(userActivityQuery("lyfe691"));
   }, [queryClient]);
 
-  // testimonials - untranslatable due to respective copyrights
-  const testimonials = [
-    {
-      quote:
-        "Yanis carried me through every Software Engineering (IT) subject—I genuinely did next to nothing. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
-      author: "Dominik Könitzer",
-      role: "Intern",
-      company: "mpa international ag",
-      rating: 5,
-      website: "https://dominikkoenitzer.ch",
-    },
-    {
-      quote:
-        "Working with Yanis was a fantastic experience. He carried me through every subject, consistently bringing creative solutions to complex problems and delivering everything on time. Truly an exceptional developer.",
-      author: "Jason Bichsel",
-      role: "Student",
-      company: "WISS",
-      rating: 5,
-      website: "https://jasonbichsel.com",
-      linkedin: "https://linkedin.com/in/jason-bichsel",
-    },
-    {
-      quote:
-        "Yanis has a rare combination of technical skill and design sensibility. The WISS Forum he created for us exceeded all expectations and has significantly improved our online presence.",
-      author: "Patrick Venzin",
-      role: "Teacher",
-      company: "WISS",
-      rating: 5,
-      linkedin: "https://linkedin.com/in/patrick-venzin-68314a100",
-    },
-  ];
-
   // automatically determine if current theme is dark - handles ALL themes dynamically
   const isDarkTheme = () => getThemeType(theme) === "dark";
 
@@ -469,12 +438,12 @@ const About = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
+            {testimonials.map((testimonial) => (
               <TestimonialCard
-                key={index}
-                quote={testimonial.quote}
+                key={testimonial.i18nKey}
+                quote={t.about.testimonials.items[testimonial.i18nKey].quote}
                 author={testimonial.author}
-                role={testimonial.role}
+                role={t.about.testimonials.items[testimonial.i18nKey].role}
                 company={testimonial.company}
                 rating={testimonial.rating}
                 website={testimonial.website}

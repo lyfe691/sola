@@ -131,9 +131,6 @@ export const en = {
     checkBack: "Check back later for updates",
     moreSuffix: "more",
   },
-  hire: {
-    hirebtn: "Hire Me",
-  },
   nav: {
     about: "About",
     experience: "Experience",
@@ -428,6 +425,23 @@ export const en = {
       viewLinkedIn: "View LinkedIn",
       modalTitle: "Testimonial",
       modalDescription: "Full testimonial from {author}",
+      items: {
+        koenitzer: {
+          quote:
+            "Yanis carried me through every Software Engineering (IT) subject—I genuinely did next to nothing. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
+          role: "Intern",
+        },
+        bichsel: {
+          quote:
+            "Working with Yanis was a fantastic experience. He carried me through every subject, consistently bringing creative solutions to complex problems and delivering everything on time. Truly an exceptional developer.",
+          role: "Student",
+        },
+        venzin: {
+          quote:
+            "Yanis has a rare combination of technical skill and design sensibility. The WISS Forum he created for us exceeded all expectations and has significantly improved our online presence.",
+          role: "Teacher",
+        },
+      },
     },
     certifications: {
       link: "Certifications",

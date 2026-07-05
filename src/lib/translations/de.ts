@@ -132,9 +132,6 @@ export const de = {
     checkBack: "Schauen Sie später noch einmal vorbei",
     moreSuffix: "mehr",
   },
-  hire: {
-    hirebtn: "Jetzt anfragen",
-  },
   nav: {
     about: "Über mich",
     experience: "Erfahrung",
@@ -430,6 +427,23 @@ export const de = {
       viewLinkedIn: "LinkedIn ansehen",
       modalTitle: "Referenz",
       modalDescription: "Vollständige Referenz von {author}",
+      items: {
+        koenitzer: {
+          quote:
+            "Yanis hat mich durch jedes Fach der Softwareentwicklung (IT) getragen – ich habe ehrlich gesagt so gut wie nichts gemacht. Seine technischen Fähigkeiten, seine Zuverlässigkeit und sein Problemlösungsvermögen waren auf einem anderen Niveau. Ein wirklich außergewöhnlicher Entwickler und Teamkollege.",
+          role: "Praktikant",
+        },
+        bichsel: {
+          quote:
+            "Die Zusammenarbeit mit Yanis war eine fantastische Erfahrung. Er hat mich durch jedes Fach getragen, immer wieder kreative Lösungen für komplexe Probleme gefunden und alles pünktlich geliefert. Ein wirklich außergewöhnlicher Entwickler.",
+          role: "Student",
+        },
+        venzin: {
+          quote:
+            "Yanis vereint auf seltene Weise technisches Können mit einem Gespür für Design. Das WISS Forum, das er für uns entwickelt hat, hat alle Erwartungen übertroffen und unsere Online-Präsenz deutlich verbessert.",
+          role: "Dozent",
+        },
+      },
     },
     certifications: {
       link: "Zertifikate",

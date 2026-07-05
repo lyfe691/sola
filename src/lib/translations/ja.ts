@@ -129,9 +129,6 @@ export const ja = {
     checkBack: "後でもう一度ご確認ください",
     moreSuffix: "件",
   },
-  hire: {
-    hirebtn: "採用する",
-  },
   nav: {
     about: "私について",
     experience: "経験",
@@ -421,6 +418,23 @@ export const ja = {
       viewLinkedIn: "LinkedIn を見る",
       modalTitle: "推薦文",
       modalDescription: "{author} からの全文推薦",
+      items: {
+        koenitzer: {
+          quote:
+            "ソフトウェアエンジニアリング（IT）のすべての科目で Yanis に助けてもらいました。正直、私はほとんど何もしていません。彼の技術力、信頼性、問題解決能力は別次元でした。本当に卓越した開発者であり、最高のチームメイトです。",
+          role: "インターン",
+        },
+        bichsel: {
+          quote:
+            "Yanis と一緒に働けたのは素晴らしい経験でした。すべての科目で私を支え、複雑な問題にいつも創造的な解決策をもたらし、すべてを期限どおりに仕上げてくれました。本当に卓越した開発者です。",
+          role: "学生",
+        },
+        venzin: {
+          quote:
+            "Yanis は技術力とデザインセンスを兼ね備えた、まれな人材です。彼が私たちのために作った WISS Forum はあらゆる期待を超え、オンラインでの存在感を大きく高めてくれました。",
+          role: "講師",
+        },
+      },
     },
     certifications: {
       link: "認定資格",

@@ -134,9 +134,6 @@ export const es = {
     checkBack: "Vuelve más tarde para ver novedades",
     moreSuffix: "más",
   },
-  hire: {
-    hirebtn: "Contrátame",
-  },
   nav: {
     about: "Sobre mí",
     experience: "Experiencia",
@@ -433,6 +430,23 @@ export const es = {
       viewLinkedIn: "Ver LinkedIn",
       modalTitle: "Testimonio",
       modalDescription: "Testimonio completo de {author}",
+      items: {
+        koenitzer: {
+          quote:
+            "Yanis me llevó en volandas por todas las asignaturas de Ingeniería de Software (TI); sinceramente, yo no hice casi nada. Sus habilidades técnicas, su fiabilidad y su capacidad para resolver problemas estaban a otro nivel. Un desarrollador y compañero de equipo verdaderamente excepcional.",
+          role: "Becario",
+        },
+        bichsel: {
+          quote:
+            "Trabajar con Yanis fue una experiencia fantástica. Me sacó adelante en todas las asignaturas, aportando siempre soluciones creativas a problemas complejos y entregando todo a tiempo. Un desarrollador verdaderamente excepcional.",
+          role: "Estudiante",
+        },
+        venzin: {
+          quote:
+            "Yanis combina de una forma poco común la destreza técnica con la sensibilidad por el diseño. El WISS Forum que creó para nosotros superó todas las expectativas y ha mejorado notablemente nuestra presencia en línea.",
+          role: "Profesor",
+        },
+      },
     },
     certifications: {
       link: "Certificaciones",

@@ -126,9 +126,6 @@ export const zh = {
     checkBack: "请稍后再查看",
     moreSuffix: "条",
   },
-  hire: {
-    hirebtn: "雇佣我",
-  },
   nav: {
     about: "关于我",
     experience: "经验",
@@ -419,6 +416,23 @@ export const zh = {
       viewLinkedIn: "查看 LinkedIn",
       modalTitle: "推荐",
       modalDescription: "来自 {author} 的完整推荐",
+      items: {
+        koenitzer: {
+          quote:
+            "所有软件工程（IT）科目都是 Yanis 带着我过的——说实话，我几乎什么都没做。他的技术能力、可靠性和解决问题的能力完全在另一个层次。一位真正出色的开发者和队友。",
+          role: "实习生",
+        },
+        bichsel: {
+          quote:
+            "与 Yanis 合作是一段非常棒的经历。每一门科目都是他带着我完成的，他总能为复杂的问题带来富有创意的解决方案，而且一切都按时交付。一位真正出色的开发者。",
+          role: "学生",
+        },
+        venzin: {
+          quote:
+            "Yanis 难得地兼具技术实力与设计感。他为我们打造的 WISS Forum 超出了所有预期，并显著提升了我们的线上形象。",
+          role: "教师",
+        },
+      },
     },
     certifications: {
       link: "证书",
