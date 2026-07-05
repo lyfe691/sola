@@ -145,24 +145,20 @@ function useTypewriter(target: string): string {
 }
 
 /**
- * Terminal caret, em-sized so it scales with the prompt. Solid while
- * characters arrive, blinking while the command waits (on the fetch, or
- * through the finished hold) — the way a real terminal idles.
+ * The prompt's caret: a thin primary bar, em-sized so it scales with the
+ * type. Solid while characters arrive; while the command waits (on the
+ * fetch, or through the finished hold) it phases — a soft breath, not a
+ * hard terminal strobe, matching how everything else on this site idles.
  */
 function Caret({ blinking }: { blinking: boolean }) {
   return (
     <motion.span
       aria-hidden
-      className="ml-[0.15em] inline-block h-[1em] w-[0.5ch] translate-y-[0.12em] rounded-[2px] bg-muted-foreground/70"
-      animate={blinking ? { opacity: [1, 1, 0, 0] } : { opacity: 1 }}
+      className="ml-[0.15em] inline-block h-[1em] w-[0.09em] min-w-[2px] translate-y-[0.12em] rounded-full bg-primary"
+      animate={blinking ? { opacity: [1, 0.15, 1] } : { opacity: 1 }}
       transition={
         blinking
-          ? {
-              duration: 1.1,
-              times: [0, 0.5, 0.5, 1],
-              repeat: Infinity,
-              ease: REVEAL,
-            }
+          ? { duration: 1.2, repeat: Infinity, ease: REVEAL }
           : { duration: 0.1 }
       }
     />
