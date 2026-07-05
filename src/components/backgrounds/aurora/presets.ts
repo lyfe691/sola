@@ -83,8 +83,8 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     base: 0.3,
   },
   cyber: {
-    // purple/cyan neon
-    colorStops: ["#E879F9", "#A78BFA", "#60A5FA"],
+    // magenta/violet/cyan neon
+    colorStops: ["#E341E3", "#8C5EE8", "#00DFE8"],
     blendMode: "screen",
     intensity: 0.9,
     blend: 0.58,
@@ -146,8 +146,8 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     base: 0.3,
   },
   life: {
-    // solarpunk green
-    colorStops: ["#3DD68C", "#7FE3BF", "#D4F9EA"],
+    // solarpunk leaf/gold/cream
+    colorStops: ["#67BB6B", "#E2CE80", "#ECEAC4"],
     blendMode: "soft-light",
     intensity: 0.86,
     blend: 0.56,
