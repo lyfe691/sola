@@ -9,12 +9,14 @@
  * scoped to. Directories are allowed (the GitHub commits API accepts them).
  * Unmapped routes fall back to the repo-wide latest commit.
  *
- * Only AppLayout routes are listed on purpose: the toggle lives in the nav's
- * appearance menu (AppLayout is the only layout with a nav), and a route
- * change force-exits the mode — so pages under BlankLayout (/a,
- * /projects/:slug, /404) can never show the code view. If the mode ever
- * gets another entry point, re-add their mappings here.
+ * Two entry points: AppLayout routes (listed below) flip the mode from the
+ * nav's appearance menu; project deep dives flip it from their breadcrumb
+ * bar and scope to their MDX source — the one file that is genuinely that
+ * page. The remaining BlankLayout pages (/a, /404) have no entry point on
+ * purpose, so they stay unmapped.
  */
+
+import { projectPagesConfig } from "@/config/project-deep-dive";
 
 const PAGE_PATHS: Record<string, string> = {
   "/": "src/pages/Index.tsx",
@@ -30,5 +32,10 @@ const PAGE_PATHS: Record<string, string> = {
 
 export function resolvePagePath(pathname: string): string | null {
   const normalized = pathname.replace(/\/+$/, "") || "/";
+  const slug = /^\/projects\/([^/]+)$/.exec(normalized)?.[1];
+  if (slug) {
+    const config = projectPagesConfig[slug];
+    return config ? `src/content/projects/${config.mdxPath}.mdx` : null;
+  }
   return PAGE_PATHS[normalized] ?? null;
 }

@@ -17,9 +17,20 @@ const BlankLayout = () => {
   const outlet = useOutlet();
 
   return (
-    <main className="flex min-h-screen flex-col">
-      <PageShell>{outlet}</PageShell>
-    </main>
+    <div className="flex min-h-screen flex-col">
+      <PageShell>
+        {/* inside PageShell so the code view (which brings its own #main)
+            replaces this landmark instead of nesting under it; tabIndex lets
+            the exit hand focus back, same as AppLayout */}
+        <main
+          id="main"
+          tabIndex={-1}
+          className="flex min-h-screen flex-1 flex-col outline-none"
+        >
+          {outlet}
+        </main>
+      </PageShell>
+    </div>
   );
 };
 

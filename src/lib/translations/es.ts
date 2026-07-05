@@ -60,6 +60,7 @@ export const es = {
   },
   common: {
     home: "Inicio",
+    back: "Volver",
     overview: "Resumen",
     menu: {
       themes: "Temas",

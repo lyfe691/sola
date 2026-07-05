@@ -58,6 +58,7 @@ export const de = {
   },
   common: {
     home: "Startseite",
+    back: "Zurück",
     overview: "Überblick",
     menu: {
       themes: "Designs",

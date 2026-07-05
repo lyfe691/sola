@@ -53,6 +53,7 @@ export const zh = {
   },
   common: {
     home: "首页",
+    back: "返回",
     overview: "概览",
     menu: {
       themes: "主题",

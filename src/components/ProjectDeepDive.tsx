@@ -8,7 +8,7 @@
 
 import React, { lazy, useState } from "react";
 import { motion } from "motion/react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CodeXml } from "lucide-react";
 import { useNavigate } from "react-router";
 import {
   Breadcrumb,
@@ -18,7 +18,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { IconButton } from "./ui/custom/icon-button";
+import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 import { EASE_OUT } from "@/utils/transitions";
 
 const Silk = lazy(() => import("@/components/backgrounds/Silk"));
@@ -64,6 +73,9 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
 }) => {
   const navigate = useNavigate();
   const [silkReady, setSilkReady] = useState(false);
+  const { setActive: setCodeView } = useCodeView();
+  const { language } = useLanguage();
+  const t = translations[language];
 
   // instant scroll to top on mount to prevent white flash during smooth scroll
   React.useLayoutEffect(() => {
@@ -153,13 +165,13 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
               <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbLink href="/" className="text-xs">
-                    Home
+                    {t.common.home}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink href="/projects" className="text-xs">
-                    Projects
+                    {t.nav.projects}
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
@@ -171,16 +183,37 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
               </BreadcrumbList>
             </Breadcrumb>
 
-            <IconButton
-              variant="ghost"
-              icon={<ArrowLeft />}
-              iconPosition="left"
-              size="sm"
-              onClick={() => navigate("/projects")}
-              className="text-xs h-8 px-3 gap-2"
-            >
-              Back
-            </IconButton>
+            <div className="flex items-center gap-1.5">
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => setCodeView(true)}
+                      aria-label={t.common.diff.showDiff}
+                      className="text-muted-foreground hover:text-foreground"
+                    />
+                  }
+                >
+                  <CodeXml className="size-4" aria-hidden="true" />
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  {t.common.diff.showDiff}
+                </TooltipContent>
+              </Tooltip>
+
+              <IconButton
+                variant="ghost"
+                icon={<ArrowLeft />}
+                iconPosition="left"
+                size="sm"
+                onClick={() => navigate("/projects")}
+                className="text-xs h-8 px-3 gap-2"
+              >
+                {t.common.back}
+              </IconButton>
+            </div>
           </div>
         </div>
       </div>

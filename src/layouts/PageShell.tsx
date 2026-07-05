@@ -71,10 +71,15 @@ const PageShell = ({ children }: { children: ReactNode }) => {
           window.scrollTo(0, 0);
         } else {
           wasActive.current = false;
-          window.scrollTo(0, savedScroll.current);
-          // the toggle that opened the mode lives in a long-closed menu —
-          // hand focus back to the page's main landmark instead
-          document.getElementById("main")?.focus({ preventScroll: true });
+          // rAF: the returning page may scroll itself to the top in a mount
+          // layout effect (ProjectDeepDive does) — those run pre-paint, so
+          // deferring one frame guarantees the restore lands last
+          requestAnimationFrame(() => {
+            window.scrollTo(0, savedScroll.current);
+            // the toggle that opened the mode lives in a long-closed menu —
+            // hand focus back to the page's main landmark instead
+            document.getElementById("main")?.focus({ preventScroll: true });
+          });
         }
       }}
     >

@@ -57,6 +57,7 @@ export const en = {
   },
   common: {
     home: "Home",
+    back: "Back",
     overview: "Overview",
     menu: {
       themes: "Themes",

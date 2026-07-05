@@ -55,6 +55,7 @@ export const ja = {
   },
   common: {
     home: "ホーム",
+    back: "戻る",
     overview: "概要",
     menu: {
       themes: "テーマ",
