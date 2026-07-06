@@ -18,14 +18,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "./ui/custom/icon-button";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { EASE_OUT } from "@/utils/transitions";
@@ -198,9 +195,7 @@ const ProjectPage: React.FC<ProjectPageProps> = ({
                 >
                   <CodeXml className="size-4" aria-hidden="true" />
                 </TooltipTrigger>
-                <TooltipContent side="bottom">
-                  {t.common.diff.showDiff}
-                </TooltipContent>
+                <DiffHintContent side="bottom" />
               </Tooltip>
 
               <IconButton

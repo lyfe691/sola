@@ -21,12 +21,10 @@ import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { MenuHint } from "@/components/menu-hint";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
-import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
-import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
+import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { Switch } from "@/components/ui/switch";
 import {
   Tooltip,
-  TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
@@ -127,109 +125,6 @@ function TreeLeaf({
 }
 
 type BranchId = "themes" | "custom" | "background";
-
-/**
- * Miniature of what the code view shows — a commit (dot + sha) and its diff,
- * one line removed, one added. Painted with the code view's own DIFF_TOKENS
- * so the preview colors are exactly the real thing's.
- */
-function DiffHintArt() {
-  const isDark = useIsDarkScheme();
-
-  return (
-    <svg
-      viewBox="0 0 152 76"
-      // block, or the inline baseline gap makes the wrapper taller than the
-      // art and its bottom corners escape the wrapper's rounding
-      className="block w-full"
-      style={DIFF_TOKENS[isDark ? "dark" : "light"]}
-      aria-hidden="true"
-    >
-      {/* panel ground — square-cornered; the wrapper's rounded-lg clips it
-          concentric with the bubble (rounded-xl = 1.4 × --radius = 14px,
-          minus the 4px inset = 10px = --radius = rounded-lg), so the
-          droplet's outline stays the only border in the tooltip */}
-      <rect width="152" height="76" className="fill-muted/40" />
-      {/* commit dot + sha chip */}
-      <circle cx="16" cy="16" r="3.5" className="fill-primary" />
-      <rect
-        x="26"
-        y="12"
-        width="34"
-        height="8"
-        rx="4"
-        className="fill-foreground/12"
-      />
-      {/* context line */}
-      <rect
-        x="14"
-        y="28"
-        width="86"
-        height="6"
-        rx="3"
-        className="fill-foreground/10"
-      />
-      {/* removed line: tinted row, − marker, content bar */}
-      <rect
-        x="6"
-        y="41"
-        width="140"
-        height="12"
-        rx="4"
-        className="fill-(--diff-del-fg)/10"
-      />
-      <rect
-        x="12"
-        y="45.5"
-        width="8"
-        height="3"
-        rx="1.5"
-        className="fill-(--diff-del-fg)"
-      />
-      <rect
-        x="28"
-        y="44"
-        width="58"
-        height="6"
-        rx="3"
-        className="fill-(--diff-del-fg)/40"
-      />
-      {/* added line: tinted row, + marker, content bar */}
-      <rect
-        x="6"
-        y="57"
-        width="140"
-        height="12"
-        rx="4"
-        className="fill-(--diff-add-fg)/10"
-      />
-      <rect
-        x="12"
-        y="61.5"
-        width="8"
-        height="3"
-        rx="1.5"
-        className="fill-(--diff-add-fg)"
-      />
-      <rect
-        x="14.5"
-        y="59"
-        width="3"
-        height="8"
-        rx="1.5"
-        className="fill-(--diff-add-fg)"
-      />
-      <rect
-        x="28"
-        y="60"
-        width="84"
-        height="6"
-        rx="3"
-        className="fill-(--diff-add-fg)/40"
-      />
-    </svg>
-  );
-}
 
 /** The theme/background picker tree — the content of the appearance menu. */
 export function ThemeMenuContent({
@@ -336,22 +231,7 @@ export function ThemeMenuContent({
               }}
             />
           </TooltipTrigger>
-          <TooltipContent
-            side="left"
-            sideOffset={16}
-            className="w-52 flex-col items-stretch gap-1.5 p-1"
-          >
-            <div className="overflow-hidden rounded-lg">
-              <DiffHintArt />
-            </div>
-            <div className="space-y-0.5 px-2 pt-0.5 pb-1.5 text-left">
-              {/* a command name, not copy — every locale keeps "git diff" */}
-              <p className="font-mono">git diff</p>
-              <p className="font-normal leading-relaxed text-popover-foreground/70">
-                {t.common.diff.hint}
-              </p>
-            </div>
-          </TooltipContent>
+          <DiffHintContent side="left" sideOffset={16} />
         </Tooltip>
       </TooltipProvider>
     </div>
