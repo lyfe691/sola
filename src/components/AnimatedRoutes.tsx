@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Routes, Route, Navigate } from "react-router";
+import { Routes, Route } from "react-router";
 import AppLayout from "@/layouts/AppLayout";
 import BlankLayout from "@/layouts/BlankLayout";
 import { APP_ROUTES, type RouteLayout } from "@/config/routes";
@@ -30,8 +30,6 @@ export const AnimatedRoutes = () => {
           )}
         </Route>
       ))}
-
-      <Route path="*" element={<Navigate to="/404" />} />
     </Routes>
   );
 };
