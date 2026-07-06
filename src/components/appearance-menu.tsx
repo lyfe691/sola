@@ -26,6 +26,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { ThemeMenuContent, ThemeTriggerIcon } from "./theme-toggle";
@@ -73,6 +74,15 @@ export function AppearanceMenu() {
   };
 
   const close = () => setOpenId(null);
+
+  // the `d` shortcut flips into the code view from anywhere, unmounting the
+  // nav under us — close first so the portaled surface exits with its own
+  // fade instead of hanging opaque over the page transition. (The switch
+  // row already closes via onClose; this covers the keyboard path.)
+  const { active: codeView } = useCodeView();
+  useEffect(() => {
+    if (codeView) setOpenId(null);
+  }, [codeView]);
 
   // focusable, non-collapsed items in the open surface (for roving focus)
   const getItems = () =>

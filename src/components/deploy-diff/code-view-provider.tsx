@@ -38,6 +38,34 @@ export function CodeViewProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [active]);
 
+  // `d` (for diff) flips the mode from anywhere. A bare keypress, so bail
+  // while typing (inputs, the palette's field), mid-IME composition
+  // (ja/zh), on key repeat, and under ⌘/ctrl/alt (⌘D is the browser's
+  // bookmark). Shift stays allowed — lowercasing also keeps caps lock
+  // working.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (
+        e.key.toLowerCase() !== "d" ||
+        e.defaultPrevented ||
+        e.isComposing ||
+        e.repeat
+      )
+        return;
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = e.target as HTMLElement;
+      if (
+        el.tagName === "INPUT" ||
+        el.tagName === "TEXTAREA" ||
+        el.isContentEditable
+      )
+        return;
+      setActive((prev) => !prev);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   const value = useMemo(
     () => ({
       active,

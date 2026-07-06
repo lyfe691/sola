@@ -13,6 +13,7 @@
  */
 
 import type { ComponentProps } from "react";
+import { Kbd } from "@/components/ui/kbd";
 import { TooltipContent } from "@/components/ui/tooltip";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -134,7 +135,10 @@ export function DiffHintContent({
   return (
     <TooltipContent
       className={cn(
-        "w-52 flex-col items-stretch gap-1.5 p-1 select-none",
+        // the trailing has-data override cancels the base tooltip's
+        // kbd-aware pr-1.5 — the art needs the 4px inset on all sides to
+        // stay concentric with the bubble
+        "w-52 flex-col items-stretch gap-1.5 p-1 select-none has-data-[slot=kbd]:pr-1",
         className,
       )}
       {...props}
@@ -143,8 +147,12 @@ export function DiffHintContent({
         <DiffHintArt />
       </div>
       <div className="space-y-0.5 px-2 pt-0.5 pb-1.5 text-left">
-        {/* a command name, not copy — every locale keeps "git diff" */}
-        <p className="font-mono">git diff</p>
+        {/* a command name, not copy — every locale keeps "git diff".
+            The chip is the mode's toggle key (see code-view-provider). */}
+        <div className="flex items-center justify-between gap-2">
+          <p className="font-mono">git diff</p>
+          <Kbd className="h-4 min-w-4 px-1 text-[10px]">D</Kbd>
+        </div>
         <p className="font-normal leading-relaxed text-popover-foreground/70">
           {t.common.diff.hint}
         </p>
