@@ -18,6 +18,7 @@ import {
 } from "@/config/social";
 import { useState } from "react";
 import { toast } from "sonner";
+import { DeployChip } from "@/components/deploy-diff/deploy-chip";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -236,12 +237,15 @@ const Footer = () => {
         {/* bottom section */}
         <div className="relative">
           <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent" />
-          <div className="pt-8 text-center">
+          <div className="flex flex-col items-center gap-2.5 pt-8 text-center">
             <p className="text-xs text-foreground/40 leading-relaxed">
               © {year}{" "}
               <span className="font-medium">Yanis Sebastian Zürcher</span>.{" "}
               {t.footer.rights}
             </p>
+            {/* the deployed-commit pin, the page's last line — centered, out
+                of the scroll-to-top button's fixed bottom-right corner */}
+            <DeployChip />
           </div>
         </div>
       </div>

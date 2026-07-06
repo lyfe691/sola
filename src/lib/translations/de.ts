@@ -69,6 +69,7 @@ export const de = {
       showDiff: "Git-Diff anzeigen",
       exit: "Git-Diff ausblenden",
       hint: "Zeigt den letzten Commit, der die aktuelle Seite verändert hat.",
+      deployed: "Der Commit, aus dem dieses Deployment gebaut wurde.",
       noChanges: "Keine erfassten Änderungen für diese Seite.",
       viewOnGitHub: "Auf GitHub ansehen",
       error: "Diff konnte nicht geladen werden.",

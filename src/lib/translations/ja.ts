@@ -66,6 +66,7 @@ export const ja = {
       showDiff: "git diff を表示",
       exit: "git diff を非表示",
       hint: "現在のページを最後に変更したコミットを表示します。",
+      deployed: "このデプロイの元になったコミットです。",
       noChanges: "このページの変更履歴はありません。",
       viewOnGitHub: "GitHub で見る",
       error: "diff を読み込めませんでした。",

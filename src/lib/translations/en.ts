@@ -68,6 +68,7 @@ export const en = {
       showDiff: "Show git diff",
       exit: "Hide git diff",
       hint: "Shows the last commit that touched the current page.",
+      deployed: "The commit this deployment was built from.",
       noChanges: "No recorded changes for this page.",
       viewOnGitHub: "View on GitHub",
       error: "Couldn't load the diff.",
