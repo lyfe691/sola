@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/drawer";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { useCommandMenu } from "@/hooks/use-command-menu";
+import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTheme } from "./theme-provider";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -54,6 +55,7 @@ export function CommandMenu() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
   const { isOpen, closeCommandMenu } = useCommandMenu();
+  const { active: codeView, setActive: setCodeView } = useCodeView();
   const isMobile = useIsMobile();
   const { active: activeBackground, setActive: setBackground } =
     useBackground();
@@ -141,6 +143,19 @@ export function CommandMenu() {
                 <CommandShortcut>↵</CommandShortcut>
               </CommandItem>
             ))}
+            {/* the diff mode rides with navigation — flipping it swaps the
+                page like a route does. Label follows the mode's state; the
+                chip names its global key. */}
+            <CommandItem
+              value={codeView ? t.common.diff.exit : t.common.diff.showDiff}
+              onSelect={() => {
+                closeCommandMenu();
+                setCodeView(!codeView);
+              }}
+            >
+              <span>{codeView ? t.common.diff.exit : t.common.diff.showDiff}</span>
+              <CommandShortcut>D</CommandShortcut>
+            </CommandItem>
           </CommandGroup>
 
           <CommandSeparator />
