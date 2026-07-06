@@ -75,14 +75,13 @@ export function AppearanceMenu() {
 
   const close = () => setOpenId(null);
 
-  // the `d` shortcut flips into the code view from anywhere, unmounting the
-  // nav under us — close first so the portaled surface exits with its own
-  // fade instead of hanging opaque over the page transition. (The switch
-  // row already closes via onClose; this covers the keyboard path.)
+  // the `d` shortcut can flip into the code view while we're open, and
+  // Navigation unmounts us only after its 250ms exit fade — which would
+  // leave the portaled surface hanging opaque over the transition. Deriving
+  // the render off codeView plays the surface's own exit immediately
+  // instead. No state to sync: Navigation remounts us fresh after the mode,
+  // so the stale openId never re-shows.
   const { active: codeView } = useCodeView();
-  useEffect(() => {
-    if (codeView) setOpenId(null);
-  }, [codeView]);
 
   // focusable, non-collapsed items in the open surface (for roving focus)
   const getItems = () =>
@@ -229,7 +228,7 @@ export function AppearanceMenu() {
 
       {createPortal(
         <AnimatePresence>
-          {openId && anchor && (
+          {openId && anchor && !codeView && (
             <motion.div
               ref={popoverRef}
               key="appearance-popover"
