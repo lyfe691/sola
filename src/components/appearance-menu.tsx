@@ -108,6 +108,13 @@ export function AppearanceMenu() {
       if (popoverRef.current?.contains(target)) return;
       if (buttons.current.language?.contains(target)) return;
       if (buttons.current.theme?.contains(target)) return;
+      // tooltips portal to <body>, outside popoverRef — a press inside one
+      // (e.g. the git-diff droplet) isn't an outside click
+      if (
+        target instanceof Element &&
+        target.closest('[data-slot="tooltip-content"]')
+      )
+        return;
       setOpenId(null);
     };
     const onKey = (e: KeyboardEvent) => {
