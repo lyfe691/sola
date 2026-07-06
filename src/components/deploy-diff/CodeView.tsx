@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
+import { Caret } from "./caret";
 import { CommitDiff } from "./CommitDiff";
 import { DIFF_TOKENS } from "./diff-tokens";
 import { useCodeView } from "./code-view-provider";
@@ -142,27 +143,6 @@ function useTypewriter(target: string): string {
   }, [target, reducedMotion]);
 
   return reducedMotion ? target : text;
-}
-
-/**
- * The prompt's caret: a thin primary bar, em-sized so it scales with the
- * type. Solid while characters arrive; while the command waits (on the
- * fetch, or through the finished hold) it phases — a soft breath, not a
- * hard terminal strobe, matching how everything else on this site idles.
- */
-function Caret({ blinking }: { blinking: boolean }) {
-  return (
-    <motion.span
-      aria-hidden
-      className="ml-[0.15em] inline-block h-[1em] w-[0.09em] min-w-[2px] translate-y-[0.12em] rounded-full bg-primary"
-      animate={blinking ? { opacity: [1, 0.15, 1] } : { opacity: 1 }}
-      transition={
-        blinking
-          ? { duration: 1.2, repeat: Infinity, ease: REVEAL }
-          : { duration: 0.1 }
-      }
-    />
-  );
 }
 
 function Dot() {
