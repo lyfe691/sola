@@ -4,9 +4,24 @@
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ *
+ * The GitHub heatmap, themed through the site's tokens. Two departures from
+ * the library's defaults: day squares carry the site's droplet tooltip (a
+ * grouped provider, so sweeping across squares feels instant after the
+ * first), and the block size is solved from the card's measured width so
+ * the grid fills the card instead of stopping at its intrinsic ~740px.
+ * The weekday-label gutter is text-measured by the library per locale, so
+ * it's recovered from the rendered SVG rather than guessed.
  */
 
-import { cloneElement, useCallback, useMemo } from "react";
+import {
+  cloneElement,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityCalendar,
   type Activity,
@@ -24,6 +39,12 @@ import {
   type ContributionYear,
 } from "@/lib/github-contributions";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 const USERNAME = "lyfe691";
@@ -53,14 +74,15 @@ const heatmapTheme: ThemeInput = {
   ],
 };
 
-const BLOCK_SIZE = 11;
+// the grid never shrinks below GitHub's own 11px (narrow screens scroll,
+// as before); wide cards grow blocks until they fill, capped where the
+// squares start reading chunky
+const BLOCK_SIZE_MIN = 11;
+const BLOCK_SIZE_MAX = 16;
 const BLOCK_MARGIN = 3;
 const FONT_SIZE = 11;
+const WEEK_START = 1; // Monday
 const HEATMAP_LEVELS = 5;
-
-// Matches react-activity-calendar layout math for stable height.
-const CALENDAR_MIN_HEIGHT =
-  FONT_SIZE + 8 + (BLOCK_SIZE + BLOCK_MARGIN) * 7 - BLOCK_MARGIN;
 
 type GitHubContributionCalendarProps = {
   year: ContributionYear;
@@ -119,27 +141,83 @@ const GitHubContributionCalendar = ({
       .replace("{{year}}", String(year));
   }, [data, t, year]);
 
-  const formatTooltip = useCallback(
-    (date: string, count: number) =>
+  // ——— fit the grid to the card ———
+
+  // how many week columns the current data spans (the layout math's X axis)
+  const weekCount = useMemo(() => {
+    const days = data?.contributions;
+    if (!days?.length) return 53;
+    const lead = (new Date(days[0].date).getDay() - WEEK_START + 7) % 7;
+    return Math.ceil((lead + days.length) / 7);
+  }, [data]);
+
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [blockSize, setBlockSize] = useState(BLOCK_SIZE_MIN);
+
+  useLayoutEffect(() => {
+    const body = bodyRef.current;
+    if (!body) return;
+
+    const fit = () => {
+      const svg = body.querySelector(".react-activity-calendar__calendar");
+      const svgWidth = Number(svg?.getAttribute("width"));
+      if (!svgWidth) return;
+      // grid width at the current block size is known, so the rendered SVG
+      // gives away the label gutter exactly — no locale metric guessing
+      const grid = weekCount * (blockSize + BLOCK_MARGIN) - BLOCK_MARGIN;
+      const gutter = svgWidth - grid;
+      const usable = body.clientWidth - gutter + BLOCK_MARGIN;
+      const next = Math.min(
+        BLOCK_SIZE_MAX,
+        Math.max(
+          BLOCK_SIZE_MIN,
+          Math.floor(usable / weekCount) - BLOCK_MARGIN,
+        ),
+      );
+      setBlockSize(next);
+    };
+
+    // run now (a block-size change re-renders and re-enters here, converging
+    // in one step since the gutter is size-independent), then follow resizes
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(body);
+    return () => observer.disconnect();
+  }, [weekCount, blockSize, locale, data]);
+
+  // matches react-activity-calendar's layout math for stable height
+  const calendarMinHeight =
+    FONT_SIZE + 8 + (blockSize + BLOCK_MARGIN) * 7 - BLOCK_MARGIN;
+
+  // ——— droplet tooltips on the day squares ———
+
+  const formatDay = useCallback(
+    (activity: Activity) =>
       t.about.github.dayTooltip
-        .replace("{count}", String(count))
-        .replace("{date}", date),
-    [t.about.github.dayTooltip],
+        .replace("{count}", String(activity.count))
+        .replace(
+          "{date}",
+          new Intl.DateTimeFormat(locale, { dateStyle: "medium" }).format(
+            new Date(activity.date),
+          ),
+        ),
+    [t.about.github.dayTooltip, locale],
   );
 
   const renderBlock = useCallback(
     (block: BlockElement, activity: Activity) => (
-      <g>
-        {cloneElement(block, {
-          style: {
-            ...block.props.style,
-            stroke: "none",
-          },
-        })}
-        <title>{formatTooltip(activity.date, activity.count)}</title>
-      </g>
+      <Tooltip>
+        <TooltipTrigger
+          render={cloneElement(block, {
+            style: { ...block.props.style, stroke: "none" },
+          })}
+        />
+        <TooltipContent side="top" sideOffset={8}>
+          {formatDay(activity)}
+        </TooltipContent>
+      </Tooltip>
     ),
-    [formatTooltip],
+    [formatDay],
   );
 
   const showCalendar = !error && (loading || data);
@@ -151,30 +229,35 @@ const GitHubContributionCalendar = ({
       data-scheme={colorScheme}
     >
       <div
+        ref={bodyRef}
         className="contribution-calendar__body"
-        style={{ minHeight: CALENDAR_MIN_HEIGHT }}
+        style={{ minHeight: calendarMinHeight }}
       >
         {showError ? (
           <div className="flex h-full min-h-[inherit] items-center justify-center rounded-lg border border-dashed border-foreground/12 bg-foreground/[0.02] px-4 py-8 text-center text-sm text-muted-foreground">
             {t.about.github.loadError}
           </div>
         ) : showCalendar ? (
-          <ActivityCalendar
-            data={data?.contributions ?? []}
-            loading={loading}
-            colorScheme={colorScheme}
-            theme={heatmapTheme}
-            labels={labels}
-            weekStart={1}
-            blockSize={BLOCK_SIZE}
-            blockRadius={3}
-            blockMargin={BLOCK_MARGIN}
-            fontSize={FONT_SIZE}
-            showWeekdayLabels={["mon", "wed", "fri"]}
-            showTotalCount={false}
-            showColorLegend={false}
-            renderBlock={renderBlock}
-          />
+          // one grouped provider: the first square lingers 300ms, then
+          // sweeping across neighbours re-anchors the droplet instantly
+          <TooltipProvider delay={300}>
+            <ActivityCalendar
+              data={data?.contributions ?? []}
+              loading={loading}
+              colorScheme={colorScheme}
+              theme={heatmapTheme}
+              labels={labels}
+              weekStart={WEEK_START}
+              blockSize={blockSize}
+              blockRadius={Math.round(blockSize / 4)}
+              blockMargin={BLOCK_MARGIN}
+              fontSize={FONT_SIZE}
+              showWeekdayLabels={["mon", "wed", "fri"]}
+              showTotalCount={false}
+              showColorLegend={false}
+              renderBlock={renderBlock}
+            />
+          </TooltipProvider>
         ) : null}
       </div>
 
