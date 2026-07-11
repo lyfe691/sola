@@ -73,7 +73,10 @@ function TooltipContent({
             // silhouette, so bubble and tail cast one shadow as one object.
             // Origin sits at the tail tip: the bead swells out of the trigger
             // and settles past full size on --ease-pop; exit absorbs back.
-            "inline-flex w-fit max-w-xs origin-[var(--transform-origin)] items-center gap-1.5 rounded-xl bg-popover px-3 py-1.5 text-xs font-medium text-popover-foreground drop-shadow-md outline outline-1 outline-border [transition:scale_250ms_var(--ease-pop),opacity_150ms_var(--ease-out)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[ending-style]:duration-100 data-[ending-style]:ease-out motion-safe:data-[starting-style]:scale-[0.5] motion-safe:data-[ending-style]:scale-[0.9] data-[instant]:transition-none has-data-[slot=kbd]:pr-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-md",
+            // Left/right bubbles hold the two-line height: only at 44px does
+            // the tail's full 20px base sit on straight edge — every thinner
+            // floor leaves a visible nick where it crosses the corner arcs.
+            "inline-flex w-fit max-w-xs origin-[var(--transform-origin)] items-center gap-1.5 rounded-xl bg-popover px-3 py-1.5 text-xs font-medium text-popover-foreground data-[side=left]:min-h-11 data-[side=right]:min-h-11 drop-shadow-md outline outline-1 outline-border [transition:scale_250ms_var(--ease-pop),opacity_150ms_var(--ease-out)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[ending-style]:duration-100 data-[ending-style]:ease-out motion-safe:data-[starting-style]:scale-[0.5] motion-safe:data-[ending-style]:scale-[0.9] data-[instant]:transition-none has-data-[slot=kbd]:pr-1.5 **:data-[slot=kbd]:relative **:data-[slot=kbd]:isolate **:data-[slot=kbd]:z-50 **:data-[slot=kbd]:rounded-md",
             className
           )}
           {...props}
