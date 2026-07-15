@@ -2,14 +2,16 @@
 
 Vite 8 + React 19 + TypeScript strict + Tailwind v4, deployed on Vercel.
 `api/` holds Vercel serverless functions (GitHub activity proxy, version).
+Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 
 ## Verify
 
-- `npm run lint` — must stay at 0 errors (warnings tolerated)
-- `npm run typecheck` — `tsc -b` over src/ and api/ (plain `tsc --noEmit`
+- `bun run lint` — must stay at 0 errors (warnings tolerated)
+- `bun run typecheck` — `tsc -b` over src/ and api/ (plain `tsc --noEmit`
   checks nothing: the root tsconfig is solution-style with `files: []`)
-- `npm test` — vitest
-- `npm run build` — vite build; `npm run dev` serves on port 3000
+- `bun run test` — vitest (NOT `bun test` — that invokes Bun's own test
+  runner instead of the `test` script)
+- `bun run build` — vite build; `bun run dev` serves on port 3000
 - CI (`.github/workflows/ci.yml`) runs all four on push/PR
 
 ## Structure rules
