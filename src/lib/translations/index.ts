@@ -13,6 +13,7 @@ import { en, type Translation } from "./en";
 import { de } from "./de";
 import { es } from "./es";
 import { ja } from "./ja";
+import { ko } from "./ko";
 import { zh } from "./zh";
 
 export const translations: Record<Language, Translation> = {
@@ -20,6 +21,7 @@ export const translations: Record<Language, Translation> = {
   de,
   es,
   ja,
+  ko,
   zh,
 };
 
