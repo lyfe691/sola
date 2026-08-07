@@ -5,9 +5,10 @@ import { en } from "../src/lib/translations/en.ts";
 import { de } from "../src/lib/translations/de.ts";
 import { es } from "../src/lib/translations/es.ts";
 import { ja } from "../src/lib/translations/ja.ts";
+import { ko } from "../src/lib/translations/ko.ts";
 import { zh } from "../src/lib/translations/zh.ts";
 
-const translations = { en, de, es, ja, zh };
+const translations = { en, de, es, ja, ko, zh };
 
 const locales = Object.keys(translations);
 const BASE = "en";

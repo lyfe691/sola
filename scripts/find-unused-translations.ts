@@ -13,6 +13,7 @@ import { en } from "../src/lib/translations/en.ts";
 import { de } from "../src/lib/translations/de.ts";
 import { es } from "../src/lib/translations/es.ts";
 import { ja } from "../src/lib/translations/ja.ts";
+import { ko } from "../src/lib/translations/ko.ts";
 import { zh } from "../src/lib/translations/zh.ts";
 import {
   MAIN_NAVIGATION,
@@ -336,6 +337,12 @@ function main() {
       file: "ja.ts",
       exportName: "ja",
       data: ja as JsonObject,
+      suffix: " satisfies Translation;",
+    },
+    {
+      file: "ko.ts",
+      exportName: "ko",
+      data: ko as JsonObject,
       suffix: " satisfies Translation;",
     },
     {

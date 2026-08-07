@@ -26,6 +26,7 @@ const Certifications: React.FC = () => {
     de: "de-CH",
     es: "es-ES",
     ja: "ja-JP",
+    ko: "ko-KR",
     zh: "zh-CN",
   };
   const formatDate = (iso: string) =>

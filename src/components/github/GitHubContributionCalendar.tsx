@@ -54,6 +54,7 @@ const INTL_LOCALE: Record<string, string> = {
   de: "de",
   es: "es",
   ja: "ja",
+  ko: "ko",
   zh: "zh-CN",
 };
 

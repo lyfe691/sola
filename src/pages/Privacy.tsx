@@ -640,6 +640,8 @@ const Privacy = () => {
     },
   } as const;
 
+  const privacyLanguage = language === "ko" ? "en" : language;
+
   // last updated utilities
   const LAST_UPDATED_ISO = "2026-03-16"; // update when content meaningfully changes
   const localeMap: Record<typeof language, string> = {
@@ -647,6 +649,7 @@ const Privacy = () => {
     de: "de-CH",
     es: "es-ES",
     ja: "ja-JP",
+    ko: "ko-KR",
     zh: "zh-CN",
   };
   const updatedDate = new Date(LAST_UPDATED_ISO);
@@ -660,6 +663,7 @@ const Privacy = () => {
     de: "Aktualisiert",
     es: "Actualizado",
     ja: "更新",
+    ko: "업데이트",
     zh: "已更新",
   }[language];
 
@@ -735,7 +739,7 @@ const Privacy = () => {
         className="mb-16 text-center"
       >
         <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-wrap wrap-break-word">
-          {L[language].pageTitle}
+          {L[privacyLanguage].pageTitle}
         </h1>
         <div className="mt-8 flex items-center justify-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-border bg-background/60 px-2.5 py-1 text-2xs/[1rem] text-foreground/60 backdrop-blur-xs">
@@ -753,24 +757,24 @@ const Privacy = () => {
           <motion.section id="introduction" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].intro.title}
+                {L[privacyLanguage].intro.title}
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed text-base">
-                <p>{L[language].intro.p1}</p>
+                <p>{L[privacyLanguage].intro.p1}</p>
                 <p>
                   <strong className="text-foreground">
-                    {L[language].intro.controller}
+                    {L[privacyLanguage].intro.controller}
                   </strong>{" "}
-                  {L[language].intro.controllerVal}
+                  {L[privacyLanguage].intro.controllerVal}
                   <br />
                   <strong className="text-foreground">
-                    {L[language].intro.contact}
+                    {L[privacyLanguage].intro.contact}
                   </strong>{" "}
                   <a
                     href="mailto:yanis.sebastian.zuercher@gmail.com"
                     className="link"
                   >
-                    {L[language].intro.email}
+                    {L[privacyLanguage].intro.email}
                   </a>
                 </p>
               </div>
@@ -782,16 +786,16 @@ const Privacy = () => {
             <motion.section id="hosting" {...reveal}>
               <Card className="gap-0 h-full px-6">
                 <h2 className="text-xl font-semibold text-foreground mb-4">
-                  {L[language].hosting.title}
+                  {L[privacyLanguage].hosting.title}
                 </h2>
                 <p className="text-muted-foreground leading-relaxed text-base">
-                  {L[language].hosting.p1}
+                  {L[privacyLanguage].hosting.p1}
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-base mt-3">
                   <strong className="text-foreground">
-                    {L[language].hosting.legal.split(":")[0]}:
+                    {L[privacyLanguage].hosting.legal.split(":")[0]}:
                   </strong>{" "}
-                  {L[language].hosting.legal
+                  {L[privacyLanguage].hosting.legal
                     .split(":")
                     .slice(1)
                     .join(":")
@@ -803,16 +807,16 @@ const Privacy = () => {
             <motion.section id="analytics" {...reveal}>
               <Card className="gap-0 h-full px-6">
                 <h2 className="text-xl font-semibold text-foreground mb-4">
-                  {L[language].analytics.title}
+                  {L[privacyLanguage].analytics.title}
                 </h2>
                 <p className="text-muted-foreground leading-relaxed text-base">
-                  {L[language].analytics.p1}
+                  {L[privacyLanguage].analytics.p1}
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-base mt-3">
                   <strong className="text-foreground">
-                    {L[language].hosting.legal.split(":")[0]}:
+                    {L[privacyLanguage].hosting.legal.split(":")[0]}:
                   </strong>{" "}
-                  {L[language].analytics.legal
+                  {L[privacyLanguage].analytics.legal
                     .split(":")
                     .slice(1)
                     .join(":")
@@ -825,10 +829,10 @@ const Privacy = () => {
           <motion.section id="cookies" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].cookies.title}
+                {L[privacyLanguage].cookies.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].cookies.p1}
+                {L[privacyLanguage].cookies.p1}
               </p>
             </Card>
           </motion.section>
@@ -836,16 +840,20 @@ const Privacy = () => {
           <motion.section id="contact" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].contact.title}
+                {L[privacyLanguage].contact.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].contact.p1}
+                {L[privacyLanguage].contact.p1}
               </p>
               <p className="text-muted-foreground leading-relaxed text-base mt-3">
                 <strong className="text-foreground">
-                  {L[language].hosting.legal.split(":")[0]}:
+                  {L[privacyLanguage].hosting.legal.split(":")[0]}:
                 </strong>{" "}
-                {L[language].contact.legal.split(":").slice(1).join(":").trim()}
+                {L[privacyLanguage].contact.legal
+                  .split(":")
+                  .slice(1)
+                  .join(":")
+                  .trim()}
               </p>
             </Card>
           </motion.section>
@@ -853,16 +861,20 @@ const Privacy = () => {
           <motion.section id="github" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].github.title}
+                {L[privacyLanguage].github.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].github.p1}
+                {L[privacyLanguage].github.p1}
               </p>
               <p className="text-muted-foreground leading-relaxed text-base mt-3">
                 <strong className="text-foreground">
-                  {L[language].hosting.legal.split(":")[0]}:
+                  {L[privacyLanguage].hosting.legal.split(":")[0]}:
                 </strong>{" "}
-                {L[language].github.legal.split(":").slice(1).join(":").trim()}
+                {L[privacyLanguage].github.legal
+                  .split(":")
+                  .slice(1)
+                  .join(":")
+                  .trim()}
               </p>
             </Card>
           </motion.section>
@@ -870,10 +882,10 @@ const Privacy = () => {
           <motion.section id="processors" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].processors.title}
+                {L[privacyLanguage].processors.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].processors.p1}
+                {L[privacyLanguage].processors.p1}
               </p>
             </Card>
           </motion.section>
@@ -881,29 +893,31 @@ const Privacy = () => {
           <motion.section id="rights" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].rights.title}
+                {L[privacyLanguage].rights.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].rights.p1}
+                {L[privacyLanguage].rights.p1}
               </p>
-              {"items" in L[language].rights &&
-                Array.isArray(L[language].rights.items) && (
+              {"items" in L[privacyLanguage].rights &&
+                Array.isArray(L[privacyLanguage].rights.items) && (
                   <ul className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-muted-foreground">
-                    {(L[language].rights.items as string[]).map((item) => (
-                      <li key={item} className="flex items-start gap-2.5">
-                        <span
-                          aria-hidden
-                          className="flex h-5 shrink-0 items-center"
-                        >
-                          <span className="size-1.5 rounded-full bg-primary/70" />
-                        </span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
+                    {(L[privacyLanguage].rights.items as string[]).map(
+                      (item) => (
+                        <li key={item} className="flex items-start gap-2.5">
+                          <span
+                            aria-hidden
+                            className="flex h-5 shrink-0 items-center"
+                          >
+                            <span className="size-1.5 rounded-full bg-primary/70" />
+                          </span>
+                          <span>{item}</span>
+                        </li>
+                      ),
+                    )}
                   </ul>
                 )}
               <p className="text-muted-foreground leading-relaxed text-base mt-4">
-                {L[language].rights.p2}
+                {L[privacyLanguage].rights.p2}
               </p>
             </Card>
           </motion.section>
@@ -911,10 +925,10 @@ const Privacy = () => {
           <motion.section id="changes" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].changes.title}
+                {L[privacyLanguage].changes.title}
               </h2>
               <p className="text-muted-foreground leading-relaxed text-base">
-                {L[language].changes.p1}
+                {L[privacyLanguage].changes.p1}
               </p>
             </Card>
           </motion.section>
@@ -924,19 +938,19 @@ const Privacy = () => {
           <motion.section id="impressum" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {L[language].impressum.title}
+                {L[privacyLanguage].impressum.title}
               </h2>
               <div className="text-muted-foreground leading-relaxed space-y-2 text-base">
                 <p>
                   <span className="font-semibold text-foreground">
-                    {L[language].impressum.responsible}
+                    {L[privacyLanguage].impressum.responsible}
                   </span>
                 </p>
-                <p>{L[language].impressum.name}</p>
-                <p>{L[language].impressum.location}</p>
+                <p>{L[privacyLanguage].impressum.name}</p>
+                <p>{L[privacyLanguage].impressum.location}</p>
                 <p>
                   <span className="font-semibold text-foreground">
-                    {L[language].impressum.emailLabel}
+                    {L[privacyLanguage].impressum.emailLabel}
                   </span>{" "}
                   <a
                     href="mailto:yanis.sebastian.zuercher@gmail.com"
@@ -965,7 +979,7 @@ const Privacy = () => {
             iconPosition="left"
             className="inline-flex items-center gap-2 text-sm "
           >
-            {L[language].back}
+            {L[privacyLanguage].back}
           </IconButton>
         </motion.div>
       </div>
