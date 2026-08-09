@@ -13,7 +13,6 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  tooltipCardClassName,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
@@ -163,9 +162,9 @@ export function LinkPreview({
       <TooltipContent
         side="top"
         className={cn(
-          // the screenshot preview is a card, not a label — popover surface
-          !compact && tooltipCardClassName,
-          !compact && "max-w-none flex-col items-stretch gap-0 p-0",
+          // the screenshot rides the same inverted bubble as every tooltip —
+          // one link-preview family, the deep-dive one just adds the image
+          !compact && "max-w-none flex-col items-stretch gap-0 overflow-hidden p-0",
         )}
       >
         {!compact && previewStatus === "ready" && screenshotUrl ? (

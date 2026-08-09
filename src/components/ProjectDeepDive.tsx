@@ -159,30 +159,33 @@ export function ProjectDeepDive({
       <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-xs -mx-4 sm:-mx-6 lg:-mx-8">
         <div className="border-b border-border px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto py-4">
-            <div className="flex items-center justify-between">
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem>
+            <div className="flex items-center justify-between gap-3">
+              {/* min-w-0 down the chain + nowrap list: the crumbs yield to
+                  the button cluster and the title truncates instead of the
+                  two overlapping on narrow screens */}
+              <Breadcrumb className="min-w-0">
+                <BreadcrumbList className="flex-nowrap">
+                  <BreadcrumbItem className="shrink-0">
                     <BreadcrumbLink href="/" className="text-xs">
                       {t.common.home}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
-                  <BreadcrumbItem>
+                  <BreadcrumbItem className="shrink-0">
                     <BreadcrumbLink href="/projects" className="text-xs">
                       {t.nav.projects}
                     </BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <BreadcrumbPage className="text-xs font-medium">
+                  <BreadcrumbItem className="min-w-0">
+                    <BreadcrumbPage className="block truncate text-xs font-medium">
                       {title}
                     </BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex shrink-0 items-center gap-1.5">
                 <Tooltip>
                   <TooltipTrigger
                     render={
