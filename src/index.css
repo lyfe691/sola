@@ -596,6 +596,16 @@
 /* ---------- code block (shiki) ---------- */
 /* Styles target Shiki's generated `pre.shiki > code > span.line` markup and the
    plain-text fallback, which mirrors it. Unlayered so it wins over utilities. */
+/* Surface grammar ported from the shadcn docs code block, derived from the
+   site's own tokens instead of dedicated per-theme values: the --code pair
+   leans on the card pair (nudged toward foreground so it lifts off same-color
+   pages), the number color is mixed from it — all 11 themes hold for free. */
+.code-block {
+  --code: color-mix(in oklab, var(--card) 97%, var(--foreground));
+  --code-foreground: var(--card-foreground);
+  --code-number: color-mix(in oklab, var(--code-foreground) 45%, transparent);
+}
+
 .code-block .shiki {
   margin: 0;
   background-color: transparent;
@@ -612,17 +622,22 @@
 
 .code-block .shiki .line {
   counter-increment: sh-line;
-  padding-inline: 1.25rem;
+  padding-right: 1.25rem;
 }
 
+/* the number cell is sticky and paints its own --code ground, so code
+   slides underneath it on horizontal scroll (the shadcn-docs behavior) */
 .code-block .shiki .line::before {
   content: counter(sh-line);
+  position: sticky;
+  left: 0;
   display: inline-block;
-  width: 1.25rem;
-  margin-right: 1.5rem;
+  width: 1.75rem;
+  padding-left: 1rem;
+  margin-right: 1.25rem;
   text-align: right;
-  color: var(--muted-foreground);
-  opacity: 0.5;
+  background-color: var(--code);
+  color: var(--code-number);
   user-select: none;
   -webkit-user-select: none;
 }
