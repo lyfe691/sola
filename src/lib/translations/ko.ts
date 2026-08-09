@@ -117,6 +117,7 @@ export const ko = {
     sourceCode: "소스 코드",
     demo: "Demo",
     moreProjects: "더 많은 프로젝트",
+    onThisPage: "목차",
     moreOnGithub: "GitHub에서 더 보기",
     view: "보기",
     update: {

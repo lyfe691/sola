@@ -116,6 +116,7 @@ export const en = {
     sourceCode: "Source Code",
     demo: "Demo",
     moreProjects: "More Projects",
+    onThisPage: "On this page",
     moreOnGithub: "More on GitHub",
     view: "View",
     update: {

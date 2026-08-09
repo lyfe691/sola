@@ -111,6 +111,7 @@ export const zh = {
     sourceCode: "源代码",
     demo: "演示",
     moreProjects: "更多项目",
+    onThisPage: "本页内容",
     moreOnGithub: "在 GitHub 上查看更多",
     view: "查看",
     update: {

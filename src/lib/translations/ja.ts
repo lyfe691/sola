@@ -114,6 +114,7 @@ export const ja = {
     sourceCode: "ソースコード",
     demo: "デモ",
     moreProjects: "他のプロジェクト",
+    onThisPage: "目次",
     moreOnGithub: "GitHub で見る",
     view: "表示",
     update: {

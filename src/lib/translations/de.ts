@@ -117,6 +117,7 @@ export const de = {
     sourceCode: "Quellcode",
     demo: "Demo",
     moreProjects: "Weitere Projekte",
+    onThisPage: "Auf dieser Seite",
     moreOnGithub: "Mehr auf GitHub",
     view: "Ansehen",
     update: {

@@ -20,6 +20,22 @@ interface MDXComponentProps {
   id?: string;
 }
 
+// render-time slug for heading anchors — the MDX pipeline has no rehype-slug
+const slugifyHeading = (children: React.ReactNode): string | undefined => {
+  const text = React.Children.toArray(children)
+    .map((child) =>
+      typeof child === "string" || typeof child === "number"
+        ? String(child)
+        : "",
+    )
+    .join(" ")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
+    .trim()
+    .replace(/\s+/g, "-");
+  return text || undefined;
+};
+
 // element map handed to MDXProvider — matches the design system
 export const MDXComponents = {
   // Headings
@@ -33,15 +49,22 @@ export const MDXComponents = {
     </motion.h1>
   ),
 
-  h2: ({ children, ...props }: MDXComponentProps) => (
-    <motion.h2
-      {...blockReveal}
-      className="text-lg font-semibold text-foreground mb-4 mt-8 first:mt-0"
-      {...props}
-    >
-      {children}
-    </motion.h2>
-  ),
+  // h2s are the article's nav landmarks: the id + data-toc pair lets the
+  // deep-dive section nav pick them up; scroll-mt clears the sticky bar
+  h2: ({ children, id, ...props }: MDXComponentProps) => {
+    const headingId = id ?? slugifyHeading(children);
+    return (
+      <motion.h2
+        {...blockReveal}
+        id={headingId}
+        data-toc={headingId ? "" : undefined}
+        className="text-lg font-semibold text-foreground mb-4 mt-8 first:mt-0 scroll-mt-24"
+        {...props}
+      >
+        {children}
+      </motion.h2>
+    );
+  },
 
   h3: ({ children, ...props }: MDXComponentProps) => (
     <motion.h3
