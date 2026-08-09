@@ -7,7 +7,7 @@
  *
  * The deployed-commit pin for the footer: a quiet mono chip — commit dot +
  * short sha — naming the exact commit this page was built from. Lingering
- * grows the droplet with the live commit (subject, diffstat, date), loaded
+ * grows the hint card with the live commit (subject, diffstat, date), loaded
  * through use-page-diff's site scope so it shares the code view's cache and
  * GitHub rate budget; nothing is fetched until someone actually hovers.
  * Clicking flips into the code view, same as the appearance menu's switch.
@@ -18,9 +18,11 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  tooltipCardClassName,
 } from "@/components/ui/tooltip";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { cn } from "@/lib/utils";
 import { useCodeView } from "./code-view-provider";
 import { DIFF_TOKENS } from "./diff-tokens";
 import { useIsDarkScheme } from "./use-scheme";
@@ -71,11 +73,14 @@ export function DeployChip() {
       </TooltipTrigger>
       <TooltipContent
         side="top"
-        className="w-56 flex-col items-stretch p-1 select-none"
+        className={cn(
+          tooltipCardClassName,
+          "w-56 flex-col items-stretch p-1 select-none",
+        )}
       >
         <div className="space-y-1 px-2 pt-1 pb-1.5 text-left">
           {/* a command name, not copy — and the title the code view opens
-              under, so the droplet reads as its preview */}
+              under, so the card reads as its preview */}
           <p className="font-mono">git show</p>
           {state.status === "loading" && (
             <div className="space-y-1.5 py-1" aria-hidden="true">

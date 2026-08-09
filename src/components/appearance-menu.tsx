@@ -118,7 +118,7 @@ export function AppearanceMenu() {
       if (buttons.current.language?.contains(target)) return;
       if (buttons.current.theme?.contains(target)) return;
       // tooltips portal to <body>, outside popoverRef — a press inside one
-      // (e.g. the git-diff droplet) isn't an outside click
+      // (e.g. the git-diff hint card) isn't an outside click
       if (
         target instanceof Element &&
         target.closest('[data-slot="tooltip-content"]')

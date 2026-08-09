@@ -209,7 +209,7 @@ export function ThemeMenuContent({
 
       {/* flips the whole page into the code view; the label wraps the switch
           so the row itself is clickable. Closing the menu lets the page
-          transition play unobstructed. Lingering on the row grows a droplet
+          transition play unobstructed. Lingering on the row grows a hint card
           with a miniature of the mode and the one-line explanation. */}
       <TooltipProvider>
         <Tooltip>
@@ -231,7 +231,9 @@ export function ThemeMenuContent({
               }}
             />
           </TooltipTrigger>
-          <DiffHintContent side="left" sideOffset={16} />
+          {/* a hair more air than the default — the card hangs off a raised
+              menu panel, not a bare control */}
+          <DiffHintContent side="left" sideOffset={8} />
         </Tooltip>
       </TooltipProvider>
     </div>

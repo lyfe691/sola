@@ -6,8 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * The GitHub heatmap, themed through the site's tokens. Two departures from
- * the library's defaults: day squares carry the site's droplet tooltip (a
- * grouped provider, so sweeping across squares feels instant after the
+ * the library's defaults: day squares carry the site's tooltip (a grouped
+ * provider, so sweeping across squares feels instant after the
  * first), and the block size is solved from the card's measured width so
  * the grid fills the card instead of stopping at its intrinsic ~740px.
  * The weekday-label gutter is text-measured by the library per locale, so
@@ -190,7 +190,7 @@ const GitHubContributionCalendar = ({
   const calendarMinHeight =
     FONT_SIZE + 8 + (blockSize + BLOCK_MARGIN) * 7 - BLOCK_MARGIN;
 
-  // ——— droplet tooltips on the day squares ———
+  // ——— tooltips on the day squares ———
 
   const formatDay = useCallback(
     (activity: Activity) =>
@@ -213,9 +213,7 @@ const GitHubContributionCalendar = ({
             style: { ...block.props.style, stroke: "none" },
           })}
         />
-        <TooltipContent side="top" sideOffset={8}>
-          {formatDay(activity)}
-        </TooltipContent>
+        <TooltipContent side="top">{formatDay(activity)}</TooltipContent>
       </Tooltip>
     ),
     [formatDay],
@@ -240,7 +238,7 @@ const GitHubContributionCalendar = ({
           </div>
         ) : showCalendar ? (
           // one grouped provider: the first square lingers 300ms, then
-          // sweeping across neighbours re-anchors the droplet instantly
+          // sweeping across neighbours re-anchors the tooltip instantly
           <TooltipProvider delay={300}>
             <ActivityCalendar
               data={data?.contributions ?? []}

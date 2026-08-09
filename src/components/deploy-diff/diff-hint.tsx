@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * The git-diff droplet body — a miniature of the code view plus the one-line
+ * The git-diff hint card — a miniature of the code view plus the one-line
  * explanation. Shared by every surface that flips into the code view (the
  * appearance menu's switch, the deep-dive toolbar) so the preview stays one
  * artifact and can't drift between copies. Consumers own the Tooltip and
@@ -14,7 +14,10 @@
 
 import type { ComponentProps } from "react";
 import { Kbd } from "@/components/ui/kbd";
-import { TooltipContent } from "@/components/ui/tooltip";
+import {
+  TooltipContent,
+  tooltipCardClassName,
+} from "@/components/ui/tooltip";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -39,9 +42,9 @@ function DiffHintArt() {
       aria-hidden="true"
     >
       {/* panel ground — square-cornered; the wrapper's rounded-lg clips it
-          concentric with the bubble (rounded-xl = 1.4 × --radius = 14px,
+          concentric with the card (rounded-xl = 1.4 × --radius = 14px,
           minus the 4px inset = 10px = --radius = rounded-lg), so the
-          droplet's outline stays the only border in the tooltip */}
+          card's outline stays the only border in the tooltip */}
       <rect width="152" height="76" className="fill-muted/40" />
       {/* commit dot + sha chip */}
       <circle cx="16" cy="16" r="3.5" className="fill-primary" />
@@ -124,7 +127,7 @@ function DiffHintArt() {
   );
 }
 
-/** The droplet's TooltipContent: art panel, mono `git diff` heading, hint. */
+/** The hint card's TooltipContent: art panel, mono `git diff` heading, hint. */
 export function DiffHintContent({
   className,
   ...props
@@ -135,9 +138,10 @@ export function DiffHintContent({
   return (
     <TooltipContent
       className={cn(
+        tooltipCardClassName,
         // the trailing has-data override cancels the base tooltip's
         // kbd-aware pr-1.5 — the art needs the 4px inset on all sides to
-        // stay concentric with the bubble
+        // stay concentric with the card
         "w-52 flex-col items-stretch gap-1.5 p-1 select-none has-data-[slot=kbd]:pr-1",
         className,
       )}
