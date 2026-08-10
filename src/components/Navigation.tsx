@@ -261,13 +261,16 @@ const MobileNav = () => {
       : location.pathname === path || location.pathname.startsWith(`${path}/`);
 
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
 
   const close = useCallback(() => setMenuOpen(false), []);
 
   // while open: block page scroll (touch + wheel, but let the menu scroll if it
-  // overflows), move focus into the menu, and close on Escape (which returns
-  // focus to the trigger)
+  // overflows), move focus into the menu, keep Tab cycling inside the menu +
+  // bar (the close trigger lives in the bar, so both belong to the trap — and
+  // that's also why the overlay can't claim aria-modal), and close on Escape
+  // (which returns focus to the trigger)
   useEffect(() => {
     if (!menuOpen) return;
 
@@ -286,6 +289,36 @@ const MobileNav = () => {
       if (e.key === "Escape") {
         triggerRef.current?.focus();
         setMenuOpen(false);
+        return;
+      }
+      if (e.key !== "Tab") return;
+      // bar and overlay are DOM-adjacent, so native tabbing walks them in
+      // order; only the edges need wrapping
+      const focusables = [barRef.current, navRef.current]
+        .filter((el): el is HTMLElement => el !== null)
+        .flatMap((el) =>
+          Array.from(
+            el.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+          ),
+        );
+      if (focusables.length === 0) return;
+      const active = document.activeElement as HTMLElement | null;
+      const index = active ? focusables.indexOf(active) : -1;
+      if (index === -1) {
+        // outside the trap: pull focus back from the page, but leave portaled
+        // surfaces (the appearance popover) to manage their own
+        if (active === document.body) {
+          e.preventDefault();
+          focusables[0].focus();
+        }
+        return;
+      }
+      if (!e.shiftKey && index === focusables.length - 1) {
+        e.preventDefault();
+        focusables[0].focus();
+      } else if (e.shiftKey && index === 0) {
+        e.preventDefault();
+        focusables[focusables.length - 1].focus();
       }
     };
 
@@ -309,6 +342,7 @@ const MobileNav = () => {
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50 lg:hidden">
         <div className="px-3 sm:px-5">
           <motion.div
+            ref={barRef}
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: EASE_OUT }}
