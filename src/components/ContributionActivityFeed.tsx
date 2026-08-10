@@ -343,9 +343,6 @@ const ContributionActivityFeed = () => {
           </div>
         )}
 
-        {!loading && events.length > VISIBLE_EVENTS ? (
-          <div className="pointer-events-none absolute bottom-0 left-0 h-8 w-full rounded-b-2xl bg-linear-to-t from-background/30 to-transparent" />
-        ) : null}
       </div>
 
       {!loading && events.length > 0 ? (
