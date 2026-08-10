@@ -14,8 +14,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { EASE_EXPO } from "@/utils/transitions";
 
-const EASE_EXPO = [0.16, 1, 0.3, 1] as const;
 const POLL_INTERVAL_MS = 5 * 60 * 1000;
 const DISMISS_KEY = "sola-update-dismissed-version";
 const CURRENT_VERSION = import.meta.env.VITE_APP_VERSION ?? "dev";

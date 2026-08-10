@@ -11,11 +11,11 @@ import {
 } from "motion/react";
 import React, { useState, useEffect, useRef } from "react";
 
-export type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
+type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
 
-export type PerType = "word" | "char" | "line";
+type PerType = "word" | "char" | "line";
 
-export type TextEffectProps = {
+type TextEffectProps = {
   children: string;
   per?: PerType;
   as?: keyof React.JSX.IntrinsicElements;
@@ -228,7 +228,7 @@ const createVariantsWithTransition = (
   };
 };
 
-export function TextEffectWrapper({
+function TextEffectWrapper({
   children,
   per = "word",
   as = "p",

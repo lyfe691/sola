@@ -112,7 +112,6 @@
   --animate-accordion-down: accordion-down 0.2s var(--ease-out);
   --animate-accordion-up: accordion-up 0.2s var(--ease-out);
   --animate-shine: shine 5s linear infinite;
-  --animate-spinner-leaf-fade: spinner-leaf-fade 800ms linear infinite;
   /* press feedback (Button): one pass — the circle expands from the pointer
      to cover the control while fading out. forwards holds the ended state
      until React unmounts the ripple, so there's no flash at the seam. */
@@ -134,15 +133,6 @@
     }
     100% {
       background-position: -100%;
-    }
-  }
-  @keyframes spinner-leaf-fade {
-    0%,
-    100% {
-      opacity: 0;
-    }
-    50% {
-      opacity: 1;
     }
   }
 }

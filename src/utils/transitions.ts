@@ -17,19 +17,17 @@ import { useInView } from "motion/react";
  *   - Content reveals / page transitions want to feel SMOOTH -> longer + a buttery
  *     deceleration curve (SMOOTH), a subtle scale, and a blur-bridge where it helps.
  *
- * Easing curves mirror the CSS custom properties in src/index.css (@theme). In markup use
- * the `ease-*` utilities; in JS import these consts. Never inline a cubic-bezier or use a
- * built-in "easeOut"/"easeInOut" string.
+ * Easing curves mirror the CSS custom properties in src/index.css (@theme) — only curves
+ * actually consumed from JS live here; CSS-only tokens (--ease-in-out, --ease-drawer,
+ * --ease-pop) stay in index.css. In markup use the `ease-*` utilities; in JS import these
+ * consts. Never inline a cubic-bezier or use a built-in "easeOut"/"easeInOut" string.
  */
 
 // Custom easing curves
 // EASE_OUT is a gentle easeOutCubic (not a front-loaded quint) so short hover/UI
 // transitions glide instead of snapping. Mirrors --ease-out in index.css.
 export const EASE_OUT = [0.33, 1, 0.68, 1] as const; // responsive-but-smooth UI (dropdowns/hover)
-export const EASE_IN_OUT = [0.77, 0, 0.175, 1] as const; // on-screen movement / FLIP
-export const EASE_DRAWER = [0.32, 0.72, 0, 1] as const; // edge-sliding panels
 export const EASE_EXPO = [0.16, 1, 0.3, 1] as const; // lush hero entrances
-export const EASE_POP = [0.34, 1.56, 0.64, 1] as const; // press-release pop (button active scale); tiny overshoot, tiny deltas only
 
 // Page transition: a punchy expo. The blur masks its front-loading, so it's fine here.
 export const SMOOTH = [0.16, 1, 0.3, 1] as const;
@@ -70,9 +68,6 @@ export const pageTransitionVariants = {
     transition: { duration: 0.32, ease: CONSUME_IN },
   },
 };
-
-// kept for back-compat (enter timing)
-export const pageTransition = { duration: 0.5, ease: SMOOTH };
 
 // ---- Scroll-reveal variants ----
 // Opacity + a graceful translate + a subtle scale, on the SMOOTH curve. Movement is
