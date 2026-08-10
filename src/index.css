@@ -100,15 +100,34 @@
   /* gentle ease-in-out (matches the JS REVEAL curve) for on-screen morphs that should
      glide rather than snap — nav scroll-pill, link highlight, etc. */
   --ease-smooth: cubic-bezier(0.45, 0, 0.55, 1);
-  /* micro-interaction pop: slight overshoot for press-release (button active
-     scale). Reserve for tiny deltas (2-3%) — bigger ones turn cartoonish. */
+  /* micro-interaction pop: slight overshoot for press-release (name-morpher
+     active scale). Reserve for tiny deltas (2-3%) — bigger ones turn cartoonish. */
   --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* defaults for transition-* utilities that don't state an ease/duration —
+     without these, Tailwind's built-in curve and 150ms sneak past the
+     vocabulary (e.g. the stock button's transition-all) */
+  --default-transition-timing-function: var(--ease-out);
+  --default-transition-duration: 200ms;
 
   --animate-accordion-down: accordion-down 0.2s var(--ease-out);
   --animate-accordion-up: accordion-up 0.2s var(--ease-out);
   --animate-shine: shine 5s linear infinite;
   --animate-spinner-leaf-fade: spinner-leaf-fade 800ms linear infinite;
+  /* press feedback (Button): one pass — the circle expands from the pointer
+     to cover the control while fading out. forwards holds the ended state
+     until React unmounts the ripple, so there's no flash at the seam. */
+  --animate-ripple: ripple 600ms var(--ease-out) forwards;
 
+  @keyframes ripple {
+    from {
+      scale: 0;
+      opacity: 0.3;
+    }
+    to {
+      scale: 1;
+      opacity: 0;
+    }
+  }
   @keyframes shine {
     0% {
       background-position: 100%;

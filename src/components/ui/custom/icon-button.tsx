@@ -67,7 +67,7 @@ export function IconButton({
           pillBg,
         )}
       >
-        <span className="flex transition-transform duration-300 ease-out can-hover:group-hover/btn:scale-110 group-active/btn:scale-95 group-active/btn:duration-[120ms]">
+        <span className="flex transition-transform duration-300 ease-out can-hover:group-hover/btn:scale-110">
           {icon}
         </span>
       </span>

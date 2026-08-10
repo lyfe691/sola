@@ -1,13 +1,11 @@
-import { Button as ButtonPrimitive } from "@base-ui/react/button";
-import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react"
+import { Button as ButtonPrimitive } from "@base-ui/react/button"
+import { cva, type VariantProps } from "class-variance-authority"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  // scale gets its own transition entry: the press snaps down clean (active
-  // forces 100ms + ease-out), the release pops back on --ease-pop, and the
-  // color/shadow properties keep the site's gentle --ease-out glide throughout
-  "group/button inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap [transition:filter_200ms_var(--ease-out),background-color_200ms_var(--ease-out),border-color_200ms_var(--ease-out),color_200ms_var(--ease-out),box-shadow_200ms_var(--ease-out),opacity_200ms_var(--ease-out),scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:brightness-90 active:not-aria-[haspopup]:duration-100 active:not-aria-[haspopup]:ease-out disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/button relative inline-flex shrink-0 items-center justify-center rounded-4xl border border-transparent bg-clip-padding text-sm font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
@@ -20,7 +18,7 @@ const buttonVariants = cva(
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline active:not-aria-[haspopup]:brightness-100",
+        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
         default:
@@ -34,35 +32,89 @@ const buttonVariants = cva(
         "icon-lg": "size-10",
       },
     },
-    compoundVariants: [
-      {
-        // press feedback for everything that reads as a button; link opts out
-        // of press effects (see its brightness reset) and popup triggers are
-        // excluded so anchored menus don't jitter against a moving anchor
-        variant: ["default", "outline", "secondary", "ghost", "destructive"],
-        className: "motion-safe:active:not-aria-[haspopup]:scale-[0.97]",
-      },
-    ],
     defaultVariants: {
       variant: "default",
       size: "default",
     },
-  },
-);
+  }
+)
+
+// Press feedback is an ink ripple (--animate-ripple): a circle sized to cover
+// the button expands from the pointer and fades out. Spawned on pointerdown,
+// removed when its animation ends; keyboard activation keeps the focus ring
+// as its feedback. The link variant reads as text, not a surface — no ripple.
+
+type Ripple = {
+  key: number
+  x: number
+  y: number
+  size: number
+}
+
+function useRipples() {
+  const [ripples, setRipples] = React.useState<Ripple[]>([])
+  const nextKey = React.useRef(0)
+
+  const spawn = React.useCallback((event: React.PointerEvent<HTMLElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
+    const size =
+      2 * Math.hypot(Math.max(x, rect.width - x), Math.max(y, rect.height - y))
+    setRipples((prev) => [...prev, { key: nextKey.current++, x, y, size }])
+  }, [])
+
+  const remove = React.useCallback((key: number) => {
+    setRipples((prev) => prev.filter((ripple) => ripple.key !== key))
+  }, [])
+
+  return { ripples, spawn, remove }
+}
 
 function Button({
   className,
   variant = "default",
   size = "default",
+  onPointerDown,
+  children,
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+  const { ripples, spawn, remove } = useRipples()
+  const rippling = variant !== "link"
+
   return (
     <ButtonPrimitive
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
+      onPointerDown={(event) => {
+        if (rippling && event.button === 0) spawn(event)
+        onPointerDown?.(event)
+      }}
       {...props}
-    />
-  );
+    >
+      {children}
+      {rippling && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
+        >
+          {ripples.map(({ key, x, y, size: diameter }) => (
+            <span
+              key={key}
+              onAnimationEnd={() => remove(key)}
+              className="animate-ripple absolute rounded-full bg-current"
+              style={{
+                left: x - diameter / 2,
+                top: y - diameter / 2,
+                width: diameter,
+                height: diameter,
+              }}
+            />
+          ))}
+        </span>
+      )}
+    </ButtonPrimitive>
+  )
 }
 
-export { Button, buttonVariants };
+export { Button, buttonVariants }
