@@ -183,7 +183,7 @@ const DesktopNav = () => {
           className={cn(
             "pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 transition-[max-width,margin,padding,border-radius,background-color,border-color,box-shadow] duration-200 ease-out",
             scrolled
-              ? "mt-3 max-w-7xl rounded-full border border-foreground/10 bg-background/70 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
+              ? "mt-3 max-w-7xl rounded-full border border-foreground/10 bg-background px-4 py-2 shadow-lg shadow-black/5"
               : "mt-0 max-w-screen-2xl rounded-none border border-transparent bg-transparent px-6 py-5 lg:px-8",
           )}
         >
