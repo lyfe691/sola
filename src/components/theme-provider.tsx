@@ -85,52 +85,40 @@ export function ThemeProvider({
 
   const handleSetTheme = useCallback(
     (newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
-      const applyTheme = () => {
+      const apply = () => {
         localStorage.setItem(storageKey, newTheme);
         setTheme(newTheme);
       };
 
-      const shouldAnimate =
+      const animate =
+        event &&
         "startViewTransition" in document &&
         !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
-        event &&
         resolveTheme(theme) !== resolveTheme(newTheme);
 
-      if (!shouldAnimate) {
-        applyTheme();
+      if (!animate) {
+        apply();
         return;
       }
 
+      // percentages, not px: circle() % radii resolve against the snapshot
+      // box diagonal / √2, and Chromium places px clip-paths on the snapshot
+      // unscaled under fractional display scales
       const { clientX: x, clientY: y } = event;
       const { innerWidth: w, innerHeight: h } = window;
-
-      const maxRadius = Math.ceil(
-        Math.max(
-          Math.hypot(x, y),
-          Math.hypot(w - x, y),
-          Math.hypot(x, h - y),
-          Math.hypot(w - x, h - y),
-        ) * 1.05,
-      );
+      const radius = Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
 
       const root = document.documentElement;
-      root.style.setProperty("--theme-transition-x", `${x}px`);
-      root.style.setProperty("--theme-transition-y", `${y}px`);
-      root.style.setProperty("--theme-transition-radius", `${maxRadius}px`);
+      root.style.setProperty(
+        "--theme-wipe-origin",
+        `${(x / w) * 100}% ${(y / h) * 100}%`,
+      );
+      root.style.setProperty(
+        "--theme-wipe-radius",
+        `${(radius / (Math.hypot(w, h) / Math.SQRT2)) * 100}%`,
+      );
 
-      const clearTransitionVars = () => {
-        root.style.removeProperty("--theme-transition-x");
-        root.style.removeProperty("--theme-transition-y");
-        root.style.removeProperty("--theme-transition-radius");
-      };
-
-      (
-        document as Document & {
-          startViewTransition: (cb: () => void) => { finished: Promise<void> };
-        }
-      )
-        .startViewTransition(applyTheme)
-        .finished.then(clearTransitionVars, clearTransitionVars);
+      document.startViewTransition(apply);
     },
     [storageKey, theme],
   );

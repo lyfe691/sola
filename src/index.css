@@ -538,18 +538,14 @@
     animation-duration: 1s !important;
     animation-iteration-count: infinite !important;
   }
-  /* skip the theme view-transition clip-path sweep — it is pure movement */
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
-  }
 }
 
 /* ---------- theme transition (view transitions api) ---------- */
-/* the transition overlay must not intercept clicks: while it plays (~900ms),
-   interacting again — e.g. switching themes in an open menu — would otherwise
-   land on the overlay and read as an outside-click, closing the menu.
-   pointer-events is inherited, so the pseudo-root covers the whole tree. */
+/* one animation: the next theme wipes in as a circle from the click point
+   (origin/radius set by theme-provider, skipped under reduced motion there);
+   the old frame holds still beneath it. pointer-events: none so mid-wipe
+   clicks — e.g. trying themes in an open menu — reach the page, not the
+   overlay. */
 ::view-transition {
   pointer-events: none;
 }
@@ -560,36 +556,21 @@
 }
 
 ::view-transition-old(root) {
-  z-index: 1;
-  animation: theme-fade-out 700ms var(--ease-out) forwards;
+  animation: none;
 }
 
 ::view-transition-new(root) {
-  z-index: 9999;
-  animation: theme-reveal 700ms var(--ease-drawer) forwards;
+  animation: theme-wipe 700ms var(--ease-out);
 }
 
-@keyframes theme-reveal {
-  0% {
+@keyframes theme-wipe {
+  from {
+    clip-path: circle(0% at var(--theme-wipe-origin, 50% 50%));
+  }
+  to {
     clip-path: circle(
-      0px at var(--theme-transition-x, 50%) var(--theme-transition-y, 50%)
+      var(--theme-wipe-radius, 142%) at var(--theme-wipe-origin, 50% 50%)
     );
-  }
-  100% {
-    clip-path: circle(
-      var(--theme-transition-radius, 150vmax) at var(--theme-transition-x, 50%)
-        var(--theme-transition-y, 50%)
-    );
-  }
-}
-
-@keyframes theme-fade-out {
-  0%,
-  20% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
   }
 }
 
