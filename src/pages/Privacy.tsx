@@ -638,9 +638,135 @@ const Privacy = () => {
       },
       back: "返回",
     },
+    ko: {
+      pageTitle: "개인정보 처리방침",
+      lastUpdated: "최종 업데이트: 2026년 3월",
+      intro: {
+        title: "소개",
+        p1: (
+          <>
+            이 개인 포트폴리오 웹사이트(
+            {" "}
+            <LinkPreview href="https://sola.ysz.life" className="link" compact>
+              {"https://sola.ysz.life"}
+            </LinkPreview>{" "}
+            )는 제 프로젝트와 프리랜스 서비스를 소개합니다. 본 개인정보
+            처리방침은 스위스 연방 데이터 보호법(revFADP 2023)과 EU 일반
+            개인정보 보호법(GDPR)을 준수하며, 어떤 데이터가 어떤 이유로
+            처리되는지 설명합니다.
+          </>
+        ),
+        controller: "데이터 컨트롤러:",
+        controllerVal: "Yanis Sebastian Zürcher, 스위스",
+        contact: "연락처:",
+        email: "yanis.sebastian.zuercher@gmail.com",
+      },
+      hosting: {
+        title: "호스팅",
+        p1: (
+          <>
+            본 사이트는{" "}
+            <LinkPreview href="https://vercel.com" className="link" compact>
+              Vercel Inc.
+            </LinkPreview>
+            (미국 캘리포니아주 Walnut, 340 S Lemon Ave #4133, CA 91789)에서
+            호스팅됩니다. Vercel은 웹사이트를 안전하고 안정적으로 제공하기
+            위해 서버 로그에 연결 데이터(예: IP 주소, 브라우저 유형, 접속
+            시각)를 저장합니다.
+          </>
+        ),
+        legal:
+          "법적 근거: GDPR 제6조 1항 (f) — 사이트 운영 및 보호에 대한 정당한 이익.",
+      },
+      analytics: {
+        title: "분석",
+        p1: "방문 통계는 Vercel Analytics로 수집합니다. 데이터는 저장 전에 익명화되며, 쿠키나 교차 사이트 식별자는 설정되지 않습니다.",
+        legal:
+          "법적 근거: GDPR 제6조 1항 (f) — 개인정보를 침해하지 않으면서 성능을 분석·개선하기 위한 정당한 이익.",
+      },
+      cookies: {
+        title: "쿠키",
+        p1: "본 사이트는 추적 쿠키를 설정하지 않습니다. 호스팅 플랫폼은 보안 및 전송에 꼭 필요한 경우에만 필수 쿠키를 사용할 수 있습니다.",
+      },
+      contact: {
+        title: "문의",
+        p1: "양식이나 이메일로 연락하시면, 제공하신 데이터(이름, 이메일, 메시지)는 문의 처리 및 필요한 후속 대응을 위해서만 처리됩니다.",
+        legal:
+          "법적 근거: GDPR 제6조 1항 (a) — 동의, 그리고 해당하는 경우 제6조 1항 (b) — 귀하의 요청에 따른 계약 전 조치.",
+      },
+      github: {
+        title: "GitHub 콘텐츠",
+        p1: (
+          <>
+            일부 페이지는{" "}
+            <LinkPreview href="https://github.com" className="link" compact>
+              GitHub, Inc.
+            </LinkPreview>{" "}
+            (미국)의 기여 그래프나 저장소 위젯을 불러올 수 있습니다. 이러한
+            리소스를 요청할 때 귀하의 IP 주소가 전송됩니다. GitHub은 EU–US
+            Data Privacy Framework에 참여합니다.
+          </>
+        ),
+        legal:
+          "법적 근거: GDPR 제6조 1항 (f) — 오픈 소스 활동을 보여 주기 위한 정당한 이익.",
+      },
+      processors: {
+        title: "처리자",
+        p1: "Vercel 및 Vercel Analytics에 의한 처리는 GDPR 제28조 및 revFADP 제9조에 부합하는 데이터 처리 계약의 적용을 받습니다.",
+      },
+      rights: {
+        title: "귀하의 권리",
+        p1: "귀하는 열람, 정정, 삭제, 처리 제한, 데이터 이동을 요청할 수 있으며, 정당한 이익에 기반한 처리에 이의를 제기할 수 있습니다.",
+        p2: (
+          <>
+            권리를 행사하려면{" "}
+            <a
+              href="mailto:yanis.sebastian.zuercher@gmail.com"
+              className="link"
+            >
+              yanis.sebastian.zuercher@gmail.com
+            </a>
+            으로 이메일을 보내 주세요. 스위스 거주자는 FDPIC에, EU 거주자는
+            관할 감독 기관에 불만을 제기할 수 있습니다.
+          </>
+        ),
+        items: [
+          "데이터 열람 (GDPR 제15조)",
+          "정정 (GDPR 제16조)",
+          "삭제 (GDPR 제17조)",
+          "처리 제한 (GDPR 제18조)",
+          "데이터 이동권 (GDPR 제20조)",
+          "정당한 이익에 대한 이의 (GDPR 제21조)",
+        ],
+      },
+      changes: {
+        title: "변경",
+        p1: (
+          <>
+            법률 또는 기능 변경으로 본 방침이 달라질 수 있습니다. 최신 버전은{" "}
+            <LinkPreview
+              href="https://sola.ysz.life/privacy"
+              className="link"
+              compact
+            >
+              {"https://sola.ysz.life/privacy"}
+            </LinkPreview>
+            에서 확인할 수 있습니다.
+          </>
+        ),
+      },
+      impressum: {
+        title: "법적 고지",
+        responsible: "본 웹사이트 책임자:",
+        name: "Yanis Sebastian Zürcher",
+        location: "취리히, 스위스",
+        emailLabel: "이메일:",
+      },
+      back: "뒤로",
+    },
   } as const;
 
-  const privacyLanguage = language === "ko" ? "en" : language;
+  const privacyLanguage = language;
 
   // last updated utilities
   const LAST_UPDATED_ISO = "2026-03-16"; // update when content meaningfully changes
