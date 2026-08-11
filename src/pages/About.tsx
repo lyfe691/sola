@@ -121,6 +121,29 @@ function SectionHeading({
   );
 }
 
+/** Soft matte frame — quiet ring + inset pad, not a hard 1px crop edge. */
+function MediaFrame({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "rounded-2xl bg-foreground/[0.03] p-1.5 shadow-xs ring-1 ring-foreground/10",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+const MEDIA_INNER =
+  "size-full overflow-hidden rounded-[0.875rem] bg-muted/20";
+
 // -------------------------------- Portrait --------------------------------
 
 function AboutPortrait({ src, alt }: { src: string; alt: string }) {
@@ -131,38 +154,40 @@ function AboutPortrait({ src, alt }: { src: string; alt: string }) {
     : PORTRAIT_PARTICLES;
 
   return (
-    <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-border bg-muted/20 sm:aspect-square">
-      <img
-        src={src}
-        alt={alt}
-        className="absolute inset-0 size-full object-cover"
-        decoding="async"
-      />
-      {!reduceMotion && (
-        <Suspense fallback={null}>
-          <ParticleImage
-            imageUrl={src}
-            width="100%"
-            height="100%"
-            particleCount={particleCount}
-            particleSize={2}
-            particleOpacity={0.7}
-            speed={0.85}
-            noiseScale={0.0035}
-            noiseStrength={0.03}
-            damping={0.985}
-            lifespan={450}
-            showImage={false}
-            backgroundColor="transparent"
-            cursorInteraction
-            cursorStrength={0.12}
-            cursorRadius={100}
-            dpr={isMobile ? 1.15 : 1.5}
-            className="absolute inset-0 size-full"
-          />
-        </Suspense>
-      )}
-    </div>
+    <MediaFrame>
+      <div className={cn("relative aspect-[4/5] sm:aspect-square", MEDIA_INNER)}>
+        <img
+          src={src}
+          alt={alt}
+          className="absolute inset-0 size-full object-cover"
+          decoding="async"
+        />
+        {!reduceMotion && (
+          <Suspense fallback={null}>
+            <ParticleImage
+              imageUrl={src}
+              width="100%"
+              height="100%"
+              particleCount={particleCount}
+              particleSize={2}
+              particleOpacity={0.7}
+              speed={0.85}
+              noiseScale={0.0035}
+              noiseStrength={0.03}
+              damping={0.985}
+              lifespan={450}
+              showImage={false}
+              backgroundColor="transparent"
+              cursorInteraction
+              cursorStrength={0.12}
+              cursorRadius={100}
+              dpr={isMobile ? 1.15 : 1.5}
+              className="absolute inset-0 size-full"
+            />
+          </Suspense>
+        )}
+      </div>
+    </MediaFrame>
   );
 }
 
@@ -440,14 +465,17 @@ const About = () => {
                   key={key}
                   className="grid grid-cols-1 gap-5 border-t border-foreground/8 py-8 first:border-t-0 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-10"
                 >
-                  <div className="overflow-hidden rounded-lg border border-border/60 bg-muted/15 sm:col-span-4">
+                  <MediaFrame className="sm:col-span-4">
                     <img
                       src={image}
                       alt=""
                       loading="lazy"
-                      className="aspect-[4/3] size-full object-cover sm:aspect-[5/4]"
+                      className={cn(
+                        "aspect-[4/3] object-cover sm:aspect-[5/4]",
+                        MEDIA_INNER,
+                      )}
                     />
-                  </div>
+                  </MediaFrame>
                   <div className="flex flex-col justify-center gap-2 sm:col-span-8">
                     <h3 className="text-base font-medium sm:text-lg">
                       {item.title}
