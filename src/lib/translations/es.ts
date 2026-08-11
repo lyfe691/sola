@@ -394,9 +394,9 @@ export const es = {
   about: {
     title: "Sobre mí",
     intro:
-      "Soy Yanis Sebastian Zürcher — 18, en Zúrich. Estudio Ciencias de la Computación en [WISS](https://www.wiss.ch), pero casi todo lo que sé viene de publicar mis propios proyectos, no de las clases.",
+      "Soy Yanis Sebastian Zürcher, desarrollador de software de 18 años en Zúrich. Estudio Ciencias de la Computación en [WISS](https://www.wiss.ch), pero casi todo lo que sé viene de construir y publicar mis propios proyectos — no de quedarme sentado en clase.",
     hobbies:
-      "Construyo apps web que no estorban: rápidas, mínimas y un poco obsesivas con cómo se sienten. Full-stack cuando hace falta, frontend cuando la interfaz es el producto.",
+      "Trabajo full-stack: backends, APIs, datos y la interfaz, de punta a punta. Me importan mucho los detalles de lo que la gente usa de verdad: rendimiento, claridad y una UI que se sienta pensada, no pegada al final. El stack es el producto entero, no solo lo que queda arriba.",
     philosophy: {
       title: "Cómo trabajo",
       clean:

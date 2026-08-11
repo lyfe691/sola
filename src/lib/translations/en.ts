@@ -13,7 +13,7 @@ export const en = {
     },
     about: {
       description:
-        "Yanis Sebastian Zürcher — 18, Zürich. Background, GitHub activity, and how I work.",
+        "Yanis Sebastian Zürcher — 18, Zürich. Full-stack developer, background, GitHub activity, and how I work.",
     },
     projects: {
       description:
@@ -389,9 +389,9 @@ export const en = {
   about: {
     title: "About",
     intro:
-      "I'm Yanis Sebastian Zürcher — 18, based in Zürich. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from shipping my own projects, not from lectures.",
+      "I'm Yanis Sebastian Zürcher, an 18-year-old software developer based in Zürich. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from building and shipping my own projects — not from sitting through lectures.",
     hobbies:
-      "I build web apps that stay out of the way: fast, minimal, and a little obsessive about how they feel. Full-stack when it needs to be, frontend when the interface is the product.",
+      "I work full-stack: backends, APIs, data, and the interface, end to end. I care a lot about the details of what people actually use — performance, clarity, and a UI that feels considered rather than bolted on. The stack is the whole product, not just whatever happens to sit on top of it.",
     philosophy: {
       title: "How I work",
       clean:

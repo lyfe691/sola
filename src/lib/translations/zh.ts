@@ -380,9 +380,9 @@ export const zh = {
   about: {
     title: "关于",
     intro:
-      "我是 Yanis Sebastian Zürcher——18 岁，住在苏黎世。在 [WISS](https://www.wiss.ch) 学计算机科学，但大部分本事是靠自己把项目做出来的，不是听课听来的。",
+      "我是 Yanis Sebastian Zürcher，18 岁，住在苏黎世的软件开发者。在 [WISS](https://www.wiss.ch) 学计算机科学，但大部分本事是靠自己把项目做出来、发出来的——不是光坐在课上听来的。",
     hobbies:
-      "我做不挡道的网页应用：快、极简，对用起来的感觉有点强迫。该全栈就全栈，界面就是产品时就做前端。",
+      "我做全栈：后端、API、数据和界面，从头到尾。很在意用户真正用到的那些细节——性能、清晰度，以及看起来是认真做过、而不是最后硬贴上去的 UI。技术栈是整个产品，不只是上面那一层。",
     philosophy: {
       title: "怎么做事",
       clean:
