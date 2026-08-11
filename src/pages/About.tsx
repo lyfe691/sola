@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import {
   Book,
   Code2,
@@ -16,6 +16,7 @@ import {
   Download,
   ChevronRight,
 } from "lucide-react";
+import { useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -55,6 +56,16 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
+import { cn } from "@/lib/utils";
+
+const ParticleImage = lazy(() =>
+  import("@/components/particle-image").then((m) => ({
+    default: m.ParticleImage,
+  })),
+);
+
+const PORTRAIT_PARTICLES = 140_000;
+const PORTRAIT_PARTICLES_COARSE = 64_000;
 
 // --------------------------------- Helpers ---------------------------------
 
@@ -83,6 +94,65 @@ const viewResume = (language: string) => {
 };
 
 // -------------------------------- Components --------------------------------
+
+/** Theme-aware portrait with a GPU particle dissolve (static under reduced-motion). */
+function AboutPortrait({
+  src,
+  alt,
+}: {
+  src: string;
+  alt: string;
+}) {
+  const reduceMotion = useReducedMotion();
+  const isMobile = useIsMobile();
+  const particleCount = isMobile
+    ? PORTRAIT_PARTICLES_COARSE
+    : PORTRAIT_PARTICLES;
+
+  return (
+    <div className="relative md:col-span-2">
+      <div
+        className={cn(
+          "relative aspect-square overflow-hidden rounded-xl border-2 border-border shadow-xs",
+          "bg-muted/20",
+        )}
+      >
+        {/* static base — LCP + reduced-motion + texture-load fallback */}
+        <img
+          src={src}
+          alt={alt}
+          className="absolute inset-0 size-full object-cover"
+          decoding="async"
+        />
+        {!reduceMotion && (
+          <Suspense fallback={null}>
+            <ParticleImage
+              imageUrl={src}
+              width="100%"
+              height="100%"
+              particleCount={particleCount}
+              particleSize={2.25}
+              particleOpacity={0.72}
+              speed={0.9}
+              noiseScale={0.0035}
+              noiseStrength={0.032}
+              damping={0.985}
+              lifespan={450}
+              showImage={false}
+              backgroundColor="transparent"
+              cursorInteraction
+              cursorStrength={0.14}
+              cursorRadius={110}
+              dpr={isMobile ? 1.25 : 1.75}
+              className="absolute inset-0 size-full"
+            />
+          </Suspense>
+        )}
+      </div>
+      <div className="absolute -z-10 -bottom-3 -right-3 h-full w-full -rotate-2 rounded-xl bg-primary/5" />
+    </div>
+  );
+}
 
 type InterestCardProps = {
   title: string;
@@ -324,16 +394,10 @@ const About = () => {
 
           {/* ------------------ Portrait ------------------ */}
 
-          <div className="md:col-span-2 relative">
-            <div className="aspect-square overflow-hidden rounded-xl border-2 border-border shadow-xs">
-              <img
-                src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
-                alt="Yanis Sebastian Zürcher"
-                className="w-full h-full object-cover transition-transform duration-200 ease-out can-hover:scale-[1.02]"
-              />
-            </div>
-            <div className="absolute -z-10 -bottom-3 -right-3 w-full h-full bg-primary/5 rounded-xl -rotate-2" />
-          </div>
+          <AboutPortrait
+            src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
+            alt="Yanis Sebastian Zürcher"
+          />
         </div>
       </ScrollReveal>
 

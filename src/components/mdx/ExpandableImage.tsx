@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Expandable project figure: quiet frame, hover zoom affordance, accessible
+ * Expandable project figure: quiet frame, hover expand chip, accessible
  * lightbox. Scale-on-hover is intentionally avoided — press + icon only.
  */
 
@@ -97,8 +97,6 @@ function ImageLightbox({
   const dialogLabel = alt.trim() || t.common.expandedImage;
   const showCaption = Boolean(alt.trim());
 
-  // Portal to <body> so the fixed overlay escapes page-transition containing
-  // blocks (filter/transform on PageShell) that would pin it off-screen.
   return createPortal(
     <AnimatePresence>
       {isOpen && (
@@ -126,7 +124,6 @@ function ImageLightbox({
             className={cn(
               "absolute right-4 top-4 z-10 grid size-9 place-items-center rounded-full",
               "border border-white/10 bg-black/40 text-white/80 backdrop-blur-md",
-              // v4: scale-* is the `scale` property — transitioning `transform` does nothing
               "transition-[background-color,color,scale] duration-150 ease-out",
               "hover:bg-black/55 hover:text-white",
               "active:scale-[0.97]",
@@ -193,8 +190,7 @@ export function ExpandableImage({
           "group/image relative block w-full overflow-hidden rounded-xl",
           "bg-muted/20 ring-1 ring-border",
           "cursor-zoom-in outline-none select-none",
-          // v4: individual transform props — use `scale` not `transform` in the list
-          // https://tailwindcss.com/docs/upgrade-guide#individual-transform-properties
+          // v4: scale uses the `scale` property — transition `scale`, not transform
           "transition-[box-shadow,scale] duration-200 ease-out",
           "can-hover:hover:ring-foreground/20",
           "active:scale-[0.99]",
@@ -202,7 +198,6 @@ export function ExpandableImage({
           className,
         )}
       >
-        {/* alt empty: the button owns the accessible name */}
         <img
           src={src}
           alt=""
@@ -211,7 +206,6 @@ export function ExpandableImage({
           decoding="async"
         />
 
-        {/* quiet veil + expand chip — fine pointer only */}
         <span
           aria-hidden="true"
           className={cn(
