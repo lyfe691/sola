@@ -5,15 +5,9 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Resolves /projects/:slug into the deep-dive shell: config-driven sections
- * (date, overview, tech stack, links), the project's MDX article, and the
- * related-projects footer.
- *
- * Motion model (one system, no races):
- *   1. Meta block — staggered cascade when the content column enters view
- *   2. Article    — single soft settle when the MDX region enters view
- *   3. Related    — single soft settle when the footer enters view
- * MDX internals are static; independent per-block whileInView was the bug.
+ * Resolves /projects/:slug into the deep-dive shell: config sections (date,
+ * overview, tech, links), the project's MDX article, and related projects.
+ * Hero motion lives in ProjectDeepDive; this file is static markup only.
  */
 
 import {
@@ -25,7 +19,6 @@ import {
   type LazyExoticComponent,
 } from "react";
 import { Link, Navigate, useParams } from "react-router";
-import { motion } from "motion/react";
 import { ExternalLink, Globe } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import {
@@ -36,11 +29,6 @@ import {
 } from "@/components/deep-dive-nav";
 import { ProjectDeepDive } from "@/components/ProjectDeepDive";
 import { Mdx, SectionHeading, TechStack } from "@/components/mdx";
-import {
-  sectionCascade,
-  sectionChild,
-  sectionReveal,
-} from "@/components/mdx/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -50,12 +38,12 @@ import {
   projectPagesConfig,
   type ProjectPageConfig,
 } from "@/config/project-deep-dive";
+import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage } from "@/lib/language-provider";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { translations, type Translation } from "@/lib/translations";
 
-// every lazy MDX module is created once at load (nothing fetches until first
-// render); render only looks up identities — never creates them
+// lazy modules created once at load; first render only looks them up
 const mdxByPath: Record<string, LazyExoticComponent<ComponentType>> =
   Object.fromEntries(
     Object.values(projectPagesConfig).map((config) => [
@@ -64,7 +52,6 @@ const mdxByPath: Record<string, LazyExoticComponent<ComponentType>> =
     ]),
   );
 
-// fires once the lazy MDX module has painted — signals TOC discovery
 function MountSignal({ onMount }: { onMount: () => void }) {
   useEffect(() => {
     onMount();
@@ -112,14 +99,54 @@ function getLinkActions(
   return actions;
 }
 
+function RelatedProjectCard({
+  slug,
+  title,
+  date,
+  blurb,
+  technologies,
+}: {
+  slug: string;
+  title: string;
+  date: string;
+  blurb: string;
+  technologies: string[];
+}) {
+  return (
+    <Link
+      to={`/projects/${slug}`}
+      className="group block rounded-4xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/40"
+    >
+      <Card className="h-full gap-2 bg-card/40 p-4 backdrop-blur-md transition-shadow duration-300 group-hover:shadow-lg">
+        <h3 className="font-medium text-foreground underline-offset-4 decoration-foreground/20 transition-colors duration-300 group-hover:underline">
+          {title}
+        </h3>
+        <time className="block text-2xs text-muted-foreground">{date}</time>
+        <p className="text-xs leading-relaxed text-muted-foreground">{blurb}</p>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {technologies.slice(0, 3).map((tech) => (
+            <Badge key={tech} variant="secondary" className="font-normal">
+              {tech}
+            </Badge>
+          ))}
+          {technologies.length > 3 && (
+            <span className="text-xs text-muted-foreground">
+              +{technologies.length - 3}
+            </span>
+          )}
+        </div>
+      </Card>
+    </Link>
+  );
+}
+
 const ProjectDeepDiveRenderer = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
   const t = translations[language];
 
   const contentRef = useRef<HTMLDivElement>(null);
-  // which slug's article has mounted — comparing against the current slug
-  // resets readiness on navigation without an effect
+  // track which slug's MDX has mounted so TOC rediscovers after navigation
   const [readySlug, setReadySlug] = useState<string | null>(null);
   const mdxReady = readySlug === slug;
 
@@ -142,6 +169,11 @@ const ProjectDeepDiveRenderer = () => {
   const projectCopy = t.projects.list[config.i18nKey];
   const title = projectCopy.title;
   const description = config.tagline ?? projectCopy.description;
+  const dateLabel = formatProjectDate(
+    INTL_LOCALE[language],
+    config.date,
+    t.common.present,
+  );
 
   return (
     <ProjectDeepDive
@@ -153,97 +185,79 @@ const ProjectDeepDiveRenderer = () => {
       }
     >
       <DeepDiveSectionRail sections={sections} activeId={activeId} />
+
       <div ref={contentRef} className="space-y-16">
-        {/* 1 · Meta — one cascade when the column enters view.
-            Do not spread sectionReveal here: its variants would clobber the cascade. */}
-        <motion.div
-          className="space-y-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={sectionReveal.viewport}
-          variants={sectionCascade}
+        <div className="text-center">
+          <time
+            className="text-xs font-medium tracking-wide text-muted-foreground uppercase"
+            dateTime={config.date.start}
+          >
+            {dateLabel}
+          </time>
+        </div>
+
+        <section
+          id="overview"
+          data-toc=""
+          data-toc-label={t.common.overview}
+          className="scroll-mt-24"
         >
-          <motion.div variants={sectionChild} className="text-center">
-            <time className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-              {config.date}
-            </time>
-          </motion.div>
+          <SectionHeading sectionId="overview">
+            {t.common.overview}
+          </SectionHeading>
+          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            {config.overview}
+          </p>
+        </section>
 
-          <motion.section
-            id="overview"
-            data-toc=""
-            data-toc-label={t.common.overview}
-            className="scroll-mt-24"
-            variants={sectionChild}
-          >
-            <SectionHeading sectionId="overview">
-              {t.common.overview}
-            </SectionHeading>
-            <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-              {config.overview}
-            </p>
-          </motion.section>
+        <section
+          id="tech-stack"
+          data-toc=""
+          data-toc-label={t.common.techStack}
+          className="scroll-mt-24"
+        >
+          <SectionHeading sectionId="tech-stack">
+            {t.common.techStack}
+          </SectionHeading>
+          <TechStack technologies={config.technologies} />
+        </section>
 
-          <motion.section
-            id="tech-stack"
-            data-toc=""
-            data-toc-label={t.common.techStack}
-            className="scroll-mt-24"
-            variants={sectionChild}
-          >
-            <SectionHeading sectionId="tech-stack">
-              {t.common.techStack}
-            </SectionHeading>
-            <TechStack technologies={config.technologies} />
-          </motion.section>
-
-          <motion.section
-            id="links"
-            data-toc=""
-            data-toc-label={t.common.links}
-            className="scroll-mt-24"
-            variants={sectionChild}
-          >
-            <SectionHeading sectionId="links">{t.common.links}</SectionHeading>
-            <div className="flex flex-wrap gap-3">
-              {getLinkActions(config.links, t).map(
-                ({ href, label, Icon, variant }) => (
-                  <Button
-                    key={href}
-                    nativeButton={false}
-                    size="lg"
-                    variant={variant}
-                    className="gap-2"
-                    render={
-                      <a
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      />
-                    }
-                  >
-                    <Icon className="h-4 w-4" aria-hidden />
-                    {label}
-                  </Button>
-                ),
-              )}
-            </div>
-          </motion.section>
-        </motion.div>
+        <section
+          id="links"
+          data-toc=""
+          data-toc-label={t.common.links}
+          className="scroll-mt-24"
+        >
+          <SectionHeading sectionId="links">{t.common.links}</SectionHeading>
+          <div className="flex flex-wrap gap-3">
+            {getLinkActions(config.links, t).map(
+              ({ href, label, Icon, variant }) => (
+                <Button
+                  key={href}
+                  nativeButton={false}
+                  size="lg"
+                  variant={variant}
+                  className="gap-2"
+                  render={
+                    <a href={href} target="_blank" rel="noopener noreferrer" />
+                  }
+                >
+                  <Icon className="h-4 w-4" aria-hidden />
+                  {label}
+                </Button>
+              ),
+            )}
+          </div>
+        </section>
 
         <Separator />
 
-        {/* 2 · Article — one settle for the whole MDX region (internals static) */}
-        <motion.div {...sectionReveal}>
-          <Mdx>
-            <MDXComponent />
-            <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
-          </Mdx>
-        </motion.div>
+        <Mdx>
+          <MDXComponent />
+          <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
+        </Mdx>
 
-        {/* 3 · Related — one settle when the footer enters */}
-        <motion.section
-          {...sectionReveal}
+        <section
           id="more-projects"
           data-toc=""
           data-toc-label={t.common.moreProjects}
@@ -257,43 +271,22 @@ const ProjectDeepDiveRenderer = () => {
               const related = projectPagesConfig[relatedSlug];
               const relatedCopy = t.projects.list[related.i18nKey];
               return (
-                <Link
+                <RelatedProjectCard
                   key={relatedSlug}
-                  to={`/projects/${relatedSlug}`}
-                  className="group block rounded-4xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/40"
-                >
-                  <Card className="h-full gap-2 bg-card/40 p-4 backdrop-blur-md transition-shadow duration-300 group-hover:shadow-lg">
-                    <h3 className="font-medium text-foreground underline-offset-4 decoration-foreground/20 transition-colors duration-300 group-hover:underline">
-                      {relatedCopy.title}
-                    </h3>
-                    <time className="block text-2xs text-muted-foreground">
-                      {related.date}
-                    </time>
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      {related.tagline ?? relatedCopy.description}
-                    </p>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {related.technologies.slice(0, 3).map((tech) => (
-                        <Badge
-                          key={tech}
-                          variant="secondary"
-                          className="font-normal"
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                      {related.technologies.length > 3 && (
-                        <span className="text-xs text-muted-foreground">
-                          +{related.technologies.length - 3}
-                        </span>
-                      )}
-                    </div>
-                  </Card>
-                </Link>
+                  slug={relatedSlug}
+                  title={relatedCopy.title}
+                  date={formatProjectDate(
+                    INTL_LOCALE[language],
+                    related.date,
+                    t.common.present,
+                  )}
+                  blurb={related.tagline ?? relatedCopy.description}
+                  technologies={related.technologies}
+                />
               );
             })}
           </div>
-        </motion.section>
+        </section>
       </div>
     </ProjectDeepDive>
   );

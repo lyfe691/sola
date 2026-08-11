@@ -5,9 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * MDX element map for deep-dive articles. Static markup only — page motion
- * is owned by section wrappers in ProjectDeepDiveRenderer so reveals never
- * race across independent whileInView observers.
+ * MDX element map for deep-dive articles.
  */
 
 import {

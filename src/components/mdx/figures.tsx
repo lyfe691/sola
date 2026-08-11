@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * MDX figure primitives — single image, multi-image gallery, shared caption.
- * Static layout: deep-dive motion is owned by section wrappers, not figures.
  */
 
 import type { ReactNode } from "react";

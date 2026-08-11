@@ -6,11 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Anchored headings for deep-dive MDX and config sections. Hover (fine pointer)
- * underlines the title and reveals a link icon that jumps to the section hash.
+ * underlines the title and shows a link icon that jumps to the section hash.
  * Coarse-pointer users navigate via the deep-dive TOC (rail / mobile menu).
- *
- * Headings are static DOM — motion lives on section wrappers, not every title,
- * so TOC discovery and scroll-mt stay predictable.
  */
 
 import { createElement, type ComponentPropsWithoutRef, type ReactNode } from "react";
@@ -152,8 +149,7 @@ type StaticHeadingProps = Omit<ComponentPropsWithoutRef<"h2">, "id"> & {
 };
 
 /**
- * Non-motion heading for config-driven sections (overview, tech stack, …).
- * Parent section already owns the motion + data-toc landmark and the element id.
+ * Heading for config-driven sections (overview, tech stack, …).
  */
 export function SectionHeading({
   sectionId,
