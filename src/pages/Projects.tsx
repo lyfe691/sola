@@ -51,6 +51,8 @@ import { PROJECTS, type ProjectMeta } from "@/config/projects";
 interface Project extends ProjectMeta {
   title: string;
   description: string;
+  /** Preformatted for the active locale — set once in localizeProjects. */
+  dateLabel: string;
 }
 
 type SortOption =
@@ -90,12 +92,16 @@ const buildSortOptions = (t: Translation): SortOptionItem[] => [
   },
 ];
 
-const localizeProjects = (t: Translation): Project[] =>
-  PROJECTS.map((p) => ({
+const localizeProjects = (t: Translation, language: Language): Project[] => {
+  const locale = INTL_LOCALE[language];
+  const present = t.common.present;
+  return PROJECTS.map((p) => ({
     ...p,
     title: t.projects.list[p.i18nKey].title,
     description: t.projects.list[p.i18nKey].description,
+    dateLabel: formatProjectDate(locale, p.date, present),
   }));
+};
 
 const cardClassName =
   "group h-full gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg";
@@ -205,11 +211,9 @@ const ProjectActions = ({
 const ProjectBody = ({
   project,
   t,
-  language,
 }: {
   project: Project;
   t: Translation;
-  language: Language;
 }) => (
   <div className="flex h-full flex-col gap-4 p-5 sm:p-6">
     <div className="flex flex-col gap-1">
@@ -220,11 +224,7 @@ const ProjectBody = ({
         className="font-mono text-xs text-foreground/60"
         dateTime={project.date.start}
       >
-        {formatProjectDate(
-          INTL_LOCALE[language],
-          project.date,
-          t.common.present,
-        )}
+        {project.dateLabel}
       </time>
     </div>
     <p className="flex-1 text-sm text-foreground/60">
@@ -238,22 +238,20 @@ const ProjectBody = ({
 const ProjectCard = ({
   project,
   t,
-  language,
 }: {
   project: Project;
   t: Translation;
-  language: Language;
 }) =>
   project.featured && project.image ? (
     <Card className={cardClassName}>
       <div className="grid grid-cols-1 md:grid-cols-2">
         <ProjectImage project={project} t={t} />
-        <ProjectBody project={project} t={t} language={language} />
+        <ProjectBody project={project} t={t} />
       </div>
     </Card>
   ) : (
     <Card className={cardClassName}>
-      <ProjectBody project={project} t={t} language={language} />
+      <ProjectBody project={project} t={t} />
     </Card>
   );
 
@@ -263,7 +261,7 @@ const Projects = () => {
   const t = translations[language] as Translation;
 
   const { featuredProjects, otherProjects, sortOptions } = useMemo(() => {
-    const projects = localizeProjects(t);
+    const projects = localizeProjects(t, language);
     const sortOptions = buildSortOptions(t);
 
     const sortedProjects = [...projects].sort((a, b) => {
@@ -292,7 +290,7 @@ const Projects = () => {
       otherProjects: sortedProjects.filter((p) => !p.featured),
       sortOptions,
     };
-  }, [t, sortBy]);
+  }, [t, language, sortBy]);
 
   return (
     <div className="flex flex-col w-full">
@@ -350,7 +348,7 @@ const Projects = () => {
             variant="default"
             delay={Math.min(index * 60, 360)}
           >
-            <ProjectCard project={project} t={t} language={language} />
+            <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}
       </div>
@@ -384,7 +382,7 @@ const Projects = () => {
             delay={Math.min(index * 60, 360)}
             className="h-full"
           >
-            <ProjectCard project={project} t={t} language={language} />
+            <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}
       </div>
