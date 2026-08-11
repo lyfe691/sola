@@ -8,15 +8,16 @@
  * Anchored headings for deep-dive MDX and config sections. Hover (fine pointer)
  * underlines the title and reveals a link icon that jumps to the section hash.
  * Coarse-pointer users navigate via the deep-dive TOC (rail / mobile menu).
+ *
+ * Headings are static DOM — motion lives on section wrappers, not every title,
+ * so TOC discovery and scroll-mt stay predictable.
  */
 
-import { type ComponentPropsWithoutRef, type ReactNode } from "react";
+import { createElement, type ComponentPropsWithoutRef, type ReactNode } from "react";
 import { Link } from "lucide-react";
-import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
-import { blockReveal } from "./reveal";
 
 type HeadingLevel = "h1" | "h2" | "h3";
 
@@ -81,7 +82,6 @@ export function HeadingLink({ id, children }: HeadingLinkProps) {
           "ml-2 inline-flex size-[1em] shrink-0 translate-y-[0.05em] items-center justify-center",
           "rounded-sm text-muted-foreground no-underline",
           "opacity-0 transition-opacity duration-200 ease-out",
-          // fine pointer: reveal on heading hover; keyboard: on focus
           "can-hover:group-hover/heading:opacity-70",
           "hover:text-foreground hover:!opacity-100",
           "focus-visible:opacity-100 focus-visible:outline-none",
@@ -110,7 +110,7 @@ const LEVEL_CLASS: Record<HeadingLevel, string> = {
 };
 
 /**
- * Motion heading used by the MDX element map. Slugifies children when no id
+ * Static heading used by the MDX element map. Slugifies children when no id
  * is supplied; h2s (toc) are the article landmarks for the section rail.
  */
 export function MDXHeading({
@@ -121,21 +121,19 @@ export function MDXHeading({
   id: idProp,
 }: MotionHeadingProps) {
   const id = idProp ?? slugifyHeading(children);
-  const MotionTag = motion[level];
 
-  return (
-    <MotionTag
-      {...blockReveal}
-      id={id}
-      data-toc={toc && id ? "" : undefined}
-      className={cn(
+  return createElement(
+    level,
+    {
+      id,
+      "data-toc": toc && id ? "" : undefined,
+      className: cn(
         LEVEL_CLASS[level],
         id && "group/heading scroll-mt-24",
         className,
-      )}
-    >
-      {id ? <HeadingLink id={id}>{children}</HeadingLink> : children}
-    </MotionTag>
+      ),
+    },
+    id ? <HeadingLink id={id}>{children}</HeadingLink> : children,
   );
 }
 

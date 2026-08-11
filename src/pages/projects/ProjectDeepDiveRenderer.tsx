@@ -8,6 +8,12 @@
  * Resolves /projects/:slug into the deep-dive shell: config-driven sections
  * (date, overview, tech stack, links), the project's MDX article, and the
  * related-projects footer.
+ *
+ * Motion model (one system, no races):
+ *   1. Meta block — staggered cascade when the content column enters view
+ *   2. Article    — single soft settle when the MDX region enters view
+ *   3. Related    — single soft settle when the footer enters view
+ * MDX internals are static; independent per-block whileInView was the bug.
  */
 
 import {
@@ -30,7 +36,11 @@ import {
 } from "@/components/deep-dive-nav";
 import { ProjectDeepDive } from "@/components/ProjectDeepDive";
 import { Mdx, SectionHeading, TechStack } from "@/components/mdx";
-import { blockReveal } from "@/components/mdx/reveal";
+import {
+  sectionCascade,
+  sectionChild,
+  sectionReveal,
+} from "@/components/mdx/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -43,7 +53,6 @@ import {
 import { useLanguage } from "@/lib/language-provider";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { translations, type Translation } from "@/lib/translations";
-import { scrollSubtleVariants } from "@/utils/transitions";
 
 // every lazy MDX module is created once at load (nothing fetches until first
 // render); render only looks up identities — never creates them
@@ -54,11 +63,6 @@ const mdxByPath: Record<string, LazyExoticComponent<ComponentType>> =
       lazy(() => import(`@/content/projects/${config.mdxPath}.mdx`)),
     ]),
   );
-
-const cascade = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
-};
 
 // fires once the lazy MDX module has painted — signals TOC discovery
 function MountSignal({ onMount }: { onMount: () => void }) {
@@ -149,86 +153,97 @@ const ProjectDeepDiveRenderer = () => {
       }
     >
       <DeepDiveSectionRail sections={sections} activeId={activeId} />
-      <motion.div
-        ref={contentRef}
-        className="space-y-16"
-        initial="hidden"
-        animate="visible"
-        variants={cascade}
-      >
-        <motion.div variants={scrollSubtleVariants} className="text-center">
-          <time className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
-            {config.date}
-          </time>
+      <div ref={contentRef} className="space-y-16">
+        {/* 1 · Meta — one cascade when the column enters view.
+            Do not spread sectionReveal here: its variants would clobber the cascade. */}
+        <motion.div
+          className="space-y-16"
+          initial="hidden"
+          whileInView="visible"
+          viewport={sectionReveal.viewport}
+          variants={sectionCascade}
+        >
+          <motion.div variants={sectionChild} className="text-center">
+            <time className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              {config.date}
+            </time>
+          </motion.div>
+
+          <motion.section
+            id="overview"
+            data-toc=""
+            data-toc-label={t.common.overview}
+            className="scroll-mt-24"
+            variants={sectionChild}
+          >
+            <SectionHeading sectionId="overview">
+              {t.common.overview}
+            </SectionHeading>
+            <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
+              {config.overview}
+            </p>
+          </motion.section>
+
+          <motion.section
+            id="tech-stack"
+            data-toc=""
+            data-toc-label={t.common.techStack}
+            className="scroll-mt-24"
+            variants={sectionChild}
+          >
+            <SectionHeading sectionId="tech-stack">
+              {t.common.techStack}
+            </SectionHeading>
+            <TechStack technologies={config.technologies} />
+          </motion.section>
+
+          <motion.section
+            id="links"
+            data-toc=""
+            data-toc-label={t.common.links}
+            className="scroll-mt-24"
+            variants={sectionChild}
+          >
+            <SectionHeading sectionId="links">{t.common.links}</SectionHeading>
+            <div className="flex flex-wrap gap-3">
+              {getLinkActions(config.links, t).map(
+                ({ href, label, Icon, variant }) => (
+                  <Button
+                    key={href}
+                    nativeButton={false}
+                    size="lg"
+                    variant={variant}
+                    className="gap-2"
+                    render={
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                  >
+                    <Icon className="h-4 w-4" aria-hidden />
+                    {label}
+                  </Button>
+                ),
+              )}
+            </div>
+          </motion.section>
         </motion.div>
-
-        <motion.section
-          id="overview"
-          data-toc=""
-          data-toc-label={t.common.overview}
-          className="scroll-mt-24"
-          variants={scrollSubtleVariants}
-        >
-          <SectionHeading sectionId="overview">
-            {t.common.overview}
-          </SectionHeading>
-          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            {config.overview}
-          </p>
-        </motion.section>
-
-        <motion.section
-          id="tech-stack"
-          data-toc=""
-          data-toc-label={t.common.techStack}
-          className="scroll-mt-24"
-          variants={scrollSubtleVariants}
-        >
-          <SectionHeading sectionId="tech-stack">
-            {t.common.techStack}
-          </SectionHeading>
-          <TechStack technologies={config.technologies} />
-        </motion.section>
-
-        <motion.section
-          id="links"
-          data-toc=""
-          data-toc-label={t.common.links}
-          className="scroll-mt-24"
-          variants={scrollSubtleVariants}
-        >
-          <SectionHeading sectionId="links">{t.common.links}</SectionHeading>
-          <div className="flex flex-wrap gap-3">
-            {getLinkActions(config.links, t).map(
-              ({ href, label, Icon, variant }) => (
-                <Button
-                  key={href}
-                  nativeButton={false}
-                  size="lg"
-                  variant={variant}
-                  className="gap-2"
-                  render={
-                    <a href={href} target="_blank" rel="noopener noreferrer" />
-                  }
-                >
-                  <Icon className="h-4 w-4" aria-hidden />
-                  {label}
-                </Button>
-              ),
-            )}
-          </div>
-        </motion.section>
 
         <Separator />
 
-        {/* MDX owns its own block reveals — no outer whileInView double-fade */}
-        <Mdx>
-          <MDXComponent />
-          <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
-        </Mdx>
+        {/* 2 · Article — one settle for the whole MDX region (internals static) */}
+        <motion.div {...sectionReveal}>
+          <Mdx>
+            <MDXComponent />
+            <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
+          </Mdx>
+        </motion.div>
 
+        {/* 3 · Related — one settle when the footer enters */}
         <motion.section
-          {...blockReveal}
+          {...sectionReveal}
           id="more-projects"
           data-toc=""
           data-toc-label={t.common.moreProjects}
@@ -279,7 +294,7 @@ const ProjectDeepDiveRenderer = () => {
             })}
           </div>
         </motion.section>
-      </motion.div>
+      </div>
     </ProjectDeepDive>
   );
 };

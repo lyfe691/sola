@@ -5,9 +5,9 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * MDX element map for deep-dive articles — the same contract popular docs
- * sites use: HTML tags get design-system components, custom shortcodes
- * (CodeBlock, ProjectImage, …) are available without per-file imports.
+ * MDX element map for deep-dive articles. Static markup only — page motion
+ * is owned by section wrappers in ProjectDeepDiveRenderer so reveals never
+ * race across independent whileInView observers.
  */
 
 import {
@@ -17,7 +17,6 @@ import {
   type ReactNode,
 } from "react";
 import type { MDXComponents as MDXComponentsType } from "mdx/types";
-import { motion } from "motion/react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { CodeBlock, type CodeBlockLanguage } from "@/components/ui/code-block";
 import {
@@ -32,10 +31,9 @@ import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import { FigureCaption, ProjectGallery, ProjectImage } from "./figures";
 import { MDXHeading } from "./Heading";
-import { blockReveal } from "./reveal";
 import { TechStack } from "./TechStack";
 
-/** Props MDX actually passes — avoid full HTML* bags (clash with motion). */
+/** Props MDX actually passes — avoid full HTML* bags. */
 type MdxProps = {
   children?: ReactNode;
   className?: string;
@@ -51,10 +49,6 @@ type MdxImgProps = {
   alt?: string;
   className?: string;
 };
-
-// ---------------------------------------------------------------------------
-// helpers
-// ---------------------------------------------------------------------------
 
 function extractFencedCode(children: ReactNode): {
   language: string;
@@ -80,12 +74,7 @@ function isExternalHref(href: string | undefined): href is string {
   return typeof href === "string" && /^https?:\/\//i.test(href);
 }
 
-// ---------------------------------------------------------------------------
-// HTML elements
-// ---------------------------------------------------------------------------
-
 const html = {
-  // document root — one surface for the whole article
   wrapper: ({ children }: MdxProps) => (
     <div className="mdx min-w-0">{children}</div>
   ),
@@ -96,7 +85,6 @@ const html = {
     </MDXHeading>
   ),
 
-  // h2s are TOC landmarks for the deep-dive section rail
   h2: ({ children, className, id }: MdxProps) => (
     <MDXHeading level="h2" toc id={id} className={className}>
       {children}
@@ -110,39 +98,36 @@ const html = {
   ),
 
   p: ({ children, className }: MdxProps) => (
-    <motion.p
-      {...blockReveal}
+    <p
       className={cn(
         "mb-4 max-w-3xl text-sm leading-relaxed text-muted-foreground",
         className,
       )}
     >
       {children}
-    </motion.p>
+    </p>
   ),
 
   ul: ({ children, className }: MdxProps) => (
-    <motion.ul
-      {...blockReveal}
+    <ul
       className={cn(
         "mb-4 ml-5 list-disc space-y-2 marker:text-primary",
         className,
       )}
     >
       {children}
-    </motion.ul>
+    </ul>
   ),
 
   ol: ({ children, className }: MdxProps) => (
-    <motion.ol
-      {...blockReveal}
+    <ol
       className={cn(
         "mb-4 ml-5 list-decimal space-y-2 marker:text-primary",
         className,
       )}
     >
       {children}
-    </motion.ol>
+    </ol>
   ),
 
   li: ({ children, className }: MdxProps) => (
@@ -157,15 +142,14 @@ const html = {
   ),
 
   blockquote: ({ children, className }: MdxProps) => (
-    <motion.blockquote
-      {...blockReveal}
+    <blockquote
       className={cn(
         "mb-4 border-l-4 border-primary/30 pl-4 text-sm italic text-muted-foreground",
         className,
       )}
     >
       {children}
-    </motion.blockquote>
+    </blockquote>
   ),
 
   pre: ({ children, className }: MdxProps) => {
@@ -180,20 +164,18 @@ const html = {
     }
 
     return (
-      <motion.pre
-        {...blockReveal}
+      <pre
         className={cn(
           "mb-4 overflow-x-auto rounded-xl border border-border bg-muted/50 p-4 text-xs",
           className,
         )}
       >
         {children}
-      </motion.pre>
+      </pre>
     );
   },
 
   code: ({ children, className }: MdxProps) => {
-    // fenced blocks are handled by `pre` → CodeBlock; style inline only
     const fenced = className?.includes("language-");
     return (
       <code
@@ -209,10 +191,10 @@ const html = {
   },
 
   img: ({ src, alt }: MdxImgProps) => (
-    <motion.figure {...blockReveal} className="my-8">
+    <figure className="my-8">
       <ExpandableImage src={src || ""} alt={alt || ""} />
       {alt ? <FigureCaption>{alt}</FigureCaption> : null}
-    </motion.figure>
+    </figure>
   ),
 
   a: ({ href, className, children }: MdxAnchorProps) => {
@@ -237,10 +219,7 @@ const html = {
   },
 
   hr: ({ className }: MdxProps) => (
-    <motion.hr
-      {...blockReveal}
-      className={cn("my-8 border-border", className)}
-    />
+    <hr className={cn("my-8 border-border", className)} />
   ),
 
   strong: ({ children, className }: MdxProps) => (
@@ -253,11 +232,10 @@ const html = {
     <em className={cn("italic", className)}>{children}</em>
   ),
 
-  // GFM tables → shadcn Table (container scrolls horizontally)
   table: ({ children, className }: MdxProps) => (
-    <motion.div {...blockReveal} className="my-6">
+    <div className="my-6">
       <Table className={cn("text-xs", className)}>{children}</Table>
-    </motion.div>
+    </div>
   ),
 
   thead: ({ children, className }: MdxProps) => (
@@ -287,10 +265,6 @@ const html = {
     </TableCell>
   ),
 } satisfies MDXComponentsType;
-
-// ---------------------------------------------------------------------------
-// shortcodes — available in every deep-dive without local imports
-// ---------------------------------------------------------------------------
 
 const shortcodes = {
   CodeBlock,

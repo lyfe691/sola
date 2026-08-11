@@ -38,7 +38,7 @@ import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import type { ProjectSilk } from "@/config/projects";
-import { EASE_OUT } from "@/utils/transitions";
+import { EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
 
 const Silk = lazy(() => import("@/components/backgrounds/Silk"));
 
@@ -88,13 +88,13 @@ export function ProjectDeepDive({
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, ease: EASE_OUT }}
+      transition={{ duration: 0.35, ease: EASE_OUT }}
       className="min-h-screen bg-background p-4 sm:p-6 lg:p-8"
     >
       {description && <meta name="description" content={description} />}
 
       {/* hero section */}
-      <div className="h-[60vh] min-h-[400px] relative overflow-hidden rounded-3xl mb-6 border-4 border-border shadow-lg shadow-black/5">
+      <div className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5">
         {/* silk background - fades in when ready */}
         <div
           className="absolute inset-0 transition-opacity duration-700 ease-out"
@@ -111,40 +111,39 @@ export function ProjectDeepDive({
           style={{ backgroundColor: silk.color, opacity: silkReady ? 0 : 1 }}
         />
 
-        {/* overlay */}
         <div className="absolute inset-0 bg-black/20" />
 
-        {/* hero content */}
+        {/* hero content — rare lush entrance (EASE_EXPO), then soft REVEAL body */}
         <div className="absolute inset-0 flex items-center justify-center">
           <motion.div
-            className="text-center px-6 max-w-4xl"
+            className="max-w-4xl px-6 text-center"
             initial="hidden"
             animate="visible"
             variants={{
               hidden: {},
               visible: {
-                transition: { staggerChildren: 0.06, delayChildren: 0.15 },
+                transition: { staggerChildren: 0.08, delayChildren: 0.12 },
               },
             }}
           >
             <motion.h1
               variants={{
-                hidden: { opacity: 0, y: 25, skewY: 3 },
-                visible: { opacity: 1, y: 0, skewY: 0 },
+                hidden: { opacity: 0, y: 18 },
+                visible: { opacity: 1, y: 0 },
               }}
-              transition={{ duration: 0.55, ease: EASE_OUT }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6"
+              transition={{ duration: 0.55, ease: EASE_EXPO }}
+              className="mb-6 text-5xl font-bold text-white sm:text-6xl md:text-7xl lg:text-8xl"
             >
               {title}
             </motion.h1>
             {description && (
               <motion.p
                 variants={{
-                  hidden: { opacity: 0, y: 25 },
+                  hidden: { opacity: 0, y: 12 },
                   visible: { opacity: 1, y: 0 },
                 }}
-                transition={{ duration: 0.5, ease: EASE_OUT }}
-                className="text-base sm:text-lg md:text-xl text-white/90 font-light"
+                transition={{ duration: 0.45, ease: REVEAL }}
+                className="text-base font-light text-white/90 sm:text-lg md:text-xl"
               >
                 {description}
               </motion.p>

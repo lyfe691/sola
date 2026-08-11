@@ -6,14 +6,12 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * MDX figure primitives — single image, multi-image gallery, shared caption.
- * All expand through ExpandableImage.
+ * Static layout: deep-dive motion is owned by section wrappers, not figures.
  */
 
 import type { ReactNode } from "react";
-import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
-import { blockReveal } from "./reveal";
 
 export function FigureCaption({
   children,
@@ -54,13 +52,10 @@ export function ProjectImage({
   size?: keyof typeof SIZE_CLASS;
 }) {
   return (
-    <motion.figure
-      {...blockReveal}
-      className={cn("my-8", SIZE_CLASS[size], className)}
-    >
+    <figure className={cn("my-8", SIZE_CLASS[size], className)}>
       <ExpandableImage src={src} alt={alt} />
       {caption ? <FigureCaption>{caption}</FigureCaption> : null}
-    </motion.figure>
+    </figure>
   );
 }
 
@@ -83,8 +78,7 @@ export function ProjectGallery({
   if (images.length === 1 && (size === "large" || size === "full")) {
     const image = images[0];
     return (
-      <motion.figure
-        {...blockReveal}
+      <figure
         className={cn(
           "my-8",
           size === "full" ? "w-full" : "mx-auto max-w-4xl",
@@ -92,15 +86,12 @@ export function ProjectGallery({
       >
         <ExpandableImage src={image.src} alt={image.alt} />
         {image.caption ? <FigureCaption>{image.caption}</FigureCaption> : null}
-      </motion.figure>
+      </figure>
     );
   }
 
   return (
-    <motion.div
-      {...blockReveal}
-      className={cn("my-8 grid items-start gap-4 sm:gap-5", COL_CLASS[columns])}
-    >
+    <div className={cn("my-8 grid items-start gap-4 sm:gap-5", COL_CLASS[columns])}>
       {images.map((image) => (
         <figure key={image.src} className="min-w-0">
           <ExpandableImage src={image.src} alt={image.alt} />
@@ -109,6 +100,6 @@ export function ProjectGallery({
           ) : null}
         </figure>
       ))}
-    </motion.div>
+    </div>
   );
 }

@@ -7,7 +7,6 @@
  */
 
 import type { ComponentType, SVGProps } from "react";
-import { motion } from "motion/react";
 import { FileCode2, Terminal } from "lucide-react";
 import {
   SiDocker,
@@ -18,7 +17,6 @@ import {
 } from "react-icons/si";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
-import { scrollSubtleVariants } from "@/utils/transitions";
 import { cn } from "@/lib/utils";
 import { CopyButton } from "./copy-button";
 import { useShikiHighlight, type CodeBlockLanguage } from "./use-shiki";
@@ -95,12 +93,8 @@ export const CodeBlock = ({
   const html = useShikiHighlight(value, lang);
 
   return (
-    <motion.figure
+    <figure
       data-code-theme={codeTheme}
-      variants={scrollSubtleVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
       className={cn(
         "code-block group relative my-6 overflow-hidden rounded-xl bg-(--code) text-sm ring-1 ring-border",
         className,
@@ -125,7 +119,7 @@ export const CodeBlock = ({
           <FallbackCode code={value} />
         )}
       </div>
-    </motion.figure>
+    </figure>
   );
 };
 
