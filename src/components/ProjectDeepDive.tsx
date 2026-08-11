@@ -8,11 +8,14 @@
  * The deep-dive page shell: the silk hero in the project's own color, the
  * sticky breadcrumb bar with the code-view toggle, and the content column.
  * The renderer supplies everything project-specific through props.
+ *
+ * Hero sequence: silk background settles → title FoldText → subtitle FoldText.
  */
 
 import {
   Suspense,
   lazy,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useState,
@@ -33,28 +36,34 @@ import {
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "./ui/custom/icon-button";
+import FoldText from "./ui/custom/FoldText";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import type { ProjectSilk } from "@/config/projects";
-import { EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
+import { EASE_OUT } from "@/utils/transitions";
 
 const Silk = lazy(() => import("@/components/backgrounds/Silk"));
 
-// tells the shell when Silk is on screen so it can crossfade away from the
-// flat color placeholder; the small delay covers WebGL context startup
+// silk color is on screen from the first paint; this delay only covers WebGL
+// startup so the GPU layer can crossfade over the solid fill
 function SilkLoader({
   onReady,
   ...props
 }: ComponentProps<typeof Silk> & { onReady: () => void }) {
   useEffect(() => {
-    const timer = setTimeout(onReady, 50);
+    const timer = setTimeout(onReady, 80);
     return () => clearTimeout(timer);
   }, [onReady]);
 
   return <Silk {...props} />;
 }
+
+/** Beat after silk starts fading in, before title unfolds (ms). */
+const BG_TO_TITLE_MS = 320;
+/** Beat after title mounts, before subtitle unfolds (ms). */
+const TITLE_TO_SUBTITLE_MS = 420;
 
 interface ProjectDeepDiveProps {
   title: string;
@@ -75,93 +84,136 @@ export function ProjectDeepDive({
 }: ProjectDeepDiveProps) {
   const navigate = useNavigate();
   const [silkReady, setSilkReady] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
+  const [showSubtitle, setShowSubtitle] = useState(false);
   const { setActive: setCodeView } = useCodeView();
   const { language } = useLanguage();
   const t = translations[language];
 
-  // instant scroll to top on mount to prevent white flash during smooth scroll
+  const onSilkReady = useCallback(() => setSilkReady(true), []);
+
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  // new project → restart the hero sequence
+  useEffect(() => {
+    setSilkReady(false);
+    setShowTitle(false);
+    setShowSubtitle(false);
+  }, [title, silk.color]);
+
+  // background first → title → subtitle (FoldText mounts on each beat so its
+  // mount trigger fires at the right moment — no instant race with silk)
+  useEffect(() => {
+    if (!silkReady) return;
+    const titleTimer = window.setTimeout(
+      () => setShowTitle(true),
+      BG_TO_TITLE_MS,
+    );
+    return () => window.clearTimeout(titleTimer);
+  }, [silkReady]);
+
+  useEffect(() => {
+    if (!showTitle || !description) return;
+    const subTimer = window.setTimeout(
+      () => setShowSubtitle(true),
+      TITLE_TO_SUBTITLE_MS,
+    );
+    return () => window.clearTimeout(subTimer);
+  }, [showTitle, description]);
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.35, ease: EASE_OUT }}
+      transition={{ duration: 0.3, ease: EASE_OUT }}
       className="min-h-screen bg-background p-4 sm:p-6 lg:p-8"
     >
       {description && <meta name="description" content={description} />}
 
-      {/* hero section */}
       <div className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5">
-        {/* silk background - fades in when ready */}
+        {/* solid project color from first paint; silk crossfades on top */}
+        <div
+          className="absolute inset-0"
+          style={{ backgroundColor: silk.color }}
+        />
         <div
           className="absolute inset-0 transition-opacity duration-700 ease-out"
           style={{ opacity: silkReady ? 1 : 0 }}
         >
           <Suspense fallback={null}>
-            <SilkLoader {...silk} onReady={() => setSilkReady(true)} />
+            {/* key remounts silk + restarts the bg→text sequence per project */}
+            <SilkLoader
+              key={silk.color + title}
+              {...silk}
+              onReady={onSilkReady}
+            />
           </Suspense>
         </div>
-        {/* placeholder while silk loads - uses the silk color for a seamless
-            crossfade */}
-        <div
-          className="absolute inset-0 transition-opacity duration-700 ease-out"
-          style={{ backgroundColor: silk.color, opacity: silkReady ? 0 : 1 }}
-        />
 
         <div className="absolute inset-0 bg-black/20" />
 
-        {/* hero content — rare lush entrance (EASE_EXPO), then soft REVEAL body */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <motion.div
-            className="max-w-4xl px-6 text-center"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: {},
-              visible: {
-                transition: { staggerChildren: 0.08, delayChildren: 0.12 },
-              },
-            }}
-          >
-            <motion.h1
-              variants={{
-                hidden: { opacity: 0, y: 18 },
-                visible: { opacity: 1, y: 0 },
-              }}
-              transition={{ duration: 0.55, ease: EASE_EXPO }}
-              className="mb-6 text-5xl font-bold text-white sm:text-6xl md:text-7xl lg:text-8xl"
-            >
-              {title}
-            </motion.h1>
-            {description && (
-              <motion.p
-                variants={{
-                  hidden: { opacity: 0, y: 12 },
-                  visible: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.45, ease: REVEAL }}
-                className="text-base font-light text-white/90 sm:text-lg md:text-xl"
-              >
-                {description}
-              </motion.p>
-            )}
-          </motion.div>
+          <div className="max-w-4xl px-6 text-center">
+            {/* reserve title space so the layout doesn't jump when FoldText mounts */}
+            <h1 className="mb-6 min-h-[1.1em] text-5xl font-extrabold sm:text-6xl md:text-7xl lg:text-8xl">
+              {showTitle ? (
+                <FoldText
+                  key={`title-${title}`}
+                  text={title}
+                  splitBy="char"
+                  hinge="top"
+                  trigger="mount"
+                  duration={0.65}
+                  stagger={0.045}
+                  ease="power3.out"
+                  perspective={700}
+                  creaseShading={0.55}
+                  fontSize="clamp(2.75rem, 9vw, 6rem)"
+                  fontWeight={800}
+                  color="#ffffff"
+                />
+              ) : (
+                <span className="invisible select-none" aria-hidden="true">
+                  {title}
+                </span>
+              )}
+            </h1>
+
+            {description ? (
+              <p className="mx-auto min-h-[1.5em] max-w-2xl text-base font-light sm:text-lg md:text-xl">
+                {showSubtitle ? (
+                  <FoldText
+                    key={`sub-${title}`}
+                    text={description}
+                    splitBy="word"
+                    hinge="top"
+                    trigger="mount"
+                    duration={0.55}
+                    stagger={0.04}
+                    ease="power3.out"
+                    perspective={700}
+                    creaseShading={0.4}
+                    fontSize="clamp(1rem, 2.2vw, 1.25rem)"
+                    fontWeight={300}
+                    color="rgba(255,255,255,0.9)"
+                  />
+                ) : (
+                  <span className="invisible select-none" aria-hidden="true">
+                    {description}
+                  </span>
+                )}
+              </p>
+            ) : null}
+          </div>
         </div>
       </div>
 
-      {/* navigation — the border lives on the breadcrumb row, not the bar:
-          the section menu row hangs below the line with no edge of its own
-          (its sheet covers that seam whenever it opens) */}
-      <div className="sticky top-0 z-30 bg-background/95 backdrop-blur-xs -mx-4 sm:-mx-6 lg:-mx-8">
+      <div className="sticky top-0 z-30 -mx-4 bg-background/95 backdrop-blur-xs sm:-mx-6 lg:-mx-8">
         <div className="border-b border-border px-4 sm:px-6 lg:px-8">
-          <div className="max-w-4xl mx-auto py-4">
+          <div className="mx-auto max-w-4xl py-4">
             <div className="flex items-center justify-between gap-3">
-              {/* min-w-0 down the chain + nowrap list: the crumbs yield to
-                  the button cluster and the title truncates instead of the
-                  two overlapping on narrow screens */}
               <Breadcrumb className="min-w-0">
                 <BreadcrumbList className="flex-nowrap">
                   <BreadcrumbItem className="shrink-0">
@@ -208,7 +260,7 @@ export function ProjectDeepDive({
                   iconPosition="left"
                   size="sm"
                   onClick={() => navigate("/projects")}
-                  className="text-xs h-8 px-3 gap-2"
+                  className="h-8 gap-2 px-3 text-xs"
                 >
                   {t.common.back}
                 </IconButton>
@@ -219,10 +271,8 @@ export function ProjectDeepDive({
         {sectionNav}
       </div>
 
-      {/* content — relative so the section nav can hang off the column and
-          span its full height */}
       {children && (
-        <div className="relative max-w-4xl mx-auto py-12">{children}</div>
+        <div className="relative mx-auto max-w-4xl py-12">{children}</div>
       )}
     </motion.div>
   );
