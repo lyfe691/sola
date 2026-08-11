@@ -18,7 +18,6 @@ import {
   useState,
   type ComponentType,
   type LazyExoticComponent,
-  type ReactNode,
 } from "react";
 import { Link, Navigate, useParams } from "react-router";
 import { motion } from "motion/react";
@@ -32,7 +31,7 @@ import {
   useDeepDiveSections,
 } from "@/components/deep-dive-nav";
 import { ProjectDeepDive } from "@/components/ProjectDeepDive";
-import { MDXComponents, TechStack } from "@/components/mdx";
+import { MDXComponents, SectionHeading, TechStack } from "@/components/mdx";
 import { blockReveal } from "@/components/mdx/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -47,7 +46,6 @@ import {
 import { useLanguage } from "@/lib/language-provider";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { translations, type Translation } from "@/lib/translations";
-import { cn } from "@/lib/utils";
 import { scrollSubtleVariants } from "@/utils/transitions";
 
 // every lazy MDX component is created once at module load (nothing fetches
@@ -75,20 +73,6 @@ function MountSignal({ onMount }: { onMount: () => void }) {
     onMount();
   }, [onMount]);
   return null;
-}
-
-function SectionHeading({
-  className,
-  children,
-}: {
-  className?: string;
-  children: ReactNode;
-}) {
-  return (
-    <h2 className={cn("text-lg font-semibold mb-4 text-foreground", className)}>
-      {children}
-    </h2>
-  );
 }
 
 interface LinkAction {
@@ -194,7 +178,9 @@ const ProjectDeepDiveRenderer = () => {
           className="scroll-mt-24"
           variants={scrollSubtleVariants}
         >
-          <SectionHeading>{t.common.overview}</SectionHeading>
+          <SectionHeading sectionId="overview">
+            {t.common.overview}
+          </SectionHeading>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
             {config.overview}
           </p>
@@ -208,7 +194,9 @@ const ProjectDeepDiveRenderer = () => {
           className="scroll-mt-24"
           variants={scrollSubtleVariants}
         >
-          <SectionHeading>{t.common.techStack}</SectionHeading>
+          <SectionHeading sectionId="tech-stack">
+            {t.common.techStack}
+          </SectionHeading>
           <TechStack technologies={config.technologies} />
         </motion.section>
 
@@ -220,7 +208,7 @@ const ProjectDeepDiveRenderer = () => {
           className="scroll-mt-24"
           variants={scrollSubtleVariants}
         >
-          <SectionHeading>{t.common.links}</SectionHeading>
+          <SectionHeading sectionId="links">{t.common.links}</SectionHeading>
           <div className="flex flex-wrap gap-3">
             {getLinkActions(config.links, t).map(
               ({ href, label, Icon, variant }) => (
@@ -245,13 +233,14 @@ const ProjectDeepDiveRenderer = () => {
         <Separator />
 
         {/* mdx content — the article is tall, so a low viewport amount lets
-            the reveal fire as soon as it enters */}
+            the reveal fire as soon as it enters. Custom MDX components own
+            all styling (no prose plugin). */}
         <motion.div
           variants={scrollSubtleVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.05 }}
-          className="prose prose-sm max-w-none"
+          className="max-w-none"
         >
           <MDXProvider components={MDXComponents}>
             <Suspense
@@ -275,7 +264,7 @@ const ProjectDeepDiveRenderer = () => {
           data-toc-label={t.common.moreProjects}
           className="border-t border-border pt-12 scroll-mt-24"
         >
-          <SectionHeading className="mb-6">
+          <SectionHeading sectionId="more-projects" className="mb-6">
             {t.common.moreProjects}
           </SectionHeading>
           <div className="grid sm:grid-cols-2 gap-6">

@@ -120,6 +120,11 @@ export const es = {
     demo: "Demo",
     moreProjects: "Más proyectos",
     onThisPage: "En esta página",
+    linkToSection: "Enlace a la sección: {title}",
+    close: "Cerrar",
+    expandImage: "Ampliar imagen",
+    expandImageNamed: "Ampliar imagen: {alt}",
+    expandedImage: "Imagen ampliada",
     moreOnGithub: "Más en GitHub",
     view: "Ver",
     update: {

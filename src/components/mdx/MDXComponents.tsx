@@ -4,156 +4,159 @@
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ *
+ * Element map handed to MDXProvider — design-system components for every
+ * markdown construct the deep-dive articles use.
  */
 
-import React from "react";
+import {
+  Children,
+  isValidElement,
+  type AnchorHTMLAttributes,
+  type HTMLAttributes,
+  type ImgHTMLAttributes,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { CodeBlock, type CodeBlockLanguage } from "@/components/ui/code-block";
+import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
+import { MDXHeading } from "./Heading";
 import { blockReveal } from "./reveal";
 
 interface MDXComponentProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   id?: string;
 }
 
-// render-time slug for heading anchors — the MDX pipeline has no rehype-slug
-const slugifyHeading = (children: React.ReactNode): string | undefined => {
-  const text = React.Children.toArray(children)
-    .map((child) =>
-      typeof child === "string" || typeof child === "number"
-        ? String(child)
-        : "",
-    )
-    .join(" ")
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s-]/gu, "")
-    .trim()
-    .replace(/\s+/g, "-");
-  return text || undefined;
-};
+function extractFencedCode(children: ReactNode): {
+  language: string;
+  code: string;
+} | null {
+  const child = Children.toArray(children)[0];
+  if (!isValidElement(child)) return null;
 
-// element map handed to MDXProvider — matches the design system
+  const el = child as ReactElement<{
+    className?: string;
+    children?: ReactNode;
+  }>;
+  const className = el.props.className;
+  if (!className?.startsWith("language-")) return null;
+
+  const language = className.slice("language-".length);
+  const raw = el.props.children;
+  const code = typeof raw === "string" ? raw : String(raw ?? "");
+  return { language, code };
+}
+
 export const MDXComponents = {
-  // Headings
-  h1: ({ children, ...props }: MDXComponentProps) => (
-    <motion.h1
-      {...blockReveal}
-      className="text-2xl font-bold text-foreground mb-6 mt-8 first:mt-0"
-      {...props}
-    >
+  h1: ({ children, className, id, ...props }: MDXComponentProps) => (
+    <MDXHeading level="h1" id={id} className={className} {...props}>
       {children}
-    </motion.h1>
+    </MDXHeading>
   ),
 
-  // h2s are the article's nav landmarks: the id + data-toc pair lets the
-  // deep-dive section nav pick them up; scroll-mt clears the sticky bar
-  h2: ({ children, id, ...props }: MDXComponentProps) => {
-    const headingId = id ?? slugifyHeading(children);
-    return (
-      <motion.h2
-        {...blockReveal}
-        id={headingId}
-        data-toc={headingId ? "" : undefined}
-        className="text-lg font-semibold text-foreground mb-4 mt-8 first:mt-0 scroll-mt-24"
-        {...props}
-      >
-        {children}
-      </motion.h2>
-    );
-  },
-
-  h3: ({ children, ...props }: MDXComponentProps) => (
-    <motion.h3
-      {...blockReveal}
-      className="text-base font-medium text-foreground mb-3 mt-6"
-      {...props}
-    >
+  // h2s are the article's nav landmarks: data-toc lets the section rail
+  // pick them up; scroll-mt clears the sticky bar
+  h2: ({ children, className, id, ...props }: MDXComponentProps) => (
+    <MDXHeading level="h2" toc id={id} className={className} {...props}>
       {children}
-    </motion.h3>
+    </MDXHeading>
   ),
 
-  // Paragraphs
-  p: ({ children, ...props }: MDXComponentProps) => (
+  h3: ({ children, className, id, ...props }: MDXComponentProps) => (
+    <MDXHeading level="h3" id={id} className={className} {...props}>
+      {children}
+    </MDXHeading>
+  ),
+
+  p: ({ children, className, ...props }: MDXComponentProps) => (
     <motion.p
       {...blockReveal}
-      className="text-sm text-muted-foreground leading-relaxed mb-4 max-w-3xl"
+      className={cn(
+        "mb-4 max-w-3xl text-sm leading-relaxed text-muted-foreground",
+        className,
+      )}
       {...props}
     >
       {children}
     </motion.p>
   ),
 
-  // Lists — native markers so ordered lists keep their numbers
-  ul: ({ children, ...props }: MDXComponentProps) => (
+  // native markers so ordered lists keep their numbers
+  ul: ({ children, className, ...props }: MDXComponentProps) => (
     <motion.ul
       {...blockReveal}
-      className="list-disc marker:text-primary space-y-2 mb-4 ml-5"
+      className={cn(
+        "mb-4 ml-5 list-disc space-y-2 marker:text-primary",
+        className,
+      )}
       {...props}
     >
       {children}
     </motion.ul>
   ),
 
-  ol: ({ children, ...props }: MDXComponentProps) => (
+  ol: ({ children, className, ...props }: MDXComponentProps) => (
     <motion.ol
       {...blockReveal}
-      className="list-decimal marker:text-primary space-y-2 mb-4 ml-5"
+      className={cn(
+        "mb-4 ml-5 list-decimal space-y-2 marker:text-primary",
+        className,
+      )}
       {...props}
     >
       {children}
     </motion.ol>
   ),
 
-  li: ({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
+  li: ({ children, className, ...props }: HTMLAttributes<HTMLLIElement>) => (
     <li
-      className="text-sm text-muted-foreground leading-relaxed pl-1.5"
+      className={cn(
+        "pl-1.5 text-sm leading-relaxed text-muted-foreground",
+        className,
+      )}
       {...props}
     >
       {children}
     </li>
   ),
 
-  // Blockquotes
-  blockquote: ({ children, ...props }: MDXComponentProps) => (
+  blockquote: ({ children, className, ...props }: MDXComponentProps) => (
     <motion.blockquote
       {...blockReveal}
-      className="border-l-4 border-primary/30 pl-4 italic text-sm text-muted-foreground mb-4"
+      className={cn(
+        "mb-4 border-l-4 border-primary/30 pl-4 text-sm italic text-muted-foreground",
+        className,
+      )}
       {...props}
     >
       {children}
     </motion.blockquote>
   ),
 
-  // Code blocks
-  pre: ({ children, ...props }: MDXComponentProps) => {
-    // fenced code blocks carry the language on their inner <code>
-    const codeElement = React.Children.toArray(
-      children,
-    )[0] as React.ReactElement<{
-      className?: string;
-      children?: React.ReactNode;
-    }>;
-    if (codeElement?.props?.className?.startsWith("language-")) {
-      const language = codeElement.props.className.replace("language-", "");
-      const code = codeElement.props.children;
-
+  pre: ({ children, className, ...props }: MDXComponentProps) => {
+    const fenced = extractFencedCode(children);
+    if (fenced) {
       return (
         <CodeBlock
-          code={typeof code === "string" ? code : String(code)}
-          lang={language as CodeBlockLanguage}
+          code={fenced.code}
+          lang={fenced.language as CodeBlockLanguage}
         />
       );
     }
 
-    // Fallback for regular pre blocks
     return (
       <motion.pre
         {...blockReveal}
-        className="bg-muted/50 border border-border rounded-lg p-4 overflow-x-auto text-xs mb-4"
+        className={cn(
+          "mb-4 overflow-x-auto rounded-lg border border-border bg-muted/50 p-4 text-xs",
+          className,
+        )}
         {...props}
       >
         {children}
@@ -161,74 +164,99 @@ export const MDXComponents = {
     );
   },
 
-  code: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+  code: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLElement>) => (
     <code
-      className="bg-muted/50 px-1.5 py-0.5 rounded text-xs font-mono"
+      className={cn(
+        // fenced blocks are handled by `pre` → CodeBlock; this styles inline
+        // `code` only (language-* class is present on fenced code, so skip)
+        !className?.includes("language-") &&
+          "rounded bg-muted/50 px-1.5 py-0.5 font-mono text-xs",
+        className,
+      )}
       {...props}
     >
       {children}
     </code>
   ),
 
-  // Images - expandable on click
-  img: ({ src, alt }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <motion.div {...blockReveal} className="mb-6">
+  img: ({ src, alt, className }: ImgHTMLAttributes<HTMLImageElement>) => (
+    <motion.figure {...blockReveal} className="mb-6">
       <ExpandableImage
         src={src || ""}
         alt={alt || ""}
-        className="w-full rounded-lg border border-border mb-2"
+        className={cn("mb-2 w-full rounded-lg border border-border", className)}
       />
-      {alt && (
-        <p className="text-xs text-muted-foreground italic text-center">
+      {alt ? (
+        <figcaption className="text-center text-xs italic text-muted-foreground">
           {alt}
-        </p>
-      )}
-    </motion.div>
+        </figcaption>
+      ) : null}
+    </motion.figure>
   ),
 
-  // Links
   a: ({
     children,
     href,
+    className,
     ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+  }: AnchorHTMLAttributes<HTMLAnchorElement>) => {
     const isExternal = typeof href === "string" && /^https?:\/\//i.test(href);
-    const extProps = props as Record<string, unknown>;
-    const iconProp = extProps?.icon ?? extProps?.ext ?? extProps?.["data-icon"];
+    // MDX may pass icon/ext/data-icon as freeform attrs
+    const ext = props as Record<string, unknown>;
+    const iconProp = ext.icon ?? ext.ext ?? ext["data-icon"];
     const showIcon =
-      iconProp === undefined
-        ? false
-        : iconProp !== false && iconProp !== "false";
+      iconProp !== undefined && iconProp !== false && iconProp !== "false";
+
     if (isExternal && href) {
       return (
         <LinkPreview
           href={href}
           previewType="auto"
           compact={false}
-          className="link inline-flex items-center gap-1"
+          className={cn("link inline-flex items-center gap-1", className)}
         >
           <span>{children}</span>
-          {showIcon ? <ExternalLink className="w-3 h-3 opacity-60" /> : null}
+          {showIcon ? (
+            <ExternalLink className="h-3 w-3 opacity-60" aria-hidden="true" />
+          ) : null}
         </LinkPreview>
       );
     }
+
     return (
-      <a href={href} className="link inline-flex items-center gap-1" {...props}>
+      <a
+        href={href}
+        className={cn("link inline-flex items-center gap-1", className)}
+        {...props}
+      >
         <span>{children}</span>
       </a>
     );
   },
 
-  // Horizontal rule
-  hr: ({ ...props }: MDXComponentProps) => (
-    <motion.hr {...blockReveal} className="border-border my-8" {...props} />
+  hr: ({ className, ...props }: MDXComponentProps) => (
+    <motion.hr
+      {...blockReveal}
+      className={cn("my-8 border-border", className)}
+      {...props}
+    />
   ),
 
-  // Tables
-  table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <motion.div {...blockReveal} className="overflow-x-auto mb-6">
+  table: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLTableElement>) => (
+    <motion.div {...blockReveal} className="mb-6 overflow-x-auto">
       <table
-        className="w-full border-collapse border border-border text-xs"
+        className={cn(
+          "w-full border-collapse border border-border text-xs",
+          className,
+        )}
         {...props}
       >
         {children}
@@ -236,21 +264,48 @@ export const MDXComponents = {
     </motion.div>
   ),
 
-  th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+  th: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLTableCellElement>) => (
     <th
-      className="border border-border px-3 py-2 bg-muted/30 text-left font-medium"
+      className={cn(
+        "border border-border bg-muted/30 px-3 py-2 text-left font-medium",
+        className,
+      )}
       {...props}
     >
       {children}
     </th>
   ),
 
-  td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+  td: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLTableCellElement>) => (
     <td
-      className="border border-border px-3 py-2 text-muted-foreground"
+      className={cn(
+        "border border-border px-3 py-2 text-muted-foreground",
+        className,
+      )}
       {...props}
     >
       {children}
     </td>
+  ),
+
+  strong: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLElement>) => (
+    <strong
+      className={cn("font-semibold text-foreground", className)}
+      {...props}
+    >
+      {children}
+    </strong>
   ),
 };

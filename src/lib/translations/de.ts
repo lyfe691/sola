@@ -118,6 +118,11 @@ export const de = {
     demo: "Demo",
     moreProjects: "Weitere Projekte",
     onThisPage: "Auf dieser Seite",
+    linkToSection: "Link zu Abschnitt: {title}",
+    close: "Schließen",
+    expandImage: "Bild vergrößern",
+    expandImageNamed: "Bild vergrößern: {alt}",
+    expandedImage: "Vergrößertes Bild",
     moreOnGithub: "Mehr auf GitHub",
     view: "Ansehen",
     update: {

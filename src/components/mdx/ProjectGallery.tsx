@@ -6,59 +6,63 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
 import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import { blockReveal } from "./reveal";
 
-export const ProjectGallery: React.FC<{
+const COL_CLASS = {
+  2: "sm:grid-cols-2",
+  3: "sm:grid-cols-2 lg:grid-cols-3",
+  4: "sm:grid-cols-2 lg:grid-cols-4",
+} as const;
+
+export function ProjectGallery({
+  images,
+  columns = 2,
+  size = "normal",
+}: {
   images: Array<{ src: string; alt: string; caption?: string }>;
   columns?: 2 | 3 | 4;
   size?: "normal" | "large";
-}> = ({ images, columns = 2, size = "normal" }) => {
-  // For single image with large size, use special layout
+}) {
   if (images.length === 1 && size === "large") {
+    const image = images[0];
     return (
-      <motion.div {...blockReveal} className="mb-6 max-w-4xl mx-auto">
+      <motion.figure {...blockReveal} className="mb-6 mx-auto max-w-4xl">
         <ExpandableImage
-          src={images[0].src}
-          alt={images[0].alt}
+          src={image.src}
+          alt={image.alt}
           className="w-full rounded-lg border border-border"
         />
-        {images[0].caption && (
-          <p className="text-xs text-muted-foreground italic text-center mt-2">
-            {images[0].caption}
-          </p>
-        )}
-      </motion.div>
+        {image.caption ? (
+          <figcaption className="mt-2 text-center text-xs italic text-muted-foreground">
+            {image.caption}
+          </figcaption>
+        ) : null}
+      </motion.figure>
     );
   }
 
   return (
     <motion.div
       {...blockReveal}
-      className={`grid gap-4 mb-6 items-start ${
-        columns === 2
-          ? "sm:grid-cols-2"
-          : columns === 3
-            ? "sm:grid-cols-2 lg:grid-cols-3"
-            : "sm:grid-cols-2 lg:grid-cols-4"
-      }`}
+      className={cn("mb-6 grid items-start gap-4", COL_CLASS[columns])}
     >
       {images.map((image) => (
-        <div key={image.src} className="space-y-2">
+        <figure key={image.src} className="space-y-2">
           <ExpandableImage
             src={image.src}
             alt={image.alt}
             className="w-full rounded-lg border border-border"
           />
-          {image.caption && (
-            <p className="text-xs text-muted-foreground italic">
+          {image.caption ? (
+            <figcaption className="text-xs italic text-muted-foreground">
               {image.caption}
-            </p>
-          )}
-        </div>
+            </figcaption>
+          ) : null}
+        </figure>
       ))}
     </motion.div>
   );
-};
+}

@@ -118,6 +118,11 @@ export const ko = {
     demo: "Demo",
     moreProjects: "더 많은 프로젝트",
     onThisPage: "목차",
+    linkToSection: "섹션 링크: {title}",
+    close: "닫기",
+    expandImage: "이미지 확대",
+    expandImageNamed: "이미지 확대: {alt}",
+    expandedImage: "확대된 이미지",
     moreOnGithub: "GitHub에서 더 보기",
     view: "보기",
     update: {

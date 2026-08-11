@@ -112,6 +112,11 @@ export const zh = {
     demo: "演示",
     moreProjects: "更多项目",
     onThisPage: "本页内容",
+    linkToSection: "链接到章节：{title}",
+    close: "关闭",
+    expandImage: "放大图片",
+    expandImageNamed: "放大图片：{alt}",
+    expandedImage: "已放大的图片",
     moreOnGithub: "在 GitHub 上查看更多",
     view: "查看",
     update: {

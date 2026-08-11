@@ -11,4 +11,5 @@ export { ExpandableImage } from "./ExpandableImage";
 export { ProjectImage } from "./ProjectImage";
 export { ProjectGallery } from "./ProjectGallery";
 export { TechStack } from "./TechStack";
+export { HeadingLink, MDXHeading, SectionHeading, slugifyHeading } from "./Heading";
 export { CodeBlock } from "@/components/ui/code-block";

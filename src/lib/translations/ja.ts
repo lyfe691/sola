@@ -115,6 +115,11 @@ export const ja = {
     demo: "デモ",
     moreProjects: "他のプロジェクト",
     onThisPage: "目次",
+    linkToSection: "セクションへのリンク: {title}",
+    close: "閉じる",
+    expandImage: "画像を拡大",
+    expandImageNamed: "画像を拡大: {alt}",
+    expandedImage: "拡大画像",
     moreOnGithub: "GitHub で見る",
     view: "表示",
     update: {

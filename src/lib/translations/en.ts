@@ -117,6 +117,11 @@ export const en = {
     demo: "Demo",
     moreProjects: "More Projects",
     onThisPage: "On this page",
+    linkToSection: "Link to section: {title}",
+    close: "Close",
+    expandImage: "Expand image",
+    expandImageNamed: "Expand image: {alt}",
+    expandedImage: "Expanded image",
     moreOnGithub: "More on GitHub",
     view: "View",
     update: {
