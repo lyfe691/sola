@@ -6,31 +6,23 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React, { lazy, Suspense, useEffect, useState } from "react";
 import {
-  Book,
-  Code2,
-  Coffee,
-  Laptop,
-  Mountain,
-  Download,
-  ChevronRight,
-} from "lucide-react";
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import { Download, ChevronRight } from "lucide-react";
 import { useReducedMotion } from "motion/react";
+import { Link } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
-import { Link } from "react-router";
-import { useTheme } from "@/components/theme-provider";
-import { getThemeType } from "@/config/themes";
-import { testimonials } from "@/config/testimonials";
-import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogFooter,
@@ -39,7 +31,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   Drawer,
-  DrawerTrigger,
   DrawerContent,
   DrawerHeader,
   DrawerFooter,
@@ -48,14 +39,19 @@ import {
 } from "@/components/ui/drawer";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
 import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
-import { useQueryClient } from "@tanstack/react-query";
-import { githubContributionsQuery } from "@/lib/github-contributions";
-import { userActivityQuery } from "@/lib/github-activity";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
+import { useTheme } from "@/components/theme-provider";
+import { getThemeType } from "@/config/themes";
+import { testimonials } from "@/config/testimonials";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useLanguage } from "@/lib/language-provider";
+import { translations, type Translation } from "@/lib/translations";
+import { githubContributionsQuery } from "@/lib/github-contributions";
+import { userActivityQuery } from "@/lib/github-activity";
 import { cn } from "@/lib/utils";
 
 const ParticleImage = lazy(() =>
@@ -64,14 +60,31 @@ const ParticleImage = lazy(() =>
   })),
 );
 
-const PORTRAIT_PARTICLES = 140_000;
-const PORTRAIT_PARTICLES_COARSE = 64_000;
+const GITHUB_USER = "lyfe691";
+const PORTRAIT_PARTICLES = 120_000;
+const PORTRAIT_PARTICLES_COARSE = 56_000;
+const CONTRIBUTION_YEARS = [2026, 2025] as const;
 
-// --------------------------------- Helpers ---------------------------------
+type InterestKey = keyof Omit<Translation["about"]["interests"], "title">;
+type ApproachKey = keyof Translation["about"]["philosophyLabels"];
 
-const getResumePath = (language: string) => {
-  return language === "de" ? "/sola_de.pdf" : "/sola_en.pdf";
-};
+const INTERESTS: ReadonlyArray<{ key: InterestKey; image: string }> = [
+  { key: "nature", image: "/about/spring-japan.jpg" },
+  { key: "tech", image: "/about/16.jpg" },
+  { key: "learning", image: "/about/12.jpg" },
+  { key: "workspace", image: "/about/sesh.jpg" },
+];
+
+const APPROACH_KEYS: readonly ApproachKey[] = [
+  "clean",
+  "simplicity",
+  "learning",
+];
+
+// --------------------------------- Resume ---------------------------------
+
+const getResumePath = (language: string) =>
+  language === "de" ? "/sola_de.pdf" : "/sola_en.pdf";
 
 const downloadResume = (language: string) => {
   const resumePath = getResumePath(language);
@@ -79,7 +92,6 @@ const downloadResume = (language: string) => {
     language === "de"
       ? "Lebenslauf_Yanis-Sebastian-Zürcher.pdf"
       : "Resume_Yanis-Sebastian-Zürcher.pdf";
-
   const link = document.createElement("a");
   link.href = resumePath;
   link.download = fileName;
@@ -89,20 +101,29 @@ const downloadResume = (language: string) => {
 };
 
 const viewResume = (language: string) => {
-  const resumePath = getResumePath(language);
-  window.open(resumePath, "_blank");
+  window.open(getResumePath(language), "_blank");
 };
 
-// -------------------------------- Components --------------------------------
+// --------------------------------- Shared ---------------------------------
 
-/** Theme-aware portrait with a GPU particle dissolve (static under reduced-motion). */
-function AboutPortrait({
-  src,
-  alt,
+function SectionHeading({
+  children,
+  trailing,
 }: {
-  src: string;
-  alt: string;
+  children: ReactNode;
+  trailing?: ReactNode;
 }) {
+  return (
+    <div className="mb-6 flex items-end justify-between gap-4 md:mb-8">
+      <h2 className="text-2xl font-bold tracking-tight">{children}</h2>
+      {trailing}
+    </div>
+  );
+}
+
+// -------------------------------- Portrait --------------------------------
+
+function AboutPortrait({ src, alt }: { src: string; alt: string }) {
   const reduceMotion = useReducedMotion();
   const isMobile = useIsMobile();
   const particleCount = isMobile
@@ -110,103 +131,57 @@ function AboutPortrait({
     : PORTRAIT_PARTICLES;
 
   return (
-    <div className="relative md:col-span-2">
-      <div
-        className={cn(
-          "relative aspect-square overflow-hidden rounded-xl border-2 border-border shadow-xs",
-          "bg-muted/20",
-        )}
-      >
-        {/* static base — LCP + reduced-motion + texture-load fallback */}
-        <img
-          src={src}
-          alt={alt}
-          className="absolute inset-0 size-full object-cover"
-          decoding="async"
-        />
-        {!reduceMotion && (
-          <Suspense fallback={null}>
-            <ParticleImage
-              imageUrl={src}
-              width="100%"
-              height="100%"
-              particleCount={particleCount}
-              particleSize={2.25}
-              particleOpacity={0.72}
-              speed={0.9}
-              noiseScale={0.0035}
-              noiseStrength={0.032}
-              damping={0.985}
-              lifespan={450}
-              showImage={false}
-              backgroundColor="transparent"
-              cursorInteraction
-              cursorStrength={0.14}
-              cursorRadius={110}
-              dpr={isMobile ? 1.25 : 1.75}
-              className="absolute inset-0 size-full"
-            />
-          </Suspense>
-        )}
-      </div>
-      <div className="absolute -z-10 -bottom-3 -right-3 h-full w-full -rotate-2 rounded-xl bg-primary/5" />
+    <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-border bg-muted/20 sm:aspect-square">
+      <img
+        src={src}
+        alt={alt}
+        className="absolute inset-0 size-full object-cover"
+        decoding="async"
+      />
+      {!reduceMotion && (
+        <Suspense fallback={null}>
+          <ParticleImage
+            imageUrl={src}
+            width="100%"
+            height="100%"
+            particleCount={particleCount}
+            particleSize={2}
+            particleOpacity={0.7}
+            speed={0.85}
+            noiseScale={0.0035}
+            noiseStrength={0.03}
+            damping={0.985}
+            lifespan={450}
+            showImage={false}
+            backgroundColor="transparent"
+            cursorInteraction
+            cursorStrength={0.12}
+            cursorRadius={100}
+            dpr={isMobile ? 1.15 : 1.5}
+            className="absolute inset-0 size-full"
+          />
+        </Suspense>
+      )}
     </div>
   );
 }
 
-type InterestCardProps = {
-  title: string;
-  description: string;
-  icon: React.ComponentType<{ className?: string }>;
-  image: string;
-};
+// -------------------------------- Resume UI --------------------------------
 
-const InterestCard = ({
-  title,
-  description,
-  icon: Icon,
-  image,
-}: InterestCardProps) => (
-  <Card className="group gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
-    <div className="relative h-36 overflow-hidden">
-      <img
-        src={image}
-        alt={title}
-        loading="lazy"
-        className="h-full w-full object-cover transition-transform duration-200 ease-out can-hover:group-hover:scale-105"
-      />
-      <div className="absolute inset-0 bg-linear-to-t from-background to-transparent" />
-    </div>
-
-    <div className="flex flex-col gap-2 p-4">
-      <div className="flex items-center gap-2">
-        <div className="flex size-7 items-center justify-center rounded-md bg-primary/10">
-          <Icon className="size-3.5 text-primary" />
-        </div>
-        <h3 className="font-medium">{title}</h3>
-      </div>
-      <p className="text-sm leading-relaxed text-foreground/70">
-        {description}
-      </p>
-    </div>
-  </Card>
-);
-
-// resume modal, use drawer for mobile
-const ResumeModal = () => {
+function ResumeModal() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = translations[language].about.resume;
   const [selectedLang, setSelectedLang] = useState<"en" | "de">(
     language === "de" ? "de" : "en",
   );
 
+  const close = () => setOpen(false);
+
   const languagePicker = (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-sm font-medium">
-        {t.about.resume.languageLabel}
-      </span>
+      <span className="text-sm font-medium">{t.languageLabel}</span>
       <ToggleGroup
         value={[selectedLang]}
         onValueChange={(value) =>
@@ -226,193 +201,201 @@ const ResumeModal = () => {
       <Button
         onClick={() => {
           viewResume(selectedLang);
-          setOpen(false);
+          close();
         }}
       >
-        {t.about.resume.viewButton}
+        {t.viewButton}
       </Button>
       <Button
         variant="outline"
         onClick={() => {
           downloadResume(selectedLang);
-          setOpen(false);
+          close();
         }}
       >
-        {t.about.resume.downloadButton}
+        {t.downloadButton}
       </Button>
     </>
   );
 
+  const trigger = (
+    <IconButton
+      variant="default"
+      size="lg"
+      className="w-full border-foreground/20 sm:w-auto"
+      icon={<Download className="size-4" />}
+      iconPosition="left"
+      label={t.buttonLabel}
+      onClick={() => setOpen(true)}
+    />
+  );
+
   if (isMobile) {
     return (
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>
-          <IconButton
-            variant="default"
-            size="lg"
-            className="w-1/2 border-foreground/20"
-            icon={<Download className="w-4 h-4" />}
-            iconPosition="left"
-            label={t.about.resume.buttonLabel}
-            onClick={() => setOpen(true)}
-          />
-        </DrawerTrigger>
-        <DrawerContent>
-          <DrawerHeader>
-            <DrawerTitle>{t.about.resume.title}</DrawerTitle>
-            <DrawerDescription>
-              <RichText text={t.about.resume.description} />
-            </DrawerDescription>
-          </DrawerHeader>
-          <div className="px-4">{languagePicker}</div>
-          <DrawerFooter>{actions}</DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+      <>
+        {trigger}
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>{t.title}</DrawerTitle>
+              <DrawerDescription>
+                <RichText text={t.description} />
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="px-4">{languagePicker}</div>
+            <DrawerFooter>{actions}</DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </>
     );
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <IconButton
-            variant="default"
-            size="lg"
-            className="w-1/3 border-foreground/20"
-            icon={<Download className="w-4 h-4" />}
-            iconPosition="left"
-            label={t.about.resume.buttonLabel}
-            onClick={() => setOpen(true)}
-          />
-        }
-      />
-      <DialogContent>
-        {/* pr-8 keeps longer locales clear of the absolute close button */}
-        <DialogHeader className="pr-8">
-          <DialogTitle>{t.about.resume.title}</DialogTitle>
-          <DialogDescription>
-            <RichText text={t.about.resume.description} />
-          </DialogDescription>
-        </DialogHeader>
-        {languagePicker}
-        <DialogFooter className="sm:flex-col">{actions}</DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <>
+      {trigger}
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <DialogHeader className="pr-8">
+            <DialogTitle>{t.title}</DialogTitle>
+            <DialogDescription>
+              <RichText text={t.description} />
+            </DialogDescription>
+          </DialogHeader>
+          {languagePicker}
+          <DialogFooter className="sm:flex-col">{actions}</DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
-};
+}
 
-// render
+// -------------------------------- Sections --------------------------------
 
-const CONTRIBUTION_YEARS = [2026, 2025] as const;
+function ApproachPanel({
+  title,
+  items,
+}: {
+  title: string;
+  items: ReadonlyArray<{ label: string; text: string }>;
+}) {
+  return (
+    <section className="mb-10">
+      <SectionHeading>{title}</SectionHeading>
+      <div
+        className={cn(
+          "grid overflow-hidden rounded-2xl border border-foreground/12",
+          "bg-linear-to-b from-foreground/[0.04] to-transparent",
+          "divide-y divide-foreground/10",
+          "sm:grid-cols-3 sm:divide-x sm:divide-y-0",
+        )}
+      >
+        {items.map(({ label, text }) => (
+          <div
+            key={label}
+            className={cn(
+              "flex flex-col gap-3 p-6 sm:min-h-[11.5rem] sm:p-7 lg:gap-4 lg:p-8",
+              "transition-colors duration-200 can-hover:hover:bg-foreground/[0.04]",
+            )}
+          >
+            <h3 className="text-base font-semibold tracking-tight sm:text-lg">
+              {label}
+            </h3>
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+              <RichText text={text} />
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// -------------------------------- Page --------------------------------
 
 const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
+  const about = t.about;
   const { theme } = useTheme();
   const [contributionTab, setContributionTab] = useState("last");
   const queryClient = useQueryClient();
+  const isDark = getThemeType(theme) === "dark";
 
   const contributionTabs = [
-    { value: "last", label: t.about.github.overview, year: "last" as const },
+    { value: "last", label: about.github.overview, year: "last" as const },
     ...CONTRIBUTION_YEARS.map((year) => ({
       value: String(year),
       label: String(year),
       year,
     })),
   ];
+
   const selectedContributionYear =
     contributionTab === "last"
       ? "last"
       : (Number(contributionTab) as (typeof CONTRIBUTION_YEARS)[number]);
 
-  // warm the caches so the calendar tabs and the activity feed render
-  // instantly when scrolled into view / switched to
+  const approachItems = APPROACH_KEYS.map((key) => ({
+    label: about.philosophyLabels[key],
+    text: about.philosophy[key],
+  }));
+
   useEffect(() => {
-    void queryClient.prefetchQuery(githubContributionsQuery("lyfe691", "last"));
+    void queryClient.prefetchQuery(
+      githubContributionsQuery(GITHUB_USER, "last"),
+    );
     for (const year of CONTRIBUTION_YEARS) {
-      void queryClient.prefetchQuery(githubContributionsQuery("lyfe691", year));
+      void queryClient.prefetchQuery(
+        githubContributionsQuery(GITHUB_USER, year),
+      );
     }
-    void queryClient.prefetchQuery(userActivityQuery("lyfe691"));
+    void queryClient.prefetchQuery(userActivityQuery(GITHUB_USER));
   }, [queryClient]);
 
-  // automatically determine if current theme is dark - handles ALL themes dynamically
-  const isDarkTheme = () => getThemeType(theme) === "dark";
-
-  const interestImages = {
-    nature: "/about/spring-japan.jpg",
-    tech: "/about/16.jpg",
-    learning: "/about/12.jpg",
-    workspace: "/about/sesh.jpg",
-  } as const;
-
-  const approach = [
-    {
-      icon: Code2,
-      label: t.about.philosophyLabels.clean,
-      text: t.about.philosophy.clean,
-    },
-    {
-      icon: Coffee,
-      label: t.about.philosophyLabels.simplicity,
-      text: t.about.philosophy.simplicity,
-    },
-    {
-      icon: Book,
-      label: t.about.philosophyLabels.learning,
-      text: t.about.philosophy.learning,
-    },
-  ];
-
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex w-full flex-col">
       <meta name="description" content={t.seo.about.description} />
 
-      {/* ------------------- Title ------------------- */}
-
       <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.about.title}</h1>
+        <h1 className="mb-8 text-4xl font-bold sm:mb-12">{about.title}</h1>
       </ScrollReveal>
 
-      {/* ------------------- Hero ------------------- */}
-
       <ScrollReveal variant="default">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-16 md:mb-24">
-          <div className="md:col-span-3 space-y-5">
-            <p className="text-lg text-foreground/80 leading-relaxed">
-              <RichText text={t.about.intro} previewExternal />
+        <div className="mb-16 grid grid-cols-1 items-start gap-10 md:mb-24 md:grid-cols-12">
+          <div className="flex flex-col gap-5 md:col-span-7">
+            <p className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg">
+              <RichText text={about.intro} previewExternal />
             </p>
-            <p className="text-lg text-foreground/80 leading-relaxed">
-              <RichText text={t.about.hobbies} previewExternal />
+            <p className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg">
+              <RichText text={about.hobbies} previewExternal />
             </p>
-
-            {/* ----------- Resume Button ---------- */}
-
-            <div className="pt-5">
+            <div className="pt-1">
               <ResumeModal />
             </div>
           </div>
-
-          {/* ------------------ Portrait ------------------ */}
-
-          <AboutPortrait
-            src={isDarkTheme() ? "/ysz-d.webp" : "/ysz-l.webp"}
-            alt="Yanis Sebastian Zürcher"
-          />
+          <div className="md:col-span-5">
+            <AboutPortrait
+              src={isDark ? "/ysz-d.webp" : "/ysz-l.webp"}
+              alt="Yanis Sebastian Zürcher"
+            />
+          </div>
         </div>
       </ScrollReveal>
 
-      {/* ------------------- GitHub Activity ------------------ */}
       <ScrollReveal variant="default">
-        <div className="mb-16 md:mb-20">
-          <div className="flex items-center justify-between mb-6 md:mb-8 pb-2 border-b border-foreground/10">
-            <h2 className="text-2xl font-bold">{t.about.github.title}</h2>
-            <LinkPreview
-              href="https://github.com/lyfe691"
-              className="text-sm text-foreground/70 hover:text-primary transition-colors"
-            >
-              @lyfe691
-            </LinkPreview>
-          </div>
+        <section className="mb-16 md:mb-20">
+          <SectionHeading
+            trailing={
+              <LinkPreview
+                href={`https://github.com/${GITHUB_USER}`}
+                className="pb-0.5 text-sm text-muted-foreground transition-colors hover:text-primary"
+              >
+                @{GITHUB_USER}
+              </LinkPreview>
+            }
+          >
+            {about.github.title}
+          </SectionHeading>
 
           <Card className="gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md">
             <Tabs
@@ -443,100 +426,86 @@ const About = () => {
           </Card>
 
           <ContributionActivityFeed />
-        </div>
+        </section>
       </ScrollReveal>
 
-      {/* ------------------- Interests ------------------ */}
-
       <ScrollReveal variant="default">
-        <div className="mb-16 md:mb-20">
-          <h2 className="text-2xl font-bold mb-6 md:mb-8 pb-2 border-b border-foreground/10">
-            {t.about.interests.title}
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InterestCard
-              title={t.about.interests.nature.title}
-              description={t.about.interests.nature.description}
-              icon={Mountain}
-              image={interestImages.nature}
-            />
-            <InterestCard
-              title={t.about.interests.tech.title}
-              description={t.about.interests.tech.description}
-              icon={Code2}
-              image={interestImages.tech}
-            />
-            <InterestCard
-              title={t.about.interests.learning.title}
-              description={t.about.interests.learning.description}
-              icon={Book}
-              image={interestImages.learning}
-            />
-            <InterestCard
-              title={t.about.interests.workspace.title}
-              description={t.about.interests.workspace.description}
-              icon={Laptop}
-              image={interestImages.workspace}
-            />
-          </div>
-        </div>
+        <section className="mb-16 md:mb-20">
+          <SectionHeading>{about.interests.title}</SectionHeading>
+          <ul className="flex flex-col">
+            {INTERESTS.map(({ key, image }) => {
+              const item = about.interests[key];
+              return (
+                <li
+                  key={key}
+                  className="grid grid-cols-1 gap-5 border-t border-foreground/8 py-8 first:border-t-0 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-10"
+                >
+                  <div className="overflow-hidden rounded-lg border border-border/60 bg-muted/15 sm:col-span-4">
+                    <img
+                      src={image}
+                      alt=""
+                      loading="lazy"
+                      className="aspect-[4/3] size-full object-cover sm:aspect-[5/4]"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center gap-2 sm:col-span-8">
+                    <h3 className="text-base font-medium sm:text-lg">
+                      {item.title}
+                    </h3>
+                    <p className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+                      {item.description}
+                    </p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
       </ScrollReveal>
 
-      {/* ------------------- Testimonials ------------------ */}
       <ScrollReveal variant="default">
-        <div className="mb-16 md:mb-20">
-          <div className="flex items-center justify-between mb-6 md:mb-8 pb-2 border-b border-foreground/10">
-            <h2 className="text-2xl font-bold">{t.about.testimonials.title}</h2>
-            <Link
-              to="/contact"
-              className="group inline-flex items-center gap-1 text-sm text-foreground/50 transition-colors duration-300 ease-out hover:text-primary"
-            >
-              <span className="border-b border-dotted border-foreground/20 transition-colors duration-300 group-hover:border-primary">
-                {t.about.testimonials.link}
-              </span>
-              <ChevronRight
-                aria-hidden
-                className="size-3.5 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:translate-x-0.5"
-              />
-            </Link>
-          </div>
+        <section className="mb-16 md:mb-20">
+          <SectionHeading
+            trailing={
+              <Link
+                to="/contact"
+                className="group inline-flex items-center gap-1 pb-0.5 text-sm text-muted-foreground transition-colors duration-300 ease-out hover:text-primary"
+              >
+                <span className="border-b border-dotted border-foreground/20 transition-colors duration-300 group-hover:border-primary">
+                  {about.testimonials.link}
+                </span>
+                <ChevronRight
+                  aria-hidden
+                  className="size-3.5 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:translate-x-0.5"
+                />
+              </Link>
+            }
+          >
+            {about.testimonials.title}
+          </SectionHeading>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((testimonial) => (
-              <TestimonialCard
-                key={testimonial.i18nKey}
-                quote={t.about.testimonials.items[testimonial.i18nKey].quote}
-                author={testimonial.author}
-                role={t.about.testimonials.items[testimonial.i18nKey].role}
-                company={testimonial.company}
-                rating={testimonial.rating}
-                website={testimonial.website}
-                linkedin={testimonial.linkedin}
-              />
-            ))}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((testimonial) => {
+              const copy = about.testimonials.items[testimonial.i18nKey];
+              return (
+                <TestimonialCard
+                  key={testimonial.i18nKey}
+                  quote={copy.quote}
+                  author={testimonial.author}
+                  role={copy.role}
+                  company={testimonial.company}
+                  rating={testimonial.rating}
+                  website={testimonial.website}
+                  linkedin={testimonial.linkedin}
+                />
+              );
+            })}
           </div>
-        </div>
+        </section>
       </ScrollReveal>
 
-      {/* ------------------- Philosophy ----------------- */}
-
       <ScrollReveal variant="default">
-        <Card className="mb-10 bg-linear-to-br from-foreground/5 to-card p-6 md:p-8">
-          <h2 className="text-xl font-bold">{t.about.philosophy.title}</h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {approach.map(({ icon: Icon, label, text }) => (
-              <div key={label} className="space-y-2">
-                <div className="mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-                  <Icon className="h-4 w-4 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold">{label}</h3>
-                <p className="text-sm leading-relaxed text-foreground/80">
-                  <RichText text={text} />
-                </p>
-              </div>
-            ))}
-          </div>
-        </Card>
+        <ApproachPanel title={about.philosophy.title} items={approachItems} />
       </ScrollReveal>
     </div>
   );

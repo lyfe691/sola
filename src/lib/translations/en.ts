@@ -13,7 +13,7 @@ export const en = {
     },
     about: {
       description:
-        "Learn more about my background, values, and tools I use to build fast, clean, and minimal software.",
+        "Yanis Sebastian Zürcher — 18, Zürich. Background, GitHub activity, and how I work.",
     },
     projects: {
       description:
@@ -387,45 +387,45 @@ export const en = {
     legal: "Legal",
   },
   about: {
-    title: "About Me",
+    title: "About",
     intro:
-      "I'm Yanis Sebastian Zürcher, an 18-year-old software developer based in Zürich, Switzerland. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from building my own projects—not from school.",
+      "I'm Yanis Sebastian Zürcher — 18, based in Zürich. I study Computer Science at [WISS](https://www.wiss.ch), but most of what I know comes from shipping my own projects, not from lectures.",
     hobbies:
-      "I focus on creating fast, clean, and minimal web applications. Whether it's full-stack platforms or sharp frontends, I care about clarity, performance, and a refined user experience. I'm always pushing my own ideas forward—building things that feel as good as they function.",
+      "I build web apps that stay out of the way: fast, minimal, and a little obsessive about how they feel. Full-stack when it needs to be, frontend when the interface is the product.",
     philosophy: {
-      title: "My Approach",
+      title: "How I work",
       clean:
-        "I believe that clean, maintainable code is the foundation of sustainable software development. Every line I write reflects my commitment to excellence.",
+        "Code should still make sense in six months. I rewrite the clever bits until they're boring.",
       simplicity:
-        "Complex problems deserve elegant solutions. I strive to find the perfect balance between functionality, performance, and user experience.",
+        "If a feature needs a paragraph to explain, it's probably two features. I cut until what's left is obvious.",
       learning:
-        "The tech landscape evolves rapidly, and so do I. Continuous learning and adaptation are essential components of my professional identity.",
+        "I learn by building the next thing I don't know how to build yet. Docs, repos, and breaking stuff in public.",
     },
     interests: {
-      title: "Passions & Pursuits",
+      title: "Also",
       nature: {
-        title: "Alpine Exploration",
+        title: "Mountains",
         description:
-          "Living in Switzerland offers incredible access to nature. I regularly hike through the Alps, finding that the blend of challenge and natural beauty provides both mental clarity and creative inspiration for my technical work.",
+          "Switzerland makes it easy. Long hikes clear the queue of half-finished ideas better than another coffee.",
       },
       tech: {
-        title: "Open Source Contribution",
+        title: "Open source",
         description:
-          "I actively contribute to several open-source projects, particularly focusing on performance optimization and accessibility improvements. This community involvement keeps me at the cutting edge while giving back to the ecosystem I value.",
+          "I chip in where I can — mostly performance and accessibility. It's a good way to get yelled at by better code.",
       },
       learning: {
-        title: "Technical Literature",
+        title: "Reading",
         description:
-          "I maintain a curated collection of technical books and regularly participate in online courses. Currently exploring advanced patterns in distributed systems and functional programming paradigms that I apply to my projects.",
+          "Technical books when I have patience, deep-dives and courses when I don't. Lately: systems and the weird edges of the web platform.",
       },
       workspace: {
-        title: "Optimized Environment",
+        title: "Desk",
         description:
-          "My workspace is carefully designed to maximize productivity and creativity. I use a minimalist dual-monitor setup with custom mechanical keyboard and ergonomic solutions that enable long, focused development sessions.",
+          "Two monitors, a loud keyboard, not much else. The less there is to fiddle with, the longer I stay in the work.",
       },
     },
     testimonials: {
-      title: "What People Say",
+      title: "From people I've worked with",
       link: "Work with me",
       viewMore: "View more",
       visitWebsite: "Visit Website",
@@ -475,9 +475,9 @@ export const en = {
       loadError: "Contribution data couldn't be loaded right now.",
     },
     philosophyLabels: {
-      clean: "Clean Code",
-      simplicity: "Simplicity",
-      learning: "Continuous Learning",
+      clean: "Readable code",
+      simplicity: "Less, not more",
+      learning: "Build to learn",
     },
   },
   contact: {

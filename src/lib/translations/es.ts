@@ -392,45 +392,45 @@ export const es = {
     legal: "Legal",
   },
   about: {
-    title: "Sobre Mí",
+    title: "Sobre mí",
     intro:
-      "Soy Yanis Sebastian Zürcher, un desarrollador de software de 18 años de Zúrich, Suiza. Estudio Ciencias de la Computación en [WISS](https://www.wiss.ch), pero la mayor parte de lo que sé lo he aprendido haciendo mis propios proyectos, no en la escuela.",
+      "Soy Yanis Sebastian Zürcher — 18, en Zúrich. Estudio Ciencias de la Computación en [WISS](https://www.wiss.ch), pero casi todo lo que sé viene de publicar mis propios proyectos, no de las clases.",
     hobbies:
-      "Me enfoco en crear aplicaciones web rápidas, limpias y minimalistas. Ya sea desarrollando plataformas completas o interfaces pulidas, me importan la claridad, el rendimiento y una experiencia de usuario refinada. Siempre estoy desarrollando nuevas ideas propias y creando cosas que se sienten tan bien como funcionan.",
+      "Construyo apps web que no estorban: rápidas, mínimas y un poco obsesivas con cómo se sienten. Full-stack cuando hace falta, frontend cuando la interfaz es el producto.",
     philosophy: {
-      title: "Mi Enfoque",
+      title: "Cómo trabajo",
       clean:
-        "Creo que el código limpio y mantenible es la base del desarrollo de software sostenible. Cada línea que escribo refleja mi compromiso con la excelencia.",
+        "El código tiene que seguir teniendo sentido dentro de seis meses. Reescribo lo ingenioso hasta que es aburrido.",
       simplicity:
-        "Los problemas complejos merecen soluciones elegantes. Me esfuerzo por encontrar el equilibrio perfecto entre funcionalidad, rendimiento y experiencia de usuario.",
+        "Si una función necesita un párrafo para explicarse, probablemente son dos. Recorto hasta que lo que queda es obvio.",
       learning:
-        "El panorama tecnológico evoluciona rápidamente, y yo evoluciono con él. El aprendizaje continuo y la adaptación son componentes esenciales de mi identidad profesional.",
+        "Aprendo construyendo lo siguiente que aún no sé hacer. Docs, repos y romper cosas en público.",
     },
     interests: {
-      title: "Intereses & Hobbies",
+      title: "Además",
       nature: {
-        title: "Explorador de la Naturaleza",
+        title: "Montañas",
         description:
-          "Encuentro paz y inspiración en la naturaleza. Ya sea que esté caminando por los Alpes suizos o descubriendo senderos ocultos, cada viaje trae nuevas perspectivas e ideas.",
+          "En Suiza es fácil. Las caminatas largas vacían la cola de ideas a medias mejor que otro café.",
       },
       tech: {
-        title: "Entusiasta de la Tecnología",
+        title: "Open source",
         description:
-          "Más allá del trabajo, estoy entusiasmado por explorar nuevas tecnologías y contribuir a proyectos de código abierto. La escena tecnológica en constante evolución me mantiene curioso y comprometido.",
+          "Aporto donde puedo — sobre todo rendimiento y accesibilidad. Es una buena forma de que código mejor te regañe.",
       },
       learning: {
-        title: "Aprendizaje Continuo",
+        title: "Lectura",
         description:
-          "Creo en el aprendizaje continuo. Desde libros técnicos hasta cursos en línea, siempre busco expandir mis conocimientos y habilidades.",
+          "Libros técnicos cuando tengo paciencia; deep-dives y cursos cuando no. Últimamente: sistemas y los bordes raros de la web.",
       },
       workspace: {
-        title: "Espacio Creativo",
+        title: "Escritorio",
         description:
-          "Mi espacio de trabajo es donde las ideas cobran vida. Con una configuración minimalista y las herramientas adecuadas, creo un entorno que fomenta la productividad y la creatividad.",
+          "Dos monitores, un teclado ruidoso y poco más. Cuanto menos haya con lo que juguetear, más rato me quedo en el trabajo.",
       },
     },
     testimonials: {
-      title: "Lo que la gente dice",
+      title: "De gente con la que he trabajado",
       link: "Trabajar conmigo",
       viewMore: "Ver más",
       visitWebsite: "Visitar sitio web",
@@ -480,9 +480,9 @@ export const es = {
       loadError: "No se pudieron cargar los datos de contribuciones.",
     },
     philosophyLabels: {
-      clean: "Código limpio",
-      simplicity: "Simplicidad",
-      learning: "Aprendizaje continuo",
+      clean: "Código legible",
+      simplicity: "Menos, no más",
+      learning: "Construir para aprender",
     },
   },
   contact: {

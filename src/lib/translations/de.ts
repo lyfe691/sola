@@ -391,43 +391,43 @@ export const de = {
   about: {
     title: "Über mich",
     intro:
-      "Ich bin Yanis Sebastian Zürcher, ein 18-jähriger Softwareentwickler aus Zürich, Schweiz. Ich studiere Informatik an der [WISS](https://www.wiss.ch), aber das meiste habe ich mir durch eigene Projekte beigebracht – nicht durch die Schule.",
+      "Ich bin Yanis Sebastian Zürcher — 18, aus Zürich. Ich studiere Informatik an der [WISS](https://www.wiss.ch), aber das meiste lerne ich, indem ich eigene Projekte shippe, nicht in der Vorlesung.",
     hobbies:
-      "Ich konzentriere mich darauf, schnelle, saubere und minimalistische Webanwendungen zu entwickeln. Ob Full-Stack-Plattformen oder elegante Frontends – mir sind Klarheit, Performance und ein durchdachtes Nutzererlebnis wichtig. Ich arbeite ständig an meinen eigenen Ideen und entwickle Dinge, die sich genauso gut anfühlen, wie sie funktionieren.",
+      "Ich baue Web-Apps, die nicht im Weg stehen: schnell, minimal, und ein bisschen obsessiv darin, wie sie sich anfühlen. Full-Stack wenn nötig, Frontend wenn die Oberfläche das Produkt ist.",
     philosophy: {
-      title: "Mein Ansatz",
+      title: "So arbeite ich",
       clean:
-        "Ich glaube, dass sauberer, wartbarer Code das Fundament nachhaltiger Softwareentwicklung ist. Jede Zeile, die ich schreibe, spiegelt mein Streben nach Exzellenz wider.",
+        "Code soll in sechs Monaten noch Sinn ergeben. Die cleveren Stellen schreibe ich um, bis sie langweilig sind.",
       simplicity:
-        "Komplexe Probleme verdienen elegante Lösungen. Ich strebe danach, das perfekte Gleichgewicht zwischen Funktionalität, Leistung und Benutzererfahrung zu finden.",
+        "Braucht ein Feature einen Absatz zur Erklärung, sind es wahrscheinlich zwei. Ich streiche, bis das Übrige offensichtlich ist.",
       learning:
-        "Die Technologielandschaft entwickelt sich rasant weiter, und ich entwickle mich mit. Kontinuierliches Lernen und Anpassung sind wesentliche Bestandteile meiner beruflichen Identität.",
+        "Ich lerne, indem ich das Nächste baue, das ich noch nicht kann. Docs, Repos, und Sachen öffentlich kaputtmachen.",
     },
     interests: {
-      title: "Leidenschaften & Interessen",
+      title: "Ausserdem",
       nature: {
-        title: "Alpine Erkundung",
+        title: "Berge",
         description:
-          "Das Leben in der Schweiz bietet unglaublichen Zugang zur Natur. Ich wandere regelmässig durch die Alpen und finde, dass die Kombination aus Herausforderung und natürlicher Schönheit sowohl mentale Klarheit als auch kreative Inspiration für meine technische Arbeit bietet.",
+          "In der Schweiz ist das einfach. Lange Wanderungen räumen den Kopf besser als noch ein Kaffee.",
       },
       tech: {
-        title: "Open‑Source‑Engagement",
+        title: "Open Source",
         description:
-          "Ich engagiere mich aktiv in mehreren Open‑Source‑Projekten – mit Fokus auf Leistungsoptimierung und Barrierefreiheit. Dieses Engagement hält mich technisch auf dem neuesten Stand und ermöglicht es mir, dem Ökosystem, das ich schätze, etwas zurückzugeben.",
+          "Ich helfe wo ich kann — meist Performance und Accessibility. Guter Weg, von besserem Code gescholten zu werden.",
       },
       learning: {
-        title: "Technische Literatur",
+        title: "Lesen",
         description:
-          "Ich pflege eine kuratierte Sammlung technischer Bücher und nehme regelmässig an Online‑Kursen teil. Derzeit erforsche ich fortgeschrittene Muster in verteilten Systemen und funktionale Programmierparadigmen, die ich in meinen Projekten anwende.",
+          "Fachbücher wenn ich Geduld habe, Deep-Dives und Kurse wenn nicht. Gerade: Systeme und die seltsamen Ecken der Web-Plattform.",
       },
       workspace: {
-        title: "Optimierte Umgebung",
+        title: "Schreibtisch",
         description:
-          "Mein Arbeitsbereich ist sorgfältig gestaltet, um Produktivität und Kreativität zu maximieren. Ich verwende ein minimalistisches Dual-Monitor-Setup mit individueller mechanischer Tastatur und ergonomischen Lösungen, die lange, fokussierte Entwicklungssessions ermöglichen.",
+          "Zwei Monitore, laute Tastatur, sonst wenig. Je weniger es zu fummeln gibt, desto länger bleibe ich in der Arbeit.",
       },
     },
     testimonials: {
-      title: "Kundenstimmen",
+      title: "Von Leuten, mit denen ich gearbeitet habe",
       link: "Mit mir arbeiten",
       viewMore: "Mehr anzeigen",
       visitWebsite: "Website besuchen",
@@ -477,9 +477,9 @@ export const de = {
       loadError: "Beitragsdaten konnten gerade nicht geladen werden.",
     },
     philosophyLabels: {
-      clean: "Sauberer Code",
-      simplicity: "Einfachheit",
-      learning: "Kontinuierliches Lernen",
+      clean: "Lesbarer Code",
+      simplicity: "Weniger, nicht mehr",
+      learning: "Bauen zum Lernen",
     },
   },
   contact: {
