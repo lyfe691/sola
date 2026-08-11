@@ -407,26 +407,26 @@ export const es = {
         "Aprendo construyendo lo siguiente que aún no sé hacer. Docs, repos y romper cosas en público.",
     },
     interests: {
-      title: "Además",
+      title: "Intereses",
       nature: {
-        title: "Montañas",
+        title: "Aire libre",
         description:
-          "En Suiza es fácil. Las caminatas largas vacían la cola de ideas a medias mejor que otro café.",
+          "Intento salir con regularidad: sobre todo senderismo, a veces solo caminatas largas sin destino. Vivir en Suiza lo pone fácil; los Alpes están cerca, y unas horas en un sendero siguen siendo de las mejores formas que conozco de despejar la cabeza después de demasiadas horas delante de una pantalla.",
       },
       tech: {
         title: "Open source",
         description:
-          "Aporto donde puedo — sobre todo rendimiento y accesibilidad. Es una buena forma de que código mejor te regañe.",
+          "Contribuyo a open source cuando un proyecto me interesa de verdad, no como un ítem de lista. Suele ser trabajo de rendimiento, accesibilidad o pequeñas mejoras en herramientas que ya uso a diario.",
       },
       learning: {
-        title: "Lectura",
+        title: "Aprendizaje",
         description:
-          "Libros técnicos cuando tengo paciencia; deep-dives y cursos cuando no. Últimamente: sistemas y los bordes raros de la web.",
+          "Fuera de clase sigo aprendiendo con una mezcla de libros, documentación y algún curso cuando algo es nuevo para mí. Últimamente me he centrado en sistemas y en cómo funcionan los navegadores por dentro, y eso vuelve directo a los proyectos que saco.",
       },
       workspace: {
-        title: "Escritorio",
+        title: "Setup",
         description:
-          "Dos monitores, un teclado ruidoso y poco más. Cuanto menos haya con lo que juguetear, más rato me quedo en el trabajo.",
+          "Mi escritorio es simple a propósito: dos monitores, un teclado mecánico y poco desorden. Me importa más un setup que no estorbe que coleccionar gadgets, para poder sentarme a trabajar sin reordenar media habitación antes.",
       },
     },
     testimonials: {

@@ -404,26 +404,26 @@ export const de = {
         "Ich lerne, indem ich das Nächste baue, das ich noch nicht kann. Docs, Repos, und Sachen öffentlich kaputtmachen.",
     },
     interests: {
-      title: "Ausserdem",
+      title: "Interessen",
       nature: {
-        title: "Berge",
+        title: "Draussen",
         description:
-          "In der Schweiz ist das einfach. Lange Wanderungen räumen den Kopf besser als noch ein Kaffee.",
+          "Ich versuche regelmässig rauszukommen — meist wandern, manchmal einfach lange Spaziergänge ohne Ziel. In der Schweiz ist das einfach; die Alpen sind nah, und ein paar Stunden auf dem Trail sind immer noch eine der besseren Arten, den Kopf freizubekommen nach zu vielen Stunden am Bildschirm.",
       },
       tech: {
         title: "Open Source",
         description:
-          "Ich helfe wo ich kann — meist Performance und Accessibility. Guter Weg, von besserem Code gescholten zu werden.",
+          "Zu Open Source trage ich bei, wenn mich ein Projekt wirklich interessiert, nicht als Checklisten-Punkt. Das heisst meist Performance, Accessibility oder kleine Verbesserungen an Tools, die ich sowieso täglich nutze.",
       },
       learning: {
-        title: "Lesen",
+        title: "Lernen",
         description:
-          "Fachbücher wenn ich Geduld habe, Deep-Dives und Kurse wenn nicht. Gerade: Systeme und die seltsamen Ecken der Web-Plattform.",
+          "Neben der Schule lerne ich weiter mit einer Mischung aus Büchern, Dokumentation und ab und zu einem Kurs, wenn mir etwas neu ist. Gerade geht es viel um Systeme und wie Browser unter der Haube laufen — das fliesst direkt in die Projekte, die ich shippe.",
       },
       workspace: {
-        title: "Schreibtisch",
+        title: "Setup",
         description:
-          "Zwei Monitore, laute Tastatur, sonst wenig. Je weniger es zu fummeln gibt, desto länger bleibe ich in der Arbeit.",
+          "Mein Schreibtisch ist absichtlich schlicht: zwei Monitore, eine mechanische Tastatur und wenig Zeug drumherum. Mir ist wichtiger, dass das Setup nicht im Weg steht, als Gadgets zu sammeln — dann kann ich mich hinsetzen und arbeiten, ohne vorher den halben Raum umzuräumen.",
       },
     },
     testimonials: {

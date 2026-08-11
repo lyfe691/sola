@@ -402,26 +402,26 @@ export const en = {
         "I learn by building the next thing I don't know how to build yet. Docs, repos, and breaking stuff in public.",
     },
     interests: {
-      title: "Also",
+      title: "Interests",
       nature: {
-        title: "Mountains",
+        title: "Outdoors",
         description:
-          "Switzerland makes it easy. Long hikes clear the queue of half-finished ideas better than another coffee.",
+          "I try to get outside regularly — mostly hiking, sometimes just long walks with no destination. Living in Switzerland makes that easy; the Alps are close, and a few hours on a trail is still one of the better ways I know to clear my head after too many hours at a screen.",
       },
       tech: {
         title: "Open source",
         description:
-          "I chip in where I can — mostly performance and accessibility. It's a good way to get yelled at by better code.",
+          "I contribute to open source when a project actually catches my interest, not as a checklist item. That usually means performance work, accessibility fixes, or small quality-of-life improvements in tools I already use day to day.",
       },
       learning: {
-        title: "Reading",
+        title: "Learning",
         description:
-          "Technical books when I have patience, deep-dives and courses when I don't. Lately: systems and the weird edges of the web platform.",
+          "Outside of school I keep learning through a mix of books, documentation, and the occasional course when something is new to me. Lately that has been systems topics and how browsers actually work under the hood, which feeds straight back into the projects I ship.",
       },
       workspace: {
-        title: "Desk",
+        title: "Setup",
         description:
-          "Two monitors, a loud keyboard, not much else. The less there is to fiddle with, the longer I stay in the work.",
+          "My desk is simple on purpose: two monitors, a mechanical keyboard, and not a lot of clutter. I care more about having a setup that stays out of the way than about collecting gadgets, so I can sit down and work without rearranging half the room first.",
       },
     },
     testimonials: {
