@@ -381,13 +381,10 @@ const About = () => {
     <div className="flex w-full flex-col">
       <meta name="description" content={t.seo.about.description} />
 
-      <ScrollReveal variant="pageTitle">
-        <h1 className="mb-8 text-4xl font-bold sm:mb-12">{about.title}</h1>
-      </ScrollReveal>
-
       <ScrollReveal variant="default">
-        <div className="mb-16 grid grid-cols-1 items-start gap-10 md:mb-24 md:grid-cols-12">
+        <div className="mb-16 grid grid-cols-1 items-center gap-10 md:mb-24 md:grid-cols-12">
           <div className="flex flex-col gap-5 md:col-span-7">
+            <h1 className="text-4xl font-bold">{about.title}</h1>
             <p className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg">
               <RichText text={about.intro} previewExternal />
             </p>
