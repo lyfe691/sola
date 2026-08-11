@@ -35,13 +35,9 @@ export function ProjectImage({
       {...blockReveal}
       className={cn("my-8", SIZE_CLASS[size], className)}
     >
-      <ExpandableImage
-        src={src}
-        alt={alt}
-        className="w-full rounded-lg border border-border"
-      />
+      <ExpandableImage src={src} alt={alt} />
       {caption ? (
-        <figcaption className="mt-2 text-center text-xs italic text-muted-foreground">
+        <figcaption className="mt-2.5 text-center text-2xs leading-relaxed text-muted-foreground">
           {caption}
         </figcaption>
       ) : null}

@@ -22,6 +22,14 @@ import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { CodeBlock, type CodeBlockLanguage } from "@/components/ui/code-block";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import { MDXHeading } from "./Heading";
@@ -183,15 +191,11 @@ export const MDXComponents = {
     </code>
   ),
 
-  img: ({ src, alt, className }: ImgHTMLAttributes<HTMLImageElement>) => (
-    <motion.figure {...blockReveal} className="mb-6">
-      <ExpandableImage
-        src={src || ""}
-        alt={alt || ""}
-        className={cn("mb-2 w-full rounded-lg border border-border", className)}
-      />
+  img: ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
+    <motion.figure {...blockReveal} className="my-8">
+      <ExpandableImage src={src || ""} alt={alt || ""} />
       {alt ? (
-        <figcaption className="text-center text-xs italic text-muted-foreground">
+        <figcaption className="mt-2.5 text-center text-2xs leading-relaxed text-muted-foreground">
           {alt}
         </figcaption>
       ) : null}
@@ -246,22 +250,47 @@ export const MDXComponents = {
     />
   ),
 
+  // GFM tables → shadcn Table (container already scrolls horizontally)
   table: ({
     children,
     className,
     ...props
   }: HTMLAttributes<HTMLTableElement>) => (
-    <motion.div {...blockReveal} className="mb-6 overflow-x-auto">
-      <table
-        className={cn(
-          "w-full border-collapse border border-border text-xs",
-          className,
-        )}
-        {...props}
-      >
+    <motion.div {...blockReveal} className="my-6">
+      <Table className={cn("text-xs", className)} {...props}>
         {children}
-      </table>
+      </Table>
     </motion.div>
+  ),
+
+  thead: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLTableSectionElement>) => (
+    <TableHeader className={className} {...props}>
+      {children}
+    </TableHeader>
+  ),
+
+  tbody: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLTableSectionElement>) => (
+    <TableBody className={className} {...props}>
+      {children}
+    </TableBody>
+  ),
+
+  tr: ({
+    children,
+    className,
+    ...props
+  }: HTMLAttributes<HTMLTableRowElement>) => (
+    <TableRow className={className} {...props}>
+      {children}
+    </TableRow>
   ),
 
   th: ({
@@ -269,15 +298,12 @@ export const MDXComponents = {
     className,
     ...props
   }: HTMLAttributes<HTMLTableCellElement>) => (
-    <th
-      className={cn(
-        "border border-border bg-muted/30 px-3 py-2 text-left font-medium",
-        className,
-      )}
+    <TableHead
+      className={cn("h-10 text-xs font-medium", className)}
       {...props}
     >
       {children}
-    </th>
+    </TableHead>
   ),
 
   td: ({
@@ -285,15 +311,15 @@ export const MDXComponents = {
     className,
     ...props
   }: HTMLAttributes<HTMLTableCellElement>) => (
-    <td
+    <TableCell
       className={cn(
-        "border border-border px-3 py-2 text-muted-foreground",
+        "whitespace-normal text-xs text-muted-foreground",
         className,
       )}
       {...props}
     >
       {children}
-    </td>
+    </TableCell>
   ),
 
   strong: ({

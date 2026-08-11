@@ -24,19 +24,22 @@ export function ProjectGallery({
 }: {
   images: Array<{ src: string; alt: string; caption?: string }>;
   columns?: 2 | 3 | 4;
-  size?: "normal" | "large";
+  /** Single-image large is a hero; multi always fills the column grid. */
+  size?: "normal" | "large" | "full";
 }) {
-  if (images.length === 1 && size === "large") {
+  if (images.length === 1 && (size === "large" || size === "full")) {
     const image = images[0];
     return (
-      <motion.figure {...blockReveal} className="mb-6 mx-auto max-w-4xl">
-        <ExpandableImage
-          src={image.src}
-          alt={image.alt}
-          className="w-full rounded-lg border border-border"
-        />
+      <motion.figure
+        {...blockReveal}
+        className={cn(
+          "mb-8",
+          size === "full" ? "w-full" : "mx-auto max-w-4xl",
+        )}
+      >
+        <ExpandableImage src={image.src} alt={image.alt} />
         {image.caption ? (
-          <figcaption className="mt-2 text-center text-xs italic text-muted-foreground">
+          <figcaption className="mt-2.5 text-center text-2xs leading-relaxed text-muted-foreground">
             {image.caption}
           </figcaption>
         ) : null}
@@ -47,17 +50,13 @@ export function ProjectGallery({
   return (
     <motion.div
       {...blockReveal}
-      className={cn("mb-6 grid items-start gap-4", COL_CLASS[columns])}
+      className={cn("mb-8 grid items-start gap-4 sm:gap-5", COL_CLASS[columns])}
     >
       {images.map((image) => (
-        <figure key={image.src} className="space-y-2">
-          <ExpandableImage
-            src={image.src}
-            alt={image.alt}
-            className="w-full rounded-lg border border-border"
-          />
+        <figure key={image.src} className="min-w-0">
+          <ExpandableImage src={image.src} alt={image.alt} />
           {image.caption ? (
-            <figcaption className="text-xs italic text-muted-foreground">
+            <figcaption className="mt-2.5 text-center text-2xs leading-relaxed text-muted-foreground">
               {image.caption}
             </figcaption>
           ) : null}
