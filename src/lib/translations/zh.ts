@@ -53,6 +53,7 @@ export const zh = {
   },
   common: {
     home: "首页",
+    present: "至今",
     back: "返回",
     overview: "概览",
     menu: {
@@ -173,13 +174,7 @@ export const zh = {
       contract: "合同",
       freelance: "自由职业",
     },
-    period: {
-      nadlo: "2026年5月 - 至今",
-      gz: "2025年8月 - 2026年3月",
-      freelance: "2025年7月 - 至今",
-      wiss: "2023年8月 - 至今",
-      sek: "2020年 - 2023年",
-    },
+
     nadlo: {
       role: "全栈软件开发工程师",
       company: "nadlo",

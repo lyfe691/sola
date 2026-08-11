@@ -55,6 +55,7 @@ export const ja = {
   },
   common: {
     home: "ホーム",
+    present: "現在",
     back: "戻る",
     overview: "概要",
     menu: {
@@ -176,13 +177,7 @@ export const ja = {
       contract: "契約",
       freelance: "フリーランス",
     },
-    period: {
-      nadlo: "2026年5月 - 現在",
-      gz: "2025年8月 - 2026年3月",
-      freelance: "2025年7月 - 現在",
-      wiss: "2023年8月 - 現在",
-      sek: "2020年 - 2023年",
-    },
+
     nadlo: {
       role: "フルスタック ソフトウェアエンジニア",
       company: "nadlo",

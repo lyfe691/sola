@@ -58,6 +58,7 @@ export const ko = {
   },
   common: {
     home: "홈",
+    present: "현재",
     back: "뒤로",
     overview: "개요",
     menu: {
@@ -180,13 +181,7 @@ export const ko = {
       contract: "계약",
       freelance: "프리랜서",
     },
-    period: {
-      nadlo: "2026년 5월~현재",
-      gz: "2025년 8월 ~ 2026년 3월",
-      freelance: "2025년 7월~현재",
-      wiss: "2023년 8월 ~ 현재",
-      sek: "2020년 - 2023년",
-    },
+
     nadlo: {
       role: "풀스택 소프트웨어 개발자",
       company: "nadlo",

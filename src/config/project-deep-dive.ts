@@ -20,7 +20,7 @@ export interface ProjectPageConfig {
   tagline?: string;
   overview: string;
   technologies: string[];
-  date: string;
+  date: ProjectMeta["date"];
   links: {
     live?: string;
     github?: string;
@@ -48,7 +48,7 @@ function toPageConfig(project: ProjectWithDeepDive): ProjectPageConfig {
     tagline: project.deepDive.tagline,
     overview: project.deepDive.overview,
     technologies: project.technologies,
-    date: project.date.display,
+    date: project.date,
     links: {
       live: project.link,
       github: project.github,

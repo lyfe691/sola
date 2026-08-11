@@ -36,9 +36,10 @@ export interface ProjectMeta {
   technologies: string[];
   featured: boolean;
   date: {
+    /** ISO month `YYYY-MM` (or year `YYYY`). */
     start: string;
-    end?: string;
-    display: string;
+    /** ISO month, or `"present"` for ongoing work. Omit for a single point in time. */
+    end?: string | "present";
   };
   priority: number;
   /** present = project has a deep-dive page at /projects/<slug> */
@@ -67,7 +68,7 @@ export const PROJECTS: ProjectMeta[] = [
     featured: true,
     date: {
       start: "2026-06",
-      display: "Jun 2026 - Present",
+      end: "present",
     },
     priority: 3,
     slug: "magi",
@@ -103,7 +104,7 @@ export const PROJECTS: ProjectMeta[] = [
     featured: true,
     date: {
       start: "2025-11",
-      display: "Nov 2025 - Present",
+      end: "present",
     },
     priority: 1,
     slug: "kinoa",
@@ -143,7 +144,7 @@ export const PROJECTS: ProjectMeta[] = [
     featured: true,
     date: {
       start: "2025-02",
-      display: "Feb 2025 - Present",
+      end: "present",
     },
     priority: 2,
     slug: "sola",
@@ -180,7 +181,6 @@ export const PROJECTS: ProjectMeta[] = [
     date: {
       start: "2026-03",
       end: "2026-04",
-      display: "Mar 2026 - Apr 2026",
     },
     priority: 4,
     slug: "luma",
@@ -218,7 +218,6 @@ export const PROJECTS: ProjectMeta[] = [
     date: {
       start: "2024-12",
       end: "2025-02",
-      display: "Dec 2024 - Feb 2025",
     },
     priority: 5,
     slug: "applicare",
@@ -251,7 +250,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: true,
     date: {
       start: "2025-05",
-      display: "May 2025",
     },
     priority: 6,
     slug: "self",
@@ -279,7 +277,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: true,
     date: {
       start: "2024-08",
-      display: "Aug 2024",
     },
     priority: 7,
     slug: "code-extractor",
@@ -306,7 +303,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2025-08",
-      display: "Aug 2025",
     },
     priority: 8,
     slug: "thoughts",
@@ -339,7 +335,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2025-04",
-      display: "Apr 2025",
     },
     priority: 9,
     slug: "taco",
@@ -367,7 +362,6 @@ export const PROJECTS: ProjectMeta[] = [
     date: {
       start: "2024-11",
       end: "2024-12",
-      display: "Nov 2024 - Dec 2024",
     },
     priority: 10,
   },
@@ -387,7 +381,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2024-09",
-      display: "Sep 2024",
     },
     priority: 11,
   },
@@ -400,7 +393,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2024-08",
-      display: "Aug 2024",
     },
     priority: 12,
   },
@@ -412,7 +404,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2024-08",
-      display: "Aug 2024",
     },
     priority: 13,
   },
@@ -424,7 +415,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2024-06",
-      display: "Jun 2024",
     },
     priority: 14,
   },
@@ -436,7 +426,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2024-04",
-      display: "Apr 2024",
     },
     priority: 15,
   },
@@ -454,7 +443,6 @@ export const PROJECTS: ProjectMeta[] = [
     featured: false,
     date: {
       start: "2024-04",
-      display: "Apr 2024",
     },
     priority: 16,
   },

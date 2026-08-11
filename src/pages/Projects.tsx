@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import { Link } from "react-router";
+import type { Language } from "@/config/languages";
+import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
@@ -200,15 +202,30 @@ const ProjectActions = ({
   );
 };
 
-const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
+const ProjectBody = ({
+  project,
+  t,
+  language,
+}: {
+  project: Project;
+  t: Translation;
+  language: Language;
+}) => (
   <div className="flex h-full flex-col gap-4 p-5 sm:p-6">
     <div className="flex flex-col gap-1">
       <h3 className="text-lg font-medium text-foreground transition-colors duration-300 group-hover:text-primary sm:text-xl">
         {project.title}
       </h3>
-      <span className="font-mono text-xs text-foreground/60">
-        {project.date.display}
-      </span>
+      <time
+        className="font-mono text-xs text-foreground/60"
+        dateTime={project.date.start}
+      >
+        {formatProjectDate(
+          INTL_LOCALE[language],
+          project.date,
+          t.common.present,
+        )}
+      </time>
     </div>
     <p className="flex-1 text-sm text-foreground/60">
       <RichText text={project.description} />
@@ -218,17 +235,25 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
   </div>
 );
 
-const ProjectCard = ({ project, t }: { project: Project; t: Translation }) =>
+const ProjectCard = ({
+  project,
+  t,
+  language,
+}: {
+  project: Project;
+  t: Translation;
+  language: Language;
+}) =>
   project.featured && project.image ? (
     <Card className={cardClassName}>
       <div className="grid grid-cols-1 md:grid-cols-2">
         <ProjectImage project={project} t={t} />
-        <ProjectBody project={project} t={t} />
+        <ProjectBody project={project} t={t} language={language} />
       </div>
     </Card>
   ) : (
     <Card className={cardClassName}>
-      <ProjectBody project={project} t={t} />
+      <ProjectBody project={project} t={t} language={language} />
     </Card>
   );
 
@@ -325,7 +350,7 @@ const Projects = () => {
             variant="default"
             delay={Math.min(index * 60, 360)}
           >
-            <ProjectCard project={project} t={t} />
+            <ProjectCard project={project} t={t} language={language} />
           </ScrollReveal>
         ))}
       </div>
@@ -359,7 +384,7 @@ const Projects = () => {
             delay={Math.min(index * 60, 360)}
             className="h-full"
           >
-            <ProjectCard project={project} t={t} />
+            <ProjectCard project={project} t={t} language={language} />
           </ScrollReveal>
         ))}
       </div>

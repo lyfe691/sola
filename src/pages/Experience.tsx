@@ -17,8 +17,8 @@ const Experience = () => {
   const t = translations[language] as Translation;
   const chips = t.experience.chips as Record<string, string>;
 
-  const work = resolveEntries(WORK, t);
-  const education = resolveEntries(EDUCATION, t);
+  const work = resolveEntries(WORK, t, language);
+  const education = resolveEntries(EDUCATION, t, language);
 
   return (
     <div className="flex w-full flex-col">

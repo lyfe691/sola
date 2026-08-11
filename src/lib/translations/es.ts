@@ -60,6 +60,7 @@ export const es = {
   },
   common: {
     home: "Inicio",
+    present: "Presente",
     back: "Volver",
     overview: "Resumen",
     menu: {
@@ -185,13 +186,7 @@ export const es = {
       contract: "Contrato",
       freelance: "Freelance",
     },
-    period: {
-      nadlo: "May 2026 - Presente",
-      gz: "Ago 2025 - Mar 2026",
-      freelance: "Jul 2025 - Presente",
-      wiss: "Ago 2023 - Presente",
-      sek: "2020 - 2023",
-    },
+
     nadlo: {
       role: "Desarrollador de Software Full Stack",
       company: "nadlo",

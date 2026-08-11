@@ -6,14 +6,16 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import { formatDateRange, INTL_LOCALE, type YearMonth } from "@/lib/dates";
+import type { Language } from "@/config/languages";
 import type { Translation } from "@/lib/translations";
 
 export type EmploymentType =
   "full_time" | "part_time" | "contract" | "internship" | "freelance";
 export type LocationType = "onsite" | "remote" | "hybrid";
 
-/** A point in time. `month` is 1-indexed (January = 1) to match `formatDuration`. */
-export type DatePoint = { year: number; month: number };
+/** A point in time. `month` is 1-indexed (January = 1). */
+export type DatePoint = YearMonth;
 
 /** Non-translated facts for one entry, keyed to `t.experience[key]`. */
 export interface ExperienceFact {
@@ -139,17 +141,18 @@ export const EDUCATION: ExperienceFact[] = [
   },
 ];
 
-/** Merge static facts with the active language's copy and localized range string. */
+/** Merge static facts with the active language's copy and a localized date range. */
 export const resolveEntries = (
   facts: ExperienceFact[],
   t: Translation,
+  language: Language,
 ): ExperienceEntry[] => {
   const copy = t.experience as unknown as Record<string, ExperienceCopy>;
-  const periods = t.experience.period as unknown as Record<string, string>;
+  const locale = INTL_LOCALE[language];
   return facts.map((fact) => ({
     ...fact,
     ...copy[fact.key],
-    period: periods[fact.key],
+    period: formatDateRange(locale, fact.start, fact.end, t.common.present),
   }));
 };
 
