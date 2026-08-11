@@ -8,13 +8,15 @@
 
 import ScrollReveal from "@/components/ScrollReveal";
 import ExperienceItem from "@/components/experience/ExperienceItem";
+import { INTL_LOCALE } from "@/lib/dates";
 import { formatDuration, type ExperienceEntry } from "@/lib/experience";
+import type { Language } from "@/config/languages";
 
 interface ExperienceSectionProps {
   title: string;
   entries: ExperienceEntry[];
   isWork: boolean;
-  language: string;
+  language: Language;
   /** Localized chip labels for employment + location types. */
   chips: Record<string, string>;
 }
@@ -27,6 +29,8 @@ const ExperienceSection = ({
   language,
   chips,
 }: ExperienceSectionProps) => {
+  const locale = INTL_LOCALE[language];
+
   return (
     <section>
       <ScrollReveal variant="default">
@@ -46,7 +50,7 @@ const ExperienceSection = ({
             <ExperienceItem
               entry={entry}
               isWork={isWork}
-              duration={formatDuration(language, entry.start, entry.end)}
+              duration={formatDuration(locale, entry.start, entry.end)}
               employmentLabel={
                 chips[entry.employmentType] ?? entry.employmentType
               }

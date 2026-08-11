@@ -21,6 +21,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useLanguage } from "@/lib/language-provider";
+import { INTL_LOCALE } from "@/lib/dates";
 import { translations } from "@/lib/translations";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { IconButton } from "@/components/ui/custom/icon-button";
@@ -770,16 +771,8 @@ const Privacy = () => {
 
   // last updated utilities
   const LAST_UPDATED_ISO = "2026-03-16"; // update when content meaningfully changes
-  const localeMap: Record<typeof language, string> = {
-    en: "en-US",
-    de: "de-CH",
-    es: "es-ES",
-    ja: "ja-JP",
-    ko: "ko-KR",
-    zh: "zh-CN",
-  };
   const updatedDate = new Date(LAST_UPDATED_ISO);
-  const formattedUpdated = updatedDate.toLocaleDateString(localeMap[language], {
+  const formattedUpdated = updatedDate.toLocaleDateString(INTL_LOCALE[language], {
     year: "numeric",
     month: "short",
     day: "numeric",

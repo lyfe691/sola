@@ -32,19 +32,11 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IconButton } from "./ui/custom/icon-button";
+import { INTL_LOCALE } from "@/lib/dates";
 import { EASE_OUT } from "@/utils/transitions";
 
 const USERNAME = "lyfe691";
 const VISIBLE_EVENTS = 6;
-
-const INTL_LOCALE: Record<string, string> = {
-  en: "en",
-  de: "de",
-  es: "es",
-  ja: "ja",
-  ko: "ko",
-  zh: "zh-CN",
-};
 
 const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
   const iconClass = "w-3.5 h-3.5 shrink-0";
@@ -288,7 +280,7 @@ const ActivityFeedSkeleton = () => (
 const ContributionActivityFeed = () => {
   const { language } = useLanguage();
   const t = translations[language];
-  const locale = INTL_LOCALE[language] ?? "en";
+  const locale = INTL_LOCALE[language];
 
   const { data, isPending: loading } = useQuery(userActivityQuery(USERNAME));
   const events: ProcessedActivity[] = data ?? [];

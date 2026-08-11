@@ -6,6 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import type { ProjectDate } from "@/lib/dates";
 import type { Translation } from "@/lib/translations";
 
 export type ProjectI18nKey = keyof Translation["projects"]["list"];
@@ -35,12 +36,7 @@ export interface ProjectMeta {
   github?: string;
   technologies: string[];
   featured: boolean;
-  date: {
-    /** ISO month `YYYY-MM` (or year `YYYY`). */
-    start: string;
-    /** ISO month, or `"present"` for ongoing work. Omit for a single point in time. */
-    end?: string | "present";
-  };
+  date: ProjectDate;
   priority: number;
   /** present = project has a deep-dive page at /projects/<slug> */
   slug?: string;

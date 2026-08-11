@@ -10,18 +10,26 @@
 
 import type { Language } from "@/config/languages";
 
-/** BCP 47 tags for short month + year labels. */
+/** Canonical BCP 47 tags for the site's languages. */
 export const INTL_LOCALE: Record<Language, string> = {
-  en: "en",
+  en: "en-US",
   de: "de-CH",
-  es: "es",
-  ja: "ja",
-  ko: "ko",
+  es: "es-ES",
+  ja: "ja-JP",
+  ko: "ko-KR",
   zh: "zh-CN",
 };
 
 /** Calendar month. `month` is 1-indexed (January = 1). */
 export type YearMonth = { year: number; month: number };
+
+/** Project / deep-dive config shape: ISO month strings + optional end. */
+export type ProjectDate = {
+  /** `YYYY-MM` or `YYYY`. */
+  start: string;
+  /** ISO month, or `"present"` for ongoing work. Omit for a single point. */
+  end?: string | "present";
+};
 
 /** Parse config ISO fragments: `YYYY-MM` or `YYYY`. */
 export function parseYearMonth(iso: string): YearMonth {
@@ -59,18 +67,18 @@ export function formatDateRange(
   return `${startLabel} - ${formatMonthYear(lang, end)}`;
 }
 
-/** Project config dates: `start` + optional `end` or `"present"`. */
+/** Format a project config date for the active locale. */
 export function formatProjectDate(
   lang: string,
-  date: { start: string; end?: string | "present" },
+  date: ProjectDate,
   presentLabel: string,
 ): string {
   const start = parseYearMonth(date.start);
-  if (date.end === "present") {
-    return formatDateRange(lang, start, "present", presentLabel);
-  }
-  if (date.end) {
-    return formatDateRange(lang, start, parseYearMonth(date.end), presentLabel);
-  }
-  return formatMonthYear(lang, start);
+  const end =
+    date.end === undefined
+      ? undefined
+      : date.end === "present"
+        ? "present"
+        : parseYearMonth(date.end);
+  return formatDateRange(lang, start, end, presentLabel);
 }

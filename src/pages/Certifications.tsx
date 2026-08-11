@@ -16,21 +16,14 @@ import { getAllCertifications, isExpired } from "@/config/certifications";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { INTL_LOCALE } from "@/lib/dates";
 
 const Certifications: React.FC = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const items = getAllCertifications();
-  const localeMap: Record<typeof language, string> = {
-    en: "en-US",
-    de: "de-CH",
-    es: "es-ES",
-    ja: "ja-JP",
-    ko: "ko-KR",
-    zh: "zh-CN",
-  };
   const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString(localeMap[language], {
+    new Date(iso).toLocaleDateString(INTL_LOCALE[language], {
       year: "numeric",
       month: "short",
       day: "numeric",

@@ -45,18 +45,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { INTL_LOCALE } from "@/lib/dates";
 import { cn } from "@/lib/utils";
 
 const USERNAME = "lyfe691";
-
-const INTL_LOCALE: Record<string, string> = {
-  en: "en",
-  de: "de",
-  es: "es",
-  ja: "ja",
-  ko: "ko",
-  zh: "zh-CN",
-};
 
 const heatmapTheme: ThemeInput = {
   light: [
@@ -99,7 +91,7 @@ const GitHubContributionCalendar = ({
   const t = translations[language];
 
   const colorScheme = getThemeType(theme);
-  const locale = INTL_LOCALE[language] ?? "en";
+  const locale = INTL_LOCALE[language];
 
   const {
     data,
