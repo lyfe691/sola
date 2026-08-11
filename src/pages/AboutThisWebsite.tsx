@@ -35,8 +35,8 @@ const MATERIALS: Array<{ name: string; href: string }> = [
   { name: "Motion", href: "https://motion.dev" },
   { name: "GSAP", href: "https://gsap.com" },
   {
-    name: "Instrument Sans",
-    href: "https://fonts.google.com/specimen/Instrument+Sans",
+    name: "Onest",
+    href: "https://fonts.google.com/specimen/Onest",
   },
   {
     name: "Bricolage Grotesque",
