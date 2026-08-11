@@ -4,17 +4,14 @@
  * This file is part of a proprietary software project.
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ *
+ * Chip list for the deep-dive tech-stack section. Motion lives on the parent
+ * section — this component stays presentational.
  */
-
-import { motion } from "motion/react";
-import { blockReveal } from "./reveal";
 
 export function TechStack({ technologies }: { technologies: string[] }) {
   return (
-    <motion.ul
-      {...blockReveal}
-      className="mb-6 flex list-none flex-wrap gap-2.5 p-0"
-    >
+    <ul className="flex list-none flex-wrap gap-2.5 p-0">
       {technologies.map((tech) => (
         <li
           key={tech}
@@ -23,6 +20,6 @@ export function TechStack({ technologies }: { technologies: string[] }) {
           {tech}
         </li>
       ))}
-    </motion.ul>
+    </ul>
   );
 }

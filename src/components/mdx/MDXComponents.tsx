@@ -5,20 +5,18 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Element map handed to MDXProvider — design-system components for every
- * markdown construct the deep-dive articles use.
+ * MDX element map for deep-dive articles — the same contract popular docs
+ * sites use: HTML tags get design-system components, custom shortcodes
+ * (CodeBlock, ProjectImage, …) are available without per-file imports.
  */
 
 import {
   Children,
   isValidElement,
-  type AnchorHTMLAttributes,
-  type HTMLAttributes,
-  type ImgHTMLAttributes,
   type ReactElement,
   type ReactNode,
 } from "react";
-import { ExternalLink } from "lucide-react";
+import type { MDXComponents as MDXComponentsType } from "mdx/types";
 import { motion } from "motion/react";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { CodeBlock, type CodeBlockLanguage } from "@/components/ui/code-block";
@@ -32,14 +30,31 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
+import { FigureCaption, ProjectGallery, ProjectImage } from "./figures";
 import { MDXHeading } from "./Heading";
 import { blockReveal } from "./reveal";
+import { TechStack } from "./TechStack";
 
-interface MDXComponentProps {
+/** Props MDX actually passes — avoid full HTML* bags (clash with motion). */
+type MdxProps = {
   children?: ReactNode;
   className?: string;
   id?: string;
-}
+};
+
+type MdxAnchorProps = MdxProps & {
+  href?: string;
+};
+
+type MdxImgProps = {
+  src?: string;
+  alt?: string;
+  className?: string;
+};
+
+// ---------------------------------------------------------------------------
+// helpers
+// ---------------------------------------------------------------------------
 
 function extractFencedCode(children: ReactNode): {
   language: string;
@@ -61,93 +76,99 @@ function extractFencedCode(children: ReactNode): {
   return { language, code };
 }
 
-export const MDXComponents = {
-  h1: ({ children, className, id, ...props }: MDXComponentProps) => (
-    <MDXHeading level="h1" id={id} className={className} {...props}>
+function isExternalHref(href: string | undefined): href is string {
+  return typeof href === "string" && /^https?:\/\//i.test(href);
+}
+
+// ---------------------------------------------------------------------------
+// HTML elements
+// ---------------------------------------------------------------------------
+
+const html = {
+  // document root — one surface for the whole article
+  wrapper: ({ children }: MdxProps) => (
+    <div className="mdx min-w-0">{children}</div>
+  ),
+
+  h1: ({ children, className, id }: MdxProps) => (
+    <MDXHeading level="h1" id={id} className={className}>
       {children}
     </MDXHeading>
   ),
 
-  // h2s are the article's nav landmarks: data-toc lets the section rail
-  // pick them up; scroll-mt clears the sticky bar
-  h2: ({ children, className, id, ...props }: MDXComponentProps) => (
-    <MDXHeading level="h2" toc id={id} className={className} {...props}>
+  // h2s are TOC landmarks for the deep-dive section rail
+  h2: ({ children, className, id }: MdxProps) => (
+    <MDXHeading level="h2" toc id={id} className={className}>
       {children}
     </MDXHeading>
   ),
 
-  h3: ({ children, className, id, ...props }: MDXComponentProps) => (
-    <MDXHeading level="h3" id={id} className={className} {...props}>
+  h3: ({ children, className, id }: MdxProps) => (
+    <MDXHeading level="h3" id={id} className={className}>
       {children}
     </MDXHeading>
   ),
 
-  p: ({ children, className, ...props }: MDXComponentProps) => (
+  p: ({ children, className }: MdxProps) => (
     <motion.p
       {...blockReveal}
       className={cn(
         "mb-4 max-w-3xl text-sm leading-relaxed text-muted-foreground",
         className,
       )}
-      {...props}
     >
       {children}
     </motion.p>
   ),
 
-  // native markers so ordered lists keep their numbers
-  ul: ({ children, className, ...props }: MDXComponentProps) => (
+  ul: ({ children, className }: MdxProps) => (
     <motion.ul
       {...blockReveal}
       className={cn(
         "mb-4 ml-5 list-disc space-y-2 marker:text-primary",
         className,
       )}
-      {...props}
     >
       {children}
     </motion.ul>
   ),
 
-  ol: ({ children, className, ...props }: MDXComponentProps) => (
+  ol: ({ children, className }: MdxProps) => (
     <motion.ol
       {...blockReveal}
       className={cn(
         "mb-4 ml-5 list-decimal space-y-2 marker:text-primary",
         className,
       )}
-      {...props}
     >
       {children}
     </motion.ol>
   ),
 
-  li: ({ children, className, ...props }: HTMLAttributes<HTMLLIElement>) => (
+  li: ({ children, className }: MdxProps) => (
     <li
       className={cn(
         "pl-1.5 text-sm leading-relaxed text-muted-foreground",
         className,
       )}
-      {...props}
     >
       {children}
     </li>
   ),
 
-  blockquote: ({ children, className, ...props }: MDXComponentProps) => (
+  blockquote: ({ children, className }: MdxProps) => (
     <motion.blockquote
       {...blockReveal}
       className={cn(
         "mb-4 border-l-4 border-primary/30 pl-4 text-sm italic text-muted-foreground",
         className,
       )}
-      {...props}
     >
       {children}
     </motion.blockquote>
   ),
 
-  pre: ({ children, className, ...props }: MDXComponentProps) => {
+  pre: ({ children, className }: MdxProps) => {
     const fenced = extractFencedCode(children);
     if (fenced) {
       return (
@@ -162,176 +183,123 @@ export const MDXComponents = {
       <motion.pre
         {...blockReveal}
         className={cn(
-          "mb-4 overflow-x-auto rounded-lg border border-border bg-muted/50 p-4 text-xs",
+          "mb-4 overflow-x-auto rounded-xl border border-border bg-muted/50 p-4 text-xs",
           className,
         )}
-        {...props}
       >
         {children}
       </motion.pre>
     );
   },
 
-  code: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLElement>) => (
-    <code
-      className={cn(
-        // fenced blocks are handled by `pre` → CodeBlock; this styles inline
-        // `code` only (language-* class is present on fenced code, so skip)
-        !className?.includes("language-") &&
-          "rounded bg-muted/50 px-1.5 py-0.5 font-mono text-xs",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </code>
-  ),
+  code: ({ children, className }: MdxProps) => {
+    // fenced blocks are handled by `pre` → CodeBlock; style inline only
+    const fenced = className?.includes("language-");
+    return (
+      <code
+        className={cn(
+          !fenced &&
+            "rounded bg-muted/50 px-1.5 py-0.5 font-mono text-xs text-foreground",
+          className,
+        )}
+      >
+        {children}
+      </code>
+    );
+  },
 
-  img: ({ src, alt }: ImgHTMLAttributes<HTMLImageElement>) => (
+  img: ({ src, alt }: MdxImgProps) => (
     <motion.figure {...blockReveal} className="my-8">
       <ExpandableImage src={src || ""} alt={alt || ""} />
-      {alt ? (
-        <figcaption className="mt-2.5 text-center text-2xs leading-relaxed text-muted-foreground">
-          {alt}
-        </figcaption>
-      ) : null}
+      {alt ? <FigureCaption>{alt}</FigureCaption> : null}
     </motion.figure>
   ),
 
-  a: ({
-    children,
-    href,
-    className,
-    ...props
-  }: AnchorHTMLAttributes<HTMLAnchorElement>) => {
-    const isExternal = typeof href === "string" && /^https?:\/\//i.test(href);
-    // MDX may pass icon/ext/data-icon as freeform attrs
-    const ext = props as Record<string, unknown>;
-    const iconProp = ext.icon ?? ext.ext ?? ext["data-icon"];
-    const showIcon =
-      iconProp !== undefined && iconProp !== false && iconProp !== "false";
-
-    if (isExternal && href) {
+  a: ({ href, className, children }: MdxAnchorProps) => {
+    if (isExternalHref(href)) {
       return (
         <LinkPreview
           href={href}
           previewType="auto"
           compact={false}
-          className={cn("link inline-flex items-center gap-1", className)}
+          className={cn("link", className)}
         >
-          <span>{children}</span>
-          {showIcon ? (
-            <ExternalLink className="h-3 w-3 opacity-60" aria-hidden="true" />
-          ) : null}
+          {children}
         </LinkPreview>
       );
     }
 
     return (
-      <a
-        href={href}
-        className={cn("link inline-flex items-center gap-1", className)}
-        {...props}
-      >
-        <span>{children}</span>
+      <a href={href} className={cn("link", className)}>
+        {children}
       </a>
     );
   },
 
-  hr: ({ className, ...props }: MDXComponentProps) => (
+  hr: ({ className }: MdxProps) => (
     <motion.hr
       {...blockReveal}
       className={cn("my-8 border-border", className)}
-      {...props}
     />
   ),
 
-  // GFM tables → shadcn Table (container already scrolls horizontally)
-  table: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLTableElement>) => (
+  strong: ({ children, className }: MdxProps) => (
+    <strong className={cn("font-semibold text-foreground", className)}>
+      {children}
+    </strong>
+  ),
+
+  em: ({ children, className }: MdxProps) => (
+    <em className={cn("italic", className)}>{children}</em>
+  ),
+
+  // GFM tables → shadcn Table (container scrolls horizontally)
+  table: ({ children, className }: MdxProps) => (
     <motion.div {...blockReveal} className="my-6">
-      <Table className={cn("text-xs", className)} {...props}>
-        {children}
-      </Table>
+      <Table className={cn("text-xs", className)}>{children}</Table>
     </motion.div>
   ),
 
-  thead: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLTableSectionElement>) => (
-    <TableHeader className={className} {...props}>
-      {children}
-    </TableHeader>
+  thead: ({ children, className }: MdxProps) => (
+    <TableHeader className={className}>{children}</TableHeader>
+  ),
+  tbody: ({ children, className }: MdxProps) => (
+    <TableBody className={className}>{children}</TableBody>
+  ),
+  tr: ({ children, className }: MdxProps) => (
+    <TableRow className={className}>{children}</TableRow>
   ),
 
-  tbody: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLTableSectionElement>) => (
-    <TableBody className={className} {...props}>
-      {children}
-    </TableBody>
-  ),
-
-  tr: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLTableRowElement>) => (
-    <TableRow className={className} {...props}>
-      {children}
-    </TableRow>
-  ),
-
-  th: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLTableCellElement>) => (
-    <TableHead
-      className={cn("h-10 text-xs font-medium", className)}
-      {...props}
-    >
+  th: ({ children, className }: MdxProps) => (
+    <TableHead className={cn("h-10 text-xs font-medium", className)}>
       {children}
     </TableHead>
   ),
 
-  td: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLTableCellElement>) => (
+  td: ({ children, className }: MdxProps) => (
     <TableCell
       className={cn(
         "whitespace-normal text-xs text-muted-foreground",
         className,
       )}
-      {...props}
     >
       {children}
     </TableCell>
   ),
+} satisfies MDXComponentsType;
 
-  strong: ({
-    children,
-    className,
-    ...props
-  }: HTMLAttributes<HTMLElement>) => (
-    <strong
-      className={cn("font-semibold text-foreground", className)}
-      {...props}
-    >
-      {children}
-    </strong>
-  ),
+// ---------------------------------------------------------------------------
+// shortcodes — available in every deep-dive without local imports
+// ---------------------------------------------------------------------------
+
+const shortcodes = {
+  CodeBlock,
+  ProjectImage,
+  ProjectGallery,
+  TechStack,
 };
+
+export const MDXComponents = {
+  ...html,
+  ...shortcodes,
+} as MDXComponentsType & typeof shortcodes;

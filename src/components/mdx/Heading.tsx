@@ -12,7 +12,7 @@
 
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 import { Link } from "lucide-react";
-import { motion, type HTMLMotionProps } from "motion/react";
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -101,7 +101,7 @@ type MotionHeadingProps = {
   children?: ReactNode;
   className?: string;
   id?: string;
-} & Omit<HTMLMotionProps<"h1">, "id" | "children" | "className">;
+};
 
 const LEVEL_CLASS: Record<HeadingLevel, string> = {
   h1: "text-2xl font-bold text-foreground mb-6 mt-8 first:mt-0",
@@ -119,15 +119,13 @@ export function MDXHeading({
   children,
   className,
   id: idProp,
-  ...props
 }: MotionHeadingProps) {
   const id = idProp ?? slugifyHeading(children);
-  const MotionTag = motion[level] as typeof motion.h1;
+  const MotionTag = motion[level];
 
   return (
     <MotionTag
       {...blockReveal}
-      {...props}
       id={id}
       data-toc={toc && id ? "" : undefined}
       className={cn(

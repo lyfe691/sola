@@ -7,9 +7,14 @@
  */
 
 export { MDXComponents } from "./MDXComponents";
+export { Mdx, MdxDocument } from "./Mdx";
 export { ExpandableImage } from "./ExpandableImage";
-export { ProjectImage } from "./ProjectImage";
-export { ProjectGallery } from "./ProjectGallery";
+export { FigureCaption, ProjectImage, ProjectGallery } from "./figures";
 export { TechStack } from "./TechStack";
-export { HeadingLink, MDXHeading, SectionHeading, slugifyHeading } from "./Heading";
+export {
+  HeadingLink,
+  MDXHeading,
+  SectionHeading,
+  slugifyHeading,
+} from "./Heading";
 export { CodeBlock } from "@/components/ui/code-block";

@@ -11,7 +11,6 @@
  */
 
 import {
-  Suspense,
   lazy,
   useEffect,
   useRef,
@@ -21,7 +20,6 @@ import {
 } from "react";
 import { Link, Navigate, useParams } from "react-router";
 import { motion } from "motion/react";
-import { MDXProvider } from "@mdx-js/react";
 import { ExternalLink, Globe } from "lucide-react";
 import { FaGithubAlt } from "react-icons/fa";
 import {
@@ -31,13 +29,12 @@ import {
   useDeepDiveSections,
 } from "@/components/deep-dive-nav";
 import { ProjectDeepDive } from "@/components/ProjectDeepDive";
-import { MDXComponents, SectionHeading, TechStack } from "@/components/mdx";
+import { Mdx, SectionHeading, TechStack } from "@/components/mdx";
 import { blockReveal } from "@/components/mdx/reveal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Spinner } from "@/components/ui/spinner";
 import {
   getProjectConfig,
   projectPagesConfig,
@@ -48,10 +45,9 @@ import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { translations, type Translation } from "@/lib/translations";
 import { scrollSubtleVariants } from "@/utils/transitions";
 
-// every lazy MDX component is created once at module load (nothing fetches
-// until first render), so render only ever looks identities up — never
-// creates them
-const mdxComponents: Record<string, LazyExoticComponent<ComponentType>> =
+// every lazy MDX module is created once at load (nothing fetches until first
+// render); render only looks up identities — never creates them
+const mdxByPath: Record<string, LazyExoticComponent<ComponentType>> =
   Object.fromEntries(
     Object.values(projectPagesConfig).map((config) => [
       config.mdxPath,
@@ -59,15 +55,12 @@ const mdxComponents: Record<string, LazyExoticComponent<ComponentType>> =
     ]),
   );
 
-// stagger root for the config-driven sections; each child rides
-// scrollSubtleVariants
 const cascade = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 
-// mounts once the sibling lazy MDX component resolves — the signal that the
-// article's headings exist for section discovery
+// fires once the lazy MDX module has painted — signals TOC discovery
 function MountSignal({ onMount }: { onMount: () => void }) {
   useEffect(() => {
     onMount();
@@ -122,7 +115,7 @@ const ProjectDeepDiveRenderer = () => {
 
   const contentRef = useRef<HTMLDivElement>(null);
   // which slug's article has mounted — comparing against the current slug
-  // makes readiness reset itself on navigation, no effect needed
+  // resets readiness on navigation without an effect
   const [readySlug, setReadySlug] = useState<string | null>(null);
   const mdxReady = readySlug === slug;
 
@@ -133,7 +126,7 @@ const ProjectDeepDiveRenderer = () => {
   const activeId = useActiveSection(sections);
 
   const config = slug ? getProjectConfig(slug) : undefined;
-  const MDXComponent = config ? (mdxComponents[config.mdxPath] ?? null) : null;
+  const MDXComponent = config ? (mdxByPath[config.mdxPath] ?? null) : null;
 
   if (!slug) {
     return <Navigate to="/projects" replace />;
@@ -163,14 +156,12 @@ const ProjectDeepDiveRenderer = () => {
         animate="visible"
         variants={cascade}
       >
-        {/* date */}
         <motion.div variants={scrollSubtleVariants} className="text-center">
           <time className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
             {config.date}
           </time>
         </motion.div>
 
-        {/* overview */}
         <motion.section
           id="overview"
           data-toc=""
@@ -181,12 +172,11 @@ const ProjectDeepDiveRenderer = () => {
           <SectionHeading sectionId="overview">
             {t.common.overview}
           </SectionHeading>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
+          <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
             {config.overview}
           </p>
         </motion.section>
 
-        {/* tech stack */}
         <motion.section
           id="tech-stack"
           data-toc=""
@@ -200,7 +190,6 @@ const ProjectDeepDiveRenderer = () => {
           <TechStack technologies={config.technologies} />
         </motion.section>
 
-        {/* links */}
         <motion.section
           id="links"
           data-toc=""
@@ -232,42 +221,23 @@ const ProjectDeepDiveRenderer = () => {
 
         <Separator />
 
-        {/* mdx content — the article is tall, so a low viewport amount lets
-            the reveal fire as soon as it enters. Custom MDX components own
-            all styling (no prose plugin). */}
-        <motion.div
-          variants={scrollSubtleVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.05 }}
-          className="max-w-none"
-        >
-          <MDXProvider components={MDXComponents}>
-            <Suspense
-              fallback={
-                <div className="flex items-center justify-center py-8">
-                  <Spinner className="size-6 text-muted-foreground" />
-                </div>
-              }
-            >
-              <MDXComponent />
-              <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
-            </Suspense>
-          </MDXProvider>
-        </motion.div>
+        {/* MDX owns its own block reveals — no outer whileInView double-fade */}
+        <Mdx>
+          <MDXComponent />
+          <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
+        </Mdx>
 
-        {/* related projects */}
         <motion.section
           {...blockReveal}
           id="more-projects"
           data-toc=""
           data-toc-label={t.common.moreProjects}
-          className="border-t border-border pt-12 scroll-mt-24"
+          className="scroll-mt-24 border-t border-border pt-12"
         >
           <SectionHeading sectionId="more-projects" className="mb-6">
             {t.common.moreProjects}
           </SectionHeading>
-          <div className="grid sm:grid-cols-2 gap-6">
+          <div className="grid gap-6 sm:grid-cols-2">
             {getRelatedProjectSlugs(slug, 2).map((relatedSlug) => {
               const related = projectPagesConfig[relatedSlug];
               const relatedCopy = t.projects.list[related.i18nKey];
@@ -284,7 +254,7 @@ const ProjectDeepDiveRenderer = () => {
                     <time className="block text-2xs text-muted-foreground">
                       {related.date}
                     </time>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
+                    <p className="text-xs leading-relaxed text-muted-foreground">
                       {related.tagline ?? relatedCopy.description}
                     </p>
                     <div className="flex flex-wrap items-center gap-1.5">
