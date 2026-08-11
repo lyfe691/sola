@@ -86,10 +86,11 @@ void main() {
 
 interface SilkPlaneProps {
   uniforms: SilkUniforms;
+  paused?: boolean;
   ref?: React.RefObject<Mesh | null>;
 }
 
-function SilkPlane({ uniforms, ref }: SilkPlaneProps) {
+function SilkPlane({ uniforms, paused = false, ref }: SilkPlaneProps) {
   const { viewport } = useThree();
 
   useLayoutEffect(() => {
@@ -99,12 +100,11 @@ function SilkPlane({ uniforms, ref }: SilkPlaneProps) {
   }, [ref, viewport]);
 
   useFrame((_state: RootState, delta: number) => {
-    if (ref?.current) {
-      const material = ref.current.material as ShaderMaterial & {
-        uniforms: SilkUniforms;
-      };
-      material.uniforms.uTime.value += 0.1 * delta;
-    }
+    if (paused || !ref?.current) return;
+    const material = ref.current.material as ShaderMaterial & {
+      uniforms: SilkUniforms;
+    };
+    material.uniforms.uTime.value += 0.1 * delta;
   });
 
   return (
@@ -125,6 +125,10 @@ export interface SilkProps {
   color?: string;
   noiseIntensity?: number;
   rotation?: number;
+  /** Cap device pixel ratio. */
+  dpr?: number | [number, number];
+  /** Freeze the shader time loop (saves GPU for overlapping UI animation). */
+  paused?: boolean;
 }
 
 const Silk: React.FC<SilkProps> = ({
@@ -133,6 +137,8 @@ const Silk: React.FC<SilkProps> = ({
   color = "#7B7481",
   noiseIntensity = 1.5,
   rotation = 0,
+  dpr = [1, 2],
+  paused = false,
 }) => {
   const meshRef = useRef<Mesh>(null);
 
@@ -149,8 +155,9 @@ const Silk: React.FC<SilkProps> = ({
   );
 
   return (
-    <Canvas dpr={[1, 2]} frameloop="always">
-      <SilkPlane ref={meshRef} uniforms={uniforms} />
+    // demand while paused = no continuous WebGL rAF fighting DOM animation
+    <Canvas dpr={dpr} frameloop={paused ? "demand" : "always"}>
+      <SilkPlane ref={meshRef} uniforms={uniforms} paused={paused} />
     </Canvas>
   );
 };

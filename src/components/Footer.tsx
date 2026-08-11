@@ -17,7 +17,7 @@ import {
   SOCIAL_HOVER_ACCENTS,
 } from "@/config/social";
 import { useState } from "react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { DeployChip } from "@/components/deploy-diff/deploy-chip";
 
 const Footer = () => {
@@ -166,7 +166,10 @@ const Footer = () => {
                   navigator.clipboard.writeText(
                     "yanis.sebastian.zuercher@gmail.com",
                   );
-                  toast.success(t.common.copied);
+                  toast.add({
+                    type: "success",
+                    title: t.common.copied,
+                  });
                 }}
                 className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-300 ease-out hover:cursor-copy"
               >

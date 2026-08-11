@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toast";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router";
@@ -51,18 +51,19 @@ const App = () => (
                 duration={450}
               >
                 <div className="min-h-screen flex flex-col relative">
-                  <Toaster position="bottom-right" />
-                  <UpdateNotification />
-                  <BrowserRouter>
-                    <CodeViewProvider>
-                      <DocumentTitle />
-                      <CanonicalUrl />
-                      <KeyboardShortcuts />
-                      <CommandMenu />
-                      <AnimatedRoutes />
-                      <ScrollToTop />
-                    </CodeViewProvider>
-                  </BrowserRouter>
+                  <Toaster>
+                    <UpdateNotification />
+                    <BrowserRouter>
+                      <CodeViewProvider>
+                        <DocumentTitle />
+                        <CanonicalUrl />
+                        <KeyboardShortcuts />
+                        <CommandMenu />
+                        <AnimatedRoutes />
+                        <ScrollToTop />
+                      </CodeViewProvider>
+                    </BrowserRouter>
+                  </Toaster>
                 </div>
               </ClickSpark>
             </TooltipProvider>

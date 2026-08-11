@@ -1,6 +1,9 @@
 /**
  * FoldText — React Bits (TypeScript + Tailwind / GSAP).
  * https://reactbits.dev/text-animations/fold-text
+ *
+ * Perf notes (local): styles injected once; will-change cleared after the full
+ * timeline (not per-glyph); optional onComplete for sequencing.
  */
 
 import {
@@ -34,6 +37,8 @@ export interface FoldTextProps {
   color?: string;
   className?: string;
   style?: CSSProperties;
+  /** Fires once when the unfold timeline finishes (including stagger tail). */
+  onComplete?: () => void;
 }
 
 type HingeConfig = {
@@ -158,6 +163,21 @@ const FOLD_TEXT_STYLES = `.fold-text {
 }
 `;
 
+/** Inject stylesheet once — two FoldText mounts must not reparse CSS mid-animation. */
+let stylesReady = false;
+function ensureFoldTextStyles() {
+  if (stylesReady || typeof document === "undefined") return;
+  if (document.querySelector("style[data-fold-text]")) {
+    stylesReady = true;
+    return;
+  }
+  const el = document.createElement("style");
+  el.setAttribute("data-fold-text", "");
+  el.textContent = FOLD_TEXT_STYLES;
+  document.head.appendChild(el);
+  stylesReady = true;
+}
+
 const FoldText = ({
   text = "Design unfolds",
   splitBy = "char",
@@ -173,9 +193,11 @@ const FoldText = ({
   color = "#f7f2e8",
   className = "",
   style = {},
+  onComplete,
 }: FoldTextProps) => {
   const rootRef = useRef<HTMLSpanElement | null>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const onCompleteRef = useRef(onComplete);
   const hingeConfig = HINGE_CONFIG[hinge] || HINGE_CONFIG.top;
   const safeCrease = clamp(creaseShading, 0, 1);
   const safePerspective = Math.max(120, perspective);
@@ -240,6 +262,14 @@ const FoldText = ({
   }, [text, splitBy, hinge, hingeConfig.origin, safePerspective]);
 
   useEffect(() => {
+    ensureFoldTextStyles();
+  }, []);
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
     if (typeof window === "undefined") return undefined;
 
     const root = rootRef.current;
@@ -271,7 +301,8 @@ const FoldText = ({
       duration: activeDuration,
       ease: reduceMotion ? "power1.out" : ease,
       stagger: activeStagger,
-      clearProps: "willChange",
+      // clear will-change once after the whole cascade — per-glyph clearProps
+      // promotes/demotes layers mid-stagger and stutters (worse on mobile)
     };
 
     const killTimeline = () => {
@@ -280,14 +311,23 @@ const FoldText = ({
       gsap.killTweensOf(pieces);
     };
 
+    const finish = () => {
+      gsap.set(pieces, { clearProps: "willChange" });
+      onCompleteRef.current?.();
+    };
+
     const play = (repeat: boolean): gsap.core.Timeline => {
       killTimeline();
-      timelineRef.current = gsap.timeline({
+      const tl = gsap.timeline({
         repeat: repeat ? -1 : 0,
         repeatDelay: repeat ? 0.75 : 0,
+        onComplete: repeat ? undefined : finish,
       });
-      timelineRef.current.fromTo(pieces, fromVars, toVars);
-      return timelineRef.current;
+      // set folded state first so the first frame isn't a flash of settled text
+      gsap.set(pieces, fromVars);
+      tl.fromTo(pieces, fromVars, toVars);
+      timelineRef.current = tl;
+      return tl;
     };
 
     let scrollTrigger: ReturnType<typeof ScrollTrigger.create> | undefined;
@@ -314,7 +354,15 @@ const FoldText = ({
     } else if (trigger === "loop") {
       play(true);
     } else {
-      play(false);
+      // wait one frame so layout/paint of the new text nodes settle before
+      // promoting them to compositor layers (avoids a hitch on mount)
+      const raf = requestAnimationFrame(() => play(false));
+      return () => {
+        cancelAnimationFrame(raf);
+        if (hoverHandler) root.removeEventListener("mouseenter", hoverHandler);
+        scrollTrigger?.kill();
+        killTimeline();
+      };
     }
 
     return () => {
@@ -346,19 +394,16 @@ const FoldText = ({
   } as CSSProperties;
 
   return (
-    <>
-      <style>{FOLD_TEXT_STYLES}</style>
-      <span
-        ref={rootRef}
-        className={`fold-text ${className}`.trim()}
-        style={rootStyle}
-      >
-        <span className="fold-text-sr-only">{text}</span>
-        <span className="fold-text-visual" aria-hidden="true">
-          {segments}
-        </span>
+    <span
+      ref={rootRef}
+      className={`fold-text ${className}`.trim()}
+      style={rootStyle}
+    >
+      <span className="fold-text-sr-only">{text}</span>
+      <span className="fold-text-visual" aria-hidden="true">
+        {segments}
       </span>
-    </>
+    </span>
   );
 };
 

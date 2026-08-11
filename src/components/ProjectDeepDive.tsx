@@ -22,7 +22,6 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import { motion } from "motion/react";
 import { ArrowLeft, CodeXml } from "lucide-react";
 import { useNavigate } from "react-router";
 import {
@@ -42,7 +41,6 @@ import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import type { ProjectSilk } from "@/config/projects";
-import { EASE_OUT } from "@/utils/transitions";
 
 const Silk = lazy(() => import("@/components/backgrounds/Silk"));
 
@@ -60,10 +58,135 @@ function SilkLoader({
   return <Silk {...props} />;
 }
 
-/** Beat after silk starts fading in, before title unfolds (ms). */
-const BG_TO_TITLE_MS = 320;
-/** Beat after title mounts, before subtitle unfolds (ms). */
-const TITLE_TO_SUBTITLE_MS = 420;
+/** Beat after silk is visible, before title unfolds (ms). */
+const BG_TO_TITLE_MS = 400;
+
+/**
+ * Hero sequence (one GPU job at a time):
+ *   1. solid color → silk fades in (WebGL free to run)
+ *   2. freeze silk, then FoldText title (word panels)
+ *   3. FoldText subtitle after title completes
+ *   4. unfreeze silk
+ *
+ * Char-split + mix-blend creases + live WebGL was the stutter.
+ */
+function DeepDiveHero({
+  title,
+  description,
+  silk,
+}: {
+  title: string;
+  description?: string;
+  silk: ProjectSilk;
+}) {
+  const [silkReady, setSilkReady] = useState(false);
+  // freeze WebGL while text folds so they never share a frame budget
+  const [folding, setFolding] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
+  const [showSubtitle, setShowSubtitle] = useState(false);
+  const onSilkReady = useCallback(() => setSilkReady(true), []);
+
+  useEffect(() => {
+    if (!silkReady) return;
+    const t = window.setTimeout(() => {
+      setFolding(true);
+      setShowTitle(true);
+    }, BG_TO_TITLE_MS);
+    return () => window.clearTimeout(t);
+  }, [silkReady]);
+
+  const finishText = useCallback(() => {
+    setFolding(false);
+  }, []);
+
+  return (
+    <div className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5">
+      <div
+        className="absolute inset-0"
+        style={{ backgroundColor: silk.color }}
+      />
+      <div
+        className="absolute inset-0 transition-opacity duration-700 ease-out"
+        style={{ opacity: silkReady ? 1 : 0 }}
+      >
+        <Suspense fallback={null}>
+          <SilkLoader
+            {...silk}
+            dpr={1}
+            paused={folding}
+            onReady={onSilkReady}
+          />
+        </Suspense>
+      </div>
+
+      <div className="absolute inset-0 bg-black/20" />
+
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="max-w-4xl px-6 text-center">
+          {/* match FoldText metrics so mount doesn't reflow/stutter */}
+          <h1
+            className="mb-6 min-h-[1.1em] text-5xl font-extrabold tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl"
+            style={{ lineHeight: 0.95 }}
+          >
+            {showTitle ? (
+              <FoldText
+                text={title}
+                splitBy="char"
+                hinge="top"
+                trigger="mount"
+                duration={0.65}
+                stagger={0.045}
+                ease="power3.out"
+                perspective={700}
+                creaseShading={0.55}
+                fontSize="clamp(2.75rem, 9vw, 6rem)"
+                fontWeight={800}
+                color="#ffffff"
+                onComplete={() => {
+                  if (description) setShowSubtitle(true);
+                  else finishText();
+                }}
+              />
+            ) : (
+              <span className="invisible select-none" aria-hidden="true">
+                {title}
+              </span>
+            )}
+          </h1>
+
+          {description ? (
+            <p
+              className="mx-auto min-h-[1.5em] max-w-2xl text-base font-light tracking-[-0.04em] sm:text-lg md:text-xl"
+              style={{ lineHeight: 0.95 }}
+            >
+              {showSubtitle ? (
+                <FoldText
+                  text={description}
+                  splitBy="word"
+                  hinge="top"
+                  trigger="mount"
+                  duration={0.55}
+                  stagger={0.04}
+                  ease="power3.out"
+                  perspective={700}
+                  creaseShading={0.4}
+                  fontSize="clamp(1rem, 2.2vw, 1.25rem)"
+                  fontWeight={300}
+                  color="rgba(255,255,255,0.9)"
+                  onComplete={finishText}
+                />
+              ) : (
+                <span className="invisible select-none" aria-hidden="true">
+                  {description}
+                </span>
+              )}
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface ProjectDeepDiveProps {
   title: string;
@@ -83,132 +206,26 @@ export function ProjectDeepDive({
   children,
 }: ProjectDeepDiveProps) {
   const navigate = useNavigate();
-  const [silkReady, setSilkReady] = useState(false);
-  const [showTitle, setShowTitle] = useState(false);
-  const [showSubtitle, setShowSubtitle] = useState(false);
   const { setActive: setCodeView } = useCodeView();
   const { language } = useLanguage();
   const t = translations[language];
-
-  const onSilkReady = useCallback(() => setSilkReady(true), []);
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // new project → restart the hero sequence
-  useEffect(() => {
-    setSilkReady(false);
-    setShowTitle(false);
-    setShowSubtitle(false);
-  }, [title, silk.color]);
-
-  // background first → title → subtitle (FoldText mounts on each beat so its
-  // mount trigger fires at the right moment — no instant race with silk)
-  useEffect(() => {
-    if (!silkReady) return;
-    const titleTimer = window.setTimeout(
-      () => setShowTitle(true),
-      BG_TO_TITLE_MS,
-    );
-    return () => window.clearTimeout(titleTimer);
-  }, [silkReady]);
-
-  useEffect(() => {
-    if (!showTitle || !description) return;
-    const subTimer = window.setTimeout(
-      () => setShowSubtitle(true),
-      TITLE_TO_SUBTITLE_MS,
-    );
-    return () => window.clearTimeout(subTimer);
-  }, [showTitle, description]);
-
+  // no page-shell opacity fade — it fought the silk + FoldText GPU work and
+  // read as a mid-sequence hitch
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3, ease: EASE_OUT }}
-      className="min-h-screen bg-background p-4 sm:p-6 lg:p-8"
-    >
+    <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
       {description && <meta name="description" content={description} />}
 
-      <div className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5">
-        {/* solid project color from first paint; silk crossfades on top */}
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: silk.color }}
-        />
-        <div
-          className="absolute inset-0 transition-opacity duration-700 ease-out"
-          style={{ opacity: silkReady ? 1 : 0 }}
-        >
-          <Suspense fallback={null}>
-            {/* key remounts silk + restarts the bg→text sequence per project */}
-            <SilkLoader
-              key={silk.color + title}
-              {...silk}
-              onReady={onSilkReady}
-            />
-          </Suspense>
-        </div>
-
-        <div className="absolute inset-0 bg-black/20" />
-
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="max-w-4xl px-6 text-center">
-            {/* reserve title space so the layout doesn't jump when FoldText mounts */}
-            <h1 className="mb-6 min-h-[1.1em] text-5xl font-extrabold sm:text-6xl md:text-7xl lg:text-8xl">
-              {showTitle ? (
-                <FoldText
-                  key={`title-${title}`}
-                  text={title}
-                  splitBy="char"
-                  hinge="top"
-                  trigger="mount"
-                  duration={0.65}
-                  stagger={0.045}
-                  ease="power3.out"
-                  perspective={700}
-                  creaseShading={0.55}
-                  fontSize="clamp(2.75rem, 9vw, 6rem)"
-                  fontWeight={800}
-                  color="#ffffff"
-                />
-              ) : (
-                <span className="invisible select-none" aria-hidden="true">
-                  {title}
-                </span>
-              )}
-            </h1>
-
-            {description ? (
-              <p className="mx-auto min-h-[1.5em] max-w-2xl text-base font-light sm:text-lg md:text-xl">
-                {showSubtitle ? (
-                  <FoldText
-                    key={`sub-${title}`}
-                    text={description}
-                    splitBy="word"
-                    hinge="top"
-                    trigger="mount"
-                    duration={0.55}
-                    stagger={0.04}
-                    ease="power3.out"
-                    perspective={700}
-                    creaseShading={0.4}
-                    fontSize="clamp(1rem, 2.2vw, 1.25rem)"
-                    fontWeight={300}
-                    color="rgba(255,255,255,0.9)"
-                  />
-                ) : (
-                  <span className="invisible select-none" aria-hidden="true">
-                    {description}
-                  </span>
-                )}
-              </p>
-            ) : null}
-          </div>
-        </div>
-      </div>
+      <DeepDiveHero
+        key={`${title}-${silk.color}`}
+        title={title}
+        description={description}
+        silk={silk}
+      />
 
       <div className="sticky top-0 z-30 -mx-4 bg-background/95 backdrop-blur-xs sm:-mx-6 lg:-mx-8">
         <div className="border-b border-border px-4 sm:px-6 lg:px-8">
@@ -274,6 +291,6 @@ export function ProjectDeepDive({
       {children && (
         <div className="relative mx-auto max-w-4xl py-12">{children}</div>
       )}
-    </motion.div>
+    </div>
   );
 }

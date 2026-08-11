@@ -8,7 +8,7 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -33,7 +33,7 @@ export const CopyButton = ({ value, className }: CopyButtonProps) => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error(t.common.copyFailed);
+      toast.add({ type: "error", title: t.common.copyFailed });
     }
   };
 

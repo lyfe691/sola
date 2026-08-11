@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
-import { toast } from "sonner";
+import { toast } from "@/components/ui/toast";
 import { useNavigate, useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -141,7 +141,10 @@ const Contact = () => {
       });
 
       if (response.ok) {
-        toast.success(t.contact.successMessage);
+        toast.add({
+          type: "success",
+          title: t.contact.successMessage,
+        });
         clearForm();
       } else {
         const data = await response.json();
@@ -149,7 +152,10 @@ const Contact = () => {
       }
     } catch (error) {
       console.error("Submission error:", error);
-      toast.error(t.contact.errorMessage);
+      toast.add({
+        type: "error",
+        title: t.contact.errorMessage,
+      });
     } finally {
       setIsSubmitting(false);
     }
