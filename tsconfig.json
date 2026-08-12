@@ -3,7 +3,8 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" },
-    { "path": "./tsconfig.api.json" }
+    { "path": "./tsconfig.api.json" },
+    { "path": "./tsconfig.scripts.json" }
   ],
   // solution-style configs compile nothing, but the shadcn CLI resolves the
   // `@/` alias from THIS file — without a paths map here, `shadcn add`

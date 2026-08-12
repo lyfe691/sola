@@ -4,4 +4,8 @@ coverage
 node_modules
 dist
 .agents/skills
-src/components/ui
+# vendored shadcn/base-ui keeps upstream style — but the first-party
+# subtrees (custom/, code-block/) are ours and stay formatted
+src/components/ui/*
+!src/components/ui/custom
+!src/components/ui/code-block

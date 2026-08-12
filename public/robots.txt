@@ -9,5 +9,8 @@ Sitemap: https://sola.ysz.life/sitemap.xml
 # Common crawl directories
 Disallow: /api/
 Disallow: /admin/
-Disallow: /private/ 
+Disallow: /private/
+# the colophon route is exactly /a — "$" anchors for Google/Bing; the /a/
+# form covers any children for crawlers that ignore the anchor
+Disallow: /a$
 Disallow: /a/

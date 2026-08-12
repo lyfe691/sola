@@ -21,6 +21,7 @@ import {
 } from "../src/config/navigation.ts";
 import { PROJECTS } from "../src/config/projects.ts";
 import { SKILL_GROUPS } from "../src/config/skills.ts";
+import { WORK, EDUCATION } from "../src/lib/experience.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
@@ -177,9 +178,20 @@ function collectUsedPaths(): Set<string> {
     addPath(used, `skills.groups.${group.id}`);
   }
 
+  // Experience copy is read at runtime through a computed lookup
+  // (`copy[fact.key]` in src/lib/experience.ts) that the regex passes above
+  // cannot see — seed every entry so --fix never deletes live content.
+  for (const fact of [...WORK, ...EDUCATION]) {
+    addPath(used, `experience.${fact.key}`);
+  }
+
   for (const key of CONTACT_VALIDATION_KEYS) {
     addPath(used, `contact.validation.${key}`);
   }
+
+  // ErrorBoundary reads translations[readLanguage()].errorBoundary — there is
+  // no static `t.…` chain for the scanner to find
+  addPath(used, "errorBoundary");
 
   addPath(used, "common.update");
   addPath(used, "services.badges.mostPopular");
@@ -280,17 +292,6 @@ function serializeValue(value: JsonValue, indent: number): string {
   });
 
   return `{\n${entries.join("\n")}\n${pad}}`;
-}
-
-function writeLocaleFile(
-  filePath: string,
-  exportName: string,
-  translation: JsonObject,
-  suffix: string,
-) {
-  const body = serializeValue(translation, 0);
-  const contents = `${COPYRIGHT}\nexport const ${exportName} = ${body}${suffix}\n`;
-  fs.writeFileSync(filePath, contents.replace(/\r\n/g, "\n"), "utf8");
 }
 
 function main() {

@@ -7,19 +7,20 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 ## Verify
 
 - `bun run lint` — must stay at 0 errors (warnings tolerated)
+- `bun run format:check` — prettier; `bun run format` fixes
 - `bun run typecheck` — `tsc -b` over src/ and api/ (plain `tsc --noEmit`
   checks nothing: the root tsconfig is solution-style with `files: []`)
 - `bun run test` — vitest (NOT `bun test` — that invokes Bun's own test
   runner instead of the `test` script)
 - `bun run build` — vite build; `bun run dev` serves on port 3000
-- CI (`.github/workflows/ci.yml`) runs all four on push/PR
+- CI (`.github/workflows/ci.yml`) runs all of the above on push/PR
 
 ## Structure rules
 
 - **Routes** live only in `src/config/routes.ts` — one manifest drives the
   router, layouts, and localized tab titles. Adding a page there is the
   whole job. Layouts: `app` (nav + footer) and `blank` (nothing).
-- **i18n**: hand-rolled. `src/lib/translations/{en,de,es,ja,zh}.ts`; `en.ts`
+- **i18n**: hand-rolled. `src/lib/translations/{en,de,es,ja,ko,zh}.ts`; `en.ts`
   defines the `Translation` type, so every locale must mirror new keys.
   No user-facing string literals in components — add a key. zh is
   Simplified (except the /a page title, which is deliberately Traditional).
@@ -36,7 +37,7 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   amethyst) trigger it. Never gate on `.dark` directly.
 - `src/components/ui/` is vendored shadcn/base-ui: prettier-ignored, keeps
   upstream style; don't reformat it.
-- `can-hover:` custom variant gates hover-*movement* (touch taps fire
+- `can-hover:` custom variant gates hover-_movement_ (touch taps fire
   phantom hovers). Color-only hovers don't need it.
 
 ## Motion
