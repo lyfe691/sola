@@ -81,11 +81,20 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove(...ALL_THEME_VALUES.filter((t) => t !== "system"));
-    root.classList.add(resolveTheme(theme));
-    // the dark: variant matches this attr too — custom dark themes
-    // (cyber, forest, amethyst) never carry the literal `dark` class
-    root.dataset.scheme = getThemeType(theme);
+    const apply = () => {
+      root.classList.remove(...ALL_THEME_VALUES.filter((t) => t !== "system"));
+      root.classList.add(resolveTheme(theme));
+      // the dark: variant matches this attr too — custom dark themes
+      // (cyber, forest, amethyst) never carry the literal `dark` class
+      root.dataset.scheme = getThemeType(theme);
+    };
+    apply();
+    if (theme !== "system") return;
+    // "system" tracks the OS live — resolveTheme/getThemeType re-read the
+    // media query, so re-stamping on change is the whole update
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    mql.addEventListener("change", apply);
+    return () => mql.removeEventListener("change", apply);
   }, [theme]);
 
   const handleSetTheme = useCallback(
