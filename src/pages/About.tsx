@@ -6,13 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import {
-  lazy,
-  Suspense,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { Download, ChevronRight } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import { Link } from "react-router";
@@ -52,6 +46,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { githubContributionsQuery } from "@/lib/github-contributions";
 import { userActivityQuery } from "@/lib/github-activity";
+import { GITHUB_USER } from "@/lib/github";
 import { cn } from "@/lib/utils";
 
 const ParticleImage = lazy(() =>
@@ -60,10 +55,14 @@ const ParticleImage = lazy(() =>
   })),
 );
 
-const GITHUB_USER = "lyfe691";
 const PORTRAIT_PARTICLES = 120_000;
 const PORTRAIT_PARTICLES_COARSE = 56_000;
-const CONTRIBUTION_YEARS = [2026, 2025] as const;
+// newest first, extending itself each January (2025 = first year with data)
+const FIRST_CONTRIBUTION_YEAR = 2025;
+const CONTRIBUTION_YEARS = Array.from(
+  { length: new Date().getFullYear() - FIRST_CONTRIBUTION_YEAR + 1 },
+  (_, i) => new Date().getFullYear() - i,
+);
 
 type InterestKey = keyof Omit<Translation["about"]["interests"], "title">;
 type ApproachKey = keyof Translation["about"]["philosophyLabels"];
@@ -141,8 +140,7 @@ function MediaFrame({
   );
 }
 
-const MEDIA_INNER =
-  "size-full overflow-hidden rounded-[0.875rem] bg-muted/20";
+const MEDIA_INNER = "size-full overflow-hidden rounded-[0.875rem] bg-muted/20";
 
 // -------------------------------- Portrait --------------------------------
 
@@ -155,7 +153,9 @@ function AboutPortrait({ src, alt }: { src: string; alt: string }) {
 
   return (
     <MediaFrame>
-      <div className={cn("relative aspect-[4/5] sm:aspect-square", MEDIA_INNER)}>
+      <div
+        className={cn("relative aspect-[4/5] sm:aspect-square", MEDIA_INNER)}
+      >
         <img
           src={src}
           alt={alt}

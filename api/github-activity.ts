@@ -66,14 +66,14 @@ interface GitHubEvent {
     deleted?: boolean;
     commits?: GitHubCommit[];
     pull_request?: {
-      id: number;
+      number: number;
       title: string;
       html_url: string;
       merged: boolean;
       additions: number;
       deletions: number;
     };
-    issue?: { id: number; title: string; html_url: string };
+    issue?: { number: number; title: string; html_url: string };
     release?: { tag_name: string; name: string; html_url: string };
     forkee?: { html_url: string; description: string };
     member?: { login: string; html_url: string };
@@ -218,7 +218,8 @@ async function processEvent(
         description: pr.title,
         url: pr.html_url,
         metadata: {
-          pullNumber: pr.id,
+          // the repo-scoped #number users see — NOT the internal database id
+          pullNumber: pr.number,
           additions: pr.additions,
           deletions: pr.deletions,
         },
@@ -236,7 +237,7 @@ async function processEvent(
         title: `${a === "opened" ? "Opened" : a === "closed" ? "Closed" : "Updated"} issue`,
         description: issue.title,
         url: issue.html_url,
-        metadata: { issueNumber: issue.id },
+        metadata: { issueNumber: issue.number },
       };
     }
 
@@ -365,7 +366,9 @@ export async function getGitHubActivity(
     headers,
   );
 
-  if (!events) return [];
+  // surface the failure — returning [] here would let the handler cache an
+  // empty feed as a 200 for five minutes while upstream is merely down
+  if (!events) throw new Error("failed to fetch events");
 
   const budget: EnrichmentBudget = { remaining: MAX_ENRICHMENT_FETCHES };
 

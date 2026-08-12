@@ -38,6 +38,7 @@ import {
   githubContributionsQuery,
   type ContributionYear,
 } from "@/lib/github-contributions";
+import { GITHUB_USER } from "@/lib/github";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
@@ -47,8 +48,6 @@ import {
 } from "@/components/ui/tooltip";
 import { INTL_LOCALE } from "@/lib/dates";
 import { cn } from "@/lib/utils";
-
-const USERNAME = "lyfe691";
 
 const heatmapTheme: ThemeInput = {
   light: [
@@ -97,7 +96,7 @@ const GitHubContributionCalendar = ({
     data,
     isPending: loading,
     isError: error,
-  } = useQuery(githubContributionsQuery(USERNAME, year));
+  } = useQuery(githubContributionsQuery(GITHUB_USER, year));
 
   const labels = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) =>
@@ -162,10 +161,7 @@ const GitHubContributionCalendar = ({
       const usable = body.clientWidth - gutter + BLOCK_MARGIN;
       const next = Math.min(
         BLOCK_SIZE_MAX,
-        Math.max(
-          BLOCK_SIZE_MIN,
-          Math.floor(usable / weekCount) - BLOCK_MARGIN,
-        ),
+        Math.max(BLOCK_SIZE_MIN, Math.floor(usable / weekCount) - BLOCK_MARGIN),
       );
       setBlockSize(next);
     };
@@ -253,7 +249,7 @@ const GitHubContributionCalendar = ({
       </div>
 
       <div className="contribution-calendar__meta">
-        {loading || !data ? (
+        {showError ? null : loading || !data ? (
           <>
             <Skeleton className="h-3.5 w-44" />
             <div className="flex items-center gap-1.5">

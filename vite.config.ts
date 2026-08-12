@@ -68,9 +68,19 @@ function apiDevPlugin(): Plugin {
           res.end(JSON.stringify(processed));
         } catch (error) {
           console.error("[github-activity dev]", error);
-          res.statusCode = 400;
+          // mirror the production handler's branching (api/github-activity.ts)
+          const notAllowed =
+            error instanceof Error &&
+            error.message === "username is not allowed";
+          res.statusCode = notAllowed ? 403 : 502;
           res.setHeader("Content-Type", "application/json");
-          res.end(JSON.stringify({ error: "username is required" }));
+          res.end(
+            JSON.stringify({
+              error: notAllowed
+                ? "username is not allowed"
+                : "failed to load activity",
+            }),
+          );
         }
       };
 

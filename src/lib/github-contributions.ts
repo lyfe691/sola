@@ -30,11 +30,19 @@ export async function fetchGitHubContributions(
   const res = await fetch(
     `${API_URL}${encodeURIComponent(username)}?y=${String(year)}`,
   );
-  const data = (await res.json()) as ContributionResponse & { error?: string };
   if (!res.ok) {
-    throw new Error(data.error ?? "Failed to fetch contributions");
+    // a 502/504 may hand back an HTML gateway page — only trust the body as
+    // JSON once we know it's an API error, and fall back to the status
+    let message = `Failed to fetch contributions (${res.status})`;
+    try {
+      const body = (await res.json()) as { error?: string };
+      if (body.error) message = body.error;
+    } catch {
+      /* non-JSON error body — keep the status message */
+    }
+    throw new Error(message);
   }
-  return data;
+  return (await res.json()) as ContributionResponse;
 }
 
 // Contributions don't change within a session — cache forever, like the

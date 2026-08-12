@@ -99,6 +99,17 @@ describe("getGitHubActivity", () => {
     expect(fetchMock).toHaveBeenCalledTimes(6);
   });
 
+  it("throws when the events fetch fails instead of returning an empty feed", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => ({ ok: false, json: async () => ({}) })),
+    );
+    const { getGitHubActivity } = await load();
+    await expect(getGitHubActivity("lyfe691")).rejects.toThrow(
+      "failed to fetch events",
+    );
+  });
+
   it("memoizes non-empty results per username", async () => {
     const fetchMock = stubFetch([event({ id: "2", type: "WatchEvent" })]);
     const { getGitHubActivity } = await load();

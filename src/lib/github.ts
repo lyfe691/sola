@@ -12,6 +12,13 @@
 
 // processed activity for display (the API contract — kept in sync with the
 // mirror in api/github-activity.ts)
+/**
+ * The one GitHub account the widgets render. Also part of every react-query
+ * key, so the calendar/feed queries and About's prefetch must all read this —
+ * a second copy that drifts silently breaks the prefetch instead of failing.
+ */
+export const GITHUB_USER = "lyfe691";
+
 export interface ProcessedActivity {
   id: string;
   type:

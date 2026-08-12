@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type TranslationAny } from "@/lib/translations";
 import { motion } from "motion/react";
-import type { ProcessedActivity } from "@/lib/github";
+import { GITHUB_USER, type ProcessedActivity } from "@/lib/github";
 import { userActivityQuery } from "@/lib/github-activity";
 import {
   GitCommit,
@@ -35,7 +35,6 @@ import { IconButton } from "./ui/custom/icon-button";
 import { INTL_LOCALE } from "@/lib/dates";
 import { EASE_OUT } from "@/utils/transitions";
 
-const USERNAME = "lyfe691";
 const VISIBLE_EVENTS = 6;
 
 const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
@@ -104,9 +103,9 @@ const ActivityMetadata = ({
   const items: string[] = [];
 
   if (activity.metadata.commits) {
-    items.push(
-      `${activity.metadata.commits} commit${activity.metadata.commits !== 1 ? "s" : ""}`,
-    );
+    const template =
+      activity.metadata.commits === 1 ? t.feed.commit : t.feed.commits;
+    items.push(template.replace("{count}", String(activity.metadata.commits)));
   }
 
   if (activity.metadata.branch) {
@@ -152,14 +151,16 @@ const ActivityMetadata = ({
 const formatDate = (timestamp: string, locale: string) => {
   const date = new Date(timestamp);
   const now = new Date();
-  const diffInHours = Math.floor(
-    (now.getTime() - date.getTime()) / (1000 * 60 * 60),
+  const diffInMinutes = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60),
   );
+  const diffInHours = Math.floor(diffInMinutes / 60);
 
   if (diffInHours < 1) {
+    // numeric:"auto" renders 0 minutes as "now"-style phrasing per locale
     return new Intl.RelativeTimeFormat(locale, { numeric: "auto" }).format(
-      -1,
-      "hour",
+      -diffInMinutes,
+      "minute",
     );
   }
   if (diffInHours < 24) {
@@ -282,7 +283,11 @@ const ContributionActivityFeed = () => {
   const t = translations[language];
   const locale = INTL_LOCALE[language];
 
-  const { data, isPending: loading } = useQuery(userActivityQuery(USERNAME));
+  const {
+    data,
+    isPending: loading,
+    isError,
+  } = useQuery(userActivityQuery(GITHUB_USER));
   const events: ProcessedActivity[] = data ?? [];
 
   const eventsToShow = events.slice(0, VISIBLE_EVENTS);
@@ -299,13 +304,25 @@ const ContributionActivityFeed = () => {
           {t.feed.recentActivity}
         </h3>
         <span className="rounded-full bg-foreground/4 px-2.5 py-1 text-xs text-foreground/40">
-          {t.feed.lastEvents}
+          {t.feed.lastEvents.replace("{count}", String(VISIBLE_EVENTS))}
         </span>
       </div>
 
       <div className="relative min-h-[18rem]">
         {loading ? (
           <ActivityFeedSkeleton />
+        ) : isError ? (
+          <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs">
+            <div className="p-12 text-center">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
+                <AlertCircle className="h-6 w-6 text-foreground/30" />
+              </div>
+              <p className="mb-1 text-sm text-foreground/70">
+                {t.feed.loadError}
+              </p>
+              <p className="text-xs text-foreground/50">{t.feed.checkBack}</p>
+            </div>
+          </div>
         ) : (
           <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs">
             {eventsToShow.length > 0 ? (
@@ -334,7 +351,6 @@ const ContributionActivityFeed = () => {
             )}
           </div>
         )}
-
       </div>
 
       {!loading && events.length > 0 ? (
@@ -347,7 +363,7 @@ const ContributionActivityFeed = () => {
             label={t.common.moreOnGithub}
             onClick={() =>
               window.open(
-                "https://github.com/lyfe691?tab=events",
+                `https://github.com/${GITHUB_USER}?tab=events`,
                 "_blank",
                 "noopener,noreferrer",
               )
