@@ -91,7 +91,10 @@ const Services = () => {
           <ScrollReveal
             key={service.key}
             variant="default"
-            delay={staggerDelay(index)}
+            // column position, not global index: rows sequence themselves by
+            // scroll order, and a global index let the closing card (0ms)
+            // visibly beat row two (160/240ms) at page load
+            delay={staggerDelay(index % 2)}
           >
             <Card className="group relative h-full gap-0 overflow-visible bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
               {service.highlight && (
@@ -159,8 +162,9 @@ const Services = () => {
         ))}
       </div>
 
-      {/* custom requirements */}
-      <ScrollReveal variant="default">
+      {/* custom requirements — delayed past the grid's column stagger so it
+          can never lead the cards above it when co-visible */}
+      <ScrollReveal variant="default" delay={160}>
         <Card className="bg-linear-to-br from-primary/20 via-primary/10 to-card p-5 sm:p-6 md:p-8">
           <h2 className="text-xl font-medium text-foreground">
             {t.services.customRequirements.title}
