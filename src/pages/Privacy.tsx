@@ -9,7 +9,7 @@
  */
 
 import { motion } from "motion/react";
-import { EASE_OUT } from "@/utils/transitions";
+import { fadeUpVariants, cardInVariants } from "@/utils/transitions";
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
 import {
@@ -469,8 +469,7 @@ const Privacy = () => {
             は EU–US Data Privacy Framework に参加しています。
           </>
         ),
-        legal:
-          "GDPR第6条1項(f) — オープンソース活動の提示に関する正当な利益。",
+        legal: "GDPR第6条1項(f) — オープンソース活動の提示に関する正当な利益。",
       },
       processors: {
         title: "委託処理者",
@@ -652,8 +651,7 @@ const Privacy = () => {
         title: "소개",
         p1: (
           <>
-            이 개인 포트폴리오 웹사이트(
-            {" "}
+            이 개인 포트폴리오 웹사이트({" "}
             <LinkPreview href="https://sola.ysz.life" className="link" compact>
               {"https://sola.ysz.life"}
             </LinkPreview>{" "}
@@ -677,13 +675,12 @@ const Privacy = () => {
               Vercel Inc.
             </LinkPreview>
             (미국 캘리포니아주 Walnut, 340 S Lemon Ave #4133, CA 91789)에서
-            호스팅됩니다. Vercel은 웹사이트를 안전하고 안정적으로 제공하기
-            위해 서버 로그에 연결 데이터(예: IP 주소, 브라우저 유형, 접속
-            시각)를 저장합니다.
+            호스팅됩니다. Vercel은 웹사이트를 안전하고 안정적으로 제공하기 위해
+            서버 로그에 연결 데이터(예: IP 주소, 브라우저 유형, 접속 시각)를
+            저장합니다.
           </>
         ),
-        legal:
-          "GDPR 제6조 1항 (f) — 사이트 운영 및 보호에 대한 정당한 이익.",
+        legal: "GDPR 제6조 1항 (f) — 사이트 운영 및 보호에 대한 정당한 이익.",
       },
       analytics: {
         title: "분석",
@@ -710,8 +707,8 @@ const Privacy = () => {
               GitHub, Inc.
             </LinkPreview>{" "}
             (미국)의 기여 그래프나 저장소 위젯을 불러올 수 있습니다. 이러한
-            리소스를 요청할 때 귀하의 IP 주소가 전송됩니다. GitHub은 EU–US
-            Data Privacy Framework에 참여합니다.
+            리소스를 요청할 때 귀하의 IP 주소가 전송됩니다. GitHub은 EU–US Data
+            Privacy Framework에 참여합니다.
           </>
         ),
         legal:
@@ -733,8 +730,8 @@ const Privacy = () => {
             >
               yanis.sebastian.zuercher@gmail.com
             </a>
-            으로 이메일을 보내 주세요. 스위스 거주자는 FDPIC에, EU 거주자는
-            관할 감독 기관에 불만을 제기할 수 있습니다.
+            으로 이메일을 보내 주세요. 스위스 거주자는 FDPIC에, EU 거주자는 관할
+            감독 기관에 불만을 제기할 수 있습니다.
           </>
         ),
         items: [
@@ -778,11 +775,14 @@ const Privacy = () => {
   // last updated utilities
   const LAST_UPDATED_ISO = "2026-03-16"; // update when content meaningfully changes
   const updatedDate = new Date(LAST_UPDATED_ISO);
-  const formattedUpdated = updatedDate.toLocaleDateString(INTL_LOCALE[language], {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const formattedUpdated = updatedDate.toLocaleDateString(
+    INTL_LOCALE[language],
+    {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    },
+  );
   const updatedLabel = {
     en: "Updated",
     de: "Aktualisiert",
@@ -796,24 +796,10 @@ const Privacy = () => {
     n(-1);
   };
 
-  // bespoke motion variants
-  const fadeUp = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.32, ease: EASE_OUT },
-    },
-  } as const;
-  const cardIn = {
-    hidden: { opacity: 0, y: 12, scale: 0.97 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.35, ease: EASE_OUT },
-    },
-  } as const;
+  // shared in-view pair from transitions.ts — content reveals ride the
+  // REVEAL register, and the shapes can't drift from Certifications
+  const fadeUp = fadeUpVariants;
+  const cardIn = cardInVariants;
   // Reveal-on-scroll props shared by every section card.
   const reveal = {
     variants: cardIn,
@@ -1079,13 +1065,13 @@ const Privacy = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-10% 0px" }}
           className="mt-16 pt-8 border-t border-border"
-          onClick={h}
         >
           <IconButton
             icon={<ArrowLeft className="w-4 h-4" />}
             variant="ghost"
             size="sm"
             iconPosition="left"
+            onClick={h}
             className="inline-flex items-center gap-2 text-sm "
           >
             {L[privacyLanguage].back}

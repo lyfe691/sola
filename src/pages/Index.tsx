@@ -33,7 +33,8 @@ const homeAnimations = {
       transition: { duration: 0.5, staggerChildren: 0.08, delayChildren: 0.06 },
     },
   },
-  badge: {
+  // one child variant for the badge and the CTA row — they animate the same
+  item: {
     hidden: { opacity: 0, y: 16, scale: 0.98 },
     show: {
       opacity: 1,
@@ -60,33 +61,6 @@ const homeAnimations = {
       transition: { duration: 0.55, ease: REVEAL },
     },
   },
-  buttons: {
-    hidden: { opacity: 0, y: 16, scale: 0.98 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.48, ease: REVEAL },
-    },
-  },
-  ctaLeft: {
-    hidden: { opacity: 0, y: 16, scale: 0.98 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.48, ease: REVEAL },
-    },
-  },
-  ctaRight: {
-    hidden: { opacity: 0, y: 16, scale: 0.98 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.48, ease: REVEAL },
-    },
-  },
   socialsContainer: {
     hidden: { opacity: 0 },
     show: {
@@ -105,21 +79,7 @@ const homeAnimations = {
   },
 } as const;
 
-function socialHoverWidth(label: string) {
-  if (label === "LeetCode")
-    return "md:can-hover:hover:w-32 lg:can-hover:hover:w-32";
-  if (label.length <= 5)
-    return "md:can-hover:hover:w-[6.3rem] lg:can-hover:hover:w-[6.3rem]";
-  if (label.length <= 7)
-    return "md:can-hover:hover:w-[6.8rem] lg:can-hover:hover:w-[6.8rem]";
-  if (label.length <= 8)
-    return "md:can-hover:hover:w-30 lg:can-hover:hover:w-30";
-  if (label.length <= 10)
-    return "md:can-hover:hover:w-34 lg:can-hover:hover:w-34";
-  return "md:can-hover:hover:w-38 lg:can-hover:hover:w-38";
-}
-
-function SocialLink({ id, index }: { id: SocialId; index: number }) {
+function SocialLink({ id }: { id: SocialId }) {
   const social = SOCIAL_LINKS[id];
   const Icon = SOCIAL_ICONS[id];
   const hoverClass = SOCIAL_HOVER_ACCENTS[id];
@@ -130,28 +90,28 @@ function SocialLink({ id, index }: { id: SocialId; index: number }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={social.label}
-      custom={index}
       variants={homeAnimations.socialItem}
       className={cn(
-        "group relative inline-flex items-center justify-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset transition-[width,color] duration-200 ease-out will-change-transform transform-gpu",
-        "size-10 active:bg-foreground/12",
-        "md:size-12 md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-300",
+        "group relative inline-flex items-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset transition-colors duration-200 ease-out will-change-transform transform-gpu",
+        "active:bg-foreground/12",
+        "md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-300",
         "hover:text-foreground",
         hoverClass,
-        socialHoverWidth(social.label),
       )}
     >
-      <div className="size-5 md:hidden">
-        <Icon className="size-full" aria-hidden="true" />
-      </div>
-      <div className="absolute top-[0.7rem] left-[11.47px] z-10 hidden size-6 items-center justify-center md:flex">
-        <Icon className="size-full" aria-hidden="true" />
-      </div>
-      <div className="pointer-events-none absolute top-1/2 right-1 left-12 hidden -translate-y-1/2 items-center md:flex">
-        <span className="translate-x-4 text-sm font-medium whitespace-nowrap opacity-0 blur-xs transition-[transform,translate,scale,rotate,opacity,filter] duration-200 ease-out delay-100 can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100 can-hover:group-hover:blur-none">
-          {social.label}
+      {/* fixed icon zone — the icon is centered, never pixel-pinned */}
+      <span className="flex size-10 shrink-0 items-center justify-center md:size-12">
+        <Icon className="size-5 md:size-6" aria-hidden="true" />
+      </span>
+      {/* width-to-measure reveal: the grid track grows 0fr -> 1fr so the pill
+          fits whatever the label renders at — no char-count width map */}
+      <span className="hidden md:grid md:grid-cols-[0fr] md:transition-[grid-template-columns] md:duration-300 md:ease-out md:can-hover:group-hover:grid-cols-[1fr]">
+        <span className="overflow-hidden">
+          <span className="block translate-x-4 pr-5 text-sm font-medium whitespace-nowrap opacity-0 blur-xs transition-[transform,translate,scale,rotate,opacity,filter] duration-200 ease-out delay-100 can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100 can-hover:group-hover:blur-none">
+            {social.label}
+          </span>
         </span>
-      </div>
+      </span>
     </motion.a>
   );
 }
@@ -178,7 +138,7 @@ const Index = () => {
 
       <motion.div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
         <motion.a
-          variants={homeAnimations.badge}
+          variants={homeAnimations.item}
           href="https://kinoa.to"
           target="_blank"
           rel="noopener noreferrer"
@@ -221,37 +181,33 @@ const Index = () => {
         </motion.div>
 
         <motion.div
-          variants={homeAnimations.buttons}
+          variants={homeAnimations.item}
           className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4"
         >
-          <motion.div variants={homeAnimations.ctaLeft}>
-            <Link to="/contact">
-              <IconButton
-                icon={<Contact className="size-4" />}
-                variant="default"
-                size="lg"
-                label={t.index.contactMe}
-              />
-            </Link>
-          </motion.div>
-          <motion.div variants={homeAnimations.ctaRight}>
-            <Link to="/projects">
-              <IconButton
-                icon={<FolderGit2 className="size-4" />}
-                variant="secondary"
-                size="lg"
-                label={t.index.viewProjects}
-              />
-            </Link>
-          </motion.div>
+          <Link to="/contact">
+            <IconButton
+              icon={<Contact className="size-4" />}
+              variant="default"
+              size="lg"
+              label={t.index.contactMe}
+            />
+          </Link>
+          <Link to="/projects">
+            <IconButton
+              icon={<FolderGit2 className="size-4" />}
+              variant="secondary"
+              size="lg"
+              label={t.index.viewProjects}
+            />
+          </Link>
         </motion.div>
 
         <motion.div
           variants={homeAnimations.socialsContainer}
           className="flex flex-wrap items-center gap-3 sm:gap-4"
         >
-          {SOCIAL_ORDER_HERO.map((id, index) => (
-            <SocialLink key={id} id={id} index={index} />
+          {SOCIAL_ORDER_HERO.map((id) => (
+            <SocialLink key={id} id={id} />
           ))}
         </motion.div>
       </motion.div>

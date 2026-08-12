@@ -20,7 +20,7 @@ import { useNavigate, useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { SOCIAL_LINKS } from "@/config/social";
-import { EASE_OUT } from "@/utils/transitions";
+import { EASE_OUT, REVEAL } from "@/utils/transitions";
 
 type FieldName = "name" | "email" | "subject" | "message";
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
@@ -169,9 +169,7 @@ const Contact = () => {
         {/* left: intro, expectations, direct links */}
         <div className="flex flex-col gap-8">
           <ScrollReveal variant="pageTitle" className="flex flex-col gap-4">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-              {t.contact.title}
-            </h1>
+            <h1 className="text-4xl font-bold">{t.contact.title}</h1>
             <p className="max-w-md text-foreground/60">
               {t.contact.description}
             </p>
@@ -181,7 +179,7 @@ const Contact = () => {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: 0.1, ease: EASE_OUT }}
+            transition={{ duration: 0.5, delay: 0.1, ease: REVEAL }}
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-4">
@@ -196,9 +194,9 @@ const Contact = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{
-                      duration: 0.3,
+                      duration: 0.42,
                       delay: 0.1 + 0.08 * i,
-                      ease: EASE_OUT,
+                      ease: REVEAL,
                     }}
                     className="flex items-start gap-3 text-sm text-foreground/70"
                   >
@@ -239,7 +237,7 @@ const Contact = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.15, ease: EASE_OUT }}
+          transition={{ duration: 0.5, delay: 0.15, ease: REVEAL }}
         >
           <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
             <form

@@ -25,20 +25,18 @@ const Experience = () => {
       <meta name="description" content={t.seo.experience.description} />
 
       <ScrollReveal variant="pageTitle">
-        <h1 className="mb-8 text-4xl font-bold sm:mb-12">
-          {t.experience.title}
-        </h1>
+        <h1 className="mb-4 text-4xl font-bold">{t.experience.title}</h1>
       </ScrollReveal>
 
       <ScrollReveal variant="default">
-        <p className="mb-8 max-w-2xl text-muted-foreground sm:mb-12">
+        <p className="mb-10 max-w-2xl text-muted-foreground">
           {t.experience.subtitle}
         </p>
       </ScrollReveal>
 
       <div className="mb-16 sm:mb-24">
         <ExperienceSection
-          title={t.experience.sections?.work ?? "Work"}
+          title={t.experience.sections.work}
           entries={work}
           isWork
           language={language}
@@ -47,7 +45,7 @@ const Experience = () => {
       </div>
 
       <ExperienceSection
-        title={t.experience.sections?.education ?? "Education"}
+        title={t.experience.sections.education}
         entries={education}
         isWork={false}
         language={language}

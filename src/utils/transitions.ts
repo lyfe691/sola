@@ -134,6 +134,28 @@ export const scrollChildVariants = {
   },
 };
 
+// In-view pair for config/card pages (Certifications, Privacy): the shapes
+// those pages defined locally, moved onto the REVEAL register where content
+// reveals belong. One definition so the pair can't drift between pages.
+export const fadeUpVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: D_REVEAL, ease: REVEAL },
+  },
+};
+
+export const cardInVariants = {
+  hidden: { opacity: 0, y: 12, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: D_REVEAL, ease: REVEAL },
+  },
+};
+
 // ---- In-view latch (fires once). Delay is applied by ScrollReveal to the variant. ----
 export const useScrollReveal = (options?: {
   threshold?: number;

@@ -8,7 +8,7 @@
 
 import React from "react";
 import { motion } from "motion/react";
-import { EASE_OUT } from "@/utils/transitions";
+import { fadeUpVariants, cardInVariants } from "@/utils/transitions";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { ExternalLink } from "lucide-react";
@@ -33,23 +33,8 @@ const Certifications: React.FC = () => {
     hidden: {},
     visible: { transition: { staggerChildren: 0.06 } },
   } as const;
-  const fadeUp = {
-    hidden: { opacity: 0, y: 10 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.32, ease: EASE_OUT },
-    },
-  } as const;
-  const cardIn = {
-    hidden: { opacity: 0, y: 12, scale: 0.97 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.35, ease: EASE_OUT },
-    },
-  } as const;
+  const fadeUp = fadeUpVariants;
+  const cardIn = cardInVariants;
 
   return (
     <motion.div>
@@ -63,14 +48,14 @@ const Certifications: React.FC = () => {
         className="mb-16 text-center"
       >
         <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-wrap wrap-break-word shrink-0">
-          {t.certifications?.title ?? "Certifications"}
+          {t.certifications.title}
         </h1>
       </motion.div>
 
       <div className="max-w-4xl mx-auto">
         {items.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            {t.certifications?.empty ?? "No certifications published yet."}
+            {t.certifications.empty}
           </p>
         ) : (
           <motion.div
@@ -105,7 +90,7 @@ const Certifications: React.FC = () => {
                           </h2>
                           {expired && (
                             <span className="px-2 py-0.5 text-[10px] rounded bg-destructive/10 border border-destructive/30 text-destructive shrink-0">
-                              {t.certifications?.expired ?? "Expired"}
+                              {t.certifications.expired}
                             </span>
                           )}
                         </div>
@@ -117,7 +102,7 @@ const Certifications: React.FC = () => {
                             <>
                               <span className="mx-1">•</span>
                               <span>
-                                {t.certifications?.expires ?? "Expires"}:{" "}
+                                {t.certifications.expires}:{" "}
                                 {formatDate(c.expirationDate)}
                               </span>
                             </>
@@ -126,9 +111,8 @@ const Certifications: React.FC = () => {
                             <>
                               <span className="mx-1">•</span>
                               <span>
-                                {t.certifications?.credentialId ??
-                                  "Credential ID"}
-                                : {c.credentialId}
+                                {t.certifications.credentialId}:{" "}
+                                {c.credentialId}
                               </span>
                             </>
                           ) : null}
@@ -157,7 +141,7 @@ const Certifications: React.FC = () => {
                               rel="noopener noreferrer"
                               className="link"
                             >
-                              {t.certifications?.viewPdf ?? "View PDF"}
+                              {t.certifications.viewPdf}
                             </a>
                           </object>
                         </div>
@@ -204,7 +188,7 @@ const Certifications: React.FC = () => {
                             window.open(c.url!, "_blank", "noopener,noreferrer")
                           }
                         >
-                          {t.certifications?.verify ?? "Verify"}
+                          {t.certifications.verify}
                         </IconButton>
                       </div>
                     </>
