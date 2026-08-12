@@ -184,15 +184,19 @@ export function DeepDiveSectionMenu({ sections, activeId }: SectionNavProps) {
           type="button"
           aria-expanded={open}
           onClick={() => setOpen(!open)}
-          className="flex w-full items-center justify-between gap-2 py-2.5 text-xs"
+          // label centered on purpose: left-aligned it sits in the headings'
+          // column with heading-like weight and reads as duplicated content.
+          // The chevron keeps the right edge as the expand affordance; the
+          // label's px matches its width so the text stays optically centered.
+          className="relative flex w-full items-center justify-center py-2.5 text-xs"
         >
-          <span className="truncate font-medium text-foreground">
+          <span className="min-w-0 truncate px-6 font-medium text-foreground">
             {current?.label ?? t.common.onThisPage}
           </span>
           <ChevronDown
             aria-hidden="true"
             className={cn(
-              "size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out",
+              "absolute right-0 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out",
               open && "rotate-180",
             )}
           />
@@ -221,7 +225,7 @@ export function DeepDiveSectionMenu({ sections, activeId }: SectionNavProps) {
                       scrollToSection(id);
                     }}
                     className={cn(
-                      "block w-full py-2.5 text-left text-sm transition-colors duration-200 ease-out",
+                      "block w-full py-2.5 text-center text-sm transition-colors duration-200 ease-out",
                       activeId === id
                         ? "font-medium text-primary"
                         : "text-muted-foreground",
