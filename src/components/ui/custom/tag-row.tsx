@@ -113,7 +113,7 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
       >
         {tags.map((tag) => (
           <span key={tag} data-measure="tag" className="inline-flex">
-            <TechChip name={tag} variant="badge" />
+            <TechChip name={tag} />
           </span>
         ))}
         <span
@@ -125,7 +125,7 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
       </div>
 
       {tags.slice(0, visibleCount).map((tag) => (
-        <TechChip key={tag} name={tag} variant="badge" />
+        <TechChip key={tag} name={tag} />
       ))}
       {hiddenCount > 0 &&
         (isMobile ? (

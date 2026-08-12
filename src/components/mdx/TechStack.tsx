@@ -5,21 +5,29 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Chip list for the deep-dive tech-stack section — the shared TechChip, so
- * this section, the project cards, and the experience rows all speak one
- * design. Motion lives on the parent section; this stays presentational.
+ * The deep-dive tech-stack section: one ambient marquee row of pills
+ * instead of chips wrapping onto a second line. Under reduced motion the
+ * stack falls back to the wrapped static list, which keeps every tag
+ * visible without any drift.
  */
 
-import { TechChip } from "@/components/ui/custom/tech-chip";
+import { useReducedMotion } from "motion/react";
+import { StackItem, TechMarquee } from "@/components/ui/custom/tech-marquee";
 
 export function TechStack({ technologies }: { technologies: string[] }) {
-  return (
-    <ul className="flex list-none flex-wrap gap-2.5 p-0">
-      {technologies.map((tech) => (
-        <li key={tech}>
-          <TechChip name={tech} size="md" />
-        </li>
-      ))}
-    </ul>
-  );
+  const reduceMotion = useReducedMotion();
+
+  if (reduceMotion) {
+    return (
+      <ul className="flex list-none flex-wrap gap-x-8 gap-y-3 p-0">
+        {technologies.map((tech) => (
+          <li key={tech}>
+            <StackItem name={tech} />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  return <TechMarquee tags={technologies} />;
 }
