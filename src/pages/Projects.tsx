@@ -208,13 +208,7 @@ const ProjectActions = ({
   );
 };
 
-const ProjectBody = ({
-  project,
-  t,
-}: {
-  project: Project;
-  t: Translation;
-}) => (
+const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
   <div className="flex h-full flex-col gap-4 p-5 sm:p-6">
     <div className="flex flex-col gap-1">
       <h3 className="text-lg font-medium text-foreground transition-colors duration-300 group-hover:text-primary sm:text-xl">
@@ -235,13 +229,7 @@ const ProjectBody = ({
   </div>
 );
 
-const ProjectCard = ({
-  project,
-  t,
-}: {
-  project: Project;
-  t: Translation;
-}) =>
+const ProjectCard = ({ project, t }: { project: Project; t: Translation }) =>
   project.featured && project.image ? (
     <Card className={cardClassName}>
       <div className="grid grid-cols-1 md:grid-cols-2">
@@ -362,7 +350,13 @@ const Projects = () => {
             <Tooltip>
               <TooltipTrigger
                 render={
-                  <Info className="w-4 h-4 hover:text-primary transition-colors duration-300 group-hover:text-primary cursor-help" />
+                  <button
+                    type="button"
+                    aria-label={t.projects.otherInfo}
+                    className="inline-flex cursor-help items-center justify-center rounded-full transition-colors duration-300 hover:text-primary group-hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                  >
+                    <Info className="w-4 h-4" aria-hidden="true" />
+                  </button>
                 }
               />
               <TooltipContent side="right" align="center">

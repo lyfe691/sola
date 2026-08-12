@@ -10,7 +10,11 @@
  * Coarse-pointer users navigate via the deep-dive TOC (rail / mobile menu).
  */
 
-import { createElement, type ComponentPropsWithoutRef, type ReactNode } from "react";
+import {
+  createElement,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from "react";
 import { Link } from "lucide-react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -92,7 +96,10 @@ export function HeadingLink({ id, children }: HeadingLinkProps) {
 }
 
 type MotionHeadingProps = {
+  /** visual scale (LEVEL_CLASS) — also the rendered tag unless `as` says otherwise */
   level: HeadingLevel;
+  /** rendered element when the outline position differs from the visual scale */
+  as?: HeadingLevel;
   /** When true, expose this heading to the deep-dive section nav. */
   toc?: boolean;
   children?: ReactNode;
@@ -112,6 +119,7 @@ const LEVEL_CLASS: Record<HeadingLevel, string> = {
  */
 export function MDXHeading({
   level,
+  as,
   toc = false,
   children,
   className,
@@ -120,7 +128,7 @@ export function MDXHeading({
   const id = idProp ?? slugifyHeading(children);
 
   return createElement(
-    level,
+    as ?? level,
     {
       id,
       "data-toc": toc && id ? "" : undefined,

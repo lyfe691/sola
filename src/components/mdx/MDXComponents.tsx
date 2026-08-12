@@ -25,6 +25,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Link } from "react-router";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import { FigureCaption, ProjectGallery, ProjectImage } from "./figures";
@@ -77,8 +78,10 @@ const html = {
     <div className="mdx min-w-0">{children}</div>
   ),
 
+  // the deep-dive hero already owns the page's single <h1>; an article's
+  // leading `#` keeps the h1 display scale but lands as an <h2> in the outline
   h1: ({ children, className, id }: MdxProps) => (
-    <MDXHeading level="h1" id={id} className={className}>
+    <MDXHeading level="h1" as="h2" id={id} className={className}>
       {children}
     </MDXHeading>
   ),
@@ -196,6 +199,16 @@ const html = {
   ),
 
   a: ({ href, className, children }: MdxAnchorProps) => {
+    // site-internal links ride the router — a plain <a> would hard-reload
+    // the whole document (mirrors RichText's treatment)
+    if (typeof href === "string" && href.startsWith("/")) {
+      return (
+        <Link to={href} className={cn("link", className)}>
+          {children}
+        </Link>
+      );
+    }
+
     if (isExternalHref(href)) {
       return (
         <LinkPreview

@@ -384,8 +384,13 @@ const NotFound = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.35, ease: REVEAL }}
       >
-        <Button variant="default" className="mt-6">
-          <Link to="/">{t.notFound.backHome}</Link>
+        <Button
+          variant="default"
+          className="mt-6"
+          nativeButton={false}
+          render={<Link to="/" />}
+        >
+          {t.notFound.backHome}
         </Button>
       </motion.div>
     </div>
