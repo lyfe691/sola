@@ -61,6 +61,15 @@ export const de = {
     present: "Heute",
     back: "Zurück",
     overview: "Überblick",
+    a11y: {
+      openMenu: "Menü öffnen",
+      closeMenu: "Menü schliessen",
+      primaryNav: "Hauptnavigation",
+      toggleLanguage: "Sprache wechseln",
+      toggleTheme: "Design wechseln",
+      commandPalette: "Befehlspalette",
+      commandPaletteHint: "Befehl suchen…",
+    },
     menu: {
       themes: "Designs",
       customThemes: "Eigene Designs",
@@ -136,10 +145,13 @@ export const de = {
   },
   feed: {
     recentActivity: "Aktuelle Aktivitäten",
-    lastEvents: "Letzte 20 Aktivitäten",
+    lastEvents: "Letzte {count} Aktivitäten",
     noActivity: "Keine aktuellen Aktivitäten",
+    loadError: "Aktuelle Aktivitäten konnten nicht geladen werden",
     checkBack: "Schauen Sie später noch einmal vorbei",
     moreSuffix: "mehr",
+    commit: "{count} Commit",
+    commits: "{count} Commits",
   },
   nav: {
     about: "Über mich",
@@ -350,7 +362,6 @@ export const de = {
   skills: {
     title: "Fähigkeiten",
     subtitle: "Technologien und Tools, mit denen ich regelmässig arbeite.",
-    backHome: "Zurück zur Startseite",
     groups: {
       languages: "Sprachen",
       frontend: "Frontend",
@@ -578,6 +589,15 @@ export const de = {
       description:
         "Haben Sie ein bestimmtes Projekt im Sinn? Ich helfe Ihnen dabei, Ihre Vision Wirklichkeit werden zu lassen. Lassen Sie uns Ihre Anforderungen besprechen und eine passende Lösung entwickeln.",
       button: "Kontaktieren Sie mich",
+      subject: "Individuelle Entwicklungsanforderungen",
+      message:
+        "Hallo Yanis,\n\nich habe spezielle Anforderungen, die nicht in die üblichen Service-Kategorien passen, und würde gerne eine individuelle Lösung besprechen.\n\nProjektdetails:\n- \n- \n- \n\nIch freue mich auf Ihre Rückmeldung!",
     },
+  },
+  errorBoundary: {
+    title: "Etwas ist schiefgelaufen",
+    message:
+      "Ein unerwarteter Fehler ist aufgetreten. Ein Neuladen der Seite behebt das meistens.",
+    reload: "Neu laden",
   },
 } satisfies Translation;

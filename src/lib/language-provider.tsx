@@ -56,10 +56,14 @@ function getAuto(defaultLanguage: Language) {
   return { matched: normalize(first), source: first };
 }
 
+/** exported for the one consumer that cannot use the hook (ErrorBoundary
+ * renders when the provider tree itself may have crashed) */
+export const LANGUAGE_STORAGE_KEY = "app-language";
+
 export function LanguageProvider({
   children,
   defaultLanguage = "en",
-  storageKey = "app-language",
+  storageKey = LANGUAGE_STORAGE_KEY,
 }: LanguageProviderProps) {
   const auto = useMemo(() => getAuto(defaultLanguage), [defaultLanguage]);
 

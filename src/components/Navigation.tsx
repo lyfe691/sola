@@ -199,7 +199,7 @@ const DesktopNav = () => {
 
             <nav
               ref={linksRef}
-              aria-label="Primary"
+              aria-label={t.common.a11y.primaryNav}
               onMouseLeave={snapToActive}
               className="relative flex items-center"
             >
@@ -357,7 +357,9 @@ const MobileNav = () => {
               ref={triggerRef}
               type="button"
               onClick={() => setMenuOpen((open) => !open)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-label={
+                menuOpen ? t.common.a11y.closeMenu : t.common.a11y.openMenu
+              }
               aria-expanded={menuOpen}
               className="flex size-9 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
             >
@@ -382,7 +384,7 @@ const MobileNav = () => {
             <motion.nav
               ref={navRef}
               variants={menuListVariants as Variants}
-              aria-label="Primary"
+              aria-label={t.common.a11y.primaryNav}
               className="flex h-full flex-col justify-center gap-1 overflow-y-auto overscroll-contain px-8"
             >
               {links.map((link) => {

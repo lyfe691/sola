@@ -12,6 +12,25 @@
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { translations } from "@/lib/translations";
+import { LANGUAGE_STORAGE_KEY } from "@/lib/language-provider";
+import { SUPPORTED_LANGUAGE_CODES, type Language } from "@/config/languages";
+
+/**
+ * The provider tree may be the thing that crashed, so the persisted choice is
+ * read straight from storage instead of through useLanguage().
+ */
+function readLanguage(): Language {
+  try {
+    const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    if (stored && (SUPPORTED_LANGUAGE_CODES as string[]).includes(stored)) {
+      return stored as Language;
+    }
+  } catch {
+    /* storage unavailable — fall through to English */
+  }
+  return "en";
+}
 
 interface Props {
   children: ReactNode;
@@ -35,16 +54,16 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (!this.state.hasError) return this.props.children;
 
+    const t = translations[readLanguage()].errorBoundary;
+
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-6 text-center text-foreground">
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          Something went wrong
+          {t.title}
         </h1>
-        <p className="max-w-sm text-sm text-muted-foreground">
-          An unexpected error occurred. Reloading the page usually fixes it.
-        </p>
+        <p className="max-w-sm text-sm text-muted-foreground">{t.message}</p>
         <Button onClick={() => window.location.reload()} className="mt-2">
-          Reload
+          {t.reload}
         </Button>
       </div>
     );

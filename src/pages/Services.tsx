@@ -42,7 +42,7 @@ const Services = () => {
     {
       icon: Blocks,
       key: "frontend",
-      highlight: t.services?.badges?.mostPopular || "Most Popular",
+      highlight: t.services.badges.mostPopular,
     },
     {
       icon: Database,
@@ -67,16 +67,20 @@ const Services = () => {
     return `/contact?subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}`;
   };
 
+  // same builder path as the per-service CTAs — the prefill must be localized
+  const cr = t.services.customRequirements;
+  const customRequirementsUrl = `/contact?subject=${encodeURIComponent(cr.subject)}&message=${encodeURIComponent(cr.message)}`;
+
   return (
     <div className="flex flex-col w-full">
       <meta name="description" content={t.seo.services.description} />
 
       <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.services.title}</h1>
+        <h1 className="text-4xl font-bold mb-4">{t.services.title}</h1>
       </ScrollReveal>
 
       <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-8 sm:mb-12 max-w-2xl">
+        <p className="text-foreground/60 mb-10 max-w-2xl">
           {t.services.subtitle}
         </p>
       </ScrollReveal>
@@ -142,7 +146,7 @@ const Services = () => {
                   variant="default"
                   className="w-full"
                   size="lg"
-                  label={t.services.getStarted || "Get Started"}
+                  label={t.services.getStarted}
                 />
               </div>
             </Card>
@@ -161,9 +165,7 @@ const Services = () => {
           </p>
           <IconButton
             nativeButton={false}
-            render={
-              <Link to="/contact?subject=Custom%20Development%20Requirements&message=Hi%20Yanis%2C%0A%0AI%20have%20specific%20requirements%20that%20don%27t%20fit%20standard%20service%20categories.%20I%27d%20like%20to%20discuss%20a%20custom%20solution.%0A%0AProject%20details%3A%0A-%20%0A-%20%0A-%20%0A%0ALooking%20forward%20to%20discussing%20this%20further%21" />
-            }
+            render={<Link to={customRequirementsUrl} />}
             className="self-start transition-colors duration-150"
           >
             {t.services.customRequirements.button}

@@ -215,13 +215,13 @@ export function AppearanceMenu() {
       {renderTrigger(
         "language",
         <Languages className="h-4 w-4" />,
-        "Toggle language",
+        t.common.a11y.toggleLanguage,
         t.common.command.groups.language,
       )}
       {renderTrigger(
         "theme",
         <ThemeTriggerIcon />,
-        "Toggle theme",
+        t.common.a11y.toggleTheme,
         t.common.command.groups.theme,
         true,
       )}

@@ -18,6 +18,14 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { type Translation, translations } from "@/lib/translations";
 import { useLanguage } from "@/lib/language-provider";
 
+// ⌘ exists only on Apple keyboards; the shortcut itself binds meta OR ctrl
+// (use-command-menu), so everyone else is told the key they actually have
+const MOD_KEY =
+  typeof navigator !== "undefined" &&
+  /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent)
+    ? "⌘"
+    : "Ctrl";
+
 export function SearchToggle() {
   const { toggleCommandMenu } = useCommandMenu();
   const { language } = useLanguage();
@@ -42,7 +50,7 @@ export function SearchToggle() {
       <TooltipContent>
         <KbdGroup>
           <p>{t.common.search}</p>
-          <Kbd className="h-4 min-w-4 text-[10px]">⌘</Kbd>
+          <Kbd className="h-4 min-w-4 text-[10px]">{MOD_KEY}</Kbd>
           <span>+</span>
           <Kbd className="h-4 min-w-4 text-[10px]">K</Kbd>
         </KbdGroup>

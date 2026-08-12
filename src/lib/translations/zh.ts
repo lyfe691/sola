@@ -56,6 +56,15 @@ export const zh = {
     present: "至今",
     back: "返回",
     overview: "概览",
+    a11y: {
+      openMenu: "打开菜单",
+      closeMenu: "关闭菜单",
+      primaryNav: "主导航",
+      toggleLanguage: "切换语言",
+      toggleTheme: "切换主题",
+      commandPalette: "命令面板",
+      commandPaletteHint: "搜索命令…",
+    },
     menu: {
       themes: "主题",
       customThemes: "自定义主题",
@@ -130,10 +139,13 @@ export const zh = {
   },
   feed: {
     recentActivity: "最新活动",
-    lastEvents: "最近 20 条",
+    lastEvents: "最近 {count} 条",
     noActivity: "暂无活动",
+    loadError: "无法加载最近动态",
     checkBack: "请稍后再查看",
     moreSuffix: "条",
+    commit: "{count} 次提交",
+    commits: "{count} 次提交",
   },
   nav: {
     about: "关于我",
@@ -338,7 +350,6 @@ export const zh = {
   skills: {
     title: "技能",
     subtitle: "我日常使用的技术和工具。",
-    backHome: "返回首页",
     groups: {
       languages: "编程语言",
       frontend: "前端",
@@ -380,12 +391,10 @@ export const zh = {
       "我做全栈：后端、API、数据和界面，从头到尾。很在意用户真正用到的那些细节——性能、清晰度，以及看起来是认真做过、而不是最后硬贴上去的 UI。技术栈是整个产品，不只是上面那一层。",
     philosophy: {
       title: "怎么做事",
-      clean:
-        "代码半年后还得能看懂。机灵的写法我会重写到无聊为止。",
+      clean: "代码半年后还得能看懂。机灵的写法我会重写到无聊为止。",
       simplicity:
         "一个功能如果需要一整段解释，多半其实是两个。砍到剩下的部分一目了然。",
-      learning:
-        "靠做下一件还不会的东西来学。文档、仓库，以及公开把东西弄坏。",
+      learning: "靠做下一件还不会的东西来学。文档、仓库，以及公开把东西弄坏。",
     },
     interests: {
       title: "兴趣",
@@ -550,6 +559,14 @@ export const zh = {
       description:
         "有特定项目想法？我可以帮助您实现愿景。让我们讨论您的需求，为您创建量身定制的解决方案。",
       button: "联系我",
+      subject: "定制开发需求",
+      message:
+        "你好 Yanis，\n\n我有一些不属于标准服务类别的特殊需求，想讨论一个定制方案。\n\n项目详情：\n- \n- \n- \n\n期待与你进一步沟通！",
     },
+  },
+  errorBoundary: {
+    title: "出错了",
+    message: "发生了意外错误。刷新页面通常可以解决。",
+    reload: "刷新",
   },
 } satisfies Translation;

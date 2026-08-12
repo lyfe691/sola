@@ -35,6 +35,7 @@ import {
 import { Kbd } from "@/components/ui/kbd";
 import { MenuHint } from "@/components/menu-hint";
 import { cn } from "@/lib/utils";
+import { INTL_LOCALE } from "@/lib/dates";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
@@ -329,9 +330,9 @@ export function CodeView() {
   const formattedDate = useMemo(() => {
     if (!commit?.date) return null;
     try {
-      return new Intl.DateTimeFormat(language, { dateStyle: "medium" }).format(
-        new Date(commit.date),
-      );
+      return new Intl.DateTimeFormat(INTL_LOCALE[language], {
+        dateStyle: "medium",
+      }).format(new Date(commit.date));
     } catch {
       return null;
     }

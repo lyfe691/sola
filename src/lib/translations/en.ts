@@ -60,6 +60,15 @@ export const en = {
     present: "Present",
     back: "Back",
     overview: "Overview",
+    a11y: {
+      openMenu: "Open menu",
+      closeMenu: "Close menu",
+      primaryNav: "Primary",
+      toggleLanguage: "Toggle language",
+      toggleTheme: "Toggle theme",
+      commandPalette: "Command palette",
+      commandPaletteHint: "Search for a command to run…",
+    },
     menu: {
       themes: "Themes",
       customThemes: "Custom themes",
@@ -135,10 +144,13 @@ export const en = {
   },
   feed: {
     recentActivity: "Recent Activity",
-    lastEvents: "Last 20 events",
+    lastEvents: "Last {count} events",
     noActivity: "No recent activity",
+    loadError: "Couldn't load recent activity",
     checkBack: "Check back later for updates",
     moreSuffix: "more",
+    commit: "{count} commit",
+    commits: "{count} commits",
   },
   nav: {
     about: "About",
@@ -348,7 +360,6 @@ export const en = {
   skills: {
     title: "Skills",
     subtitle: "Technologies and tools I work with regularly.",
-    backHome: "Back home",
     groups: {
       languages: "Languages",
       frontend: "Frontend",
@@ -578,7 +589,16 @@ export const en = {
       description:
         "Have a specific project in mind? I'm here to help turn your vision into reality. Let's discuss your requirements and create a tailored solution for your needs.",
       button: "Get in touch",
+      subject: "Custom Development Requirements",
+      message:
+        "Hi Yanis,\n\nI have specific requirements that don't fit standard service categories. I'd like to discuss a custom solution.\n\nProject details:\n- \n- \n- \n\nLooking forward to discussing this further!",
     },
+  },
+  errorBoundary: {
+    title: "Something went wrong",
+    message:
+      "An unexpected error occurred. Reloading the page usually fixes it.",
+    reload: "Reload",
   },
 };
 

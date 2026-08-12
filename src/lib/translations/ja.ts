@@ -58,6 +58,15 @@ export const ja = {
     present: "現在",
     back: "戻る",
     overview: "概要",
+    a11y: {
+      openMenu: "メニューを開く",
+      closeMenu: "メニューを閉じる",
+      primaryNav: "メインナビゲーション",
+      toggleLanguage: "言語を切り替える",
+      toggleTheme: "テーマを切り替える",
+      commandPalette: "コマンドパレット",
+      commandPaletteHint: "コマンドを検索…",
+    },
     menu: {
       themes: "テーマ",
       customThemes: "カスタムテーマ",
@@ -133,10 +142,13 @@ export const ja = {
   },
   feed: {
     recentActivity: "最近のアクティビティ",
-    lastEvents: "直近20件",
+    lastEvents: "直近{count}件",
     noActivity: "最近のアクティビティはありません",
+    loadError: "最近のアクティビティを読み込めませんでした",
     checkBack: "後でもう一度ご確認ください",
     moreSuffix: "件",
+    commit: "{count}件のコミット",
+    commits: "{count}件のコミット",
   },
   nav: {
     about: "私について",
@@ -341,7 +353,6 @@ export const ja = {
   skills: {
     title: "スキル",
     subtitle: "日常的に使用している技術とツール。",
-    backHome: "ホームに戻る",
     groups: {
       languages: "言語",
       frontend: "フロントエンド",
@@ -569,6 +580,15 @@ export const ja = {
       description:
         "具体的なプロジェクトをお考えですか？あなたのビジョンを実現するお手伝いをさせていただきます。ご要件についてご相談させていただき、ニーズに合わせたソリューションを作成いたしましょう。",
       button: "お問い合わせ",
+      subject: "カスタム開発のご相談",
+      message:
+        "Yanisさん\n\n標準のサービスカテゴリに当てはまらない特別な要件があります。カスタムソリューションについてご相談したいです。\n\nプロジェクトの詳細:\n- \n- \n- \n\nご連絡をお待ちしています。",
     },
+  },
+  errorBoundary: {
+    title: "問題が発生しました",
+    message:
+      "予期しないエラーが発生しました。ページを再読み込みすると解決することがほとんどです。",
+    reload: "再読み込み",
   },
 } satisfies Translation;

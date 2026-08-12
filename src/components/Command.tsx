@@ -118,8 +118,8 @@ export function CommandMenu() {
         className={isMobile ? "text-base" : undefined}
       />
       <div className="relative">
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-5 bg-gradient-to-b from-popover to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-5 bg-gradient-to-t from-popover to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-5 bg-linear-to-b from-popover to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-5 bg-linear-to-t from-popover to-transparent" />
         <CommandList>
           <CommandEmpty className="py-0">
             <Empty className="p-8">
@@ -153,7 +153,9 @@ export function CommandMenu() {
                 setCodeView(!codeView);
               }}
             >
-              <span>{codeView ? t.common.diff.exit : t.common.diff.showDiff}</span>
+              <span>
+                {codeView ? t.common.diff.exit : t.common.diff.showDiff}
+              </span>
               <CommandShortcut>D</CommandShortcut>
             </CommandItem>
           </CommandGroup>
@@ -248,7 +250,13 @@ export function CommandMenu() {
   }
 
   return (
-    <CommandDialog open={isOpen} onOpenChange={closeCommandMenu}>
+    <CommandDialog
+      open={isOpen}
+      onOpenChange={closeCommandMenu}
+      // sr-only dialog name — the defaults in ui/command.tsx are English-only
+      title={t.common.a11y.commandPalette}
+      description={t.common.a11y.commandPaletteHint}
+    >
       <Command>
         {commandContent}
         {commandFooter}

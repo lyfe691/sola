@@ -61,6 +61,15 @@ export const ko = {
     present: "현재",
     back: "뒤로",
     overview: "개요",
+    a11y: {
+      openMenu: "메뉴 열기",
+      closeMenu: "메뉴 닫기",
+      primaryNav: "기본 내비게이션",
+      toggleLanguage: "언어 전환",
+      toggleTheme: "테마 전환",
+      commandPalette: "명령 팔레트",
+      commandPaletteHint: "명령 검색…",
+    },
     menu: {
       themes: "테마",
       customThemes: "맞춤 테마",
@@ -136,10 +145,13 @@ export const ko = {
   },
   feed: {
     recentActivity: "최근 활동",
-    lastEvents: "지난 20개 이벤트",
+    lastEvents: "지난 {count}개 이벤트",
     noActivity: "최근 활동 없음",
+    loadError: "최근 활동을 불러오지 못했습니다",
     checkBack: "나중에 다시 업데이트를 확인하세요.",
     moreSuffix: "더",
+    commit: "커밋 {count}개",
+    commits: "커밋 {count}개",
   },
   nav: {
     about: "소개",
@@ -185,7 +197,7 @@ export const ko = {
     nadlo: {
       role: "풀스택 소프트웨어 개발자",
       company: "nadlo",
-      location: "Baden, Switzerland",
+      location: "바덴, 스위스",
       description:
         "전체 스택에 걸쳐 프로덕션 웹 애플리케이션을 구축합니다. 타입 안정성, 성능 및 빠른 출시에 중점을 두고 이를 지원하는 API 및 데이터 모델과 함께 응답성이 뛰어나고 접근 가능한 인터페이스를 설계합니다.",
       achievements: [
@@ -198,7 +210,7 @@ export const ko = {
     freelance: {
       role: "프리랜서 웹 개발자",
       company: "자영업자",
-      location: "Zürich, Switzerland",
+      location: "취리히, 스위스",
       description:
         "깔끔한 UX, 성능, 유지 관리 가능한 코드에 중점을 두고 랜딩 페이지부터 풀 스택 기능까지 클라이언트를 위한 최신 웹 솔루션을 제공합니다.",
       achievements: [
@@ -209,7 +221,7 @@ export const ko = {
     gz: {
       role: "IAM 개발자",
       company: "Gesundheitswelt Zollikerberg",
-      location: "Zollikon, Switzerland",
+      location: "촐리콘, 스위스",
       description:
         "IAM 엔지니어링 인턴으로서 저는 ID 및 액세스 관리 프로세스 자동화에 중점을 두고 IT 인프라의 유지 관리 및 최적화에 기여하고 있습니다. 이 회사는 Zollikon 주민들에게 의료 서비스를 제공합니다.",
       achievements: [
@@ -221,7 +233,7 @@ export const ko = {
     wiss: {
       role: "학생 - 컴퓨터 공학",
       company: "WISS",
-      location: "Zürich, Switzerland",
+      location: "취리히, 스위스",
       description:
         "저는 현재 컴퓨터 과학 학교인 WISS에 재학 중이며 종합적인 컴퓨터 과학 교육을 받고 있습니다. 제가 공부하는 분야는 프로그래밍, 시스템 분석, 데이터베이스 관리, 소프트웨어 개발, 프로젝트 관리 등 광범위한 테마입니다. 이 경험은 저에게 컴퓨터 과학 분야에서 광범위하고 탄탄한 기반을 제공하고 소프트웨어 엔지니어링 분야의 미래를 준비할 수 있게 해주었습니다.",
       achievements: [
@@ -232,7 +244,7 @@ export const ko = {
     sek: {
       role: "Sek A",
       company: "Lachenzelg",
-      location: "Zürich, Switzerland",
+      location: "취리히, 스위스",
       description:
         "기술 여정을 위한 기본 지식을 수집했습니다. 최종 프로젝트로 언리얼 엔진 환경을 만들었습니다.",
       achievements: [
@@ -345,7 +357,6 @@ export const ko = {
   skills: {
     title: "기술",
     subtitle: "정기적으로 사용하는 기술과 도구입니다.",
-    backHome: "홈으로 돌아가기",
     groups: {
       languages: "언어",
       frontend: "프런트엔드",
@@ -567,6 +578,15 @@ export const ko = {
       description:
         "특정 프로젝트를 염두에 두고 있나요? 나는 당신의 비전을 현실로 바꾸는 데 도움을 주기 위해 왔습니다. 귀하의 요구 사항에 대해 논의하고 귀하의 필요에 맞는 맞춤형 솔루션을 만들어 보겠습니다.",
       button: "문의하기",
+      subject: "맞춤 개발 문의",
+      message:
+        "안녕하세요 Yanis님,\n\n표준 서비스 카테고리에 맞지 않는 특별한 요구 사항이 있어 맞춤 솔루션에 대해 논의하고 싶습니다.\n\n프로젝트 세부 정보:\n- \n- \n- \n\n연락 기다리겠습니다!",
     },
+  },
+  errorBoundary: {
+    title: "문제가 발생했습니다",
+    message:
+      "예기치 않은 오류가 발생했습니다. 페이지를 새로고침하면 대부분 해결됩니다.",
+    reload: "새로고침",
   },
 } satisfies Translation;

@@ -63,6 +63,15 @@ export const es = {
     present: "Presente",
     back: "Volver",
     overview: "Resumen",
+    a11y: {
+      openMenu: "Abrir menú",
+      closeMenu: "Cerrar menú",
+      primaryNav: "Navegación principal",
+      toggleLanguage: "Cambiar idioma",
+      toggleTheme: "Cambiar tema",
+      commandPalette: "Paleta de comandos",
+      commandPaletteHint: "Busca un comando…",
+    },
     menu: {
       themes: "Temas",
       customThemes: "Temas personalizados",
@@ -138,10 +147,13 @@ export const es = {
   },
   feed: {
     recentActivity: "Actividad reciente",
-    lastEvents: "Últimos 20 eventos",
+    lastEvents: "Últimos {count} eventos",
     noActivity: "No hay actividad reciente",
+    loadError: "No se pudo cargar la actividad reciente",
     checkBack: "Vuelve más tarde para ver novedades",
     moreSuffix: "más",
+    commit: "{count} commit",
+    commits: "{count} commits",
   },
   nav: {
     about: "Sobre mí",
@@ -353,7 +365,6 @@ export const es = {
   skills: {
     title: "Habilidades",
     subtitle: "Tecnologías y herramientas con las que trabajo regularmente.",
-    backHome: "Regresar",
     groups: {
       languages: "Lenguajes",
       frontend: "Frontend",
@@ -584,6 +595,15 @@ export const es = {
       description:
         "¿Tienes un proyecto específico en mente? Te puedo ayudar a hacer tu visión realidad. Hagamos una reunión para discutir tus requisitos y crear una solución personalizada para tus necesidades.",
       button: "Contáctame",
+      subject: "Requisitos de desarrollo a medida",
+      message:
+        "Hola Yanis:\n\nTengo requisitos específicos que no encajan en las categorías de servicio estándar. Me gustaría hablar de una solución a medida.\n\nDetalles del proyecto:\n- \n- \n- \n\n¡Espero poder hablarlo contigo!",
     },
+  },
+  errorBoundary: {
+    title: "Algo salió mal",
+    message:
+      "Se produjo un error inesperado. Recargar la página suele solucionarlo.",
+    reload: "Recargar",
   },
 } satisfies Translation;

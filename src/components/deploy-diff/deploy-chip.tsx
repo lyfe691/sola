@@ -20,6 +20,7 @@ import {
   TooltipTrigger,
   tooltipCardClassName,
 } from "@/components/ui/tooltip";
+import { INTL_LOCALE } from "@/lib/dates";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -42,9 +43,9 @@ export function DeployChip() {
 
   // same format as the code view's meta row — one commit, one voice
   const formattedDate = commit?.date
-    ? new Intl.DateTimeFormat(language, { dateStyle: "medium" }).format(
-        new Date(commit.date),
-      )
+    ? new Intl.DateTimeFormat(INTL_LOCALE[language], {
+        dateStyle: "medium",
+      }).format(new Date(commit.date))
     : "";
 
   return (
