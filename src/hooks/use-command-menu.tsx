@@ -12,14 +12,12 @@ import { useEffect } from "react";
 interface CommandMenuState {
   isOpen: boolean;
   toggleCommandMenu: () => void;
-  openCommandMenu: () => void;
   closeCommandMenu: () => void;
 }
 
 export const useCommandMenu = create<CommandMenuState>((set) => ({
   isOpen: false,
   toggleCommandMenu: () => set((state) => ({ isOpen: !state.isOpen })),
-  openCommandMenu: () => set({ isOpen: true }),
   closeCommandMenu: () => set({ isOpen: false }),
 }));
 

@@ -32,10 +32,7 @@ interface CodeBlockProps {
 /* The shadcn-docs header touch: a small language mark next to the filename.
    Only the languages the articles actually speak get a brand icon; shells
    share the terminal glyph and everything else falls back to a file mark. */
-const LANGUAGE_ICONS: Record<
-  string,
-  ComponentType<SVGProps<SVGSVGElement>>
-> = {
+const LANGUAGE_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   typescript: SiTypescript,
   ts: SiTypescript,
   tsx: SiReact,

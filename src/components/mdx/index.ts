@@ -6,15 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-export { MDXComponents } from "./MDXComponents";
-export { Mdx, MdxDocument } from "./Mdx";
-export { ExpandableImage } from "./ExpandableImage";
-export { FigureCaption, ProjectImage, ProjectGallery } from "./figures";
+// only what is actually consumed through the barrel (ProjectDeepDiveRenderer);
+// everything else is imported by direct path
+export { Mdx } from "./Mdx";
+export { SectionHeading } from "./Heading";
 export { TechStack } from "./TechStack";
-export {
-  HeadingLink,
-  MDXHeading,
-  SectionHeading,
-  slugifyHeading,
-} from "./Heading";
-export { CodeBlock } from "@/components/ui/code-block";

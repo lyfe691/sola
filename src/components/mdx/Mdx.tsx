@@ -9,7 +9,7 @@
  * deep-dive page focused on layout rather than MDX plumbing.
  */
 
-import { Suspense, type ComponentType, type ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { Spinner } from "@/components/ui/spinner";
 import { MDXComponents } from "./MDXComponents";
@@ -33,18 +33,5 @@ export function Mdx({
     <MDXProvider components={MDXComponents}>
       <Suspense fallback={fallback}>{children}</Suspense>
     </MDXProvider>
-  );
-}
-
-/** Convenience when the article is a single lazy MDX module. */
-export function MdxDocument({
-  component: Component,
-}: {
-  component: ComponentType;
-}) {
-  return (
-    <Mdx>
-      <Component />
-    </Mdx>
   );
 }

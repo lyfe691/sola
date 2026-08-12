@@ -78,10 +78,7 @@ export function ProjectGallery({
     const image = images[0];
     return (
       <figure
-        className={cn(
-          "my-8",
-          size === "full" ? "w-full" : "mx-auto max-w-4xl",
-        )}
+        className={cn("my-8", size === "full" ? "w-full" : "mx-auto max-w-4xl")}
       >
         <ExpandableImage src={image.src} alt={image.alt} />
         {image.caption ? <FigureCaption>{image.caption}</FigureCaption> : null}
@@ -90,7 +87,9 @@ export function ProjectGallery({
   }
 
   return (
-    <div className={cn("my-8 grid items-start gap-4 sm:gap-5", COL_CLASS[columns])}>
+    <div
+      className={cn("my-8 grid items-start gap-4 sm:gap-5", COL_CLASS[columns])}
+    >
       {images.map((image) => (
         <figure key={image.src} className="min-w-0">
           <ExpandableImage src={image.src} alt={image.alt} />

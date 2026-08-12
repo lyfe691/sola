@@ -190,9 +190,8 @@ export const formatDuration = (
     unitDisplay: "short",
   });
 
-  return (
-    [years > 0 && yr.format(years), rest > 0 && mo.format(rest)]
-      .filter(Boolean)
-      .join(" ") || mo.format(0)
-  );
+  // the month clamp above guarantees at least one segment
+  return [years > 0 && yr.format(years), rest > 0 && mo.format(rest)]
+    .filter(Boolean)
+    .join(" ");
 };

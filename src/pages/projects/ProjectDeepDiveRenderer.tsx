@@ -44,13 +44,15 @@ import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { translations, type Translation } from "@/lib/translations";
 
 // lazy modules created once at load; first render only looks them up
-const mdxByPath: Record<string, LazyExoticComponent<ComponentType>> =
-  Object.fromEntries(
-    Object.values(projectPagesConfig).map((config) => [
-      config.mdxPath,
-      lazy(() => import(`@/content/projects/${config.mdxPath}.mdx`)),
-    ]),
-  );
+const mdxByPath: Record<
+  string,
+  LazyExoticComponent<ComponentType>
+> = Object.fromEntries(
+  Object.values(projectPagesConfig).map((config) => [
+    config.mdxPath,
+    lazy(() => import(`@/content/projects/${config.mdxPath}.mdx`)),
+  ]),
+);
 
 function MountSignal({ onMount }: { onMount: () => void }) {
   useEffect(() => {

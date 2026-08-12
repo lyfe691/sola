@@ -14,10 +14,7 @@
 
 import type { ComponentProps } from "react";
 import { Kbd } from "@/components/ui/kbd";
-import {
-  TooltipContent,
-  tooltipCardClassName,
-} from "@/components/ui/tooltip";
+import { TooltipContent, tooltipCardClassName } from "@/components/ui/tooltip";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";

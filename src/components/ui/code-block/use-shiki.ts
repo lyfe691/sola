@@ -7,8 +7,10 @@
  */
 
 import { useEffect, useState } from "react";
-// `shiki/bundle/web` ships only web languages (no cpp/wasm/etc.), dropping ~2 MB
-// of unused grammar chunks. Unsupported languages fall back to plain text.
+// `shiki/bundle/web` trims to web-oriented grammars plus the smaller JS
+// engine — cpp/wasm ARE still included, but every grammar splits into its own
+// lazy chunk that only loads on first use. Unsupported languages fall back to
+// plain text.
 import { codeToHtml } from "shiki/bundle/web";
 import type { BundledLanguage, SpecialLanguage } from "shiki";
 

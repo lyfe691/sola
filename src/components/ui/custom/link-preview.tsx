@@ -164,7 +164,8 @@ export function LinkPreview({
         className={cn(
           // the screenshot rides the same inverted bubble as every tooltip —
           // one link-preview family, the deep-dive one just adds the image
-          !compact && "max-w-none flex-col items-stretch gap-0 overflow-hidden p-0",
+          !compact &&
+            "max-w-none flex-col items-stretch gap-0 overflow-hidden p-0",
         )}
       >
         {!compact && previewStatus === "ready" && screenshotUrl ? (

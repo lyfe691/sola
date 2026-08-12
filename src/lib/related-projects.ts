@@ -53,7 +53,9 @@ export function getRelatedProjectSlugs(
   const scored = allSlugs
     .filter((slug) => slug !== currentSlug)
     .map((slug) => {
-      const tech = new Set(projectPagesConfig[slug].technologies.map(normalize));
+      const tech = new Set(
+        projectPagesConfig[slug].technologies.map(normalize),
+      );
       let score = 0;
       for (const shared of currentTech) {
         if (tech.has(shared)) score += idf(shared);
