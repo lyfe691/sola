@@ -31,12 +31,11 @@ type BackgroundProviderState = {
 /** legacy key from the aurora-only era; migrated on first load */
 const LEGACY_AURORA_KEY = "aurora-enabled";
 
-const initialState: BackgroundProviderState = {
-  active: NONE_BACKGROUND,
-  setActive: () => undefined,
-};
-
-const BackgroundContext = createContext<BackgroundProviderState>(initialState);
+// default undefined so the useBackground guard actually catches
+// out-of-provider use (same pattern as LanguageProvider)
+const BackgroundContext = createContext<BackgroundProviderState | undefined>(
+  undefined,
+);
 
 const readInitial = (storageKey: string, fallback: string): string => {
   try {

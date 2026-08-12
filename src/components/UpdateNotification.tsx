@@ -65,8 +65,16 @@ export function UpdateNotification() {
     retry: false,
   });
 
-  const [dismissedVersion, setDismissedVersion] = useState<string | null>(() =>
-    sessionStorage.getItem(DISMISS_KEY),
+  const [dismissedVersion, setDismissedVersion] = useState<string | null>(
+    () => {
+      try {
+        return sessionStorage.getItem(DISMISS_KEY);
+      } catch {
+        // storage access can throw (blocked storage) — a missing toast beats
+        // escaping into render and blanking the app via the ErrorBoundary
+        return null;
+      }
+    },
   );
 
   const hasUpdate = !!latestVersion && latestVersion !== CURRENT_VERSION;
@@ -74,7 +82,11 @@ export function UpdateNotification() {
 
   function dismiss() {
     if (!latestVersion) return;
-    sessionStorage.setItem(DISMISS_KEY, latestVersion);
+    try {
+      sessionStorage.setItem(DISMISS_KEY, latestVersion);
+    } catch {
+      /* storage unavailable — dismissal still holds for this session */
+    }
     setDismissedVersion(latestVersion);
   }
 

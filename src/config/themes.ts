@@ -38,7 +38,7 @@ export interface ThemeConfig {
   type: "light" | "dark"; // for automatic theme mapping
 }
 
-export const THEMES: ThemeConfig[] = [
+export const THEMES = [
   { value: "light", label: "Light", icon: Sun, isCustom: false, type: "light" },
   {
     value: "dark",
@@ -110,10 +110,18 @@ export const THEMES: ThemeConfig[] = [
     isCustom: true,
     type: "light",
   },
-];
+  // literal inference (not ThemeConfig[]) keeps Theme a closed union, so the
+  // per-theme preset tables in backgrounds/ stay exhaustively checked — a new
+  // theme without presets fails typecheck instead of silently rendering
+  // upstream demo defaults
+] as const satisfies readonly ThemeConfig[];
 
 export const ALL_THEME_VALUES = THEMES.map((t) => t.value);
 export type Theme = (typeof ALL_THEME_VALUES)[number];
+
+/** membership check for values from storage — narrows instead of casting */
+export const isTheme = (value: string): value is Theme =>
+  (ALL_THEME_VALUES as readonly string[]).includes(value);
 
 /** resolve light/dark "type" for a given theme (handles "system"). */
 export const getThemeType = (currentTheme: Theme): "light" | "dark" => {

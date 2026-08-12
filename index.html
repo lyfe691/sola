@@ -15,8 +15,8 @@
          mirrors CALLOUT_STORAGE_KEY in src/config/welcome-preset.ts. -->
     <script>
       (function () {
+        var root = document.documentElement;
         try {
-          var root = document.documentElement;
           var theme = localStorage.getItem("vite-ui-theme");
           if (!theme)
             theme = localStorage.getItem("sola-theme-callout-v1")
@@ -33,6 +33,12 @@
         } catch (e) {
           /* storage unavailable — first paint stays on the default theme */
         }
+        /* browser-chrome color follows the resolved scheme; values mirror
+           --background in light and dark (src/index.css) */
+        var meta = document.createElement("meta");
+        meta.name = "theme-color";
+        meta.content = root.dataset.scheme === "dark" ? "#0a0a0a" : "#ffffff";
+        document.head.appendChild(meta);
       })();
     </script>
 
@@ -110,7 +116,6 @@
     />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#000000" />
 
     <!-- =====================================
          ROBOTS
@@ -150,7 +155,7 @@
         "sameAs": [
           "https://github.com/lyfe691",
           "https://www.linkedin.com/in/yanis-sebastian-zürcher/",
-          "https://app.hackthebox.com/profile/2350832"
+          "https://profile.hackthebox.com/profile/019ebdeb-cfb3-708a-9d67-dde825d9bfb3"
         ],
         "jobTitle": "Software Developer",
         "worksFor": {

@@ -17,7 +17,12 @@ import {
   shouldApplyWelcomePreset,
   WELCOME_PRESET,
 } from "@/config/welcome-preset";
-import { type Theme, ALL_THEME_VALUES, getThemeType } from "@/config/themes";
+import {
+  type Theme,
+  ALL_THEME_VALUES,
+  getThemeType,
+  isTheme,
+} from "@/config/themes";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -30,12 +35,11 @@ type ThemeProviderState = {
   setTheme: (theme: Theme, event?: React.MouseEvent | MouseEvent) => void;
 };
 
-const initialState: ThemeProviderState = {
-  theme: "system",
-  setTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+// default undefined so the useTheme guard actually catches out-of-provider
+// use (same pattern as LanguageProvider)
+const ThemeProviderContext = createContext<ThemeProviderState | undefined>(
+  undefined,
+);
 
 /** resolved light/dark, read by the pre-paint stamp script in index.html */
 const SCHEME_STORAGE_KEY = "vite-ui-scheme";
@@ -48,9 +52,10 @@ const resolveTheme = (theme: Theme) =>
 
 const readInitialTheme = (storageKey: string, defaultTheme: Theme): Theme => {
   try {
-    // an explicit choice (any surface: menu, palette) beats the first-visit preset
-    const stored = localStorage.getItem(storageKey) as Theme | null;
-    if (stored) return stored;
+    // an explicit choice (any surface: menu, palette) beats the first-visit
+    // preset; a stale/renamed id falls through instead of reaching classList
+    const stored = localStorage.getItem(storageKey);
+    if (stored && isTheme(stored)) return stored;
     if (shouldApplyWelcomePreset()) return WELCOME_PRESET.theme;
     return defaultTheme;
   } catch {
@@ -110,7 +115,11 @@ export function ThemeProvider({
   const handleSetTheme = useCallback(
     (newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
       const apply = () => {
-        localStorage.setItem(storageKey, newTheme);
+        try {
+          localStorage.setItem(storageKey, newTheme);
+        } catch {
+          /* storage unavailable — the choice still applies this session */
+        }
         setTheme(newTheme);
       };
 
