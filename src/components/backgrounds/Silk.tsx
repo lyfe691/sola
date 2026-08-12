@@ -91,7 +91,9 @@ interface SilkPlaneProps {
 }
 
 function SilkPlane({ uniforms, paused = false, ref }: SilkPlaneProps) {
-  const { viewport } = useThree();
+  // selector subscription: re-render exactly when the viewport changes, so
+  // the plane rescale below can never miss a resize
+  const viewport = useThree((state) => state.viewport);
 
   useLayoutEffect(() => {
     if (ref?.current) {
@@ -155,8 +157,17 @@ const Silk: React.FC<SilkProps> = ({
   );
 
   return (
-    // demand while paused = no continuous WebGL rAF fighting DOM animation
-    <Canvas dpr={dpr} frameloop={paused ? "demand" : "always"}>
+    // demand while paused = no continuous WebGL rAF fighting DOM animation.
+    // offsetSize: measure LAYOUT size, not transformed bounds — this canvas
+    // mounts while the route transition scales an ancestor from 0.96, and a
+    // getBoundingClientRect measure taken mid-animation sticks ~4% narrow
+    // (ResizeObserver never re-fires when only the transform settles),
+    // leaving a dead strip on the hero's right edge.
+    <Canvas
+      dpr={dpr}
+      frameloop={paused ? "demand" : "always"}
+      resize={{ offsetSize: true }}
+    >
       <SilkPlane ref={meshRef} uniforms={uniforms} paused={paused} />
     </Canvas>
   );
