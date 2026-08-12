@@ -9,10 +9,10 @@
  * scoped to. Directories are allowed (the GitHub commits API accepts them).
  * Unmapped routes fall back to the repo-wide latest commit.
  *
- * Two entry points: AppLayout routes (listed below) flip the mode from the
+ * Two entry points: app-layout routes (listed below) flip the mode from the
  * nav's appearance menu; project deep dives flip it from their breadcrumb
  * bar and scope to their MDX source — the one file that is genuinely that
- * page. The remaining BlankLayout pages (/a, /404) have no entry point on
+ * page. The remaining blank-layout pages (/a, /404) have no entry point on
  * purpose, so they stay unmapped.
  */
 

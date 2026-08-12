@@ -7,29 +7,21 @@
  */
 
 import { Routes, Route } from "react-router";
-import AppLayout from "@/layouts/AppLayout";
-import BlankLayout from "@/layouts/BlankLayout";
-import { APP_ROUTES, type RouteLayout } from "@/config/routes";
+import RootLayout from "@/layouts/RootLayout";
+import { APP_ROUTES } from "@/config/routes";
 
 // rendered straight from the manifest (src/config/routes.ts) — routes and
-// tab titles cannot drift apart because they share one source of truth
-const LAYOUTS: { layout: RouteLayout; element: React.ReactElement }[] = [
-  { layout: "app", element: <AppLayout /> },
-  { layout: "blank", element: <BlankLayout /> },
-];
-
+// tab titles cannot drift apart because they share one source of truth.
+// every route sits under the ONE RootLayout so a single PageShell owns
+// every transition (see RootLayout for why that must not be per-layout)
 export const AnimatedRoutes = () => {
   return (
     <Routes>
-      {LAYOUTS.map(({ layout, element }) => (
-        <Route key={layout} element={element}>
-          {APP_ROUTES.filter((route) => route.layout === layout).map(
-            ({ path, Component }) => (
-              <Route key={path} path={path} element={<Component />} />
-            ),
-          )}
-        </Route>
-      ))}
+      <Route element={<RootLayout />}>
+        {APP_ROUTES.map(({ path, Component }) => (
+          <Route key={path} path={path} element={<Component />} />
+        ))}
+      </Route>
     </Routes>
   );
 };

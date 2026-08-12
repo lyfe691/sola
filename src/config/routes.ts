@@ -86,7 +86,7 @@ export const APP_ROUTES: AppRoute[] = [
     path: "/certifications",
     layout: "app",
     Component: lazy(() => import("@/pages/Certifications")),
-    title: (t) => t.certifications?.title ?? "Certifications",
+    title: (t) => t.certifications.title,
   },
   {
     // catch-all, ranked last by the router: unknown paths render the 404
@@ -126,4 +126,11 @@ export function resolveTitle(pathname: string, t: Translation): string {
   const route = match?.route.handle as AppRoute | undefined;
   if (!route) return "404";
   return route.title(t, match?.params ?? {});
+}
+
+/** layout for a location — unmatched paths get blank, same as the 404 route */
+export function resolveLayout(pathname: string): RouteLayout {
+  const match = matchRoutes(MATCHABLE, pathname)?.at(-1);
+  const route = match?.route.handle as AppRoute | undefined;
+  return route?.layout ?? "blank";
 }
