@@ -37,6 +37,9 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
+/** resolved light/dark, read by the pre-paint stamp script in index.html */
+const SCHEME_STORAGE_KEY = "vite-ui-scheme";
+
 const getSystemTheme = () =>
   window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
@@ -87,6 +90,13 @@ export function ThemeProvider({
       // the dark: variant matches this attr too — custom dark themes
       // (cyber, forest, amethyst) never carry the literal `dark` class
       root.dataset.scheme = getThemeType(theme);
+      // persisted for the pre-paint stamp in index.html — custom themes
+      // (cyber, forest, …) carry a type the inline script can't derive
+      try {
+        localStorage.setItem(SCHEME_STORAGE_KEY, root.dataset.scheme);
+      } catch {
+        /* storage unavailable — fail silently */
+      }
     };
     apply();
     if (theme !== "system") return;

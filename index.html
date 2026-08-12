@@ -7,6 +7,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Pre-paint theme stamp: keeps dark themes from flashing white (and
+         the 250ms color transition from animating the correction) while
+         React boots. Mirrors theme-provider.tsx, which remains the source
+         of truth: it re-stamps on mount and persists the resolved scheme
+         under "vite-ui-scheme" for this script to read. The callout key
+         mirrors CALLOUT_STORAGE_KEY in src/config/welcome-preset.ts. -->
+    <script>
+      (function () {
+        try {
+          var root = document.documentElement;
+          var theme = localStorage.getItem("vite-ui-theme");
+          if (!theme)
+            theme = localStorage.getItem("sola-theme-callout-v1")
+              ? "system"
+              : "light";
+          var scheme = localStorage.getItem("vite-ui-scheme");
+          if (theme === "system")
+            theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          if (!scheme) scheme = theme === "dark" ? "dark" : "light";
+          root.classList.add(theme);
+          root.dataset.scheme = scheme;
+        } catch (e) {
+          /* storage unavailable — first paint stays on the default theme */
+        }
+      })();
+    </script>
+
     <!-- =====================================
          PRIMARY META TAGS
          data-react-managed tags cover the pre-boot window and raw-HTML
