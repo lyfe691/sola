@@ -28,15 +28,24 @@ window.addEventListener("vite:preloadError", (event) => {
 });
 
 // index.html ships a static <title>/<meta name="description"> for the pre-boot
-// window and raw-HTML crawlers. Pages own them via React 19 native metadata,
-// which doesn't dedupe against static tags — so the statics are removed the
-// moment React hoists its first <title>. The observer fires as a microtask,
-// before paint, so there is never a visible gap or duplicate.
-const staticHeadTags = document.querySelectorAll("head > [data-react-managed]");
-if (staticHeadTags.length > 0) {
+// window and raw-HTML crawlers. The title stays — DocumentTitle writes
+// document.title imperatively, which mutates the static element in place, so
+// no duplicate is ever created. Descriptions are different: pages hoist their
+// own <meta> via React 19 native metadata, which doesn't dedupe against
+// static tags, so the static one is removed the moment the first page-owned
+// description lands. The observer fires as a microtask, before paint, so
+// there is never a visible gap or duplicate.
+const staticDescription = document.querySelector(
+  'head > meta[name="description"][data-react-managed]',
+);
+if (staticDescription) {
   const headObserver = new MutationObserver(() => {
-    if (document.querySelector("head > title:not([data-react-managed])")) {
-      staticHeadTags.forEach((el) => el.remove());
+    if (
+      document.querySelector(
+        'head > meta[name="description"]:not([data-react-managed])',
+      )
+    ) {
+      staticDescription.remove();
       headObserver.disconnect();
     }
   });

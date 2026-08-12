@@ -38,10 +38,11 @@
 
     <!-- =====================================
          PRIMARY META TAGS
-         data-react-managed tags cover the pre-boot window and raw-HTML
-         crawlers; main.tsx removes them before React mounts, because each
-         page renders its own <title>/<meta name="description"> via React 19
-         native metadata, which does not dedupe against static head tags.
+         data-react-managed marks tags owned by the boot sequence. The title
+         is mutated in place by DocumentTitle (imperative document.title).
+         The meta description covers the pre-boot window and raw-HTML
+         crawlers; main.tsx removes it as soon as a page hoists its own via
+         React 19 native metadata, which does not dedupe against static tags.
     ====================================== -->
     <title data-react-managed>
       Yanis Sebastian Zürcher • Software Developer in Zürich
