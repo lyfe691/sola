@@ -14,6 +14,7 @@
  */
 
 import { type Theme, getThemeType } from "@/config/themes";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 import type { AuroraLayer, SkyLayer } from "@/components/aurora-blur";
 
 export type AuroraBlurPreset = {
@@ -200,13 +201,8 @@ export const AURORA_BLUR_THEME_CLASS_KEYS = Object.keys(
 ) as Exclude<Theme, "system">[];
 
 /** resolve the preset for a theme (maps system -> light/dark) */
-export const getAuroraBlurPreset = (theme: Theme): AuroraBlurPreset => {
-  const resolved =
-    theme === "system"
-      ? getThemeType("system")
-      : (theme as Exclude<Theme, "system">);
-  return AURORA_BLUR_PRESETS[resolved as Exclude<Theme, "system">];
-};
+export const getAuroraBlurPreset = (theme: Theme): AuroraBlurPreset =>
+  resolveThemePreset(AURORA_BLUR_PRESETS, theme);
 
 /** whether the active theme is a light-type palette */
 export const isAuroraBlurLightTheme = (theme: Theme): boolean =>

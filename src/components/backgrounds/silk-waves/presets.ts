@@ -1,9 +1,6 @@
 import { type Theme } from "@/config/themes";
 import type { SilkWavesProps } from "@/components/silk-waves";
-import {
-  BACKGROUND_THEME_CLASS_KEYS,
-  resolveThemePreset,
-} from "@/components/backgrounds/preset-utils";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type SilkWavesPreset = Required<
   Pick<
@@ -184,8 +181,6 @@ const SILK_WAVES_PRESETS: Record<Exclude<Theme, "system">, SilkWavesPreset> = {
     ],
   },
 };
-
-export { BACKGROUND_THEME_CLASS_KEYS as SILK_WAVES_THEME_CLASS_KEYS };
 
 export const getSilkWavesPreset = (theme: Theme): SilkWavesPreset =>
   resolveThemePreset(SILK_WAVES_PRESETS, theme);

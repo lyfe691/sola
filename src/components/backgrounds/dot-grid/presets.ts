@@ -1,9 +1,6 @@
 import { type Theme } from "@/config/themes";
 import type { DotGridProps } from "@/components/DotGrid";
-import {
-  BACKGROUND_THEME_CLASS_KEYS,
-  resolveThemePreset,
-} from "@/components/backgrounds/preset-utils";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type DotGridPreset = Required<
   Pick<
@@ -58,8 +55,6 @@ const DOT_GRID_PRESETS: Record<Exclude<Theme, "system">, DotGridPreset> = {
   life: { ...lightBase, baseColor: "#DDF9EE", activeColor: "#3CB88A" },
   rose: { ...lightBase, baseColor: "#FFE8ED", activeColor: "#E84868" },
 };
-
-export { BACKGROUND_THEME_CLASS_KEYS as DOT_GRID_THEME_CLASS_KEYS };
 
 export const getDotGridPreset = (theme: Theme): DotGridPreset =>
   resolveThemePreset(DOT_GRID_PRESETS, theme);

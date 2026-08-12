@@ -9,7 +9,8 @@
 import { useEffect, useState } from "react";
 import { type Theme } from "@/config/themes";
 
-const detectThemeFromHtml = (
+/** one-shot read for imperative render loops (Aurora) — the hook wraps this */
+export const detectThemeFromHtml = (
   classKeys: readonly Exclude<Theme, "system">[],
 ): Exclude<Theme, "system"> => {
   const cls = document.documentElement.classList;

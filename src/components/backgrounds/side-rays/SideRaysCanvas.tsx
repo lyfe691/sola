@@ -75,6 +75,38 @@ export default function SideRaysCanvas({
   const [isVisible, setIsVisible] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  // latest visuals for the async init to read at attach time — the mount
+  // effect re-runs only on visibility, so reading its closure would freeze
+  // whatever preset was active when the canvas first appeared
+  const visualPropsRef = useRef({
+    speed,
+    rayColor1,
+    rayColor2,
+    intensity,
+    spread,
+    origin,
+    tilt,
+    saturation,
+    blend,
+    falloff,
+    opacity,
+  });
+  useEffect(() => {
+    visualPropsRef.current = {
+      speed,
+      rayColor1,
+      rayColor2,
+      intensity,
+      spread,
+      origin,
+      tilt,
+      saturation,
+      blend,
+      falloff,
+      opacity,
+    };
+  });
+
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -115,6 +147,20 @@ export default function SideRaysCanvas({
       await new Promise<void>((resolve) => setTimeout(resolve, 10));
 
       if (cancelled || !containerRef.current) return;
+
+      const {
+        speed,
+        rayColor1,
+        rayColor2,
+        intensity,
+        spread,
+        origin,
+        tilt,
+        saturation,
+        blend,
+        falloff,
+        opacity,
+      } = visualPropsRef.current;
 
       const renderer = new Renderer({
         dpr: Math.min(window.devicePixelRatio, 2),
@@ -282,20 +328,11 @@ void main() {
         cleanupFunctionRef.current = null;
       }
     };
-  }, [
-    isVisible,
-    speed,
-    rayColor1,
-    rayColor2,
-    intensity,
-    spread,
-    origin,
-    tilt,
-    saturation,
-    blend,
-    falloff,
-    opacity,
-  ]);
+    // visuals come from visualPropsRef and stay live via the uniform-sync
+    // effect below; rebuilding the GL context on preset changes is exactly
+    // the teardown this split avoids
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isVisible]);
 
   useEffect(() => {
     if (!uniformsRef.current) return;

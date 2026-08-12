@@ -1,9 +1,6 @@
 import { type Theme } from "@/config/themes";
 import type { FrameBorderProps } from "@/components/frame-border";
-import {
-  BACKGROUND_THEME_CLASS_KEYS,
-  resolveThemePreset,
-} from "@/components/backgrounds/preset-utils";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type FrameBorderPreset = Required<
   Pick<
@@ -61,8 +58,6 @@ const FRAME_BORDER_PRESETS: Record<
   life: { ...lightBase, color: "#3CB88A", backgroundColor: "#F4FDF9" },
   rose: { ...lightBase, color: "#E84868", backgroundColor: "#FFF6F8" },
 };
-
-export { BACKGROUND_THEME_CLASS_KEYS as FRAME_BORDER_THEME_CLASS_KEYS };
 
 export const getFrameBorderPreset = (theme: Theme): FrameBorderPreset =>
   resolveThemePreset(FRAME_BORDER_PRESETS, theme);

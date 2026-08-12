@@ -10,7 +10,8 @@
  * `getSideRaysPreset(theme)`.
  */
 
-import { type Theme, getThemeType } from "@/config/themes";
+import { type Theme } from "@/config/themes";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 import type { SideRaysOrigin } from "./SideRaysCanvas";
 
 export type SideRaysPreset = {
@@ -170,10 +171,5 @@ export const SIDE_RAYS_THEME_CLASS_KEYS = Object.keys(
 ) as Exclude<Theme, "system">[];
 
 /** resolve the preset for a theme (maps system -> light/dark) */
-export const getSideRaysPreset = (theme: Theme): SideRaysPreset => {
-  const resolved =
-    theme === "system"
-      ? getThemeType("system")
-      : (theme as Exclude<Theme, "system">);
-  return SIDE_RAYS_PRESETS[resolved as Exclude<Theme, "system">];
-};
+export const getSideRaysPreset = (theme: Theme): SideRaysPreset =>
+  resolveThemePreset(SIDE_RAYS_PRESETS, theme);

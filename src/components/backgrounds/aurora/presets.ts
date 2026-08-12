@@ -10,7 +10,8 @@
  * (`<background>/presets.ts` + a `get<Background>Preset(theme)` helper).
  */
 
-import { type Theme, getThemeType } from "@/config/themes";
+import { type Theme } from "@/config/themes";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 type BlendMode =
   | "normal"
@@ -180,10 +181,5 @@ export const AURORA_THEME_CLASS_KEYS = Object.keys(AURORA_PRESETS) as Exclude<
 >[];
 
 /** resolve the preset for a theme (maps system -> light/dark) */
-export const getAuroraPreset = (theme: Theme): AuroraPreset => {
-  const resolved =
-    theme === "system"
-      ? getThemeType("system")
-      : (theme as Exclude<Theme, "system">);
-  return AURORA_PRESETS[resolved as Exclude<Theme, "system">];
-};
+export const getAuroraPreset = (theme: Theme): AuroraPreset =>
+  resolveThemePreset(AURORA_PRESETS, theme);

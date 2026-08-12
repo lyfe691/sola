@@ -1,9 +1,6 @@
 import { type Theme } from "@/config/themes";
 import type { WatercolorProps } from "@/components/watercolor";
-import {
-  BACKGROUND_THEME_CLASS_KEYS,
-  resolveThemePreset,
-} from "@/components/backgrounds/preset-utils";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type WatercolorPreset = Required<
   Pick<
@@ -70,8 +67,6 @@ const WATERCOLOR_PRESETS: Record<Exclude<Theme, "system">, WatercolorPreset> = {
   life: { ...lightBase, color1: "#3CB88A", color2: "#DDF9EE" },
   rose: { ...lightBase, color1: "#C41E3A", color2: "#FFE8ED" },
 };
-
-export { BACKGROUND_THEME_CLASS_KEYS as WATERCOLOR_THEME_CLASS_KEYS };
 
 export const getWatercolorPreset = (theme: Theme): WatercolorPreset =>
   resolveThemePreset(WATERCOLOR_PRESETS, theme);

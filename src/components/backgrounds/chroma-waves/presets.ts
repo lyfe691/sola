@@ -10,7 +10,8 @@
  * `getChromaWavesPreset(theme)`.
  */
 
-import { type Theme, getThemeType } from "@/config/themes";
+import { type Theme } from "@/config/themes";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type ChromaWavesPreset = {
   speed: number;
@@ -113,10 +114,5 @@ export const CHROMA_WAVES_THEME_CLASS_KEYS = Object.keys(
 ) as Exclude<Theme, "system">[];
 
 /** resolve the preset for a theme (maps system -> light/dark) */
-export const getChromaWavesPreset = (theme: Theme): ChromaWavesPreset => {
-  const resolved =
-    theme === "system"
-      ? getThemeType("system")
-      : (theme as Exclude<Theme, "system">);
-  return CHROMA_WAVES_PRESETS[resolved as Exclude<Theme, "system">];
-};
+export const getChromaWavesPreset = (theme: Theme): ChromaWavesPreset =>
+  resolveThemePreset(CHROMA_WAVES_PRESETS, theme);

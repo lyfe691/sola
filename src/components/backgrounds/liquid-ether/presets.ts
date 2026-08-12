@@ -1,9 +1,6 @@
 import { type Theme } from "@/config/themes";
 import type { LiquidEtherProps } from "@/components/LiquidEther";
-import {
-  BACKGROUND_THEME_CLASS_KEYS,
-  resolveThemePreset,
-} from "@/components/backgrounds/preset-utils";
+import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type LiquidEtherPreset = Required<
   Pick<
@@ -111,8 +108,6 @@ const LIQUID_ETHER_PRESETS: Record<
     colors: ["#E84868", "#FF9DB0", "#FFE8ED"],
   },
 };
-
-export { BACKGROUND_THEME_CLASS_KEYS as LIQUID_ETHER_THEME_CLASS_KEYS };
 
 export const getLiquidEtherPreset = (theme: Theme): LiquidEtherPreset =>
   resolveThemePreset(LIQUID_ETHER_PRESETS, theme);

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import { getAuroraPreset, AURORA_THEME_CLASS_KEYS } from "./presets";
-import { type Theme } from "@/config/themes";
+import { detectThemeFromHtml } from "@/components/backgrounds/use-background-theme";
 
 const VERT = `#version 300 es
 in vec2 position;
@@ -109,16 +109,6 @@ export interface AuroraProps {
   base?: number;
 }
 
-const detectThemeFromHtml = (): Exclude<Theme, "system"> => {
-  const cls = document.documentElement.classList;
-  for (const key of AURORA_THEME_CLASS_KEYS) if (cls.contains(key)) return key;
-  // Fallback: if .dark present use dark else light based on media query
-  if (cls.contains("dark")) return "dark";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-};
-
 export default function Aurora({
   amplitude = 0.45,
   speed = 1.0,
@@ -146,7 +136,6 @@ export default function Aurora({
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.canvas.style.backgroundColor = "transparent";
-    // gl.canvas.style.pointerEvents = "none";
 
     // assigned once below, but referenced by closures declared before it
     // eslint-disable-next-line prefer-const
@@ -157,7 +146,9 @@ export default function Aurora({
       return [c.r, c.g, c.b] as [number, number, number];
     };
 
-    const preset = getAuroraPreset(detectThemeFromHtml());
+    const preset = getAuroraPreset(
+      detectThemeFromHtml(AURORA_THEME_CLASS_KEYS),
+    );
     gl.canvas.style.mixBlendMode =
       preset.blendMode as CSSStyleDeclaration["mixBlendMode"];
 
@@ -210,7 +201,7 @@ export default function Aurora({
 
     const applyTheme = () => {
       if (!program) return;
-      const p = getAuroraPreset(detectThemeFromHtml());
+      const p = getAuroraPreset(detectThemeFromHtml(AURORA_THEME_CLASS_KEYS));
       gl.canvas.style.mixBlendMode =
         p.blendMode as CSSStyleDeclaration["mixBlendMode"];
       program.uniforms.uIntensity.value = p.intensity;
