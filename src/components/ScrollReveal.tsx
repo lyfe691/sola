@@ -11,6 +11,7 @@ import { motion, type DOMMotionComponents, type Variants } from "motion/react";
 import {
   useScrollReveal,
   scrollRevealVariants,
+  scrollFeatureVariants,
   scrollPageTitleVariants,
   scrollTitleVariants,
   scrollSubtleVariants,
@@ -21,16 +22,23 @@ import {
 interface ScrollRevealProps {
   children: React.ReactNode;
   /**
-   * Animation variant to use
-   * - default: Standard content reveal (20px up, scale 0.98)
-   * - pageTitle: Page headers with left slide + blur effect
-   * - title: Section titles with subtle upward movement
-   * - subtle: Fast, light animations for small elements
+   * Animation variant to use (all fade + a long rise on EASE_OUT_QUART)
+   * - default: Standard content reveal (80px rise)
+   * - feature: Full-width media cards (40px rise — big mass, less travel)
+   * - pageTitle: Page headers — quickest of the set so the title lands first
+   * - title: Section titles (48px rise)
+   * - subtle: Small elements (32px rise, fastest)
    * - container: For sections with staggered children
    * - child: For items within staggered containers
    */
   variant?:
-    "default" | "pageTitle" | "title" | "subtle" | "container" | "child";
+    | "default"
+    | "feature"
+    | "pageTitle"
+    | "title"
+    | "subtle"
+    | "container"
+    | "child";
   /**
    * Custom animation variants (overrides variant)
    */
@@ -43,7 +51,7 @@ interface ScrollRevealProps {
    * Scroll trigger options
    */
   options?: {
-    /** Visibility threshold (0-1) - defaults to 0.15 */
+    /** Visibility amount (0-1). Unset = trigger at top-90% of viewport */
     threshold?: number;
     /** Whether animation runs only once - defaults to true */
     once?: boolean;
@@ -61,6 +69,7 @@ interface ScrollRevealProps {
 // Variant mapping - perfectly organized
 const ANIMATION_VARIANTS = {
   default: scrollRevealVariants,
+  feature: scrollFeatureVariants,
   pageTitle: scrollPageTitleVariants,
   title: scrollTitleVariants,
   subtle: scrollSubtleVariants,

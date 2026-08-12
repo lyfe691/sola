@@ -19,6 +19,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
+import { staggerDelay } from "@/utils/transitions";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -87,7 +88,11 @@ const Services = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
         {servicesList.map((service, index) => (
-          <ScrollReveal key={service.key} variant="default" delay={index * 60}>
+          <ScrollReveal
+            key={service.key}
+            variant="default"
+            delay={staggerDelay(index)}
+          >
             <Card className="group relative h-full gap-0 overflow-visible bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
               {service.highlight && (
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 shadow-xs">

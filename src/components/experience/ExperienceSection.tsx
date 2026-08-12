@@ -7,6 +7,7 @@
  */
 
 import ScrollReveal from "@/components/ScrollReveal";
+import { staggerDelay } from "@/utils/transitions";
 import ExperienceItem from "@/components/experience/ExperienceItem";
 import { INTL_LOCALE } from "@/lib/dates";
 import { formatDuration, type ExperienceEntry } from "@/lib/experience";
@@ -46,7 +47,11 @@ const ExperienceSection = ({
 
       <div className="flex flex-col">
         {entries.map((entry, index) => (
-          <ScrollReveal key={entry.key} variant="default" delay={index * 60}>
+          <ScrollReveal
+            key={entry.key}
+            variant="default"
+            delay={staggerDelay(index)}
+          >
             <ExperienceItem
               entry={entry}
               isWork={isWork}

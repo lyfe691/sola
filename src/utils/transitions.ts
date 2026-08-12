@@ -12,10 +12,16 @@ import { useInView } from "motion/react";
 /**
  * Central motion system.
  *
- * Two registers, deliberately different:
+ * Three registers, deliberately different:
  *   - UI controls (dropdowns, tooltips, hover) want to feel RESPONSIVE -> short + EASE_OUT.
- *   - Content reveals / page transitions want to feel SMOOTH -> longer + a buttery
- *     deceleration curve (SMOOTH), a subtle scale, and a blur-bridge where it helps.
+ *   - Scroll reveals are the SHOWPIECE register: BIG travel (32-80px),
+ *     0.6-0.8s on EASE_OUT_QUART, triggered as soon as the element's top
+ *     crosses 90% of the viewport. The travel is what makes it read as
+ *     animation — small offsets read as pop-in at any duration or curve.
+ *     The quart-out attack starts the instant the element is reached, so
+ *     big+slow still feels responsive.
+ *   - The page transition (and the hero's load-in) keeps the longer glide ->
+ *     SMOOTH/REVEAL with the blur-bridge.
  *
  * Easing curves mirror the CSS custom properties in src/index.css (@theme) — only curves
  * actually consumed from JS live here; CSS-only tokens (--ease-in-out, --ease-drawer,
@@ -27,25 +33,35 @@ import { useInView } from "motion/react";
 // EASE_OUT is a gentle easeOutCubic (not a front-loaded quint) so short hover/UI
 // transitions glide instead of snapping. Mirrors --ease-out in index.css.
 export const EASE_OUT = [0.33, 1, 0.68, 1] as const; // responsive-but-smooth UI (dropdowns/hover)
+// The reveal curve: easeOutQuart — a fast attack you can see, then a long
+// visible settle. Mirrors --ease-out-quart in index.css.
+export const EASE_OUT_QUART = [0.165, 0.84, 0.44, 1] as const;
 export const EASE_EXPO = [0.16, 1, 0.3, 1] as const; // lush hero entrances
 
 // Page transition: a punchy expo. The blur masks its front-loading, so it's fine here.
 export const SMOOTH = [0.16, 1, 0.3, 1] as const;
-// Content reveals: a SYMMETRIC ease-in-out (easeInOutQuad). The gentle ease-IN start (y1=0) is
-// what reads as smooth for this site — the element eases up from rest rather than launching at
-// full speed. User-validated: "responsive" fast-start curves (expo y1≈1, the Vaul drawer) read
-// as snappy/ugly here no matter the best-practice; this gentle in-out is the one that feels right.
-// Scroll reveals + hero use this.
+// The glide curve: a symmetric ease-in-out (easeInOutQuad). Motion builds
+// and settles, so the travel is visible for its whole duration — this is
+// what "smooth" means to the owner's eye (out-curves read as pop-in).
+// Shared by scroll reveals (short clock) and the load-in theater — hero,
+// 404 terminal, colophon, code-view beats (long clock).
 export const REVEAL = [0.45, 0, 0.55, 1] as const;
 // Exit/consume: accelerate away (ease-in is correct for a leaving element collapsing in).
 // Exported for in-page elements that leave the way a page does (code view's command beat).
 export const CONSUME_IN = [0.5, 0, 0.75, 0] as const;
 
-// Durations (seconds) — smooth, leaning long (smoothness beats speed for this site)
-const D_REVEAL = 0.5;
-const D_TITLE = 0.6;
-const D_SUBTLE = 0.42;
-const STANDARD_THRESHOLD = 0.15;
+// Durations (seconds) — long clocks are fine BECAUSE the trigger fires
+// early (top-90% of viewport) and the quart-out front-loads the visible
+// motion; index delays stay capped (staggerDelay) so nothing ever waits to
+// start. The 0.8s clock also outlasts the 0.5s route-transition blur, so
+// above-the-fold entrances keep ~0.3s of clearly visible settle after the
+// page sharpens (shorter reveals finished invisibly UNDER the blur — the
+// "just appears" bug).
+const D_REVEAL = 0.8;
+const D_TITLE = 0.7;
+const D_PAGE_TITLE = 0.65;
+const D_SUBTLE = 0.6;
+const D_FEATURE = 0.7;
 
 // ---- Page (route) transition: "consumes itself" ----
 // The old page shrinks + blurs as it accelerates away (consumed inward); the new page
@@ -70,100 +86,65 @@ export const pageTransitionVariants = {
 };
 
 // ---- Scroll-reveal variants ----
-// Opacity + a graceful translate + a subtle scale, on the SMOOTH curve. Movement is
+// Fade + a LONG rise, nothing else — no scale, no blur. Movement is
 // stripped under prefers-reduced-motion globally by <MotionConfig reducedMotion="user">.
 
-export const scrollRevealVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.98 },
+/** the register's one shape: fade + a rise that settles on the quart-out */
+const rise = (y: number, duration: number) => ({
+  hidden: { opacity: 0, y },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: D_REVEAL, ease: REVEAL },
+    transition: { duration, ease: EASE_OUT_QUART },
   },
-};
+});
 
-export const scrollTitleVariants = {
-  hidden: { opacity: 0, y: 24, scale: 0.985 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: D_TITLE, ease: REVEAL },
-  },
-};
+// Travel scales with role — and DOWN as visual mass goes up: 80px on a small
+// card is lively, 80px on a full-width media card is a slab lurching.
+export const scrollRevealVariants = rise(80, D_REVEAL);
+export const scrollTitleVariants = rise(48, D_TITLE);
+// page titles: quickest of the set so the heading LANDS FIRST
+export const scrollPageTitleVariants = rise(40, D_PAGE_TITLE);
+export const scrollSubtleVariants = rise(32, D_SUBTLE);
+export const scrollChildVariants = rise(64, D_REVEAL);
+// full-width media cards (featured projects) — paired with NO index delay:
+// in a single-column stack only one card enters at a time, so scroll
+// cadence is the stagger and a delay is pure wait
+export const scrollFeatureVariants = rise(40, D_FEATURE);
 
-// Page titles: crisp and quick so the heading LANDS FIRST, before the content below it.
-// (No blur — the blur clears slowly under the ease-in start and made the title look like it
-// loaded after the content. Shorter than D_REVEAL so it leads when both fire on page load.)
-export const scrollPageTitleVariants = {
-  hidden: { opacity: 0, y: 14 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: REVEAL },
-  },
-};
+// in-view pair for config/card pages (Certifications, Privacy) — one
+// definition on the shared register so the pair can't drift
+export const fadeUpVariants = rise(48, D_REVEAL);
+export const cardInVariants = rise(64, D_REVEAL);
 
-export const scrollSubtleVariants = {
-  hidden: { opacity: 0, y: 12, scale: 0.99 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: D_SUBTLE, ease: REVEAL },
-  },
-};
-
-// Container/child: a gentle cascade from one in-view parent
+// Container/child: a tight cascade from one in-view parent (stagger is
+// decorative and must never make content feel gated)
 export const scrollContainerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.06 },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
-export const scrollChildVariants = {
-  hidden: { opacity: 0, y: 16, scale: 0.98 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: D_REVEAL, ease: REVEAL },
-  },
-};
-
-// In-view pair for config/card pages (Certifications, Privacy): the shapes
-// those pages defined locally, moved onto the REVEAL register where content
-// reveals belong. One definition so the pair can't drift between pages.
-export const fadeUpVariants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: D_REVEAL, ease: REVEAL },
-  },
-};
-
-export const cardInVariants = {
-  hidden: { opacity: 0, y: 12, scale: 0.97 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: D_REVEAL, ease: REVEAL },
-  },
-};
+/** index delay (ms) for multi-column grids, capped so late rows never wait.
+ * Single-column stacks take no delay at all (see scrollFeatureVariants). */
+export const staggerDelay = (index: number) => Math.min(index * 80, 240);
 
 // ---- In-view latch (fires once). Delay is applied by ScrollReveal to the variant. ----
+// Default trigger fires as soon as the element's top crosses 90% of the
+// viewport (margin shrinks the observation
+// box by 10% at the bottom), instead of waiting for 15% of the element to be
+// visible — tall elements otherwise start late and feel laggy.
 export const useScrollReveal = (options?: {
   threshold?: number;
   once?: boolean;
 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, {
-    amount: options?.threshold ?? STANDARD_THRESHOLD,
+    ...(options?.threshold !== undefined
+      ? { amount: options.threshold }
+      : { margin: "0px 0px -10% 0px" }),
     once: options?.once ?? true,
   });
   return { ref, isInView };

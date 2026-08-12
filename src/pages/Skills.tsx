@@ -16,6 +16,7 @@ import {
 } from "@/config/skills";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ScrollReveal from "@/components/ScrollReveal";
+import { staggerDelay } from "@/utils/transitions";
 
 const ProficiencyDots = ({ level }: { level: Proficiency }) => (
   <div className="flex gap-1">
@@ -90,7 +91,7 @@ const Skills = () => {
             key={group.id}
             group={group}
             title={groups[group.id] ?? group.id}
-            delay={index * 80}
+            delay={staggerDelay(index)}
           />
         ))}
       </div>

@@ -88,6 +88,9 @@
   /* micro-interaction pop: slight overshoot for press-release (name-morpher
      active scale). Reserve for tiny deltas (2-3%) — bigger ones turn cartoonish. */
   --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* scroll reveals — easeOutQuart: fast attack, long visible settle.
+     Mirrors EASE_OUT_QUART in src/utils/transitions.ts. */
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
   /* defaults for transition-* utilities that don't state an ease/duration —
      without these, Tailwind's built-in curve and 150ms sneak past the
      vocabulary (e.g. the stock button's transition-all) */

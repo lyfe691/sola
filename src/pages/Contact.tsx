@@ -20,7 +20,7 @@ import { useNavigate, useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { SOCIAL_LINKS } from "@/config/social";
-import { EASE_OUT, REVEAL } from "@/utils/transitions";
+import { EASE_OUT, EASE_OUT_QUART } from "@/utils/transitions";
 
 type FieldName = "name" | "email" | "subject" | "message";
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
@@ -175,11 +175,9 @@ const Contact = () => {
             </p>
           </ScrollReveal>
 
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1, ease: REVEAL }}
+          <ScrollReveal
+            variant="child"
+            delay={50}
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-4">
@@ -187,16 +185,19 @@ const Contact = () => {
                 {t.contact.expectations.title}
               </h2>
               <ul className="flex flex-col gap-3">
+                {/* bespoke horizontal micro-cascade — same curve family and
+                    clock as the reveal register; x-slides have no shared
+                    variant, so this stays inline by design */}
                 {t.contact.expectations.items.map((item, i) => (
                   <motion.li
                     key={i}
-                    initial={{ opacity: 0, x: -8 }}
+                    initial={{ opacity: 0, x: -24 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{
-                      duration: 0.42,
-                      delay: 0.1 + 0.08 * i,
-                      ease: REVEAL,
+                      duration: 0.6,
+                      delay: 0.05 + 0.08 * i,
+                      ease: EASE_OUT_QUART,
                     }}
                     className="flex items-start gap-3 text-sm text-foreground/70"
                   >
@@ -229,16 +230,11 @@ const Contact = () => {
                 })}
               </div>
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
 
         {/* right: form card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.15, ease: REVEAL }}
-        >
+        <ScrollReveal variant="child" delay={100}>
           <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
             <form
               onSubmit={handleSubmit}
@@ -331,7 +327,7 @@ const Contact = () => {
               />
             </form>
           </Card>
-        </motion.div>
+        </ScrollReveal>
       </div>
     </div>
   );

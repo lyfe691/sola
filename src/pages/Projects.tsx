@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
+import { staggerDelay } from "@/utils/transitions";
 import { RichText } from "@/components/i18n/RichText";
 import {
   Tooltip,
@@ -330,12 +331,8 @@ const Projects = () => {
 
       {/* Featured Projects */}
       <div className="grid grid-cols-1 gap-6 sm:gap-8 mb-12 sm:mb-16">
-        {featuredProjects.map((project, index) => (
-          <ScrollReveal
-            key={project.id}
-            variant="default"
-            delay={Math.min(index * 60, 360)}
-          >
+        {featuredProjects.map((project) => (
+          <ScrollReveal key={project.id} variant="feature">
             <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}
@@ -373,7 +370,7 @@ const Projects = () => {
           <ScrollReveal
             key={project.id}
             variant="default"
-            delay={Math.min(index * 60, 360)}
+            delay={staggerDelay(index)}
             className="h-full"
           >
             <ProjectCard project={project} t={t} />

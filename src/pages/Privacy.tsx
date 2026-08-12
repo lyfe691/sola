@@ -796,8 +796,8 @@ const Privacy = () => {
     n(-1);
   };
 
-  // shared in-view pair from transitions.ts — content reveals ride the
-  // REVEAL register, and the shapes can't drift from Certifications
+  // shared in-view pair from transitions.ts — one register-owned shape,
+  // so Privacy can't drift from Certifications
   const fadeUp = fadeUpVariants;
   const cardIn = cardInVariants;
   // Reveal-on-scroll props shared by every section card.
