@@ -241,6 +241,9 @@ const SilkWaves: React.FC<SilkWavesProps> = ({
       resizeObserver.disconnect();
 
       renderer.dispose();
+      // dispose() alone does not release the WebGL context — without this,
+      // every unmount orphans one until the browser starts killing the oldest
+      renderer.forceContextLoss();
       geometry.dispose();
       material.dispose();
       if (container.contains(renderer.domElement)) {

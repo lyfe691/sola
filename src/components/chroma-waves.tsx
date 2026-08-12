@@ -54,7 +54,12 @@ const ChromaWaves: React.FC<ChromaWavesProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number>(0);
-  const startTimeRef = useRef<number>(0);
+  const materialRef = useRef<THREE.ShaderMaterial | null>(null);
+  // read from the rAF loop so a live speed change needs no rebuild
+  const speedRef = useRef(speed);
+  useEffect(() => {
+    speedRef.current = speed;
+  }, [speed]);
 
   const hexToRgb = useCallback((hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -299,22 +304,24 @@ const ChromaWaves: React.FC<ChromaWavesProps> = ({
       fragmentShader,
       transparent: true,
     });
+    materialRef.current = material;
 
     const geometry = new THREE.PlaneGeometry(2, 2);
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    startTimeRef.current = performance.now();
-    let lastTime = startTimeRef.current;
+    let lastTime = performance.now();
 
     const animate = (currentTime: number) => {
       rafRef.current = requestAnimationFrame(animate);
 
       if (currentTime - lastTime < 16) return;
+      const dt = (currentTime - lastTime) * 0.001;
       lastTime = currentTime;
 
-      const elapsed = (currentTime - startTimeRef.current) * 0.001 * speed;
-      uniforms.iTime.value = elapsed;
+      // accumulate incrementally so a live speed change rescales the flow
+      // from here on instead of jumping the whole elapsed time
+      uniforms.iTime.value += dt * speedRef.current;
 
       renderer.render(scene, camera);
     };
@@ -341,13 +348,37 @@ const ChromaWaves: React.FC<ChromaWavesProps> = ({
       scene.remove(mesh);
       geometry.dispose();
       material.dispose();
+      materialRef.current = null;
       renderer.dispose();
+      // dispose() alone does not release the WebGL context — without this,
+      // every rebuild orphans one until the browser starts killing the oldest
+      renderer.forceContextLoss();
       if (renderer.domElement && renderer.domElement.parentNode === container) {
         container.removeChild(renderer.domElement);
       }
     };
+    // quality is the one prop that needs a renderer rebuild (pixel ratio);
+    // every visual prop syncs onto the live material below
+  }, [quality]);
+
+  // live prop -> uniform sync: theme/preset changes update the running
+  // material instead of tearing down and rebuilding the WebGL context
+  useEffect(() => {
+    const material = materialRef.current;
+    if (!material) return;
+    const u = material.uniforms;
+    u.uColor.value.set(rgbColor.r, rgbColor.g, rgbColor.b);
+    u.uBackgroundColor.value.set(rgbBg.r, rgbBg.g, rgbBg.b);
+    u.uWaveFrequency.value = Math.max(0.1, Math.min(10, waveFrequency));
+    u.uWaveAmplitude.value = Math.max(0.1, Math.min(5, waveAmplitude));
+    u.uDistortion.value = Math.max(0, Math.min(2, distortion));
+    u.uChromaShift.value = Math.max(0, Math.min(0.5, chromaShift));
+    u.uNoiseLevel.value = Math.max(0, Math.min(1, noiseLevel));
+    u.uFlatness.value = Math.max(0, Math.min(10, flatness));
+    u.uOpacity.value = Math.max(0, Math.min(1, opacity));
   }, [
-    speed,
+    rgbColor,
+    rgbBg,
     waveFrequency,
     waveAmplitude,
     distortion,
@@ -355,9 +386,6 @@ const ChromaWaves: React.FC<ChromaWavesProps> = ({
     noiseLevel,
     flatness,
     opacity,
-    quality,
-    rgbColor,
-    rgbBg,
   ]);
 
   const widthStyle = typeof width === "number" ? `${width}px` : width;
