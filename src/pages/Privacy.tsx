@@ -37,6 +37,7 @@ const Privacy = () => {
   const L = {
     en: {
       pageTitle: "Privacy Policy",
+      legalLabel: "Legal basis: ",
       lastUpdated: "Last updated: March 2026",
       intro: {
         title: "Introduction",
@@ -71,13 +72,13 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "Legal basis: Art. 6(1)(f) GDPR — legitimate interests in operating and safeguarding the site.",
+          "Art. 6(1)(f) GDPR — legitimate interests in operating and safeguarding the site.",
       },
       analytics: {
         title: "Analytics",
         p1: "Visitor statistics are collected with Vercel Analytics. Data are anonymised prior to storage; no cookies or cross‑site identifiers are set.",
         legal:
-          "Legal basis: Art. 6(1)(f) GDPR — legitimate interests in analysing and improving performance without infringing on privacy.",
+          "Art. 6(1)(f) GDPR — legitimate interests in analysing and improving performance without infringing on privacy.",
       },
       cookies: {
         title: "Cookies",
@@ -87,7 +88,7 @@ const Privacy = () => {
         title: "Contact",
         p1: "If you contact me (form or email), the data you provide (name, email, message) are processed solely to handle your enquiry and possible follow‑ups.",
         legal:
-          "Legal basis: Art. 6(1)(a) GDPR — consent; and, where relevant, Art. 6(1)(b) GDPR — pre‑contractual steps at your request.",
+          "Art. 6(1)(a) GDPR — consent; and, where relevant, Art. 6(1)(b) GDPR — pre‑contractual steps at your request.",
       },
       github: {
         title: "GitHub Content",
@@ -102,7 +103,7 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "Legal basis: Art. 6(1)(f) GDPR — legitimate interests in presenting open‑source activity.",
+          "Art. 6(1)(f) GDPR — legitimate interests in presenting open‑source activity.",
       },
       processors: {
         title: "Processors",
@@ -161,6 +162,7 @@ const Privacy = () => {
     },
     de: {
       pageTitle: "Datenschutzerklärung",
+      legalLabel: "Rechtsgrundlage: ",
       lastUpdated: "Zuletzt aktualisiert: März 2026",
       intro: {
         title: "Einführung",
@@ -194,13 +196,13 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse am Betrieb und an der Absicherung der Website.",
+          "Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse am Betrieb und an der Absicherung der Website.",
       },
       analytics: {
         title: "Analytics",
         p1: "Besucherstatistiken werden mit Vercel Analytics erhoben. Die Daten werden vor Speicherung anonymisiert; es werden keine Cookies oder Cross‑Site‑Identifier gesetzt.",
         legal:
-          "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse an Analyse und Performanceverbesserung bei Wahrung der Privatsphäre.",
+          "Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse an Analyse und Performanceverbesserung bei Wahrung der Privatsphäre.",
       },
       cookies: {
         title: "Cookies",
@@ -210,7 +212,7 @@ const Privacy = () => {
         title: "Kontakt",
         p1: "Bei Kontaktaufnahme (Formular oder E‑Mail) werden die angegebenen Daten (Name, E‑Mail, Nachricht) ausschließlich zur Bearbeitung der Anfrage und etwaiger Rückfragen verarbeitet.",
         legal:
-          "Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO — Einwilligung; ggf. Art. 6 Abs. 1 lit. b DSGVO — vorvertragliche Maßnahmen auf Ihre Anfrage.",
+          "Art. 6 Abs. 1 lit. a DSGVO — Einwilligung; ggf. Art. 6 Abs. 1 lit. b DSGVO — vorvertragliche Maßnahmen auf Ihre Anfrage.",
       },
       github: {
         title: "GitHub‑Inhalte",
@@ -225,7 +227,7 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse an der Darstellung von Open‑Source‑Aktivität.",
+          "Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse an der Darstellung von Open‑Source‑Aktivität.",
       },
       processors: {
         title: "Auftragsverarbeiter",
@@ -283,6 +285,7 @@ const Privacy = () => {
     },
     es: {
       pageTitle: "Política de Privacidad",
+      legalLabel: "Base jurídica: ",
       lastUpdated: "Última actualización: marzo de 2026",
       intro: {
         title: "Introducción",
@@ -315,13 +318,13 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "Base jurídica: art. 6.1.f RGPD — interés legítimo en operar y proteger el sitio.",
+          "art. 6.1.f RGPD — interés legítimo en operar y proteger el sitio.",
       },
       analytics: {
         title: "Analítica",
         p1: "Las estadísticas se recogen con Vercel Analytics. Los datos se anonimizan antes de almacenarse; no se usan cookies ni identificadores entre sitios.",
         legal:
-          "Base jurídica: art. 6.1.f RGPD — interés legítimo en analizar y mejorar el rendimiento respetando la privacidad.",
+          "art. 6.1.f RGPD — interés legítimo en analizar y mejorar el rendimiento respetando la privacidad.",
       },
       cookies: {
         title: "Cookies",
@@ -331,7 +334,7 @@ const Privacy = () => {
         title: "Contacto",
         p1: "Si me contactas (formulario o correo), los datos facilitados (nombre, correo, mensaje) se procesan solo para atender tu solicitud y posibles seguimientos.",
         legal:
-          "Base jurídica: art. 6.1.a RGPD — consentimiento; y, en su caso, art. 6.1.b RGPD — medidas precontractuales a petición del interesado.",
+          "art. 6.1.a RGPD — consentimiento; y, en su caso, art. 6.1.b RGPD — medidas precontractuales a petición del interesado.",
       },
       github: {
         title: "Contenido de GitHub",
@@ -346,7 +349,7 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "Base jurídica: art. 6.1.f RGPD — interés legítimo en mostrar actividad de código abierto.",
+          "art. 6.1.f RGPD — interés legítimo en mostrar actividad de código abierto.",
       },
       processors: {
         title: "Encargados del tratamiento",
@@ -404,6 +407,7 @@ const Privacy = () => {
     },
     ja: {
       pageTitle: "プライバシーポリシー",
+      legalLabel: "法的根拠: ",
       lastUpdated: "最終更新日: 2026年3月",
       intro: {
         title: "はじめに",
@@ -435,13 +439,13 @@ const Privacy = () => {
             は接続データ（IPアドレス、ブラウザ種別、アクセス時刻等）をサーバーログに保存します。
           </>
         ),
-        legal: "法的根拠: GDPR第6条1項(f) — 正当な利益（サイト運営・保護）。",
+        legal: "GDPR第6条1項(f) — 正当な利益（サイト運営・保護）。",
       },
       analytics: {
         title: "アクセス解析",
         p1: "Vercel Analytics を用いて統計を収集します。保存前に匿名化され、クッキーやクロスサイト識別子は使用しません。",
         legal:
-          "法的根拠: GDPR第6条1項(f) — プライバシーを損なわない範囲での性能改善という正当な利益。",
+          "GDPR第6条1項(f) — プライバシーを損なわない範囲での性能改善という正当な利益。",
       },
       cookies: {
         title: "クッキー",
@@ -451,7 +455,7 @@ const Privacy = () => {
         title: "お問い合わせ",
         p1: "フォームまたはメールでご連絡いただいた場合、提供されたデータ（氏名・メール・メッセージ）は、対応および必要に応じた連絡のためにのみ処理します。",
         legal:
-          "法的根拠: GDPR第6条1項(a) — 同意、必要に応じて第6条1項(b) — 事前契約措置。",
+          "GDPR第6条1項(a) — 同意、必要に応じて第6条1項(b) — 事前契約措置。",
       },
       github: {
         title: "GitHub コンテンツ",
@@ -466,7 +470,7 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "法的根拠: GDPR第6条1項(f) — オープンソース活動の提示に関する正当な利益。",
+          "GDPR第6条1項(f) — オープンソース活動の提示に関する正当な利益。",
       },
       processors: {
         title: "委託処理者",
@@ -524,6 +528,7 @@ const Privacy = () => {
     },
     zh: {
       pageTitle: "隐私政策",
+      legalLabel: "法律依据：",
       lastUpdated: "最后更新：2026年3月",
       intro: {
         title: "简介",
@@ -554,13 +559,13 @@ const Privacy = () => {
             会在服务器日志中保存连接数据（如 IP、浏览器类型、访问时间）。
           </>
         ),
-        legal: "法律依据：GDPR 第6条1款(f)——基于运营与安全的合法利益。",
+        legal: "GDPR 第6条1款(f)——基于运营与安全的合法利益。",
       },
       analytics: {
         title: "分析",
         p1: "使用 Vercel Analytics 收集访问统计。数据在存储前已匿名化；不设置 Cookie 或跨站标识符。",
         legal:
-          "法律依据：GDPR 第6条1款(f)——在不侵犯隐私的前提下进行性能分析与改进的合法利益。",
+          "GDPR 第6条1款(f)——在不侵犯隐私的前提下进行性能分析与改进的合法利益。",
       },
       cookies: {
         title: "Cookie",
@@ -570,7 +575,7 @@ const Privacy = () => {
         title: "联系我",
         p1: "当你通过表单或电子邮件联系我时，你提供的姓名、邮箱与消息仅用于处理你的请求及后续沟通。",
         legal:
-          "法律依据：GDPR 第6条1款(a)——同意；必要时，第6条1款(b)——应你请求的合同前措施。",
+          "GDPR 第6条1款(a)——同意；必要时，第6条1款(b)——应你请求的合同前措施。",
       },
       github: {
         title: "GitHub 内容",
@@ -584,7 +589,7 @@ const Privacy = () => {
             Privacy Framework。
           </>
         ),
-        legal: "法律依据：GDPR 第6条1款(f)——展示开源活动的合法利益。",
+        legal: "GDPR 第6条1款(f)——展示开源活动的合法利益。",
       },
       processors: {
         title: "受托处理方",
@@ -641,6 +646,7 @@ const Privacy = () => {
     },
     ko: {
       pageTitle: "개인정보 처리방침",
+      legalLabel: "법적 근거: ",
       lastUpdated: "최종 업데이트: 2026년 3월",
       intro: {
         title: "소개",
@@ -677,13 +683,13 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "법적 근거: GDPR 제6조 1항 (f) — 사이트 운영 및 보호에 대한 정당한 이익.",
+          "GDPR 제6조 1항 (f) — 사이트 운영 및 보호에 대한 정당한 이익.",
       },
       analytics: {
         title: "분석",
         p1: "방문 통계는 Vercel Analytics로 수집합니다. 데이터는 저장 전에 익명화되며, 쿠키나 교차 사이트 식별자는 설정되지 않습니다.",
         legal:
-          "법적 근거: GDPR 제6조 1항 (f) — 개인정보를 침해하지 않으면서 성능을 분석·개선하기 위한 정당한 이익.",
+          "GDPR 제6조 1항 (f) — 개인정보를 침해하지 않으면서 성능을 분석·개선하기 위한 정당한 이익.",
       },
       cookies: {
         title: "쿠키",
@@ -693,7 +699,7 @@ const Privacy = () => {
         title: "문의",
         p1: "양식이나 이메일로 연락하시면, 제공하신 데이터(이름, 이메일, 메시지)는 문의 처리 및 필요한 후속 대응을 위해서만 처리됩니다.",
         legal:
-          "법적 근거: GDPR 제6조 1항 (a) — 동의, 그리고 해당하는 경우 제6조 1항 (b) — 귀하의 요청에 따른 계약 전 조치.",
+          "GDPR 제6조 1항 (a) — 동의, 그리고 해당하는 경우 제6조 1항 (b) — 귀하의 요청에 따른 계약 전 조치.",
       },
       github: {
         title: "GitHub 콘텐츠",
@@ -709,7 +715,7 @@ const Privacy = () => {
           </>
         ),
         legal:
-          "법적 근거: GDPR 제6조 1항 (f) — 오픈 소스 활동을 보여 주기 위한 정당한 이익.",
+          "GDPR 제6조 1항 (f) — 오픈 소스 활동을 보여 주기 위한 정당한 이익.",
       },
       processors: {
         title: "처리자",
@@ -912,13 +918,9 @@ const Privacy = () => {
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-base mt-3">
                   <strong className="text-foreground">
-                    {L[privacyLanguage].hosting.legal.split(":")[0]}:
-                  </strong>{" "}
-                  {L[privacyLanguage].hosting.legal
-                    .split(":")
-                    .slice(1)
-                    .join(":")
-                    .trim()}
+                    {L[privacyLanguage].legalLabel}
+                  </strong>
+                  {L[privacyLanguage].hosting.legal}
                 </p>
               </Card>
             </motion.section>
@@ -933,13 +935,9 @@ const Privacy = () => {
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-base mt-3">
                   <strong className="text-foreground">
-                    {L[privacyLanguage].hosting.legal.split(":")[0]}:
-                  </strong>{" "}
-                  {L[privacyLanguage].analytics.legal
-                    .split(":")
-                    .slice(1)
-                    .join(":")
-                    .trim()}
+                    {L[privacyLanguage].legalLabel}
+                  </strong>
+                  {L[privacyLanguage].analytics.legal}
                 </p>
               </Card>
             </motion.section>
@@ -966,13 +964,9 @@ const Privacy = () => {
               </p>
               <p className="text-muted-foreground leading-relaxed text-base mt-3">
                 <strong className="text-foreground">
-                  {L[privacyLanguage].hosting.legal.split(":")[0]}:
-                </strong>{" "}
-                {L[privacyLanguage].contact.legal
-                  .split(":")
-                  .slice(1)
-                  .join(":")
-                  .trim()}
+                  {L[privacyLanguage].legalLabel}
+                </strong>
+                {L[privacyLanguage].contact.legal}
               </p>
             </Card>
           </motion.section>
@@ -987,13 +981,9 @@ const Privacy = () => {
               </p>
               <p className="text-muted-foreground leading-relaxed text-base mt-3">
                 <strong className="text-foreground">
-                  {L[privacyLanguage].hosting.legal.split(":")[0]}:
-                </strong>{" "}
-                {L[privacyLanguage].github.legal
-                  .split(":")
-                  .slice(1)
-                  .join(":")
-                  .trim()}
+                  {L[privacyLanguage].legalLabel}
+                </strong>
+                {L[privacyLanguage].github.legal}
               </p>
             </Card>
           </motion.section>
