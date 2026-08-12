@@ -7,7 +7,8 @@
  */
 
 import { useLayoutEffect, useRef, useState } from "react";
-import { Badge, badgeVariants } from "@/components/ui/badge";
+import { badgeVariants } from "@/components/ui/badge";
+import { TechChip } from "@/components/ui/custom/tech-chip";
 import {
   Tooltip,
   TooltipContent,
@@ -111,24 +112,20 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
         className="pointer-events-none invisible absolute left-0 top-0 flex gap-1.5"
       >
         {tags.map((tag) => (
-          <Badge
-            key={tag}
-            data-measure="tag"
-            variant="secondary"
-            className="font-normal"
-          >
-            {tag}
-          </Badge>
+          <span key={tag} data-measure="tag" className="inline-flex">
+            <TechChip name={tag} variant="badge" />
+          </span>
         ))}
-        <Badge data-measure="more" variant="secondary" className="font-normal">
+        <span
+          data-measure="more"
+          className={cn(badgeVariants({ variant: "secondary" }), "font-normal")}
+        >
           +{tags.length}
-        </Badge>
+        </span>
       </div>
 
       {tags.slice(0, visibleCount).map((tag) => (
-        <Badge key={tag} variant="secondary" className="font-normal">
-          {tag}
-        </Badge>
+        <TechChip key={tag} name={tag} variant="badge" />
       ))}
       {hiddenCount > 0 &&
         (isMobile ? (
