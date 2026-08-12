@@ -40,13 +40,14 @@ const BackgroundContext = createContext<BackgroundProviderState>(initialState);
 
 const readInitial = (storageKey: string, fallback: string): string => {
   try {
-    if (shouldApplyWelcomePreset()) {
-      return resolveBackground(WELCOME_PRESET.background);
-    }
+    // an explicit choice (any surface: menu, palette) beats the first-visit preset
     const stored = localStorage.getItem(storageKey);
     if (stored !== null) return resolveBackground(stored);
     // migrate the old aurora boolean: enabled -> aurora
     if (localStorage.getItem(LEGACY_AURORA_KEY) === "true") return "aurora";
+    if (shouldApplyWelcomePreset()) {
+      return resolveBackground(WELCOME_PRESET.background);
+    }
     return resolveBackground(fallback);
   } catch {
     return resolveBackground(fallback);

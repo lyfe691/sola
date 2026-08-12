@@ -45,9 +45,10 @@ const resolveTheme = (theme: Theme) =>
 
 const readInitialTheme = (storageKey: string, defaultTheme: Theme): Theme => {
   try {
-    if (shouldApplyWelcomePreset()) return WELCOME_PRESET.theme;
+    // an explicit choice (any surface: menu, palette) beats the first-visit preset
     const stored = localStorage.getItem(storageKey) as Theme | null;
     if (stored) return stored;
+    if (shouldApplyWelcomePreset()) return WELCOME_PRESET.theme;
     return defaultTheme;
   } catch {
     return defaultTheme;
@@ -64,11 +65,15 @@ export function ThemeProvider({
     readInitialTheme(storageKey, defaultTheme),
   );
 
-  // Theme is only persisted via setTheme; seed localStorage on the welcome pass.
+  // Theme is only persisted via setTheme; seed localStorage once on the welcome
+  // pass. Never overwrite an existing value — that would revert a choice made
+  // from a surface that doesn't dismiss the callout (e.g. the command palette).
   useEffect(() => {
     if (!shouldApplyWelcomePreset()) return;
     try {
-      localStorage.setItem(storageKey, WELCOME_PRESET.theme);
+      if (localStorage.getItem(storageKey) === null) {
+        localStorage.setItem(storageKey, WELCOME_PRESET.theme);
+      }
     } catch {
       /* storage unavailable — fail silently */
     }
