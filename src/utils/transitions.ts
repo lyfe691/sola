@@ -6,7 +6,7 @@
  * For permissions, contact yanis.sebastian.zuercher@gmail.com
  */
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "motion/react";
 
 /**
@@ -107,10 +107,11 @@ export const scrollTitleVariants = rise(48, D_TITLE);
 export const scrollPageTitleVariants = rise(40, D_PAGE_TITLE);
 export const scrollSubtleVariants = rise(32, D_SUBTLE);
 export const scrollChildVariants = rise(64, D_REVEAL);
-// full-width media cards (featured projects) — paired with NO index delay:
-// in a single-column stack only one card enters at a time, so scroll
-// cadence is the stagger and a delay is pure wait
-export const scrollFeatureVariants = rise(40, D_FEATURE);
+// full-width media cards (featured projects) — one step under the default
+// travel (64 vs 80): enough rise to read as the site's glide, shy of the
+// full 80 that makes this much visual mass lurch. 40px read as fade-pop
+// next to the 80px register everywhere else.
+export const scrollFeatureVariants = rise(64, D_FEATURE);
 
 // in-view pair for config/card pages (Certifications, Privacy) — one
 // definition on the shared register so the pair can't drift
@@ -143,6 +144,23 @@ export const staggerDelay = (index: number) => Math.min(index * 80, 240);
 
 /** First content block waits so page chrome (title / sort) leads. */
 export const HEADER_LEAD = 280;
+
+/**
+ * True while the page is still settling in. HEADER_LEAD/stagger delays
+ * exist to sequence what's visible AT LOAD; on an element scrolled into
+ * view later the same delay is pure wait (it sits in view doing nothing).
+ * Gate load-cascade delays on this so scroll-triggered reveals fire
+ * instantly. The window outlasts the longest cascade (280ms lead + 240ms
+ * stagger cap + the reveal's own start).
+ */
+export const useEntranceWindow = (ms = 1000) => {
+  const [entering, setEntering] = useState(true);
+  useEffect(() => {
+    const id = window.setTimeout(() => setEntering(false), ms);
+    return () => window.clearTimeout(id);
+  }, [ms]);
+  return entering;
+};
 
 // ---- In-view latch (fires once). Delay is applied by ScrollReveal to the variant. ----
 // Default trigger fires as soon as the element's top crosses 90% of the

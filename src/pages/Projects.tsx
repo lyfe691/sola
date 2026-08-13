@@ -39,6 +39,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import {
   HEADER_LEAD,
   staggerDelay,
+  useEntranceWindow,
   scrollPageTitleVariants,
   scrollSubtleVariants,
 } from "@/utils/transitions";
@@ -254,6 +255,7 @@ const Projects = () => {
   const [sortBy, setSortBy] = useState<SortOption>("priority");
   const { language } = useLanguage();
   const t = translations[language] as Translation;
+  const entering = useEntranceWindow();
 
   const { featuredProjects, otherProjects, sortOptions } = useMemo(() => {
     const projects = localizeProjects(t, language);
@@ -341,16 +343,17 @@ const Projects = () => {
         </motion.div>
       </ScrollReveal>
 
-      {/* Featured Projects — the whole stack waits for the sort row, cascading
-          by index (the site-wide pattern). Leading only card 0 inverted the
-          order on tall viewports: card 2 was in view at load and fired during
-          card 1's HEADER_LEAD wait. */}
+      {/* Featured Projects — at load the stack waits for the sort row and
+          cascades by index (leading only card 0 inverted the order on tall
+          viewports: card 2, already in view, fired during card 1's wait).
+          Once the entrance settles the delay drops to 0 — a scrolled-to card
+          must start rising the moment it's reached, not sit gated. */}
       <div className="mb-12 grid grid-cols-1 gap-6 sm:mb-16 sm:gap-8">
         {featuredProjects.map((project, index) => (
           <ScrollReveal
             key={project.id}
             variant="feature"
-            delay={HEADER_LEAD + staggerDelay(index)}
+            delay={entering ? HEADER_LEAD + staggerDelay(index) : 0}
           >
             <ProjectCard project={project} t={t} />
           </ScrollReveal>
