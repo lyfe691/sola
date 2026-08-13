@@ -6,26 +6,19 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-/* 這個網站是怎麼造出來的 — the title as one vertical column of ink, sealed in
-   vermilion; the site's materials woven into a single line beside it.
-   No entrance choreography: PageShell's blur-in is the reveal. The only
-   motion here is one band of light passing down the characters, once. */
+/* The colophon as a hidden page: bare text set top-left in the site's
+   mincho serif, nothing else — no ornament, no motion, no centering.
+   PageShell's blur-in is the only entrance. */
 
 import "@fontsource/shippori-mincho-b1/400.css";
 import "@fontsource/shippori-mincho-b1/600.css";
 
 import { Fragment } from "react";
 import { useNavigate } from "react-router";
-import { motion } from "motion/react";
-import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { REVEAL } from "@/utils/transitions";
 
-const SCROLL_TITLE = "這個網站是怎麼造出來的";
-
-/* everything the site is made of, in one breath — build, surface, motion,
-   letters, ground. Hover previews carry the detail so labels don't have to. */
+/* everything the site is made of, in one breath */
 const MATERIALS: Array<{ name: string; href: string }> = [
   { name: "React", href: "https://react.dev" },
   { name: "TypeScript", href: "https://www.typescriptlang.org" },
@@ -54,17 +47,9 @@ const MATERIALS: Array<{ name: string; href: string }> = [
   { name: "GitHub", href: "https://github.com/lyfe691/sola" },
 ];
 
-// links rest as plain ink — the underline only surfaces on hover, so the
-// page keeps its printed stillness (the site-wide `link` accent is app voice)
+// links rest as plain ink — the underline only surfaces on hover
 const INK_LINK =
   "whitespace-nowrap rounded-sm underline-offset-4 hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50";
-
-/* paper, not pigment: fiber grain + a lamplight vignette layered over the
-   theme's own background, so every theme (and dark mode) keeps its own
-   paper color instead of a hardcoded cream */
-const PAPER_GRAIN = `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>")`;
-const PAPER_VIGNETTE =
-  "radial-gradient(120% 85% at 50% 40%, transparent 50%, color-mix(in oklab, var(--foreground) 9%, transparent))";
 
 export default function AboutThisWebsite() {
   const navigate = useNavigate();
@@ -72,83 +57,42 @@ export default function AboutThisWebsite() {
   const t = translations[language].colophon;
 
   return (
-    <div className="relative isolate flex min-h-svh items-center justify-center bg-background px-6 py-16 text-foreground sm:px-8">
+    <main className="min-h-svh bg-background px-6 py-20 font-mincho text-foreground sm:px-10 sm:py-28">
       <meta name="robots" content="noindex, nofollow" />
 
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="absolute inset-0"
-          style={{ backgroundImage: PAPER_VIGNETTE }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.05] dark:opacity-[0.07]"
-          style={{ backgroundImage: PAPER_GRAIN }}
-        />
-      </div>
+      <div className="max-w-md text-[15px] leading-loose">
+        <h1 className="font-semibold">{t.title}</h1>
 
-      <div className="flex w-full max-w-3xl flex-col-reverse items-center gap-14 font-mincho sm:flex-row sm:justify-between sm:gap-16">
-        <div className="w-full min-w-0 sm:max-w-lg">
-          <h1 className="font-mincho text-3xl font-semibold leading-snug text-balance sm:text-4xl">
-            {t.title}
-          </h1>
+        <p className="mt-6 text-foreground/70">{t.intro}</p>
 
-          <p className="mt-5 max-w-md text-[15px] leading-loose text-foreground/75">
-            {t.intro}
-          </p>
+        <p className="mt-6">
+          {MATERIALS.map((m, i) => (
+            <Fragment key={m.name}>
+              {i > 0 && <span className="text-foreground/30">・</span>}
+              <a
+                href={m.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={INK_LINK}
+              >
+                {m.name}
+              </a>
+            </Fragment>
+          ))}
+        </p>
 
-          <p className="mt-10 max-w-md text-[15px] leading-[2.1]">
-            {MATERIALS.map((m, i) => (
-              <Fragment key={m.name}>
-                {i > 0 && <span className="text-foreground/30">・</span>}
-                <LinkPreview href={m.href} className={INK_LINK} compact>
-                  {m.name}
-                </LinkPreview>
-              </Fragment>
-            ))}
-          </p>
+        <p className="mt-6 text-foreground/70">
+          {t.setByHand} {t.thanks}
+        </p>
 
-          <p className="mt-10 max-w-md text-[15px] leading-loose text-foreground/75">
-            {t.setByHand} {t.thanks}
-          </p>
-
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className={`mt-12 text-[13px] text-foreground/55 transition-colors hover:text-foreground ${INK_LINK} hover:no-underline`}
-          >
-            ← {t.back}
-          </button>
-        </div>
-
-        {/* the scroll — aria-hidden: it repeats the title for the eye, not the
-            reader. One band of light passes down it after the page settles. */}
-        <div
-          aria-hidden
-          className="flex shrink-0 select-none flex-col items-center gap-7"
+        <button
+          type="button"
+          onClick={() => navigate(-1)}
+          className={`mt-10 text-[13px] text-foreground/55 transition-colors hover:text-foreground ${INK_LINK} hover:no-underline`}
         >
-          <motion.span
-            className="text-4xl leading-none tracking-[0.06em] [writing-mode:vertical-rl] sm:text-5xl"
-            style={{
-              backgroundImage:
-                "linear-gradient(to bottom, var(--foreground) 42%, var(--muted-foreground) 50%, var(--foreground) 58%)",
-              backgroundSize: "100% 300%",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              color: "transparent",
-            }}
-            initial={{ backgroundPosition: "0% 100%" }}
-            animate={{ backgroundPosition: "0% 0%" }}
-            transition={{ delay: 0.9, duration: 1.6, ease: REVEAL }}
-          >
-            {SCROLL_TITLE}
-          </motion.span>
-          {/* the page's only color: shu-iro, the vermilion of seal ink.
-              造 — the last verb of the title — stands in for a maker's mark */}
-          <span className="flex size-10 -rotate-2 items-center justify-center rounded-[3px] bg-[oklch(0.62_0.2_33)] text-xl font-semibold text-white">
-            造
-          </span>
-        </div>
+          ← {t.back}
+        </button>
       </div>
-    </div>
+    </main>
   );
 }
