@@ -39,8 +39,6 @@ import { scrollChildVariants, staggerDelay } from "@/utils/transitions";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
-import { useTheme } from "@/components/theme-provider";
-import { getThemeType } from "@/config/themes";
 import { testimonials } from "@/config/testimonials";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useLanguage } from "@/lib/language-provider";
@@ -347,10 +345,8 @@ const About = () => {
   const { language } = useLanguage();
   const t = translations[language];
   const about = t.about;
-  const { theme } = useTheme();
   const [contributionTab, setContributionTab] = useState("last");
   const queryClient = useQueryClient();
-  const isDark = getThemeType(theme) === "dark";
 
   const contributionTabs = [
     { value: "last", label: about.github.overview, year: "last" as const },
@@ -416,7 +412,7 @@ const About = () => {
           </div>
           <motion.div variants={scrollChildVariants} className="md:col-span-5">
             <AboutPortrait
-              src={isDark ? "/ysz-d.webp" : "/ysz-l.webp"}
+              src="https://avatars.githubusercontent.com/u/162759797?v=4"
               alt="Yanis Sebastian Zürcher"
             />
           </motion.div>
