@@ -20,7 +20,13 @@ import { useNavigate, useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import { SOCIAL_LINKS } from "@/config/social";
-import { EASE_OUT, EASE_OUT_QUART } from "@/utils/transitions";
+import {
+  EASE_OUT,
+  EASE_OUT_QUART,
+  HEADER_LEAD,
+  scrollPageTitleVariants,
+  scrollSubtleVariants,
+} from "@/utils/transitions";
 
 type FieldName = "name" | "email" | "subject" | "message";
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
@@ -167,17 +173,19 @@ const Contact = () => {
 
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
         {/* left: intro, expectations, direct links */}
-        <div className="flex flex-col gap-8">
-          <ScrollReveal variant="pageTitle" className="flex flex-col gap-4">
+        <ScrollReveal variant="header" className="flex flex-col gap-8">
+          <motion.div
+            variants={scrollPageTitleVariants}
+            className="flex flex-col gap-4"
+          >
             <h1 className="text-4xl font-bold">{t.contact.title}</h1>
             <p className="max-w-md text-foreground/60">
               {t.contact.description}
             </p>
-          </ScrollReveal>
+          </motion.div>
 
-          <ScrollReveal
-            variant="child"
-            delay={50}
+          <motion.div
+            variants={scrollSubtleVariants}
             className="flex flex-col gap-8"
           >
             <div className="flex flex-col gap-4">
@@ -230,11 +238,11 @@ const Contact = () => {
                 })}
               </div>
             </div>
-          </ScrollReveal>
-        </div>
+          </motion.div>
+        </ScrollReveal>
 
         {/* right: form card */}
-        <ScrollReveal variant="child" delay={100}>
+        <ScrollReveal variant="default" delay={HEADER_LEAD}>
           <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
             <form
               onSubmit={handleSubmit}

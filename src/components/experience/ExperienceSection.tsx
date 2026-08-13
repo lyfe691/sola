@@ -7,7 +7,7 @@
  */
 
 import ScrollReveal from "@/components/ScrollReveal";
-import { staggerDelay } from "@/utils/transitions";
+import { HEADER_LEAD, staggerDelay } from "@/utils/transitions";
 import ExperienceItem from "@/components/experience/ExperienceItem";
 import { INTL_LOCALE } from "@/lib/dates";
 import { formatDuration, type ExperienceEntry } from "@/lib/experience";
@@ -50,7 +50,7 @@ const ExperienceSection = ({
           <ScrollReveal
             key={entry.key}
             variant="default"
-            delay={staggerDelay(index)}
+            delay={HEADER_LEAD + staggerDelay(index)}
           >
             <ExperienceItem
               entry={entry}

@@ -31,7 +31,7 @@ const Certifications: React.FC = () => {
 
   const containerIn = {
     hidden: {},
-    visible: { transition: { staggerChildren: 0.06 } },
+    visible: { transition: { staggerChildren: 0.08, delayChildren: 0.28 } },
   } as const;
   const fadeUp = fadeUpVariants;
   const cardIn = cardInVariants;

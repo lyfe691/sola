@@ -15,11 +15,17 @@ import {
   Tag,
 } from "lucide-react";
 import { Link } from "react-router";
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
-import { staggerDelay } from "@/utils/transitions";
+import {
+  HEADER_LEAD,
+  staggerDelay,
+  scrollPageTitleVariants,
+  scrollSubtleVariants,
+} from "@/utils/transitions";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -76,14 +82,19 @@ const Services = () => {
     <div className="flex flex-col w-full">
       <meta name="description" content={t.seo.services.description} />
 
-      <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-4">{t.services.title}</h1>
-      </ScrollReveal>
-
-      <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-10 max-w-2xl">
+      <ScrollReveal variant="header">
+        <motion.h1
+          variants={scrollPageTitleVariants}
+          className="mb-4 text-4xl font-bold"
+        >
+          {t.services.title}
+        </motion.h1>
+        <motion.p
+          variants={scrollSubtleVariants}
+          className="mb-10 max-w-2xl text-foreground/60"
+        >
           {t.services.subtitle}
-        </p>
+        </motion.p>
       </ScrollReveal>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
@@ -94,7 +105,7 @@ const Services = () => {
             // column position, not global index: rows sequence themselves by
             // scroll order, and a global index let the closing card (0ms)
             // visibly beat row two (160/240ms) at page load
-            delay={staggerDelay(index % 2)}
+            delay={HEADER_LEAD + staggerDelay(index % 2)}
           >
             <Card className="group relative h-full gap-0 overflow-visible bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
               {service.highlight && (
@@ -164,7 +175,7 @@ const Services = () => {
 
       {/* custom requirements — delayed past the grid's column stagger so it
           can never lead the cards above it when co-visible */}
-      <ScrollReveal variant="default" delay={160}>
+      <ScrollReveal variant="default" delay={HEADER_LEAD + 200}>
         <Card className="bg-linear-to-br from-primary/20 via-primary/10 to-card p-5 sm:p-6 md:p-8">
           <h2 className="text-xl font-medium text-foreground">
             {t.services.customRequirements.title}

@@ -6,6 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import {
@@ -16,7 +17,12 @@ import {
 } from "@/config/skills";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ScrollReveal from "@/components/ScrollReveal";
-import { staggerDelay } from "@/utils/transitions";
+import {
+  HEADER_LEAD,
+  staggerDelay,
+  scrollPageTitleVariants,
+  scrollSubtleVariants,
+} from "@/utils/transitions";
 
 const ProficiencyDots = ({ level }: { level: Proficiency }) => (
   <div className="flex gap-1">
@@ -75,14 +81,19 @@ const Skills = () => {
     <div className="flex flex-col w-full">
       <meta name="description" content={t.seo.skills.description} />
 
-      <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-4">{t.skills.title}</h1>
-      </ScrollReveal>
-
-      <ScrollReveal variant="default">
-        <p className="text-foreground/60 mb-10 max-w-2xl">
+      <ScrollReveal variant="header">
+        <motion.h1
+          variants={scrollPageTitleVariants}
+          className="mb-4 text-4xl font-bold"
+        >
+          {t.skills.title}
+        </motion.h1>
+        <motion.p
+          variants={scrollSubtleVariants}
+          className="mb-10 max-w-2xl text-foreground/60"
+        >
           {t.skills.subtitle}
-        </p>
+        </motion.p>
       </ScrollReveal>
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
@@ -91,7 +102,7 @@ const Skills = () => {
             key={group.id}
             group={group}
             title={groups[group.id] ?? group.id}
-            delay={staggerDelay(index)}
+            delay={HEADER_LEAD + staggerDelay(index)}
           />
         ))}
       </div>

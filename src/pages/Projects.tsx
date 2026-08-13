@@ -7,6 +7,7 @@
  */
 
 import { useMemo, useState, type ReactNode } from "react";
+import { motion } from "motion/react";
 import {
   ArrowUpRight,
   SortAsc,
@@ -35,7 +36,12 @@ import {
 } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
-import { staggerDelay } from "@/utils/transitions";
+import {
+  HEADER_LEAD,
+  staggerDelay,
+  scrollPageTitleVariants,
+  scrollSubtleVariants,
+} from "@/utils/transitions";
 import { RichText } from "@/components/i18n/RichText";
 import {
   Tooltip,
@@ -285,16 +291,22 @@ const Projects = () => {
     <div className="flex flex-col w-full">
       <meta name="description" content={t.seo.projects.description} />
 
-      <ScrollReveal variant="pageTitle">
-        <h1 className="text-4xl font-bold mb-8 sm:mb-12">{t.projects.title}</h1>
-      </ScrollReveal>
-
-      {/* Sort Controls */}
-      <ScrollReveal variant="default">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 sm:mb-12">
+      {/* title then sort — one cascade so the toolbar never lands after the
+          first card it sits on */}
+      <ScrollReveal variant="header">
+        <motion.h1
+          variants={scrollPageTitleVariants}
+          className="mb-8 text-4xl font-bold sm:mb-12"
+        >
+          {t.projects.title}
+        </motion.h1>
+        <motion.div
+          variants={scrollSubtleVariants}
+          className="mb-8 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-center sm:justify-between"
+        >
           <div className="flex items-center gap-3">
-            <SortAsc className="w-4 h-4 text-foreground/60" />
-            <span className="text-sm text-foreground/60 font-medium">
+            <SortAsc className="h-4 w-4 text-foreground/60" />
+            <span className="text-sm font-medium text-foreground/60">
               {t.projects.sortBy}:
             </span>
             <Select
@@ -326,13 +338,17 @@ const Projects = () => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </motion.div>
       </ScrollReveal>
 
-      {/* Featured Projects */}
-      <div className="grid grid-cols-1 gap-6 sm:gap-8 mb-12 sm:mb-16">
-        {featuredProjects.map((project) => (
-          <ScrollReveal key={project.id} variant="feature">
+      {/* Featured Projects — first card waits for the sort row */}
+      <div className="mb-12 grid grid-cols-1 gap-6 sm:mb-16 sm:gap-8">
+        {featuredProjects.map((project, index) => (
+          <ScrollReveal
+            key={project.id}
+            variant="feature"
+            delay={index === 0 ? HEADER_LEAD : 0}
+          >
             <ProjectCard project={project} t={t} />
           </ScrollReveal>
         ))}

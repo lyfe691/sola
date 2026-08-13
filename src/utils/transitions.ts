@@ -123,13 +123,26 @@ export const scrollContainerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.12 },
+  },
+};
+
+/** Page chrome (title → sort/subtitle). Wider than content stagger so the
+ *  heading is visibly ahead of the control that sits on top of the list. */
+export const scrollHeaderVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.16 },
   },
 };
 
 /** index delay (ms) for multi-column grids, capped so late rows never wait.
  * Single-column stacks take no delay at all (see scrollFeatureVariants). */
 export const staggerDelay = (index: number) => Math.min(index * 80, 240);
+
+/** First content block waits so page chrome (title / sort) leads. */
+export const HEADER_LEAD = 280;
 
 // ---- In-view latch (fires once). Delay is applied by ScrollReveal to the variant. ----
 // Default trigger fires as soon as the element's top crosses 90% of the

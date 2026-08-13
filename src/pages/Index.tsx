@@ -30,51 +30,53 @@ const homeAnimations = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { duration: 0.5, staggerChildren: 0.08, delayChildren: 0.06 },
+      // delayChildren outlasts the 0.5s route blur so the first beat
+      // isn't already settled when the page sharpens
+      transition: { duration: 0.7, staggerChildren: 0.1, delayChildren: 0.14 },
     },
   },
   // one child variant for the badge and the CTA row — they animate the same
   item: {
-    hidden: { opacity: 0, y: 16, scale: 0.98 },
+    hidden: { opacity: 0, y: 20, scale: 0.98 },
     show: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.48, ease: REVEAL },
+      transition: { duration: 0.72, ease: REVEAL },
     },
   },
   heading: {
-    hidden: { opacity: 0, y: 20, scale: 0.985 },
+    hidden: { opacity: 0, y: 24, scale: 0.985 },
     show: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.55, ease: REVEAL },
+      transition: { duration: 0.8, ease: REVEAL },
     },
   },
   description: {
-    hidden: { opacity: 0, y: 18, scale: 0.99 },
+    hidden: { opacity: 0, y: 22, scale: 0.99 },
     show: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.55, ease: REVEAL },
+      transition: { duration: 0.76, ease: REVEAL },
     },
   },
   socialsContainer: {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { staggerChildren: 0.07, when: "beforeChildren" as const },
+      transition: { staggerChildren: 0.08, when: "beforeChildren" as const },
     },
   },
   socialItem: {
-    hidden: { opacity: 0, y: 14, scale: 0.98 },
+    hidden: { opacity: 0, y: 16, scale: 0.98 },
     show: {
       opacity: 1,
       y: 0,
       scale: 1,
-      transition: { duration: 0.45, ease: REVEAL },
+      transition: { duration: 0.68, ease: REVEAL },
     },
   },
 } as const;

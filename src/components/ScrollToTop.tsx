@@ -9,7 +9,12 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useLocation } from "react-router";
 import { ArrowUp } from "lucide-react";
-import { motion, AnimatePresence, useMotionValue } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useAnimationFrame,
+  useReducedMotion,
+} from "motion/react";
 import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
 import { EASE_OUT } from "@/utils/transitions";
@@ -19,11 +24,63 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
 const SCROLL_THRESHOLD = 120;
+const TILE = 44;
 
-// reading-progress ring: hugs just inside the 44px frosted circle
-const RING_SIZE = 44;
-const RING_RADIUS = 20;
-const RING_STROKE = 2;
+/** One slow cubic swell. Trough sits on the progress line so full = brim. */
+function waterBody(p: number, phase: number, amp: number, size: number) {
+  const y = size * (1 - p) - amp;
+  const a = Math.sin(phase) * amp;
+  const b = Math.sin(phase + Math.PI) * amp;
+  const mid = size / 2;
+  return `M0 ${size} L0 ${y} C ${mid * 0.5} ${y + a}, ${mid * 0.5} ${y + a}, ${mid} ${y} C ${mid * 1.5} ${y + b}, ${mid * 1.5} ${y + b}, ${size} ${y} L${size} ${size} Z`;
+}
+
+function WaterFill() {
+  const reduceMotion = useReducedMotion();
+  const progressRef = useRef(0);
+  const backRef = useRef<SVGPathElement>(null);
+  const frontRef = useRef<SVGPathElement>(null);
+
+  const paint = useCallback(
+    (p: number, time: number) => {
+      const phase = reduceMotion ? 0 : time * 0.0011;
+      const amp = reduceMotion ? 0 : 1.5;
+      backRef.current?.setAttribute(
+        "d",
+        waterBody(p, phase * 0.65 + 1, amp * 1.15, TILE),
+      );
+      frontRef.current?.setAttribute("d", waterBody(p, phase, amp, TILE));
+    },
+    [reduceMotion],
+  );
+
+  const onLenis = useCallback(
+    (instance: Lenis) => {
+      const { scroll, limit } = instance;
+      progressRef.current =
+        limit - scroll < 8 ? 1 : scroll / Math.max(limit, 1);
+      if (reduceMotion) paint(progressRef.current, 0);
+    },
+    [paint, reduceMotion],
+  );
+  useLenis(onLenis);
+
+  useAnimationFrame((t) => {
+    if (reduceMotion) return;
+    paint(progressRef.current, t);
+  });
+
+  return (
+    <svg
+      aria-hidden
+      viewBox={`0 0 ${TILE} ${TILE}`}
+      className="pointer-events-none absolute inset-0 size-full"
+    >
+      <path ref={backRef} fill="var(--primary)" fillOpacity="0.1" />
+      <path ref={frontRef} fill="var(--primary)" fillOpacity="0.18" />
+    </svg>
+  );
+}
 
 export default function ScrollToTop() {
   const { pathname } = useLocation();
@@ -31,41 +88,24 @@ export default function ScrollToTop() {
   const { language } = useLanguage();
   const t = translations[language];
 
-  // ring fill = Lenis progress (already lerped). A second Motion spring
-  // on top of that would lag the page. Reduced motion still shows the
-  // ring — it's position, not decoration.
-  const ringProgress = useMotionValue(0);
-  const onLenis = useCallback(
-    (instance: Lenis) => {
-      ringProgress.set(instance.progress);
-      const next = instance.scroll > SCROLL_THRESHOLD;
-      setVisible((current) => (current === next ? current : next));
-    },
-    [ringProgress],
-  );
+  const onLenis = useCallback((instance: Lenis) => {
+    const next = instance.scroll > SCROLL_THRESHOLD;
+    setVisible((current) => (current === next ? current : next));
+  }, []);
   useLenis(onLenis);
 
-  // Read through a ref so the route-change effect below doesn't re-fire
-  // when the mode flips off mid-exit (that would glide anyway).
   const { active: codeViewActive } = useCodeView();
   const codeViewRef = useRef(codeViewActive);
   useEffect(() => {
     codeViewRef.current = codeViewActive;
   }, [codeViewActive]);
 
-  // Own scroll position fully; stop the browser from also restoring it on
-  // back/forward and racing the tween.
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
   }, []);
 
-  // Glide to the top on every route change, and abort any in-flight tween if
-  // this (singleton) component ever unmounts. A route change under an active
-  // code view is the exception: PageShell owns that scroll (it snaps to top
-  // only after the exit finishes) — gliding now would visibly scroll the
-  // still-rendered diff mid-transition.
   useEffect(() => {
     if (codeViewRef.current) return;
     smoothScrollToTop();
@@ -77,50 +117,29 @@ export default function ScrollToTop() {
       {visible && (
         <motion.button
           key="scroll-to-top"
+          type="button"
           onClick={smoothScrollToTop}
           aria-label={t.common.a11y.scrollToTop}
-          initial={{ opacity: 0, scale: 0.85, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.85, y: 10 }}
-          whileHover={{ scale: 1.08 }}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{
+            opacity: 0,
+            y: 8,
+            transition: { duration: 0.16, ease: EASE_OUT },
+          }}
           whileTap={{
-            scale: 0.95,
+            scale: 0.97,
             transition: { duration: 0.1, ease: EASE_OUT },
           }}
-          transition={{ duration: 0.25, ease: EASE_OUT }}
-          className="fixed bottom-6 right-6 z-50 flex items-center justify-center
-                     h-11 w-11 rounded-full
-                     bg-background/70 text-foreground
-                     backdrop-blur-xs shadow-lg
-                     hover:bg-background/90
-                     transition-colors"
+          transition={{ duration: 0.28, ease: EASE_OUT }}
+          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background/70 text-foreground/80 ring-1 ring-foreground/10 backdrop-blur-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
         >
-          {/* -rotate-90 starts the fill at 12 o'clock, running clockwise */}
-          <svg
-            viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
-            className="pointer-events-none absolute inset-0 -rotate-90"
-            aria-hidden="true"
-          >
-            <circle
-              cx={RING_SIZE / 2}
-              cy={RING_SIZE / 2}
-              r={RING_RADIUS}
-              fill="none"
-              strokeWidth={RING_STROKE}
-              className="stroke-foreground/10"
-            />
-            <motion.circle
-              cx={RING_SIZE / 2}
-              cy={RING_SIZE / 2}
-              r={RING_RADIUS}
-              fill="none"
-              strokeWidth={RING_STROKE}
-              strokeLinecap="round"
-              className="stroke-primary"
-              style={{ pathLength: ringProgress }}
-            />
-          </svg>
-          <ArrowUp className="h-5 w-5" strokeWidth={2} />
+          <WaterFill />
+          <ArrowUp
+            aria-hidden
+            className="relative size-3.5"
+            strokeWidth={1.5}
+          />
         </motion.button>
       )}
     </AnimatePresence>

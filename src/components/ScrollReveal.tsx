@@ -16,6 +16,7 @@ import {
   scrollTitleVariants,
   scrollSubtleVariants,
   scrollContainerVariants,
+  scrollHeaderVariants,
   scrollChildVariants,
 } from "@/utils/transitions";
 
@@ -29,6 +30,7 @@ interface ScrollRevealProps {
    * - title: Section titles (48px rise)
    * - subtle: Small elements (32px rise, fastest)
    * - container: For sections with staggered children
+   * - header: Title + toolbar/subtitle — wider stagger so chrome leads
    * - child: For items within staggered containers
    */
   variant?:
@@ -38,6 +40,7 @@ interface ScrollRevealProps {
     | "title"
     | "subtle"
     | "container"
+    | "header"
     | "child";
   /**
    * Custom animation variants (overrides variant)
@@ -74,6 +77,7 @@ const ANIMATION_VARIANTS = {
   title: scrollTitleVariants,
   subtle: scrollSubtleVariants,
   container: scrollContainerVariants,
+  header: scrollHeaderVariants,
   child: scrollChildVariants,
 } as const;
 

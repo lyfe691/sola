@@ -35,7 +35,12 @@ import ContributionActivityFeed from "@/components/ContributionActivityFeed";
 import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
-import { scrollChildVariants, staggerDelay } from "@/utils/transitions";
+import {
+  HEADER_LEAD,
+  scrollChildVariants,
+  scrollContainerVariants,
+  staggerDelay,
+} from "@/utils/transitions";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
@@ -385,40 +390,44 @@ const About = () => {
     <div className="flex w-full flex-col">
       <meta name="description" content={t.seo.about.description} />
 
-      {/* container/child: each hero piece cascades in individually instead
-          of the whole grid arriving as one slab */}
-      <ScrollReveal variant="container">
-        <div className="mb-16 grid grid-cols-1 items-center gap-10 md:mb-24 md:grid-cols-12">
-          <div className="flex flex-col gap-5 md:col-span-7">
-            <motion.h1
-              variants={scrollChildVariants}
-              className="text-4xl font-bold"
-            >
-              {about.title}
-            </motion.h1>
-            <motion.p
-              variants={scrollChildVariants}
-              className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg"
-            >
-              <RichText text={about.intro} previewExternal />
-            </motion.p>
-            <motion.p
-              variants={scrollChildVariants}
-              className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg"
-            >
-              <RichText text={about.hobbies} previewExternal />
-            </motion.p>
-            <motion.div variants={scrollChildVariants} className="pt-1">
-              <ResumeModal />
-            </motion.div>
-          </div>
-          <motion.div variants={scrollChildVariants} className="md:col-span-5">
-            <AboutPortrait
-              src="https://avatars.githubusercontent.com/u/162759797?v=4"
-              alt="Yanis Sebastian Zürcher"
-            />
+      {/* outer container staggers the two columns; the copy column is itself
+          a container so title → paras → resume actually cascade */}
+      <ScrollReveal
+        variant="container"
+        className="mb-16 grid grid-cols-1 items-center gap-10 md:mb-24 md:grid-cols-12"
+      >
+        <motion.div
+          variants={scrollContainerVariants}
+          className="flex flex-col gap-5 md:col-span-7"
+        >
+          <motion.h1
+            variants={scrollChildVariants}
+            className="text-4xl font-bold"
+          >
+            {about.title}
+          </motion.h1>
+          <motion.p
+            variants={scrollChildVariants}
+            className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg"
+          >
+            <RichText text={about.intro} previewExternal />
+          </motion.p>
+          <motion.p
+            variants={scrollChildVariants}
+            className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg"
+          >
+            <RichText text={about.hobbies} previewExternal />
+          </motion.p>
+          <motion.div variants={scrollChildVariants} className="pt-1">
+            <ResumeModal />
           </motion.div>
-        </div>
+        </motion.div>
+        <motion.div variants={scrollChildVariants} className="md:col-span-5">
+          <AboutPortrait
+            src="https://avatars.githubusercontent.com/u/162759797?v=4"
+            alt="Yanis Sebastian Zürcher"
+          />
+        </motion.div>
       </ScrollReveal>
 
       {/* each block triggers on its own viewport entry — the feed sits below
@@ -439,7 +448,7 @@ const About = () => {
           </SectionHeading>
         </ScrollReveal>
 
-        <ScrollReveal variant="default">
+        <ScrollReveal variant="default" delay={HEADER_LEAD}>
           <Card className="gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md">
             <Tabs
               value={contributionTab}
@@ -546,7 +555,7 @@ const About = () => {
               <ScrollReveal
                 key={testimonial.i18nKey}
                 variant="default"
-                delay={staggerDelay(index)}
+                delay={HEADER_LEAD + staggerDelay(index)}
                 className="h-full"
               >
                 <TestimonialCard
