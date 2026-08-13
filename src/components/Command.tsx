@@ -119,101 +119,98 @@ export function CommandMenu() {
         placeholder={t.common.command.placeholder}
         className={isMobile ? "text-base" : undefined}
       />
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-5 bg-linear-to-b from-popover to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-5 bg-linear-to-t from-popover to-transparent" />
-        <CommandList>
-          <CommandEmpty className="py-0">
-            <Empty className="p-8">
-              <EmptyHeader>
-                <EmptyMedia variant="icon">
-                  <SearchX />
-                </EmptyMedia>
-                <EmptyTitle>{t.common.command.noResults}</EmptyTitle>
-              </EmptyHeader>
-            </Empty>
-          </CommandEmpty>
+      {/* scroll-fade masks the list's own edges (scroll-aware: crisp at the
+          ends, faded mid-scroll) — replaces the old gradient overlays, which
+          were popover-colored and so slightly off inside the drawer */}
+      <CommandList className="scroll-fade">
+        <CommandEmpty className="py-0">
+          <Empty className="p-8">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <SearchX />
+              </EmptyMedia>
+              <EmptyTitle>{t.common.command.noResults}</EmptyTitle>
+            </EmptyHeader>
+          </Empty>
+        </CommandEmpty>
 
-          <CommandGroup heading={t.common.command.groups.navigation}>
-            {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
-              <CommandItem
-                key={item.key}
-                value={getNavLabel(item)}
-                onSelect={() => handleNavigation(item.path)}
-              >
-                <span>{getNavLabel(item)}</span>
-                <CommandShortcut>↵</CommandShortcut>
-              </CommandItem>
-            ))}
-            {/* the diff mode rides with navigation — flipping it swaps the
+        <CommandGroup heading={t.common.command.groups.navigation}>
+          {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
+            <CommandItem
+              key={item.key}
+              value={getNavLabel(item)}
+              onSelect={() => handleNavigation(item.path)}
+            >
+              <span>{getNavLabel(item)}</span>
+              <CommandShortcut>↵</CommandShortcut>
+            </CommandItem>
+          ))}
+          {/* the diff mode rides with navigation — flipping it swaps the
                 page like a route does. Label follows the mode's state; the
                 chip names its global key. */}
-            <CommandItem
-              value={codeView ? t.common.diff.exit : t.common.diff.showDiff}
-              onSelect={() => {
-                closeCommandMenu();
-                setCodeView(!codeView);
-              }}
-            >
-              <span>
-                {codeView ? t.common.diff.exit : t.common.diff.showDiff}
-              </span>
-              <CommandShortcut>D</CommandShortcut>
-            </CommandItem>
-          </CommandGroup>
-
-          <CommandSeparator />
-
-          <CommandGroup heading={t.common.command.groups.theme}>
-            {THEMES.filter((o) => !o.isCustom).map(renderThemeItem)}
-          </CommandGroup>
-
-          <CommandSeparator />
-
-          <CommandGroup heading={t.common.menu.customThemes}>
-            {THEMES.filter((o) => o.isCustom).map(renderThemeItem)}
-          </CommandGroup>
-
-          <CommandSeparator />
-
-          <CommandGroup heading={t.common.command.groups.language}>
-            {LANGUAGES.map(({ code, label }) => (
-              <CommandItem
-                key={code}
-                value={label}
-                data-checked={language === code ? "true" : undefined}
-                onSelect={() => handleLanguageChange(code)}
-              >
-                <span>{label}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-
-          <CommandSeparator />
-
-          <CommandGroup
-            heading={
-              <span className="inline-flex items-center gap-1.5">
-                <span>{t.common.command.groups.background}</span>
-                <MenuHint text={backgroundHint} />
-              </span>
-            }
+          <CommandItem
+            value={codeView ? t.common.diff.exit : t.common.diff.showDiff}
+            onSelect={() => {
+              closeCommandMenu();
+              setCodeView(!codeView);
+            }}
           >
-            {backgroundOptions.map((option) => (
-              <CommandItem
-                key={option.id}
-                value={option.label}
-                data-checked={
-                  activeBackground === option.id ? "true" : undefined
-                }
-                onSelect={() => handleBackgroundChange(option.id)}
-              >
-                <span>{option.label}</span>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </div>
+            <span>
+              {codeView ? t.common.diff.exit : t.common.diff.showDiff}
+            </span>
+            <CommandShortcut>D</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+
+        <CommandSeparator />
+
+        <CommandGroup heading={t.common.command.groups.theme}>
+          {THEMES.filter((o) => !o.isCustom).map(renderThemeItem)}
+        </CommandGroup>
+
+        <CommandSeparator />
+
+        <CommandGroup heading={t.common.menu.customThemes}>
+          {THEMES.filter((o) => o.isCustom).map(renderThemeItem)}
+        </CommandGroup>
+
+        <CommandSeparator />
+
+        <CommandGroup heading={t.common.command.groups.language}>
+          {LANGUAGES.map(({ code, label }) => (
+            <CommandItem
+              key={code}
+              value={label}
+              data-checked={language === code ? "true" : undefined}
+              onSelect={() => handleLanguageChange(code)}
+            >
+              <span>{label}</span>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+
+        <CommandSeparator />
+
+        <CommandGroup
+          heading={
+            <span className="inline-flex items-center gap-1.5">
+              <span>{t.common.command.groups.background}</span>
+              <MenuHint text={backgroundHint} />
+            </span>
+          }
+        >
+          {backgroundOptions.map((option) => (
+            <CommandItem
+              key={option.id}
+              value={option.label}
+              data-checked={activeBackground === option.id ? "true" : undefined}
+              onSelect={() => handleBackgroundChange(option.id)}
+            >
+              <span>{option.label}</span>
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      </CommandList>
     </>
   );
 
