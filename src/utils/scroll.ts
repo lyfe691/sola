@@ -62,7 +62,13 @@ export const unlockWindowScroll = () => {
 /** Instant jump — keeps Lenis's internal scroll in sync (unlike window.scrollTo). */
 export const snapScrollTo = (y: number) => {
   if (lenis) {
-    lenis.scrollTo(y, { immediate: true });
+    // Lenis clamps targets to its cached limit, and its content
+    // ResizeObserver is debounced (250ms) — right after a takeover swap
+    // (code view's one-viewport command screen) the cache can still read
+    // ~0, which would clamp a restore to the top. Measure now, then jump.
+    // force: the jump must land even if an overlay lock is still held.
+    lenis.resize();
+    lenis.scrollTo(y, { immediate: true, force: true });
     return;
   }
   window.scrollTo(0, y);
@@ -105,6 +111,9 @@ export const scrollToTarget = (
   options?: { immediate?: boolean; offset?: number },
 ) => {
   if (lenis) {
+    // same stale-limit hazard as snapScrollTo: content may have grown
+    // (lazy images, fonts) inside the resize debounce window
+    lenis.resize();
     lenis.scrollTo(target, options);
     return;
   }

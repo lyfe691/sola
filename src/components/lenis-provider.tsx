@@ -6,10 +6,10 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ReactLenis, useLenis } from "lenis/react";
+import { ReactLenis, useLenis, type LenisRef } from "lenis/react";
 import type { LenisOptions } from "lenis";
 import { bindLenis } from "@/utils/scroll";
 import "lenis/dist/lenis.css";
@@ -23,8 +23,10 @@ gsap.registerPlugin(ScrollTrigger);
  * autoToggle: its stop()/start() only toggle <html> overflow and can no-op
  * if checkOverflow hasn't flipped isStopped yet (stacked/fast overlays).
  */
+// autoRaf off: GSAP's ticker drives lenis.raf (see LenisProvider), per the
+// Lenis docs' ScrollTrigger recipe — one shared loop, no cross-loop lag.
 const OPTIONS = {
-  autoRaf: true,
+  autoRaf: false,
   anchors: true,
   allowNestedScroll: true,
   stopInertiaOnNavigate: true,
@@ -48,9 +50,24 @@ function LenisBinding() {
   return null;
 }
 
-export const LenisProvider = ({ children }: { children: ReactNode }) => (
-  <ReactLenis root options={OPTIONS}>
-    <LenisBinding />
-    {children}
-  </ReactLenis>
-);
+export const LenisProvider = ({ children }: { children: ReactNode }) => {
+  const lenisRef = useRef<LenisRef>(null);
+
+  // The docs' GSAP sync: Lenis ticks inside gsap.ticker (seconds → ms) so
+  // ScrollTrigger and the scroll interpolation share one frame loop, and
+  // lag smoothing is off so scroll-bound animation never drifts from the
+  // real scroll position after a hitch.
+  useEffect(() => {
+    const update = (time: number) => lenisRef.current?.lenis?.raf(time * 1000);
+    gsap.ticker.add(update);
+    gsap.ticker.lagSmoothing(0);
+    return () => gsap.ticker.remove(update);
+  }, []);
+
+  return (
+    <ReactLenis root options={OPTIONS} ref={lenisRef}>
+      <LenisBinding />
+      {children}
+    </ReactLenis>
+  );
+};
