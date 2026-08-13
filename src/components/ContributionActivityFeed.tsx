@@ -36,6 +36,13 @@ import { INTL_LOCALE } from "@/lib/dates";
 import { EASE_OUT } from "@/utils/transitions";
 
 const VISIBLE_EVENTS = 6;
+// extra items that exist only to dissolve: the card doesn't end, it trails
+// off — the fade (not a chip or a hard edge) says "there's more on GitHub"
+const FADE_TAIL = 2;
+
+// the mask dissolves the card itself (border and backdrop included), so the
+// surface evaporates instead of closing with a bottom edge
+const FEED_FADE = "mask-b-from-55%";
 
 const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
   const iconClass = "w-3.5 h-3.5 shrink-0";
@@ -189,12 +196,16 @@ const ActivityItem = ({
   locale,
   t,
   play,
+  decorative = false,
 }: {
   activity: ProcessedActivity;
   index: number;
   locale: string;
   t: TranslationAny;
   play: boolean;
+  /** Tail items inside the fade — for the eye, not the reader: no links,
+   *  no focus stops, no hover, just content dissolving. */
+  decorative?: boolean;
 }) => {
   const repoName = activity.repo.split("/")[1];
 
@@ -207,7 +218,11 @@ const ActivityItem = ({
           ? { delay: index * 0.02, duration: 0.25, ease: EASE_OUT }
           : { duration: 0 }
       }
-      className="group px-4 py-3 transition-colors duration-150 can-hover:hover:bg-foreground/2"
+      inert={decorative}
+      aria-hidden={decorative || undefined}
+      className={`group px-4 py-3 transition-colors duration-150 can-hover:hover:bg-foreground/2 ${
+        decorative ? "pointer-events-none" : ""
+      }`}
     >
       <div className="flex items-start gap-3">
         <div className="mt-1 rounded-lg bg-foreground/4 p-1.5 transition-colors duration-200 can-hover:group-hover:bg-foreground/8">
@@ -262,7 +277,7 @@ const ActivityItem = ({
 
 const ActivityFeedSkeleton = () => (
   <div
-    className="divide-y divide-foreground/6 overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs"
+    className={`divide-y divide-foreground/6 overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs ${FEED_FADE}`}
     aria-hidden
   >
     {Array.from({ length: 5 }).map((_, index) => (
@@ -290,7 +305,13 @@ const ContributionActivityFeed = () => {
   } = useQuery(userActivityQuery(GITHUB_USER));
   const events: ProcessedActivity[] = data ?? [];
 
-  const eventsToShow = events.slice(0, VISIBLE_EVENTS);
+  // the tail only exists when there is genuinely more: a short feed keeps
+  // its clean bottom edge instead of fading real content away
+  const hasTail = events.length > VISIBLE_EVENTS;
+  const eventsToShow = events.slice(
+    0,
+    hasTail ? VISIBLE_EVENTS + FADE_TAIL : VISIBLE_EVENTS,
+  );
 
   // entrance stagger only when items are already there on first paint (query
   // cache hit); after a skeleton phase they appear in place instead of
@@ -324,7 +345,11 @@ const ContributionActivityFeed = () => {
             </div>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs">
+          <div
+            className={`overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs ${
+              hasTail ? FEED_FADE : ""
+            }`}
+          >
             {eventsToShow.length > 0 ? (
               <div className="divide-y divide-foreground/6">
                 {eventsToShow.map((activity, index) => (
@@ -335,6 +360,7 @@ const ContributionActivityFeed = () => {
                     locale={locale}
                     t={t}
                     play={play}
+                    decorative={index >= VISIBLE_EVENTS}
                   />
                 ))}
               </div>
@@ -354,7 +380,13 @@ const ContributionActivityFeed = () => {
       </div>
 
       {!loading && events.length > 0 ? (
-        <div className="mt-6 flex justify-center">
+        // with a tail the button rises into the dissolve — the paywall move:
+        // the continuation affordance sits where the content trails off
+        <div
+          className={`relative z-10 flex justify-center ${
+            hasTail ? "-mt-16" : "mt-6"
+          }`}
+        >
           <IconButton
             variant="default"
             icon={<ArrowUpRight className="h-3.5 w-3.5" />}
