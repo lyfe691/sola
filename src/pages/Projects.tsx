@@ -341,13 +341,16 @@ const Projects = () => {
         </motion.div>
       </ScrollReveal>
 
-      {/* Featured Projects — first card waits for the sort row */}
+      {/* Featured Projects — the whole stack waits for the sort row, cascading
+          by index (the site-wide pattern). Leading only card 0 inverted the
+          order on tall viewports: card 2 was in view at load and fired during
+          card 1's HEADER_LEAD wait. */}
       <div className="mb-12 grid grid-cols-1 gap-6 sm:mb-16 sm:gap-8">
         {featuredProjects.map((project, index) => (
           <ScrollReveal
             key={project.id}
             variant="feature"
-            delay={index === 0 ? HEADER_LEAD : 0}
+            delay={HEADER_LEAD + staggerDelay(index)}
           >
             <ProjectCard project={project} t={t} />
           </ScrollReveal>
