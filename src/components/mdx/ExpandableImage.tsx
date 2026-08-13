@@ -17,6 +17,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { EASE_OUT } from "@/utils/transitions";
+import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -173,6 +174,7 @@ export function ExpandableImage({
   const { language } = useLanguage();
   const t = translations[language];
   const labelId = useId();
+  useWindowScrollLock(isOpen);
   const handleOpen = useCallback(() => setIsOpen(true), []);
   const handleClose = useCallback(() => setIsOpen(false), []);
 

@@ -19,6 +19,7 @@ import { LineSidebar } from "@/components/ui/custom/line-sidebar";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
+import { scrollToTarget } from "@/utils/scroll";
 
 export interface DeepDiveSection {
   id: string;
@@ -104,7 +105,7 @@ function scrollToSection(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  scrollToTarget(el, { immediate: reduced });
 }
 
 interface SectionNavProps {

@@ -40,6 +40,7 @@ import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { snapScrollTo } from "@/utils/scroll";
 import type { ProjectSilk } from "@/config/projects";
 
 const Silk = lazy(() => import("@/components/backgrounds/Silk"));
@@ -211,7 +212,7 @@ export function ProjectDeepDive({
   const t = translations[language];
 
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    snapScrollTo(0);
   }, []);
 
   // no page-shell opacity fade — it fought the silk + FoldText GPU work and

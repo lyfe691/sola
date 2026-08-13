@@ -41,6 +41,7 @@ import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
 import { testimonials } from "@/config/testimonials";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { githubContributionsQuery } from "@/lib/github-contributions";
@@ -195,6 +196,7 @@ function AboutPortrait({ src, alt }: { src: string; alt: string }) {
 function ResumeModal() {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
+  useWindowScrollLock(open);
   const { language } = useLanguage();
   const t = translations[language].about.resume;
   const [selectedLang, setSelectedLang] = useState<"en" | "de">(

@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import {
   Dialog,
   DialogContent,
@@ -181,6 +182,7 @@ const TestimonialCard = ({
 }: TestimonialCardProps) => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
+  useWindowScrollLock(open);
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 

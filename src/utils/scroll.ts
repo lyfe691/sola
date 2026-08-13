@@ -6,110 +6,114 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import type Lenis from "lenis";
+
 /**
- * Owned smooth-scroll-to-top.
+ * Window scroll, owned through the root Lenis instance.
  *
  * Why not `window.scrollTo({ behavior: "smooth" })`? That is a fire-and-forget
  * browser animation. On a route change into a SHORT page (Home), the outgoing
  * tall page stays mounted through PageShell's exit, then unmounts — collapsing
  * the document height mid-animation. The native scroll gets clamped to the new
- * (tiny) max and stranded there, which on the short page reads as "jumped down
- * to the footer". A rAF tween that we drive ourselves re-targets 0 every frame,
- * so a height collapse can't strand it: it simply keeps gliding to the top.
+ * (tiny) max and stranded there. Lenis keeps interpolating toward target 0, so
+ * a height collapse can't strand it.
  *
- * State is module-level on purpose: there is exactly ONE window scroll, so there
- * is exactly one animation to own. Two concurrent tweens would fight regardless
- * of where the handle lived; modelling it as a single module-scoped controller
- * makes that singleton-ness explicit. Relies on `scroll-behavior: auto` (see
- * index.css) so each per-frame scrollTo lands instantly instead of re-animating.
+ * The instance is bound by LenisProvider. Call sites stay module-level because
+ * there is exactly one window scroll.
  */
 
-// Glide tuning — a premium glide for deep scrolls, snappier (but never a
-// sub-300ms "snap") for short ones. Duration scales with distance, clamped.
-const MIN_DURATION_MS = 420;
-const MAX_DURATION_MS = 680;
-const MS_PER_PX = 0.32;
+// Glide tuning for programmatic jumps (wheel smoothing uses Lenis lerp).
+// A premium glide for deep scrolls, snappier (but never a sub-300ms snap)
+// for short ones. Duration scales with distance, clamped. Seconds for Lenis.
+const MIN_DURATION_S = 0.42;
+const MAX_DURATION_S = 0.68;
+const S_PER_PX = 0.00032;
 
-// Keys that mean "the user is taking over the scroll" — pressing any hands
-// control straight back to them instead of fighting their input.
-const SCROLL_KEYS = new Set([
-  " ",
-  "PageUp",
-  "PageDown",
-  "ArrowUp",
-  "ArrowDown",
-  "Home",
-  "End",
-]);
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-// Mirrors --ease-out / EASE_OUT ([0.33, 1, 0.68, 1] ≈ easeOutCubic): decelerate
-// into the top so the glide settles rather than snapping.
+// Mirrors --ease-out / EASE_OUT ([0.33, 1, 0.68, 1] ≈ easeOutCubic).
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
-let rafId: number | null = null;
-let detachGuards: (() => void) | null = null;
+let lenis: Lenis | null = null;
+let lockCount = 0;
 
-/** Cancel any in-flight tween and detach its input guards. */
+export const bindLenis = (instance: Lenis | null) => {
+  lenis = instance;
+  // overlays can mount before the instance; re-apply an existing lock
+  if (lenis && lockCount > 0) lenis.stop();
+};
+
+export const getLenis = () => lenis;
+
+/**
+ * Pause window smoothing while an overlay is open. Ref-counted so stacked
+ * dialogs don't release the lock early. Calls Lenis stop/start directly
+ * (autoToggle is off — it only writes <html> overflow and can miss a
+ * start() if isStopped hasn't flipped yet).
+ */
+export const lockWindowScroll = () => {
+  lockCount += 1;
+  if (lockCount === 1) lenis?.stop();
+};
+
+export const unlockWindowScroll = () => {
+  lockCount = Math.max(0, lockCount - 1);
+  if (lockCount === 0) lenis?.start();
+};
+
+/** Instant jump — keeps Lenis's internal scroll in sync (unlike window.scrollTo). */
+export const snapScrollTo = (y: number) => {
+  if (lenis) {
+    lenis.scrollTo(y, { immediate: true });
+    return;
+  }
+  window.scrollTo(0, y);
+};
+
+/** Cancel an in-flight programmatic glide, leaving the scroll where it is. */
 export const stopScrollToTop = () => {
-  if (rafId !== null) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
-  }
-  if (detachGuards) {
-    detachGuards();
-    detachGuards = null;
-  }
+  if (!lenis?.isScrolling) return;
+  lenis.scrollTo(lenis.scroll, { immediate: true });
 };
 
 /** Glide the window to the top, resilient to mid-flight document-height changes. */
 export const smoothScrollToTop = () => {
-  stopScrollToTop();
-
   if (typeof window === "undefined") return;
 
-  const start = window.scrollY;
+  const start = lenis?.scroll ?? window.scrollY;
   if (start <= 0) return;
 
-  if (prefersReducedMotion()) {
+  if (!lenis) {
     window.scrollTo(0, 0);
     return;
   }
 
+  // respectReducedMotion already forces instant scrollTo; still be explicit
+  if (lenis.prefersReducedMotion) {
+    lenis.scrollTo(0, { immediate: true });
+    return;
+  }
+
   const duration = Math.min(
-    MAX_DURATION_MS,
-    Math.max(MIN_DURATION_MS, start * MS_PER_PX),
+    MAX_DURATION_S,
+    Math.max(MIN_DURATION_S, start * S_PER_PX),
   );
-  let startTime: number | null = null;
+  lenis.scrollTo(0, { duration, easing: easeOutCubic });
+};
 
-  // Yield to genuine user input — never re-snap or fight a deliberate scroll.
-  // We listen to INPUT events, not "scroll", since our own scrollTo emits scroll.
-  const onUserScroll = () => stopScrollToTop();
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (SCROLL_KEYS.has(e.key)) stopScrollToTop();
-  };
-  window.addEventListener("wheel", onUserScroll, { passive: true });
-  window.addEventListener("touchmove", onUserScroll, { passive: true });
-  window.addEventListener("keydown", onKeyDown);
-  detachGuards = () => {
-    window.removeEventListener("wheel", onUserScroll);
-    window.removeEventListener("touchmove", onUserScroll);
-    window.removeEventListener("keydown", onKeyDown);
-  };
+/** Scroll to a section / element. Falls back to scrollIntoView without Lenis. */
+export const scrollToTarget = (
+  target: string | HTMLElement,
+  options?: { immediate?: boolean; offset?: number },
+) => {
+  if (lenis) {
+    lenis.scrollTo(target, options);
+    return;
+  }
 
-  const step = (now: number) => {
-    if (startTime === null) startTime = now;
-    const t = Math.min((now - startTime) / duration, 1);
-    window.scrollTo(0, start * (1 - easeOutCubic(t)));
-    if (t < 1) {
-      rafId = requestAnimationFrame(step);
-    } else {
-      stopScrollToTop();
-    }
-  };
-
-  rafId = requestAnimationFrame(step);
+  const el =
+    typeof target === "string" ? document.querySelector(target) : target;
+  if (!(el instanceof HTMLElement)) return;
+  el.scrollIntoView({
+    behavior: options?.immediate ? "auto" : "smooth",
+    block: "start",
+  });
 };

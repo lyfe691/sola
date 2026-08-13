@@ -25,6 +25,7 @@ import { UpdateNotification } from "./components/UpdateNotification";
 import { MotionConfig } from "motion/react";
 import { CanonicalUrl } from "./components/CanonicalUrl";
 import { DocumentTitle } from "./components/DocumentTitle";
+import { LenisProvider } from "./components/lenis-provider";
 
 // create new query client instance
 const queryClient = new QueryClient();
@@ -39,37 +40,39 @@ function KeyboardShortcuts() {
 const App = () => (
   <ThemeProvider defaultTheme={WELCOME_PRESET.theme}>
     <MotionConfig reducedMotion="user">
-      <LanguageProvider>
-        <BackgroundProvider defaultBackground={WELCOME_PRESET.background}>
-          <QueryClientProvider client={queryClient}>
-            <TooltipProvider>
-              <BackgroundLayer />
-              <ClickSpark
-                sparkColor="var(--primary)"
-                sparkSize={4}
-                sparkCount={7}
-                duration={450}
-              >
-                <div className="min-h-screen flex flex-col relative">
-                  <Toaster>
-                    <UpdateNotification />
-                    <BrowserRouter>
-                      <CodeViewProvider>
-                        <DocumentTitle />
-                        <CanonicalUrl />
-                        <KeyboardShortcuts />
-                        <CommandMenu />
-                        <AnimatedRoutes />
-                        <ScrollToTop />
-                      </CodeViewProvider>
-                    </BrowserRouter>
-                  </Toaster>
-                </div>
-              </ClickSpark>
-            </TooltipProvider>
-          </QueryClientProvider>
-        </BackgroundProvider>
-      </LanguageProvider>
+      <LenisProvider>
+        <LanguageProvider>
+          <BackgroundProvider defaultBackground={WELCOME_PRESET.background}>
+            <QueryClientProvider client={queryClient}>
+              <TooltipProvider>
+                <BackgroundLayer />
+                <ClickSpark
+                  sparkColor="var(--primary)"
+                  sparkSize={4}
+                  sparkCount={7}
+                  duration={450}
+                >
+                  <div className="min-h-screen flex flex-col relative">
+                    <Toaster>
+                      <UpdateNotification />
+                      <BrowserRouter>
+                        <CodeViewProvider>
+                          <DocumentTitle />
+                          <CanonicalUrl />
+                          <KeyboardShortcuts />
+                          <CommandMenu />
+                          <AnimatedRoutes />
+                          <ScrollToTop />
+                        </CodeViewProvider>
+                      </BrowserRouter>
+                    </Toaster>
+                  </div>
+                </ClickSpark>
+              </TooltipProvider>
+            </QueryClientProvider>
+          </BackgroundProvider>
+        </LanguageProvider>
+      </LenisProvider>
     </MotionConfig>
   </ThemeProvider>
 );

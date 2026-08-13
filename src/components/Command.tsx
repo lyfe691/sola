@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/drawer";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { useCommandMenu } from "@/hooks/use-command-menu";
+import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTheme } from "./theme-provider";
 import { useLanguage } from "@/lib/language-provider";
@@ -55,6 +56,7 @@ export function CommandMenu() {
   const { language, setLanguage } = useLanguage();
   const t = translations[language];
   const { isOpen, closeCommandMenu } = useCommandMenu();
+  useWindowScrollLock(isOpen);
   const { active: codeView, setActive: setCodeView } = useCodeView();
   const isMobile = useIsMobile();
   const { active: activeBackground, setActive: setBackground } =

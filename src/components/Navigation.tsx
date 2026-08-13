@@ -9,7 +9,10 @@
 import { Link, useLocation } from "react-router";
 import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useEffect, useState, useCallback, useRef, memo } from "react";
+import { useLenis } from "lenis/react";
+import type Lenis from "lenis";
 import { useLanguage } from "@/lib/language-provider";
+import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
@@ -96,12 +99,11 @@ const MenuGlyph = ({ open }: { open: boolean }) => (
 
 const useScrolled = () => {
   const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+  const onLenis = useCallback((instance: Lenis) => {
+    const next = instance.scroll > 24;
+    setScrolled((current) => (current === next ? current : next));
   }, []);
+  useLenis(onLenis);
   return scrolled;
 };
 
@@ -244,6 +246,7 @@ const MobileNav = () => {
   const location = useLocation();
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
+  useWindowScrollLock(menuOpen);
 
   const links = [
     { label: t.common.home, path: "/" },

@@ -11,6 +11,7 @@ import { useLocation } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { pageTransitionVariants } from "@/utils/transitions";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { getLenis, snapScrollTo } from "@/utils/scroll";
 
 // lazy like the route pages — the diff renderer (and shiki behind it) only
 // loads once someone actually flips the mode on
@@ -49,7 +50,7 @@ const PageShell = ({ children }: { children: ReactNode }) => {
   const savedScroll = useRef(0);
   useEffect(() => {
     if (active) {
-      savedScroll.current = window.scrollY;
+      savedScroll.current = getLenis()?.scroll ?? window.scrollY;
       wasActive.current = true;
     }
   }, [active]);
@@ -63,19 +64,19 @@ const PageShell = ({ children }: { children: ReactNode }) => {
           // snap the new page to the top now
           routeExit.current = false;
           wasActive.current = false;
-          window.scrollTo(0, 0);
+          snapScrollTo(0);
           return;
         }
         if (!wasActive.current) return;
         if (active) {
-          window.scrollTo(0, 0);
+          snapScrollTo(0);
         } else {
           wasActive.current = false;
           // rAF: the returning page may scroll itself to the top in a mount
           // layout effect (ProjectDeepDive does) — those run pre-paint, so
           // deferring one frame guarantees the restore lands last
           requestAnimationFrame(() => {
-            window.scrollTo(0, savedScroll.current);
+            snapScrollTo(savedScroll.current);
             // the toggle that opened the mode lives in a long-closed menu —
             // hand focus back to the page's main landmark instead
             document.getElementById("main")?.focus({ preventScroll: true });

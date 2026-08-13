@@ -9,13 +9,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useLocation } from "react-router";
 import { ArrowUp } from "lucide-react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useSpring,
-  useReducedMotion,
-} from "motion/react";
+import { motion, AnimatePresence, useMotionValue } from "motion/react";
+import { useLenis } from "lenis/react";
+import type Lenis from "lenis";
 import { EASE_OUT } from "@/utils/transitions";
 import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
@@ -23,7 +19,6 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
 const SCROLL_THRESHOLD = 120;
-const SCROLL_DEBOUNCE_DELAY = 120;
 
 // reading-progress ring: hugs just inside the 44px frosted circle
 const RING_SIZE = 44;
@@ -36,18 +31,19 @@ export default function ScrollToTop() {
   const { language } = useLanguage();
   const t = translations[language];
 
-  // ring fill = scroll depth, driven as a MotionValue (no re-render per
-  // frame). The light spring makes glides and jumps read as one continuous
-  // fill; under reduced motion the raw value applies directly — the ring is
-  // information, not decoration, so it stays.
-  const { scrollYProgress } = useScroll();
-  const reduceMotion = useReducedMotion();
-  const smoothedProgress = useSpring(scrollYProgress, {
-    stiffness: 150,
-    damping: 30,
-    restDelta: 0.001,
-  });
-  const ringProgress = reduceMotion ? scrollYProgress : smoothedProgress;
+  // ring fill = Lenis progress (already lerped). A second Motion spring
+  // on top of that would lag the page. Reduced motion still shows the
+  // ring — it's position, not decoration.
+  const ringProgress = useMotionValue(0);
+  const onLenis = useCallback(
+    (instance: Lenis) => {
+      ringProgress.set(instance.progress);
+      const next = instance.scroll > SCROLL_THRESHOLD;
+      setVisible((current) => (current === next ? current : next));
+    },
+    [ringProgress],
+  );
+  useLenis(onLenis);
 
   // Read through a ref so the route-change effect below doesn't re-fire
   // when the mode flips off mid-exit (that would glide anyway).
@@ -75,25 +71,6 @@ export default function ScrollToTop() {
     smoothScrollToTop();
     return stopScrollToTop;
   }, [pathname]);
-
-  const handleScroll = useCallback(() => {
-    setVisible(window.scrollY > SCROLL_THRESHOLD);
-  }, []);
-
-  useEffect(() => {
-    let timeoutId: ReturnType<typeof setTimeout>;
-
-    const debouncedScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(handleScroll, SCROLL_DEBOUNCE_DELAY);
-    };
-
-    window.addEventListener("scroll", debouncedScroll);
-    return () => {
-      window.removeEventListener("scroll", debouncedScroll);
-      clearTimeout(timeoutId);
-    };
-  }, [handleScroll]);
 
   return (
     <AnimatePresence>
