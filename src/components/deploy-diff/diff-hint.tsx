@@ -8,13 +8,13 @@
  * The git-diff hint card — a miniature of the code view plus the one-line
  * explanation. Shared by every surface that flips into the code view (the
  * appearance menu's switch, the deep-dive toolbar) so the preview stays one
- * artifact and can't drift between copies. Consumers own the Tooltip and
+ * artifact and can't drift between copies. Consumers own the HoverCard and
  * trigger and choose the side/offset.
  */
 
 import type { ComponentProps } from "react";
 import { Kbd } from "@/components/ui/kbd";
-import { TooltipContent, tooltipCardClassName } from "@/components/ui/tooltip";
+import { HoverCardContent } from "@/components/ui/hover-card";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -124,27 +124,25 @@ function DiffHintArt() {
   );
 }
 
-/** The hint card's TooltipContent: art panel, mono `git diff` heading, hint. */
+/** The hint card's HoverCardContent: art panel, mono `git diff` heading, hint. */
 export function DiffHintContent({
   className,
   ...props
-}: ComponentProps<typeof TooltipContent>) {
+}: ComponentProps<typeof HoverCardContent>) {
   const { language } = useLanguage();
   const t = translations[language];
 
   return (
-    <TooltipContent
+    <HoverCardContent
       className={cn(
-        tooltipCardClassName,
-        // the trailing has-data override cancels the base tooltip's
-        // kbd-aware pr-1.5 — the art needs the 4px inset on all sides to
-        // stay concentric with the card
-        "w-52 flex-col items-stretch gap-1.5 p-1 select-none has-data-[slot=kbd]:pr-1",
+        // p-1 keeps the art concentric with the card: rounded-3xl (22px)
+        // minus the 4px inset = 18px = the art wrapper's rounded-2xl
+        "flex w-52 flex-col items-stretch gap-1.5 p-1 text-xs font-medium select-none",
         className,
       )}
       {...props}
     >
-      <div className="overflow-hidden rounded-lg">
+      <div className="overflow-hidden rounded-2xl">
         <DiffHintArt />
       </div>
       <div className="space-y-0.5 px-2 pt-0.5 pb-1.5 text-left">
@@ -158,6 +156,6 @@ export function DiffHintContent({
           {t.common.diff.hint}
         </p>
       </div>
-    </TooltipContent>
+    </HoverCardContent>
   );
 }

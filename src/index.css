@@ -169,8 +169,12 @@
 /* Inspired by Vercel */
 
 @layer base {
-  /* root is light mode*/
-  :root {
+  /* root is light mode. `.light` carries the same tokens so light can be
+     re-scoped onto a subtree (theme swatches render inside a portal that
+     inherits the ACTIVE theme's tokens from <html> — without a class of its
+     own, a "light" swatch would wear the current theme instead). */
+  :root,
+  .light {
     --background: oklch(1 0 0);
     --foreground: oklch(0.145 0 0);
     --card: oklch(1 0 0);

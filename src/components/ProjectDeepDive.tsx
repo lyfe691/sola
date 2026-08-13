@@ -32,7 +32,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";
+import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "./ui/custom/icon-button";
 import FoldText from "./ui/custom/FoldText";
@@ -254,8 +254,9 @@ export function ProjectDeepDive({
               </Breadcrumb>
 
               <div className="flex shrink-0 items-center gap-1.5">
-                <Tooltip>
-                  <TooltipTrigger
+                <HoverCard>
+                  <HoverCardTrigger
+                    delay={250}
                     render={
                       <Button
                         variant="ghost"
@@ -267,9 +268,9 @@ export function ProjectDeepDive({
                     }
                   >
                     <CodeXml className="size-4" aria-hidden="true" />
-                  </TooltipTrigger>
+                  </HoverCardTrigger>
                   <DiffHintContent side="bottom" />
-                </Tooltip>
+                </HoverCard>
 
                 <IconButton
                   variant="ghost"
