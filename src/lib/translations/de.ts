@@ -69,6 +69,7 @@ export const de = {
       toggleTheme: "Design wechseln",
       commandPalette: "Befehlspalette",
       commandPaletteHint: "Befehl suchen…",
+      scrollToTop: "Nach oben scrollen",
     },
     menu: {
       themes: "Designs",

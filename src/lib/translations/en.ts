@@ -68,6 +68,7 @@ export const en = {
       toggleTheme: "Toggle theme",
       commandPalette: "Command palette",
       commandPaletteHint: "Search for a command to run…",
+      scrollToTop: "Scroll to top",
     },
     menu: {
       themes: "Themes",

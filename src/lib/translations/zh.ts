@@ -64,6 +64,7 @@ export const zh = {
       toggleTheme: "切换主题",
       commandPalette: "命令面板",
       commandPaletteHint: "搜索命令…",
+      scrollToTop: "回到顶部",
     },
     menu: {
       themes: "主题",

@@ -69,6 +69,7 @@ export const ko = {
       toggleTheme: "테마 전환",
       commandPalette: "명령 팔레트",
       commandPaletteHint: "명령 검색…",
+      scrollToTop: "맨 위로",
     },
     menu: {
       themes: "테마",

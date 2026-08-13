@@ -71,6 +71,7 @@ export const es = {
       toggleTheme: "Cambiar tema",
       commandPalette: "Paleta de comandos",
       commandPaletteHint: "Busca un comando…",
+      scrollToTop: "Volver arriba",
     },
     menu: {
       themes: "Temas",

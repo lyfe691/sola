@@ -66,6 +66,7 @@ export const ja = {
       toggleTheme: "テーマを切り替える",
       commandPalette: "コマンドパレット",
       commandPaletteHint: "コマンドを検索…",
+      scrollToTop: "トップへ戻る",
     },
     menu: {
       themes: "テーマ",

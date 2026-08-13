@@ -9,17 +9,45 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useLocation } from "react-router";
 import { ArrowUp } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useSpring,
+  useReducedMotion,
+} from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";
 import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { useLanguage } from "@/lib/language-provider";
+import { translations } from "@/lib/translations";
 
 const SCROLL_THRESHOLD = 120;
 const SCROLL_DEBOUNCE_DELAY = 120;
 
+// reading-progress ring: hugs just inside the 44px frosted circle
+const RING_SIZE = 44;
+const RING_RADIUS = 20;
+const RING_STROKE = 2;
+
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
+  const { language } = useLanguage();
+  const t = translations[language];
+
+  // ring fill = scroll depth, driven as a MotionValue (no re-render per
+  // frame). The light spring makes glides and jumps read as one continuous
+  // fill; under reduced motion the raw value applies directly — the ring is
+  // information, not decoration, so it stays.
+  const { scrollYProgress } = useScroll();
+  const reduceMotion = useReducedMotion();
+  const smoothedProgress = useSpring(scrollYProgress, {
+    stiffness: 150,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const ringProgress = reduceMotion ? scrollYProgress : smoothedProgress;
 
   // Read through a ref so the route-change effect below doesn't re-fire
   // when the mode flips off mid-exit (that would glide anyway).
@@ -73,7 +101,7 @@ export default function ScrollToTop() {
         <motion.button
           key="scroll-to-top"
           onClick={smoothScrollToTop}
-          aria-label="Scroll to top"
+          aria-label={t.common.a11y.scrollToTop}
           initial={{ opacity: 0, scale: 0.85, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.85, y: 10 }}
@@ -90,6 +118,31 @@ export default function ScrollToTop() {
                      hover:bg-background/90
                      transition-colors"
         >
+          {/* -rotate-90 starts the fill at 12 o'clock, running clockwise */}
+          <svg
+            viewBox={`0 0 ${RING_SIZE} ${RING_SIZE}`}
+            className="pointer-events-none absolute inset-0 -rotate-90"
+            aria-hidden="true"
+          >
+            <circle
+              cx={RING_SIZE / 2}
+              cy={RING_SIZE / 2}
+              r={RING_RADIUS}
+              fill="none"
+              strokeWidth={RING_STROKE}
+              className="stroke-foreground/10"
+            />
+            <motion.circle
+              cx={RING_SIZE / 2}
+              cy={RING_SIZE / 2}
+              r={RING_RADIUS}
+              fill="none"
+              strokeWidth={RING_STROKE}
+              strokeLinecap="round"
+              className="stroke-primary"
+              style={{ pathLength: ringProgress }}
+            />
+          </svg>
           <ArrowUp className="h-5 w-5" strokeWidth={2} />
         </motion.button>
       )}
