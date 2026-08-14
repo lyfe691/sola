@@ -17,7 +17,7 @@ import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 
 const INK =
-  "rounded-sm underline-offset-4 hover:underline focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50";
+  "rounded-sm text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:decoration-foreground/70 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50";
 
 export default function AboutThisWebsite() {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export default function AboutThisWebsite() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className={`mt-10 text-[13px] text-foreground/55 transition-colors hover:text-foreground ${INK} hover:no-underline`}
+          className="mt-10 text-[13px] text-foreground/55 transition-colors hover:text-foreground focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50"
         >
           ← {t.back}
         </button>
