@@ -13,7 +13,7 @@ import {
   Calendar03Icon,
   Calendar04Icon,
   FileSearchIcon,
-  GithubIcon,
+  Github01Icon,
   InformationCircleIcon,
   ArrowDownAZIcon,
   ArrowUpZAIcon,
@@ -208,7 +208,7 @@ const ProjectActions = ({
                 }
               >
                 <HugeiconsIcon
-                  icon={GithubIcon}
+                  icon={Github01Icon}
                   strokeWidth={2}
                   className="size-4"
                   aria-hidden="true"

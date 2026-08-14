@@ -8,7 +8,7 @@
 
 import { useState, useRef } from "react";
 import {
-  GithubIcon,
+  Github01Icon,
   Linkedin02Icon,
   Mail01Icon,
   SentIcon,
@@ -42,7 +42,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
 const DIRECT_LINKS = [
   { ...SOCIAL_LINKS.email, Icon: hugeIcon(Mail01Icon) },
-  { ...SOCIAL_LINKS.github, Icon: hugeIcon(GithubIcon) },
+  { ...SOCIAL_LINKS.github, Icon: hugeIcon(Github01Icon) },
   { ...SOCIAL_LINKS.linkedin, Icon: hugeIcon(Linkedin02Icon) },
 ] as const;
 

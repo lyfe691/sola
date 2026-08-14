@@ -2,75 +2,28 @@
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  */
 
-import ReactOriginal from "devicons-react/icons/ReactOriginal";
-import TypescriptOriginal from "devicons-react/icons/TypescriptOriginal";
-import DockerOriginal from "devicons-react/icons/DockerOriginal";
-import JavascriptOriginal from "devicons-react/icons/JavascriptOriginal";
-import TailwindcssOriginal from "devicons-react/icons/TailwindcssOriginal";
-import NextjsOriginal from "devicons-react/icons/NextjsOriginal";
-import MongodbOriginal from "devicons-react/icons/MongodbOriginal";
-import SpringOriginal from "devicons-react/icons/SpringOriginal";
-import PostgresqlOriginal from "devicons-react/icons/PostgresqlOriginal";
-import MysqlOriginal from "devicons-react/icons/MysqlOriginal";
-import NodejsOriginal from "devicons-react/icons/NodejsOriginal";
-import GitOriginal from "devicons-react/icons/GitOriginal";
-import LinuxOriginal from "devicons-react/icons/LinuxOriginal";
-import PythonOriginal from "devicons-react/icons/PythonOriginal";
-import JavaOriginal from "devicons-react/icons/JavaOriginal";
-import FigmaOriginal from "devicons-react/icons/FigmaOriginal";
-import Html5Original from "devicons-react/icons/Html5Original";
-import Css3Original from "devicons-react/icons/Css3Original";
-import CplusplusOriginal from "devicons-react/icons/CplusplusOriginal";
-import KotlinOriginal from "devicons-react/icons/KotlinOriginal";
-import FastapiOriginal from "devicons-react/icons/FastapiOriginal";
-import DjangoPlain from "devicons-react/icons/DjangoPlain";
-import KubernetesOriginal from "devicons-react/icons/KubernetesOriginal";
-import NginxOriginal from "devicons-react/icons/NginxOriginal";
-import TerraformOriginal from "devicons-react/icons/TerraformOriginal";
-import VscodeOriginal from "devicons-react/icons/VscodeOriginal";
-import {
-  SiShadcnui,
-  SiVercel,
-  SiGithubactions,
-  SiGnubash,
-  SiKalilinux,
-  SiBurpsuite,
-  SiWireshark,
-  SiPostman,
-  SiNotion,
-  SiFramer,
-  SiVite,
-  SiRadixui,
-  SiRedis,
-  SiMetasploit,
-  SiOwasp,
-  SiGithub,
-  SiNpm,
-  SiInsomnia,
-  SiObsidian,
-  SiSupabase,
-} from "react-icons/si";
 import { FaAws } from "react-icons/fa6";
 import {
-  ComputerTerminal01Icon,
-  Cursor02Icon,
-} from "@hugeicons/core-free-icons";
+  SiBurpsuite,
+  SiMetasploit,
+  SiObsidian,
+  SiOwasp,
+  SiRadixui,
+  SiWireshark,
+} from "react-icons/si";
+import { Cursor02Icon } from "@hugeicons/core-free-icons";
 import { hugeIcon } from "@/lib/huge-icon";
+import { TECH_ICONS, type TechIcon } from "@/config/tech-icons";
 import type { IconType } from "react-icons";
-import type { ComponentType } from "react";
 
-type DevIcon = ComponentType<{
-  className?: string;
-  size?: number;
-  "aria-hidden"?: boolean | "true" | "false";
-}>;
+type SkillIcon = TechIcon | IconType;
 
 // 1-5 scale: 1=learning, 2=familiar, 3=comfortable, 4=proficient, 5=advanced
 export type Proficiency = 1 | 2 | 3 | 4 | 5;
 
 export interface Skill {
   name: string;
-  icon: DevIcon | IconType;
+  icon: SkillIcon;
   level: Proficiency;
 }
 
@@ -79,86 +32,99 @@ export interface SkillGroup {
   skills: Skill[];
 }
 
+/** Chip registry first — same mark as project / experience / deep-dive. */
+function icon(name: string, fallback?: SkillIcon): SkillIcon {
+  const resolved = TECH_ICONS[name] ?? fallback;
+  if (!resolved) {
+    throw new Error(`No icon for skill "${name}"`);
+  }
+  return resolved;
+}
+
+function skill(name: string, level: Proficiency, fallback?: SkillIcon): Skill {
+  return { name, icon: icon(name, fallback), level };
+}
+
 const SKILL_GROUPS_RAW: SkillGroup[] = [
   {
     id: "languages",
     skills: [
-      { name: "HTML", icon: Html5Original, level: 5 },
-      { name: "TypeScript", icon: TypescriptOriginal, level: 4 },
-      { name: "JavaScript", icon: JavascriptOriginal, level: 4 },
-      { name: "Java", icon: JavaOriginal, level: 4 },
-      { name: "CSS", icon: Css3Original, level: 4 },
-      { name: "Python", icon: PythonOriginal, level: 3 },
-      { name: "Kotlin", icon: KotlinOriginal, level: 3 },
-      { name: "C++", icon: CplusplusOriginal, level: 2 },
+      skill("HTML", 5),
+      skill("TypeScript", 4),
+      skill("JavaScript", 4),
+      skill("Java", 4),
+      skill("CSS", 4),
+      skill("Python", 3),
+      skill("Kotlin", 3),
+      skill("C++", 2),
     ],
   },
   {
     id: "frontend",
     skills: [
-      { name: "React", icon: ReactOriginal, level: 5 },
-      { name: "Tailwind CSS", icon: TailwindcssOriginal, level: 5 },
-      { name: "Next.js", icon: NextjsOriginal, level: 4 },
-      { name: "shadcn/ui", icon: SiShadcnui, level: 5 },
-      { name: "Radix UI", icon: SiRadixui, level: 4 },
-      { name: "Framer Motion", icon: SiFramer, level: 4 },
-      { name: "Vite", icon: SiVite, level: 4 },
-      { name: "Figma", icon: FigmaOriginal, level: 3 },
+      skill("React", 5),
+      skill("Tailwind CSS", 5),
+      skill("Next.js", 4),
+      skill("shadcn/ui", 5),
+      skill("Radix UI", 4, SiRadixui),
+      skill("Framer Motion", 4),
+      skill("Vite", 4),
+      skill("Figma", 3),
     ],
   },
   {
     id: "backend",
     skills: [
-      { name: "Spring Boot", icon: SpringOriginal, level: 4 },
-      { name: "MongoDB", icon: MongodbOriginal, level: 4 },
-      { name: "Node.js", icon: NodejsOriginal, level: 3 },
-      { name: "PostgreSQL", icon: PostgresqlOriginal, level: 3 },
-      { name: "MySQL", icon: MysqlOriginal, level: 3 },
-      { name: "Redis", icon: SiRedis, level: 3 },
-      { name: "Supabase", icon: SiSupabase, level: 3 },
-      { name: "FastAPI", icon: FastapiOriginal, level: 2 },
-      { name: "Django", icon: DjangoPlain, level: 2 },
+      skill("Spring Boot", 4),
+      skill("MongoDB", 4),
+      skill("Node.js", 3),
+      skill("PostgreSQL", 3),
+      skill("MySQL", 3),
+      skill("Redis", 3),
+      skill("Supabase", 3),
+      skill("FastAPI", 2),
+      skill("Django", 2),
     ],
   },
   {
     id: "infrastructure",
     skills: [
-      { name: "Git", icon: GitOriginal, level: 5 },
-      { name: "Docker", icon: DockerOriginal, level: 4 },
-      { name: "Linux", icon: LinuxOriginal, level: 4 },
-      { name: "Vercel", icon: SiVercel, level: 4 },
-      { name: "GitHub Actions", icon: SiGithubactions, level: 3 },
-      { name: "PowerShell", icon: hugeIcon(ComputerTerminal01Icon), level: 4 },
-      { name: "Bash", icon: SiGnubash, level: 3 },
-      { name: "Nginx", icon: NginxOriginal, level: 3 },
-      { name: "Kubernetes", icon: KubernetesOriginal, level: 2 },
-      { name: "AWS", icon: FaAws, level: 2 },
-      { name: "Terraform", icon: TerraformOriginal, level: 2 },
+      skill("Git", 5),
+      skill("Docker", 4),
+      skill("Linux", 4),
+      skill("Vercel", 4),
+      skill("GitHub Actions", 3),
+      skill("PowerShell", 4),
+      skill("Bash", 3),
+      skill("Nginx", 3),
+      skill("Kubernetes", 2),
+      skill("AWS", 2, FaAws),
+      skill("Terraform", 2),
     ],
   },
   {
     id: "security",
     skills: [
-      { name: "Kali Linux", icon: SiKalilinux, level: 4 },
-      { name: "OSINT", icon: hugeIcon(ComputerTerminal01Icon), level: 4 },
-      { name: "Nmap", icon: hugeIcon(ComputerTerminal01Icon), level: 4 },
-      { name: "Wireshark", icon: SiWireshark, level: 3 },
-      { name: "OWASP", icon: SiOwasp, level: 3 },
-      { name: "Metasploit", icon: SiMetasploit, level: 3 },
-      { name: "Burp Suite", icon: SiBurpsuite, level: 2 },
+      skill("Kali Linux", 4),
+      skill("OSINT", 4),
+      skill("Nmap", 4),
+      skill("Wireshark", 3, SiWireshark),
+      skill("OWASP", 3, SiOwasp),
+      skill("Metasploit", 3, SiMetasploit),
+      skill("Burp Suite", 2, SiBurpsuite),
     ],
   },
   {
     id: "tools",
     skills: [
-      { name: "VS Code", icon: VscodeOriginal, level: 5 },
-      { name: "Cursor", icon: hugeIcon(Cursor02Icon), level: 5 },
-      { name: "GitHub", icon: SiGithub, level: 5 },
-      { name: "npm", icon: SiNpm, level: 4 },
-      { name: "Notion", icon: SiNotion, level: 4 },
-      { name: "Obsidian", icon: SiObsidian, level: 4 },
-      { name: "Postman", icon: SiPostman, level: 3 },
-      { name: "Insomnia", icon: SiInsomnia, level: 3 },
+      skill("VS Code", 5),
+      skill("Cursor", 5, hugeIcon(Cursor02Icon)),
+      skill("GitHub", 5),
+      skill("npm", 4),
+      skill("Notion", 4),
+      skill("Obsidian", 4, SiObsidian),
+      skill("Postman", 3),
+      skill("Insomnia", 3),
     ],
   },
 ];

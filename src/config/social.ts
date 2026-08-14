@@ -5,7 +5,7 @@
 
 import type { ComponentType } from "react";
 import {
-  GithubIcon,
+  Github01Icon,
   Linkedin02Icon,
   Mail01Icon,
 } from "@hugeicons/core-free-icons";
@@ -77,7 +77,7 @@ export const SOCIAL_ICONS: Record<
     "aria-hidden"?: boolean | "true" | "false";
   }>
 > = {
-  github: hugeIcon(GithubIcon),
+  github: hugeIcon(Github01Icon),
   email: hugeIcon(Mail01Icon),
   linkedin: hugeIcon(Linkedin02Icon),
   leetcode: SiLeetcode,

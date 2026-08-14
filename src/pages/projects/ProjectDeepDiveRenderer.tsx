@@ -20,7 +20,7 @@ import {
 } from "react";
 import { Link, Navigate, useParams } from "react-router";
 import {
-  GithubIcon,
+  Github01Icon,
   Globe02Icon,
   LinkSquare02Icon,
 } from "@hugeicons/core-free-icons";
@@ -90,7 +90,7 @@ function getLinkActions(
     actions.push({
       href: links.github,
       label: t.common.sourceCode,
-      Icon: hugeIcon(GithubIcon),
+      Icon: hugeIcon(Github01Icon),
       variant: "outline",
     });
   }

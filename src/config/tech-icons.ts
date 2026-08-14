@@ -50,25 +50,38 @@ import {
 } from "@hugeicons/core-free-icons";
 import { hugeIcon } from "@/lib/huge-icon";
 import AntdesignOriginal from "devicons-react/icons/AntdesignOriginal";
+import BashOriginal from "devicons-react/icons/BashOriginal";
 import ChromeOriginal from "devicons-react/icons/ChromeOriginal";
+import CplusplusOriginal from "devicons-react/icons/CplusplusOriginal";
 import Css3Original from "devicons-react/icons/Css3Original";
+import DjangoPlain from "devicons-react/icons/DjangoPlain";
 import DockerOriginal from "devicons-react/icons/DockerOriginal";
 import EslintOriginal from "devicons-react/icons/EslintOriginal";
+import FastapiOriginal from "devicons-react/icons/FastapiOriginal";
 import FigmaOriginal from "devicons-react/icons/FigmaOriginal";
 import FramermotionOriginal from "devicons-react/icons/FramermotionOriginal";
 import GitOriginal from "devicons-react/icons/GitOriginal";
+import GithubOriginal from "devicons-react/icons/GithubOriginal";
 import GithubactionsOriginal from "devicons-react/icons/GithubactionsOriginal";
 import Html5Original from "devicons-react/icons/Html5Original";
+import InsomniaOriginal from "devicons-react/icons/InsomniaOriginal";
 import JavaOriginal from "devicons-react/icons/JavaOriginal";
 import JavascriptOriginal from "devicons-react/icons/JavascriptOriginal";
+import KotlinOriginal from "devicons-react/icons/KotlinOriginal";
+import KubernetesOriginal from "devicons-react/icons/KubernetesOriginal";
 import LinuxOriginal from "devicons-react/icons/LinuxOriginal";
 import MarkdownOriginal from "devicons-react/icons/MarkdownOriginal";
 import MongodbOriginal from "devicons-react/icons/MongodbOriginal";
+import MysqlOriginal from "devicons-react/icons/MysqlOriginal";
 import NestjsOriginal from "devicons-react/icons/NestjsOriginal";
 import NextjsOriginal from "devicons-react/icons/NextjsOriginal";
+import NginxOriginal from "devicons-react/icons/NginxOriginal";
 import NodejsOriginal from "devicons-react/icons/NodejsOriginal";
+import NotionOriginal from "devicons-react/icons/NotionOriginal";
+import NpmOriginal from "devicons-react/icons/NpmOriginal";
 import PostgresqlOriginal from "devicons-react/icons/PostgresqlOriginal";
-import PowershellOriginal from "devicons-react/icons/PowershellOriginal";
+import PostmanOriginal from "devicons-react/icons/PostmanOriginal";
+import PowershellPlain from "devicons-react/icons/PowershellPlain";
 import PythonOriginal from "devicons-react/icons/PythonOriginal";
 import ReactOriginal from "devicons-react/icons/ReactOriginal";
 import RedisOriginal from "devicons-react/icons/RedisOriginal";
@@ -76,9 +89,12 @@ import RustOriginal from "devicons-react/icons/RustOriginal";
 import SpringOriginal from "devicons-react/icons/SpringOriginal";
 import SupabaseOriginal from "devicons-react/icons/SupabaseOriginal";
 import TailwindcssOriginal from "devicons-react/icons/TailwindcssOriginal";
+import TerraformOriginal from "devicons-react/icons/TerraformOriginal";
 import ThreejsOriginal from "devicons-react/icons/ThreejsOriginal";
 import TypescriptOriginal from "devicons-react/icons/TypescriptOriginal";
 import VercelOriginal from "devicons-react/icons/VercelOriginal";
+import ViteOriginal from "devicons-react/icons/ViteOriginal";
+import VscodeOriginal from "devicons-react/icons/VscodeOriginal";
 
 export type TechIcon = ComponentType<{
   className?: string;
@@ -89,27 +105,41 @@ export type TechIcon = ComponentType<{
 /** exact display-name -> mark; variants of one stack share its mark */
 export const TECH_ICONS: Record<string, TechIcon> = {
   "Ant Design": AntdesignOriginal,
+  Bash: BashOriginal,
+  "C++": CplusplusOriginal,
   "Chrome Extension": ChromeOriginal,
   CSS: Css3Original,
+  Django: DjangoPlain,
   Docker: DockerOriginal,
   ESLint: EslintOriginal,
+  FastAPI: FastapiOriginal,
   Figma: FigmaOriginal,
   "Framer Motion": FramermotionOriginal,
   Git: GitOriginal,
+  GitHub: GithubOriginal,
   "GitHub Actions": GithubactionsOriginal,
   HTML: Html5Original,
+  Insomnia: InsomniaOriginal,
   Java: JavaOriginal,
   JavaScript: JavascriptOriginal,
   "Kali Linux": LinuxOriginal,
+  Kotlin: KotlinOriginal,
+  Kubernetes: KubernetesOriginal,
   Linux: LinuxOriginal,
   MDX: MarkdownOriginal,
   MongoDB: MongodbOriginal,
+  MySQL: MysqlOriginal,
   NestJS: NestjsOriginal,
   "Next.js": NextjsOriginal,
   "Next.js App Router": NextjsOriginal,
+  Nginx: NginxOriginal,
   "Node.js": NodejsOriginal,
+  Notion: NotionOriginal,
+  npm: NpmOriginal,
   PostgreSQL: PostgresqlOriginal,
-  Powershell: PowershellOriginal,
+  Postman: PostmanOriginal,
+  Powershell: PowershellPlain,
+  PowerShell: PowershellPlain,
   Python: PythonOriginal,
   React: ReactOriginal,
   "React (Vite)": ReactOriginal,
@@ -119,9 +149,13 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   "Spring Boot": SpringOriginal,
   Supabase: SupabaseOriginal,
   "Tailwind CSS": TailwindcssOriginal,
+  Terraform: TerraformOriginal,
   "Three.js": ThreejsOriginal,
   TypeScript: TypescriptOriginal,
+  Vercel: VercelOriginal,
   "Vercel AI SDK": VercelOriginal,
+  Vite: ViteOriginal,
+  "VS Code": VscodeOriginal,
   tokio: RustOriginal,
 
   // ---- concept tags (hugeicons, monochrome) ----
@@ -141,6 +175,8 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   JSZip: hugeIcon(FileZipIcon),
   MINT: hugeIcon(Chemistry01Icon),
   Networking: hugeIcon(Wifi01Icon),
+  Nmap: hugeIcon(RadarIcon),
+  OSINT: hugeIcon(SearchIcon),
   "Office 365": hugeIcon(Office365Icon),
   OverTheWire: hugeIcon(Sword01Icon),
   "Package Management": hugeIcon(Package01Icon),
