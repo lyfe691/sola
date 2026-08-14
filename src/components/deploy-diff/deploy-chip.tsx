@@ -7,7 +7,7 @@
  *
  * The deployed-commit pin for the footer: a quiet mono chip — commit dot +
  * short sha — naming the exact commit this page was built from. Lingering
- * grows the hint card with the live commit (subject, diffstat, date), loaded
+ * grows a tooltip with the live commit (subject, diffstat, date), loaded
  * through use-page-diff's site scope so it shares the code view's cache and
  * GitHub rate budget; nothing is fetched until someone actually hovers.
  * Clicking flips into the code view, same as the appearance menu's switch.
@@ -18,12 +18,10 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-  tooltipCardClassName,
 } from "@/components/ui/tooltip";
 import { INTL_LOCALE } from "@/lib/dates";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { cn } from "@/lib/utils";
 import { useCodeView } from "./code-view-provider";
 import { DIFF_TOKENS } from "./diff-tokens";
 import { useIsDarkScheme } from "./use-scheme";
@@ -74,27 +72,24 @@ export function DeployChip() {
       </TooltipTrigger>
       <TooltipContent
         side="top"
-        className={cn(
-          tooltipCardClassName,
-          "w-56 flex-col items-stretch p-1 select-none",
-        )}
+        className="w-56 flex-col items-stretch select-none"
       >
-        <div className="space-y-1 px-2 pt-1 pb-1.5 text-left">
+        <div className="space-y-1 text-left">
           {/* a command name, not copy — and the title the code view opens
-              under, so the card reads as its preview */}
+              under, so the tooltip reads as its preview */}
           <p className="font-mono">git show</p>
           {state.status === "loading" && (
             <div className="space-y-1.5 py-1" aria-hidden="true">
-              <div className="h-2.5 w-full animate-pulse rounded-full bg-popover-foreground/10" />
-              <div className="h-2.5 w-2/3 animate-pulse rounded-full bg-popover-foreground/10" />
+              <div className="h-2.5 w-full animate-pulse rounded-full bg-background/10" />
+              <div className="h-2.5 w-2/3 animate-pulse rounded-full bg-background/10" />
             </div>
           )}
           {commit && (
             <>
               <p className="line-clamp-2 leading-relaxed">{commit.subject}</p>
               <p
-                style={DIFF_TOKENS[isDark ? "dark" : "light"]}
-                className="font-mono text-[10px] font-normal text-popover-foreground/60"
+                style={DIFF_TOKENS[isDark ? "light" : "dark"]}
+                className="font-mono text-[10px] font-normal text-background/60"
               >
                 <span className="text-(--diff-add-fg)">
                   +{commit.additions}
@@ -106,7 +101,7 @@ export function DeployChip() {
               </p>
             </>
           )}
-          <p className="pt-0.5 font-normal leading-relaxed text-popover-foreground/70">
+          <p className="pt-0.5 font-normal leading-relaxed text-background/70">
             {t.common.diff.deployed}
           </p>
         </div>
