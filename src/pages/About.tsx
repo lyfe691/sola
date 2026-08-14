@@ -7,7 +7,7 @@
  */
 
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { ArrowRight01Icon, Download02Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, Download01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router";
@@ -257,7 +257,7 @@ function ResumeModal() {
       className="w-full border-foreground/20 sm:w-auto"
       icon={
         <HugeiconsIcon
-          icon={Download02Icon}
+          icon={Download01Icon}
           strokeWidth={2}
           className="size-4"
         />
