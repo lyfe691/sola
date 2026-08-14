@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 import path from "path";
 import type { IncomingMessage, ServerResponse } from "http";
 import type { Connect } from "vite";
-import { getGitHubActivity } from "./api/github-activity";
+import { getGitHubActivity } from "./api/github-activity.ts";
 
 const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
 
@@ -113,7 +113,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
   build: {
