@@ -375,10 +375,12 @@ export const en = {
   },
   colophon: {
     title: "How this website was made",
-    intro:
-      "In old books, the last page tells you how the thing was made. This is that page.",
-    setByHand: "Set by hand in Zürich.",
-    thanks: "Thanks for stopping by.",
+    lede: "In old books, the last page tells you how the thing was made. This is that page.",
+    built:
+      "It is a [React](https://react.dev) app in [TypeScript](https://www.typescriptlang.org), built with [Vite](https://vite.dev) so the loop from save to screen stays out of the way. Colour and space come from [Tailwind CSS](https://tailwindcss.com) and [shadcn/ui](https://ui.shadcn.com) — tokens, never a raw palette. What moves is [Motion](https://motion.dev) for the interface and [GSAP](https://gsap.com) for the skies; two clocks, so a button never borrows from a background.",
+    faces:
+      "The faces are [Onest](https://fonts.google.com/specimen/Onest) for reading, [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque) for the names, [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) for code, and [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1) for ink like this. It lives on [Vercel](https://vercel.com); the source is on [GitHub](https://github.com/lyfe691/sola).",
+    close: "Set by hand in Zürich. Thanks for stopping by.",
     back: "Go back",
   },
   footer: {

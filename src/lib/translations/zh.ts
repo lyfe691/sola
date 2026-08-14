@@ -367,9 +367,12 @@ export const zh = {
     // deliberately Traditional in a Simplified file: it's the page's identity
     // line, and Shippori Mincho B1 (a Japanese face) has no glyph for 这
     title: "這個網站是怎麼造出來的",
-    intro: "旧书的最后一页，往往写着这本书是如何做成的。这里就是那一页。",
-    setByHand: "于苏黎世手工排版。",
-    thanks: "感谢到访。",
+    lede: "旧书的最后一页，往往写着这本书是如何做成的。这里就是那一页。",
+    built:
+      "这是用 [React](https://react.dev) 和 [TypeScript](https://www.typescriptlang.org) 写的，用 [Vite](https://vite.dev) 搭建，好让保存到上屏的距离看不见。颜色和留白来自 [Tailwind CSS](https://tailwindcss.com) 和 [shadcn/ui](https://ui.shadcn.com) — 只用 token，不用生的色板。动的东西，界面是 [Motion](https://motion.dev)，天是 [GSAP](https://gsap.com)。两套时钟，按钮不向背景借拍子。",
+    faces:
+      "字体是阅读用的 [Onest](https://fonts.google.com/specimen/Onest)，名字用的 [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque)，代码用的 [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono)，这一页的墨是 [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1)。住在 [Vercel](https://vercel.com)；源码在 [GitHub](https://github.com/lyfe691/sola)。",
+    close: "于苏黎世手工排版。感谢到访。",
     back: "返回",
   },
   footer: {

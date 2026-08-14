@@ -380,10 +380,12 @@ export const es = {
   },
   colophon: {
     title: "Cómo se hizo este sitio",
-    intro:
-      "En los libros antiguos, la última página cuenta cómo se hizo todo. Esta es esa página.",
-    setByHand: "Compuesto a mano en Zúrich.",
-    thanks: "Gracias por la visita.",
+    lede: "En los libros antiguos, la última página cuenta cómo se hizo todo. Esta es esa página.",
+    built:
+      "Es una app de [React](https://react.dev) en [TypeScript](https://www.typescriptlang.org), construida con [Vite](https://vite.dev) para que el camino del guardado a la pantalla no se note. El color y el espacio vienen de [Tailwind CSS](https://tailwindcss.com) y [shadcn/ui](https://ui.shadcn.com) — tokens, nunca una paleta cruda. Lo que se mueve es [Motion](https://motion.dev) para la interfaz y [GSAP](https://gsap.com) para los cielos; dos relojes, para que un botón no le pida prestado a un fondo.",
+    faces:
+      "Las letras son [Onest](https://fonts.google.com/specimen/Onest) para leer, [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque) para los nombres, [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) para el código y [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1) para tinta como esta. Vive en [Vercel](https://vercel.com); el código está en [GitHub](https://github.com/lyfe691/sola).",
+    close: "Compuesto a mano en Zúrich. Gracias por la visita.",
     back: "Volver",
   },
   footer: {

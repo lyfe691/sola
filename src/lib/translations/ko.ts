@@ -371,11 +371,13 @@ export const ko = {
     backHome: "홈으로 돌아가기",
   },
   colophon: {
-    title: "이 웹사이트는 어떻게 만들어졌나요?",
-    intro:
-      "오래된 책에서는 마지막 페이지에 그 물건이 어떻게 만들어졌는지 알려줍니다. 이것이 바로 그 페이지입니다.",
-    setByHand: "취리히에서 직접 만들었습니다.",
-    thanks: "들러주셔서 감사합니다.",
+    title: "이 웹사이트는 어떻게 만들어졌나요",
+    lede: "오래된 책에서는 마지막 페이지에 그 물건이 어떻게 만들어졌는지 알려줍니다. 이것이 바로 그 페이지입니다.",
+    built:
+      "[React](https://react.dev)와 [TypeScript](https://www.typescriptlang.org)로 만든 앱이고, 저장에서 화면까지의 거리가 보이지 않게 [Vite](https://vite.dev)로 짓습니다. 색과 여백은 [Tailwind CSS](https://tailwindcss.com)와 [shadcn/ui](https://ui.shadcn.com) — 토큰만, 날것의 팔레트는 쓰지 않습니다. 움직이는 것은 인터페이스가 [Motion](https://motion.dev), 하늘이 [GSAP](https://gsap.com). 시계는 둘입니다. 버튼이 배경의 박자를 빌려 쓰지 않게.",
+    faces:
+      "글자는 읽기용 [Onest](https://fonts.google.com/specimen/Onest), 이름용 [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque), 코드용 [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono), 그리고 이런 먹색에는 [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1). [Vercel](https://vercel.com)에 살고, 원본은 [GitHub](https://github.com/lyfe691/sola)에 있습니다.",
+    close: "취리히에서 손으로 짰습니다. 들러주셔서 감사합니다.",
     back: "돌아가기",
   },
   footer: {
