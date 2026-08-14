@@ -9,17 +9,18 @@
 import { useMemo, useState, type ReactNode } from "react";
 import { motion } from "motion/react";
 import {
-  ArrowUpRight,
-  SortAsc,
-  Star,
-  Calendar,
-  CalendarClock,
-  ArrowDownAZ,
-  ArrowUpAZ,
-  FileSearch,
-  Info,
-} from "lucide-react";
-import { FaGithubAlt } from "react-icons/fa";
+  ArrowUpRight01Icon,
+  Calendar03Icon,
+  Calendar04Icon,
+  FileSearchIcon,
+  GithubIcon,
+  InformationCircleIcon,
+  ArrowDownAZIcon,
+  ArrowUpZAIcon,
+  SortByDown01Icon,
+  StarIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Link } from "react-router";
 import type { Language } from "@/config/languages";
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
@@ -76,27 +77,39 @@ const buildSortOptions = (t: Translation): SortOptionItem[] => [
   {
     value: "priority",
     label: t.projects.sortOptions.priority,
-    icon: <Star className="w-4 h-4" />,
+    icon: <HugeiconsIcon icon={StarIcon} strokeWidth={2} className="size-4" />,
   },
   {
     value: "date-newest",
     label: t.projects.sortOptions.dateNewest,
-    icon: <Calendar className="w-4 h-4" />,
+    icon: (
+      <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" />
+    ),
   },
   {
     value: "date-oldest",
     label: t.projects.sortOptions.dateOldest,
-    icon: <CalendarClock className="w-4 h-4" />,
+    icon: (
+      <HugeiconsIcon icon={Calendar04Icon} strokeWidth={2} className="size-4" />
+    ),
   },
   {
     value: "name-asc",
     label: t.projects.sortOptions.nameAsc,
-    icon: <ArrowDownAZ className="w-4 h-4" />,
+    icon: (
+      <HugeiconsIcon
+        icon={ArrowDownAZIcon}
+        strokeWidth={2}
+        className="size-4"
+      />
+    ),
   },
   {
     value: "name-desc",
     label: t.projects.sortOptions.nameDesc,
-    icon: <ArrowUpAZ className="w-4 h-4" />,
+    icon: (
+      <HugeiconsIcon icon={ArrowUpZAIcon} strokeWidth={2} className="size-4" />
+    ),
   },
 ];
 
@@ -169,7 +182,13 @@ const ProjectActions = ({
             nativeButton={false}
             render={<Link to={`/projects/${project.slug}`} />}
             label={t.projects.viewDetails}
-            icon={<FileSearch className="h-4 w-4" />}
+            icon={
+              <HugeiconsIcon
+                icon={FileSearchIcon}
+                strokeWidth={2}
+                className="size-4"
+              />
+            }
             size="lg"
             className="w-full"
           />
@@ -188,7 +207,12 @@ const ProjectActions = ({
                   />
                 }
               >
-                <FaGithubAlt className="h-4 w-4" aria-hidden="true" />
+                <HugeiconsIcon
+                  icon={GithubIcon}
+                  strokeWidth={2}
+                  className="size-4"
+                  aria-hidden="true"
+                />
                 {t.projects.viewGithub}
               </Button>
             )}
@@ -205,7 +229,11 @@ const ProjectActions = ({
                   />
                 }
               >
-                <ArrowUpRight className="h-4 w-4" />
+                <HugeiconsIcon
+                  icon={ArrowUpRight01Icon}
+                  strokeWidth={2}
+                  className="size-4"
+                />
                 {t.projects.visitProject}
               </Button>
             )}
@@ -307,7 +335,11 @@ const Projects = () => {
           className="mb-8 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-center sm:justify-between"
         >
           <div className="flex items-center gap-3">
-            <SortAsc className="h-4 w-4 text-foreground/60" />
+            <HugeiconsIcon
+              icon={SortByDown01Icon}
+              strokeWidth={2}
+              className="size-4 text-foreground/60"
+            />
             <span className="text-sm font-medium text-foreground/60">
               {t.projects.sortBy}:
             </span>
@@ -374,7 +406,12 @@ const Projects = () => {
                     aria-label={t.projects.otherInfo}
                     className="inline-flex cursor-help items-center justify-center rounded-full transition-colors duration-300 hover:text-primary group-hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
                   >
-                    <Info className="w-4 h-4" aria-hidden="true" />
+                    <HugeiconsIcon
+                      icon={InformationCircleIcon}
+                      strokeWidth={2}
+                      className="size-4"
+                      aria-hidden="true"
+                    />
                   </button>
                 }
               />
@@ -406,7 +443,13 @@ const Projects = () => {
           <IconButton
             variant="default"
             size="lg"
-            icon={<ArrowUpRight className="w-4 h-4" />}
+            icon={
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                strokeWidth={2}
+                className="size-4"
+              />
+            }
             className="transition-colors duration-150 group border-foreground/20 rounded-full"
             label={t.projects.viewAll}
             onClick={() =>

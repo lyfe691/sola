@@ -7,7 +7,8 @@
  */
 
 import { Link } from "react-router";
-import { Contact, FolderGit2 } from "lucide-react";
+import { ContactIcon, FolderGitTwoIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -188,7 +189,13 @@ const Index = () => {
         >
           <Link to="/contact">
             <IconButton
-              icon={<Contact className="size-4" />}
+              icon={
+                <HugeiconsIcon
+                  icon={ContactIcon}
+                  strokeWidth={2}
+                  className="size-4"
+                />
+              }
               variant="default"
               size="lg"
               label={t.index.contactMe}
@@ -196,7 +203,13 @@ const Index = () => {
           </Link>
           <Link to="/projects">
             <IconButton
-              icon={<FolderGit2 className="size-4" />}
+              icon={
+                <HugeiconsIcon
+                  icon={FolderGitTwoIcon}
+                  strokeWidth={2}
+                  className="size-4"
+                />
+              }
               variant="secondary"
               size="lg"
               label={t.index.viewProjects}

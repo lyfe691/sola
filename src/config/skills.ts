@@ -51,7 +51,11 @@ import {
   SiSupabase,
 } from "react-icons/si";
 import { FaAws } from "react-icons/fa6";
-import { Terminal, MousePointer2 } from "lucide-react";
+import {
+  ComputerTerminal01Icon,
+  Cursor02Icon,
+} from "@hugeicons/core-free-icons";
+import { hugeIcon } from "@/lib/huge-icon";
 import type { IconType } from "react-icons";
 import type { ComponentType } from "react";
 
@@ -124,7 +128,7 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       { name: "Linux", icon: LinuxOriginal, level: 4 },
       { name: "Vercel", icon: SiVercel, level: 4 },
       { name: "GitHub Actions", icon: SiGithubactions, level: 3 },
-      { name: "PowerShell", icon: Terminal, level: 4 },
+      { name: "PowerShell", icon: hugeIcon(ComputerTerminal01Icon), level: 4 },
       { name: "Bash", icon: SiGnubash, level: 3 },
       { name: "Nginx", icon: NginxOriginal, level: 3 },
       { name: "Kubernetes", icon: KubernetesOriginal, level: 2 },
@@ -136,8 +140,8 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
     id: "security",
     skills: [
       { name: "Kali Linux", icon: SiKalilinux, level: 4 },
-      { name: "OSINT", icon: Terminal, level: 4 },
-      { name: "Nmap", icon: Terminal, level: 4 },
+      { name: "OSINT", icon: hugeIcon(ComputerTerminal01Icon), level: 4 },
+      { name: "Nmap", icon: hugeIcon(ComputerTerminal01Icon), level: 4 },
       { name: "Wireshark", icon: SiWireshark, level: 3 },
       { name: "OWASP", icon: SiOwasp, level: 3 },
       { name: "Metasploit", icon: SiMetasploit, level: 3 },
@@ -148,7 +152,7 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
     id: "tools",
     skills: [
       { name: "VS Code", icon: VscodeOriginal, level: 5 },
-      { name: "Cursor", icon: MousePointer2, level: 5 },
+      { name: "Cursor", icon: hugeIcon(Cursor02Icon), level: 5 },
       { name: "GitHub", icon: SiGithub, level: 5 },
       { name: "npm", icon: SiNpm, level: 4 },
       { name: "Notion", icon: SiNotion, level: 4 },

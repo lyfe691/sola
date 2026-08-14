@@ -7,7 +7,13 @@
  */
 
 import { useState } from "react";
-import { Globe, Linkedin, Quote, Star } from "lucide-react";
+import {
+  Globe02Icon,
+  Linkedin02Icon,
+  QuoteDownIcon,
+  StarIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useLanguage } from "@/lib/language-provider";
@@ -47,10 +53,14 @@ type TestimonialCardProps = {
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-1">
     {Array.from({ length: 5 }).map((_, i) => (
-      <Star
+      <HugeiconsIcon
         key={i}
+        icon={StarIcon}
+        strokeWidth={2}
         className={`size-4 ${
-          i < rating ? "fill-primary text-primary" : "text-foreground/20"
+          i < rating
+            ? "fill-primary text-primary [&_path]:fill-primary"
+            : "text-foreground/20"
         }`}
       />
     ))}
@@ -80,7 +90,11 @@ const AuthorLinks = ({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 rounded bg-foreground/5 px-1.5 py-0.5 text-xs transition-colors hover:bg-foreground/10"
           >
-            <Globe className="size-2.5" />
+            <HugeiconsIcon
+              icon={Globe02Icon}
+              strokeWidth={2}
+              className="size-2.5"
+            />
             {t.about.testimonials.website}
           </a>
         ) : null}
@@ -91,7 +105,11 @@ const AuthorLinks = ({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 rounded bg-foreground/5 px-1.5 py-0.5 text-xs transition-colors hover:bg-foreground/10"
           >
-            <Linkedin className="size-2.5" />
+            <HugeiconsIcon
+              icon={Linkedin02Icon}
+              strokeWidth={2}
+              className="size-2.5"
+            />
             LinkedIn
           </a>
         ) : null}
@@ -106,7 +124,11 @@ const AuthorLinks = ({
           href={website}
           className="inline-flex items-center gap-1.5 rounded-md bg-foreground/5 px-2.5 py-1.5 text-sm transition-colors hover:bg-foreground/10"
         >
-          <Globe className="size-3.5" />
+          <HugeiconsIcon
+            icon={Globe02Icon}
+            strokeWidth={2}
+            className="size-3.5"
+          />
           {t.about.testimonials.visitWebsite}
         </LinkPreview>
       ) : null}
@@ -115,7 +137,11 @@ const AuthorLinks = ({
           href={linkedin}
           className="inline-flex items-center gap-1.5 rounded-md bg-foreground/5 px-2.5 py-1.5 text-sm transition-colors hover:bg-foreground/10"
         >
-          <Linkedin className="size-3.5" />
+          <HugeiconsIcon
+            icon={Linkedin02Icon}
+            strokeWidth={2}
+            className="size-3.5"
+          />
           {t.about.testimonials.viewLinkedIn}
         </LinkPreview>
       ) : null}
@@ -215,7 +241,11 @@ const TestimonialCard = ({
   const cardContent = (
     <Card className="group relative flex h-full flex-col gap-4 overflow-hidden bg-card/40 p-6 backdrop-blur-md">
       <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
-        <Quote className="size-4 text-primary" />
+        <HugeiconsIcon
+          icon={QuoteDownIcon}
+          strokeWidth={2}
+          className="size-4 text-primary"
+        />
       </div>
 
       <StarRating rating={rating} />

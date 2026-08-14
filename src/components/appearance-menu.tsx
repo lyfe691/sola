@@ -19,7 +19,8 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
-import { Languages } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -214,7 +215,11 @@ export function AppearanceMenu() {
     <>
       {renderTrigger(
         "language",
-        <Languages className="h-4 w-4" />,
+        <HugeiconsIcon
+          icon={AiTranslateIcon}
+          strokeWidth={2}
+          className="size-4"
+        />,
         t.common.a11y.toggleLanguage,
         t.common.command.groups.language,
       )}

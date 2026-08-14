@@ -7,20 +7,22 @@
  */
 
 import {
-  MoonStar,
-  Sun,
-  Cloud,
-  Sprout,
-  Slack,
-  Trees,
-  Coffee,
-  LaptopMinimal,
-} from "lucide-react";
+  BanknoteIcon,
+  CircuitBoardIcon,
+  CloudIcon,
+  Coffee01Icon,
+  DiamondIcon,
+  LaptopIcon,
+  Moon02Icon,
+  PineTreeIcon,
+  Plant02Icon,
+  Sun03Icon,
+} from "@hugeicons/core-free-icons";
 import { RoseIcon } from "@/components/ui/icons/RoseIcon";
-import { FaGem, FaMoneyBillAlt } from "react-icons/fa";
+import { hugeIcon } from "@/lib/huge-icon";
 import type { ComponentType } from "react";
 
-// every icon source used here (lucide, react-icons, custom svg components)
+// every icon source used here (hugeicons glyphs, custom svg components)
 // accepts this prop surface; a concrete type keeps <Icon className/aria-hidden>
 // call sites type-checkable, which bare ElementType unions are not
 export type ThemeIcon = ComponentType<{
@@ -39,67 +41,73 @@ export interface ThemeConfig {
 }
 
 export const THEMES = [
-  { value: "light", label: "Light", icon: Sun, isCustom: false, type: "light" },
+  {
+    value: "light",
+    label: "Light",
+    icon: hugeIcon(Sun03Icon),
+    isCustom: false,
+    type: "light",
+  },
   {
     value: "dark",
     label: "Dark",
-    icon: MoonStar,
+    icon: hugeIcon(Moon02Icon),
     isCustom: false,
     type: "dark",
   },
   {
     value: "system",
     label: "System",
-    icon: LaptopMinimal,
+    icon: hugeIcon(LaptopIcon),
     isCustom: false,
     type: "light",
   }, // system handled via getThemeType
   {
     value: "life",
     label: "Solarpunk",
-    icon: Sprout,
+    icon: hugeIcon(Plant02Icon),
     isCustom: true,
     type: "light",
   },
   {
     value: "cyber",
     label: "Cyberpunk",
-    icon: Slack,
+    icon: hugeIcon(CircuitBoardIcon),
     isCustom: true,
     type: "dark",
   },
   {
     value: "cloud",
     label: "Cloud",
-    icon: Cloud,
+    icon: hugeIcon(CloudIcon),
     isCustom: true,
     type: "light",
   },
   {
     value: "forest",
     label: "Forest",
-    icon: Trees,
+    icon: hugeIcon(PineTreeIcon),
     isCustom: true,
     type: "dark",
   },
   {
     value: "amethyst",
     label: "Amethyst",
-    icon: FaGem,
+    icon: hugeIcon(DiamondIcon),
     isCustom: true,
     type: "dark",
   },
   {
     value: "vintage",
     label: "Vintage",
-    icon: FaMoneyBillAlt,
+    icon: hugeIcon(BanknoteIcon),
     isCustom: true,
     type: "light",
   },
   {
     value: "coffee",
     label: "Coffee",
-    icon: Coffee,
+    icon: hugeIcon(Coffee01Icon),
     isCustom: true,
     type: "light",
   },

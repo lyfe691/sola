@@ -6,12 +6,15 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 
 export function ChevronToArrowIcon({ className }: { className?: string }) {
   return (
-    <ArrowRight
+    <HugeiconsIcon
+      icon={ArrowRight02Icon}
+      strokeWidth={2}
       className={cn(
         "size-4",
         // The line (first path): starts invisible, scales/fades in on hover

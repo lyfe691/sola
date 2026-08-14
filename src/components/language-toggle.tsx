@@ -6,7 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Check } from "lucide-react";
+import { Tick02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { LANGUAGES } from "@/config/languages";
@@ -45,7 +46,11 @@ export function LanguageMenuContent({ onClose }: { onClose: () => void }) {
               {label}
             </span>
             {isSelected && (
-              <Check className="size-4 shrink-0 text-muted-foreground" />
+              <HugeiconsIcon
+                icon={Tick02Icon}
+                strokeWidth={2}
+                className="size-4 shrink-0 text-muted-foreground"
+              />
             )}
           </button>
         );

@@ -7,13 +7,15 @@
  */
 
 import {
-  Code2,
-  Blocks,
-  Database,
-  Lightbulb,
-  CheckCircle2,
-  Tag,
-} from "lucide-react";
+  CheckmarkCircle02Icon,
+  CubeIcon,
+  Database01Icon,
+  IdeaIcon,
+  SaleTag01Icon,
+  SourceCodeIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { hugeIcon } from "@/lib/huge-icon";
 import { Link } from "react-router";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
@@ -29,7 +31,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import type { LucideIcon } from "lucide-react";
+import type { HugeGlyph } from "@/lib/huge-icon";
 
 type ServiceKey = keyof Translation["services"]["services"];
 
@@ -38,25 +40,25 @@ const Services = () => {
   const t = translations[language] as Translation;
 
   const servicesList: {
-    icon: LucideIcon;
+    icon: HugeGlyph;
     key: ServiceKey;
     highlight?: string;
   }[] = [
     {
-      icon: Code2,
+      icon: hugeIcon(SourceCodeIcon),
       key: "fullstack",
     },
     {
-      icon: Blocks,
+      icon: hugeIcon(CubeIcon),
       key: "frontend",
       highlight: t.services.badges.mostPopular,
     },
     {
-      icon: Database,
+      icon: hugeIcon(Database01Icon),
       key: "backend",
     },
     {
-      icon: Lightbulb,
+      icon: hugeIcon(IdeaIcon),
       key: "consulting",
     },
   ];
@@ -145,7 +147,11 @@ const Services = () => {
                         key={i}
                         className="flex items-start gap-2.5 text-sm text-foreground/70 transition-colors group-hover:text-foreground/80"
                       >
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary/80 transition-colors group-hover:text-primary" />
+                        <HugeiconsIcon
+                          icon={CheckmarkCircle02Icon}
+                          strokeWidth={2}
+                          className="mt-0.5 size-4 shrink-0 text-primary/80 transition-colors group-hover:text-primary"
+                        />
                         <span>{feature}</span>
                       </li>
                     ),
@@ -153,7 +159,11 @@ const Services = () => {
                 </ul>
 
                 <div className="flex items-center justify-center gap-2 rounded-xl bg-foreground/5 px-3 py-2 text-sm text-foreground/90 sm:hidden">
-                  <Tag className="h-4 w-4 text-primary/80" />
+                  <HugeiconsIcon
+                    icon={SaleTag01Icon}
+                    strokeWidth={2}
+                    className="size-4 text-primary/80"
+                  />
                   <span className="font-semibold">
                     {t.services.services[service.key].price}
                   </span>

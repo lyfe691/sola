@@ -6,7 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Home } from "lucide-react";
+import { HomeIcon } from "@hugeicons/core-free-icons";
+import { hugeIcon } from "@/lib/huge-icon";
 import type { ElementType } from "react";
 import { type Translation } from "@/lib/translations";
 
@@ -23,7 +24,7 @@ export const MAIN_NAVIGATION: NavigationItem[] = [
   {
     key: "home",
     path: "/",
-    icon: Home,
+    icon: hugeIcon(HomeIcon),
     translationKey: "home",
   },
   {

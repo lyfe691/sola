@@ -7,10 +7,10 @@
  */
 
 import * as React from "react";
-import { ChevronRight } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 
 const PILL_BG = {
   default: "bg-primary-foreground/15",
@@ -31,7 +31,7 @@ export interface IconButtonProps extends React.ComponentProps<typeof Button> {
 export function IconButton({
   className,
   variant = "default",
-  icon = <ChevronRight />,
+  icon = <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />,
   label,
   hideLabel = false,
   iconPosition = "right",

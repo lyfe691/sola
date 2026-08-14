@@ -9,7 +9,13 @@
 import { Link } from "react-router";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { Mail, Info, ChevronRight, ArrowUpRight } from "lucide-react";
+import {
+  ArrowRight01Icon,
+  ArrowUpRight01Icon,
+  InformationCircleIcon,
+  Mail01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   SOCIAL_LINKS,
   SOCIAL_ORDER_FOOTER,
@@ -76,7 +82,11 @@ const Footer = () => {
                 className="group inline-flex items-center space-x-2 font-heading font-bold text-2xl text-foreground hover:text-primary transition-colors"
               >
                 <span>YSZ</span>
-                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <HugeiconsIcon
+                  icon={ArrowUpRight01Icon}
+                  strokeWidth={2}
+                  className="size-4 opacity-0 transition-opacity group-hover:opacity-100"
+                />
               </Link>
               <p className="text-sm text-foreground/70 leading-relaxed">
                 {t.footer.madeWith} <span className="text-primary">♥</span>{" "}
@@ -90,7 +100,11 @@ const Footer = () => {
               to={e}
               className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
             >
-              <Info className="w-3.5 h-3.5 can-hover:group-hover:rotate-12 transition-transform duration-300 ease-out" />
+              <HugeiconsIcon
+                icon={InformationCircleIcon}
+                strokeWidth={2}
+                className="size-3.5 transition-transform duration-300 ease-out can-hover:group-hover:rotate-12"
+              />
               <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
                 {t.footer.atw}
               </span>
@@ -105,7 +119,11 @@ const Footer = () => {
                 <div
                   className={`transition-transform duration-300 ease-out ${isLegalExpanded ? "rotate-90" : ""}`}
                 >
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <HugeiconsIcon
+                    icon={ArrowRight01Icon}
+                    strokeWidth={2}
+                    className="size-3.5"
+                  />
                 </div>
                 <span className="font-medium">{t.footer.legal}</span>
               </button>
@@ -122,7 +140,11 @@ const Footer = () => {
                       <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
                         {t.footer.privacy}
                       </span>
-                      <ArrowUpRight className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <HugeiconsIcon
+                        icon={ArrowUpRight01Icon}
+                        strokeWidth={2}
+                        className="size-2.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                      />
                     </Link>
                   </div>
                 </div>
@@ -173,7 +195,11 @@ const Footer = () => {
                 }}
                 className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-300 ease-out hover:cursor-copy"
               >
-                <Mail className="w-4 h-4 shrink-0 can-hover:group-hover:scale-110 transition-transform duration-300 ease-out" />
+                <HugeiconsIcon
+                  icon={Mail01Icon}
+                  strokeWidth={2}
+                  className="size-4 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:scale-110"
+                />
                 <span className="leading-relaxed wrap-break-word">
                   yanis.sebastian.zuercher@gmail.com
                 </span>
@@ -183,7 +209,11 @@ const Footer = () => {
                 className="inline-flex items-center gap-1 text-sm text-foreground/60 hover:text-foreground can-hover:hover:translate-x-1 transition-[color,transform,translate,scale,rotate] duration-300 ease-out"
               >
                 {t.footer.contactForm}
-                <ArrowUpRight className="w-3 h-3" />
+                <HugeiconsIcon
+                  icon={ArrowUpRight01Icon}
+                  strokeWidth={2}
+                  className="size-3"
+                />
               </Link>
             </div>
           </div>

@@ -7,15 +7,16 @@
  */
 
 import {
-  ArrowUpRight,
-  Briefcase,
-  CalendarDays,
-  MapPin,
-  Building2,
-  House,
-  Blend,
-  type LucideIcon,
-} from "lucide-react";
+  ArrowUpRight01Icon,
+  BlendIcon,
+  Briefcase01Icon,
+  Building02Icon,
+  CalendarDaysIcon,
+  Home03Icon,
+  Location01Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { hugeIcon, type HugeGlyph } from "@/lib/huge-icon";
 import CompanyLogo from "@/components/experience/CompanyLogo";
 import { TagRow } from "@/components/ui/custom/tag-row";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
@@ -31,10 +32,13 @@ interface ExperienceItemProps {
   locationLabel: string;
 }
 
-const LOCATION_TYPE_ICON: Record<LocationType, LucideIcon> = {
-  onsite: Building2,
-  remote: House,
-  hybrid: Blend,
+const BriefcaseGlyph = hugeIcon(Briefcase01Icon);
+const MapPinGlyph = hugeIcon(Location01Icon);
+
+const LOCATION_TYPE_ICON: Record<LocationType, HugeGlyph> = {
+  onsite: hugeIcon(Building02Icon),
+  remote: hugeIcon(Home03Icon),
+  hybrid: hugeIcon(BlendIcon),
 };
 
 /** A small muted icon + label pair used across the meta row. */
@@ -42,7 +46,7 @@ const MetaItem = ({
   icon: Icon,
   label,
 }: {
-  icon: LucideIcon;
+  icon: HugeGlyph;
   label: string;
 }) => (
   <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
@@ -63,7 +67,8 @@ const ExperienceItem = ({
   employmentLabel,
   locationLabel,
 }: ExperienceItemProps) => {
-  const ModeIcon = LOCATION_TYPE_ICON[entry.locationType] ?? Building2;
+  const ModeIcon =
+    LOCATION_TYPE_ICON[entry.locationType] ?? LOCATION_TYPE_ICON.onsite;
 
   return (
     <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-muted/50 sm:-mx-4 sm:gap-5 sm:px-4">
@@ -86,17 +91,23 @@ const ExperienceItem = ({
           <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
             {entry.company}
           </span>
-          <ArrowUpRight
+          <HugeiconsIcon
+            icon={ArrowUpRight01Icon}
+            strokeWidth={2}
             aria-hidden="true"
-            className="size-3.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="size-3.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           />
         </LinkPreview>
 
         {/* meta — icon-led, wraps as whole units on small screens */}
         <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-          {isWork && <MetaItem icon={Briefcase} label={employmentLabel} />}
+          {isWork && <MetaItem icon={BriefcaseGlyph} label={employmentLabel} />}
           <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono">
-            <CalendarDays className="size-3.5 shrink-0 text-muted-foreground/70" />
+            <HugeiconsIcon
+              icon={CalendarDaysIcon}
+              strokeWidth={2}
+              className="size-3.5 shrink-0 text-muted-foreground/70"
+            />
             <span>
               {entry.period}
               <span className="text-muted-foreground/60">
@@ -105,7 +116,7 @@ const ExperienceItem = ({
               </span>
             </span>
           </span>
-          <MetaItem icon={MapPin} label={entry.location} />
+          <MetaItem icon={MapPinGlyph} label={entry.location} />
           {isWork && <MetaItem icon={ModeIcon} label={locationLabel} />}
         </div>
 

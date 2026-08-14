@@ -8,7 +8,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useLocation } from "react-router";
-import { ArrowUp } from "lucide-react";
+import { ArrowUpIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   motion,
   AnimatePresence,
@@ -135,10 +136,11 @@ export default function ScrollToTop() {
           className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background/70 text-foreground/80 ring-1 ring-foreground/10 backdrop-blur-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
         >
           <WaterFill />
-          <ArrowUp
+          <HugeiconsIcon
+            icon={ArrowUpIcon}
+            strokeWidth={1.5}
             aria-hidden
             className="relative size-3.5"
-            strokeWidth={1.5}
           />
         </motion.button>
       )}

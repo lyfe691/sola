@@ -11,7 +11,8 @@ import { motion } from "motion/react";
 import { fadeUpVariants, cardInVariants } from "@/utils/transitions";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { ExternalLink } from "lucide-react";
+import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { getAllCertifications, isExpired } from "@/config/certifications";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Separator } from "@/components/ui/separator";
@@ -182,7 +183,12 @@ const Certifications: React.FC = () => {
                         <IconButton
                           variant="default"
                           size="lg"
-                          icon={<ExternalLink />}
+                          icon={
+                            <HugeiconsIcon
+                              icon={LinkSquare02Icon}
+                              strokeWidth={2}
+                            />
+                          }
                           className="w-full"
                           onClick={() =>
                             window.open(c.url!, "_blank", "noopener,noreferrer")

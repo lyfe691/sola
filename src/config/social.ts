@@ -4,8 +4,12 @@
  */
 
 import type { ComponentType } from "react";
-import { Mail, Linkedin } from "lucide-react";
-import { FaGithubAlt } from "react-icons/fa";
+import {
+  GithubIcon,
+  Linkedin02Icon,
+  Mail01Icon,
+} from "@hugeicons/core-free-icons";
+import { hugeIcon } from "@/lib/huge-icon";
 import {
   SiChessdotcom,
   SiHackthebox,
@@ -73,9 +77,9 @@ export const SOCIAL_ICONS: Record<
     "aria-hidden"?: boolean | "true" | "false";
   }>
 > = {
-  github: FaGithubAlt,
-  email: Mail,
-  linkedin: Linkedin,
+  github: hugeIcon(GithubIcon),
+  email: hugeIcon(Mail01Icon),
+  linkedin: hugeIcon(Linkedin02Icon),
   leetcode: SiLeetcode,
   hackthebox: SiHackthebox,
   chess: SiChessdotcom,

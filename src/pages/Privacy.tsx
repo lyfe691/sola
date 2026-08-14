@@ -25,7 +25,8 @@ import { INTL_LOCALE } from "@/lib/dates";
 import { translations } from "@/lib/translations";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { IconButton } from "@/components/ui/custom/icon-button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 
@@ -1067,7 +1068,13 @@ const Privacy = () => {
           className="mt-16 pt-8 border-t border-border"
         >
           <IconButton
-            icon={<ArrowLeft className="w-4 h-4" />}
+            icon={
+              <HugeiconsIcon
+                icon={ArrowLeft02Icon}
+                strokeWidth={2}
+                className="size-4"
+              />
+            }
             variant="ghost"
             size="sm"
             iconPosition="left"

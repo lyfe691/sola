@@ -8,7 +8,7 @@
  * THE tech chip: the site's secondary Badge carrying the technology's mark —
  * one design across project cards, the deep-dive tech stack, and experience
  * rows, backed by one icon registry (src/config/tech-icons.ts). Every chip
- * gets an icon: brand mark when one exists, semantic lucide glyph for
+ * gets an icon: brand mark when one exists, semantic hugeicons glyph for
  * concept tags, Tag as the last resort. Chips aren't interactive, so no
  * hover states.
  */

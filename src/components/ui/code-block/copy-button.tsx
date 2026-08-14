@@ -7,11 +7,12 @@
  */
 
 import { useState } from "react";
-import { Check, Copy } from "lucide-react";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Tick02Icon, Copy01Icon } from "@hugeicons/core-free-icons";
 
 interface CopyButtonProps {
   value: string;
@@ -50,13 +51,17 @@ export const CopyButton = ({ value, className }: CopyButtonProps) => {
         className,
       )}
     >
-      <Copy
+      <HugeiconsIcon
+        icon={Copy01Icon}
+        strokeWidth={2}
         className={cn(
           "size-3.5 transition duration-200 ease-out",
           copied && "scale-90 opacity-0",
         )}
       />
-      <Check
+      <HugeiconsIcon
+        icon={Tick02Icon}
+        strokeWidth={2}
         className={cn(
           "absolute inset-0 m-auto size-3.5 text-primary transition duration-200 ease-out",
           copied ? "scale-100 opacity-100" : "scale-90 opacity-0",

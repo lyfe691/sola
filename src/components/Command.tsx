@@ -7,7 +7,8 @@
  */
 
 import { useNavigate } from "react-router";
-import { SearchX } from "lucide-react";
+import { SearchRemoveIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Command,
   CommandDialog,
@@ -127,7 +128,7 @@ export function CommandMenu() {
           <Empty className="p-8">
             <EmptyHeader>
               <EmptyMedia variant="icon">
-                <SearchX />
+                <HugeiconsIcon icon={SearchRemoveIcon} strokeWidth={2} />
               </EmptyMedia>
               <EmptyTitle>{t.common.command.noResults}</EmptyTitle>
             </EmptyHeader>

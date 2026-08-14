@@ -10,7 +10,8 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon } from "lucide-react"
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft01Icon, ArrowRight01Icon, ArrowDown01Icon } from "@hugeicons/core-free-icons";
 
 function Calendar({
   className,
@@ -147,18 +148,18 @@ function Calendar({
         Chevron: ({ className, orientation, ...props }) => {
           if (orientation === "left") {
             return (
-              <ChevronLeftIcon className={cn("size-4", className)} {...props} />
+              <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} className={cn("size-4", className)} {...props} />
             )
           }
 
           if (orientation === "right") {
             return (
-              <ChevronRightIcon className={cn("size-4", className)} {...props} />
+              <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className={cn("size-4", className)} {...props} />
             )
           }
 
           return (
-            <ChevronDownIcon className={cn("size-4", className)} {...props} />
+            <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} className={cn("size-4", className)} {...props} />
           )
         },
         DayButton: ({ ...props }) => (

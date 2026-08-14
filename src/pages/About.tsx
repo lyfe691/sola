@@ -7,7 +7,8 @@
  */
 
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { Download, ChevronRight } from "lucide-react";
+import { ArrowRight01Icon, Download02Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
@@ -254,7 +255,13 @@ function ResumeModal() {
       variant="default"
       size="lg"
       className="w-full border-foreground/20 sm:w-auto"
-      icon={<Download className="size-4" />}
+      icon={
+        <HugeiconsIcon
+          icon={Download02Icon}
+          strokeWidth={2}
+          className="size-4"
+        />
+      }
       iconPosition="left"
       label={t.buttonLabel}
       onClick={() => setOpen(true)}
@@ -535,7 +542,9 @@ const About = () => {
                 <span className="border-b border-dotted border-foreground/20 transition-colors duration-300 group-hover:border-primary">
                   {about.testimonials.link}
                 </span>
-                <ChevronRight
+                <HugeiconsIcon
+                  icon={ArrowRight01Icon}
+                  strokeWidth={2}
                   aria-hidden
                   className="size-3.5 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:translate-x-0.5"
                 />

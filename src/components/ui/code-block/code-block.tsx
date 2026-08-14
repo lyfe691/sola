@@ -6,8 +6,12 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import type { ComponentType, SVGProps } from "react";
-import { FileCode2, Terminal } from "lucide-react";
+import type { ComponentType } from "react";
+import {
+  ComputerTerminal01Icon,
+  FileCodeIcon,
+} from "@hugeicons/core-free-icons";
+import { hugeIcon } from "@/lib/huge-icon";
 import {
   SiDocker,
   SiJavascript,
@@ -32,7 +36,15 @@ interface CodeBlockProps {
 /* The shadcn-docs header touch: a small language mark next to the filename.
    Only the languages the articles actually speak get a brand icon; shells
    share the terminal glyph and everything else falls back to a file mark. */
-const LANGUAGE_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
+const FileCodeGlyph = hugeIcon(FileCodeIcon);
+
+const LANGUAGE_ICONS: Record<
+  string,
+  ComponentType<{
+    className?: string;
+    "aria-hidden"?: boolean | "true" | "false";
+  }>
+> = {
   typescript: SiTypescript,
   ts: SiTypescript,
   tsx: SiReact,
@@ -42,16 +54,16 @@ const LANGUAGE_ICONS: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
   json: SiJson,
   docker: SiDocker,
   dockerfile: SiDocker,
-  bash: Terminal,
-  sh: Terminal,
-  shell: Terminal,
-  zsh: Terminal,
-  console: Terminal,
-  powershell: Terminal,
+  bash: hugeIcon(ComputerTerminal01Icon),
+  sh: hugeIcon(ComputerTerminal01Icon),
+  shell: hugeIcon(ComputerTerminal01Icon),
+  zsh: hugeIcon(ComputerTerminal01Icon),
+  console: hugeIcon(ComputerTerminal01Icon),
+  powershell: hugeIcon(ComputerTerminal01Icon),
 };
 
 const LanguageIcon = ({ lang }: { lang: string }) => {
-  const Icon = LANGUAGE_ICONS[lang] ?? FileCode2;
+  const Icon = LANGUAGE_ICONS[lang] ?? FileCodeGlyph;
   return <Icon aria-hidden className="size-3.5 shrink-0 opacity-70" />;
 };
 

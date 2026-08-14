@@ -11,7 +11,8 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Maximize2, X } from "lucide-react";
+import { ArrowExpandIcon, Cancel01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -132,7 +133,12 @@ function ImageLightbox({
               "sm:right-6 sm:top-6",
             )}
           >
-            <X className="size-4" aria-hidden="true" />
+            <HugeiconsIcon
+              icon={Cancel01Icon}
+              strokeWidth={2}
+              className="size-4"
+              aria-hidden="true"
+            />
           </button>
 
           <motion.figure
@@ -228,7 +234,11 @@ export function ExpandableImage({
             "group-focus-visible/image:opacity-100",
           )}
         >
-          <Maximize2 className="size-3.5" strokeWidth={2} />
+          <HugeiconsIcon
+            icon={ArrowExpandIcon}
+            strokeWidth={2}
+            className="size-3.5"
+          />
         </span>
       </button>
 

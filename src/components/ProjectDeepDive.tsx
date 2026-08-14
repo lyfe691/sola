@@ -22,7 +22,8 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import { ArrowLeft, CodeXml } from "lucide-react";
+import { ArrowLeft02Icon, CodeXmlIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useNavigate } from "react-router";
 import {
   Breadcrumb,
@@ -268,14 +269,21 @@ export function ProjectDeepDive({
                       />
                     }
                   >
-                    <CodeXml className="size-4" aria-hidden="true" />
+                    <HugeiconsIcon
+                      icon={CodeXmlIcon}
+                      strokeWidth={2}
+                      className="size-4"
+                      aria-hidden="true"
+                    />
                   </HoverCardTrigger>
                   <DiffHintContent side="bottom" />
                 </HoverCard>
 
                 <IconButton
                   variant="ghost"
-                  icon={<ArrowLeft />}
+                  icon={
+                    <HugeiconsIcon icon={ArrowLeft02Icon} strokeWidth={2} />
+                  }
                   iconPosition="left"
                   size="sm"
                   onClick={() => navigate("/projects")}

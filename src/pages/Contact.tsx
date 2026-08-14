@@ -7,7 +7,15 @@
  */
 
 import { useState, useRef } from "react";
-import { Check, Github, Linkedin, Mail, Send } from "lucide-react";
+import {
+  GithubIcon,
+  Linkedin02Icon,
+  Mail01Icon,
+  SentIcon,
+  Tick02Icon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { hugeIcon } from "@/lib/huge-icon";
 import { AnimatePresence, motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
@@ -33,9 +41,9 @@ const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
 const DIRECT_LINKS = [
-  { ...SOCIAL_LINKS.email, Icon: Mail },
-  { ...SOCIAL_LINKS.github, Icon: Github },
-  { ...SOCIAL_LINKS.linkedin, Icon: Linkedin },
+  { ...SOCIAL_LINKS.email, Icon: hugeIcon(Mail01Icon) },
+  { ...SOCIAL_LINKS.github, Icon: hugeIcon(GithubIcon) },
+  { ...SOCIAL_LINKS.linkedin, Icon: hugeIcon(Linkedin02Icon) },
 ] as const;
 
 const FieldError = ({ name, error }: { name: string; error?: string }) => (
@@ -210,7 +218,11 @@ const Contact = () => {
                     className="flex items-start gap-3 text-sm text-foreground/70"
                   >
                     <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                      <Check className="size-3 text-primary" strokeWidth={3} />
+                      <HugeiconsIcon
+                        icon={Tick02Icon}
+                        strokeWidth={3}
+                        className="size-3 text-primary"
+                      />
                     </span>
                     {item}
                   </motion.li>
@@ -327,7 +339,17 @@ const Contact = () => {
                 type="submit"
                 disabled={isSubmitting}
                 iconPosition="left"
-                icon={isSubmitting ? <Spinner /> : <Send className="h-4 w-4" />}
+                icon={
+                  isSubmitting ? (
+                    <Spinner />
+                  ) : (
+                    <HugeiconsIcon
+                      icon={SentIcon}
+                      strokeWidth={2}
+                      className="size-4"
+                    />
+                  )
+                }
                 variant="default"
                 size="lg"
                 className="mt-1 w-full"

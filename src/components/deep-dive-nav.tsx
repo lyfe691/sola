@@ -14,7 +14,8 @@
  */
 
 import { useEffect, useState, type RefObject } from "react";
-import { ChevronDown } from "lucide-react";
+import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { LineSidebar } from "@/components/ui/custom/line-sidebar";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
@@ -194,7 +195,9 @@ export function DeepDiveSectionMenu({ sections, activeId }: SectionNavProps) {
           <span className="min-w-0 truncate px-6 font-medium text-foreground">
             {current?.label ?? t.common.onThisPage}
           </span>
-          <ChevronDown
+          <HugeiconsIcon
+            icon={ArrowDown01Icon}
+            strokeWidth={2}
             aria-hidden="true"
             className={cn(
               "absolute right-0 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out",

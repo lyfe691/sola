@@ -6,7 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Search } from "lucide-react";
+import { SearchIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "./ui/button";
 import { useCommandMenu } from "@/hooks/use-command-menu";
 import {
@@ -44,7 +45,7 @@ export function SearchToggle() {
           />
         }
       >
-        <Search className="h-4 w-4" />
+        <HugeiconsIcon icon={SearchIcon} strokeWidth={2} className="size-4" />
         <span className="sr-only">{t.common.search}</span>
       </TooltipTrigger>
       <TooltipContent>

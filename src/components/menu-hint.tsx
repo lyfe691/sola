@@ -9,7 +9,8 @@
  * desktop, popover on touch. Clicks never reach the row it decorates.
  */
 
-import { Info } from "lucide-react";
+import { InformationCircleIcon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Tooltip,
@@ -37,7 +38,11 @@ export function MenuHint({ text }: MenuHintProps) {
       onPointerDown={(event) => event.stopPropagation()}
       aria-label={text}
     >
-      <Info className="size-3" />
+      <HugeiconsIcon
+        icon={InformationCircleIcon}
+        strokeWidth={2}
+        className="size-3"
+      />
     </button>
   );
 

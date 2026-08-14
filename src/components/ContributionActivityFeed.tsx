@@ -14,22 +14,23 @@ import { motion } from "motion/react";
 import { GITHUB_USER, type ProcessedActivity } from "@/lib/github";
 import { userActivityQuery } from "@/lib/github-activity";
 import {
-  GitCommit,
-  GitPullRequest,
-  GitBranch,
-  GitMerge,
-  Plus,
-  Trash2,
-  Star,
-  GitFork,
-  AlertCircle,
-  CheckCircle2,
-  Tag,
-  Users,
-  Eye,
-  ArrowUpRight,
-  Clock,
-} from "lucide-react";
+  Add01Icon,
+  AlertCircleIcon,
+  ArrowUpRight01Icon,
+  CheckmarkCircle02Icon,
+  Clock01Icon,
+  Delete02Icon,
+  EyeIcon,
+  GitBranchIcon,
+  GitCommitIcon,
+  GitForkIcon,
+  GitMergeIcon,
+  GitPullRequestIcon,
+  SaleTag01Icon,
+  StarIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { IconButton } from "./ui/custom/icon-button";
 import { INTL_LOCALE } from "@/lib/dates";
@@ -49,52 +50,154 @@ const ActivityIcon = ({ activity }: { activity: ProcessedActivity }) => {
 
   switch (activity.type) {
     case "push":
-      return <GitCommit className={`${iconClass} text-foreground/60`} />;
+      return (
+        <HugeiconsIcon
+          icon={GitCommitIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-foreground/60`}
+        />
+      );
 
     case "pull_request":
       if (activity.action === "opened") {
-        return <GitPullRequest className={`${iconClass} text-primary`} />;
+        return (
+          <HugeiconsIcon
+            icon={GitPullRequestIcon}
+            strokeWidth={2}
+            className={`${iconClass} text-primary`}
+          />
+        );
       } else if (activity.action === "closed") {
-        return <GitMerge className={`${iconClass} text-primary`} />;
+        return (
+          <HugeiconsIcon
+            icon={GitMergeIcon}
+            strokeWidth={2}
+            className={`${iconClass} text-primary`}
+          />
+        );
       }
-      return <GitPullRequest className={`${iconClass} text-foreground/60`} />;
+      return (
+        <HugeiconsIcon
+          icon={GitPullRequestIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-foreground/60`}
+        />
+      );
 
     case "issues":
       if (activity.action === "opened") {
-        return <AlertCircle className={`${iconClass} text-destructive`} />;
+        return (
+          <HugeiconsIcon
+            icon={AlertCircleIcon}
+            strokeWidth={2}
+            className={`${iconClass} text-destructive`}
+          />
+        );
       } else if (activity.action === "closed") {
-        return <CheckCircle2 className={`${iconClass} text-primary`} />;
+        return (
+          <HugeiconsIcon
+            icon={CheckmarkCircle02Icon}
+            strokeWidth={2}
+            className={`${iconClass} text-primary`}
+          />
+        );
       }
-      return <AlertCircle className={`${iconClass} text-foreground/60`} />;
+      return (
+        <HugeiconsIcon
+          icon={AlertCircleIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-foreground/60`}
+        />
+      );
 
     case "create":
       if (activity.metadata?.branch) {
-        return <GitBranch className={`${iconClass} text-primary`} />;
+        return (
+          <HugeiconsIcon
+            icon={GitBranchIcon}
+            strokeWidth={2}
+            className={`${iconClass} text-primary`}
+          />
+        );
       } else if (activity.metadata?.tag) {
-        return <Tag className={`${iconClass} text-primary`} />;
+        return (
+          <HugeiconsIcon
+            icon={SaleTag01Icon}
+            strokeWidth={2}
+            className={`${iconClass} text-primary`}
+          />
+        );
       }
-      return <Plus className={`${iconClass} text-primary`} />;
+      return (
+        <HugeiconsIcon
+          icon={Add01Icon}
+          strokeWidth={2}
+          className={`${iconClass} text-primary`}
+        />
+      );
 
     case "delete":
-      return <Trash2 className={`${iconClass} text-destructive`} />;
+      return (
+        <HugeiconsIcon
+          icon={Delete02Icon}
+          strokeWidth={2}
+          className={`${iconClass} text-destructive`}
+        />
+      );
 
     case "fork":
-      return <GitFork className={`${iconClass} text-primary`} />;
+      return (
+        <HugeiconsIcon
+          icon={GitForkIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-primary`}
+        />
+      );
 
     case "star":
-      return <Star className={`${iconClass} text-primary`} />;
+      return (
+        <HugeiconsIcon
+          icon={StarIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-primary`}
+        />
+      );
 
     case "release":
-      return <Tag className={`${iconClass} text-primary`} />;
+      return (
+        <HugeiconsIcon
+          icon={SaleTag01Icon}
+          strokeWidth={2}
+          className={`${iconClass} text-primary`}
+        />
+      );
 
     case "member":
-      return <Users className={`${iconClass} text-foreground/60`} />;
+      return (
+        <HugeiconsIcon
+          icon={UserGroupIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-foreground/60`}
+        />
+      );
 
     case "watch":
-      return <Eye className={`${iconClass} text-foreground/60`} />;
+      return (
+        <HugeiconsIcon
+          icon={EyeIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-foreground/60`}
+        />
+      );
 
     default:
-      return <GitCommit className={`${iconClass} text-foreground/60`} />;
+      return (
+        <HugeiconsIcon
+          icon={GitCommitIcon}
+          strokeWidth={2}
+          className={`${iconClass} text-foreground/60`}
+        />
+      );
   }
 };
 
@@ -242,7 +345,11 @@ const ActivityItem = ({
 
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2 text-xs text-foreground/50">
-              <Clock className="h-3 w-3" />
+              <HugeiconsIcon
+                icon={Clock01Icon}
+                strokeWidth={2}
+                className="size-3"
+              />
               <time dateTime={activity.timestamp}>
                 {formatDate(activity.timestamp, locale)}
               </time>
@@ -254,7 +361,11 @@ const ActivityItem = ({
                 className="inline-flex items-center gap-1 transition-colors hover:text-foreground/70"
               >
                 {repoName}
-                <ArrowUpRight className="h-2.5 w-2.5" />
+                <HugeiconsIcon
+                  icon={ArrowUpRight01Icon}
+                  strokeWidth={2}
+                  className="size-2.5"
+                />
               </a>
             </div>
 
@@ -336,7 +447,11 @@ const ContributionActivityFeed = () => {
           <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs">
             <div className="p-12 text-center">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
-                <AlertCircle className="h-6 w-6 text-foreground/30" />
+                <HugeiconsIcon
+                  icon={AlertCircleIcon}
+                  strokeWidth={2}
+                  className="size-6 text-foreground/30"
+                />
               </div>
               <p className="mb-1 text-sm text-foreground/70">
                 {t.feed.loadError}
@@ -367,7 +482,11 @@ const ContributionActivityFeed = () => {
             ) : (
               <div className="p-12 text-center">
                 <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
-                  <GitCommit className="h-6 w-6 text-foreground/30" />
+                  <HugeiconsIcon
+                    icon={GitCommitIcon}
+                    strokeWidth={2}
+                    className="size-6 text-foreground/30"
+                  />
                 </div>
                 <p className="mb-1 text-sm text-foreground/70">
                   {t.feed.noActivity}
@@ -389,7 +508,13 @@ const ContributionActivityFeed = () => {
         >
           <IconButton
             variant="default"
-            icon={<ArrowUpRight className="h-3.5 w-3.5" />}
+            icon={
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                strokeWidth={2}
+                className="size-3.5"
+              />
+            }
             size="lg"
             className="rounded-full border-foreground/20 transition-colors duration-200"
             label={t.common.moreOnGithub}

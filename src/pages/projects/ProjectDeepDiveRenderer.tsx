@@ -19,8 +19,12 @@ import {
   type LazyExoticComponent,
 } from "react";
 import { Link, Navigate, useParams } from "react-router";
-import { ExternalLink, Globe } from "lucide-react";
-import { FaGithubAlt } from "react-icons/fa";
+import {
+  GithubIcon,
+  Globe02Icon,
+  LinkSquare02Icon,
+} from "@hugeicons/core-free-icons";
+import { hugeIcon } from "@/lib/huge-icon";
 import {
   DeepDiveSectionMenu,
   DeepDiveSectionRail,
@@ -78,7 +82,7 @@ function getLinkActions(
     actions.push({
       href: links.live,
       label: isChromeStore ? t.common.chromeStore : t.common.visitSite,
-      Icon: isChromeStore ? Globe : ExternalLink,
+      Icon: isChromeStore ? hugeIcon(Globe02Icon) : hugeIcon(LinkSquare02Icon),
       variant: "default",
     });
   }
@@ -86,7 +90,7 @@ function getLinkActions(
     actions.push({
       href: links.github,
       label: t.common.sourceCode,
-      Icon: FaGithubAlt,
+      Icon: hugeIcon(GithubIcon),
       variant: "outline",
     });
   }
@@ -94,7 +98,7 @@ function getLinkActions(
     actions.push({
       href: links.demo,
       label: t.common.demo,
-      Icon: ExternalLink,
+      Icon: hugeIcon(LinkSquare02Icon),
       variant: "outline",
     });
   }
