@@ -237,12 +237,20 @@ export function CommandMenu() {
   // render drawer for mobile, dialog for desktop
   if (isMobile) {
     return (
-      <Drawer open={isOpen} onOpenChange={closeCommandMenu}>
-        <DrawerContent className="px-4 pb-4">
+      <Drawer
+        open={isOpen}
+        onOpenChange={(open) => {
+          if (!open) closeCommandMenu();
+        }}
+        showSwipeHandle
+      >
+        <DrawerContent>
           <DrawerHeader className="sr-only">
             <DrawerTitle>{t.common.command.placeholder}</DrawerTitle>
           </DrawerHeader>
-          <Command>{commandContent}</Command>
+          <Command className="h-auto min-h-0 rounded-none bg-transparent p-3 pb-4">
+            {commandContent}
+          </Command>
         </DrawerContent>
       </Drawer>
     );

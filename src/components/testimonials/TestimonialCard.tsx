@@ -260,7 +260,7 @@ const TestimonialCard = ({
     return (
       <>
         {cardContent}
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
           <DrawerContent>
             <DrawerHeader>
               <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
@@ -271,7 +271,9 @@ const TestimonialCard = ({
                 />
               </DrawerDescription>
             </DrawerHeader>
-            <div className="overflow-y-auto px-4">{fullTestimonialContent}</div>
+            <div className="min-h-0 flex-1 overflow-y-auto p-4">
+              {fullTestimonialContent}
+            </div>
           </DrawerContent>
         </Drawer>
       </>

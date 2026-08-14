@@ -265,7 +265,7 @@ function ResumeModal() {
     return (
       <>
         {trigger}
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
           <DrawerContent>
             <DrawerHeader>
               <DrawerTitle>{t.title}</DrawerTitle>
@@ -273,7 +273,7 @@ function ResumeModal() {
                 <RichText text={t.description} />
               </DrawerDescription>
             </DrawerHeader>
-            <div className="px-4">{languagePicker}</div>
+            <div className="p-4">{languagePicker}</div>
             <DrawerFooter>{actions}</DrawerFooter>
           </DrawerContent>
         </Drawer>
