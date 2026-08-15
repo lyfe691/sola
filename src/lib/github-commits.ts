@@ -102,61 +102,35 @@ export function statusLetter(status: string): string {
   return STATUS_LETTER[status] ?? (status.slice(0, 1).toUpperCase() || "?");
 }
 
-export interface StatRow {
-  prefix: string;
+export interface FileNode {
   name: string;
+  path: string;
   file?: ChangelogFile;
+  children: FileNode[];
 }
 
-type Trie = {
-  name: string;
-  children: Map<string, Trie>;
-  file?: ChangelogFile;
-};
-
-/** Box-drawing tree (`├──` / `└──`) for `git show --stat`. */
-export function statTree(files: ChangelogFile[]): StatRow[] {
-  const root: Trie = { name: "", children: new Map() };
+export function fileTree(files: ChangelogFile[]): FileNode[] {
+  const root: FileNode = { name: "", path: "", children: [] };
   const sorted = [...files].sort((a, b) =>
     a.filename.localeCompare(b.filename),
   );
 
   for (const file of sorted) {
     let node = root;
+    let path = "";
     const parts = file.filename.split("/");
     for (let i = 0; i < parts.length; i++) {
       const part = parts[i];
-      let next = node.children.get(part);
+      path = path ? `${path}/${part}` : part;
+      let next = node.children.find((child) => child.name === part);
       if (!next) {
-        next = { name: part, children: new Map() };
-        node.children.set(part, next);
+        next = { name: part, path, children: [] };
+        node.children.push(next);
       }
       node = next;
       if (i === parts.length - 1) node.file = file;
     }
   }
 
-  const rows: StatRow[] = [];
-  const walk = (
-    node: Trie,
-    prefix: string,
-    isLast: boolean,
-    isRoot: boolean,
-  ) => {
-    if (!isRoot) {
-      rows.push({
-        prefix: prefix + (isLast ? "└── " : "├── "),
-        name: node.name,
-        file: node.file,
-      });
-    }
-    const kids = [...node.children.values()];
-    kids.forEach((kid, i) => {
-      const last = i === kids.length - 1;
-      const nextPrefix = isRoot ? "" : prefix + (isLast ? "    " : "│   ");
-      walk(kid, nextPrefix, last, false);
-    });
-  };
-  walk(root, "", true, true);
-  return rows;
+  return root.children;
 }

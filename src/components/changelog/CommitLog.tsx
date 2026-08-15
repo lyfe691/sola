@@ -145,20 +145,20 @@ function CommitRow({
       </button>
       <div
         className={cn(
-          "grid transition-[grid-template-rows,opacity] duration-500 ease-out-quart motion-reduce:transition-none",
+          "grid min-w-0 transition-[grid-template-rows,opacity] duration-500 ease-out-quart motion-reduce:transition-none",
           isOpen
             ? "grid-rows-[1fr] opacity-100"
             : "pointer-events-none grid-rows-[0fr] opacity-0",
         )}
       >
-        <div className="min-h-0 overflow-hidden">
+        <div className="min-h-0 min-w-0 overflow-hidden">
           <div
             id={panelId}
             role="region"
             aria-label={commit.subject}
             aria-hidden={!isOpen}
             inert={!isOpen}
-            className="px-3 pb-5 pt-1 sm:px-0 sm:pl-[4.75rem]"
+            className="min-w-0 px-3 pb-5 pt-1 sm:px-0"
           >
             {mounted ? <CommitDetail sha={commit.sha} /> : null}
           </div>
@@ -263,7 +263,7 @@ export function CommitLog({
       : "";
 
   return (
-    <ol>
+    <ol className="min-w-0">
       {rows.map((commit, index) => (
         <ScrollReveal
           key={commit.sha}
@@ -276,7 +276,7 @@ export function CommitLog({
                 ? staggerDelay(index - revealFrom)
                 : 0
           }
-          className="border-b border-foreground/8"
+          className="min-w-0 border-b border-foreground/8"
         >
           <CommitRow
             commit={commit}

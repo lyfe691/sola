@@ -28,7 +28,9 @@ import {
   ComputerTerminal01Icon,
   CpuIcon,
   CubeIcon,
+  FileCodeIcon,
   FileZipIcon,
+  Folder01Icon,
   FolderTreeIcon,
   GraduationCapIcon,
   HighlighterIcon,
@@ -198,3 +200,106 @@ export const TECH_ICONS: Record<string, TechIcon> = {
 
 /** last-resort glyph so no chip is ever icon-less */
 export const TECH_ICON_FALLBACK: TechIcon = hugeIcon(SaleTag01Icon);
+
+export const FOLDER_ICON: TechIcon = hugeIcon(Folder01Icon);
+const FILE_ICON: TechIcon = hugeIcon(FileCodeIcon);
+
+const FILE_TECH: Record<string, string> = {
+  ts: "TypeScript",
+  tsx: "React",
+  js: "JavaScript",
+  mjs: "JavaScript",
+  cjs: "JavaScript",
+  jsx: "React",
+  css: "CSS",
+  html: "HTML",
+  md: "MDX",
+  mdx: "MDX",
+  sh: "Bash",
+  rs: "Rust",
+  py: "Python",
+  ps1: "PowerShell",
+};
+
+const LANG_TECH: Record<string, string> = {
+  typescript: "TypeScript",
+  ts: "TypeScript",
+  tsx: "React",
+  jsx: "React",
+  javascript: "JavaScript",
+  js: "JavaScript",
+  mjs: "JavaScript",
+  cjs: "JavaScript",
+  css: "CSS",
+  html: "HTML",
+  md: "MDX",
+  mdx: "MDX",
+  bash: "Bash",
+  sh: "Bash",
+  shell: "Bash",
+  zsh: "Bash",
+  powershell: "PowerShell",
+  docker: "Docker",
+  dockerfile: "Docker",
+  rust: "Rust",
+  python: "Python",
+  console: "CLI",
+};
+
+const FILE_NAME_TECH: Record<string, string> = {
+  dockerfile: "Docker",
+  "docker-compose.yml": "Docker",
+  "docker-compose.yaml": "Docker",
+  "package.json": "npm",
+  "package-lock.json": "npm",
+  "tsconfig.json": "TypeScript",
+  "tsconfig.app.json": "TypeScript",
+  "tsconfig.node.json": "TypeScript",
+  "components.json": "shadcn/ui",
+  "vite.config.ts": "Vite",
+  "vite.config.js": "Vite",
+  "eslint.config.js": "ESLint",
+  "eslint.config.ts": "ESLint",
+  "tailwind.config.ts": "Tailwind CSS",
+  "tailwind.config.js": "Tailwind CSS",
+  ".gitignore": "Git",
+  "vercel.json": "Vercel",
+};
+
+/** Brand mark for a path, from the filename — same registry as deep dives. */
+export function techIconForFile(filename: string): TechIcon {
+  const base = filename.slice(filename.lastIndexOf("/") + 1).toLowerCase();
+  const named = FILE_NAME_TECH[base];
+  if (named) return TECH_ICONS[named] ?? FILE_ICON;
+  const lower = filename.replaceAll("\\", "/").toLowerCase();
+  if (
+    lower.includes(".github/workflows/") &&
+    (lower.endsWith(".yml") || lower.endsWith(".yaml"))
+  ) {
+    return TECH_ICONS["GitHub Actions"] ?? FILE_ICON;
+  }
+  const ext = base.includes(".") ? base.slice(base.lastIndexOf(".") + 1) : "";
+  const fromExt = FILE_TECH[ext];
+  if (fromExt) return TECH_ICONS[fromExt] ?? FILE_ICON;
+  return FILE_ICON;
+}
+
+/** Header mark for a code block: filename first, language as fallback. */
+export function techIconForCode({
+  filename,
+  lang,
+}: {
+  filename?: string;
+  lang?: string;
+} = {}): TechIcon {
+  if (filename?.endsWith("/")) return FOLDER_ICON;
+  if (filename) {
+    const icon = techIconForFile(filename);
+    if (icon !== FILE_ICON) return icon;
+  }
+  if (lang) {
+    const name = LANG_TECH[lang.toLowerCase()];
+    if (name) return TECH_ICONS[name] ?? FILE_ICON;
+  }
+  return filename ? FILE_ICON : FOLDER_ICON;
+}

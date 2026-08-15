@@ -7,6 +7,7 @@
  */
 
 import { CopyButton } from "@/components/ui/code-block";
+import { TechFileMark } from "@/components/ui/custom/tech-file-mark";
 import type { DiffLine } from "@/components/deploy-diff/parse-patch";
 import { useCappedDiff } from "@/components/deploy-diff/use-diff-highlight";
 import { toUnifiedDiff, type ChangelogFile } from "@/lib/github-commits";
@@ -28,7 +29,7 @@ function DiffLineRow({
     return (
       <tr>
         <td className="w-4 min-w-4 px-3 select-none" />
-        <td className="pr-4 whitespace-pre text-muted-foreground/60 italic">
+        <td className="pr-3 whitespace-pre-wrap break-all text-muted-foreground/60 italic">
           {line.text}
         </td>
       </tr>
@@ -54,7 +55,7 @@ function DiffLineRow({
       >
         {mark}
       </td>
-      <td className="pr-4 whitespace-pre">
+      <td className="pr-3 whitespace-pre-wrap break-all align-top">
         {tokens
           ? tokens.map((token, i) => (
               <span key={i} style={{ color: token.variants[scheme]?.color }}>
@@ -90,21 +91,30 @@ export function CommitPatch({
   }
 
   return (
-    <figure className="code-block group relative my-0 overflow-hidden rounded-xl bg-(--code) text-sm ring-1 ring-border">
-      <figcaption className="flex items-center gap-2 border-b border-border py-1.5 pl-4 pr-2 font-mono text-xs text-(--code-foreground)">
-        <span className="truncate">{file.filename}</span>
-        <CopyButton value={toUnifiedDiff(file)} className="ml-auto" />
+    <figure className="code-block group relative my-0 w-full min-w-0 overflow-hidden rounded-xl bg-(--code) text-sm ring-1 ring-inset ring-border">
+      <figcaption className="flex min-w-0 items-center gap-2 border-b border-border py-1.5 pl-4 pr-2 font-mono text-xs text-(--code-foreground)">
+        <TechFileMark
+          filename={file.filename}
+          className="size-3.5 shrink-0"
+          size={14}
+        />
+        <span className="min-w-0 truncate">{file.filename}</span>
+        <CopyButton value={toUnifiedDiff(file)} className="ml-auto shrink-0" />
       </figcaption>
-      <div className="max-h-[min(32rem,70vh)] overflow-auto overscroll-contain py-2 font-mono text-xs leading-5 [scrollbar-width:thin]">
-        <table className="w-max min-w-full border-separate border-spacing-0">
+      <div className="max-h-[min(32rem,70vh)] min-w-0 overflow-y-auto overscroll-contain py-2 font-mono text-xs leading-5 [scrollbar-width:thin]">
+        <table className="w-full table-fixed border-separate border-spacing-0">
           <caption className="sr-only">{file.filename}</caption>
+          <colgroup>
+            <col className="w-7" />
+            <col />
+          </colgroup>
           <tbody>
             {rows.map((row) =>
               row.kind === "hunk" ? (
                 <tr key={row.key}>
                   <td
                     colSpan={2}
-                    className="bg-muted/40 px-3 py-1 text-[11px] whitespace-pre text-muted-foreground/70 select-none"
+                    className="bg-muted/40 px-3 py-1 text-[11px] whitespace-pre-wrap break-all text-muted-foreground/70 select-none"
                   >
                     {row.text}
                   </td>

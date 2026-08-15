@@ -9,16 +9,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CommitPatch } from "@/components/changelog/CommitPatch";
+import { FileTree } from "@/components/changelog/FileTree";
 import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
 import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
-import {
-  commitDetailQuery,
-  statusLetter,
-  statTree,
-} from "@/lib/github-commits";
+import { commitDetailQuery, fileTree } from "@/lib/github-commits";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
-import { cn } from "@/lib/utils";
 
 const MAX_FILES = 20;
 
@@ -42,10 +38,14 @@ export function CommitDetail({ sha }: { sha: string }) {
           <span className="h-2.5 w-8 animate-pulse rounded-sm bg-(--diff-del-fg)/25" />
         </div>
         <div className="space-y-2">
-          <span className="block h-2.5 w-20 animate-pulse rounded-sm bg-foreground/8" />
-          <span className="ml-4 block h-2.5 w-28 animate-pulse rounded-sm bg-foreground/8" />
-          <span className="ml-8 block h-2.5 w-40 animate-pulse rounded-sm bg-foreground/10" />
-          <span className="ml-8 block h-2.5 w-32 animate-pulse rounded-sm bg-foreground/10" />
+          <span className="block h-2.5 w-16 animate-pulse rounded-sm bg-foreground/8" />
+          <div className="ml-1.5 space-y-2 border-l border-foreground/10 pl-2.5">
+            <span className="block h-2.5 w-20 animate-pulse rounded-sm bg-foreground/8" />
+            <div className="ml-1.5 space-y-2 border-l border-foreground/10 pl-2.5">
+              <span className="block h-2.5 w-36 animate-pulse rounded-sm bg-foreground/10" />
+              <span className="block h-2.5 w-28 animate-pulse rounded-sm bg-foreground/10" />
+            </div>
+          </div>
         </div>
         <div className="h-36 animate-pulse rounded-xl bg-foreground/6 ring-1 ring-border" />
       </div>
@@ -54,22 +54,22 @@ export function CommitDetail({ sha }: { sha: string }) {
 
   const commit = query.data;
   const shown = commit.files.slice(0, MAX_FILES);
-  const tree = statTree(shown);
+  const tree = fileTree(shown);
   const selected =
     shown.find((file) => file.filename === active) ?? shown[0] ?? null;
   const overflow = commit.files.length > MAX_FILES;
   const scheme = isDark ? "dark" : "light";
 
   return (
-    <div className="space-y-4" style={DIFF_TOKENS[scheme]}>
+    <div className="min-w-0 space-y-4" style={DIFF_TOKENS[scheme]}>
       {commit.body ? (
-        <p className="max-w-prose text-sm leading-relaxed whitespace-pre-wrap text-foreground/65">
+        <p className="max-w-prose text-sm leading-relaxed whitespace-pre-wrap text-foreground/65 sm:pl-[4.75rem]">
           {commit.body}
         </p>
       ) : null}
 
       {tree.length > 0 ? (
-        <div>
+        <div className="min-w-0">
           <p className="mb-2 font-mono text-[11px] text-muted-foreground">
             {t.files.replace("{count}", String(commit.files.length))}
             <span className="ml-3 text-(--diff-add-fg)">
@@ -77,60 +77,11 @@ export function CommitDetail({ sha }: { sha: string }) {
             </span>{" "}
             <span className="text-(--diff-del-fg)">−{commit.deletions}</span>
           </p>
-          <ul className="font-mono text-[12px] leading-6">
-            {tree.map((row) => {
-              const selectedFile =
-                !!row.file && row.file.filename === selected?.filename;
-              const line = (
-                <>
-                  <span className="select-none text-muted-foreground/50">
-                    {row.prefix}
-                  </span>
-                  <span
-                    className={cn(
-                      row.file ? "text-foreground" : "text-muted-foreground",
-                    )}
-                  >
-                    {row.name}
-                  </span>
-                  {row.file ? (
-                    <span className="ml-3 shrink-0 tabular-nums text-muted-foreground">
-                      <span className="text-foreground/70">
-                        {statusLetter(row.file.status)}
-                      </span>
-                      <span className="ml-2 text-(--diff-add-fg)">
-                        +{row.file.additions}
-                      </span>{" "}
-                      <span className="text-(--diff-del-fg)">
-                        −{row.file.deletions}
-                      </span>
-                    </span>
-                  ) : null}
-                </>
-              );
-
-              return (
-                <li key={`${row.prefix}${row.name}`}>
-                  {row.file ? (
-                    <button
-                      type="button"
-                      onClick={() => setActive(row.file!.filename)}
-                      aria-pressed={selectedFile}
-                      className={cn(
-                        "-mx-2 flex w-[calc(100%+1rem)] items-baseline rounded-md px-2 text-left transition-colors duration-200 ease-out",
-                        "can-hover:hover:bg-muted/60",
-                        selectedFile && "bg-muted/70",
-                      )}
-                    >
-                      {line}
-                    </button>
-                  ) : (
-                    <div className="flex items-baseline">{line}</div>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <FileTree
+            nodes={tree}
+            selected={selected?.filename ?? null}
+            onSelect={setActive}
+          />
         </div>
       ) : null}
 

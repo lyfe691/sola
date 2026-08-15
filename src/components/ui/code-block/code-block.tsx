@@ -6,19 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import type { ComponentType } from "react";
-import {
-  ComputerTerminal01Icon,
-  FileCodeIcon,
-} from "@hugeicons/core-free-icons";
-import { hugeIcon } from "@/lib/huge-icon";
-import {
-  SiDocker,
-  SiJavascript,
-  SiJson,
-  SiReact,
-  SiTypescript,
-} from "react-icons/si";
+import { TechFileMark } from "@/components/ui/custom/tech-file-mark";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
 import { cn } from "@/lib/utils";
@@ -34,38 +22,7 @@ interface CodeBlockProps {
 }
 
 /* The shadcn-docs header touch: a small language mark next to the filename.
-   Only the languages the articles actually speak get a brand icon; shells
-   share the terminal glyph and everything else falls back to a file mark. */
-const FileCodeGlyph = hugeIcon(FileCodeIcon);
-
-const LANGUAGE_ICONS: Record<
-  string,
-  ComponentType<{
-    className?: string;
-    "aria-hidden"?: boolean | "true" | "false";
-  }>
-> = {
-  typescript: SiTypescript,
-  ts: SiTypescript,
-  tsx: SiReact,
-  jsx: SiReact,
-  javascript: SiJavascript,
-  js: SiJavascript,
-  json: SiJson,
-  docker: SiDocker,
-  dockerfile: SiDocker,
-  bash: hugeIcon(ComputerTerminal01Icon),
-  sh: hugeIcon(ComputerTerminal01Icon),
-  shell: hugeIcon(ComputerTerminal01Icon),
-  zsh: hugeIcon(ComputerTerminal01Icon),
-  console: hugeIcon(ComputerTerminal01Icon),
-  powershell: hugeIcon(ComputerTerminal01Icon),
-};
-
-const LanguageIcon = ({ lang }: { lang: string }) => {
-  const Icon = LANGUAGE_ICONS[lang] ?? FileCodeGlyph;
-  return <Icon aria-hidden className="size-3.5 shrink-0 opacity-70" />;
-};
+   Same TECH_ICONS registry as deep-dive chips and the changelog file tree. */
 
 /**
  * Plain-text fallback that mirrors Shiki's `pre.shiki > code > span.line` markup,
@@ -112,7 +69,12 @@ export const CodeBlock = ({
       {fileName ? (
         // filename present → header row with the copy button laid out inside it
         <figcaption className="flex items-center gap-2 border-b border-border py-1.5 pl-4 pr-2 font-mono text-xs text-(--code-foreground)">
-          <LanguageIcon lang={lang} />
+          <TechFileMark
+            filename={fileName}
+            lang={lang}
+            className="size-3.5 shrink-0"
+            size={14}
+          />
           <span className="truncate">{fileName}</span>
           <CopyButton value={value} className="ml-auto" />
         </figcaption>

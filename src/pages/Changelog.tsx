@@ -58,7 +58,7 @@ export default function Changelog() {
     loadingMore || olderFailed || (lastReady?.data?.hasMore ?? false);
 
   return (
-    <div className="flex w-full max-w-3xl flex-col">
+    <div className="flex w-full min-w-0 max-w-3xl flex-col">
       <meta name="description" content={t.seo.changelog.description} />
 
       <ScrollReveal variant="header">
