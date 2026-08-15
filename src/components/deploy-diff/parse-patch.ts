@@ -77,3 +77,45 @@ export function parsePatch(patch: string): DiffHunk[] {
 
   return hunks;
 }
+
+export type DiffRow =
+  | { kind: "hunk"; key: string; text: string }
+  | { kind: "line"; key: string; line: DiffLine };
+
+/** Drop rows past `maxRows` (hunk header + lines) so shiki never tokenizes
+ *  what the renderer will not show. */
+export function capHunks(
+  patch: string | undefined,
+  maxRows: number,
+): { hunks: DiffHunk[]; truncated: boolean } {
+  if (!patch) return { hunks: [], truncated: false };
+
+  const parsed = parsePatch(patch);
+  const hunks: DiffHunk[] = [];
+  let rows = 0;
+
+  for (const hunk of parsed) {
+    if (rows + 1 >= maxRows) return { hunks, truncated: true };
+    rows += 1;
+    const room = maxRows - rows;
+    if (hunk.lines.length > room) {
+      hunks.push({ ...hunk, lines: hunk.lines.slice(0, room) });
+      return { hunks, truncated: true };
+    }
+    hunks.push(hunk);
+    rows += hunk.lines.length;
+  }
+
+  return { hunks, truncated: false };
+}
+
+export function flattenHunks(hunks: DiffHunk[]): DiffRow[] {
+  const rows: DiffRow[] = [];
+  for (const [hi, hunk] of hunks.entries()) {
+    rows.push({ kind: "hunk", key: `h${hi}`, text: hunk.header });
+    for (const [li, line] of hunk.lines.entries()) {
+      rows.push({ kind: "line", key: `h${hi}l${li}`, line });
+    }
+  }
+  return rows;
+}

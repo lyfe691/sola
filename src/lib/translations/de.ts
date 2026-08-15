@@ -46,6 +46,10 @@ export const de = {
     certifications: {
       description: "Zertifizierungen und Nachweise, mit Verifizierungslinks.",
     },
+    changelog: {
+      description:
+        "Git-Log von sola — Commits, Dateibäume und Patches aus der GitHub-Historie.",
+    },
   },
   certifications: {
     title: "Zertifikate",
@@ -385,6 +389,22 @@ export const de = {
     close: "Von Hand gesetzt in Zürich. Danke fürs Vorbeischauen.",
     back: "Zurück",
   },
+  changelog: {
+    title: "Changelog",
+    subtitle:
+      "Die live Git-Historie dieser Website. Einen Commit aufklappen, um die Nachricht, den Dateibaum und den Patch zu lesen.",
+    empty: "Keine Commits vorhanden.",
+    error: "Git-Historie konnte nicht geladen werden.",
+    retry: "Erneut versuchen",
+    older: "Ältere laden",
+    viewOnGitHub: "Auf GitHub ansehen",
+    thisDeploy: "dieses Deploy",
+    truncated: "Diff gekürzt. Vollständiger Commit auf GitHub.",
+    unavailable: "Patch ausgelassen (binär oder zu groß).",
+    files: "{count} Dateien",
+    expand: "Commit anzeigen",
+    collapse: "Commit ausblenden",
+  },
   footer: {
     atw: "Über diese Website",
     madeWith: "Erstellt mit",
@@ -396,6 +416,7 @@ export const de = {
     contactForm: "Kontaktformular",
     privacy: "Datenschutzerklärung",
     legal: "Rechtliches",
+    changelog: "Changelog",
   },
   about: {
     title: "Über mich",

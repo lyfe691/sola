@@ -45,6 +45,10 @@ export const en = {
     certifications: {
       description: "Certifications and credentials, with verification links.",
     },
+    changelog: {
+      description:
+        "Git log of sola — commits, file trees, and patches from the GitHub history.",
+    },
   },
   certifications: {
     title: "Certifications",
@@ -383,6 +387,22 @@ export const en = {
     close: "Set by hand in Zürich. Thanks for stopping by.",
     back: "Go back",
   },
+  changelog: {
+    title: "Changelog",
+    subtitle:
+      "The live git history of this site. Expand a commit to read the message, the file tree, and the patch.",
+    empty: "No commits to show.",
+    error: "Couldn't load the git history.",
+    retry: "Retry",
+    older: "Load older",
+    viewOnGitHub: "View on GitHub",
+    thisDeploy: "this deploy",
+    truncated: "Diff truncated. Full commit on GitHub.",
+    unavailable: "Patch omitted (binary or too large).",
+    files: "{count} files",
+    expand: "Show commit",
+    collapse: "Hide commit",
+  },
   footer: {
     atw: "about this website",
     madeWith: "Made with",
@@ -394,6 +414,7 @@ export const en = {
     contactForm: "Contact Form",
     privacy: "Privacy Policy",
     legal: "Legal",
+    changelog: "Changelog",
   },
   about: {
     title: "About",

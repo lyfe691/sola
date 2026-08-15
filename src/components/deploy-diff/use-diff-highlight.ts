@@ -16,9 +16,15 @@
  * — flipping the site theme never re-runs the highlighter.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { ThemedTokenWithVariants } from "shiki";
-import type { DiffHunk, DiffLine } from "./parse-patch";
+import {
+  capHunks,
+  flattenHunks,
+  type DiffHunk,
+  type DiffLine,
+  type DiffRow,
+} from "./parse-patch";
 
 /** filename extension -> shiki lang; null means leave the text plain */
 const EXT_LANG: Record<string, string> = {
@@ -101,4 +107,26 @@ export function useDiffHighlight(
   }, [hunks, lang]);
 
   return lineTokens;
+}
+
+const DEFAULT_MAX_ROWS = 400;
+
+/** Parse, cap, flatten, and highlight a per-file patch. Shared by the
+ *  full-page code view and the changelog block so they cannot drift. */
+export function useCappedDiff(
+  patch: string | undefined,
+  filename: string,
+  maxRows = DEFAULT_MAX_ROWS,
+): {
+  rows: DiffRow[];
+  lineTokens: Map<DiffLine, ThemedTokenWithVariants[]> | null;
+  truncated: boolean;
+} {
+  const { hunks, truncated } = useMemo(
+    () => capHunks(patch, maxRows),
+    [patch, maxRows],
+  );
+  const lineTokens = useDiffHighlight(hunks, languageForFile(filename));
+  const rows = useMemo(() => flattenHunks(hunks), [hunks]);
+  return { rows, lineTokens, truncated };
 }

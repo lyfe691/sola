@@ -7,6 +7,7 @@ import path from "path";
 import type { IncomingMessage, ServerResponse } from "http";
 import type { Connect } from "vite";
 import { getGitHubActivity } from "./api/github-activity.ts";
+import githubCommits from "./api/github-commits.ts";
 
 const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
 
@@ -40,6 +41,36 @@ function apiDevPlugin(): Plugin {
           res.setHeader("Content-Type", "application/json");
           res.setHeader("Cache-Control", "no-store");
           res.end(versionPayload);
+          return;
+        }
+
+        if (pathname === "/api/github-commits" && req.method === "GET") {
+          try {
+            const url = new URL(req.url ?? "/", "http://localhost");
+            await githubCommits(
+              {
+                query: {
+                  page: url.searchParams.get("page") ?? undefined,
+                  sha: url.searchParams.get("sha") ?? undefined,
+                },
+              },
+              {
+                setHeader: (key, value) => res.setHeader(key, value),
+                status: (code) => ({
+                  json: (body: unknown) => {
+                    res.statusCode = code;
+                    res.setHeader("Content-Type", "application/json");
+                    res.end(JSON.stringify(body));
+                  },
+                }),
+              },
+            );
+          } catch (error) {
+            console.error("[github-commits dev]", error);
+            res.statusCode = 502;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ error: "failed to load commits" }));
+          }
           return;
         }
 
@@ -84,7 +115,7 @@ function apiDevPlugin(): Plugin {
         }
       };
 
-      // Vite serves `api/github-activity.ts` as source unless we intercept first.
+      // Vite serves `api/*.ts` as source unless we intercept first.
       server.middlewares.stack.unshift({ route: "", handle: handleApi });
     },
   };

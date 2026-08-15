@@ -14,6 +14,7 @@ Currently studying software engineering at WISS, working a software engineering 
 - [Certifications](https://sola.ysz.life/certifications): Certificates and credentials earned.
 - [Services](https://sola.ysz.life/services): Freelance and contract services offered.
 - [Contact](https://sola.ysz.life/contact): Contact form and direct contact links.
+- [Changelog](https://sola.ysz.life/changelog): Git history of this site — commits, file trees, and patches.
 
 ## Projects
 

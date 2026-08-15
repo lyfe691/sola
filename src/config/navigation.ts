@@ -66,4 +66,10 @@ export const FOOTER_NAVIGATION: NavigationItem[] = [
     translationKey: "privacy",
     isFooter: true,
   },
+  {
+    key: "changelog",
+    path: "/changelog",
+    translationKey: "changelog",
+    isFooter: true,
+  },
 ];

@@ -41,6 +41,9 @@ export const zh = {
     certifications: {
       description: "证书与资质，附验证链接。",
     },
+    changelog: {
+      description: "sola 的 git log — 来自 GitHub 历史的提交、文件树和补丁。",
+    },
   },
   certifications: {
     title: "证书",
@@ -375,6 +378,21 @@ export const zh = {
     close: "于苏黎世手工排版。感谢到访。",
     back: "返回",
   },
+  changelog: {
+    title: "更新日志",
+    subtitle: "本站的实时 git 历史。展开一条提交即可阅读说明、文件树和补丁。",
+    empty: "暂无提交可显示。",
+    error: "无法加载 git 历史。",
+    retry: "重试",
+    older: "加载更早的记录",
+    viewOnGitHub: "在 GitHub 上查看",
+    thisDeploy: "本次部署",
+    truncated: "diff 已截断。完整提交见 GitHub。",
+    unavailable: "已省略补丁（二进制或体积过大）。",
+    files: "{count} 个文件",
+    expand: "显示提交",
+    collapse: "隐藏提交",
+  },
   footer: {
     atw: "关于这个网站",
     madeWith: "由",
@@ -386,6 +404,7 @@ export const zh = {
     contactForm: "通过表单",
     privacy: "隐私政策",
     legal: "法律的",
+    changelog: "更新日志",
   },
   about: {
     title: "关于",

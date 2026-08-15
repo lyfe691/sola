@@ -43,6 +43,10 @@ export const ja = {
     certifications: {
       description: "資格と認定の一覧。検証リンク付き。",
     },
+    changelog: {
+      description:
+        "sola の git log — GitHub 履歴のコミット、ファイルツリー、パッチ。",
+    },
   },
   certifications: {
     title: "認定・資格",
@@ -376,6 +380,22 @@ export const ja = {
     close: "チューリッヒにて、手組み。ご覧いただきありがとうございます。",
     back: "戻る",
   },
+  changelog: {
+    title: "Changelog",
+    subtitle:
+      "このサイトのライブな git 履歴。コミットを開くとメッセージ、ファイルツリー、パッチを読めます。",
+    empty: "表示するコミットはありません。",
+    error: "git 履歴を読み込めませんでした。",
+    retry: "再試行",
+    older: "さらに読み込む",
+    viewOnGitHub: "GitHub で見る",
+    thisDeploy: "このデプロイ",
+    truncated: "diff は省略されています。完全なコミットは GitHub で。",
+    unavailable: "パッチは省略（バイナリまたはサイズ超過）。",
+    files: "{count} ファイル",
+    expand: "コミットを表示",
+    collapse: "コミットを非表示",
+  },
   footer: {
     atw: "このウェブサイトについて",
     madeWith: "制作",
@@ -387,6 +407,7 @@ export const ja = {
     contactForm: "フォームを介して",
     privacy: "プライバシーポリシー",
     legal: "法的",
+    changelog: "Changelog",
   },
   about: {
     title: "私について",

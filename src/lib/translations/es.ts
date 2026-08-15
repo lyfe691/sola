@@ -48,6 +48,10 @@ export const es = {
       description:
         "Certificaciones y credenciales, con enlaces de verificación.",
     },
+    changelog: {
+      description:
+        "Git log de sola: commits, árboles de archivos y patches del historial de GitHub.",
+    },
   },
   certifications: {
     title: "Certificaciones",
@@ -388,6 +392,22 @@ export const es = {
     close: "Compuesto a mano en Zúrich. Gracias por la visita.",
     back: "Volver",
   },
+  changelog: {
+    title: "Changelog",
+    subtitle:
+      "El historial git en vivo de este sitio. Expande un commit para leer el mensaje, el árbol de archivos y el patch.",
+    empty: "No hay commits que mostrar.",
+    error: "No se pudo cargar el historial de git.",
+    retry: "Reintentar",
+    older: "Cargar anteriores",
+    viewOnGitHub: "Ver en GitHub",
+    thisDeploy: "este deploy",
+    truncated: "Diff recortado. Commit completo en GitHub.",
+    unavailable: "Patch omitido (binario o demasiado grande).",
+    files: "{count} archivos",
+    expand: "Mostrar commit",
+    collapse: "Ocultar commit",
+  },
   footer: {
     atw: "acerca de este sitio web",
     madeWith: "Hecho con",
@@ -399,6 +419,7 @@ export const es = {
     contactForm: "Formulario de contacto",
     privacy: "Política de privacidad",
     legal: "Legal",
+    changelog: "Changelog",
   },
   about: {
     title: "Sobre mí",

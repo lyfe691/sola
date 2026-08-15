@@ -46,6 +46,9 @@ export const ko = {
     certifications: {
       description: "확인 링크가 포함된 인증 및 자격 증명입니다.",
     },
+    changelog: {
+      description: "sola의 git log — GitHub 기록의 커밋, 파일 트리, 패치.",
+    },
   },
   certifications: {
     title: "인증",
@@ -380,6 +383,22 @@ export const ko = {
     close: "취리히에서 손으로 짰습니다. 들러주셔서 감사합니다.",
     back: "돌아가기",
   },
+  changelog: {
+    title: "Changelog",
+    subtitle:
+      "이 사이트의 실시간 git 기록입니다. 커밋을 펼치면 메시지, 파일 트리, 패치를 볼 수 있습니다.",
+    empty: "표시할 커밋이 없습니다.",
+    error: "git 기록을 불러올 수 없습니다.",
+    retry: "다시 시도",
+    older: "이전 기록 불러오기",
+    viewOnGitHub: "GitHub에서 보기",
+    thisDeploy: "이 배포",
+    truncated: "diff가 잘렸습니다. 전체 커밋은 GitHub에서 확인하세요.",
+    unavailable: "패치 생략 (바이너리이거나 너무 큼).",
+    files: "{count}개 파일",
+    expand: "커밋 표시",
+    collapse: "커밋 숨기기",
+  },
   footer: {
     atw: "이 웹사이트에 대해",
     madeWith: "제작 도구",
@@ -391,6 +410,7 @@ export const ko = {
     contactForm: "문의 양식",
     privacy: "개인 정보 보호 정책",
     legal: "법적 고지",
+    changelog: "Changelog",
   },
   about: {
     title: "소개",

@@ -7,7 +7,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { parsePatch } from "./parse-patch";
+import { capHunks, flattenHunks, parsePatch } from "./parse-patch";
 
 const PATCH = [
   "@@ -1,3 +1,4 @@",
@@ -67,5 +67,24 @@ describe("parsePatch", () => {
       ["del", 11, null],
       ["add", null, 12],
     ]);
+  });
+});
+
+describe("capHunks", () => {
+  it("returns empty when there is no patch", () => {
+    expect(capHunks(undefined, 10)).toEqual({ hunks: [], truncated: false });
+  });
+
+  it("keeps a short patch whole", () => {
+    const { hunks, truncated } = capHunks(PATCH, 40);
+    expect(truncated).toBe(false);
+    expect(flattenHunks(hunks)).toHaveLength(6);
+  });
+
+  it("cuts mid-hunk so the header is never orphaned", () => {
+    const { hunks, truncated } = capHunks(PATCH, 4);
+    expect(truncated).toBe(true);
+    expect(hunks).toHaveLength(1);
+    expect(hunks[0].lines).toHaveLength(3);
   });
 });

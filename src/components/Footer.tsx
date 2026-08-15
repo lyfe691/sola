@@ -278,7 +278,18 @@ const Footer = () => {
             </p>
             {/* the deployed-commit pin, the page's last line — centered, out
                 of the scroll-to-top button's fixed bottom-right corner */}
-            <DeployChip />
+            <div className="flex items-center gap-3">
+              <DeployChip />
+              <span aria-hidden="true" className="text-foreground/20">
+                ·
+              </span>
+              <Link
+                to="/changelog"
+                className="font-mono text-xs text-foreground/40 transition-colors hover:text-foreground/80"
+              >
+                {t.footer.changelog}
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -89,6 +89,12 @@ export const APP_ROUTES: AppRoute[] = [
     title: (t) => t.certifications.title,
   },
   {
+    path: "/changelog",
+    layout: "app",
+    Component: lazy(() => import("@/pages/Changelog")),
+    title: (t) => t.changelog.title,
+  },
+  {
     // catch-all, ranked last by the router: unknown paths render the 404
     // in place, keeping the attempted URL for the terminal to quote
     path: "*",

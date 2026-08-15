@@ -7,4 +7,5 @@
  */
 
 export { CodeBlock } from "./code-block";
+export { CopyButton } from "./copy-button";
 export type { CodeBlockLanguage } from "./use-shiki";

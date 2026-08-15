@@ -11,12 +11,11 @@
  * themes, see use-scheme.ts), so this stays presentational.
  */
 
-import { useMemo } from "react";
 import type { ThemedTokenWithVariants } from "shiki";
 import { cn } from "@/lib/utils";
 import type { Translation } from "@/lib/translations";
-import { parsePatch, type DiffHunk, type DiffLine } from "./parse-patch";
-import { languageForFile, useDiffHighlight } from "./use-diff-highlight";
+import type { DiffLine } from "./parse-patch";
+import { useCappedDiff } from "./use-diff-highlight";
 import type { PageCommit, PageCommitFile } from "./use-page-diff";
 
 export type DiffStrings = Translation["common"]["diff"];
@@ -33,10 +32,6 @@ const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   renamed: { label: "R", className: "text-(--diff-ren-fg)" },
   copied: { label: "C", className: "text-(--diff-ren-fg)" },
 };
-
-type Row =
-  | { kind: "hunk"; key: string; text: string }
-  | { kind: "line"; key: string; line: DiffLine };
 
 function DiffLineRow({
   line,
@@ -106,46 +101,11 @@ function FileSection({
   scheme: "light" | "dark";
   t: DiffStrings;
 }) {
-  // Parse, then trim to the render cap BEFORE highlighting — shiki should
-  // never tokenize rows that can't render. Row math mirrors the flattening
-  // below (one row per hunk header, one per line), and never leaves an
-  // orphaned hunk header right at the cap.
-  const { hunks, truncated } = useMemo(() => {
-    const parsed = file.patch ? parsePatch(file.patch) : [];
-    const out: DiffHunk[] = [];
-    let rows = 0;
-    let truncated = false;
-
-    for (const hunk of parsed) {
-      if (rows + 1 >= MAX_ROWS_PER_FILE) {
-        truncated = true;
-        break;
-      }
-      rows += 1; // the hunk header's own row
-      const room = MAX_ROWS_PER_FILE - rows;
-      if (hunk.lines.length > room) {
-        out.push({ ...hunk, lines: hunk.lines.slice(0, room) });
-        truncated = true;
-        break;
-      }
-      out.push(hunk);
-      rows += hunk.lines.length;
-    }
-    return { hunks: out, truncated };
-  }, [file.patch]);
-
-  const lineTokens = useDiffHighlight(hunks, languageForFile(file.filename));
-
-  const rows = useMemo(() => {
-    const out: Row[] = [];
-    for (const [hi, hunk] of hunks.entries()) {
-      out.push({ kind: "hunk", key: `h${hi}`, text: hunk.header });
-      for (const [li, line] of hunk.lines.entries()) {
-        out.push({ kind: "line", key: `h${hi}l${li}`, line });
-      }
-    }
-    return out;
-  }, [hunks]);
+  const { rows, lineTokens, truncated } = useCappedDiff(
+    file.patch,
+    file.filename,
+    MAX_ROWS_PER_FILE,
+  );
 
   const badge = STATUS_BADGE[file.status] ?? STATUS_BADGE.modified;
   const hasChanges = file.additions > 0 || file.deletions > 0;

@@ -28,6 +28,7 @@ const PAGE_PATHS: Record<string, string> = {
   "/services": "src/pages/Services.tsx",
   "/privacy": "src/pages/Privacy.tsx",
   "/certifications": "src/pages/Certifications.tsx",
+  "/changelog": "src/pages/Changelog.tsx",
 };
 
 export function resolvePagePath(pathname: string): string | null {
