@@ -7,14 +7,12 @@
  */
 
 import { Link } from "react-router";
-import { ContactIcon, FolderGitTwoIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { motion } from "motion/react";
 import { useLanguage } from "@/lib/language-provider";
 import { translations, type Translation } from "@/lib/translations";
 import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
-import { IconButton } from "@/components/ui/custom/icon-button";
+import { SpecularButton } from "@/components/ui/custom/specular-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
 import {
   SOCIAL_LINKS,
@@ -188,32 +186,14 @@ const Index = () => {
           className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4"
         >
           <Link to="/contact">
-            <IconButton
-              icon={
-                <HugeiconsIcon
-                  icon={ContactIcon}
-                  strokeWidth={2}
-                  className="size-4"
-                />
-              }
-              variant="default"
-              size="lg"
-              label={t.index.contactMe}
-            />
+            <SpecularButton size="md" autoAnimate>
+              {t.index.contactMe}
+            </SpecularButton>
           </Link>
           <Link to="/projects">
-            <IconButton
-              icon={
-                <HugeiconsIcon
-                  icon={FolderGitTwoIcon}
-                  strokeWidth={2}
-                  className="size-4"
-                />
-              }
-              variant="secondary"
-              size="lg"
-              label={t.index.viewProjects}
-            />
+            <SpecularButton variant="secondary" size="md" autoAnimate>
+              {t.index.viewProjects}
+            </SpecularButton>
           </Link>
         </motion.div>
 
