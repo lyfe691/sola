@@ -575,6 +575,7 @@ const About = () => {
                   rating={testimonial.rating}
                   website={testimonial.website}
                   linkedin={testimonial.linkedin}
+                  avatar={testimonial.avatar}
                 />
               </ScrollReveal>
             );

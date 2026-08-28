@@ -23,15 +23,17 @@ const initialsOf = (name: string) =>
 type TestimonialAvatarProps = {
   author: string;
   linkedin?: string;
+  avatar?: string;
   className?: string;
 };
 
 const TestimonialAvatar = ({
   author,
   linkedin,
+  avatar,
   className,
 }: TestimonialAvatarProps) => {
-  const src = linkedin ? getLinkedInAvatarUrl(linkedin) : undefined;
+  const src = avatar ?? (linkedin ? getLinkedInAvatarUrl(linkedin) : undefined);
   const [loading, setLoading] = useState(Boolean(src));
 
   return (

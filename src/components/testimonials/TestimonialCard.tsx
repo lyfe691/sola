@@ -48,6 +48,7 @@ type TestimonialCardProps = {
   rating?: number;
   website?: string;
   linkedin?: string;
+  avatar?: string;
 };
 
 const StarRating = ({ rating }: { rating: number }) => (
@@ -154,6 +155,7 @@ const AuthorBlock = ({
   role,
   company,
   linkedin,
+  avatar,
   t,
   avatarClassName,
   showLinks = false,
@@ -165,6 +167,7 @@ const AuthorBlock = ({
   company?: string;
   linkedin?: string;
   website?: string;
+  avatar?: string;
   t: Translation;
   avatarClassName: string;
   showLinks?: boolean;
@@ -174,6 +177,7 @@ const AuthorBlock = ({
     <TestimonialAvatar
       author={author}
       linkedin={linkedin}
+      avatar={avatar}
       className={avatarClassName}
     />
     <div className="min-w-0 flex-1">
@@ -205,6 +209,7 @@ const TestimonialCard = ({
   rating = 5,
   website,
   linkedin,
+  avatar,
 }: TestimonialCardProps) => {
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
@@ -230,6 +235,7 @@ const TestimonialCard = ({
           company={company}
           linkedin={linkedin}
           website={website}
+          avatar={avatar}
           t={t}
           avatarClassName="size-14"
           showLinks
@@ -273,6 +279,7 @@ const TestimonialCard = ({
           company={company}
           linkedin={linkedin}
           website={website}
+          avatar={avatar}
           t={t}
           avatarClassName="size-10"
           showLinks

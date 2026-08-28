@@ -469,7 +469,7 @@ export const de = {
       items: {
         koenitzer: {
           quote:
-            "Yanis hat mich durch jedes Fach der Softwareentwicklung (IT) getragen – ich habe ehrlich gesagt so gut wie nichts gemacht. Seine technischen Fähigkeiten, seine Zuverlässigkeit und sein Problemlösungsvermögen waren auf einem anderen Niveau. Ein wirklich außergewöhnlicher Entwickler und Teamkollege.",
+            "Mit Yanis in jedem Fach der Softwareentwicklung (IT) zusammenzuarbeiten war ein echtes Highlight. Seine technischen Fähigkeiten, seine Zuverlässigkeit und sein Problemlösungsvermögen waren auf einem anderen Niveau. Ein wirklich außergewöhnlicher Entwickler und Teamkollege.",
           role: "Praktikant",
         },
         bichsel: {

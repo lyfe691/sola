@@ -467,7 +467,7 @@ export const en = {
       items: {
         koenitzer: {
           quote:
-            "Yanis carried me through every Software Engineering (IT) subject—I genuinely did next to nothing. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
+            "Working with Yanis on every Software Engineering (IT) subject was a genuine highlight. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
           role: "Intern",
         },
         bichsel: {

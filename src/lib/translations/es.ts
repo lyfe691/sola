@@ -472,7 +472,7 @@ export const es = {
       items: {
         koenitzer: {
           quote:
-            "Yanis me llevó en volandas por todas las asignaturas de Ingeniería de Software (TI); sinceramente, yo no hice casi nada. Sus habilidades técnicas, su fiabilidad y su capacidad para resolver problemas estaban a otro nivel. Un desarrollador y compañero de equipo verdaderamente excepcional.",
+            "Trabajar con Yanis en todas las asignaturas de Ingeniería de Software (TI) fue una experiencia memorable. Sus habilidades técnicas, su fiabilidad y su capacidad para resolver problemas estaban a otro nivel. Un desarrollador y compañero de equipo verdaderamente excepcional.",
           role: "Becario",
         },
         bichsel: {

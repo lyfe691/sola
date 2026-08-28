@@ -19,15 +19,17 @@ export interface Testimonial {
   rating: number;
   website?: string;
   linkedin?: string;
+  avatar?: string;
 }
 
 export const testimonials: Testimonial[] = [
   {
     i18nKey: "koenitzer",
     author: "Dominik Könitzer",
-    company: "mpa international ag",
+    company: "Spadoom",
     rating: 5,
-    website: "https://dominikkoenitzer.ch",
+    website: "https://dk.punds.ch",
+    avatar: "https://avatars.githubusercontent.com/u/82450286?v=4",
   },
   {
     i18nKey: "bichsel",
