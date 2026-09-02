@@ -201,7 +201,7 @@ const ProjectActions = ({
 };
 
 const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
-  <div className="flex h-full flex-col gap-4 p-5 sm:p-6">
+  <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
     <time
       className="font-mono text-xs text-foreground/60"
       dateTime={project.date.start}
