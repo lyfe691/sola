@@ -280,6 +280,14 @@ per-preset swirl/stroke/drift tuning replaced the starting values in
 §1. The §2 "Look" paragraph describes the original streak design; the
 shipped shader is documented in `shader.ts`.
 
+Revision (same day): on review the owner found the dabs read as worms,
+not paint, and asked for a watercolor feel like the site's vendored
+watercolor background. The shipped shader is now watercolor washes:
+rotated-octave value-noise FBM warped by a rotated pair of fields (so
+the washes whorl), a continuous four-stop ramp, faint dried-edge rims,
+light granulation and paper tooth. The Van Gogh character lives in the
+palettes and the swirl of the warp rather than in drawn strokes.
+
 ## 3. Projects page and card
 
 `src/pages/Projects.tsx`:
