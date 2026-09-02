@@ -261,14 +261,9 @@ export const en = {
   },
   projects: {
     title: "Projects",
-    other: "Other Projects",
-    otherInfo:
-      "Non‑featured projects: smaller tools, experiments, and utilities.",
     viewDetails: "View Details",
     viewAll: "View All Projects",
     viewGithub: "View Code",
-    satoriAttribution:
-      "Image created with [Vercel Satori](https://og-playground.vercel.app/)",
     sortBy: "Sort by",
     sortOptions: {
       priority: "Priority",
@@ -282,81 +277,97 @@ export const en = {
     list: {
       codeExtractor: {
         title: "Website Code Extractor",
+        tagline: "Extract code with one click",
         description:
           "A simple Chrome extension that extracts HTML, CSS, JavaScript, and images from websites and packages them into a zip file with JSZip. Ideal for smaller sites, it allows quick access to web code, though it may struggle with larger sites that rely heavily on server-side code.",
       },
       applicare: {
         title: "AppliCare",
+        tagline: "Manage your job applications with ease",
         description:
           "AppliCare is a modern job application management platform built using Spring Boot for the backend, MongoDB Atlas to store data, and React (Vite) with Ant Design for the frontend. It provides an intuitive and efficient way to organize and monitor job applications with a sleek, responsive interface.",
       },
       osint: {
         title: "OSINT Website",
+        tagline: "Sharpen your investigative instincts",
         description:
           "This OSINT website is a passion project inspired by my interest in Open Source Intelligence and the ever-evolving world of digital investigations. It features interactive exercises designed to sharpen investigative skills and encourage critical thinking.",
       },
       chatapp: {
         title: "ChatApp",
+        tagline: "Real-time rooms, built on Spring Boot",
         description:
           "ChatApp is a user-friendly chat platform where individuals can create accounts and connect with others in various chat rooms. Built with Spring Boot and backed by MongoDB for efficient data storage, ChatApp provides a seamless experience for real-time communication.",
       },
       vmDetector: {
         title: "Virtual Machine Detector",
+        tagline: "Know when you're running in a VM",
         description:
           "This is a tool that detects if a machine is a virtual machine.",
       },
       viewCounter: {
         title: "View Counter",
+        tagline: "A page view counter on Redis",
         description:
           "This is a simple view counter application that counts the number of times a page has been viewed. It is built with Spring Boot and Redis.",
       },
       dockerService: {
         title: "Docker Service Deployment",
+        tagline: "MediaWiki, Nextcloud, and Gogs in Compose",
         description:
           "This Docker Compose project deploys MediaWiki, Nextcloud, and Gogs, focusing on teamwork, containerization, and documentation. Developed with Benicio Von Felten.",
       },
       phishing: {
         title: "Phishing Website Tutorial",
+        tagline: "A hands-on look at how phishing pages work",
         description:
           "This is a tutorial on how to create a phishing website. It is built with HTML, CSS, and JavaScript.",
       },
       otw: {
         title: "OverTheWire Guide",
+        tagline: "Bandit, level by level",
         description:
           "This is a guide on how to solve the OverTheWire wargames.",
       },
       sola: {
         title: "Sola",
+        tagline: "Modern portfolio in React and TypeScript",
         description:
           "Sola is my personal website, the one you're on right now. It's built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way.",
       },
       kinoa: {
         title: "Kinoa",
+        tagline: "Free streaming, no noise",
         description:
           "Kinoa is a free streaming site built with Next.js, shadcn/ui, and Supabase. No subscription needed — browse films and series, watch with inline playback from third-party hosters, and let automatic server failover handle the rest.",
       },
       self: {
         title: "Self",
+        tagline: "Neofetch, reimagined for Windows",
         description:
           "Self is a customizable Windows system information display tool inspired by Neofetch, built with Python. It displays system stats alongside image or ASCII art directly in the terminal. With support for block and braille render modes, theme customization, and a simple PowerShell installer, it brings a clean, Unix-style aesthetic to Windows.",
       },
       taco: {
         title: "Taco",
+        tagline: "A production-ready Next.js template",
         description:
           "A production‑ready template site centered on Taco, my brother's dog — built with Next.js, TypeScript, and Tailwind CSS. It includes localization with automatic detection, a blog system, and a clean modular architecture suitable for real projects.",
       },
       thoughts: {
         title: "Thoughts",
+        tagline: "Reflections, fragments, and notes",
         description:
           "A minimal personal site where I share reflections, fragments, and notes. Inspired by [Shu Ding](https://shud.in)’s personal website, built with Next.js, MDX, and Tailwind. Includes a custom guestbook feature where visitors can leave their own thoughts.",
       },
       magi: {
         title: "magi",
+        tagline: "Async port scanning, built to be correct",
         description:
           "magi is a fast, asynchronous TCP and UDP port scanner written in Rust. It does connect scanning — a normal handshake per port — so it needs no root and runs anywhere tokio does. It never reports a port state it didn’t actually establish: when a probe can’t run, it’s marked untestable rather than guessed closed. Bounded concurrency keeps memory flat from a single host to a whole /16, with banner grabbing, UDP probing, and JSON output for scripting.",
       },
       luma: {
         title: "Luma",
+        tagline: "Bring your own keys, talk to any model",
         description:
           "A multi-model AI platform that lets you bring your own API keys and talk to the best models — Claude, GPT, Gemini, Grok, and more — all in one place. Built with Next.js 16, the Vercel AI SDK, and Supabase.",
       },

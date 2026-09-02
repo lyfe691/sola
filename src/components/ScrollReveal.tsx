@@ -11,7 +11,6 @@ import { motion, type DOMMotionComponents, type Variants } from "motion/react";
 import {
   useScrollReveal,
   scrollRevealVariants,
-  scrollFeatureVariants,
   scrollPageTitleVariants,
   scrollTitleVariants,
   scrollSubtleVariants,
@@ -25,7 +24,6 @@ interface ScrollRevealProps {
   /**
    * Animation variant to use (all fade + a long rise on EASE_OUT_QUART)
    * - default: Standard content reveal (80px rise)
-   * - feature: Full-width media cards (64px rise — big mass, one step under default)
    * - pageTitle: Page headers — quickest of the set so the title lands first
    * - title: Section titles (48px rise)
    * - subtle: Small elements (32px rise, fastest)
@@ -35,7 +33,6 @@ interface ScrollRevealProps {
    */
   variant?:
     | "default"
-    | "feature"
     | "pageTitle"
     | "title"
     | "subtle"
@@ -72,7 +69,6 @@ interface ScrollRevealProps {
 // Variant mapping - perfectly organized
 const ANIMATION_VARIANTS = {
   default: scrollRevealVariants,
-  feature: scrollFeatureVariants,
   pageTitle: scrollPageTitleVariants,
   title: scrollTitleVariants,
   subtle: scrollSubtleVariants,

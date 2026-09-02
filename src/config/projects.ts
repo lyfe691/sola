@@ -8,6 +8,9 @@
 
 import type { ProjectDate } from "@/lib/dates";
 import type { Translation } from "@/lib/translations";
+import type { ProjectArt } from "@/components/painted-cover/presets";
+
+export type { ProjectArt };
 
 export type ProjectI18nKey = keyof Translation["projects"]["list"];
 
@@ -31,16 +34,15 @@ export interface ProjectDeepDiveMeta {
 export interface ProjectMeta {
   id: string;
   i18nKey: ProjectI18nKey;
-  image?: string;
   link?: string;
   github?: string;
   technologies: string[];
-  featured: boolean;
   date: ProjectDate;
   priority: number;
+  /** Painted cover art: a named preset plus a seed that rotates its flow field. */
+  art: ProjectArt;
   /** present = project has a deep-dive page at /projects/<slug> */
   slug?: string;
-  vercelSatori?: boolean;
   /** Long-form page content lives in src/content/projects/<mdxPath>.mdx */
   deepDive?: ProjectDeepDiveMeta;
 }
@@ -49,7 +51,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "magi",
     i18nKey: "magi",
-    image: "/projects/magi/hero.png",
     link: "https://magi.ysz.life",
     github: "https://github.com/lyfe691/magi",
     technologies: [
@@ -61,14 +62,13 @@ export const PROJECTS: ProjectMeta[] = [
       "Networking",
       "cargo-dist",
     ],
-    featured: true,
     date: {
       start: "2026-06",
       end: "present",
     },
     priority: 3,
+    art: { preset: "irises", seed: 0 },
     slug: "magi",
-    vercelSatori: false,
     deepDive: {
       tagline: "A fast, async TCP/UDP port scanner built to be correct",
       overview:
@@ -85,7 +85,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "kinoa",
     i18nKey: "kinoa",
-    image: "/projects/kinoa.png",
     link: "https://kinoa.to",
     github: "https://github.com/lyfe691/kinoa",
     technologies: [
@@ -97,14 +96,13 @@ export const PROJECTS: ProjectMeta[] = [
       "Tailwind CSS",
       "Framer Motion",
     ],
-    featured: true,
     date: {
       start: "2025-11",
       end: "present",
     },
     priority: 1,
+    art: { preset: "cafe", seed: 0 },
     slug: "kinoa",
-    vercelSatori: true,
     deepDive: {
       tagline:
         "A free streaming website for films and series with a clean, distraction-free interface",
@@ -122,7 +120,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "sola",
     i18nKey: "sola",
-    image: "/projects/sola.png",
     link: "https://sola.ysz.life",
     github: "https://github.com/lyfe691/sola",
     technologies: [
@@ -137,12 +134,12 @@ export const PROJECTS: ProjectMeta[] = [
       "ESLint",
       "SEO",
     ],
-    featured: true,
     date: {
       start: "2025-02",
       end: "present",
     },
     priority: 2,
+    art: { preset: "starry", seed: 0 },
     slug: "sola",
     deepDive: {
       tagline: "Modern portfolio website built with React and TypeScript",
@@ -160,7 +157,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "luma",
     i18nKey: "luma",
-    image: "/projects/luma.png",
     link: "https://luma.ysz.life",
     github: "https://github.com/lyfe691/luma",
     technologies: [
@@ -173,12 +169,12 @@ export const PROJECTS: ProjectMeta[] = [
       "Framer Motion",
       "Shiki",
     ],
-    featured: true,
     date: {
       start: "2026-03",
       end: "2026-04",
     },
     priority: 4,
+    art: { preset: "almond", seed: 0 },
     slug: "luma",
     deepDive: {
       tagline:
@@ -197,7 +193,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "applicare",
     i18nKey: "applicare",
-    image: "/projects/applicare.svg",
     link: "https://applicare.app",
     github: "https://github.com/lyfe691/AppliCare",
     technologies: [
@@ -210,12 +205,12 @@ export const PROJECTS: ProjectMeta[] = [
       "Docker",
       "SEO",
     ],
-    featured: true,
     date: {
       start: "2024-12",
       end: "2025-02",
     },
     priority: 5,
+    art: { preset: "wheat", seed: 0 },
     slug: "applicare",
     deepDive: {
       tagline: "Manage your job applications with ease.",
@@ -233,7 +228,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "self",
     i18nKey: "self",
-    image: "/projects/self.png",
     github: "https://github.com/lyfe691/self",
     technologies: [
       "Python",
@@ -243,11 +237,11 @@ export const PROJECTS: ProjectMeta[] = [
       "Command Line Interface",
       "Package Management",
     ],
-    featured: true,
     date: {
       start: "2025-05",
     },
     priority: 6,
+    art: { preset: "starry", seed: 1 },
     slug: "self",
     deepDive: {
       tagline:
@@ -266,15 +260,14 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "code-extractor",
     i18nKey: "codeExtractor",
-    image: "/projects/website-code-extractor.svg",
     link: "https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm",
     github: "https://github.com/lyfe691/Website-Code-Extractor",
     technologies: ["Chrome Extension", "JSZip", "HTML", "CSS", "JavaScript"],
-    featured: true,
     date: {
       start: "2024-08",
     },
     priority: 7,
+    art: { preset: "wheat", seed: 1 },
     slug: "code-extractor",
     deepDive: {
       tagline:
@@ -296,11 +289,11 @@ export const PROJECTS: ProjectMeta[] = [
     link: "https://thoughts.ysz.life",
     github: "https://github.com/lyfe691/thoughts",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "MDX"],
-    featured: false,
     date: {
       start: "2025-08",
     },
     priority: 8,
+    art: { preset: "almond", seed: 1 },
     slug: "thoughts",
     deepDive: {
       tagline:
@@ -328,11 +321,11 @@ export const PROJECTS: ProjectMeta[] = [
       "Framer Motion",
       "i18n",
     ],
-    featured: false,
     date: {
       start: "2025-04",
     },
     priority: 9,
+    art: { preset: "wheat", seed: 2 },
     slug: "taco",
     deepDive: {
       tagline:
@@ -354,12 +347,12 @@ export const PROJECTS: ProjectMeta[] = [
     link: "https://osint.ysz.life",
     github: "https://github.com/lyfe691/osint-ysz-life",
     technologies: ["React (Vite)", "shadcn/ui", "JavaScript"],
-    featured: false,
     date: {
       start: "2024-11",
       end: "2024-12",
     },
     priority: 10,
+    art: { preset: "cypress", seed: 0 },
   },
   {
     id: "chatapp",
@@ -374,56 +367,55 @@ export const PROJECTS: ProjectMeta[] = [
       "JavaScript",
       "WebSocket",
     ],
-    featured: false,
     date: {
       start: "2024-09",
     },
     priority: 11,
+    art: { preset: "irises", seed: 1 },
   },
-  // non-featured projects
   {
     id: "vm-detector",
     i18nKey: "vmDetector",
     github: "https://github.com/lyfe691/Virtual-Machine-Detector",
     technologies: ["Java", "Virtual Machine", "Detection"],
-    featured: false,
     date: {
       start: "2024-08",
     },
     priority: 12,
+    art: { preset: "cypress", seed: 1 },
   },
   {
     id: "view-counter",
     i18nKey: "viewCounter",
     github: "https://github.com/lyfe691/View_Counter",
     technologies: ["Spring Boot", "Redis", "Java"],
-    featured: false,
     date: {
       start: "2024-08",
     },
     priority: 13,
+    art: { preset: "starry", seed: 2 },
   },
   {
     id: "docker-service",
     i18nKey: "dockerService",
     github: "https://github.com/lyfe691/LB-WISS_169-347",
     technologies: ["Docker", "Teamwork", "Documentation"],
-    featured: false,
     date: {
       start: "2024-06",
     },
     priority: 14,
+    art: { preset: "irises", seed: 2 },
   },
   {
     id: "phishing",
     i18nKey: "phishing",
     github: "https://github.com/lyfe691/phishing-website-tutorial",
     technologies: ["HTML", "CSS", "JavaScript", "Node.js", "Tutorial"],
-    featured: false,
     date: {
       start: "2024-04",
     },
     priority: 15,
+    art: { preset: "cafe", seed: 1 },
   },
   {
     id: "otw",
@@ -436,10 +428,10 @@ export const PROJECTS: ProjectMeta[] = [
       "Tutorial",
       "Ethical Hacking",
     ],
-    featured: false,
     date: {
       start: "2024-04",
     },
     priority: 16,
+    art: { preset: "cypress", seed: 2 },
   },
 ];

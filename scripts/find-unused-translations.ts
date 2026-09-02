@@ -163,6 +163,7 @@ function collectUsedPaths(): Set<string> {
 
   for (const project of PROJECTS) {
     addPath(used, `projects.list.${project.i18nKey}.title`);
+    addPath(used, `projects.list.${project.i18nKey}.tagline`);
     addPath(used, `projects.list.${project.i18nKey}.description`);
   }
 

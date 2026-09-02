@@ -253,13 +253,9 @@ export const zh = {
   },
   projects: {
     title: "项目",
-    other: "其他项目",
-    otherInfo: "非精选项目：小型工具与实验项目。",
     viewDetails: "查看详情",
     viewAll: "查看所有项目",
     viewGithub: "查看代码",
-    satoriAttribution:
-      "图像由 [Vercel Satori](https://og-playground.vercel.app/) 生成",
     sortBy: "排序",
     sortOptions: {
       priority: "优先级",
@@ -273,79 +269,95 @@ export const zh = {
     list: {
       codeExtractor: {
         title: "网站代码提取器",
+        tagline: "一键提取网站代码",
         description:
           "一款简单的 Chrome 扩展，可从网站提取 HTML、CSS、JavaScript 和图片，并用 JSZip 打包为 ZIP。适用于小型网站，便于快速获取网页代码；对严重依赖服务端代码的大型网站存在一定限制。",
       },
       applicare: {
         title: "AppliCare",
+        tagline: "轻松管理求职申请",
         description:
           "AppliCare是一个现代求职申请管理平台，后端使用Spring Boot，数据存储使用MongoDB Atlas，前端使用React（Vite）和Ant Design。它提供了一个直观且高效的方式来组织和监控求职申请，具有时尚的响应式界面。",
       },
       osint: {
         title: "OSINT网站",
+        tagline: "磨炼你的调查直觉",
         description:
           "这个OSINT网站是一个源于我对开源情报和不断发展的数字调查世界兴趣的项目。它提供互动练习，旨在提升调查技能并鼓励批判性思维。",
       },
       chatapp: {
         title: "聊天应用",
+        tagline: "基于Spring Boot的实时聊天室",
         description:
           "ChatApp是一个用户友好的聊天平台，用户可以创建账户并在各种聊天室中与他人联系。使用Spring Boot构建，由MongoDB提供高效的数据存储，为实时通信提供无缝体验。",
       },
       vmDetector: {
         title: "虚拟机检测器",
+        tagline: "判断是否运行在虚拟机中",
         description: "这是一个检测机器是否为虚拟机的工具。",
       },
       viewCounter: {
         title: "访问计数器",
+        tagline: "基于Redis的页面访问计数器",
         description:
           "这是一个简单的访问计数器应用程序，用于统计页面被查看的次数。使用Spring Boot和Redis构建。",
       },
       dockerService: {
         title: "Docker服务部署",
+        tagline: "用Compose部署MediaWiki、Nextcloud和Gogs",
         description:
           "这个Docker Compose项目部署了MediaWiki、Nextcloud和Gogs，注重团队协作、容器化和文档编写。与Benicio Von Felten共同开发。",
       },
       phishing: {
         title: "钓鱼网站教程",
+        tagline: "了解钓鱼网页的运作方式",
         description:
           "这是一个关于如何创建钓鱼网站的教程。使用HTML、CSS和JavaScript构建。",
       },
       otw: {
         title: "OverTheWire指南",
+        tagline: "Bandit，逐关攻略",
         description: "这是一个关于如何解决OverTheWire战争游戏的指南。",
       },
       sola: {
         title: "Sola",
+        tagline: "React与TypeScript打造的现代作品集",
         description:
           "Sola 是我的个人网站。基于 React、TypeScript 与 Tailwind CSS 构建，用以以干净、现代的方式展示我的项目、技能与经验。",
       },
       kinoa: {
         title: "Kinoa",
+        tagline: "免费观影，纯净无扰",
         description:
           "Kinoa 是基于 Next.js、shadcn/ui 和 Supabase 构建的免费流媒体网站。无需订阅 — 浏览电影和剧集，通过第三方提供商内嵌播放，服务器自动切换，简洁好用。",
       },
       self: {
         title: "Self",
+        tagline: "为Windows重塑的Neofetch",
         description:
           "Self 是一个可自定义的 Windows 系统信息显示工具，受 Neofetch 启发，并使用 Python 构建。它可在终端中显示系统信息，并配合图像或 ASCII 艺术显示。支持方块或盲文渲染模式、可定制主题，以及简洁的 PowerShell 安装程序，为 Windows 带来清爽的类 Unix 风格美学。",
       },
       taco: {
         title: "Taco",
+        tagline: "可直接上线的Next.js模板",
         description:
           "围绕我弟弟的狗狗 Taco 打造的生产级模板网站——基于 Next.js、TypeScript、Tailwind CSS。内置带自动检测的本地化、博客系统，以及适用于真实项目的干净模块化架构。",
       },
       thoughts: {
         title: "Thoughts",
+        tagline: "思绪、片段与笔记",
         description:
           "一个极简的个人网站，用来分享我的思考、片段与笔记。受 [Shu Ding](https://shud.in) 个人网站启发，使用 Next.js、MDX 和 Tailwind 构建。包含自定义留言簿功能，访客可以留下自己的想法。",
       },
       magi: {
         title: "magi",
+        tagline: "以正确性为先的异步端口扫描器",
         description:
           "magi 是一款用 Rust 编写的快速、异步的 TCP/UDP 端口扫描器。它执行 connect 扫描——对每个端口进行一次正常握手——因此无需 root，并且可以在任何 tokio 能运行的地方运行。它绝不报告自己并未真正建立过的端口状态：当探测无法执行时，会标记为 untestable，而不是臆断为 closed。有界并发让内存保持平稳——从单个主机到整个 /16——并支持 banner 抓取、UDP 扫描以及便于脚本处理的 JSON 输出。",
       },
       luma: {
         title: "Luma",
+        tagline: "自带密钥，畅聊任意模型",
         description:
           "自带 API 密钥，与 Claude、GPT、Gemini、Grok 等顶级 AI 模型在同一平台对话的多模型 AI 平台。基于 Next.js 16、Vercel AI SDK 和 Supabase 构建。",
       },

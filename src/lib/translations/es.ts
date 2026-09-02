@@ -266,14 +266,9 @@ export const es = {
   },
   projects: {
     title: "Proyectos",
-    other: "Otros Proyectos",
-    otherInfo:
-      "Proyectos no destacados: utilidades y experimentos más pequeños.",
     viewDetails: "Ver Detalles",
     viewAll: "Ver Todos los Proyectos",
     viewGithub: "Ver Código",
-    satoriAttribution:
-      "Imagen creada con [Vercel Satori](https://og-playground.vercel.app/)",
     sortBy: "Ordenar por",
     sortOptions: {
       priority: "Prioridad",
@@ -287,81 +282,97 @@ export const es = {
     list: {
       codeExtractor: {
         title: "Extractor de Código Web",
+        tagline: "Extrae código con un clic",
         description:
           "Una extensión simple de Chrome que extrae HTML, CSS, JavaScript e imágenes de sitios web y los empaqueta en un archivo ZIP con JSZip. Ideal para sitios pequeños, permite acceso rápido al código web, aunque puede tener limitaciones con sitios más grandes que dependen en gran medida del código del servidor.",
       },
       applicare: {
         title: "AppliCare",
+        tagline: "Gestiona tus candidaturas sin esfuerzo",
         description:
           "AppliCare es una plataforma moderna de gestión de solicitudes de empleo construida usando Spring Boot para el backend, MongoDB Atlas para almacenar datos, y React (Vite) con Ant Design para el frontend. Proporciona una forma intuitiva y eficiente de organizar y monitorear solicitudes de empleo con una interfaz elegante y responsiva.",
       },
       osint: {
         title: "Sitio Web OSINT",
+        tagline: "Afina tu instinto investigador",
         description:
           "Este sitio web OSINT es un proyecto personal inspirado en mi interés en la Inteligencia de Fuentes Abiertas y el mundo en constante evolución de las investigaciones digitales. Presenta ejercicios interactivos diseñados para mejorar las habilidades investigativas y fomentar el pensamiento crítico.",
       },
       chatapp: {
         title: "ChatApp",
+        tagline: "Salas en tiempo real sobre Spring Boot",
         description:
           "ChatApp es una plataforma de chat fácil de usar donde los usuarios pueden crear cuentas y conectarse con otros en varias salas de chat. Construida con Spring Boot y respaldada por MongoDB para un almacenamiento eficiente de datos, ChatApp proporciona una experiencia fluida para la comunicación en tiempo real.",
       },
       vmDetector: {
         title: "Detector de Máquinas Virtuales",
+        tagline: "Detecta si corres en una máquina virtual",
         description:
           "Esta es una herramienta que detecta si una máquina es una máquina virtual.",
       },
       viewCounter: {
         title: "Contador de Vistas",
+        tagline: "Un contador de vistas sobre Redis",
         description:
           "Esta es una aplicación simple de contador de vistas que cuenta el número de veces que se ha visto una página. Está construida con Spring Boot y Redis.",
       },
       dockerService: {
         title: "Despliegue de Servicios Docker",
+        tagline: "MediaWiki, Nextcloud y Gogs con Compose",
         description:
           "Este proyecto Docker Compose implementa MediaWiki, Nextcloud, y Gogs, enfocándose en el trabajo en equipo, la containerización y la documentación. Desarrollado con Benicio Von Felten.",
       },
       phishing: {
         title: "Tutorial de Sitio Web de Phishing",
+        tagline: "Cómo funcionan las páginas de phishing",
         description:
           "Este es un tutorial sobre cómo crear un sitio web de phishing. Está construido con HTML, CSS y JavaScript.",
       },
       otw: {
         title: "Guía OverTheWire",
+        tagline: "Bandit, nivel a nivel",
         description:
           "Esta es una guía sobre cómo resolver los wargames de OverTheWire.",
       },
       sola: {
         title: "Sola",
+        tagline: "Portafolio moderno en React y TypeScript",
         description:
           "Sola es mi sitio web personal, el que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna.",
       },
       kinoa: {
         title: "Kinoa",
+        tagline: "Streaming gratis, sin ruido",
         description:
           "Kinoa es un sitio de streaming gratuito hecho con Next.js, shadcn/ui y Supabase. Sin suscripción — navega entre películas y series, mira con reproducción inline desde proveedores externos y deja que el cambio automático de servidores haga el resto.",
       },
       self: {
         title: "Self",
+        tagline: "Neofetch, reinventado para Windows",
         description:
           "Self es una herramienta personalizable de visualización de información del sistema para Windows, inspirada en Neofetch y construida con Python. Muestra estadísticas del sistema junto a arte ASCII o imágenes directamente en la terminal. Con soporte para modos de renderizado en bloques o braille, temas personalizables y un instalador sencillo por PowerShell, aporta una estética limpia al estilo Unix a Windows.",
       },
       taco: {
         title: "Taco",
+        tagline: "Una plantilla Next.js lista para producción",
         description:
           "Plantilla lista para producción en torno a Taco, el perro de mi hermano — construida con Next.js, TypeScript y Tailwind CSS. Incluye localización con detección automática, blog y una arquitectura modular limpia apta para proyectos reales.",
       },
       thoughts: {
         title: "Thoughts",
+        tagline: "Reflexiones, fragmentos y notas",
         description:
           "Un sitio personal minimalista donde comparto reflexiones, fragmentos y notas. Inspirado por el sitio web personal de [Shu Ding](https://shud.in), construido con Next.js, MDX y Tailwind. Incluye un libro de visitas personalizado donde los visitantes pueden dejar sus propios pensamientos.",
       },
       magi: {
         title: "magi",
+        tagline: "Escaneo de puertos asíncrono y correcto",
         description:
           "magi es un escáner de puertos TCP y UDP rápido y asíncrono escrito en Rust. Hace connect scanning — un handshake normal por puerto — así que no necesita root y funciona en cualquier sitio donde funcione tokio. Nunca informa de un estado de puerto que no haya establecido realmente: cuando un probe no puede ejecutarse, se marca como untestable en lugar de suponerlo closed. La concurrencia acotada mantiene la memoria plana, desde un solo host hasta un /16 entero, con captura de banners, escaneo UDP y salida JSON para scripting.",
       },
       luma: {
         title: "Luma",
+        tagline: "Trae tus claves, habla con cualquier modelo",
         description:
           "Una plataforma de IA multi‑modelo donde traes tus propias claves API y hablas con los mejores modelos — Claude, GPT, Gemini, Grok y más — todo en un solo lugar. Construido con Next.js 16, el SDK de IA de Vercel y Supabase.",
       },

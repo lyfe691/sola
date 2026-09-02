@@ -61,7 +61,6 @@ const D_REVEAL = 0.8;
 const D_TITLE = 0.7;
 const D_PAGE_TITLE = 0.65;
 const D_SUBTLE = 0.6;
-const D_FEATURE = 0.7;
 
 // ---- Page (route) transition: "consumes itself" ----
 // The old page shrinks + blurs as it accelerates away (consumed inward); the new page
@@ -107,11 +106,6 @@ export const scrollTitleVariants = rise(48, D_TITLE);
 export const scrollPageTitleVariants = rise(40, D_PAGE_TITLE);
 export const scrollSubtleVariants = rise(32, D_SUBTLE);
 export const scrollChildVariants = rise(64, D_REVEAL);
-// full-width media cards (featured projects) — one step under the default
-// travel (64 vs 80): enough rise to read as the site's glide, shy of the
-// full 80 that makes this much visual mass lurch. 40px read as fade-pop
-// next to the 80px register everywhere else.
-export const scrollFeatureVariants = rise(64, D_FEATURE);
 
 // in-view pair for config/card pages (Certifications, Privacy) — one
 // definition on the shared register so the pair can't drift
@@ -138,8 +132,9 @@ export const scrollHeaderVariants = {
   },
 };
 
-/** index delay (ms) for multi-column grids, capped so late rows never wait.
- * Single-column stacks take no delay at all (see scrollFeatureVariants). */
+/** index delay (ms) for a grid's load or re-sort cascade, capped so late
+ * cards never wait. Only applied while the grid is entering (see
+ * useEntranceWindow); a card scrolled to later rises at once. */
 export const staggerDelay = (index: number) => Math.min(index * 80, 240);
 
 /** First content block waits so page chrome (title / sort) leads. */

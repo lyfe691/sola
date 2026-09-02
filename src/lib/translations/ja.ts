@@ -257,13 +257,9 @@ export const ja = {
   },
   projects: {
     title: "プロジェクト",
-    other: "その他のプロジェクト",
-    otherInfo: "注目外のプロジェクト：小さなツールや実験的なもの。",
     viewDetails: "詳細を見る",
     viewAll: "すべてのプロジェクトを見る",
     viewGithub: "コードを見る",
-    satoriAttribution:
-      "この画像は [Vercel Satori](https://og-playground.vercel.app/) で生成",
     sortBy: "並べ替え",
     sortOptions: {
       priority: "優先度",
@@ -277,79 +273,95 @@ export const ja = {
     list: {
       codeExtractor: {
         title: "ウェブサイトコード抽出ツール",
+        tagline: "ワンクリックでコードを抽出",
         description:
           "ウェブサイトから HTML、CSS、JavaScript、画像を抽出し、JSZip で ZIP にまとめるシンプルな Chrome 拡張です。小規模サイトに最適でコードへ素早くアクセスできますが、サーバー側コードに依存する大規模サイトでは制限があります。",
       },
       applicare: {
         title: "AppliCare",
+        tagline: "応募管理をもっと手軽に",
         description:
           "AppliCareは、バックエンドにSpring Boot、データストレージにMongoDB Atlas、フロントエンドにReact（Vite）とAnt Designを使用して構築された最新の求職管理プラットフォームです。洗練されたレスポンシブなインターフェースで、求職活動を直感的かつ効率的に整理・監視する方法を提供します。",
       },
       osint: {
         title: "OSINT ウェブサイト",
+        tagline: "調査スキルを磨く",
         description:
           "このOSINTウェブサイトは、オープンソースインテリジェンスと不断に進化するデジタル調査の世界への関心から生まれたプロジェクトです。調査スキルを磨き、批判的思考を促す対話型の演習を提供しています。",
       },
       chatapp: {
         title: "ChatApp",
+        tagline: "Spring Boot製のリアルタイムチャット",
         description:
           "ChatAppは、ユーザーがアカウントを作成し、様々なチャットルームで他のユーザーとつながることができるユーザーフレンドリーなチャットプラットフォームです。Spring Bootで構築され、MongoDBによる効率的なデータストレージを備え、リアルタイムコミュニケーションのためのシームレスな体験を提供します。",
       },
       vmDetector: {
         title: "仮想マシン検出ツール",
+        tagline: "仮想マシン上かどうかを判定",
         description: "マシンが仮想マシンであるかどうかを検出するツールです。",
       },
       viewCounter: {
         title: "ビューカウンター",
+        tagline: "Redisで動くページビューカウンター",
         description:
           "ページの閲覧回数をカウントするシンプルなビューカウンターアプリケーションです。Spring BootとRedisで構築されています。",
       },
       dockerService: {
         title: "Dockerサービスデプロイメント",
+        tagline: "ComposeでMediaWiki・Nextcloud・Gogsを構築",
         description:
           "このDocker Composeプロジェクトは、MediaWiki、Nextcloud、Gogsをデプロイし、チームワーク、コンテナ化、ドキュメンテーションに焦点を当てています。Benicio Von Feltenと共同開発。",
       },
       phishing: {
         title: "フィッシングウェブサイトチュートリアル",
+        tagline: "フィッシングページの仕組みを学ぶ",
         description:
           "これは、フィッシングウェブサイトの作成方法に関するチュートリアルです。HTML、CSS、JavaScriptで構築されています。",
       },
       otw: {
         title: "OverTheWireガイド",
+        tagline: "Banditをレベルごとに攻略",
         description: "OverTheWireウォーゲームの解決方法に関するガイドです。",
       },
       sola: {
         title: "Sola",
+        tagline: "ReactとTypeScriptで作るモダンなポートフォリオ",
         description:
           "Sola は私の個人サイトです。React・TypeScript・Tailwind CSS で構築し、プロジェクトやスキル、経験をクリーンかつモダンに紹介します。",
       },
       kinoa: {
         title: "Kinoa",
+        tagline: "無料でストリーミング、ノイズなし",
         description:
           "Kinoa は Next.js、shadcn/ui、Supabase で構築した無料ストリーミングサイトです。サブスク不要 — 映画やドラマをサードパーティホスターからインライン再生でき、サーバーが落ちても自動で切り替わります。",
       },
       self: {
         title: "Self",
+        tagline: "Windows向けに再構築したNeofetch",
         description:
           "Self は、Neofetch にインスパイアされたカスタマイズ可能な Windows 用のシステム情報表示ツールで、Python で構築されています。システム情報を画像や ASCII アートと共にターミナル上に表示します。ブロックと点字の描画モード、テーマのカスタマイズ、簡単な PowerShell インストーラーに対応し、Windows にクリーンで Unix ライクな美しさをもたらします。",
       },
       taco: {
         title: "Taco",
+        tagline: "本番対応のNext.jsテンプレート",
         description:
           "弟の犬 Taco を題材にしたプロダクション品質のテンプレート。Next.js・TypeScript・Tailwind CSS により、言語自動検出付きのローカリゼーション、ブログ機能、モジュール化されたクリーンなアーキテクチャを備えています。",
       },
       thoughts: {
         title: "Thoughts",
+        tagline: "思索、断片、そしてメモ",
         description:
           "考えや断片、メモを共有するミニマルな個人サイトです。[Shu Ding](https://shud.in) の個人サイトに触発され、Next.js・MDX・Tailwind CSS で構築しました。訪問者が自分の想いを書き残せる独自のゲストブック機能を備えています。",
       },
       magi: {
         title: "magi",
+        tagline: "正確さを重視した非同期ポートスキャナ",
         description:
           "magi は Rust で書かれた高速・非同期の TCP/UDP ポートスキャナーです。コネクトスキャン（各ポートへの通常のハンドシェイク）を行うため root は不要で、tokio が動く環境ならどこでも動作します。実際に確立していないポート状態を報告することは決してありません。プローブを実行できない場合は closed と決めつけず untestable として扱います。有界な並行処理により、単一ホストから /16 全体までメモリ使用量を一定に保ち、バナー取得、UDP スキャン、スクリプト連携向けの JSON 出力に対応します。",
       },
       luma: {
         title: "Luma",
+        tagline: "自分のキーで、どのモデルとも",
         description:
           "自分の API キーを持ち込み、Claude・GPT・Gemini・Grok など最高の AI モデルとひとつの場所で対話できるマルチモデル AI プラットフォーム。Next.js 16、Vercel AI SDK、Supabase で構築。",
       },

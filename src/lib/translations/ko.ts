@@ -260,13 +260,9 @@ export const ko = {
   },
   projects: {
     title: "프로젝트",
-    other: "기타 프로젝트",
-    otherInfo: "비특집 프로젝트: 소규모 도구, 실험 및 유틸리티.",
     viewDetails: "세부정보 보기",
     viewAll: "모든 프로젝트 보기",
     viewGithub: "코드 보기",
-    satoriAttribution:
-      "[Vercel Satori](https://og-playground.vercel.app/)로 만든 이미지",
     sortBy: "정렬 기준",
     sortOptions: {
       priority: "우선순위",
@@ -280,79 +276,95 @@ export const ko = {
     list: {
       codeExtractor: {
         title: "웹사이트 코드 추출기",
+        tagline: "클릭 한 번으로 코드 추출",
         description:
           "웹사이트에서 HTML, CSS, JavaScript, 이미지를 추출하고 JSZip을 사용하여 zip 파일로 패키징하는 간단한 Chrome 확장 프로그램입니다. 소규모 사이트에 이상적이며 웹 코드에 빠르게 액세스할 수 있지만 서버 측 코드에 크게 의존하는 대규모 사이트에서는 어려움을 겪을 수 있습니다.",
       },
       applicare: {
         title: "AppliCare",
+        tagline: "지원 현황을 손쉽게 관리",
         description:
           "AppliCare는 백엔드용 Spring Boot, 데이터 저장용 MongoDB Atlas, 프론트엔드용 Ant Design이 포함된 React(Vite)를 사용하여 구축된 현대적인 입사 지원 관리 플랫폼입니다. 세련되고 반응성이 뛰어난 인터페이스를 통해 입사 지원을 정리하고 추적하는 직관적이고 효율적인 방법을 제공합니다.",
       },
       osint: {
         title: "OSINT 웹사이트",
+        tagline: "조사 감각을 날카롭게",
         description:
           "이 OSINT 웹사이트는 오픈 소스 인텔리전스(Open Source Intelligence)와 끊임없이 진화하는 디지털 조사 세계소개 나의 관심에서 영감을 받은 열정적인 프로젝트입니다. 조사 기술을 연마하고 비판적 사고를 장려하도록 고안된 대화형 연습이 특징입니다.",
       },
       chatapp: {
         title: "ChatApp",
+        tagline: "Spring Boot 기반 실시간 채팅방",
         description:
           "ChatApp은 개인이 계정을 만들고 다양한 채팅방에서 다른 사람들과 연결할 수 있는 사용자 친화적인 채팅 플랫폼입니다. 효율적인 데이터 저장을 위해 Spring Boot로 구축되고 MongoDB의 지원을 받는 ChatApp은 실시간 통신을 위한 원활한 환경을 제공합니다.",
       },
       vmDetector: {
         title: "가상 머신 탐지기",
+        tagline: "가상 머신에서 실행 중인지 감지",
         description: "이는 머신이 가상 머신인지 감지하는 도구입니다.",
       },
       viewCounter: {
         title: "조회수 카운터",
+        tagline: "Redis 기반 페이지 조회수 카운터",
         description:
           "이것은 페이지를 본 횟수를 계산하는 간단한 조회 카운터 응용 프로그램입니다. Spring Boot와 Redis로 구축되었습니다.",
       },
       dockerService: {
         title: "Docker 서비스 배포",
+        tagline: "Compose로 MediaWiki, Nextcloud, Gogs 배포",
         description:
           "이 Docker Compose 프로젝트는 팀워크, 컨테이너화 및 문서화에 중점을 두고 MediaWiki, Nextcloud 및 Gogs를 배포합니다. Benicio Von Felten과 함께 개발했습니다.",
       },
       phishing: {
         title: "피싱 웹사이트 튜토리얼",
+        tagline: "피싱 페이지의 작동 원리 배우기",
         description:
           "피싱사이트를 만드는 방법소개 튜토리얼입니다. HTML, CSS, JavaScript로 제작되었습니다.",
       },
       otw: {
         title: "OverTheWire 가이드",
+        tagline: "Bandit, 레벨별 공략",
         description: "OverTheWire 워게임을 해결하는 방법소개 가이드입니다.",
       },
       sola: {
         title: "Sola",
+        tagline: "React와 TypeScript로 만든 모던 포트폴리오",
         description:
           "Sola는 여러분이 지금 접속하고 있는 제 개인 웹사이트입니다. React, TypeScript 및 Tailwind CSS로 제작되었으며 내 프로젝트, 기술 및 경험을 깔끔하고 현대적인 방식으로 선보이도록 설계되었습니다.",
       },
       kinoa: {
         title: "Kinoa",
+        tagline: "무료 스트리밍, 군더더기 없이",
         description:
           "Kinoa는 Next.js, shadcn/ui 및 Supabase로 구축된 무료 스트리밍 사이트입니다. 구독이 필요하지 않습니다. 영화와 시리즈를 탐색하고, 타사 호스팅 업체의 인라인 재생으로 시청하고, 자동 서버 장애 조치가 나머지를 처리하도록 하세요.",
       },
       self: {
         title: "Self",
+        tagline: "Windows를 위해 다시 만든 Neofetch",
         description:
           "Self는 Python으로 구축된 Neofetch에서 영감을 받아 사용자 정의 가능한 Windows 시스템 정보 표시 도구입니다. 터미널에 직접 이미지 또는 ASCII 아트와 함께 시스템 통계를 표시합니다. 블록 및 점자 렌더링 모드, 테마 사용자 정의, 간단한 PowerShell 설치 프로그램을 지원하여 Windows에 깔끔한 Unix 스타일의 미학을 선사합니다.",
       },
       taco: {
         title: "Taco",
+        tagline: "프로덕션 준비된 Next.js 템플릿",
         description:
           "내 동생의 개 Taco를 중심으로 한 프로덕션 준비 템플릿 사이트 — Next.js, TypeScript 및 Tailwind CSS를 사용하여 구축되었습니다. 여기에는 자동 감지 기능을 갖춘 현지화, 블로그 시스템 및 실제 프로젝트에 적합한 깔끔한 모듈식 아키텍처가 포함됩니다.",
       },
       thoughts: {
         title: "Thoughts",
+        tagline: "생각, 조각, 그리고 메모",
         description:
           "나의 반성, 단편, 메모를 공유하는 미니멀 개인 사이트입니다. [Shu Ding](https://shud.in)의 개인 웹사이트에서 영감을 받아 Next.js, MDX 및 Tailwind로 구축되었습니다. 방문자가 자신의 생각을 남길 수 있는 맞춤형 방명록 기능이 포함되어 있습니다.",
       },
       magi: {
         title: "magi",
+        tagline: "정확함을 우선한 비동기 포트 스캐너",
         description:
           "magi는 Rust로 작성된 빠른 비동기식 TCP 및 UDP 포트 스캐너입니다. 포트당 일반적인 핸드셰이크인 연결 스캔(포트마다 일반 핸드셰이크)을 수행하므로 루트가 필요 없으며 tokio가 있는 곳 어디에서나 실행됩니다. 실제로 설정되지 않은 포트 상태는 절대 보고하지 않습니다. 프로브를 실행할 수 없으면 닫힌 것으로 추측되기보다는 테스트할 수 없는 것으로 표시됩니다. 제한된 동시성은 배너 잡기, UDP 검색 및 스크립팅을 위한 JSON 출력을 통해 단일 호스트에서 전체 /16까지 메모리 사용량을 일정하게 유지합니다.",
       },
       luma: {
         title: "Luma",
+        tagline: "내 키로 어떤 모델과도 대화",
         description:
           "자신의 API 키를 가져와 Claude, GPT, Gemini, Grok 등 최고의 모델과 모두 한 곳에서 대화할 수 있는 다중 모델 AI 플랫폼입니다. Next.js 16, Vercel AI SDK 및 Supabase로 구축되었습니다.",
       },
