@@ -271,6 +271,7 @@ export const ja = {
     selectSorting: "並べ替えを選択...",
     kind: {
       label: "プロジェクトの種類",
+      all: "すべて",
       personal: "個人",
       commercial: "商用",
     },

@@ -80,6 +80,9 @@ interface Project extends ProjectMeta {
   dateLabel: string;
 }
 
+/** The kind toggle: every project, or one kind. */
+type KindFilter = "all" | ProjectKind;
+
 type SortOptionItem = {
   value: ProjectSortOption;
   label: string;
@@ -292,7 +295,7 @@ const ProjectGrid = ({
 
 const Projects = () => {
   const [sortBy, setSortBy] = useState<ProjectSortOption>("priority");
-  const [kind, setKind] = useState<ProjectKind>("personal");
+  const [kind, setKind] = useState<KindFilter>("all");
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
@@ -304,6 +307,7 @@ const Projects = () => {
   const kindOptions = useMemo(
     () =>
       [
+        { value: "all", label: t.projects.kind.all },
         { value: "personal", label: t.projects.kind.personal },
         { value: "commercial", label: t.projects.kind.commercial },
       ] as const,
@@ -312,7 +316,9 @@ const Projects = () => {
   const projects = useMemo(
     () =>
       sortProjects(
-        localizeProjects(t, language).filter((p) => p.kind === kind),
+        localizeProjects(t, language).filter(
+          (p) => kind === "all" || p.kind === kind,
+        ),
         sortBy,
         INTL_LOCALE[language],
       ),

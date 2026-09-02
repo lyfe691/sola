@@ -174,7 +174,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 5,
     art: { preset: "cobalt", seed: 0 },
-    kind: "commercial",
+    kind: "personal",
     slug: "applicare",
     deepDive: {
       overview:
@@ -333,7 +333,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 14,
     art: { preset: "irises", seed: 2 },
-    kind: "commercial",
+    kind: "personal",
   },
   {
     id: "phishing",

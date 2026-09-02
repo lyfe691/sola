@@ -275,6 +275,7 @@ export const en = {
     selectSorting: "Select sorting...",
     kind: {
       label: "Project type",
+      all: "All",
       personal: "Personal",
       commercial: "Commercial",
     },

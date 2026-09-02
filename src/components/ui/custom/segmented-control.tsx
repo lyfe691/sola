@@ -57,7 +57,8 @@ export function SegmentedControl<T extends string>({
       aria-label={ariaLabel}
       onKeyDown={onKeyDown}
       className={cn(
-        "inline-flex h-9 items-center rounded-full bg-input/50 p-1",
+        // spans the row on phones with equal segments; content-sized from sm up
+        "flex h-9 w-full items-center rounded-full bg-input/50 p-1 sm:inline-flex sm:w-auto",
         className,
       )}
     >
@@ -72,7 +73,7 @@ export function SegmentedControl<T extends string>({
             tabIndex={active ? 0 : -1}
             onClick={() => onValueChange(option.value)}
             className={cn(
-              "relative h-full rounded-full px-4 text-sm font-medium outline-none transition-colors duration-300 ease-out focus-visible:ring-3 focus-visible:ring-ring/30",
+              "relative h-full flex-1 rounded-full px-4 text-sm font-medium outline-none transition-colors duration-300 ease-out focus-visible:ring-3 focus-visible:ring-ring/30 sm:flex-none",
               active
                 ? "text-foreground"
                 : "text-foreground/60 hover:text-foreground/80",

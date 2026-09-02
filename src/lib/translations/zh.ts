@@ -267,6 +267,7 @@ export const zh = {
     selectSorting: "选择排序...",
     kind: {
       label: "项目类型",
+      all: "全部",
       personal: "个人",
       commercial: "商业",
     },

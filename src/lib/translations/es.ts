@@ -280,6 +280,7 @@ export const es = {
     selectSorting: "Seleccionar orden...",
     kind: {
       label: "Tipo de proyecto",
+      all: "Todos",
       personal: "Personales",
       commercial: "Comerciales",
     },

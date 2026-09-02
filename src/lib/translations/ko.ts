@@ -274,6 +274,7 @@ export const ko = {
     selectSorting: "정렬 선택...",
     kind: {
       label: "프로젝트 유형",
+      all: "전체",
       personal: "개인",
       commercial: "상업",
     },

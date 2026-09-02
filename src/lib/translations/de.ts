@@ -277,6 +277,7 @@ export const de = {
     selectSorting: "Sortierung wählen...",
     kind: {
       label: "Projektart",
+      all: "Alle",
       personal: "Persönlich",
       commercial: "Kommerziell",
     },
