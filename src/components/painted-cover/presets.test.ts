@@ -14,16 +14,13 @@ import {
 const HEX = /^#[0-9a-f]{6}$/i;
 
 describe("PRESETS", () => {
-  it("defines every named preset with four hex stops and a horizon in [-1, 1]", () => {
+  it("defines every named preset with two hex colors and positive motion values", () => {
     for (const name of ART_PRESETS) {
       const preset = PRESETS[name];
-      expect(preset.palette).toHaveLength(4);
-      for (const stop of preset.palette) expect(stop).toMatch(HEX);
-      expect(preset.horizon).toBeGreaterThanOrEqual(-1);
-      expect(preset.horizon).toBeLessThanOrEqual(1);
-      expect(preset.swirl).toBeGreaterThan(0);
-      expect(preset.stroke).toBeGreaterThan(0);
-      expect(preset.drift).toBeGreaterThan(0);
+      expect(preset.colors).toHaveLength(2);
+      for (const color of preset.colors) expect(color).toMatch(HEX);
+      expect(preset.scale).toBeGreaterThan(0);
+      expect(preset.speed).toBeGreaterThan(0);
     }
   });
 });
@@ -50,8 +47,8 @@ describe("seedToAngle", () => {
 describe("resolveArt", () => {
   it("merges the preset with a seed of 0 by default", () => {
     const art = resolveArt({ preset: "starry" });
-    expect(art.palette).toEqual(PRESETS.starry.palette);
-    expect(art.horizon).toBe(PRESETS.starry.horizon);
+    expect(art.colors).toEqual(PRESETS.starry.colors);
+    expect(art.scale).toBe(PRESETS.starry.scale);
     expect(art.seed).toBe(0);
   });
 
@@ -61,12 +58,11 @@ describe("resolveArt", () => {
 });
 
 describe("baseGradient", () => {
-  it("uses all four stops and orients by horizon", () => {
-    const top = baseGradient(PRESETS.starry); // horizon 1: dark at top
-    const bottom = baseGradient(PRESETS.wheat); // horizon -1: dark at bottom
-    for (const stop of PRESETS.starry.palette) expect(top).toContain(stop);
-    expect(top).toContain("to bottom");
-    expect(bottom).toContain("to top");
-    expect(baseGradient(PRESETS.irises)).toContain("135deg");
+  it("runs from the deep wash to the pale one", () => {
+    const gradient = baseGradient(PRESETS.almond);
+    const [deep, pale] = PRESETS.almond.colors;
+    expect(gradient).toContain(deep);
+    expect(gradient).toContain(pale);
+    expect(gradient.indexOf(deep)).toBeLessThan(gradient.indexOf(pale));
   });
 });

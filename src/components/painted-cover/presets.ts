@@ -5,18 +5,19 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Presets for the painted project covers, named after the paintings they
- * borrow their palettes from. The covers are artwork: these are literal
- * colors, the same in every theme, like the deep-dive hero has always been.
+ * Presets for the painted project covers: two clean colors per preset, a
+ * deep wash and a pale one, the way the site's watercolor background pairs
+ * them. The covers are artwork: these are literal colors, the same in every
+ * theme, like the deep-dive hero has always been.
  */
 
 export const ART_PRESETS = [
   "starry",
-  "wheat",
+  "cafe",
   "irises",
   "almond",
-  "cafe",
-  "cypress",
+  "wheat",
+  "slate",
 ] as const;
 
 export type ArtPreset = (typeof ART_PRESETS)[number];
@@ -24,70 +25,30 @@ export type ArtPreset = (typeof ART_PRESETS)[number];
 /** What a project declares in src/config/projects.ts. */
 export interface ProjectArt {
   preset: ArtPreset;
-  /** Rotates the flow field so two projects on one preset differ. Default 0. */
+  /** Rotates the field so two projects on one preset differ. Default 0. */
   seed?: number;
 }
 
 export interface PaintedPreset {
-  /** 4 stops, dark to light; stop 0 is the base color painted before WebGL. */
-  palette: [string, string, string, string];
-  /** Where the darkest stop concentrates: -1 bottom, 0 even, 1 top. */
-  horizon: number;
-  /** Scale of the swirl field in cover widths (0.5 tight, 2 broad). */
-  swirl: number;
-  /** Stroke streak length as a fraction of cover width. */
-  stroke: number;
-  /** Field advection speed; 1 is one slow cycle per ~60s. */
-  drift: number;
+  /** Deep wash, pale wash. The deep one is the base color painted before WebGL. */
+  colors: [string, string];
+  /** Zoom of the field: larger shows more, smaller clouds. */
+  scale: number;
+  /** Drift speed; 0.3 matches the page background. */
+  speed: number;
 }
 
 export const PRESETS: Record<ArtPreset, PaintedPreset> = {
-  starry: {
-    palette: ["#141f4d", "#26418f", "#5b8fd4", "#f4d35e"],
-    horizon: 1,
-    swirl: 0.75,
-    stroke: 0.13,
-    drift: 1,
-  },
-  wheat: {
-    palette: ["#3b2a14", "#1f3a6e", "#c8961e", "#e9c55a"],
-    horizon: -1,
-    swirl: 1.4,
-    stroke: 0.15,
-    drift: 0.8,
-  },
-  irises: {
-    palette: ["#2f2a5a", "#4b3f8f", "#7c6cc4", "#efe5c2"],
-    horizon: 0,
-    swirl: 0.55,
-    stroke: 0.1,
-    drift: 0.9,
-  },
-  almond: {
-    palette: ["#2f5f66", "#4fa3a5", "#8fd0c8", "#f3efe4"],
-    horizon: 0,
-    swirl: 0.9,
-    stroke: 0.09,
-    drift: 0.7,
-  },
-  cafe: {
-    palette: ["#12213a", "#1e3557", "#d98b3a", "#f2c14e"],
-    horizon: 1,
-    swirl: 1,
-    stroke: 0.12,
-    drift: 0.9,
-  },
-  cypress: {
-    palette: ["#2f4a2c", "#7b9a5c", "#6fa3d0", "#e9eef2"],
-    horizon: -1,
-    swirl: 0.6,
-    stroke: 0.14,
-    drift: 1.1,
-  },
+  starry: { colors: ["#243b7a", "#f2d06b"], scale: 1.35, speed: 0.3 },
+  cafe: { colors: ["#1e3557", "#e8a24a"], scale: 1.3, speed: 0.3 },
+  irises: { colors: ["#4b3f8f", "#efe5c2"], scale: 1.35, speed: 0.3 },
+  almond: { colors: ["#4fa3a5", "#f3efe4"], scale: 1.35, speed: 0.3 },
+  wheat: { colors: ["#b8862b", "#fff0c4"], scale: 1.4, speed: 0.3 },
+  slate: { colors: ["#334155", "#d6e0ea"], scale: 1.35, speed: 0.3 },
 };
 
 export interface ResolvedArt extends PaintedPreset {
-  /** Rotation of the flow-field domain, radians. */
+  /** Rotation of the field, radians. */
   seed: number;
 }
 
@@ -100,9 +61,7 @@ export function resolveArt(art: ProjectArt): ResolvedArt {
 
 /** The CSS layer under the canvas: painted on first render, shown alone when
  *  WebGL is off or the cover is far from the viewport. */
-export function baseGradient({ palette, horizon }: PaintedPreset): string {
-  const direction =
-    horizon > 0 ? "to bottom" : horizon < 0 ? "to top" : "135deg";
-  const [p0, p1, p2, p3] = palette;
-  return `linear-gradient(${direction}, ${p0}, ${p1} 45%, ${p2} 80%, ${p3})`;
+export function baseGradient({ colors }: PaintedPreset): string {
+  const [deep, pale] = colors;
+  return `linear-gradient(135deg, ${deep}, ${pale})`;
 }

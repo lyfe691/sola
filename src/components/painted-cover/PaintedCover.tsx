@@ -42,7 +42,7 @@ import { useNearViewport } from "./use-near-viewport";
 
 export interface PaintedCoverProps {
   art: ProjectArt;
-  /** card: aspect 16/9, STEPS 8. hero: fills its box (pass className="absolute inset-0"), STEPS 12. */
+  /** card: aspect 21/9, STEPS 5. hero: fills its box (pass className="absolute inset-0"), STEPS 6. */
   size: "card" | "hero";
   /** caption: bottom black gradient over the lower half. dim: full-box black/20. none. */
   scrim?: "caption" | "dim" | "none";
@@ -113,12 +113,11 @@ function createCover(
       uniforms: {
         uTime: { value: time.current },
         uSeed: { value: art.seed },
-        uAspect: { value: 16 / 9 },
-        uPalette: { value: art.palette.map(toRGB) },
-        uHorizon: { value: art.horizon },
-        uSwirl: { value: art.swirl },
-        uStroke: { value: art.stroke },
-        uDrift: { value: art.drift },
+        uAspect: { value: 21 / 9 },
+        uColor1: { value: toRGB(art.colors[0]) },
+        uColor2: { value: toRGB(art.colors[1]) },
+        uScale: { value: art.scale },
+        uSpeed: { value: art.speed },
       },
     });
     if (!gl.getProgramParameter(program.program, gl.LINK_STATUS)) {
@@ -292,7 +291,7 @@ export function PaintedCover({
       ref={rootRef}
       className={cn(
         "relative overflow-hidden",
-        size === "card" && "aspect-video",
+        size === "card" && "aspect-[21/9]",
         className,
       )}
     >

@@ -263,7 +263,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "2024-12",
     },
     priority: 10,
-    art: { preset: "cypress", seed: 0 },
+    art: { preset: "slate", seed: 0 },
   },
   {
     id: "chatapp",
@@ -293,7 +293,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-08",
     },
     priority: 12,
-    art: { preset: "cypress", seed: 1 },
+    art: { preset: "slate", seed: 1 },
   },
   {
     id: "view-counter",
@@ -343,6 +343,6 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-04",
     },
     priority: 16,
-    art: { preset: "cypress", seed: 2 },
+    art: { preset: "slate", seed: 2 },
   },
 ];

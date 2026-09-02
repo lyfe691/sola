@@ -288,6 +288,15 @@ the washes whorl), a continuous four-stop ramp, faint dried-edge rims,
 light granulation and paper tooth. The Van Gogh character lives in the
 palettes and the swirl of the warp rather than in drawn strokes.
 
+Final (same day): the owner asked for the site's watercolor background
+itself. The shader is now that fragment, ported to the cover's uniform
+contract (two colors, scale, speed, seed rotation) with the background
+preset's values (5 octaves, persistence 0.52, drift 0.18, warp 0.12,
+speed 0.3). Presets became six clean two-color pairs (the cypress
+green-and-blue pair was replaced by a slate-and-mist pair), and the card
+cover ratio moved from 16:9 to 21:9 so the cover no longer dwarfs the
+body.
+
 ## 3. Projects page and card
 
 `src/pages/Projects.tsx`:
