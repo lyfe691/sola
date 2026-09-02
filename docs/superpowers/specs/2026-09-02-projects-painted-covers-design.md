@@ -268,6 +268,18 @@ uniform contract above. Runner-up ideas that score higher on one axis
 may be grafted in by the implementer. Total agents for the tournament:
 seven.
 
+Outcome (2026-09-02): four variants were built (line-integral streaks,
+anisotropic oil, layered dabs, smeared streamlines with impasto); the
+capture and judge stages were cut off by a session limit, so the owner's
+agent judged the pages directly in Chrome across all six presets. Winner:
+**layered dabs** — three layers of oriented capsule dabs on jittered
+grids along the flow, top three composited per pixel. It reads as
+Starry Night brushwork, stays calm, compiles in about 5 ms (the others
+took 60–120 ms) and renders in about 1.2 ms of GPU time at 640×360. Its
+per-preset swirl/stroke/drift tuning replaced the starting values in
+§1. The §2 "Look" paragraph describes the original streak design; the
+shipped shader is documented in `shader.ts`.
+
 ## 3. Projects page and card
 
 `src/pages/Projects.tsx`:

@@ -114,7 +114,6 @@ function createCover(
         uTime: { value: time.current },
         uSeed: { value: art.seed },
         uAspect: { value: 16 / 9 },
-        uResolution: { value: [1, 1] },
         uPalette: { value: art.palette.map(toRGB) },
         uHorizon: { value: art.horizon },
         uSwirl: { value: art.swirl },
@@ -184,10 +183,6 @@ function createCover(
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     program.uniforms.uAspect.value = width / height;
-    program.uniforms.uResolution.value = [
-      gl.drawingBufferWidth,
-      gl.drawingBufferHeight,
-    ];
     // setSize clears the buffer to black, so always draw one frame, even paused
     render();
   };
