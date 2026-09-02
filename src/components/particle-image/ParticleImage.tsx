@@ -753,7 +753,7 @@ export function ParticleImage({
         dpr={[1, Math.min(Math.max(dpr, 1), 2)]}
         frameloop={inView ? "always" : "never"}
         // layout-size measurement — immune to the route transition's
-        // ancestor transform (see backgrounds/Silk.tsx for the failure mode)
+        // ancestor transform (see painted-cover/PaintedCover.tsx for the failure mode)
         resize={{ offsetSize: true }}
         gl={{
           antialias: false,

@@ -14,21 +14,10 @@ export type { ProjectArt };
 
 export type ProjectI18nKey = keyof Translation["projects"]["list"];
 
-export interface ProjectSilk {
-  color: string;
-  speed?: number;
-  scale?: number;
-  noiseIntensity?: number;
-  rotation?: number;
-}
-
 export interface ProjectDeepDiveMeta {
   mdxPath?: string;
-  /** Hero subtitle on the deep-dive page. Falls back to the translated card description. */
-  tagline?: string;
   overview: string;
   demo?: string;
-  silk: ProjectSilk;
 }
 
 export interface ProjectMeta {
@@ -70,16 +59,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "irises", seed: 0 },
     slug: "magi",
     deepDive: {
-      tagline: "A fast, async TCP/UDP port scanner built to be correct",
       overview:
         "magi is a fast, asynchronous TCP and UDP port scanner written in Rust. It does connect scanning — a normal handshake on each port — so it needs no root and runs anywhere tokio does. Within that scope it is built to be trustworthy: it never reports a port state it didn't actually establish, and when a probe can't run it says so (untestable) rather than guessing closed. Bounded concurrency over tokio keeps memory flat whether you scan a single host or a whole /16, with banner grabbing, UDP probing, CIDR expansion, and JSON output for piping into tools like jq.",
-      silk: {
-        color: "#dea584",
-        speed: 4,
-        scale: 1.1,
-        noiseIntensity: 1.6,
-        rotation: -0.2,
-      },
     },
   },
   {
@@ -104,17 +85,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "cafe", seed: 0 },
     slug: "kinoa",
     deepDive: {
-      tagline:
-        "A free streaming website for films and series with a clean, distraction-free interface",
       overview:
         "Kinoa is a free streaming website for watching films and series — no subscription, no paywall. Built with the Next.js App Router and shadcn/ui, it pulls live metadata from TMDB and streams through third-party hosters with automatic failover. The interface stays minimal: browse trending titles, discover new releases, and hit play right on the detail page without being redirected elsewhere.",
-      silk: {
-        color: "#a0785a",
-        speed: 4.2,
-        scale: 1.12,
-        noiseIntensity: 1.6,
-        rotation: -0.25,
-      },
     },
   },
   {
@@ -142,16 +114,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "starry", seed: 0 },
     slug: "sola",
     deepDive: {
-      tagline: "Modern portfolio website built with React and TypeScript",
       overview:
         "Sola is the website you are currently on. It represents a modern approach to portfolio design, combining cutting-edge web technologies with thoughtful user experience. Built from the ground up with React and TypeScript, it showcases projects and skills through smooth animations, multiple themes, and a responsive design that works seamlessly across all devices. Its built to be fast and efficient, with a focus on user experience and performance.",
-      silk: {
-        color: "#525252",
-        speed: 3,
-        scale: 1.2,
-        noiseIntensity: 1.8,
-        rotation: 0.3,
-      },
     },
   },
   {
@@ -177,17 +141,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "almond", seed: 0 },
     slug: "luma",
     deepDive: {
-      tagline:
-        "A multi-model AI platform — bring your own keys, talk to any model",
       overview:
         "Luma is a multi-model AI platform where you bring your own API keys and talk to the best models from OpenAI, Anthropic, Google, xAI, Mistral, Cohere, DeepSeek, and more — all through a single, polished interface. Built with Next.js 16, the Vercel AI SDK, and Supabase, it features a tree-based conversation model with full branching support, encrypted key storage, streaming markdown rendering, web search, image generation, and rich content display including code highlighting, math, and diagrams.",
-      silk: {
-        color: "#7a8a5c",
-        speed: 3.5,
-        scale: 1.15,
-        noiseIntensity: 1.7,
-        rotation: -0.1,
-      },
     },
   },
   {
@@ -213,16 +168,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "wheat", seed: 0 },
     slug: "applicare",
     deepDive: {
-      tagline: "Manage your job applications with ease.",
       overview:
         "A comprehensive job application tracking system built with React and Spring Boot. Features a modern, intuitive interface for managing job applications, interviews, and career progress.",
-      silk: {
-        color: "#007bff",
-        speed: 4,
-        scale: 1.1,
-        noiseIntensity: 1.5,
-        rotation: 0.1,
-      },
     },
   },
   {
@@ -244,17 +191,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "starry", seed: 1 },
     slug: "self",
     deepDive: {
-      tagline:
-        "A customizable Windows system information display tool inspired by Neofetch",
       overview:
         "Self is a Windows system information display tool that brings the beloved Neofetch experience to Windows users. Built with Python, it provides customizable themes, multiple image rendering modes, and comprehensive system information display with ASCII art or image support.",
-      silk: {
-        color: "#1f2937",
-        speed: 3,
-        scale: 1.1,
-        noiseIntensity: 1.5,
-        rotation: 0.2,
-      },
     },
   },
   {
@@ -270,17 +208,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "wheat", seed: 1 },
     slug: "code-extractor",
     deepDive: {
-      tagline:
-        "Chrome extension for extracting and downloading website source code",
       overview:
         "A powerful Chrome extension that allows developers to easily extract and download the complete source code of any website. Used by 1000+ developers worldwide.",
-      silk: {
-        color: "#f59e0b",
-        speed: 5,
-        scale: 0.9,
-        noiseIntensity: 2.0,
-        rotation: -0.2,
-      },
     },
   },
   {
@@ -296,17 +225,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "almond", seed: 1 },
     slug: "thoughts",
     deepDive: {
-      tagline:
-        "A minimal personal site for sharing reflections, fragments, and notes.",
       overview:
         "A quiet space separate from my portfolio, designed for simplicity and writing. Built with Next.js, MDX, and Tailwind CSS, and featuring a custom guestbook for visitors to leave their own thoughts.",
-      silk: {
-        color: "#ffffff",
-        speed: 3.8,
-        scale: 1.05,
-        noiseIntensity: 1.6,
-        rotation: -0.15,
-      },
     },
   },
   {
@@ -328,17 +248,8 @@ export const PROJECTS: ProjectMeta[] = [
     art: { preset: "wheat", seed: 2 },
     slug: "taco",
     deepDive: {
-      tagline:
-        "Production-grade Next.js template with localization and blog (centered on Taco, my brother's dog)",
       overview:
         "Taco is a clean, production-ready template site centered around my brother's dog. It demonstrates localization with automatic detection, a simple blog system, and a modular architecture that can be adapted to real projects.",
-      silk: {
-        color: "#66cc99",
-        speed: 3.8,
-        scale: 1.05,
-        noiseIntensity: 1.6,
-        rotation: -0.15,
-      },
     },
   },
   {

@@ -174,7 +174,6 @@ const ProjectDeepDiveRenderer = () => {
 
   const projectCopy = t.projects.list[config.i18nKey];
   const title = projectCopy.title;
-  const description = config.tagline ?? projectCopy.description;
   const dateLabel = formatProjectDate(
     INTL_LOCALE[language],
     config.date,
@@ -184,8 +183,9 @@ const ProjectDeepDiveRenderer = () => {
   return (
     <ProjectDeepDive
       title={title}
-      description={description}
-      silk={config.silk}
+      subtitle={projectCopy.tagline}
+      description={projectCopy.description}
+      art={config.art}
       sectionNav={
         <DeepDiveSectionMenu sections={sections} activeId={activeId} />
       }
@@ -286,7 +286,7 @@ const ProjectDeepDiveRenderer = () => {
                     related.date,
                     t.common.present,
                   )}
-                  blurb={related.tagline ?? relatedCopy.description}
+                  blurb={relatedCopy.tagline}
                   technologies={related.technologies}
                 />
               );

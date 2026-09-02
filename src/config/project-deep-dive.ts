@@ -8,6 +8,7 @@
 
 import {
   PROJECTS,
+  type ProjectArt,
   type ProjectDeepDiveMeta,
   type ProjectI18nKey,
   type ProjectMeta,
@@ -17,7 +18,6 @@ export interface ProjectPageConfig {
   slug: string;
   i18nKey: ProjectI18nKey;
   mdxPath: string;
-  tagline?: string;
   overview: string;
   technologies: string[];
   date: ProjectMeta["date"];
@@ -26,7 +26,7 @@ export interface ProjectPageConfig {
     github?: string;
     demo?: string;
   };
-  silk: ProjectDeepDiveMeta["silk"];
+  art: ProjectArt;
 }
 
 type ProjectWithDeepDive = ProjectMeta & {
@@ -45,7 +45,6 @@ function toPageConfig(project: ProjectWithDeepDive): ProjectPageConfig {
     slug: project.slug,
     i18nKey: project.i18nKey,
     mdxPath: project.deepDive.mdxPath ?? project.slug,
-    tagline: project.deepDive.tagline,
     overview: project.deepDive.overview,
     technologies: project.technologies,
     date: project.date,
@@ -54,7 +53,7 @@ function toPageConfig(project: ProjectWithDeepDive): ProjectPageConfig {
       github: project.github,
       demo: project.deepDive.demo,
     },
-    silk: project.deepDive.silk,
+    art: project.art,
   };
 }
 

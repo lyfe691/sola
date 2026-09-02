@@ -5,21 +5,18 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * The deep-dive page shell: the silk hero in the project's own color, the
- * sticky breadcrumb bar with the code-view toggle, and the content column.
- * The renderer supplies everything project-specific through props.
+ * The deep-dive page shell: the painted hero in the project's own palette,
+ * the sticky breadcrumb bar with the code-view toggle, and the content
+ * column. The renderer supplies everything project-specific through props.
  *
- * Hero sequence: silk background settles → title FoldText → subtitle FoldText.
+ * Hero sequence: painted art settles → title FoldText → subtitle FoldText.
  */
 
 import {
-  Suspense,
-  lazy,
   useCallback,
   useEffect,
   useLayoutEffect,
   useState,
-  type ComponentProps,
   type ReactNode,
 } from "react";
 import { ArrowLeft02Icon, CodeXmlIcon } from "@hugeicons/core-free-icons";
@@ -42,60 +39,45 @@ import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { snapScrollTo } from "@/utils/scroll";
-import type { ProjectSilk } from "@/config/projects";
+import type { ProjectArt } from "@/config/projects";
+import { PaintedCover } from "@/components/painted-cover/PaintedCover";
 
-const Silk = lazy(() => import("@/components/backgrounds/Silk"));
-
-// silk color is on screen from the first paint; this delay only covers WebGL
-// startup so the GPU layer can crossfade over the solid fill
-function SilkLoader({
-  onReady,
-  ...props
-}: ComponentProps<typeof Silk> & { onReady: () => void }) {
-  useEffect(() => {
-    const timer = setTimeout(onReady, 80);
-    return () => clearTimeout(timer);
-  }, [onReady]);
-
-  return <Silk {...props} />;
-}
-
-/** Beat after silk is visible, before title unfolds (ms). */
+/** Beat after the art is visible, before title unfolds (ms). */
 const BG_TO_TITLE_MS = 400;
 
 /**
  * Hero sequence (one GPU job at a time):
- *   1. solid color → silk fades in (WebGL free to run)
- *   2. freeze silk, then FoldText title (word panels)
+ *   1. base gradient → painted art fades in (WebGL free to run)
+ *   2. freeze the art, then FoldText title (word panels)
  *   3. FoldText subtitle after title completes
- *   4. unfreeze silk
+ *   4. unfreeze the art
  *
  * Char-split + mix-blend creases + live WebGL was the stutter.
  */
 function DeepDiveHero({
   title,
-  description,
-  silk,
+  subtitle,
+  art,
 }: {
   title: string;
-  description?: string;
-  silk: ProjectSilk;
+  subtitle: string;
+  art: ProjectArt;
 }) {
-  const [silkReady, setSilkReady] = useState(false);
+  const [artReady, setArtReady] = useState(false);
   // freeze WebGL while text folds so they never share a frame budget
   const [folding, setFolding] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
   const [showSubtitle, setShowSubtitle] = useState(false);
-  const onSilkReady = useCallback(() => setSilkReady(true), []);
+  const onArtReady = useCallback(() => setArtReady(true), []);
 
   useEffect(() => {
-    if (!silkReady) return;
+    if (!artReady) return;
     const t = window.setTimeout(() => {
       setFolding(true);
       setShowTitle(true);
     }, BG_TO_TITLE_MS);
     return () => window.clearTimeout(t);
-  }, [silkReady]);
+  }, [artReady]);
 
   const finishText = useCallback(() => {
     setFolding(false);
@@ -103,25 +85,14 @@ function DeepDiveHero({
 
   return (
     <div className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5">
-      <div
+      <PaintedCover
+        art={art}
+        size="hero"
+        scrim="dim"
+        paused={folding}
+        onReady={onArtReady}
         className="absolute inset-0"
-        style={{ backgroundColor: silk.color }}
       />
-      <div
-        className="absolute inset-0 transition-opacity duration-700 ease-out"
-        style={{ opacity: silkReady ? 1 : 0 }}
-      >
-        <Suspense fallback={null}>
-          <SilkLoader
-            {...silk}
-            dpr={1}
-            paused={folding}
-            onReady={onSilkReady}
-          />
-        </Suspense>
-      </div>
-
-      <div className="absolute inset-0 bg-black/20" />
 
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="max-w-4xl px-6 text-center">
@@ -144,10 +115,7 @@ function DeepDiveHero({
                 fontSize="clamp(2.75rem, 9vw, 6rem)"
                 fontWeight={800}
                 color="#ffffff"
-                onComplete={() => {
-                  if (description) setShowSubtitle(true);
-                  else finishText();
-                }}
+                onComplete={() => setShowSubtitle(true)}
               />
             ) : (
               <span className="invisible select-none" aria-hidden="true">
@@ -156,34 +124,32 @@ function DeepDiveHero({
             )}
           </h1>
 
-          {description ? (
-            <p
-              className="mx-auto min-h-[1.5em] max-w-2xl text-base font-light tracking-[-0.04em] sm:text-lg md:text-xl"
-              style={{ lineHeight: 0.95 }}
-            >
-              {showSubtitle ? (
-                <FoldText
-                  text={description}
-                  splitBy="word"
-                  hinge="top"
-                  trigger="mount"
-                  duration={0.55}
-                  stagger={0.04}
-                  ease="power3.out"
-                  perspective={700}
-                  creaseShading={0.4}
-                  fontSize="clamp(1rem, 2.2vw, 1.25rem)"
-                  fontWeight={300}
-                  color="rgba(255,255,255,0.9)"
-                  onComplete={finishText}
-                />
-              ) : (
-                <span className="invisible select-none" aria-hidden="true">
-                  {description}
-                </span>
-              )}
-            </p>
-          ) : null}
+          <p
+            className="mx-auto min-h-[1.5em] max-w-2xl text-base font-light tracking-[-0.04em] sm:text-lg md:text-xl"
+            style={{ lineHeight: 0.95 }}
+          >
+            {showSubtitle ? (
+              <FoldText
+                text={subtitle}
+                splitBy="word"
+                hinge="top"
+                trigger="mount"
+                duration={0.55}
+                stagger={0.04}
+                ease="power3.out"
+                perspective={700}
+                creaseShading={0.4}
+                fontSize="clamp(1rem, 2.2vw, 1.25rem)"
+                fontWeight={300}
+                color="rgba(255,255,255,0.9)"
+                onComplete={finishText}
+              />
+            ) : (
+              <span className="invisible select-none" aria-hidden="true">
+                {subtitle}
+              </span>
+            )}
+          </p>
         </div>
       </div>
     </div>
@@ -192,8 +158,11 @@ function DeepDiveHero({
 
 interface ProjectDeepDiveProps {
   title: string;
-  description?: string;
-  silk: ProjectSilk;
+  /** The localized tagline: the hero's second line. */
+  subtitle: string;
+  /** The localized description: the page's meta description only. */
+  description: string;
+  art: ProjectArt;
   /** expanding section menu rendered under the sticky bar's breadcrumb row
       (the <2xl register) */
   sectionNav?: ReactNode;
@@ -202,8 +171,9 @@ interface ProjectDeepDiveProps {
 
 export function ProjectDeepDive({
   title,
+  subtitle,
   description,
-  silk,
+  art,
   sectionNav,
   children,
 }: ProjectDeepDiveProps) {
@@ -216,17 +186,17 @@ export function ProjectDeepDive({
     snapScrollTo(0);
   }, []);
 
-  // no page-shell opacity fade — it fought the silk + FoldText GPU work and
-  // read as a mid-sequence hitch
+  // no page-shell opacity fade — it fought the painted art + FoldText GPU
+  // work and read as a mid-sequence hitch
   return (
     <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
-      {description && <meta name="description" content={description} />}
+      <meta name="description" content={description} />
 
       <DeepDiveHero
-        key={`${title}-${silk.color}`}
+        key={`${title}-${art.preset}-${art.seed ?? 0}`}
         title={title}
-        description={description}
-        silk={silk}
+        subtitle={subtitle}
+        art={art}
       />
 
       <div className="sticky top-0 z-30 -mx-4 bg-background/95 backdrop-blur-xs sm:-mx-6 lg:-mx-8">
