@@ -82,7 +82,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "present",
     },
     priority: 1,
-    art: { preset: "cafe", seed: 0 },
+    art: { preset: "caramel", seed: 0 },
     slug: "kinoa",
     deepDive: {
       overview:
@@ -111,7 +111,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "present",
     },
     priority: 2,
-    art: { preset: "starry", seed: 0 },
+    art: { preset: "night", seed: 0 },
     slug: "sola",
     deepDive: {
       overview:
@@ -165,7 +165,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "2025-02",
     },
     priority: 5,
-    art: { preset: "wheat", seed: 0 },
+    art: { preset: "azure", seed: 0 },
     slug: "applicare",
     deepDive: {
       overview:
@@ -188,7 +188,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2025-05",
     },
     priority: 6,
-    art: { preset: "starry", seed: 1 },
+    art: { preset: "azure", seed: 1 },
     slug: "self",
     deepDive: {
       overview:
@@ -304,7 +304,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-08",
     },
     priority: 13,
-    art: { preset: "starry", seed: 2 },
+    art: { preset: "starry", seed: 0 },
   },
   {
     id: "docker-service",
@@ -326,7 +326,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-04",
     },
     priority: 15,
-    art: { preset: "cafe", seed: 1 },
+    art: { preset: "caramel", seed: 1 },
   },
   {
     id: "otw",
