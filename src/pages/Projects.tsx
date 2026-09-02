@@ -7,7 +7,7 @@
  */
 
 import { useMemo, useState, type ReactNode } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   ArrowUpRight01Icon,
   Calendar03Icon,
@@ -20,11 +20,16 @@ import {
   SortByDown01Icon,
   StarIcon,
 } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { Link } from "react-router";
 import type { Language } from "@/config/languages";
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage } from "@/lib/language-provider";
+import {
+  PROJECT_SORT_OPTIONS,
+  sortProjects,
+  type ProjectSortOption,
+} from "@/lib/project-sort";
 import { translations, type Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,6 +43,7 @@ import {
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import {
+  CONSUME_IN,
   HEADER_LEAD,
   staggerDelay,
   useEntranceWindow,
@@ -64,54 +70,43 @@ interface Project extends ProjectMeta {
   dateLabel: string;
 }
 
-type SortOption =
-  "priority" | "date-newest" | "date-oldest" | "name-asc" | "name-desc";
-
 type SortOptionItem = {
-  value: SortOption;
+  value: ProjectSortOption;
   label: string;
   icon: ReactNode;
 };
 
-const buildSortOptions = (t: Translation): SortOptionItem[] => [
-  {
-    value: "priority",
-    label: t.projects.sortOptions.priority,
-    icon: <HugeiconsIcon icon={StarIcon} strokeWidth={2} className="size-4" />,
-  },
-  {
-    value: "date-newest",
-    label: t.projects.sortOptions.dateNewest,
-    icon: (
-      <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" />
-    ),
-  },
-  {
-    value: "date-oldest",
-    label: t.projects.sortOptions.dateOldest,
-    icon: (
-      <HugeiconsIcon icon={Calendar04Icon} strokeWidth={2} className="size-4" />
-    ),
-  },
-  {
-    value: "name-asc",
-    label: t.projects.sortOptions.nameAsc,
+const SORT_ICONS: Record<ProjectSortOption, IconSvgElement> = {
+  priority: StarIcon,
+  "date-newest": Calendar03Icon,
+  "date-oldest": Calendar04Icon,
+  "name-asc": ArrowDownAZIcon,
+  "name-desc": ArrowUpZAIcon,
+};
+
+const SORT_LABELS: Record<
+  ProjectSortOption,
+  keyof Translation["projects"]["sortOptions"]
+> = {
+  priority: "priority",
+  "date-newest": "dateNewest",
+  "date-oldest": "dateOldest",
+  "name-asc": "nameAsc",
+  "name-desc": "nameDesc",
+};
+
+const buildSortOptions = (t: Translation): SortOptionItem[] =>
+  PROJECT_SORT_OPTIONS.map((value) => ({
+    value,
+    label: t.projects.sortOptions[SORT_LABELS[value]],
     icon: (
       <HugeiconsIcon
-        icon={ArrowDownAZIcon}
+        icon={SORT_ICONS[value]}
         strokeWidth={2}
         className="size-4"
       />
     ),
-  },
-  {
-    value: "name-desc",
-    label: t.projects.sortOptions.nameDesc,
-    icon: (
-      <HugeiconsIcon icon={ArrowUpZAIcon} strokeWidth={2} className="size-4" />
-    ),
-  },
-];
+  }));
 
 const localizeProjects = (t: Translation, language: Language): Project[] => {
   const locale = INTL_LOCALE[language];
@@ -279,41 +274,78 @@ const ProjectCard = ({ project, t }: { project: Project; t: Translation }) =>
     </Card>
   );
 
+/**
+ * One grid of cards. Keyed by the sort under AnimatePresence, so a re-sort
+ * dissolves the old grid and mounts this one fresh — every card that lands
+ * in view then rises in one cascade, the way the page loaded. (Reordering
+ * live cards left revealed ones teleporting while unrevealed ones fired
+ * their entrance wherever they landed.) A fresh mount also reopens the
+ * cascade window.
+ */
+const listExit = {
+  opacity: 0,
+  transition: { duration: 0.24, ease: CONSUME_IN },
+};
+
+const ProjectGrid = ({
+  projects,
+  t,
+  variant,
+  lead = 0,
+  stagger,
+  className,
+}: {
+  projects: Project[];
+  t: Translation;
+  variant: "feature" | "default";
+  /** Wait for the page chrome before the first card (load only). */
+  lead?: number;
+  /**
+   * "entrance": index stagger only while the grid is settling in — a
+   * stack scrolled to later must rise at once. "always": multi-column rows
+   * read left to right, so they keep the capped stagger on scroll too.
+   */
+  stagger: "entrance" | "always";
+  className: string;
+}) => {
+  const entering = useEntranceWindow();
+  const cascading = entering || stagger === "always";
+
+  return (
+    <motion.div exit={listExit} className={className}>
+      {projects.map((project, index) => (
+        <ScrollReveal
+          key={project.id}
+          variant={variant}
+          delay={cascading ? lead + staggerDelay(index) : 0}
+          className="h-full"
+        >
+          <ProjectCard project={project} t={t} />
+        </ScrollReveal>
+      ))}
+    </motion.div>
+  );
+};
+
 const Projects = () => {
-  const [sortBy, setSortBy] = useState<SortOption>("priority");
+  const [sortBy, setSortBy] = useState<ProjectSortOption>("priority");
   const { language } = useLanguage();
   const t = translations[language] as Translation;
+
+  // at load the cards wait for the page chrome; the grids re-mount on a
+  // re-sort, so afterwards they only stagger among themselves
   const entering = useEntranceWindow();
 
-  const { featuredProjects, otherProjects, sortOptions } = useMemo(() => {
-    const projects = localizeProjects(t, language);
-    const sortOptions = buildSortOptions(t);
-
-    const sortedProjects = [...projects].sort((a, b) => {
-      switch (sortBy) {
-        case "priority":
-          return a.priority - b.priority;
-        case "date-newest":
-          return (
-            new Date(b.date.start).getTime() - new Date(a.date.start).getTime()
-          );
-        case "date-oldest":
-          return (
-            new Date(a.date.start).getTime() - new Date(b.date.start).getTime()
-          );
-        case "name-asc":
-          return a.title.localeCompare(b.title);
-        case "name-desc":
-          return b.title.localeCompare(a.title);
-        default:
-          return a.priority - b.priority;
-      }
-    });
-
+  const sortOptions = useMemo(() => buildSortOptions(t), [t]);
+  const { featuredProjects, otherProjects } = useMemo(() => {
+    const sorted = sortProjects(
+      localizeProjects(t, language),
+      sortBy,
+      INTL_LOCALE[language],
+    );
     return {
-      featuredProjects: sortedProjects.filter((p) => p.featured),
-      otherProjects: sortedProjects.filter((p) => !p.featured),
-      sortOptions,
+      featuredProjects: sorted.filter((p) => p.featured),
+      otherProjects: sorted.filter((p) => !p.featured),
     };
   }, [t, language, sortBy]);
 
@@ -345,7 +377,7 @@ const Projects = () => {
             </span>
             <Select
               value={sortBy}
-              onValueChange={(value) => setSortBy(value as SortOption)}
+              onValueChange={(value) => setSortBy(value as ProjectSortOption)}
             >
               <SelectTrigger className="w-[160px] sm:w-[180px]">
                 <SelectValue placeholder={t.projects.selectSorting}>
@@ -354,7 +386,9 @@ const Projects = () => {
                     return current ? (
                       <>
                         {current.icon}
-                        <span className="truncate">{current.label}</span>
+                        <span className="flex-1 truncate-fade">
+                          {current.label}
+                        </span>
                       </>
                     ) : null;
                   }}
@@ -365,7 +399,9 @@ const Projects = () => {
                   {sortOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                       {option.icon}
-                      <span className="min-w-0 truncate">{option.label}</span>
+                      <span className="flex-1 truncate-fade">
+                        {option.label}
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectGroup>
@@ -375,22 +411,20 @@ const Projects = () => {
         </motion.div>
       </ScrollReveal>
 
-      {/* Featured Projects — at load the stack waits for the sort row and
-          cascades by index (leading only card 0 inverted the order on tall
-          viewports: card 2, already in view, fired during card 1's wait).
-          Once the entrance settles the delay drops to 0 — a scrolled-to card
-          must start rising the moment it's reached, not sit gated. */}
-      <div className="mb-12 grid grid-cols-1 gap-6 sm:mb-16 sm:gap-8">
-        {featuredProjects.map((project, index) => (
-          <ScrollReveal
-            key={project.id}
-            variant="feature"
-            delay={entering ? HEADER_LEAD + staggerDelay(index) : 0}
-          >
-            <ProjectCard project={project} t={t} />
-          </ScrollReveal>
-        ))}
-      </div>
+      {/* Featured Projects — the stack cascades by index (leading only card 0
+          inverted the order on tall viewports: card 2, already in view, fired
+          during card 1's wait) */}
+      <AnimatePresence mode="wait">
+        <ProjectGrid
+          key={sortBy}
+          projects={featuredProjects}
+          t={t}
+          variant="feature"
+          lead={entering ? HEADER_LEAD : 0}
+          stagger="entrance"
+          className="mb-12 grid grid-cols-1 gap-6 sm:mb-16 sm:gap-8"
+        />
+      </AnimatePresence>
 
       <ScrollReveal variant="title">
         <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
@@ -424,18 +458,16 @@ const Projects = () => {
       </ScrollReveal>
 
       {/* Other Projects */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-        {otherProjects.map((project, index) => (
-          <ScrollReveal
-            key={project.id}
-            variant="default"
-            delay={staggerDelay(index)}
-            className="h-full"
-          >
-            <ProjectCard project={project} t={t} />
-          </ScrollReveal>
-        ))}
-      </div>
+      <AnimatePresence mode="wait">
+        <ProjectGrid
+          key={sortBy}
+          projects={otherProjects}
+          t={t}
+          variant="default"
+          stagger="always"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+        />
+      </AnimatePresence>
 
       {/* View All Projects Button */}
       <ScrollReveal variant="default">

@@ -166,6 +166,16 @@
   @apply text-primary hover:text-primary/80 underline underline-offset-2 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm;
 }
 
+/* Single-line text that fades out where it would overflow, instead of an
+   ellipsis. Put it on the box that fills the row (flex-1 / w-full): the fade
+   is the box's last 1.5rem, so a label that fits never reaches it. */
+@utility truncate-fade {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
+}
+
 /* Inspired by Vercel */
 
 @layer base {
