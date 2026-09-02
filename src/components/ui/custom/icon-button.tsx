@@ -21,11 +21,31 @@ const PILL_BG = {
   destructive: "bg-destructive-foreground/15",
 } as const;
 
+/**
+ * The pill's resting width and the room the label leaves for it. Only a
+ * button with a definite width can size the pill by percentage: in a
+ * content-sized button the percentage is cyclic (it resolves to 0 while the
+ * button is measured, then to 28% of the result), so the label reserved
+ * 2.5rem while the pill grew past it and long labels ran underneath.
+ */
+const PILL = {
+  stretched: {
+    width: "w-[max(28%,2.25rem)]",
+    reserve: "calc(max(28%, 2.25rem) + 0.25rem)",
+  },
+  compact: {
+    width: "w-9",
+    reserve: "2.5rem",
+  },
+} as const;
+
 export interface IconButtonProps extends React.ComponentProps<typeof Button> {
   icon?: React.ReactNode;
   label?: React.ReactNode;
   hideLabel?: boolean;
   iconPosition?: "left" | "right";
+  /** Stretch to the container; the pill widens to 28% of the button. */
+  fullWidth?: boolean;
 }
 
 export function IconButton({
@@ -35,25 +55,28 @@ export function IconButton({
   label,
   hideLabel = false,
   iconPosition = "right",
+  fullWidth = false,
   children,
   ...props
 }: IconButtonProps) {
   const isRight = iconPosition === "right";
   const pillBg = PILL_BG[variant as keyof typeof PILL_BG] ?? PILL_BG.default;
+  const pill = fullWidth ? PILL.stretched : PILL.compact;
 
   return (
     <Button
       variant={variant}
-      className={cn("group/btn relative overflow-hidden", className)}
+      className={cn(
+        "group/btn relative overflow-hidden",
+        fullWidth && "w-full",
+        className,
+      )}
       {...props}
     >
       {!hideLabel && (
         <span
           className="relative z-10 text-center transition-[transform,translate,scale,rotate,opacity] duration-300 ease-out can-hover:group-hover/btn:scale-95 can-hover:group-hover/btn:opacity-0"
-          style={{
-            [isRight ? "paddingRight" : "paddingLeft"]:
-              "calc(max(28%, 2.25rem) + 0.25rem)",
-          }}
+          style={{ [isRight ? "paddingRight" : "paddingLeft"]: pill.reserve }}
         >
           {children ?? label}
         </span>
@@ -62,7 +85,8 @@ export function IconButton({
       <span
         aria-hidden
         className={cn(
-          "absolute inset-y-1 flex w-[max(28%,2.25rem)] items-center justify-center rounded-[inherit] transition-[width,background-color] duration-300 ease-out can-hover:group-hover/btn:w-[calc(100%-0.5rem)]",
+          "absolute inset-y-1 flex items-center justify-center rounded-[inherit] transition-[width,background-color] duration-300 ease-out can-hover:group-hover/btn:w-[calc(100%-0.5rem)]",
+          pill.width,
           isRight ? "right-1" : "left-1",
           pillBg,
         )}

@@ -173,7 +173,7 @@ const Services = () => {
                   nativeButton={false}
                   render={<Link to={getServiceContactUrl(service.key)} />}
                   variant="default"
-                  className="w-full"
+                  fullWidth
                   size="lg"
                   label={t.services.getStarted}
                 />

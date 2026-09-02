@@ -146,7 +146,7 @@ const ProjectActions = ({
               />
             }
             size="lg"
-            className="w-full"
+            fullWidth
           />
         ) : (
           <>

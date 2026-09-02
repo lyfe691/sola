@@ -189,7 +189,7 @@ const Certifications: React.FC = () => {
                               strokeWidth={2}
                             />
                           }
-                          className="w-full"
+                          fullWidth
                           onClick={() =>
                             window.open(c.url!, "_blank", "noopener,noreferrer")
                           }
