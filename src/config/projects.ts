@@ -165,7 +165,7 @@ export const PROJECTS: ProjectMeta[] = [
       end: "2025-02",
     },
     priority: 5,
-    art: { preset: "azure", seed: 0 },
+    art: { preset: "cobalt", seed: 0 },
     slug: "applicare",
     deepDive: {
       overview:
@@ -188,7 +188,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2025-05",
     },
     priority: 6,
-    art: { preset: "azure", seed: 1 },
+    art: { preset: "midnight", seed: 0 },
     slug: "self",
     deepDive: {
       overview:
@@ -245,7 +245,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2025-04",
     },
     priority: 9,
-    art: { preset: "wheat", seed: 2 },
+    art: { preset: "moss", seed: 0 },
     slug: "taco",
     deepDive: {
       overview:
@@ -326,7 +326,7 @@ export const PROJECTS: ProjectMeta[] = [
       start: "2024-04",
     },
     priority: 15,
-    art: { preset: "caramel", seed: 1 },
+    art: { preset: "poison", seed: 0 },
   },
   {
     id: "otw",

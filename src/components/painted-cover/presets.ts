@@ -13,12 +13,15 @@
 
 export const ART_PRESETS = [
   "night",
-  "azure",
+  "midnight",
+  "cobalt",
   "caramel",
   "starry",
   "irises",
   "almond",
   "wheat",
+  "moss",
+  "poison",
   "slate",
 ] as const;
 
@@ -42,12 +45,15 @@ export interface PaintedPreset {
 
 export const PRESETS: Record<ArtPreset, PaintedPreset> = {
   night: { colors: ["#0a0d16", "#2c3550"], scale: 1.35, speed: 0.3 },
-  azure: { colors: ["#2b5aa6", "#bcd8f7"], scale: 1.35, speed: 0.3 },
+  midnight: { colors: ["#141c4a", "#4a5fa8"], scale: 1.35, speed: 0.3 },
+  cobalt: { colors: ["#12306b", "#6f97d6"], scale: 1.35, speed: 0.3 },
   caramel: { colors: ["#a5652b", "#f4dab4"], scale: 1.3, speed: 0.3 },
   starry: { colors: ["#243b7a", "#f2d06b"], scale: 1.35, speed: 0.3 },
   irises: { colors: ["#4b3f8f", "#efe5c2"], scale: 1.35, speed: 0.3 },
   almond: { colors: ["#4fa3a5", "#f3efe4"], scale: 1.35, speed: 0.3 },
   wheat: { colors: ["#b8862b", "#fff0c4"], scale: 1.4, speed: 0.3 },
+  moss: { colors: ["#3a7d44", "#cfe8c4"], scale: 1.35, speed: 0.3 },
+  poison: { colors: ["#143a1d", "#6fe35a"], scale: 1.35, speed: 0.3 },
   slate: { colors: ["#334155", "#d6e0ea"], scale: 1.35, speed: 0.3 },
 };
 
