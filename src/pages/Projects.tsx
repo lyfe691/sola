@@ -136,6 +136,12 @@ const localizeProjects = (t: Translation, language: Language): Project[] => {
 const cardClassName =
   "group h-full gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg";
 
+/** The cover sits in the card the way the About page mounts its media: a
+ *  6px mat and a hairline ring, corners nesting inside the card's own radius
+ *  (the card is rounded-4xl, so the inset radius is that minus the mat). */
+const coverClassName =
+  "rounded-[calc(var(--radius-4xl)_-_0.375rem)] ring-1 ring-foreground/10";
+
 const ProjectActions = ({
   project,
   t,
@@ -234,9 +240,15 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
 
 const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
   <Card className={cardClassName}>
-    <PaintedCover art={project.art} size="card">
-      <CoverCaption as="h2" title={project.title} subtitle={project.tagline} />
-    </PaintedCover>
+    <div className="p-1.5 pb-0">
+      <PaintedCover art={project.art} size="card" className={coverClassName}>
+        <CoverCaption
+          as="h2"
+          title={project.title}
+          subtitle={project.tagline}
+        />
+      </PaintedCover>
+    </div>
     <ProjectBody project={project} t={t} />
   </Card>
 );
