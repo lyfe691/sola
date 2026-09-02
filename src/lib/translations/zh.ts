@@ -265,6 +265,13 @@ export const zh = {
       nameDesc: "名称（Z–A）",
     },
     selectSorting: "选择排序...",
+    kind: {
+      label: "项目类型",
+      personal: "个人",
+      commercial: "商业",
+    },
+    empty: "暂无内容",
+    emptyDescription: "此类项目上线后将显示在这里。",
     visitProject: "访问项目",
     list: {
       codeExtractor: {

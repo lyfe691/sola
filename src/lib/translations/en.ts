@@ -273,6 +273,13 @@ export const en = {
       nameDesc: "Name (Z-A)",
     },
     selectSorting: "Select sorting...",
+    kind: {
+      label: "Project type",
+      personal: "Personal",
+      commercial: "Commercial",
+    },
+    empty: "Nothing here yet",
+    emptyDescription: "Projects of this kind will show up here once they ship.",
     visitProject: "Visit Project",
     list: {
       codeExtractor: {

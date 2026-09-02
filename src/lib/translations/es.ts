@@ -278,6 +278,14 @@ export const es = {
       nameDesc: "Nombre (Z–A)",
     },
     selectSorting: "Seleccionar orden...",
+    kind: {
+      label: "Tipo de proyecto",
+      personal: "Personales",
+      commercial: "Comerciales",
+    },
+    empty: "Nada por aquí todavía",
+    emptyDescription:
+      "Los proyectos de este tipo aparecerán aquí cuando estén listos.",
     visitProject: "Visitar proyecto",
     list: {
       codeExtractor: {

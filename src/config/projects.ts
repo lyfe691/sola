@@ -14,6 +14,9 @@ export type { ProjectArt };
 
 export type ProjectI18nKey = keyof Translation["projects"]["list"];
 
+/** Which tab of the projects page a project belongs to. */
+export type ProjectKind = "personal" | "commercial";
+
 export interface ProjectDeepDiveMeta {
   mdxPath?: string;
   overview: string;
@@ -30,6 +33,7 @@ export interface ProjectMeta {
   priority: number;
   /** Painted cover art: a named preset plus a seed that rotates its flow field. */
   art: ProjectArt;
+  kind: ProjectKind;
   /** present = project has a deep-dive page at /projects/<slug> */
   slug?: string;
   /** Long-form page content lives in src/content/projects/<mdxPath>.mdx */
@@ -57,6 +61,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 3,
     art: { preset: "irises", seed: 0 },
+    kind: "personal",
     slug: "magi",
     deepDive: {
       overview:
@@ -83,6 +88,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 1,
     art: { preset: "caramel", seed: 0 },
+    kind: "personal",
     slug: "kinoa",
     deepDive: {
       overview:
@@ -112,6 +118,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 2,
     art: { preset: "night", seed: 0 },
+    kind: "personal",
     slug: "sola",
     deepDive: {
       overview:
@@ -139,6 +146,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 4,
     art: { preset: "almond", seed: 0 },
+    kind: "personal",
     slug: "luma",
     deepDive: {
       overview:
@@ -166,6 +174,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 5,
     art: { preset: "cobalt", seed: 0 },
+    kind: "commercial",
     slug: "applicare",
     deepDive: {
       overview:
@@ -189,6 +198,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 6,
     art: { preset: "midnight", seed: 0 },
+    kind: "personal",
     slug: "self",
     deepDive: {
       overview:
@@ -206,6 +216,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 7,
     art: { preset: "wheat", seed: 1 },
+    kind: "personal",
     slug: "code-extractor",
     deepDive: {
       overview:
@@ -223,6 +234,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 8,
     art: { preset: "almond", seed: 1 },
+    kind: "personal",
     slug: "thoughts",
     deepDive: {
       overview:
@@ -246,6 +258,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 9,
     art: { preset: "moss", seed: 0 },
+    kind: "commercial",
     slug: "taco",
     deepDive: {
       overview:
@@ -264,6 +277,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 10,
     art: { preset: "slate", seed: 0 },
+    kind: "personal",
   },
   {
     id: "chatapp",
@@ -283,6 +297,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 11,
     art: { preset: "irises", seed: 1 },
+    kind: "personal",
   },
   {
     id: "vm-detector",
@@ -294,6 +309,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 12,
     art: { preset: "slate", seed: 1 },
+    kind: "personal",
   },
   {
     id: "view-counter",
@@ -305,6 +321,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 13,
     art: { preset: "starry", seed: 0 },
+    kind: "personal",
   },
   {
     id: "docker-service",
@@ -316,6 +333,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 14,
     art: { preset: "irises", seed: 2 },
+    kind: "commercial",
   },
   {
     id: "phishing",
@@ -327,6 +345,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 15,
     art: { preset: "poison", seed: 0 },
+    kind: "personal",
   },
   {
     id: "otw",
@@ -344,5 +363,6 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 16,
     art: { preset: "slate", seed: 2 },
+    kind: "personal",
   },
 ];

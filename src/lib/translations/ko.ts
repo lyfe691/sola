@@ -272,6 +272,13 @@ export const ko = {
       nameDesc: "이름(Z-A)",
     },
     selectSorting: "정렬 선택...",
+    kind: {
+      label: "프로젝트 유형",
+      personal: "개인",
+      commercial: "상업",
+    },
+    empty: "아직 항목이 없습니다",
+    emptyDescription: "이 유형의 프로젝트는 준비되는 대로 여기에 표시됩니다.",
     visitProject: "프로젝트 방문하기",
     list: {
       codeExtractor: {

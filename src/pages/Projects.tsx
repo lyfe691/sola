@@ -13,6 +13,7 @@ import {
   Calendar03Icon,
   Calendar04Icon,
   FileSearchIcon,
+  Folder01Icon,
   Github01Icon,
   ArrowDownAZIcon,
   ArrowUpZAIcon,
@@ -40,6 +41,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/custom/icon-button";
+import { SegmentedControl } from "@/components/ui/custom/segmented-control";
 import ScrollReveal from "@/components/ScrollReveal";
 import {
   CONSUME_IN,
@@ -51,13 +53,24 @@ import {
 } from "@/utils/transitions";
 import { RichText } from "@/components/i18n/RichText";
 import { Card } from "@/components/ui/card";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Separator } from "@/components/ui/separator";
 import { TagRow } from "@/components/ui/custom/tag-row";
 import {
   CoverCaption,
   PaintedCover,
 } from "@/components/painted-cover/PaintedCover";
-import { PROJECTS, type ProjectMeta } from "@/config/projects";
+import {
+  PROJECTS,
+  type ProjectKind,
+  type ProjectMeta,
+} from "@/config/projects";
 
 interface Project extends ProjectMeta {
   title: string;
@@ -253,6 +266,17 @@ const ProjectGrid = ({
 
   return (
     <motion.div exit={listExit} className={className}>
+      {projects.length === 0 && (
+        <Empty className="col-span-full border border-dashed">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <HugeiconsIcon icon={Folder01Icon} strokeWidth={2} />
+            </EmptyMedia>
+            <EmptyTitle>{t.projects.empty}</EmptyTitle>
+            <EmptyDescription>{t.projects.emptyDescription}</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      )}
       {projects.map((project, index) => (
         <ScrollReveal
           key={project.id}
@@ -268,6 +292,7 @@ const ProjectGrid = ({
 
 const Projects = () => {
   const [sortBy, setSortBy] = useState<ProjectSortOption>("priority");
+  const [kind, setKind] = useState<ProjectKind>("personal");
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
@@ -276,14 +301,22 @@ const Projects = () => {
   const entering = useEntranceWindow();
 
   const sortOptions = useMemo(() => buildSortOptions(t), [t]);
+  const kindOptions = useMemo(
+    () =>
+      [
+        { value: "personal", label: t.projects.kind.personal },
+        { value: "commercial", label: t.projects.kind.commercial },
+      ] as const,
+    [t],
+  );
   const projects = useMemo(
     () =>
       sortProjects(
-        localizeProjects(t, language),
+        localizeProjects(t, language).filter((p) => p.kind === kind),
         sortBy,
         INTL_LOCALE[language],
       ),
-    [t, language, sortBy],
+    [t, language, sortBy, kind],
   );
 
   return (
@@ -345,12 +378,18 @@ const Projects = () => {
               </SelectContent>
             </Select>
           </div>
+          <SegmentedControl
+            value={kind}
+            onValueChange={setKind}
+            options={kindOptions}
+            aria-label={t.projects.kind.label}
+          />
         </motion.div>
       </ScrollReveal>
 
       <AnimatePresence mode="wait">
         <ProjectGrid
-          key={sortBy}
+          key={`${kind}-${sortBy}`}
           projects={projects}
           t={t}
           lead={entering ? HEADER_LEAD : 0}

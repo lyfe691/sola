@@ -269,6 +269,14 @@ export const ja = {
       nameDesc: "名前（Z–A）",
     },
     selectSorting: "並べ替えを選択...",
+    kind: {
+      label: "プロジェクトの種類",
+      personal: "個人",
+      commercial: "商用",
+    },
+    empty: "まだ何もありません",
+    emptyDescription:
+      "この種類のプロジェクトは、公開され次第ここに表示されます。",
     visitProject: "プロジェクトを見る",
     list: {
       codeExtractor: {
