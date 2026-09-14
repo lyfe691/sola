@@ -8,8 +8,10 @@
  * Shader programs cannot be shared across WebGL contexts, and ogl compiles
  * and links synchronously, so creating six covers in one React commit would
  * stall the main thread for several frames at once — on page load and again
- * every time the grid remounts after a re-sort. This queue admits one
- * canvas creation per animation frame, nearest to the viewport first.
+ * every time cards come near after a re-sort. This queue admits one
+ * canvas creation per animation frame, nearest to the viewport first, and
+ * can be held while something else needs every frame (the projects grid
+ * holds it for the length of a swap).
  */
 
 export interface MountJob {
@@ -24,9 +26,12 @@ export function createMountQueue(
 ) {
   const jobs = new Set<MountJob>();
   let scheduled = false;
+  let holds = 0;
 
   const drain = () => {
     scheduled = false;
+    // a hold that arrived after this tick was scheduled; the release re-ticks
+    if (holds) return;
     let best: MountJob | undefined;
     let bestPriority = Infinity;
     for (const job of jobs) {
@@ -43,7 +48,7 @@ export function createMountQueue(
   };
 
   const tick = () => {
-    if (scheduled) return;
+    if (scheduled || holds) return;
     scheduled = true;
     schedule(drain);
   };
@@ -54,6 +59,21 @@ export function createMountQueue(
       tick();
       return () => {
         jobs.delete(job);
+      };
+    },
+    /**
+     * Pause creation until the returned release is called; jobs keep
+     * queueing and drain afterwards, one per frame. Holds nest, and a
+     * release is idempotent.
+     */
+    hold() {
+      holds++;
+      let released = false;
+      return () => {
+        if (released) return;
+        released = true;
+        holds--;
+        if (jobs.size) tick();
       };
     },
     get size() {

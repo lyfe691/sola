@@ -254,17 +254,14 @@ export const zh = {
   projects: {
     title: "项目",
     viewDetails: "查看详情",
-    viewAll: "查看所有项目",
     viewGithub: "查看代码",
     sortBy: "排序",
     sortOptions: {
-      priority: "优先级",
-      dateNewest: "日期（最新）",
-      dateOldest: "日期（最旧）",
-      nameAsc: "名称（A–Z）",
-      nameDesc: "名称（Z–A）",
+      featured: "精选",
+      newest: "最新",
+      oldest: "最早",
+      name: "名称（A–Z）",
     },
-    selectSorting: "选择排序...",
     kind: {
       label: "项目类型",
       all: "全部",

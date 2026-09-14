@@ -6,18 +6,19 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Sort orders for the projects page. Every order is total: date and name
- * sorts fall back to priority so equal keys never leave the outcome to
- * input order, and the same list always renders in the same sequence.
+ * sorts fall back to the featured order so equal keys never leave the
+ * outcome to input order, and the same list always renders in the same
+ * sequence.
  */
 
 import type { ProjectDate } from "@/lib/dates";
 
+/** featured = the hand-set priority in config; the page's default. */
 export const PROJECT_SORT_OPTIONS = [
-  "priority",
-  "date-newest",
-  "date-oldest",
-  "name-asc",
-  "name-desc",
+  "featured",
+  "newest",
+  "oldest",
+  "name",
 ] as const;
 
 export type ProjectSortOption = (typeof PROJECT_SORT_OPTIONS)[number];
@@ -65,16 +66,14 @@ const comparatorFor = (
   locale: string,
 ): Comparator => {
   switch (sortBy) {
-    case "priority":
+    case "featured":
       return byPriority;
-    case "date-newest":
+    case "newest":
       return chain(reverse(byStart), byPriority);
-    case "date-oldest":
+    case "oldest":
       return chain(byStart, byPriority);
-    case "name-asc":
+    case "name":
       return chain(byTitle(locale), byPriority);
-    case "name-desc":
-      return chain(reverse(byTitle(locale)), byPriority);
   }
 };
 

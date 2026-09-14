@@ -261,17 +261,14 @@ export const ko = {
   projects: {
     title: "프로젝트",
     viewDetails: "세부정보 보기",
-    viewAll: "모든 프로젝트 보기",
     viewGithub: "코드 보기",
     sortBy: "정렬 기준",
     sortOptions: {
-      priority: "우선순위",
-      dateNewest: "날짜(최신)",
-      dateOldest: "날짜(가장 오래된 것)",
-      nameAsc: "이름(A~Z)",
-      nameDesc: "이름(Z-A)",
+      featured: "추천",
+      newest: "최신순",
+      oldest: "오래된순",
+      name: "이름(A~Z)",
     },
-    selectSorting: "정렬 선택...",
     kind: {
       label: "프로젝트 유형",
       all: "전체",

@@ -258,17 +258,14 @@ export const ja = {
   projects: {
     title: "プロジェクト",
     viewDetails: "詳細を見る",
-    viewAll: "すべてのプロジェクトを見る",
     viewGithub: "コードを見る",
     sortBy: "並べ替え",
     sortOptions: {
-      priority: "優先度",
-      dateNewest: "日付（新しい順）",
-      dateOldest: "日付（古い順）",
-      nameAsc: "名前（A–Z）",
-      nameDesc: "名前（Z–A）",
+      featured: "おすすめ",
+      newest: "新しい順",
+      oldest: "古い順",
+      name: "名前（A–Z）",
     },
-    selectSorting: "並べ替えを選択...",
     kind: {
       label: "プロジェクトの種類",
       all: "すべて",

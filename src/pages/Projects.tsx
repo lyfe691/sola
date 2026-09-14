@@ -6,8 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useMemo, useState, type ReactNode } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { motion, useInView } from "motion/react";
 import {
   ArrowUpRight01Icon,
   Calendar03Icon,
@@ -16,7 +16,6 @@ import {
   Folder01Icon,
   Github01Icon,
   ArrowDownAZIcon,
-  ArrowUpZAIcon,
   SortByDown01Icon,
   StarIcon,
 } from "@hugeicons/core-free-icons";
@@ -37,19 +36,22 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { SegmentedControl } from "@/components/ui/custom/segmented-control";
 import ScrollReveal from "@/components/ScrollReveal";
+import { useGridSwap, type GridSwap } from "@/hooks/use-grid-swap";
 import {
-  CONSUME_IN,
+  gridCellVariants,
   HEADER_LEAD,
   staggerDelay,
   useEntranceWindow,
   scrollPageTitleVariants,
   scrollSubtleVariants,
+  type GridCellCustom,
 } from "@/utils/transitions";
 import { RichText } from "@/components/i18n/RichText";
 import { Card } from "@/components/ui/card";
@@ -66,6 +68,7 @@ import {
   CoverCaption,
   PaintedCover,
 } from "@/components/painted-cover/PaintedCover";
+import { mountQueue } from "@/components/painted-cover/mount-queue";
 import {
   PROJECTS,
   type ProjectKind,
@@ -80,7 +83,7 @@ interface Project extends ProjectMeta {
   dateLabel: string;
 }
 
-/** The kind toggle: every project, or one kind. */
+/** The kind tabs: every project, or one kind. */
 type KindFilter = "all" | ProjectKind;
 
 type SortOptionItem = {
@@ -90,28 +93,16 @@ type SortOptionItem = {
 };
 
 const SORT_ICONS: Record<ProjectSortOption, IconSvgElement> = {
-  priority: StarIcon,
-  "date-newest": Calendar03Icon,
-  "date-oldest": Calendar04Icon,
-  "name-asc": ArrowDownAZIcon,
-  "name-desc": ArrowUpZAIcon,
-};
-
-const SORT_LABELS: Record<
-  ProjectSortOption,
-  keyof Translation["projects"]["sortOptions"]
-> = {
-  priority: "priority",
-  "date-newest": "dateNewest",
-  "date-oldest": "dateOldest",
-  "name-asc": "nameAsc",
-  "name-desc": "nameDesc",
+  featured: StarIcon,
+  newest: Calendar03Icon,
+  oldest: Calendar04Icon,
+  name: ArrowDownAZIcon,
 };
 
 const buildSortOptions = (t: Translation): SortOptionItem[] =>
   PROJECT_SORT_OPTIONS.map((value) => ({
     value,
-    label: t.projects.sortOptions[SORT_LABELS[value]],
+    label: t.projects.sortOptions[value],
     icon: (
       <HugeiconsIcon
         icon={SORT_ICONS[value]}
@@ -254,65 +245,64 @@ const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
 );
 
 /**
- * The grid of cards. Keyed by the sort under AnimatePresence, so a re-sort
- * dissolves the old grid and mounts this one fresh — every card that lands
- * in view then rises in one cascade, the way the page loaded, and the
- * covers re-create their canvases through the mount queue. A fresh mount
- * also reopens the cascade window.
+ * One slot of the grid. At rest a cell reveals on scroll like every card on
+ * the site. While a swap runs, a cell whose occupant changed dissolves where
+ * it is and re-enters in its new slot instead; a card that has arrived
+ * through a swap is simply shown from then on — it never waits on a scroll
+ * reveal again, so one that landed just under the fold can't fade back out.
  */
-const listExit = {
-  opacity: 0,
-  transition: { duration: 0.24, ease: CONSUME_IN },
-};
-
-const ProjectGrid = ({
-  projects,
+const ProjectCell = ({
+  project,
   t,
-  lead = 0,
-  className,
+  delay,
+  swap,
+  arrived,
 }: {
-  projects: Project[];
+  project: Project;
   t: Translation;
-  /** Wait for the page chrome before the first card (load only). */
-  lead?: number;
-  className: string;
+  /** load-cascade delay (ms), 0 once the page has entered */
+  delay: number;
+  swap: GridSwap | null;
+  arrived: boolean;
 }) => {
-  const entering = useEntranceWindow();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+  const phase = swap?.changed.has(project.id) ? swap.phase : null;
+  const state =
+    phase === "out"
+      ? "swapOut"
+      : phase === "in" || arrived
+        ? "swapIn"
+        : inView
+          ? "visible"
+          : "hidden";
+  const custom: GridCellCustom = {
+    delay,
+    rank: swap?.rank.get(project.id) ?? 0,
+  };
 
   return (
-    <motion.div exit={listExit} className={className}>
-      {projects.length === 0 && (
-        <Empty className="col-span-full border border-dashed">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <HugeiconsIcon icon={Folder01Icon} strokeWidth={2} />
-            </EmptyMedia>
-            <EmptyTitle>{t.projects.empty}</EmptyTitle>
-            <EmptyDescription>{t.projects.emptyDescription}</EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      )}
-      {projects.map((project, index) => (
-        <ScrollReveal
-          key={project.id}
-          delay={entering ? lead + staggerDelay(index) : 0}
-          className="h-full"
-        >
-          <ProjectCard project={project} t={t} />
-        </ScrollReveal>
-      ))}
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={state}
+      variants={gridCellVariants}
+      custom={custom}
+      className="h-full"
+    >
+      <ProjectCard project={project} t={t} />
     </motion.div>
   );
 };
 
 const Projects = () => {
-  const [sortBy, setSortBy] = useState<ProjectSortOption>("priority");
+  const [sortBy, setSortBy] = useState<ProjectSortOption>("featured");
   const [kind, setKind] = useState<KindFilter>("all");
   const { language } = useLanguage();
   const t = translations[language] as Translation;
 
-  // at load the cards wait for the page chrome; the grid re-mounts on a
-  // re-sort, so afterwards they only stagger among themselves
+  // at load the cards wait for the page chrome and cascade; a swap keeps its
+  // own clock, so after the window a card only ever rises on scroll
   const entering = useEntranceWindow();
 
   const sortOptions = useMemo(() => buildSortOptions(t), [t]);
@@ -325,24 +315,36 @@ const Projects = () => {
       ] as const,
     [t],
   );
-  const projects = useMemo(
+
+  // every project, localized: the universe the grid's ids resolve against,
+  // so a card leaving through the filter keeps its data while it exits
+  const all = useMemo(() => localizeProjects(t, language), [t, language]);
+  const byId = useMemo(() => new Map(all.map((p) => [p.id, p])), [all]);
+  const order = useMemo(
     () =>
       sortProjects(
-        localizeProjects(t, language).filter(
-          (p) => kind === "all" || p.kind === kind,
-        ),
+        all.filter((p) => kind === "all" || p.kind === kind),
         sortBy,
         INTL_LOCALE[language],
-      ),
-    [t, language, sortBy, kind],
+      ).map((p) => p.id),
+    [all, kind, sortBy, language],
   );
+  const { shownIds, swap, arrived } = useGridSwap(order);
+  const shown = shownIds.flatMap((id) => byId.get(id) ?? []);
+
+  // a cover compiles its shader synchronously when it comes near, which
+  // would land right in the enter beat; hold the mount queue while the swap
+  // runs and let the canvases arrive afterwards, over the base gradient,
+  // the way they do at load
+  const swapping = swap !== null;
+  useEffect(() => (swapping ? mountQueue.hold() : undefined), [swapping]);
 
   return (
     <div className="flex flex-col w-full">
       <meta name="description" content={t.seo.projects.description} />
 
-      {/* title then sort — one cascade so the toolbar never lands after the
-          first card it sits on */}
+      {/* title then toolbar — one cascade so the toolbar never lands after
+          the first card it sits on */}
       <ScrollReveal variant="header">
         <motion.h1
           variants={scrollPageTitleVariants}
@@ -352,94 +354,79 @@ const Projects = () => {
         </motion.h1>
         <motion.div
           variants={scrollSubtleVariants}
-          className="mb-8 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-center sm:justify-between"
+          className="mb-8 flex flex-col gap-3 sm:mb-12 sm:flex-row sm:items-center sm:justify-between"
         >
-          <div className="flex items-center gap-3">
-            <HugeiconsIcon
-              icon={SortByDown01Icon}
-              strokeWidth={2}
-              className="size-4 text-foreground/60"
-            />
-            <span className="text-sm font-medium text-foreground/60">
-              {t.projects.sortBy}:
-            </span>
-            <Select
-              value={sortBy}
-              onValueChange={(value) => setSortBy(value as ProjectSortOption)}
-            >
-              <SelectTrigger className="w-[160px] sm:w-[180px]">
-                <SelectValue placeholder={t.projects.selectSorting}>
-                  {() => {
-                    const current = sortOptions.find((o) => o.value === sortBy);
-                    return current ? (
-                      <>
-                        {current.icon}
-                        <span className="flex-1 truncate-fade">
-                          {current.label}
-                        </span>
-                      </>
-                    ) : null;
-                  }}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {sortOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.icon}
-                      <span className="flex-1 truncate-fade">
-                        {option.label}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
           <SegmentedControl
             value={kind}
             onValueChange={setKind}
             options={kindOptions}
             aria-label={t.projects.kind.label}
           />
+          <Select
+            value={sortBy}
+            onValueChange={(value) => setSortBy(value as ProjectSortOption)}
+          >
+            <SelectTrigger
+              aria-label={t.projects.sortBy}
+              className="w-full sm:w-44"
+            >
+              <HugeiconsIcon
+                icon={SortByDown01Icon}
+                strokeWidth={2}
+                className="size-4"
+                aria-hidden="true"
+              />
+              <SelectValue>{() => t.projects.sortOptions[sortBy]}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>{t.projects.sortBy}</SelectLabel>
+                {sortOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.icon}
+                    <span>{option.label}</span>
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </motion.div>
       </ScrollReveal>
 
-      <AnimatePresence mode="wait">
-        <ProjectGrid
-          key={`${kind}-${sortBy}`}
-          projects={projects}
-          t={t}
-          lead={entering ? HEADER_LEAD : 0}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8"
-        />
-      </AnimatePresence>
-
-      {/* View All Projects Button */}
-      <ScrollReveal variant="default">
-        <div className="flex justify-center mt-12 sm:mt-16">
-          <IconButton
-            variant="default"
-            size="lg"
-            icon={
-              <HugeiconsIcon
-                icon={ArrowUpRight01Icon}
-                strokeWidth={2}
-                className="size-4"
-              />
-            }
-            className="transition-colors duration-150 group border-foreground/20 rounded-full"
-            label={t.projects.viewAll}
-            onClick={() =>
-              window.open(
-                "https://github.com/lyfe691?tab=repositories",
-                "_blank",
-                "noopener,noreferrer",
-              )
-            }
+      {/* keyed by project, so a re-order moves cards instead of re-mounting
+          them; the swap driver decides which cells animate */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
+        {shown.length === 0 && (
+          <motion.div
+            variants={gridCellVariants}
+            initial="swapOut"
+            animate="swapIn"
+            className="col-span-full"
+          >
+            <Empty className="border border-dashed">
+              <EmptyHeader>
+                <EmptyMedia variant="icon">
+                  <HugeiconsIcon icon={Folder01Icon} strokeWidth={2} />
+                </EmptyMedia>
+                <EmptyTitle>{t.projects.empty}</EmptyTitle>
+                <EmptyDescription>
+                  {t.projects.emptyDescription}
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          </motion.div>
+        )}
+        {shown.map((project, index) => (
+          <ProjectCell
+            key={project.id}
+            project={project}
+            t={t}
+            delay={entering ? HEADER_LEAD + staggerDelay(index) : 0}
+            swap={swap}
+            arrived={arrived.has(project.id)}
           />
-        </div>
-      </ScrollReveal>
+        ))}
+      </div>
     </div>
   );
 };

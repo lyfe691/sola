@@ -262,17 +262,14 @@ export const en = {
   projects: {
     title: "Projects",
     viewDetails: "View Details",
-    viewAll: "View All Projects",
     viewGithub: "View Code",
     sortBy: "Sort by",
     sortOptions: {
-      priority: "Priority",
-      dateNewest: "Date (Newest)",
-      dateOldest: "Date (Oldest)",
-      nameAsc: "Name (A-Z)",
-      nameDesc: "Name (Z-A)",
+      featured: "Featured",
+      newest: "Newest",
+      oldest: "Oldest",
+      name: "Name (A–Z)",
     },
-    selectSorting: "Select sorting...",
     kind: {
       label: "Project type",
       all: "All",

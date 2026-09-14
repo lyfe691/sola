@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { useInView } from "motion/react";
+import { useInView, type Variants } from "motion/react";
 
 /**
  * Central motion system.
@@ -156,6 +156,71 @@ export const useEntranceWindow = (ms = 1000) => {
   }, [ms]);
   return entering;
 };
+
+// ---- Grid swap: a re-sort or filter changes which card sits in which slot ----
+// Nothing slides — on tall cards any travel reads as scatter. Only a slot
+// whose occupant changes animates, on a short glide between the UI and
+// reveal clocks: the leaver dissolves where it is, then, once the grid has
+// been re-ordered underneath, the arrival settles in from 12px below on the
+// reveal curve, staggered in reading order. Exit is faster than enter and
+// both are long enough to be seen as a crossfade rather than a cut;
+// transform and opacity only, so a card's frosted backdrop is never cut
+// off by a leftover filter.
+export const SWAP_EXIT = 0.2;
+export const SWAP_ENTER = 0.32;
+export const SWAP_STAGGER = 0.04;
+const SWAP_STAGGER_CAP = 0.24;
+/** enter delay (s) by rank among the changed slots, capped so late slots never wait */
+export const swapDelay = (rank: number) =>
+  Math.min(rank * SWAP_STAGGER, SWAP_STAGGER_CAP);
+/** the whole enter beat, last stagger included (ms) — the driver's clock */
+export const SWAP_SETTLE_MS = Math.round(
+  (SWAP_ENTER + SWAP_STAGGER_CAP) * 1000,
+);
+
+/** per-cell inputs the grid variants resolve against */
+export interface GridCellCustom {
+  /** load-cascade delay (ms) — only while the page is entering */
+  delay?: number;
+  /** enter order among the changed slots of a swap */
+  rank?: number;
+}
+
+/**
+ * The four states of a grid cell. hidden → visible is the scroll register
+ * (same shape and clock as scrollRevealVariants); swapOut → swapIn is the
+ * swap. swapIn starts from its own first keyframe, so a cell can go there
+ * straight from swapOut with no intermediate render.
+ */
+export const gridCellVariants = {
+  hidden: { opacity: 0, y: 80, scale: 1 },
+  visible: ({ delay = 0 }: GridCellCustom = {}) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: D_REVEAL,
+      ease: EASE_OUT_QUART,
+      delay: delay / 1000,
+    },
+  }),
+  swapOut: {
+    opacity: 0,
+    y: 0,
+    scale: 0.98,
+    transition: { duration: SWAP_EXIT, ease: EASE_OUT },
+  },
+  swapIn: ({ rank = 0 }: GridCellCustom = {}) => ({
+    opacity: [0, 1],
+    y: [12, 0],
+    scale: [0.98, 1],
+    transition: {
+      duration: SWAP_ENTER,
+      ease: EASE_OUT_QUART,
+      delay: swapDelay(rank),
+    },
+  }),
+} satisfies Variants;
 
 // ---- In-view latch (fires once). Delay is applied by ScrollReveal to the variant. ----
 // Default trigger fires as soon as the element's top crosses 90% of the

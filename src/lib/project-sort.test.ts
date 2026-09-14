@@ -29,8 +29,8 @@ const PROJECTS = [
 ];
 
 describe("sortProjects", () => {
-  it("orders by priority ascending", () => {
-    expect(ids(sortProjects(PROJECTS, "priority", "en-US"))).toEqual([
+  it("featured follows the hand-set priority", () => {
+    expect(ids(sortProjects(PROJECTS, "featured", "en-US"))).toEqual([
       "a",
       "b",
       "c",
@@ -39,8 +39,8 @@ describe("sortProjects", () => {
     ]);
   });
 
-  it("orders newest start date first, breaking ties by priority", () => {
-    expect(ids(sortProjects(PROJECTS, "date-newest", "en-US"))).toEqual([
+  it("newest puts the latest start first, breaking ties by priority", () => {
+    expect(ids(sortProjects(PROJECTS, "newest", "en-US"))).toEqual([
       "b",
       "a",
       "c",
@@ -49,8 +49,8 @@ describe("sortProjects", () => {
     ]);
   });
 
-  it("orders oldest start date first, breaking ties by priority", () => {
-    expect(ids(sortProjects(PROJECTS, "date-oldest", "en-US"))).toEqual([
+  it("oldest puts the earliest start first, breaking ties by priority", () => {
+    expect(ids(sortProjects(PROJECTS, "oldest", "en-US"))).toEqual([
       "d",
       "e",
       "c",
@@ -61,39 +61,29 @@ describe("sortProjects", () => {
 
   it("treats a bare year as the start of that year", () => {
     const items = [project("month", 1, "2024-03"), project("year", 2, "2024")];
-    expect(ids(sortProjects(items, "date-oldest", "en-US"))).toEqual([
+    expect(ids(sortProjects(items, "oldest", "en-US"))).toEqual([
       "year",
       "month",
     ]);
-    expect(ids(sortProjects(items, "date-newest", "en-US"))).toEqual([
+    expect(ids(sortProjects(items, "newest", "en-US"))).toEqual([
       "month",
       "year",
     ]);
   });
 
-  it("orders names A-Z case-insensitively for the given locale", () => {
-    expect(ids(sortProjects(PROJECTS, "name-asc", "en-US"))).toEqual([
+  it("name orders A–Z case-insensitively for the given locale", () => {
+    expect(ids(sortProjects(PROJECTS, "name", "en-US"))).toEqual([
       "a",
       "b",
       "e",
       "c",
       "d",
-    ]);
-  });
-
-  it("orders names Z-A", () => {
-    expect(ids(sortProjects(PROJECTS, "name-desc", "en-US"))).toEqual([
-      "d",
-      "c",
-      "e",
-      "b",
-      "a",
     ]);
   });
 
   it("does not mutate its input", () => {
     const input = [...PROJECTS];
-    sortProjects(input, "name-asc", "en-US");
+    sortProjects(input, "name", "en-US");
     expect(ids(input)).toEqual(ids(PROJECTS));
   });
 });
