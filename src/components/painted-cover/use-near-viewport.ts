@@ -8,6 +8,13 @@
 
 import { useEffect, useState, type RefObject } from "react";
 
+export interface NearViewportOptions {
+  /** Root margin for the `near` observer. Default: half a viewport above and below. */
+  margin?: string;
+  /** false: observe nothing and report neither near nor visible (a cover with no canvas). */
+  enabled?: boolean;
+}
+
 /**
  * Two observers, two questions: is the element close enough to deserve a
  * WebGL context (`near`, viewport ± margin), and is it actually on screen so
@@ -16,14 +23,14 @@ import { useEffect, useState, type RefObject } from "react";
  */
 export function useNearViewport(
   ref: RefObject<Element | null>,
-  margin = "50% 0px",
+  { margin = "50% 0px", enabled = true }: NearViewportOptions = {},
 ) {
   const [near, setNear] = useState(false);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
+    if (!element || !enabled) return;
     const nearObserver = new IntersectionObserver(
       ([entry]) => setNear(entry.isIntersecting),
       { rootMargin: margin },
@@ -37,7 +44,7 @@ export function useNearViewport(
       nearObserver.disconnect();
       visibleObserver.disconnect();
     };
-  }, [ref, margin]);
+  }, [ref, margin, enabled]);
 
   return { near, visible };
 }

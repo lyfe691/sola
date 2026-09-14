@@ -5,6 +5,7 @@
 import { describe, expect, it } from "vitest";
 import {
   ART_PRESETS,
+  GRAIN,
   PRESETS,
   baseGradient,
   resolveArt,
@@ -58,11 +59,33 @@ describe("resolveArt", () => {
 });
 
 describe("baseGradient", () => {
-  it("runs from the deep wash to the pale one", () => {
+  it("runs a beam of the pale wash between vivid flanks that fall to near-black", () => {
     const gradient = baseGradient(PRESETS.almond);
     const [deep, pale] = PRESETS.almond.colors;
-    expect(gradient).toContain(deep);
-    expect(gradient).toContain(pale);
-    expect(gradient.indexOf(deep)).toBeLessThan(gradient.indexOf(pale));
+    const beam = gradient.slice(gradient.lastIndexOf("linear-gradient"));
+    expect(gradient.startsWith("radial-gradient")).toBe(true);
+    expect(beam).toContain(`color-mix(in oklab, ${deep} 55%, black) 0%`);
+    expect(beam).toContain(
+      `oklch(from ${deep} 0.6 clamp(0.1, c * 1.7, 0.25) h)`,
+    );
+    expect(beam).toMatch(new RegExp(`${pale} \\d+%`));
+    expect(gradient).toContain(`color-mix(in oklab, ${pale} 70%, transparent)`);
+  });
+
+  it("moves with the seed and stays put without one", () => {
+    const still = baseGradient(resolveArt({ preset: "wheat" }));
+    expect(still).toBe(baseGradient(PRESETS.wheat));
+    expect(baseGradient(resolveArt({ preset: "wheat", seed: 1 }))).not.toBe(
+      still,
+    );
+  });
+});
+
+describe("GRAIN", () => {
+  it("is an inline SVG of tiled fractal noise", () => {
+    expect(GRAIN.startsWith('url("data:image/svg+xml,')).toBe(true);
+    const svg = decodeURIComponent(GRAIN.slice(24, -2));
+    expect(svg).toContain("feTurbulence");
+    expect(svg).toContain("stitchTiles='stitch'");
   });
 });

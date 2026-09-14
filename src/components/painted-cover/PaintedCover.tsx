@@ -10,7 +10,10 @@
  * Layers, bottom to top: a CSS gradient from the preset (always painted, so
  * nothing is ever blank), an ogl shader canvas that exists only while the
  * cover is near the viewport and renders only while it is on screen, a scrim,
- * and the caller's caption. The art, scrim and caption are deliberately
+ * and the caller's caption. A cover declared `live={false}` is the painting
+ * alone — no canvas, no observers: the projects grid shows sixteen at once,
+ * and sixteen live fields were too heavy for a list, so only the deep-dive
+ * hero keeps its field. The art, scrim and caption are deliberately
  * theme-independent: the painting is the same in every theme, so the
  * overlays are black/white rather than tokens — the same call the hero has
  * always made.
@@ -23,6 +26,7 @@
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -31,7 +35,9 @@ import {
 import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
 import { cn } from "@/lib/utils";
 import { mountQueue } from "./mount-queue";
+import { notchedOutline } from "./notch";
 import {
+  GRAIN,
   baseGradient,
   resolveArt,
   type ProjectArt,
@@ -44,6 +50,14 @@ export interface PaintedCoverProps {
   art: ProjectArt;
   /** card: aspect 21/9, STEPS 5. hero: fills its box (pass className="absolute inset-0"), STEPS 6. */
   size: "card" | "hero";
+  /** false: the static painting only, no canvas and no observers. Default true. */
+  live?: boolean;
+  /**
+   * Content set into a notch cut from the painting's top-left corner, so
+   * it sits on the surface the cover is mounted on. Sized to the content;
+   * the cut keeps the mat's gap around it.
+   */
+  notch?: ReactNode;
   /** caption: bottom black gradient over the lower half. dim: full-box black/20. none. */
   scrim?: "caption" | "dim" | "none";
   /** Stops the frame loop; the last frame stays on screen. */
@@ -60,6 +74,11 @@ const SCRIM_CLASS = {
   dim: "absolute inset-0 bg-black/20",
   none: "hidden",
 } as const;
+
+/** The notch keeps the mat's gap (p-1.5 on the card) between content and paint. */
+const NOTCH_GAP = 6;
+const NOTCH_RADIUS = 12;
+const NOTCH_FILLET = 12;
 
 /** One mounted canvas: created by the queue, driven by the running flag. */
 interface CoverController {
@@ -217,6 +236,8 @@ function createCover(
 export function PaintedCover({
   art,
   size,
+  live = true,
+  notch,
   scrim = "caption",
   paused = false,
   onReady,
@@ -225,9 +246,44 @@ export function PaintedCover({
 }: PaintedCoverProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const hostRef = useRef<HTMLDivElement>(null);
-  const { near, visible } = useNearViewport(rootRef);
+  const notchRef = useRef<HTMLDivElement>(null);
+  const { near, visible } = useNearViewport(rootRef, { enabled: live });
   const resolved = useMemo(() => resolveArt(art), [art]);
   const [controller, setController] = useState<CoverController | null>(null);
+
+  // the notch is cut to the content's measured box, re-cut when either the
+  // cover or the content resizes; before the first paint so nothing flashes
+  const [outline, setOutline] = useState<string | null>(null);
+  const hasNotch = notch !== undefined && notch !== null;
+  useLayoutEffect(() => {
+    const root = rootRef.current;
+    const label = notchRef.current;
+    if (!root || !label || !hasNotch) {
+      setOutline(null);
+      return;
+    }
+    const cut = () => {
+      // offsetWidth/Height: rects are corrupted while the route transition scales the page
+      const radius =
+        parseFloat(getComputedStyle(root).borderTopLeftRadius) || 0;
+      setOutline(
+        notchedOutline(
+          { width: root.offsetWidth, height: root.offsetHeight, radius },
+          {
+            width: label.offsetWidth + NOTCH_GAP,
+            height: label.offsetHeight + NOTCH_GAP,
+            radius: NOTCH_RADIUS,
+            fillet: NOTCH_FILLET,
+          },
+        ),
+      );
+    };
+    const observer = new ResizeObserver(cut);
+    observer.observe(root);
+    observer.observe(label);
+    cut();
+    return () => observer.disconnect();
+  }, [hasNotch]);
 
   // survives canvas remounts so the field never jumps; resets with the art
   const time = useRef(0);
@@ -246,8 +302,13 @@ export function PaintedCover({
     onReadyRef.current?.();
   }, []);
 
-  // mount the canvas while near, through the one-per-frame queue
+  // mount the canvas while near, through the one-per-frame queue; a static
+  // cover is ready as soon as it is painted
   useEffect(() => {
+    if (!live) {
+      fireReady();
+      return;
+    }
     const host = hostRef.current;
     if (!host || !near) return;
     let cancelled = false;
@@ -267,7 +328,7 @@ export function PaintedCover({
       cover?.dispose();
       setController(null);
     };
-  }, [near, resolved, size, fireReady]);
+  }, [live, near, resolved, size, fireReady]);
 
   // one flag drives the loop; one sync point for every input
   useEffect(() => {
@@ -290,22 +351,42 @@ export function PaintedCover({
     <div
       ref={rootRef}
       className={cn(
-        "relative overflow-hidden",
+        // isolate: the grain's blend mode stays inside the cover
+        "relative isolate overflow-hidden",
         size === "card" && "aspect-[21/9]",
         className,
       )}
     >
+      {/* the painting: everything the notch cuts, so the notch content and
+          the caption stay whole */}
       <div
-        ref={hostRef}
-        className={cn(
-          "absolute inset-0",
-          size === "card" &&
-            "transition-transform duration-500 ease-out can-hover:group-hover:scale-[1.03]",
+        className="absolute inset-0"
+        style={outline ? { clipPath: `path("${outline}")` } : undefined}
+      >
+        <div
+          ref={hostRef}
+          className={cn(
+            "absolute inset-0",
+            size === "card" &&
+              "transition-transform duration-500 ease-out can-hover:group-hover:scale-[1.03]",
+          )}
+          style={{ backgroundImage: baseGradient(resolved) }}
+        />
+        {!live && (
+          <div
+            className="pointer-events-none absolute inset-0 opacity-30 mix-blend-overlay"
+            style={{ backgroundImage: GRAIN, backgroundSize: "160px 160px" }}
+            aria-hidden="true"
+          />
         )}
-        style={{ backgroundImage: baseGradient(resolved) }}
-      />
-      <div className={SCRIM_CLASS[scrim]} aria-hidden="true" />
+        <div className={SCRIM_CLASS[scrim]} aria-hidden="true" />
+      </div>
       {children}
+      {hasNotch && (
+        <div ref={notchRef} className="absolute top-0 left-0">
+          {notch}
+        </div>
+      )}
     </div>
   );
 }

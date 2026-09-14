@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import { motion, useInView } from "motion/react";
 import {
   ArrowUpRight01Icon,
@@ -68,7 +68,6 @@ import {
   CoverCaption,
   PaintedCover,
 } from "@/components/painted-cover/PaintedCover";
-import { mountQueue } from "@/components/painted-cover/mount-queue";
 import {
   PROJECTS,
   type ProjectKind,
@@ -128,10 +127,10 @@ const cardClassName =
   "group h-full gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg";
 
 /** The cover sits in the card the way the About page mounts its media: a
- *  6px mat and a hairline ring, corners nesting inside the card's own radius
- *  (the card is rounded-4xl, so the inset radius is that minus the mat). */
-const coverClassName =
-  "rounded-[calc(var(--radius-4xl)_-_0.375rem)] ring-1 ring-foreground/10";
+ *  6px mat, corners nesting inside the card's own radius (the card is
+ *  rounded-4xl, so the inset radius is that minus the mat). No hairline:
+ *  the date's notch cuts the outline, and a ring can't follow the cut. */
+const coverClassName = "rounded-[calc(var(--radius-4xl)_-_0.375rem)]";
 
 const ProjectActions = ({
   project,
@@ -215,12 +214,6 @@ const ProjectActions = ({
 
 const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
   <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
-    <time
-      className="font-mono text-xs text-foreground/60"
-      dateTime={project.date.start}
-    >
-      {project.dateLabel}
-    </time>
     <p className="flex-1 text-sm text-foreground/60">
       <RichText text={project.description} />
     </p>
@@ -232,7 +225,24 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
 const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
   <Card className={cardClassName}>
     <div className="p-1.5 pb-0">
-      <PaintedCover art={project.art} size="card" className={coverClassName}>
+      <PaintedCover
+        art={project.art}
+        size="card"
+        live={false}
+        className={coverClassName}
+        // the date is part of the painting: set into a notch in its corner,
+        // on the card's surface, left-aligned with the caption below. Set
+        // like a readout — bold mono caps, tracked — so it holds its own
+        // against the art instead of whispering beside it
+        notch={
+          <time
+            dateTime={project.date.start}
+            className="block px-5 py-2 font-mono text-[11px] leading-4 font-bold tracking-[0.14em] text-foreground uppercase sm:px-6"
+          >
+            {project.dateLabel}
+          </time>
+        }
+      >
         <CoverCaption
           as="h2"
           title={project.title}
@@ -331,13 +341,6 @@ const Projects = () => {
   );
   const { shownIds, swap, arrived } = useGridSwap(order);
   const shown = shownIds.flatMap((id) => byId.get(id) ?? []);
-
-  // a cover compiles its shader synchronously when it comes near, which
-  // would land right in the enter beat; hold the mount queue while the swap
-  // runs and let the canvases arrive afterwards, over the base gradient,
-  // the way they do at load
-  const swapping = swap !== null;
-  useEffect(() => (swapping ? mountQueue.hold() : undefined), [swapping]);
 
   return (
     <div className="flex flex-col w-full">

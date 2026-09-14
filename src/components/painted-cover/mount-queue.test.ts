@@ -63,37 +63,6 @@ describe("createMountQueue", () => {
     expect(ran).toEqual(["b"]);
   });
 
-  it("holds creation until released, then drains as before", () => {
-    const s = manualScheduler();
-    const queue = createMountQueue(s.schedule);
-    const ran: string[] = [];
-    queue.enqueue({ priority: () => 1, run: () => ran.push("a") });
-    const release = queue.hold();
-    s.tick(); // the tick scheduled before the hold runs nothing
-    queue.enqueue({ priority: () => 0, run: () => ran.push("b") });
-    expect(ran).toEqual([]);
-    expect(s.pending).toBe(0);
-    release();
-    s.tick();
-    s.tick();
-    expect(ran).toEqual(["b", "a"]);
-  });
-
-  it("nests holds and ignores a second release", () => {
-    const s = manualScheduler();
-    const queue = createMountQueue(s.schedule);
-    const ran: string[] = [];
-    const releaseOuter = queue.hold();
-    const releaseInner = queue.hold();
-    queue.enqueue({ priority: () => 0, run: () => ran.push("a") });
-    releaseInner();
-    releaseInner();
-    expect(s.pending).toBe(0);
-    releaseOuter();
-    s.tick();
-    expect(ran).toEqual(["a"]);
-  });
-
   it("schedules at most one tick at a time", () => {
     const s = manualScheduler();
     const queue = createMountQueue(s.schedule);
