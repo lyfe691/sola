@@ -34,6 +34,7 @@ import {
 } from "react";
 import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
 import { cn } from "@/lib/utils";
+import { coverArtwork } from "./artwork";
 import { mountQueue } from "./mount-queue";
 import { notchedOutline } from "./notch";
 import {
@@ -249,6 +250,12 @@ export function PaintedCover({
   const notchRef = useRef<HTMLDivElement>(null);
   const { near, visible } = useNearViewport(rootRef, { enabled: live });
   const resolved = useMemo(() => resolveArt(art), [art]);
+  // a static cover is the painting; a live one paints the gradient the
+  // canvas fades in over
+  const painting = useMemo(
+    () => (live ? baseGradient(resolved) : coverArtwork(resolved)),
+    [live, resolved],
+  );
   const [controller, setController] = useState<CoverController | null>(null);
 
   // the notch is cut to the content's measured box, re-cut when either the
@@ -366,11 +373,11 @@ export function PaintedCover({
         <div
           ref={hostRef}
           className={cn(
-            "absolute inset-0",
+            "absolute inset-0 bg-cover bg-center",
             size === "card" &&
               "transition-transform duration-500 ease-out can-hover:group-hover:scale-[1.03]",
           )}
-          style={{ backgroundImage: baseGradient(resolved) }}
+          style={{ backgroundImage: painting }}
         />
         {!live && (
           <div

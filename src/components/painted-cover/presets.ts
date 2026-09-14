@@ -11,6 +11,8 @@
  * theme, like the deep-dive hero has always been.
  */
 
+import { coverPalette } from "./palette";
+
 export const ART_PRESETS = [
   "night",
   "midnight",
@@ -70,36 +72,19 @@ export function resolveArt(art: ProjectArt): ResolvedArt {
 }
 
 /**
- * The static painting, after the grainy-gradient cards React Bits shows in
- * its Gradient Carousel: one strong directional light on a saturated
- * field. A beam of the pale wash crosses the cover on a diagonal between
- * flanks of the deep hue pushed vivid, and falls off into near-black at
- * both corners; a glow of the pale wash sits where the beam is brightest.
- * The seed turns the beam and slides it, so two covers on one preset
- * differ the way their live fields do. Project cards show this under
- * GRAIN; under a live cover it is the layer painted before the canvas,
- * and what remains when WebGL is off or the cover is far away.
+ * The layer under a live cover's canvas: painted before the canvas exists,
+ * and what remains when WebGL is off or the cover is far away. The field
+ * of the painting (see artwork.ts) without its band, so the canvas fades
+ * in over something of the same family. The seed turns it the way it
+ * turns the painting.
  */
 export function baseGradient({
   colors,
   seed = 0,
 }: Pick<PaintedPreset, "colors"> & { seed?: number }): string {
-  const [deep, pale] = colors;
-  const turn = seed / (2 * Math.PI);
-  const angle = Math.round(118 + 30 * turn);
-  const core = Math.round(44 + 12 * turn);
-  const glowAt = `${Math.round(74 + 16 * turn)}% ${Math.round(8 + 22 * turn)}%`;
-  // the deep hue at a luminous lightness with its chroma pushed, floored so
-  // the near-gray presets still carry color, capped inside the gamut
-  const vivid = `oklch(from ${deep} 0.6 clamp(0.1, c * 1.7, 0.25) h)`;
-  const dark = `color-mix(in oklab, ${deep} 55%, black)`;
-  const dusk = `color-mix(in oklab, ${deep} 72%, black)`;
-  const glow = `color-mix(in oklab, ${pale} 70%, transparent)`;
-  return [
-    `radial-gradient(70% 90% at ${glowAt}, ${glow} 0%, transparent 62%)`,
-    // the beam is a plateau of the pale wash, not a line: broad and soft
-    `linear-gradient(${angle}deg, ${dark} 0%, ${vivid} ${core - 24}%, ${pale} ${core - 5}%, ${pale} ${core + 5}%, ${vivid} ${core + 20}%, ${dusk} 100%)`,
-  ].join(", ");
+  const { dark, vivid, dusk } = coverPalette({ colors });
+  const angle = Math.round(118 + 30 * (seed / (2 * Math.PI)));
+  return `linear-gradient(${angle}deg, ${dark} 0%, ${vivid} 50%, ${dusk} 100%)`;
 }
 
 /**
