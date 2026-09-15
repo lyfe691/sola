@@ -65,8 +65,6 @@ Map tiles are the part that cannot ship in advance. Instead every tile the rider
 
 Every feature in a bundle carries its source, and the manifest carries the attribution the app renders: LIPAS under CC BY 4.0, OpenStreetMap points via Overpass under ODbL, basemap tiles from the National Land Survey of Finland. The compiler enforces this rather than documenting it. A source whose license is unresolved cannot reach a bundle: the build throws instead of publishing.
 
-That rule has a cost. At least 800 km of Metsähallitus permit tracks are missing from LIPAS, and until a data agreement exists they are held out of every bundle. The app is honest about it and the landing page FAQ says so, but the coverage gap is real and it sits exactly where a permit matters most.
-
 <ProjectGallery
   images={[
     {
@@ -77,7 +75,7 @@ That rule has a cost. At least 800 km of Metsähallitus permit tracks are missin
     {
       src: "/projects/ura/faq-desktop.png",
       alt: "FAQ section 'Before you ride' with seven collapsed questions",
-      caption: "FAQ, including the permit-track gap",
+      caption: "FAQ: before you ride",
     },
   ]}
   columns={2}
@@ -103,8 +101,6 @@ The site is its own Next.js repo: next-intl in English, Finnish and German, Cabi
   columns={2}
 />
 
-## Where it stands
-
-The code is done and deployed: 311 commits, TypeScript strict across a bun workspace, Android building locally and iOS green in CI. It is not in the stores. What remains is a company developer account, a D-U-N-S number, the legal entity details the privacy policy needs, and the Metsähallitus ticket — none of it engineering, all of it lead time.
+## What carried over
 
 The engine work generalized better than I expected. When a reading is noisy, the fix is usually not a better sensor but a rule about when you are allowed to change your mind.

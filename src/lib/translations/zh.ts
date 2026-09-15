@@ -370,13 +370,13 @@ export const zh = {
         title: "perspectas",
         tagline: "围绕一个黄点做的咨询公司网站",
         description:
-          "perspectas gmbh 是苏黎世附近的一家咨询与招聘公司，我用 Next.js 16 和 Sanity 重做了他们的网站。所有文案、图片和联系方式都放在 CMS 里，两位合伙人不用经过我就能发布改动。上线时只迁移了两条 DNS 记录，邮箱完全不受影响。2026 年 9 月 11 日上线，跑在客户自己的主机账户上。",
+          "perspectas gmbh 是苏黎世附近的一家咨询与招聘公司，我用 Next.js 16 和 Sanity 重做了他们的网站。所有文案、图片和联系方式都放在 CMS 里，两位合伙人不用经过我就能发布改动。整个设计只用一种醒目的颜色：logo 上的黄点，它同时也是标题的句号。2026 年 9 月 11 日上线。",
       },
       ura: {
         title: "Ura",
         tagline: "离线雪地摩托导航，还分得清许可路线",
         description:
-          "Ura 是面向芬兰拉普兰的雪地摩托路线导航：一个 iOS 与 Android 应用，加上负责整理数据的网页控制台。每个发布的数据包会把 2595 条路线和附近 3388 个地点存到手机上；判定引擎用 40 到 60 m 的迟滞区间保持结论，路口不会让状态来回跳。代码已经部署，上架仍在等待公司资料。",
+          "Ura 是面向芬兰拉普兰的雪地摩托路线导航：一个 iOS 和 Android 应用，加上维护数据的网页控制台。每次发布的数据包把 2595 条路线和周边 3388 个地点装进手机，在线判定引擎用 40–60 米的滞回带保持判断，路口不会闪烁。每条路线都会标明是可以自由骑行，还是需要先取得许可。",
       },
       montu: {
         title: "Montu",
@@ -388,7 +388,7 @@ export const zh = {
         title: "Dulces Momentos de Sigrid",
         tagline: "四个页面，十七款烘焙作品，没有购物车",
         description:
-          "为家庭烘焙师（我母亲）做的西班牙语作品目录站。十七款作品按四个分类筛选，联系页面不接受订单，而是直接链接到 Instagram 和 WhatsApp：她本来就靠消息接单，所以网站在对话开始的地方就停下。整个目录写在一个 TypeScript 文件里而不是 CMS 中，运行不花钱，代价是她无法自己修改。",
+          "为家庭烘焙师、也就是我妈妈做的西班牙语作品目录网站。十七款作品按四个类别筛选，联系页面不接订单，而是直接跳转到 Instagram 和 WhatsApp：她靠私信卖货，所以网站在对话开始的地方就停下。目录放在一个 TypeScript 文件里而不是 CMS，运行不花一分钱。",
       },
       qr: {
         title: "QR",
@@ -400,13 +400,13 @@ export const zh = {
         title: "Vault",
         tagline: "Keycloak加FastAPI，realm由Terraform定义",
         description:
-          "Vault 是一套跑在本地的 OIDC 沙箱：Keycloak 26 签发 token，后面接 PostgreSQL，FastAPI 用 realm 的 JWKS 验签，Next.js 前端提供 admin 和 user 两个按角色分开的面板。realm、client、角色和演示用户都写在 terraform/main.tf 里，身份配置因此是一个文件，而不是管理控制台里的某个状态。只在本地运行，没有部署。",
+          "Vault 是一个本地 OIDC 沙盒：Keycloak 26 签发令牌，后面是 PostgreSQL，FastAPI 用 realm 的 JWKS 验证令牌，Next.js 前端展示按角色限制的 admin 和 user 面板。realm、客户端、角色和演示用户都在 terraform/main.tf 里声明，身份配置因此是一个文件，而不是管理控制台里的状态。一条 docker compose 命令即可启动。",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "货车GPS实时投送到办公室大屏",
         description:
-          "fleetmap 是一套配送车队监控控制台：每辆货车的手机上报位置，办公室屏幕实时显示所有车辆的移动、站点、ETA 和延误。实时广播交给 Supabase Realtime，不用 Redis，也没有自建的 WebSocket 服务器。路线来自自托管的 OSRM 实例，基于瑞士地图数据。V1 已在一台 VPS 上投入生产；免密码的司机登录已验证，但尚未随司机端应用发布。",
+          "fleetmap 是一套配送车队监控台：每辆货车的手机上报位置，办公室的大屏实时显示每辆车的移动，以及停靠点、ETA 和延误。实时推送交给 Supabase Realtime，没有 Redis，也没有自建 WebSocket 服务器。路线来自自托管的 OSRM 实例，使用瑞士地图数据。已在一块壁挂触摸屏上正式运行。",
       },
     },
   },

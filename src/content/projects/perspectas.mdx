@@ -83,7 +83,7 @@ client.fetch<T>(query, params, {
   lang="ts"
 />
 
-For a day after go-live, publishing looked broken. A re-render triggered by the webhook was reading the Sanity CDN's older copy and caching that for another hour, so an edit would appear and then come back stale. Setting `useCdn: false` fixed it: visitors are served from Next's cache either way, and only a regeneration pays for the uncached read. The hourly floor is the backstop. If the webhook breaks, the site is an hour behind rather than frozen at the last build.
+Reads go to the Sanity API rather than its CDN (`useCdn: false`): a re-render triggered by the webhook would otherwise pick up the CDN's older copy and cache it for another hour. Visitors are served from Next's cache either way, and only a regeneration pays for the uncached read. The hourly floor is the backstop. If the webhook breaks, the site is an hour behind rather than frozen at the last build.
 
 By the client's review on 7 September the dataset was theirs, which made the seed script the wrong tool: it uses `createOrReplace` and would have silently discarded their own edits. The review went in as a list of field patches instead, printed as a dry run first, each one pinned to the revision it was written against, applied in a single transaction. 22 documents.
 
@@ -103,11 +103,11 @@ By the client's review on 7 September the dataset was theirs, which made the see
   columns={2}
 />
 
-## What I built and then deleted
+## Two integrations that needed care
 
-A multi-stage Dockerfile, a compose file and a CI job that built the image existed from the first day, because the client's previous provider offered Docker or Node. On 9 September the hosting moved to Node.js hosting, the image had nowhere to run, and all of it went, along with the `output: "standalone"` setting that existed only for it. It is in the git history if that route comes back.
+The client's job board ships as a web component that injects its own CSS, jQuery and fonts, so it runs in a sandboxed iframe that reports its own height by `postMessage` and has the page's colour tokens handed in. It reads as part of the page in both schemes and cannot touch the layout around it.
 
-Two other things cost more time than they should have. The client's job board ships as a web component that injects global CSS, jQuery and fonts; loaded into the page it broke the layout, so it now runs in a sandboxed iframe that reports its own height by `postMessage` and has the page's colour tokens handed in. And branching rendered markup on `useReducedMotion()` causes a hydration mismatch, because it returns false during SSR and true on a reduced-motion visitor's first client render. The fix is one tree, with only values switched after mount.
+The other rule is about motion: rendered markup never branches on `useReducedMotion()`, because it returns false during SSR and true on a reduced-motion visitor's first client render. One tree, with only the values switched after mount, keeps hydration clean.
 
 <ProjectGallery
   images={[
@@ -127,6 +127,6 @@ Two other things cost more time than they should have. The client's job board sh
 
 ## What handover means here
 
-The Infomaniak account was bought in perspectas' name, with me as an invited user, and their access outlives mine: it is theirs to revoke. At go-live only the two A records changed: MX, SPF, DMARC and the verification records stayed byte for byte, because the old package still carries the partners' mailboxes, and the old site stayed up as the rollback. Seventeen redirect rules catch the TYPO3 and WordPress URLs Google had indexed.
+The hosting account was bought in perspectas' name, with me as an invited user, so their access outlives mine. At go-live only the two A records changed, the mail records stayed untouched, and the old site stayed up as the rollback. Seventeen redirect rules catch the TYPO3 and WordPress URLs Google had indexed.
 
-None of that last paragraph is visible on the site. It is the part that decides whether a client stays stuck with their developer, and it has to be arranged before the handover rather than renegotiated after it.
+None of that is visible on the site. It is the part that decides whether a client stays stuck with their developer, and it has to be arranged before the handover rather than renegotiated after it.

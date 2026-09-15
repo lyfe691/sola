@@ -380,13 +380,13 @@ export const en = {
         title: "perspectas",
         tagline: "A consulting site built around one yellow dot",
         description:
-          "perspectas gmbh is a consulting and recruiting firm near Zürich; I rebuilt their site on Next.js 16 and Sanity. Every text, image and contact detail lives in the CMS, so the two partners publish changes without me. At go-live only two DNS records moved, so their mailboxes never noticed. Live since 11 September 2026, on the client's own hosting account.",
+          "perspectas gmbh is a consulting and recruiting firm near Zürich; I rebuilt their site on Next.js 16 and Sanity. Every text, image and contact detail lives in the CMS, so the two partners publish changes without me. The design spends one loud colour, the yellow of the logo dot, which doubles as the headline's full stop. Live since 11 September 2026.",
       },
       ura: {
         title: "Ura",
         tagline: "Snowmobile navigation for Lapland, offline and permit-aware",
         description:
-          "Ura is snowmobile route navigation for Finnish Lapland: an iOS and Android app plus the web console that curates its data. Each published bundle puts 2,595 routes and 3,388 nearby places on the phone, and the on-route engine holds its verdict through a 40–60 m hysteresis band so a junction doesn't make it flicker. The code is deployed; the store release is waiting on company paperwork.",
+          "Ura is snowmobile route navigation for Finnish Lapland: an iOS and Android app plus the web console that curates its data. Each published bundle puts 2,595 routes and 3,388 nearby places on the phone, and the on-route engine holds its verdict through a 40–60 m hysteresis band so a junction doesn't make it flicker. Every route says whether it is free to ride or needs a permit first.",
       },
       montu: {
         title: "Montu",
@@ -398,7 +398,7 @@ export const en = {
         title: "Dulces Momentos de Sigrid",
         tagline: "Four pages, seventeen bakes, no checkout",
         description:
-          "A Spanish-language catalogue site for a home baker, my mom. Seventeen creations sit behind four category filters, and the contact page links out to Instagram and WhatsApp instead of taking orders: she sells by message, so the site stops where the conversation starts. The catalogue lives in one TypeScript file instead of a CMS, which costs nothing to run and means she cannot edit it herself.",
+          "A Spanish-language catalogue site for a home baker, my mom. Seventeen creations sit behind four category filters, and the contact page links out to Instagram and WhatsApp instead of taking orders: she sells by message, so the site stops where the conversation starts. The catalogue lives in one TypeScript file instead of a CMS, which costs nothing to run.",
       },
       qr: {
         title: "QR",
@@ -410,13 +410,13 @@ export const en = {
         title: "Vault",
         tagline: "Keycloak, FastAPI and a realm defined in Terraform",
         description:
-          "Vault is a local OIDC sandbox: Keycloak 26 issues the tokens, PostgreSQL sits behind it, FastAPI verifies them against the realm's JWKS, and a Next.js frontend shows role-gated admin and user dashboards. The realm, client, roles and demo user are declared in terraform/main.tf, so the identity setup is a file rather than a state of the admin console. It runs locally only: there is no deployment.",
+          "Vault is a local OIDC sandbox: Keycloak 26 issues the tokens, PostgreSQL sits behind it, FastAPI verifies them against the realm's JWKS, and a Next.js frontend shows role-gated admin and user dashboards. The realm, client, roles and demo user are declared in terraform/main.tf, so the identity setup is a file rather than a state of the admin console. One docker compose command brings it up.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "Van phones stream GPS to an office TV",
         description:
-          "fleetmap is a monitoring console for a delivery fleet: each van's phone posts its position, and an office screen shows every van moving with its stops, ETA and lateness. Live fan-out is Supabase Realtime's job: no Redis, no WebSocket server of my own. Routes come from an OSRM instance I self-host on a Switzerland extract. V1 runs in production on one VPS; the passwordless driver sign-in is verified but not yet shipped in the rider app.",
+          "fleetmap is a monitoring console for a delivery fleet: each van's phone posts its position, and an office screen shows every van moving with its stops, ETA and lateness. Live fan-out is Supabase Realtime's job: no Redis, no WebSocket server of my own. Routes come from an OSRM instance I self-host on a Switzerland extract. It runs in production on a wall-mounted touchscreen.",
       },
     },
   },

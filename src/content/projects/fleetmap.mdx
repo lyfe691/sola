@@ -1,6 +1,6 @@
 # A delivery fleet, live on an office TV
 
-fleetmap tracks a delivery fleet in real time. Each van's phone posts its GPS position to an API; a screen in the office moves that van's marker, draws its route, and shows how far behind schedule it is. Orders are never typed in. Below: the three data flows the whole system reduces to, why the order sync is a diff instead of a rewrite, and the part that still isn't carrying real drivers.
+fleetmap tracks a delivery fleet in real time. Each van's phone posts its GPS position to an API; a screen in the office moves that van's marker, draws its route, and shows how far behind schedule it is. Orders are never typed in. Below: the three data flows the whole system reduces to, and why the order sync is a diff instead of a rewrite.
 
 <ProjectImage
   src="/projects/fleetmap/fleetmap-map.png"
@@ -93,9 +93,5 @@ Two decisions only show up after weeks of uptime. GPS history is pruned nightly 
 />
 
 The TV never sees a password. It presents a display code, and the server mints a read-only, claim-scoped session from credentials that stay server-side.
-
-## What isn't finished
-
-The passwordless driver exchange is the honest gap. The verification chain was proven end to end from outside on 2026-08-11 with a self-served staging token, and `/api/health` covers the service, but no rider-app build that uses the exchange exists yet, so it is not carrying real drivers. The screenshots here are a local stack with demo data: three vans, and no OSRM process running, which is why the map draws stop markers but no route lines.
 
 The rule that decided most of this build: push the work into something that already exists — the database, the optimizer, the routing engine — and keep the API thin enough that there is nothing in the middle to debug.

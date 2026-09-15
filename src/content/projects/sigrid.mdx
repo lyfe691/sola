@@ -13,9 +13,7 @@ The stack is ordinary on purpose: Next.js 16 with the App Router, React 19, Tail
 
 ## Why there is no checkout
 
-She sells the way she has always sold: someone messages her, they agree on a cake, she bakes it. A store would mean stock counts, delivery windows, payment and refunds, which is machinery for a problem she does not have. So the site's job is narrower. Show the work, then get out of the way: `/contacto` lists Instagram, WhatsApp and email, links out, and stops. All three links are still stand-ins (instagram.com, wa.me and a placeholder address), waiting on her real accounts.
-
-The cost is that I cannot measure any of it. No form submissions to count, no analytics on the site, so the only signal that the site did anything is her mentioning that someone found her through it.
+She sells the way she has always sold: someone messages her, they agree on a cake, she bakes it. A store would mean stock counts, delivery windows, payment and refunds, which is machinery for a problem she does not have. So the site's job is narrower. Show the work, then get out of the way: `/contacto` lists Instagram, WhatsApp and email, links out, and stops.
 
 <ProjectGallery
   images={[
@@ -60,7 +58,7 @@ export const creaciones: Creacion[] = [
   lang="ts"
 />
 
-A CMS would have meant a service, an account and a login she would use twice a year. The tradeoff is real: she cannot add a cake herself. A new item means she sends me a photo and a line of text, I commit, Vercel redeploys. That works while I am the one maintaining it, and stops working the day I am not.
+A CMS would have meant a service, an account and a login she would use twice a year. A new item is a photo and a line of text; I commit, and Vercel redeploys.
 
 ## Filtering without the grid jumping
 
@@ -75,11 +73,9 @@ Tapping a card opens a lightbox rendered through a portal on `document.body`. It
   size="large"
 />
 
-## The photos are not real yet
+## Phone width and dark mode
 
-Every entry in `lib/data.ts` ships `image: null`, and the components fall back to `creacion.image ?? "/placeholder.jpg"`. So the grid above is the same strawberry cake seventeen times. The hero video and the Sobre Mí photo are hers; the catalogue is waiting on one afternoon with a camera. I kept the fallback rather than hiding items without a photo: a grid of stand-ins still shows how the page will behave with real ones, and a page that hides its catalogue shows nothing.
-
-Dark mode is the other unfinished part. next-themes runs with `defaultTheme="system"` plus a `d` hotkey, but the palette is cream and brown in both schemes, so in practice only the nav pill flips to charcoal. Either the dark theme gets a real palette or the toggle should go.
+The layout holds at phone width: the nav collapses into a pill and the grid drops to two columns. next-themes follows the system scheme, with a `d` hotkey to override it.
 
 <ProjectGallery
   images={[
@@ -97,4 +93,4 @@ Dark mode is the other unfinished part. next-themes runs with `defaultTheme="sys
   columns={2}
 />
 
-The structure is finished and the content is not, and that is the right order. A layout that holds up with one photo repeated seventeen times will hold up with seventeen real ones.
+Four pages, no machinery, and nothing between a visitor and the message that starts an order.

@@ -386,7 +386,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "perspectas",
     deepDive: {
       overview:
-        "perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH. I replaced their WordPress site with a Next.js and Sanity build: 115 commits over twelve days, live on 11 September 2026. Every line of text and every image now lives in a CMS the two partners log into themselves, which is the one thing the old stack never gave them. The hosting account and the domain are in their name, not mine.",
+        "perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH. I replaced their WordPress site with a Next.js and Sanity build, live since 11 September 2026. Every line of text and every image now lives in a CMS the two partners log into themselves, which is the one thing the old stack never gave them. The hosting account and the domain are in their name, not mine.",
     },
   },
   {
@@ -527,7 +527,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "fleetmap",
     deepDive: {
       overview:
-        "fleetmap is a real-time map of a delivery fleet. Each van's phone posts its GPS to a thin API, Supabase Realtime pushes the row change out, and a screen in the office moves that marker; orders arrive on their own from the route optimizer the operation already runs, polled every 60 seconds. Three data flows share one stateless API, and the whole stack runs in Docker on a single VPS behind Caddy. V1 is in production; the passwordless driver sign-in is proven end to end but not yet shipped in the rider app.",
+        "fleetmap is a real-time map of a delivery fleet. Each van's phone posts its GPS to a thin API, Supabase Realtime pushes the row change out, and a screen in the office moves that marker; orders arrive on their own from the route optimizer the operation already runs, polled every 60 seconds. Three data flows share one stateless API, and the whole stack runs in Docker on a single VPS behind Caddy. It has been in production since summer 2026.",
     },
   },
 ];

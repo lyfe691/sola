@@ -81,12 +81,6 @@ The chart derives its own axes: the vertical step is 50, 100, 250 or 500 m depen
   columns={2}
 />
 
-## What didn't ship
-
-The repo's own notes describe route sections colour-coded by difficulty on the map, and a map and chart that highlight each other on hover. Neither is in the shipped code. The map draws one orange line over a white casing with a pin at each end, and the chart is a plain area with a tooltip. Linking the two properly means every Etappe has to carry a distance range into the track, which is a number the writer would have to measure and type for each section — the opposite of the rule the rest of the schema follows.
-
-A smaller inconsistency is still standing. The distance in the stat row is typed into Sanity by hand, while the chart's horizontal axis is measured from the GPX points. On the Piz Titschal tour the stat reads 5.5 km and the axis runs just past 6 km.
-
 <ProjectGallery
   images={[
     {

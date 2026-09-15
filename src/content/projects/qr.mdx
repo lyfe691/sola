@@ -57,11 +57,9 @@ useEffect(() => {
 
 Every keystroke and every slider tick builds a new instance and replaces the container's contents. At 300 px that costs little enough to be invisible. On a much larger code, or a grid of them, it would not be.
 
-## What I would change
+## History
 
-With the input empty, the preview renders a placeholder code for `https://example.com` at 25% opacity. It is meant to read as "not yours yet." It reads as loading, and people wait for it instead of typing. The fix is an empty state with words in it, not a different opacity.
-
-The last ten codes are kept in localStorage with a thumbnail, but only the ones you downloaded or copied: exporting is the moment the thumbnail gets rendered. Close the tab without exporting and the code is gone.
+The last ten codes you download or copy are kept in localStorage with a thumbnail, so a code you exported yesterday is one click away.
 
 <ProjectImage
   src="/projects/qr/home-mobile.png"

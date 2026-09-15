@@ -383,14 +383,14 @@ export const de = {
         title: "perspectas",
         tagline: "Beratungs-Website rund um einen gelben Punkt",
         description:
-          "perspectas gmbh ist eine Beratungs- und Recruiting-Firma bei Zürich; ich habe ihre Website mit Next.js 16 und Sanity neu gebaut. Jeder Text, jedes Bild und jede Kontaktangabe liegt im CMS, die beiden Partner publizieren also ohne mich. Beim Go-live wechselten nur zwei DNS-Einträge, die Mailboxen merkten nichts davon. Seit dem 11. September 2026 live, auf dem eigenen Hosting-Konto der Kundschaft.",
+          "perspectas gmbh ist eine Beratungs- und Recruiting-Firma bei Zürich; ich habe ihre Website mit Next.js 16 und Sanity neu gebaut. Jeder Text, jedes Bild und jede Kontaktangabe liegt im CMS, die beiden Partner publizieren also ohne mich. Das Design setzt genau eine laute Farbe ein: das Gelb des Logopunkts, der zugleich der Schlusspunkt der Headline ist. Seit dem 11. September 2026 live.",
       },
       ura: {
         title: "Ura",
         tagline:
           "Schneemobilrouten für Lappland: offline, mit Genehmigungsstatus",
         description:
-          "Ura ist Routennavigation für Schneemobile in Finnisch-Lappland: eine App für iOS und Android plus die Web-Konsole, die ihre Daten pflegt. Jedes veröffentlichte Bundle speichert 2595 Routen und 3388 Orte in der Umgebung auf dem Gerät, und die On-Route-Engine hält ihr Urteil über ein Hystereseband von 40 bis 60 m, damit eine Kreuzung die Anzeige nicht flackern lässt. Der Code ist deployt, die Store-Veröffentlichung wartet auf Firmenunterlagen.",
+          "Ura ist Routennavigation für Schneemobile in Finnisch-Lappland: eine App für iOS und Android plus die Web-Konsole, die ihre Daten pflegt. Jedes veröffentlichte Bundle speichert 2595 Routen und 3388 Orte in der Umgebung auf dem Gerät, und die On-Route-Engine hält ihr Urteil über ein Hystereseband von 40 bis 60 m, damit eine Kreuzung die Anzeige nicht flackern lässt. Jede Route sagt, ob sie frei befahrbar ist oder zuerst eine Genehmigung braucht.",
       },
       montu: {
         title: "Montu",
@@ -403,7 +403,7 @@ export const de = {
         title: "Dulces Momentos de Sigrid",
         tagline: "Vier Seiten, siebzehn Backwaren, kein Warenkorb",
         description:
-          "Eine spanischsprachige Katalogseite für eine Hobbybäckerin: meine Mutter. Siebzehn Kreationen liegen hinter vier Kategoriefiltern, und die Kontaktseite verlinkt auf Instagram und WhatsApp, statt Bestellungen entgegenzunehmen. Sie verkauft per Nachricht, also hört die Seite dort auf, wo das Gespräch beginnt. Der Katalog steckt in einer einzigen TypeScript-Datei statt in einem CMS: das kostet im Betrieb nichts und bedeutet, dass sie ihn nicht selbst bearbeiten kann.",
+          "Eine spanischsprachige Katalog-Website für eine Hobbybäckerin: meine Mutter. Siebzehn Kreationen hinter vier Kategoriefiltern, und die Kontaktseite verlinkt zu Instagram und WhatsApp, statt Bestellungen anzunehmen: Sie verkauft per Nachricht, die Website hört also dort auf, wo das Gespräch beginnt. Der Katalog liegt in einer einzigen TypeScript-Datei statt in einem CMS und kostet im Betrieb nichts.",
       },
       qr: {
         title: "QR",
@@ -415,13 +415,13 @@ export const de = {
         title: "Vault",
         tagline: "Keycloak, FastAPI und ein Realm aus Terraform",
         description:
-          "Vault ist eine lokale OIDC-Sandbox: Keycloak 26 stellt die Tokens aus, PostgreSQL liegt darunter, FastAPI prüft sie gegen das JWKS des Realms, und ein Next.js-Frontend zeigt rollenbasierte Dashboards für Admin und User. Realm, Client, Rollen und Demo-Benutzer stehen in terraform/main.tf: Die Identitätskonfiguration ist damit eine Datei und kein Zustand der Admin-Konsole. Läuft nur lokal, ein Deployment gibt es nicht.",
+          "Vault ist eine lokale OIDC-Sandbox: Keycloak 26 stellt die Tokens aus, PostgreSQL liegt dahinter, FastAPI prüft sie gegen das JWKS des Realms, und ein Next.js-Frontend zeigt rollenbasierte Admin- und User-Dashboards. Realm, Client, Rollen und Demo-User sind in terraform/main.tf deklariert, die Identitätskonfiguration ist also eine Datei statt ein Zustand der Admin-Konsole. Ein docker compose-Befehl startet alles.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "Vom Handy im Lieferwagen auf den Büro-Bildschirm",
         description:
-          "fleetmap ist eine Monitoring-Konsole für eine Lieferflotte: Das Handy jedes Fahrzeugs sendet seine Position, und ein Bildschirm im Büro zeigt jeden Lieferwagen in Bewegung, mit Stopps, ETA und Verspätung. Die Live-Verteilung übernimmt Supabase Realtime: kein Redis, kein eigener WebSocket-Server. Routen liefert eine selbst gehostete OSRM-Instanz auf einem Schweiz-Extrakt. V1 läuft produktiv auf einem einzelnen VPS; die passwortlose Fahreranmeldung ist verifiziert, aber noch in keinem Build der Fahrer-App ausgeliefert.",
+          "fleetmap ist eine Monitoring-Konsole für eine Lieferflotte: Das Handy jedes Lieferwagens meldet seine Position, und ein Bildschirm im Büro zeigt jeden Wagen in Bewegung, mit Stopps, ETA und Verspätung. Die Live-Verteilung übernimmt Supabase Realtime: kein Redis, kein eigener WebSocket-Server. Routen kommen von einer selbst gehosteten OSRM-Instanz mit Schweiz-Extrakt. Läuft produktiv auf einem wandmontierten Touchscreen.",
       },
     },
   },

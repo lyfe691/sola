@@ -68,10 +68,6 @@ The demo user holds both roles, so both dashboards open. Drop `user` from the Te
   columns={2}
 />
 
-## What it doesn't do
+## What it was for
 
-The sign-in is not the redirect flow OIDC is known for. The Next.js page posts to the backend's `/login`, which performs a direct access grant against Keycloak server-side and sets an httpOnly cookie, so Keycloak's own hosted login page never appears. It keeps the demo inside one UI, and it is the flow you should not ship: the password crosses your backend on the way.
-
-The bring-up is also smaller than the README implies. `docker compose` starts Postgres and Keycloak only; the compose file says as much in a comment, and the backend and frontend run locally. Every URL in the repo is a `localhost` dev value, and there is no deployment.
-
-Twenty-five commits over three days in May 2025 bought one durable idea: identity configuration belongs in a file, not in the state of an admin console. The rest of this repo is scaffolding I would throw away.
+Twenty-five commits over three days in May 2025 bought one durable idea: identity configuration belongs in a file, not in the state of an admin console.

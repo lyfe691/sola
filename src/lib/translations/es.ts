@@ -386,13 +386,13 @@ export const es = {
         title: "perspectas",
         tagline: "Sitio de consultoría alrededor de un punto amarillo",
         description:
-          "perspectas gmbh es una empresa de consultoría y selección de personal cerca de Zúrich; rehíce su sitio web con Next.js 16 y Sanity. Cada texto, imagen y dato de contacto vive en el CMS, así que los dos socios publican cambios sin mí. En la puesta en marcha solo se movieron dos registros DNS, y sus buzones ni se enteraron. En línea desde el 11 de septiembre de 2026, en la cuenta de hosting del propio cliente.",
+          "perspectas gmbh es una empresa de consultoría y selección de personal cerca de Zúrich; rehíce su sitio web con Next.js 16 y Sanity. Cada texto, imagen y dato de contacto vive en el CMS, así que los dos socios publican cambios sin mí. El diseño usa un solo color fuerte: el amarillo del punto del logo, que también es el punto final del titular. En línea desde el 11 de septiembre de 2026.",
       },
       ura: {
         title: "Ura",
         tagline: "Motonieve en Laponia: sin conexión y con permisos",
         description:
-          "Ura es navegación de rutas de motonieve para la Laponia finlandesa: una app para iOS y Android más la consola web que mantiene sus datos. Cada paquete publicado deja 2595 rutas y 3388 lugares cercanos en el teléfono, y el motor de ruta mantiene su veredicto con una banda de histéresis de 40 a 60 m para que un cruce no lo haga parpadear. El código está desplegado; la publicación en las tiendas espera papeleo de la empresa.",
+          "Ura es navegación de rutas de motonieve para la Laponia finlandesa: una app para iOS y Android más la consola web que mantiene sus datos. Cada paquete publicado lleva 2595 rutas y 3388 lugares cercanos al teléfono, y el motor de ruta mantiene su veredicto con una banda de histéresis de 40–60 m para que un cruce no lo haga parpadear. Cada ruta indica si es libre o si primero hace falta un permiso.",
       },
       montu: {
         title: "Montu",
@@ -404,7 +404,7 @@ export const es = {
         title: "Dulces Momentos de Sigrid",
         tagline: "Cuatro páginas, diecisiete creaciones, sin carrito",
         description:
-          "Un catálogo web en español para una repostera casera: mi madre. Diecisiete creaciones se filtran por cuatro categorías, y la página de contacto enlaza a Instagram y WhatsApp en lugar de aceptar pedidos: ella vende por mensaje, así que el sitio termina donde empieza la conversación. El catálogo vive en un único archivo TypeScript en vez de un CMS, lo que no cuesta nada mantener y significa que ella no puede editarlo sola.",
+          "Un catálogo web en español para una repostera casera: mi madre. Diecisiete creaciones detrás de cuatro filtros por categoría, y la página de contacto enlaza a Instagram y WhatsApp en lugar de tomar pedidos: ella vende por mensaje, así que el sitio termina donde empieza la conversación. El catálogo vive en un solo archivo TypeScript en lugar de un CMS, y no cuesta nada mantenerlo en línea.",
       },
       qr: {
         title: "QR",
@@ -416,13 +416,13 @@ export const es = {
         title: "Vault",
         tagline: "Keycloak, FastAPI y un realm definido en Terraform",
         description:
-          "Vault es un entorno OIDC local: Keycloak 26 emite los tokens, PostgreSQL está debajo, FastAPI los verifica contra el JWKS del realm y un frontend en Next.js muestra paneles restringidos por rol para admin y user. El realm, el cliente, los roles y el usuario de demo están declarados en terraform/main.tf, así que la configuración de identidad es un archivo y no un estado de la consola de administración. Solo corre en local: no hay despliegue.",
+          "Vault es un sandbox OIDC local: Keycloak 26 emite los tokens, PostgreSQL está detrás, FastAPI los verifica contra el JWKS del realm y un frontend en Next.js muestra paneles restringidos por rol para admin y user. El realm, el cliente, los roles y el usuario de demo se declaran en terraform/main.tf, así que la configuración de identidad es un archivo y no un estado de la consola de administración. Un solo comando de docker compose lo levanta.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "GPS de cada furgoneta en la pantalla",
         description:
-          "fleetmap es una consola de monitoreo para una flota de reparto: el móvil de cada furgoneta envía su posición y una pantalla en la oficina muestra todas en movimiento, con sus paradas, ETA y retraso. La difusión en vivo la hace Supabase Realtime: sin Redis ni servidor WebSocket propio. Las rutas salen de una instancia de OSRM autoalojada sobre un extracto de Suiza. La V1 está en producción en un único VPS; el inicio de sesión sin contraseña para conductores está verificado, pero aún no se ha publicado en la app.",
+          "fleetmap es una consola de monitoreo para una flota de reparto: el teléfono de cada furgoneta envía su posición y una pantalla en la oficina muestra cada vehículo en movimiento, con sus paradas, ETA y retraso. La difusión en vivo la hace Supabase Realtime: sin Redis ni un servidor WebSocket propio. Las rutas vienen de una instancia de OSRM que alojo yo mismo con un extracto de Suiza. Funciona en producción en una pantalla táctil de pared.",
       },
     },
   },
