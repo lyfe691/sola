@@ -1,0 +1,77 @@
+# An identity stack you can tear down and rebuild
+
+Vault is a local OIDC sandbox. OIDC — OpenID Connect, the identity layer sitting on top of OAuth 2.0 — is easy to read about and hard to hold onto until you have stood one up yourself, so I built one: Keycloak 26 as the provider, PostgreSQL behind it, a FastAPI service that verifies the tokens, and a Next.js frontend with a sign-in page and two role-gated dashboards.
+
+<ProjectImage
+  src="/projects/vault/vault-login.png"
+  alt="Vault sign-in page: a centered white card titled Welcome back with username and password fields and a black Sign in button"
+  caption="The sign-in page. The demo account's credentials are printed under the form, because the whole realm is disposable."
+  size="large"
+/>
+
+## Why the realm is a Terraform file
+
+Keycloak's admin console will let you click together a realm, a client, two roles and a user in about ten minutes. The problem starts on the second run: something is configured differently, there is no diff to read, and the console holds no record of how you got there. A sandbox you can't reset is not a sandbox.
+
+So the identity configuration lives in `terraform/main.tf` and nowhere else. The realm, both realm roles, the demo user, the role assignment and the confidential client are declared resources.
+
+<CodeBlock
+  code={`resource "keycloak_realm" "vault" {
+  realm        = "vault-core"
+  enabled      = true
+  display_name = "Vault Core Realm"
+}
+resource "keycloak_role" "admin_role" {
+  realm_id    = keycloak_realm.vault.id
+  name        = "admin"
+  description = "Administrator role"
+}
+resource "keycloak_user_roles" "demo_user_roles" {
+  realm_id = keycloak_realm.vault.id
+  user_id  = keycloak_user.example_user.id
+  role_ids = [
+    keycloak_role.admin_role.id,
+    keycloak_role.user_role.id,
+  ]
+}`}
+  fileName="terraform/main.tf"
+  lang="hcl"
+/>
+
+## What the backend actually checks
+
+`app/backend/main.py` fetches the realm's discovery document at `/.well-known/openid-configuration`, reads `jwks_uri` out of it, and verifies every incoming RS256 token against that key set with both the issuer and the audience pinned. The token may arrive as an `Authorization: Bearer` header or as an `access_token` cookie; either path lands in the same verifier.
+
+Authorization is a second, separate step. A `require_roles` dependency reads `realm_access.roles` from the decoded payload and answers 403 naming the roles it wanted. `/admin` requires `admin`, `/user` requires `user`, and `/me` requires only a valid token.
+
+<ProjectImage
+  src="/projects/vault/vault-portal.png"
+  alt="Authenticated portal card reading Hello, demo with Admin and User badges above Admin Dashboard and User Dashboard buttons"
+  caption="After sign-in, the frontend decodes the cookie and renders one badge per realm role."
+/>
+
+The demo user holds both roles, so both dashboards open. Drop `user` from the Terraform role assignment and the user dashboard starts answering 403 without a line of frontend code changing.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/vault/vault-user.png",
+      alt: "User Dashboard card with Admin Access and User badges and links back to Home and to the Admin Dashboard",
+      caption: "User dashboard",
+    },
+    {
+      src: "/projects/vault/vault-admin.png",
+      alt: "Admin Dashboard card with a single Admin badge and links back to Home and to the User Dashboard",
+      caption: "Admin dashboard, gated on the realm admin role",
+    },
+  ]}
+  columns={2}
+/>
+
+## What it doesn't do
+
+The sign-in is not the redirect flow OIDC is known for. The Next.js page posts to the backend's `/login`, which performs a direct access grant against Keycloak server-side and sets an httpOnly cookie, so Keycloak's own hosted login page never appears. It keeps the demo inside one UI, and it is the flow you should not ship: the password crosses your backend on the way.
+
+The bring-up is also smaller than the README implies. `docker compose` starts Postgres and Keycloak only; the compose file says as much in a comment, and the backend and frontend run locally. Every URL in the repo is a `localhost` dev value, and there is no deployment.
+
+Twenty-five commits over three days in May 2025 bought one durable idea: identity configuration belongs in a file, not in the state of an admin console. The rest of this repo is scaffolding I would throw away.

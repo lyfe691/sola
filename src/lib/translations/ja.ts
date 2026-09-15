@@ -371,6 +371,48 @@ export const ja = {
         description:
           "自分の API キーを持ち込み、Claude・GPT・Gemini・Grok など最高の AI モデルとひとつの場所で対話できるマルチモデル AI プラットフォーム。Next.js 16、Vercel AI SDK、Supabase で構築。",
       },
+      perspectas: {
+        title: "perspectas",
+        tagline: "黄色い点を軸にしたコンサルティングサイト",
+        description:
+          "perspectas gmbh はチューリッヒ近郊のコンサルティング・採用支援会社で、そのサイトを Next.js 16 と Sanity で作り直しました。テキストも画像も連絡先もすべて CMS にあるため、2 人のパートナーは私を通さずに公開できます。公開時に変更した DNS レコードは 2 件だけで、メールボックスには影響しませんでした。2026 年 9 月 11 日から、クライアント自身のホスティング契約で稼働しています。",
+      },
+      ura: {
+        title: "Ura",
+        tagline: "オフラインで許可も分かるスノーモービル・ナビ",
+        description:
+          "Ura はフィンランド・ラップランドのスノーモービル向けルートナビです。iOS と Android のアプリと、データを整備する Web コンソールの二本立てで、公開されるバンドルは 2595 本のルートと周辺 3388 か所を端末に保存します。走行判定は 40〜60 m のヒステリシス帯で保持されるため、分岐点でも表示がちらつきません。コードは配備済みですが、ストア公開は会社の書類を待っています。",
+      },
+      montu: {
+        title: "Montu",
+        tagline: "GPXから地図と標高を描く山行記録",
+        description:
+          "Montu はスイスドイツ語の山行記録サイトで、自分でツアーを書き写真を撮るクライアントのために制作しました。各ツアーは Sanity の 1 ドキュメントで、GPX ファイルをアップロードすると Mapbox のルートと標高プロファイルがそこから描かれます。公開中のツアーは 2 件。難易度は SAC の全スケールを収めたドロップダウンで、手入力ではなく選択します。",
+      },
+      sigrid: {
+        title: "Dulces Momentos de Sigrid",
+        tagline: "4ページ、17品、カートなし",
+        description:
+          "母が焼くお菓子を紹介する、スペイン語のカタログサイトです。17 品を 4 つのカテゴリーで絞り込めて、問い合わせページは注文を受けずに Instagram と WhatsApp へ送り出します。母はもともとメッセージで注文を受けているので、サイトは会話が始まる手前で終わります。カタログは CMS ではなく TypeScript ファイル 1 つに入っていて、運用費はかかりませんが、母自身が編集することはできません。",
+      },
+      qr: {
+        title: "QR",
+        tagline: "装飾したQRコードを、その場でスキャン検証",
+        description:
+          "qr.ysz.life はすべてブラウザ内で動く QR コードジェネレーターです。ドットや角の形、グラデーション、中央のロゴを設定し、PNG・SVG・JPEG・WebP で書き出せます。コードが読み取れなくなる原因はたいてい装飾なので、ヘッダーには Scan Test があり、書き出した画像を実際のスキャナーで読み直して結果を表示します。アップロードは一切行わず、直近 10 件は localStorage に残ります。",
+      },
+      vault: {
+        title: "Vault",
+        tagline: "KeycloakとFastAPI、realmはTerraformで定義",
+        description:
+          "Vault はローカルで動く OIDC のサンドボックスです。Keycloak 26 がトークンを発行し、その背後に PostgreSQL、FastAPI が realm の JWKS でトークンを検証し、Next.js のフロントエンドが admin と user のロール別ダッシュボードを出します。realm、クライアント、ロール、デモユーザーは terraform/main.tf に宣言してあるので、ID 設定は管理コンソールの状態ではなくファイルです。ローカル専用で、デプロイ先はありません。",
+      },
+      fleetmap: {
+        title: "fleetmap",
+        tagline: "配送車のGPSを事務所のモニターへ",
+        description:
+          "fleetmap は配送フリート向けの監視コンソールです。各車両のスマートフォンが位置情報を送り、事務所のモニターに全車両の動き、停車地点、ETA、遅延が表示されます。ライブ配信は Supabase Realtime に任せ、Redis も自前の WebSocket サーバーもありません。ルートはスイスの地図データで自前運用する OSRM から取得します。V1 は 1 台の VPS 上で本番稼働中ですが、パスワード不要のドライバーログインは検証済みで、ドライバーアプリにはまだ組み込まれていません。",
+      },
     },
   },
   skills: {

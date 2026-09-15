@@ -1,0 +1,110 @@
+# A navigation app that refuses to flicker
+
+Ura ("track" in Finnish) is snowmobile route navigation for Lapland, built as a client project. It ships as two things: a Capacitor app for iOS and Android that carries the whole Finnish route network offline, and a web console where routes are imported, corrected and published to it. The app answers one question on every position fix — are you on a route, and is that route free to ride.
+
+<ProjectImage
+  src="/projects/ura/home-desktop.png"
+  alt="Ura landing page: the headline 'Know you're on the trail' beside an iPhone showing the route map around Kittilä"
+  caption="The landing page at ura-landing.vercel.app"
+  size="large"
+/>
+
+## The problem
+
+The Finnish snowmobile network is public data, and it is not one network. LIPAS (the sports facility registry run by the University of Jyväskylä) records official routes under type code 4421 and tracks under 4422. Official routes are free to ride. Most of the 4422 tracks belong to Metsähallitus, the state forest agency, and need a track permit bought from Eräluvat first. The difference is legal, not cosmetic, and it is invisible under snow.
+
+The second constraint is signal. Coverage in the fells drops out for stretches of a ride, so an app that asks a server whether you are on a route stops answering exactly where the answer matters. Everything a rider needs has to be on the phone before the ride starts.
+
+## Holding the verdict
+
+Matching a fix to the network is a nearest-segment lookup: the route geometry goes into a flatbush spatial index at load, and each fix queries it. That part is cheap. The hard part is that a single distance threshold makes the status flicker. Near a junction, or under a tree line where accuracy degrades, "on route" and "off route" trade places every second and the pill becomes noise.
+
+So the engine uses hysteresis, the way a thermostat does not switch the heating on and off at exactly one temperature. You are on route inside 40 m and only lose it past 60 m, and even then the excursion has to last 10 seconds before the status changes. Route identity gets the same treatment: the matched route is held unless a rival is closer by more than 15 m, so two parallel tracks 30 m apart stop swapping the name in the HUD.
+
+<CodeBlock
+  code={`export const ENGINE_CONFIG: EngineConfig = {
+  onRouteMeters: 40,
+  offRouteMeters: 60,
+  /** a fix with no prior state splits the 40-60 m band here instead of stalling */
+  coldStartMeters: 50,
+  /** the matched route is held unless a rival is closer by more than this */
+  routeSwitchMarginMeters: 15,
+  offRouteHoldMs: 10_000,
+  maxAccuracyMeters: 100,
+  staleFixMs: 30_000,
+};`}
+  fileName="apps/mobile/src/engine/config.ts"
+  lang="ts"
+/>
+
+`evaluate()` is a pure function: state in, state out, no timers and no device APIs. That is what makes it testable: 66 tests in `packages/core` cover it, some of them replaying recorded field traces in an NDJSON format the app itself can write. A phone that loses power mid-write leaves a half-finished last line, so the reader drops it rather than throwing.
+
+## Everything on the device
+
+A published bundle carries 2,595 routes and 3,388 nearby places: fuel stations, cafés, lean-tos, huts and fire sites within 5 km of the network. Its shape is a zod schema in `packages/schema`, the single contract the console and the app share, so a bundle the compiler produced is a bundle the app can read.
+
+Map tiles are the part that cannot ship in advance. Instead every tile the rider looks at stays on the phone up to a 250 MB ceiling, and eviction runs down to 90% of the budget rather than clearing the cache, so one overshoot does not cost a season of cached fells.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/offline-desktop.png",
+      alt: "Scroll-story slide 'Works where the signal doesn't' with the map centred on Inari and Ivalo",
+      caption: "Offline: tiles stay on the phone, up to 250 MB",
+    },
+    {
+      src: "/projects/ura/walkthrough-desktop.png",
+      alt: "Scroll-story slide 'Fuel, food, shelter' with the app's bottom sheet toggling fuel, restaurants and rest stops",
+      caption: "3,388 places within 5 km of the network",
+    },
+  ]}
+  columns={2}
+/>
+
+## Data you are allowed to publish
+
+Every feature in a bundle carries its source, and the manifest carries the attribution the app renders: LIPAS under CC BY 4.0, OpenStreetMap points via Overpass under ODbL, basemap tiles from the National Land Survey of Finland. The compiler enforces this rather than documenting it. A source whose license is unresolved cannot reach a bundle: the build throws instead of publishing.
+
+That rule has a cost. At least 800 km of Metsähallitus permit tracks are missing from LIPAS, and until a data agreement exists they are held out of every bundle. The app is honest about it and the landing page FAQ says so, but the coverage gap is real and it sits exactly where a permit matters most.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/permits-desktop.png",
+      alt: "Scroll-story slide 'Free to ride. Or permit first.' with a route detail card for Levi-Kumputunturi-Pokka",
+      caption: "Route detail: official or permit, maintainer, LIPAS id",
+    },
+    {
+      src: "/projects/ura/faq-desktop.png",
+      alt: "FAQ section 'Before you ride' with seven collapsed questions",
+      caption: "FAQ, including the permit-track gap",
+    },
+  ]}
+  columns={2}
+/>
+
+## The landing page
+
+The site is its own Next.js repo: next-intl in English, Finnish and German, Cabinet Grotesk for headings, and a pinned scroll story whose five slides drive one phone mockup. It follows the system colour scheme with no stored preference, which is why the same hero renders as a green aurora at night and a pale wash by day.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/home-dark-desktop.png",
+      alt: "The same hero in dark theme, with a deep green aurora gradient and a dark basemap in the phone mockup",
+      caption: "Dark theme, desktop",
+    },
+    {
+      src: "/projects/ura/home-mobile.png",
+      alt: "The dark hero at phone width: headline, store badges and the top of the map mockup stacked",
+      caption: "Phone width",
+    },
+  ]}
+  columns={2}
+/>
+
+## Where it stands
+
+The code is done and deployed: 311 commits, TypeScript strict across a bun workspace, Android building locally and iOS green in CI. It is not in the stores. What remains is a company developer account, a D-U-N-S number, the legal entity details the privacy policy needs, and the Metsähallitus ticket — none of it engineering, all of it lead time.
+
+The engine work generalized better than I expected. When a reading is noisy, the fix is usually not a better sensor but a rule about when you are allowed to change your mind.

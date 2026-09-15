@@ -1,0 +1,72 @@
+# Style a QR code, then check that it still scans
+
+qr.ysz.life makes QR codes in the browser. There is no backend and no upload step: the generator is a client component that pulls in `qr-code-styling` after mount and renders everything locally.
+
+<ProjectImage
+  src="/projects/qr/home-desktop.png"
+  alt="The QR generator with a link in the input, a navy-on-white preview, export buttons and the Style tab open"
+  caption="A link in, a live preview, and the Style tab open on the right."
+  size="large"
+/>
+
+## Three tabs instead of a wall of controls
+
+Everything sits in one panel with three tabs. Style holds the code's shape (square or circle), the dot style, and the corner square and corner dot styles as separate dropdowns, plus a drop zone for a center logo. Colors holds the foreground and background, an optional independent color for the three corner eyes, a transparent background, and linear or radial gradients on foreground and background with an angle control. Settings is the short one: size, margin, and error-correction level.
+
+The defaults are 300 px, a 12 px margin, and error correction Q — the level that lets a quarter of the code be destroyed and still decode.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/qr/colors-desktop.png",
+      alt: "Colors tab showing foreground and background hex fields with swatches, and toggles for custom corner color, transparent background and gradients",
+      caption: "Colors: hex fields, corner eyes, gradients.",
+    },
+    {
+      src: "/projects/qr/settings-dark-desktop.png",
+      alt: "Dark theme with the Settings tab open: size and margin sliders, error correction set to Quartile 25 percent",
+      caption: "Settings in the dark theme, toggled with the d key.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Decoration is what breaks a QR code
+
+Every style choice spends part of that error-correction budget. A logo across the center, a gradient that flattens the contrast, a foreground too close to the background: each one is allowed, and each one moves the code toward unreadable. A generator that renders the result for you will not tell you which side of the line you landed on.
+
+So the header carries a Scan Test. You drop in the file you just downloaded, `qr-scanner` decodes the image, and the dialog reports the string it read back and whether that string is a URL. When nothing decodes it says so, in one line: "No QR code found in this image."
+
+## Rebuilding the code on every change
+
+`qr-code-styling` instances expose an `update()` that takes a partial options object and merges it into the existing one. That merge gave me wrong output, so the preview does the blunt thing instead:
+
+<CodeBlock
+  code={`// Recreate instance on every config change (avoids deep-merge bugs in .update())
+useEffect(() => {
+  const Lib = qrLibRef.current
+  if (!Lib || !qrRef.current) return
+  const instance = new Lib(buildOptions(config))
+  qrRef.current.innerHTML = ""
+  instance.append(qrRef.current)
+  qrCodeRef.current = instance
+}, [config, libReady])`}
+  fileName="components/qr-generator.tsx"
+  lang="tsx"
+/>
+
+Every keystroke and every slider tick builds a new instance and replaces the container's contents. At 300 px that costs little enough to be invisible. On a much larger code, or a grid of them, it would not be.
+
+## What I would change
+
+With the input empty, the preview renders a placeholder code for `https://example.com` at 25% opacity. It is meant to read as "not yours yet." It reads as loading, and people wait for it instead of typing. The fix is an empty state with words in it, not a different opacity.
+
+The last ten codes are kept in localStorage with a thumbnail, but only the ones you downloaded or copied: exporting is the moment the thumbnail gets rendered. Close the tab without exporting and the code is gone.
+
+<ProjectImage
+  src="/projects/qr/home-mobile.png"
+  alt="Phone-width layout with the input, preview and export buttons stacked above the tabbed style panel"
+  caption="At phone width the panel moves below the preview."
+/>
+
+A tool that can quietly produce broken output should ship the check beside it, not in the documentation.

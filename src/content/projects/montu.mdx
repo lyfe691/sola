@@ -1,0 +1,113 @@
+# Building a journal someone else can keep writing
+
+Montu (montu.ch) is a mountain-tour journal in Swiss German. I built the site; the person it was built for writes the tours, takes the photos and publishes them himself. The tour page was not the part that took the thinking. Making every piece of the site editable without a deploy was.
+
+<ProjectImage
+  src="/projects/montu/home-desktop.png"
+  alt="Montu home page: a misty forest photograph filling the screen, with the serif headline Faszination Bergtouren and a glass pill nav"
+  caption="The hero runs five photographs from Sanity, crossfading every 8 seconds."
+  size="large"
+/>
+
+## A diary, not a tour portal
+
+The site says it itself, in the section about the project: "mehr Tagebuch als Führer", more diary than guidebook. Technical data is there as a signpost, not as the point.
+
+The obvious build for tour content is a portal: filters, a searchable route database, sortable tables, ratings. Two published tours need none of that, and empty filters would have been the first thing on the page to look broken. So the order everywhere is photograph, then prose, then numbers. The home page lists tours as two large photo cards with a stat row underneath: elevation gain, distance, grade.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/montu/home-tours-desktop.png",
+      alt: "Die Touren im Überblick: two rounded photo cards, one of a glacial reservoir and one of ski tourers, each with a location chip and a stat row",
+      caption: "The tour list: two cards, no filters.",
+    },
+    {
+      src: "/projects/montu/home-features-desktop.png",
+      alt: "Die Eckdaten der Touren: a list of tabs beside a photo of ski tourers with a floating Tourenkarte info card",
+      caption: "The home page explains what a tour page contains.",
+    },
+  ]}
+  columns={2}
+/>
+
+## The CMS is the whole surface
+
+A tour is one Sanity document split into five tabs: Allgemein, Inhalt, Strecke & Karte, Logistik, Extras. The editor fills in a form, not a page.
+
+Difficulty is a dropdown carrying the Swiss scales in full: T1 to T6 for hiking, L through EX for ski and alpine tours, WT1 to WT6 for snowshoe tours. Grades are picked, never typed, and the label the page prints comes from the same table. Each section of a route (an Etappe) carries its own photos, elevation, distance and a `skippable` flag, and the field explaining the alternative appears only once that flag is on:
+
+<CodeBlock
+  code={`defineField({
+  name: "skippable",
+  title: "Überspringbar",
+  description: "Kann dieser Abschnitt ausgelassen werden (z.B. via Seilbahn)?",
+  type: "boolean",
+  initialValue: false,
+}),
+defineField({
+  name: "skipAlternative",
+  title: "Alternative",
+  description: "Wie kann dieser Abschnitt umgangen werden?",
+  type: "string",
+  hidden: ({ parent }) => !parent?.skippable,
+}),`}
+  fileName="sanity/schemas/section.ts"
+  lang="ts"
+/>
+
+The same rule holds outside tour pages. The hero images, the navigation labels, the Impressum and the Datenschutz page are Sanity fields as well. Publishing fires a webhook at an internal revalidate route, which calls `revalidatePath` for the affected page; every page also revalidates on its own hourly timer as a fallback.
+
+## One GPX file feeds both the map and the chart
+
+A GPX file is what a watch or phone records on the way up: a list of points with latitude, longitude and altitude. The writer uploads one per tour. The page parses it on the server with togeojson, walks the points with a haversine distance to build a cumulative distance-and-elevation series, then hands the coordinates to Mapbox and the series to a Recharts area chart through shadcn's Chart wrapper.
+
+The chart derives its own axes: the vertical step is 50, 100, 250 or 500 m depending on the range, and the horizontal axis takes at most eight round-kilometre ticks. That is what lets a 5.5 km splitboard tour and a 28.2 km crossing from Linthal to Brigels share one component and both stay readable.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/montu/tour-map-desktop.png",
+      alt: "A Mapbox terrain map with an orange GPX track between a green start pin and an orange summit pin, beside Anfahrt and Minimalausrüstung blocks",
+      caption:
+        "The track, the two pins, and the logistics fields next to them.",
+    },
+    {
+      src: "/projects/montu/tour-elevation-desktop.png",
+      alt: "Eckdaten der Tour: four stat tiles reading 2360m, 1723m, 28.2 km and T3, above a full elevation profile chart",
+      caption: "The 28.2 km crossing: stat tiles above the computed profile.",
+    },
+  ]}
+  columns={2}
+/>
+
+## What didn't ship
+
+The repo's own notes describe route sections colour-coded by difficulty on the map, and a map and chart that highlight each other on hover. Neither is in the shipped code. The map draws one orange line over a white casing with a pin at each end, and the chart is a plain area with a tooltip. Linking the two properly means every Etappe has to carry a distance range into the track, which is a number the writer would have to measure and type for each section — the opposite of the rule the rest of the schema follows.
+
+A smaller inconsistency is still standing. The distance in the stat row is typed into Sanity by hand, while the chart's horizontal axis is measured from the GPX points. On the Piz Titschal tour the stat reads 5.5 km and the axis runs just past 6 km.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/montu/tour-hero-desktop.png",
+      alt: "Piz Titschal tour hero: ski tourers on a snowy ridge, with Splitboardtour and L – Leicht badges and a region, elevation and date line",
+      caption: "Tour hero, with type and grade as badges.",
+    },
+    {
+      src: "/projects/montu/home-dark-desktop.png",
+      alt: "The same hero photograph with the dark theme active, the pill nav rendered near-black with light text",
+      caption: "Dark theme: the chrome changes, the photographs don't.",
+    },
+    {
+      src: "/projects/montu/tour-mobile.png",
+      alt: "The Piz Titschal tour page at phone width, hero photo above the start of the German description",
+      caption: "The same tour page at 390 px.",
+    },
+  ]}
+  columns={3}
+/>
+
+## Where it stands
+
+Two tours are published, and the site has needed no deploy from me since they went up. For a site this small the rendering was never the hard part. The hard part is the form on the other side, and whether the person filling it in can publish the third tour without asking me anything.

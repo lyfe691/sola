@@ -379,6 +379,50 @@ export const de = {
         description:
           "Eine Multi‑Modell‑KI‑Plattform, bei der du deine eigenen API‑Schlüssel mitbringst und mit den besten Modellen sprichst — Claude, GPT, Gemini, Grok und mehr — alles an einem Ort. Gebaut mit Next.js 16, dem Vercel AI SDK und Supabase.",
       },
+      perspectas: {
+        title: "perspectas",
+        tagline: "Beratungs-Website rund um einen gelben Punkt",
+        description:
+          "perspectas gmbh ist eine Beratungs- und Recruiting-Firma bei Zürich; ich habe ihre Website mit Next.js 16 und Sanity neu gebaut. Jeder Text, jedes Bild und jede Kontaktangabe liegt im CMS, die beiden Partner publizieren also ohne mich. Beim Go-live wechselten nur zwei DNS-Einträge, die Mailboxen merkten nichts davon. Seit dem 11. September 2026 live, auf dem eigenen Hosting-Konto der Kundschaft.",
+      },
+      ura: {
+        title: "Ura",
+        tagline:
+          "Schneemobilrouten für Lappland: offline, mit Genehmigungsstatus",
+        description:
+          "Ura ist Routennavigation für Schneemobile in Finnisch-Lappland: eine App für iOS und Android plus die Web-Konsole, die ihre Daten pflegt. Jedes veröffentlichte Bundle speichert 2595 Routen und 3388 Orte in der Umgebung auf dem Gerät, und die On-Route-Engine hält ihr Urteil über ein Hystereseband von 40 bis 60 m, damit eine Kreuzung die Anzeige nicht flackern lässt. Der Code ist deployt, die Store-Veröffentlichung wartet auf Firmenunterlagen.",
+      },
+      montu: {
+        title: "Montu",
+        tagline:
+          "Schweizer Bergtourenjournal, kartiert aus eigenen GPX-Dateien",
+        description:
+          "Montu ist ein Bergtourenjournal auf Schweizer Hochdeutsch, gebaut für einen Kunden, der die Touren schreibt und die Fotos macht. Jede Tour ist ein Sanity-Dokument: Eine hochgeladene GPX-Datei erzeugt die Mapbox-Route und das Höhenprofil. Zwei Touren sind publiziert, und die Schwierigkeit ist ein Dropdown über die vollen SAC-Skalen, Grade werden also ausgewählt statt getippt.",
+      },
+      sigrid: {
+        title: "Dulces Momentos de Sigrid",
+        tagline: "Vier Seiten, siebzehn Backwaren, kein Warenkorb",
+        description:
+          "Eine spanischsprachige Katalogseite für eine Hobbybäckerin: meine Mutter. Siebzehn Kreationen liegen hinter vier Kategoriefiltern, und die Kontaktseite verlinkt auf Instagram und WhatsApp, statt Bestellungen entgegenzunehmen. Sie verkauft per Nachricht, also hört die Seite dort auf, wo das Gespräch beginnt. Der Katalog steckt in einer einzigen TypeScript-Datei statt in einem CMS: das kostet im Betrieb nichts und bedeutet, dass sie ihn nicht selbst bearbeiten kann.",
+      },
+      qr: {
+        title: "QR",
+        tagline: "QR-Codes gestalten und gleich gegenprüfen",
+        description:
+          "qr.ysz.life erzeugt QR-Codes komplett im Browser: Punkt- und Eckenformen, Farbverläufe, ein Logo in der Mitte und Export als PNG, SVG, JPEG oder WebP. Weil starke Gestaltung genau das ist, woran ein Code beim Scannen scheitert, sitzt oben ein Scan Test, der das fertige Bild mit einem echten Scanner zurückliest und zeigt, was er gelesen hat. Nichts wird hochgeladen; die letzten zehn Codes bleiben im localStorage.",
+      },
+      vault: {
+        title: "Vault",
+        tagline: "Keycloak, FastAPI und ein Realm aus Terraform",
+        description:
+          "Vault ist eine lokale OIDC-Sandbox: Keycloak 26 stellt die Tokens aus, PostgreSQL liegt darunter, FastAPI prüft sie gegen das JWKS des Realms, und ein Next.js-Frontend zeigt rollenbasierte Dashboards für Admin und User. Realm, Client, Rollen und Demo-Benutzer stehen in terraform/main.tf: Die Identitätskonfiguration ist damit eine Datei und kein Zustand der Admin-Konsole. Läuft nur lokal, ein Deployment gibt es nicht.",
+      },
+      fleetmap: {
+        title: "fleetmap",
+        tagline: "Vom Handy im Lieferwagen auf den Büro-Bildschirm",
+        description:
+          "fleetmap ist eine Monitoring-Konsole für eine Lieferflotte: Das Handy jedes Fahrzeugs sendet seine Position, und ein Bildschirm im Büro zeigt jeden Lieferwagen in Bewegung, mit Stopps, ETA und Verspätung. Die Live-Verteilung übernimmt Supabase Realtime: kein Redis, kein eigener WebSocket-Server. Routen liefert eine selbst gehostete OSRM-Instanz auf einem Schweiz-Extrakt. V1 läuft produktiv auf einem einzelnen VPS; die passwortlose Fahreranmeldung ist verifiziert, aber noch in keinem Build der Fahrer-App ausgeliefert.",
+      },
     },
   },
   skills: {

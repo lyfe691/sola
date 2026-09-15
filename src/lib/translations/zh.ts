@@ -366,6 +366,48 @@ export const zh = {
         description:
           "自带 API 密钥，与 Claude、GPT、Gemini、Grok 等顶级 AI 模型在同一平台对话的多模型 AI 平台。基于 Next.js 16、Vercel AI SDK 和 Supabase 构建。",
       },
+      perspectas: {
+        title: "perspectas",
+        tagline: "围绕一个黄点做的咨询公司网站",
+        description:
+          "perspectas gmbh 是苏黎世附近的一家咨询与招聘公司，我用 Next.js 16 和 Sanity 重做了他们的网站。所有文案、图片和联系方式都放在 CMS 里，两位合伙人不用经过我就能发布改动。上线时只迁移了两条 DNS 记录，邮箱完全不受影响。2026 年 9 月 11 日上线，跑在客户自己的主机账户上。",
+      },
+      ura: {
+        title: "Ura",
+        tagline: "离线雪地摩托导航，还分得清许可路线",
+        description:
+          "Ura 是面向芬兰拉普兰的雪地摩托路线导航：一个 iOS 与 Android 应用，加上负责整理数据的网页控制台。每个发布的数据包会把 2595 条路线和附近 3388 个地点存到手机上；判定引擎用 40 到 60 m 的迟滞区间保持结论，路口不会让状态来回跳。代码已经部署，上架仍在等待公司资料。",
+      },
+      montu: {
+        title: "Montu",
+        tagline: "由GPX绘出地图与海拔的登山日志",
+        description:
+          "Montu 是一个瑞士德语的登山路线日志，为自己撰写路线、拍摄照片的客户而做。每条路线是一份 Sanity 文档：上传 GPX 文件后，页面据此绘出 Mapbox 路线和海拔剖面。目前发布了两条路线；难度是一个覆盖完整 SAC 分级的下拉菜单，只能选择而不是手写。",
+      },
+      sigrid: {
+        title: "Dulces Momentos de Sigrid",
+        tagline: "四个页面，十七款烘焙作品，没有购物车",
+        description:
+          "为家庭烘焙师（我母亲）做的西班牙语作品目录站。十七款作品按四个分类筛选，联系页面不接受订单，而是直接链接到 Instagram 和 WhatsApp：她本来就靠消息接单，所以网站在对话开始的地方就停下。整个目录写在一个 TypeScript 文件里而不是 CMS 中，运行不花钱，代价是她无法自己修改。",
+      },
+      qr: {
+        title: "QR",
+        tagline: "定制样式的QR码，当场验证可扫",
+        description:
+          "qr.ysz.life 是一个完全在浏览器里运行的 QR 码生成器：点形与角形、渐变、中心 logo，并可导出 PNG、SVG、JPEG 或 WebP。样式做得越重，码就越容易扫不出来，所以顶部放了 Scan Test，用真正的解码器把导出的图片重新读一遍并显示结果。不上传任何数据，最近十条记录留在 localStorage 里。",
+      },
+      vault: {
+        title: "Vault",
+        tagline: "Keycloak加FastAPI，realm由Terraform定义",
+        description:
+          "Vault 是一套跑在本地的 OIDC 沙箱：Keycloak 26 签发 token，后面接 PostgreSQL，FastAPI 用 realm 的 JWKS 验签，Next.js 前端提供 admin 和 user 两个按角色分开的面板。realm、client、角色和演示用户都写在 terraform/main.tf 里，身份配置因此是一个文件，而不是管理控制台里的某个状态。只在本地运行，没有部署。",
+      },
+      fleetmap: {
+        title: "fleetmap",
+        tagline: "货车GPS实时投送到办公室大屏",
+        description:
+          "fleetmap 是一套配送车队监控控制台：每辆货车的手机上报位置，办公室屏幕实时显示所有车辆的移动、站点、ETA 和延误。实时广播交给 Supabase Realtime，不用 Redis，也没有自建的 WebSocket 服务器。路线来自自托管的 OSRM 实例，基于瑞士地图数据。V1 已在一台 VPS 上投入生产；免密码的司机登录已验证，但尚未随司机端应用发布。",
+      },
     },
   },
   skills: {

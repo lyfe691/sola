@@ -1,0 +1,132 @@
+# A consulting site its owners publish themselves
+
+perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH: two partners, working for small and mid-sized Swiss companies. Their site was a WordPress install on a reseller's server, and before that a TYPO3 site whose URLs Google still listed in September 2026. Dominik Künitzer and I scoped the project with the client; the design, the build, the hosting setup and the handover are mine.
+
+<ProjectImage
+  src="/projects/perspectas/home-desktop.png"
+  alt="perspectas home page: the headline perspectas gmbh – Partner für Personalfragen on an off-white ground, with a yellow dot as the full stop, two buttons and the partners' avatars"
+  caption="The home page at www.perspectas.ch. The headline's full stop is the logo dot."
+  size="large"
+/>
+
+## The constraint that picked the stack
+
+The ask was not a new coat of paint. The partners had a new positioning to express (consulting and recruiting, advisors rather than placement agents), a smaller site to fit it into (private clients, the sparring offer and the blog were all dropped), and one hard requirement: they wanted to change their own text without asking anyone. The old stack never gave them that.
+
+So every word a visitor reads lives in Sanity. Seven document types, five object types, and one settings singleton holding every fixed line on every page along with the Impressum and the Datenschutz. Services, projects, testimonials, the people on Über uns, the contact details: all editable, and publishing is a click.
+
+## One loud colour, one curve
+
+The corporate manual gives five colours. The site spends four of them quietly and one loudly: the yellow of the logo dot, on an off-white ground with the corporate grey as the text colour. No component hard-codes a hex value; the five are custom properties exposed as Tailwind utilities. The headline's full stop is that dot, springing into place once the last word of the h1 has landed.
+
+<CodeBlock
+  code={`export function HeroDot({ delay }: { delay: number }) {
+  return (
+    <motion.span
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: "spring", duration: 0.6, bounce: 0.45, delay }}
+      className="inline-block text-brand-yellow will-change-transform"
+    >
+      .
+    </motion.span>
+  )
+}`}
+  fileName="components/site/home/hero-dot.tsx"
+  lang="tsx"
+/>
+
+It renders inside the last word's box, so it can never wrap onto a line of its own. Type is Roboto, self-hosted as one variable file per style rather than fetched from Google at runtime, because the site runs on the client's own server and I did not want a third party in the first paint. Motion uses one curve and one viewport trigger, 0.6 to 1.1 seconds, and nothing loops.
+
+The Leistungen accordion came from the client verbatim: «Titel sicher sichtbar, Detailtext vielleicht zum aufklappen.» The first item opens by default, so the fold is never a secret.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/perspectas/home-leistungen.png",
+      alt: "The Leistungen accordion: item 01 Nachfolge & Schlüsselpositionen open with its number in yellow and a two-column bullet list, items 02 and 03 collapsed",
+      caption: "Leistungen: the first item is open on arrival.",
+    },
+    {
+      src: "/projects/perspectas/ueber-uns-desktop.png",
+      alt: "The Über uns page: the headline Weil gute Lösungen unterschiedliche Perspektiven brauchen, then Ulrich Kunz's portrait beside his name, role and bio",
+      caption: "Über uns. Both partners get the same two-column block.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Getting a publish onto the page
+
+Every Sanity query names the document types it reads, a webhook revalidates by type, and an hourly floor sits under all of it.
+
+<CodeBlock
+  code={`export const client = createClient({
+  projectId,
+  dataset,
+  apiVersion,
+  useCdn: false,
+  perspective: "published",
+  stega: false,
+})
+// The webhook revalidates by _type, so this list is the single source
+// for both sanityFetch and /api/revalidate.
+export const CACHE_TAGS = [
+  "siteSettings", "service", "project", "testimonial",
+  "clientReference", "teamMember", "partner",
+] as const
+client.fetch<T>(query, params, {
+  cache: "force-cache",
+  next: { tags, revalidate: 3600 },
+})`}
+  fileName="lib/sanity/client.ts"
+  lang="ts"
+/>
+
+For a day after go-live, publishing looked broken. A re-render triggered by the webhook was reading the Sanity CDN's older copy and caching that for another hour, so an edit would appear and then come back stale. Setting `useCdn: false` fixed it: visitors are served from Next's cache either way, and only a regeneration pays for the uncached read. The hourly floor is the backstop. If the webhook breaks, the site is an hour behind rather than frozen at the last build.
+
+By the client's review on 7 September the dataset was theirs, which made the seed script the wrong tool: it uses `createOrReplace` and would have silently discarded their own edits. The review went in as a list of field patches instead, printed as a dry run first, each one pinned to the revision it was written against, applied in a single transaction. 22 documents.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/perspectas/projekte-desktop.png",
+      alt: "The Projekte page: the headline Aus unserer aktuellen Beratungs- & Projektarbeit above two project cards, each with a photo, a month badge and a title",
+      caption: "Projekte. The client adds these themselves.",
+    },
+    {
+      src: "/projects/perspectas/testimonials-desktop.png",
+      alt: "The Testimonials page: the headline Warum man auf uns zählen kann? above three quote cards, each with a client logo and an attributed quote",
+      caption: "Testimonials, rebuilt on the site's own tokens.",
+    },
+  ]}
+  columns={2}
+/>
+
+## What I built and then deleted
+
+A multi-stage Dockerfile, a compose file and a CI job that built the image existed from the first day, because the client's previous provider offered Docker or Node. On 9 September the hosting moved to Node.js hosting, the image had nowhere to run, and all of it went, along with the `output: "standalone"` setting that existed only for it. It is in the git history if that route comes back.
+
+Two other things cost more time than they should have. The client's job board ships as a web component that injects global CSS, jQuery and fonts; loaded into the page it broke the layout, so it now runs in a sandboxed iframe that reports its own height by `postMessage` and has the page's colour tokens handed in. And branching rendered markup on `useReducedMotion()` causes a hydration mismatch, because it returns false during SSR and true on a reduced-motion visitor's first client render. The fix is one tree, with only values switched after mount.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/perspectas/home-dark.png",
+      alt: "The same hero in dark mode: near-black ground, off-white headline, the accent dot still yellow",
+      caption: "Dark follows the system scheme, with no click.",
+    },
+    {
+      src: "/projects/perspectas/home-mobile.png",
+      alt: "The hero at 390px: the headline wraps to two lines, the nav is a burger icon, the buttons sit side by side above the partner avatars",
+      caption: "390px. The nav collapses, the headline rewraps.",
+    },
+  ]}
+  columns={2}
+/>
+
+## What handover means here
+
+The Infomaniak account was bought in perspectas' name, with me as an invited user, and their access outlives mine: it is theirs to revoke. At go-live only the two A records changed: MX, SPF, DMARC and the verification records stayed byte for byte, because the old package still carries the partners' mailboxes, and the old site stayed up as the rollback. Seventeen redirect rules catch the TYPO3 and WordPress URLs Google had indexed.
+
+None of that last paragraph is visible on the site. It is the part that decides whether a client stays stuck with their developer, and it has to be arranged before the handover rather than renegotiated after it.

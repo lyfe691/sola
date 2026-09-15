@@ -382,6 +382,48 @@ export const es = {
         description:
           "Una plataforma de IA multi‑modelo donde traes tus propias claves API y hablas con los mejores modelos — Claude, GPT, Gemini, Grok y más — todo en un solo lugar. Construido con Next.js 16, el SDK de IA de Vercel y Supabase.",
       },
+      perspectas: {
+        title: "perspectas",
+        tagline: "Sitio de consultoría alrededor de un punto amarillo",
+        description:
+          "perspectas gmbh es una empresa de consultoría y selección de personal cerca de Zúrich; rehíce su sitio web con Next.js 16 y Sanity. Cada texto, imagen y dato de contacto vive en el CMS, así que los dos socios publican cambios sin mí. En la puesta en marcha solo se movieron dos registros DNS, y sus buzones ni se enteraron. En línea desde el 11 de septiembre de 2026, en la cuenta de hosting del propio cliente.",
+      },
+      ura: {
+        title: "Ura",
+        tagline: "Motonieve en Laponia: sin conexión y con permisos",
+        description:
+          "Ura es navegación de rutas de motonieve para la Laponia finlandesa: una app para iOS y Android más la consola web que mantiene sus datos. Cada paquete publicado deja 2595 rutas y 3388 lugares cercanos en el teléfono, y el motor de ruta mantiene su veredicto con una banda de histéresis de 40 a 60 m para que un cruce no lo haga parpadear. El código está desplegado; la publicación en las tiendas espera papeleo de la empresa.",
+      },
+      montu: {
+        title: "Montu",
+        tagline: "Diario de montaña suizo, trazado desde sus archivos GPX",
+        description:
+          "Montu es un diario de travesías de montaña en alemán suizo, hecho para un cliente que escribe las rutas y toma las fotos. Cada travesía es un documento de Sanity: al subir un archivo GPX, la página dibuja la ruta en Mapbox y el perfil de altitud. Hay dos travesías publicadas, y la dificultad es un desplegable con las escalas SAC completas, así que los grados se eligen en vez de escribirse.",
+      },
+      sigrid: {
+        title: "Dulces Momentos de Sigrid",
+        tagline: "Cuatro páginas, diecisiete creaciones, sin carrito",
+        description:
+          "Un catálogo web en español para una repostera casera: mi madre. Diecisiete creaciones se filtran por cuatro categorías, y la página de contacto enlaza a Instagram y WhatsApp en lugar de aceptar pedidos: ella vende por mensaje, así que el sitio termina donde empieza la conversación. El catálogo vive en un único archivo TypeScript en vez de un CMS, lo que no cuesta nada mantener y significa que ella no puede editarlo sola.",
+      },
+      qr: {
+        title: "QR",
+        tagline: "QR con estilo y prueba de escaneo",
+        description:
+          "qr.ysz.life genera códigos QR enteramente en el navegador: estilos de punto y de esquina, degradados, un logo central y exportación a PNG, SVG, JPEG o WebP. El exceso de estilo es justo lo que impide que un código se lea, así que la cabecera incluye un Scan Test que decodifica la imagen final con un escáner real y muestra lo que leyó. No se sube nada; los últimos diez códigos quedan en localStorage.",
+      },
+      vault: {
+        title: "Vault",
+        tagline: "Keycloak, FastAPI y un realm definido en Terraform",
+        description:
+          "Vault es un entorno OIDC local: Keycloak 26 emite los tokens, PostgreSQL está debajo, FastAPI los verifica contra el JWKS del realm y un frontend en Next.js muestra paneles restringidos por rol para admin y user. El realm, el cliente, los roles y el usuario de demo están declarados en terraform/main.tf, así que la configuración de identidad es un archivo y no un estado de la consola de administración. Solo corre en local: no hay despliegue.",
+      },
+      fleetmap: {
+        title: "fleetmap",
+        tagline: "GPS de cada furgoneta en la pantalla",
+        description:
+          "fleetmap es una consola de monitoreo para una flota de reparto: el móvil de cada furgoneta envía su posición y una pantalla en la oficina muestra todas en movimiento, con sus paradas, ETA y retraso. La difusión en vivo la hace Supabase Realtime: sin Redis ni servidor WebSocket propio. Las rutas salen de una instancia de OSRM autoalojada sobre un extracto de Suiza. La V1 está en producción en un único VPS; el inicio de sesión sin contraseña para conductores está verificado, pero aún no se ha publicado en la app.",
+      },
     },
   },
   skills: {

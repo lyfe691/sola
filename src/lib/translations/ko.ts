@@ -373,6 +373,48 @@ export const ko = {
         description:
           "자신의 API 키를 가져와 Claude, GPT, Gemini, Grok 등 최고의 모델과 모두 한 곳에서 대화할 수 있는 다중 모델 AI 플랫폼입니다. Next.js 16, Vercel AI SDK 및 Supabase로 구축되었습니다.",
       },
+      perspectas: {
+        title: "perspectas",
+        tagline: "노란 점 하나를 중심으로 만든 컨설팅 사이트",
+        description:
+          "perspectas gmbh는 취리히 근교의 컨설팅·채용 회사이고, 그 웹사이트를 Next.js 16과 Sanity로 다시 만들었습니다. 모든 문구와 이미지, 연락처가 CMS에 있어서 두 파트너가 저를 거치지 않고 직접 게시합니다. 오픈 때 옮긴 DNS 레코드는 두 개뿐이라 메일함은 아무 영향도 받지 않았습니다. 2026년 9월 11일부터 클라이언트 본인 명의의 호스팅 계정에서 운영 중입니다.",
+      },
+      ura: {
+        title: "Ura",
+        tagline: "허가 여부까지 알려주는 오프라인 스노모빌 내비",
+        description:
+          "Ura는 핀란드 라플란드의 스노모빌 경로 내비게이션입니다. iOS와 Android 앱, 그리고 데이터를 관리하는 웹 콘솔로 이루어져 있으며, 배포된 번들은 경로 2595개와 주변 장소 3388곳을 단말에 저장합니다. 주행 판정은 40~60 m 히스테리시스 구간으로 유지되어 갈림길에서 표시가 깜빡이지 않습니다. 코드는 배포됐지만 스토어 출시는 회사 서류를 기다리는 중입니다.",
+      },
+      montu: {
+        title: "Montu",
+        tagline: "GPX로 지도와 고도를 그리는 산행 기록",
+        description:
+          "Montu는 스위스 독일어로 쓰인 산행 기록 사이트로, 직접 투어를 쓰고 사진을 찍는 클라이언트를 위해 만들었습니다. 각 투어는 Sanity 문서 하나이며, GPX 파일을 올리면 페이지가 Mapbox 경로와 고도 프로필을 그려냅니다. 현재 두 개의 투어가 공개돼 있고, 난이도는 SAC 전체 등급을 담은 드롭다운이라 직접 입력하지 않고 고릅니다.",
+      },
+      sigrid: {
+        title: "Dulces Momentos de Sigrid",
+        tagline: "네 페이지, 열일곱 가지, 장바구니 없음",
+        description:
+          "홈베이커인 어머니의 작업을 보여주는 스페인어 카탈로그 사이트입니다. 열일곱 가지 제품을 네 개의 카테고리로 걸러 볼 수 있고, 연락 페이지는 주문을 받는 대신 Instagram과 WhatsApp으로 연결합니다. 어머니는 원래 메시지로 주문을 받기 때문에 사이트는 대화가 시작되는 지점에서 멈춥니다. 카탈로그는 CMS 없이 TypeScript 파일 하나에 들어 있어 운영비가 들지 않지만, 어머니가 직접 수정할 수는 없습니다.",
+      },
+      qr: {
+        title: "QR",
+        tagline: "꾸민 QR 코드를 그 자리에서 스캔 검증",
+        description:
+          "qr.ysz.life는 전부 브라우저 안에서 동작하는 QR 코드 생성기입니다. 점과 모서리 모양, 그라디언트, 가운데 로고를 정하고 PNG, SVG, JPEG, WebP로 내보낼 수 있습니다. 코드가 읽히지 않는 원인은 대개 이런 꾸밈이라, 헤더의 Scan Test가 완성된 이미지를 실제 스캐너로 다시 읽어 결과를 보여 줍니다. 업로드는 전혀 없고, 최근 10개는 localStorage에 남습니다.",
+      },
+      vault: {
+        title: "Vault",
+        tagline: "Keycloak과 FastAPI, realm은 Terraform으로 정의",
+        description:
+          "Vault는 로컬에서 돌리는 OIDC 샌드박스입니다. Keycloak 26이 토큰을 발급하고 그 뒤에 PostgreSQL이 있으며, FastAPI가 realm의 JWKS로 토큰을 검증하고, Next.js 프런트엔드가 admin과 user 역할별 대시보드를 보여줍니다. realm, 클라이언트, 역할, 데모 사용자는 terraform/main.tf에 선언되어 있어 ID 설정이 관리 콘솔의 상태가 아니라 파일입니다. 로컬 전용이라 배포본은 없습니다.",
+      },
+      fleetmap: {
+        title: "fleetmap",
+        tagline: "차량 GPS를 사무실 화면으로 실시간 전송",
+        description:
+          "fleetmap은 배송 차량을 위한 모니터링 콘솔입니다. 각 차량의 휴대폰이 위치를 전송하면 사무실 화면에 모든 차량의 이동, 정차지, ETA, 지연이 표시됩니다. 실시간 전파는 Supabase Realtime이 담당하므로 Redis도, 직접 만든 WebSocket 서버도 없습니다. 경로는 스위스 지도 데이터로 직접 호스팅한 OSRM에서 가져옵니다. V1은 VPS 한 대에서 운영 중이며, 비밀번호 없는 기사 로그인은 검증을 마쳤지만 아직 기사 앱 빌드에는 반영되지 않았습니다.",
+      },
     },
   },
   skills: {

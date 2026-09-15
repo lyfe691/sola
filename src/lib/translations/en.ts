@@ -376,6 +376,48 @@ export const en = {
         description:
           "A multi-model AI platform that lets you bring your own API keys and talk to the best models — Claude, GPT, Gemini, Grok, and more — all in one place. Built with Next.js 16, the Vercel AI SDK, and Supabase.",
       },
+      perspectas: {
+        title: "perspectas",
+        tagline: "A consulting site built around one yellow dot",
+        description:
+          "perspectas gmbh is a consulting and recruiting firm near Zürich; I rebuilt their site on Next.js 16 and Sanity. Every text, image and contact detail lives in the CMS, so the two partners publish changes without me. At go-live only two DNS records moved, so their mailboxes never noticed. Live since 11 September 2026, on the client's own hosting account.",
+      },
+      ura: {
+        title: "Ura",
+        tagline: "Snowmobile navigation for Lapland, offline and permit-aware",
+        description:
+          "Ura is snowmobile route navigation for Finnish Lapland: an iOS and Android app plus the web console that curates its data. Each published bundle puts 2,595 routes and 3,388 nearby places on the phone, and the on-route engine holds its verdict through a 40–60 m hysteresis band so a junction doesn't make it flicker. The code is deployed; the store release is waiting on company paperwork.",
+      },
+      montu: {
+        title: "Montu",
+        tagline: "Swiss mountain journal, mapped from its GPX files",
+        description:
+          "Montu is a mountain-tour journal in Swiss German, built for a client who writes the tours and takes the photos. Each tour is one Sanity document: upload a GPX file and the page draws the Mapbox route and the elevation profile from it. Two tours are published, and the difficulty field is a dropdown covering the full SAC scales, so grades are picked rather than typed.",
+      },
+      sigrid: {
+        title: "Dulces Momentos de Sigrid",
+        tagline: "Four pages, seventeen bakes, no checkout",
+        description:
+          "A Spanish-language catalogue site for a home baker, my mom. Seventeen creations sit behind four category filters, and the contact page links out to Instagram and WhatsApp instead of taking orders: she sells by message, so the site stops where the conversation starts. The catalogue lives in one TypeScript file instead of a CMS, which costs nothing to run and means she cannot edit it herself.",
+      },
+      qr: {
+        title: "QR",
+        tagline: "Styled QR codes, with a decoder attached",
+        description:
+          "qr.ysz.life is a QR code generator that runs entirely in the browser: dot and corner styles, gradients, a center logo, and export to PNG, SVG, JPEG or WebP. Heavy styling is what makes a code fail to scan, so the header carries a Scan Test that decodes your finished image with a real scanner and shows what it read back. Nothing is uploaded; the last ten codes stay in localStorage.",
+      },
+      vault: {
+        title: "Vault",
+        tagline: "Keycloak, FastAPI and a realm defined in Terraform",
+        description:
+          "Vault is a local OIDC sandbox: Keycloak 26 issues the tokens, PostgreSQL sits behind it, FastAPI verifies them against the realm's JWKS, and a Next.js frontend shows role-gated admin and user dashboards. The realm, client, roles and demo user are declared in terraform/main.tf, so the identity setup is a file rather than a state of the admin console. It runs locally only: there is no deployment.",
+      },
+      fleetmap: {
+        title: "fleetmap",
+        tagline: "Van phones stream GPS to an office TV",
+        description:
+          "fleetmap is a monitoring console for a delivery fleet: each van's phone posts its position, and an office screen shows every van moving with its stops, ETA and lateness. Live fan-out is Supabase Realtime's job: no Redis, no WebSocket server of my own. Routes come from an OSRM instance I self-host on a Switzerland extract. V1 runs in production on one VPS; the passwordless driver sign-in is verified but not yet shipped in the rider app.",
+      },
     },
   },
   skills: {
