@@ -27,6 +27,7 @@
 ## File map
 
 Created:
+
 - `src/components/painted-cover/presets.ts` — preset table, `ProjectArt`, `resolveArt`, `seedToAngle`, `baseGradient`
 - `src/components/painted-cover/presets.test.ts`
 - `src/components/painted-cover/mount-queue.ts` — one canvas creation per animation frame, nearest first
@@ -37,6 +38,7 @@ Created:
 - `src/config/projects.test.ts`
 
 Modified:
+
 - `src/config/projects.ts` — `art` field, removals
 - `src/lib/translations/{en,de,es,ja,ko,zh}.ts` — `tagline` per project, three keys removed
 - `scripts/find-unused-translations.ts` — mark `tagline` used
@@ -45,6 +47,7 @@ Modified:
 - `src/components/ProjectDeepDive.tsx`, `src/pages/projects/ProjectDeepDiveRenderer.tsx`, `src/config/project-deep-dive.ts` — hero on `PaintedCover`
 
 Deleted:
+
 - `src/components/backgrounds/Silk.tsx`
 - 12 files under `public/projects/` (listed in Task 9)
 
@@ -53,10 +56,12 @@ Deleted:
 ### Task 1: Presets and `resolveArt`
 
 **Files:**
+
 - Create: `src/components/painted-cover/presets.ts`
 - Test: `src/components/painted-cover/presets.test.ts`
 
 **Interfaces:**
+
 - Produces: `ART_PRESETS`, `ArtPreset`, `ProjectArt { preset: ArtPreset; seed?: number }`, `PaintedPreset`, `PRESETS: Record<ArtPreset, PaintedPreset>`, `ResolvedArt`, `seedToAngle(n: number): number`, `resolveArt(art: ProjectArt): ResolvedArt`, `baseGradient(preset: PaintedPreset): string`.
 - Note: `ProjectArt` is defined here (not in config) so `src/config/projects.ts` can import the type without a circular import.
 
@@ -274,10 +279,12 @@ No commit yet: Tasks 1–5 land together as rollout commit 1.
 ### Task 2: Mount queue
 
 **Files:**
+
 - Create: `src/components/painted-cover/mount-queue.ts`
 - Test: `src/components/painted-cover/mount-queue.test.ts`
 
 **Interfaces:**
+
 - Produces: `createMountQueue(schedule?: (cb: () => void) => void)` returning `{ enqueue(job: MountJob): () => void; size: number }`, `MountJob { priority: () => number; run: () => void }`, and the shared `mountQueue` singleton (scheduled on `requestAnimationFrame`).
 - Consumed by `PaintedCover` (Task 5): `mountQueue.enqueue({ priority, run })` → cancel function.
 
@@ -339,7 +346,10 @@ describe("createMountQueue", () => {
     const s = manualScheduler();
     const queue = createMountQueue(s.schedule);
     const ran: string[] = [];
-    const cancel = queue.enqueue({ priority: () => 0, run: () => ran.push("a") });
+    const cancel = queue.enqueue({
+      priority: () => 0,
+      run: () => ran.push("a"),
+    });
     queue.enqueue({ priority: () => 1, run: () => ran.push("b") });
     cancel();
     s.tick();
@@ -449,9 +459,11 @@ Expected: clean.
 ### Task 3: Near-viewport hook
 
 **Files:**
+
 - Create: `src/components/painted-cover/use-near-viewport.ts`
 
 **Interfaces:**
+
 - Produces: `useNearViewport(ref: RefObject<Element | null>, margin?: string): { near: boolean; visible: boolean }`.
 - `near` = intersects the viewport expanded by `margin` (default `"50% 0px"`, i.e. half a viewport above and below). `visible` = intersects the viewport itself. Neither latches; both track scroll.
 
@@ -516,9 +528,11 @@ Expected: clean.
 ### Task 4: Shader module
 
 **Files:**
+
 - Create: `src/components/painted-cover/shader.ts`
 
 **Interfaces:**
+
 - Produces: `VERTEX: string`, `STEPS = { card: 8, hero: 12 } as const`, `fragmentFor(steps: number): string`.
 - Uniform contract the fragment must declare (Task 5 sets exactly these): `uTime` (float, seconds), `uSeed` (float, radians), `uAspect` (float), `uResolution` (vec2, drawing-buffer px), `uPalette` (vec3[4]), `uHorizon`, `uSwirl`, `uStroke`, `uDrift` (floats). `STEPS` is a `#define` prepended by `fragmentFor`, so the body must not declare it.
 
@@ -583,9 +597,11 @@ Expected: clean.
 ### Task 5: `PaintedCover` and `CoverCaption`
 
 **Files:**
+
 - Create: `src/components/painted-cover/PaintedCover.tsx`
 
 **Interfaces:**
+
 - Consumes: `resolveArt`, `baseGradient`, `ProjectArt`, `ResolvedArt` (Task 1); `mountQueue` (Task 2); `useNearViewport` (Task 3); `VERTEX`, `STEPS`, `fragmentFor` (Task 4).
 - Produces: `PaintedCover(props: PaintedCoverProps)` and `CoverCaption({ title, subtitle, as? })`, both named exports.
 
@@ -636,13 +652,7 @@ export interface CoverCaptionProps {
  * animation frame, and are released with WEBGL_lose_context on unmount.
  */
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
 import { cn } from "@/lib/utils";
 import { mountQueue } from "./mount-queue";
@@ -983,10 +993,12 @@ Nothing consumes it yet."
 ### Task 6: Taglines in six locales, three keys removed
 
 **Files:**
+
 - Modify: `src/lib/translations/en.ts` (projects block, lines ~262–364), `de.ts`, `es.ts`, `ja.ts`, `ko.ts`, `zh.ts` (same block in each)
 - Modify: `scripts/find-unused-translations.ts:164-167`
 
 **Interfaces:**
+
 - Produces: `Translation["projects"]["list"][key].tagline: string` for all 16 keys; removes `projects.other`, `projects.otherInfo`, `projects.satoriAttribution`.
 - Consumed by Tasks 7–9 (`t.projects.list[key].tagline`).
 
@@ -1008,6 +1020,7 @@ In each of the six files delete the `other`, `otherInfo`, and `satoriAttribution
 Insert `tagline` between `title` and `description` in each of the 16 entries. Exact strings per locale:
 
 en:
+
 ```
 codeExtractor  "Extract code with one click"
 applicare      "Manage your job applications with ease"
@@ -1028,6 +1041,7 @@ luma           "Bring your own keys, talk to any model"
 ```
 
 de:
+
 ```
 codeExtractor  "Code mit einem Klick extrahieren"
 applicare      "Bewerbungen mühelos im Griff"
@@ -1048,6 +1062,7 @@ luma           "Eigene Keys, jedes Modell"
 ```
 
 es:
+
 ```
 codeExtractor  "Extrae código con un clic"
 applicare      "Gestiona tus candidaturas sin esfuerzo"
@@ -1068,6 +1083,7 @@ luma           "Trae tus claves, habla con cualquier modelo"
 ```
 
 ja:
+
 ```
 codeExtractor  "ワンクリックでコードを抽出"
 applicare      "応募管理をもっと手軽に"
@@ -1088,6 +1104,7 @@ luma           "自分のキーで、どのモデルとも"
 ```
 
 ko:
+
 ```
 codeExtractor  "클릭 한 번으로 코드 추출"
 applicare      "지원 현황을 손쉽게 관리"
@@ -1108,6 +1125,7 @@ luma           "내 키로 어떤 모델과도 대화"
 ```
 
 zh (Simplified, no spaces around Latin words, matching the existing titles):
+
 ```
 codeExtractor  "一键提取网站代码"
 applicare      "轻松管理求职申请"
@@ -1132,11 +1150,11 @@ luma           "自带密钥，畅聊任意模型"
 In `scripts/find-unused-translations.ts` the loop over `PROJECTS` becomes:
 
 ```ts
-  for (const project of PROJECTS) {
-    addPath(used, `projects.list.${project.i18nKey}.title`);
-    addPath(used, `projects.list.${project.i18nKey}.tagline`);
-    addPath(used, `projects.list.${project.i18nKey}.description`);
-  }
+for (const project of PROJECTS) {
+  addPath(used, `projects.list.${project.i18nKey}.title`);
+  addPath(used, `projects.list.${project.i18nKey}.tagline`);
+  addPath(used, `projects.list.${project.i18nKey}.description`);
+}
 ```
 
 - [ ] **Step 4: Typecheck — this is the guard**
@@ -1154,10 +1172,12 @@ Expected: clean.
 ### Task 7: Config gains `art`, loses `image`/`featured`/`vercelSatori`
 
 **Files:**
+
 - Modify: `src/config/projects.ts`
 - Test: `src/config/projects.test.ts`
 
 **Interfaces:**
+
 - Consumes: `ProjectArt` from `src/components/painted-cover/presets` (Task 1).
 - Produces: `ProjectMeta.art: ProjectArt` (required); `ProjectMeta.image`, `.featured`, `.vercelSatori` no longer exist. `deepDive.silk`, `deepDive.tagline`, and `ProjectSilk` STAY in this task (the hero still compiles against them until Task 9).
 
@@ -1215,8 +1235,8 @@ export type { ProjectArt };
 and in `ProjectMeta` delete `image?: string;`, `featured: boolean;`, `vercelSatori?: boolean;` and add:
 
 ```ts
-  /** Painted cover art: a named preset plus a seed that rotates its flow field. */
-  art: ProjectArt;
+/** Painted cover art: a named preset plus a seed that rotates its flow field. */
+art: ProjectArt;
 ```
 
 Leave `ProjectSilk`, `ProjectDeepDiveMeta.silk`, and `ProjectDeepDiveMeta.tagline` untouched in this task.
@@ -1259,11 +1279,13 @@ Expected: clean. Typecheck still fails only in `src/pages/Projects.tsx` (next ta
 ### Task 8: Projects page on one grid with painted cards
 
 **Files:**
+
 - Modify: `src/pages/Projects.tsx`
 - Modify: `src/components/ScrollReveal.tsx:14,38,75` (remove the `feature` variant)
 - Modify: `src/utils/transitions.ts` (remove `D_FEATURE`, `scrollFeatureVariants`; rewrite the `staggerDelay` comment)
 
 **Interfaces:**
+
 - Consumes: `PaintedCover`, `CoverCaption` (Task 5); `t.projects.list[key].tagline` (Task 6); `project.art` (Task 7).
 - Produces: nothing new. `ProjectGrid` becomes `({ projects, t, lead = 0, className })`.
 
@@ -1438,29 +1460,25 @@ const ProjectGrid = ({
 In `Projects`, the sorted memo returns the single list:
 
 ```tsx
-  const projects = useMemo(
-    () =>
-      sortProjects(
-        localizeProjects(t, language),
-        sortBy,
-        INTL_LOCALE[language],
-      ),
-    [t, language, sortBy],
-  );
+const projects = useMemo(
+  () =>
+    sortProjects(localizeProjects(t, language), sortBy, INTL_LOCALE[language]),
+  [t, language, sortBy],
+);
 ```
 
 and everything between the header `</ScrollReveal>` and the "View All Projects" block becomes:
 
 ```tsx
-      <AnimatePresence mode="wait">
-        <ProjectGrid
-          key={sortBy}
-          projects={projects}
-          t={t}
-          lead={entering ? HEADER_LEAD : 0}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8"
-        />
-      </AnimatePresence>
+<AnimatePresence mode="wait">
+  <ProjectGrid
+    key={sortBy}
+    projects={projects}
+    t={t}
+    lead={entering ? HEADER_LEAD : 0}
+    className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8"
+  />
+</AnimatePresence>
 ```
 
 Remove the now-unused imports (`InformationCircleIcon`, `Tooltip*`, `Skeleton`, `cn`) — eslint will list any left over.
@@ -1487,6 +1505,7 @@ tagline. Removes the Satori badge and the other-projects copy."
 ### Task 9: Deep-dive hero on `PaintedCover`, Silk removed
 
 **Files:**
+
 - Modify: `src/config/projects.ts` (remove `ProjectSilk`, `deepDive.silk`, `deepDive.tagline` from the type and all 9 entries)
 - Modify: `src/config/project-deep-dive.ts`
 - Modify: `src/components/ProjectDeepDive.tsx`
@@ -1494,6 +1513,7 @@ tagline. Removes the Satori badge and the other-projects copy."
 - Delete: `src/components/backgrounds/Silk.tsx`
 
 **Interfaces:**
+
 - Consumes: `PaintedCover` (Task 5), `ProjectMeta.art` (Task 7), `tagline` (Task 6).
 - Produces: `ProjectPageConfig.art: ProjectArt` (no `silk`, no `tagline`); `ProjectDeepDiveProps { title; subtitle; description; art; sectionNav?; children? }`.
 
@@ -1679,6 +1699,7 @@ tagline. The per-project silk config and the Silk component are gone."
 ### Task 10: Assets and sign-off
 
 **Files:**
+
 - Delete: `public/projects/applicare.jpg`, `applicare.svg`, `chatapp.svg`, `kinoa.png`, `luma.png`, `osint-website.svg`, `self.png`, `sola.png`, `taco.png`, `thoughts.svg`, `website-code-extractor.svg`, `website_code_extractor.webp`
 
 - [ ] **Step 1: Confirm nothing references them**
@@ -1704,8 +1725,9 @@ Replaced by the painted covers. The magi hero stays for its article."
 - [ ] **Step 4: Runtime checks in Chrome (allowed for this project)**
 
 With `bun run dev` running, on `/projects`:
+
 - Count canvases while scrolling the whole list at 1280×720 and at 390×844: `document.querySelectorAll('canvas').length` never exceeds 7 (six covers plus the page background).
 - Console has no errors; sort change mid-scroll dissolves and re-cascades without a hitch.
 - One deep dive (`/projects/sola`): the hero fades from gradient to art, the title folds in after ~0.4 s, the subtitle follows, the art resumes drifting.
 - Light, dark, and cyber themes: captions readable on every preset.
-Push when green: `git push origin main`.
+  Push when green: `git push origin main`.

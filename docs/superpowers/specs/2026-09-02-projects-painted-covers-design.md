@@ -30,7 +30,7 @@ system serves both, and retire Silk and the static image assets.
 - Fallback, only if the shader does not reach the bar (see §9): clean
   animated CSS gradients behind the same component API, in the spirit of
   the reactbits gradient carousel (`npx shadcn@latest add
-  @reactbits-starter/gradient-carousel-tw` as a reference, not a
+@reactbits-starter/gradient-carousel-tw` as a reference, not a
   dependency to adopt wholesale).
 
 ## Non-goals
@@ -80,7 +80,8 @@ A small hand-tuned library named after paintings. Each preset is data
 only:
 
 ```ts
-export type ArtPreset = "starry" | "wheat" | "irises" | "almond" | "cafe" | "cypress";
+export type ArtPreset =
+  "starry" | "wheat" | "irises" | "almond" | "cafe" | "cypress";
 
 export interface PaintedPreset {
   /** 4 stops, dark to light; stop 0 is the base color painted before WebGL. */
@@ -159,7 +160,11 @@ interface PaintedCoverProps {
 }
 
 /** Title + tagline as real DOM text. `as` picks the heading level. */
-interface CoverCaptionProps { title: string; subtitle: string; as?: "h2" | "h3" }
+interface CoverCaptionProps {
+  title: string;
+  subtitle: string;
+  as?: "h2" | "h3";
+}
 ```
 
 `CoverCaption` renders white text (title white, subtitle white/80) and
@@ -221,7 +226,7 @@ curves; scrim and caption stay static.
 - **Resize**: a `ResizeObserver` on the root reads `offsetWidth/Height`
   (not `getBoundingClientRect`, which the route transition corrupts;
   Silk documents the trap). Each callback calls `renderer.setSize(
-  Math.round(w * dpr), Math.round(h * dpr))`, resets the canvas style to
+Math.round(w * dpr), Math.round(h * dpr))`, resets the canvas style to
   `width:100%;height:100%` (ogl writes pixel sizes), and renders one
   frame unconditionally, even when paused or hidden, because `setSize`
   clears the buffer to black. The same one-frame render runs on
@@ -323,7 +328,7 @@ body.
 `src/components/ProjectDeepDive.tsx` and the renderer:
 
 - `ProjectDeepDiveProps` becomes `{ title; subtitle: string; description:
-  string; art: ProjectArt; ... }` with `silk` removed. `subtitle` (the
+string; art: ProjectArt; ... }` with `silk` removed. `subtitle` (the
   localized tagline) is what `DeepDiveHero` receives for its second
   FoldText; `description` (the localized card description) feeds only
   `<meta name="description">`. The renderer passes
@@ -361,9 +366,9 @@ body.
 - `scripts/find-unused-translations.ts` marks `tagline` as used alongside
   `title` and `description`.
 - Deleted assets (12 files, ~1.2 MB): `public/projects/{applicare.jpg,
-  applicare.svg, chatapp.svg, kinoa.png, luma.png, osint-website.svg,
-  self.png, sola.png, taco.png, thoughts.svg, website-code-extractor.svg,
-  website_code_extractor.webp}`. `public/projects/magi/hero.png` stays
+applicare.svg, chatapp.svg, kinoa.png, luma.png, osint-website.svg,
+self.png, sola.png, taco.png, thoughts.svg, website-code-extractor.svg,
+website_code_extractor.webp}`. `public/projects/magi/hero.png` stays
   because `src/content/projects/magi.mdx` embeds it. The `<slug>/`
   screenshot folders stay.
 
