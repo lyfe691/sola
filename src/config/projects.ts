@@ -31,6 +31,9 @@ export interface ProjectMeta {
   /** The repository exists but is private: the UI shows a disabled source
    *  button with a tooltip instead of a link that would 404. */
   sourcePrivate?: boolean;
+  /** The live app exists but is not public (it runs inside a client's
+   *  company): a disabled visit button with a tooltip instead of a link. */
+  linkPrivate?: boolean;
   technologies: string[];
   date: ProjectDate;
   priority: number;
@@ -396,7 +399,7 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "ura",
     i18nKey: "ura",
-    link: "https://ura-landing.vercel.app",
+    link: "https://ura-app.com",
     technologies: [
       "TypeScript",
       "React",
@@ -517,7 +520,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "fleetmap",
     i18nKey: "fleetmap",
-    github: "https://github.com/lyfe691/fleetmap",
     technologies: [
       "Next.js App Router",
       "TypeScript",
@@ -532,6 +534,8 @@ export const PROJECTS: ProjectMeta[] = [
     priority: 3,
     art: { preset: "almond", seed: 2 },
     kind: "commercial",
+    sourcePrivate: true,
+    linkPrivate: true,
     slug: "fleetmap",
     deepDive: {
       overview:

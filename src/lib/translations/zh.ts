@@ -125,6 +125,8 @@ export const zh = {
     sourceCode: "源代码",
     sourcePrivate: "源代码未公开。",
     sourcePrivateClient: "这是为客户开发的项目，源代码未公开。",
+    linkPrivate: "线上应用未公开。",
+    linkPrivateClient: "该应用在客户公司内部使用，因此线上版本未公开。",
     demo: "演示",
     moreProjects: "更多项目",
     onThisPage: "本页内容",

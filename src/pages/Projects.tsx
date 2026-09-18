@@ -43,7 +43,7 @@ import {
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { SegmentedControl } from "@/components/ui/custom/segmented-control";
 import ScrollReveal from "@/components/ScrollReveal";
-import { PrivateSourceButton } from "@/components/private-source-button";
+import { PrivateLinkButton } from "@/components/private-link-button";
 import { useGridSwap, type GridSwap } from "@/hooks/use-grid-swap";
 import {
   gridCellVariants,
@@ -144,7 +144,8 @@ const ProjectActions = ({
     !project.slug &&
     !project.github &&
     !project.link &&
-    !project.sourcePrivate
+    !project.sourcePrivate &&
+    !project.linkPrivate
   )
     return null;
 
@@ -192,12 +193,40 @@ const ProjectActions = ({
               </Button>
             )}
             {!project.github && project.sourcePrivate && (
-              <PrivateSourceButton
+              <PrivateLinkButton
                 label={t.projects.viewGithub}
                 reason={
                   project.kind === "commercial"
                     ? t.common.sourcePrivateClient
                     : t.common.sourcePrivate
+                }
+                icon={
+                  <HugeiconsIcon
+                    icon={Github01Icon}
+                    strokeWidth={2}
+                    className="size-4"
+                    aria-hidden="true"
+                  />
+                }
+                variant="default"
+                className="flex-1"
+              />
+            )}
+            {!project.link && project.linkPrivate && (
+              <PrivateLinkButton
+                label={t.projects.visitProject}
+                reason={
+                  project.kind === "commercial"
+                    ? t.common.linkPrivateClient
+                    : t.common.linkPrivate
+                }
+                icon={
+                  <HugeiconsIcon
+                    icon={ArrowUpRight01Icon}
+                    strokeWidth={2}
+                    className="size-4"
+                    aria-hidden="true"
+                  />
                 }
                 variant="default"
                 className="flex-1"

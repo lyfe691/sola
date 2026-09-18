@@ -132,6 +132,9 @@ export const ko = {
     sourcePrivate: "소스 코드는 비공개입니다.",
     sourcePrivateClient:
       "클라이언트를 위해 제작한 프로젝트라 소스 코드는 비공개입니다.",
+    linkPrivate: "라이브 앱은 비공개입니다.",
+    linkPrivateClient:
+      "클라이언트 회사 내부에서 사용되기 때문에 라이브 앱은 비공개입니다.",
     demo: "Demo",
     moreProjects: "더 많은 프로젝트",
     onThisPage: "목차",

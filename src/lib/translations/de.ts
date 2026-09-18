@@ -133,6 +133,9 @@ export const de = {
     sourcePrivate: "Der Quellcode ist privat.",
     sourcePrivateClient:
       "Für einen Kunden gebaut, der Quellcode ist deshalb privat.",
+    linkPrivate: "Die Live-App ist privat.",
+    linkPrivateClient:
+      "Wird firmenintern beim Kunden genutzt, die Live-App ist deshalb privat.",
     demo: "Demo",
     moreProjects: "Weitere Projekte",
     onThisPage: "Auf dieser Seite",

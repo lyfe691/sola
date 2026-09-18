@@ -30,6 +30,8 @@ export interface ProjectPageConfig {
   kind: ProjectMeta["kind"];
   /** Private repository: a disabled source button instead of a link. */
   sourcePrivate: boolean;
+  /** Private live app: a disabled visit button instead of a link. */
+  linkPrivate: boolean;
 }
 
 type ProjectWithDeepDive = ProjectMeta & {
@@ -59,6 +61,7 @@ function toPageConfig(project: ProjectWithDeepDive): ProjectPageConfig {
     art: project.art,
     kind: project.kind,
     sourcePrivate: Boolean(project.sourcePrivate),
+    linkPrivate: Boolean(project.linkPrivate),
   };
 }
 

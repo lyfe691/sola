@@ -32,7 +32,7 @@ import {
   useDeepDiveSections,
 } from "@/components/deep-dive-nav";
 import { ProjectDeepDive } from "@/components/ProjectDeepDive";
-import { PrivateSourceButton } from "@/components/private-source-button";
+import { PrivateLinkButton } from "@/components/private-link-button";
 import { Mdx, SectionHeading, TechStack } from "@/components/mdx";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -77,7 +77,7 @@ interface LinkAction {
 }
 
 function getLinkActions(
-  { links, sourcePrivate, kind }: ProjectPageConfig,
+  { links, sourcePrivate, linkPrivate, kind }: ProjectPageConfig,
   t: Translation,
 ): LinkAction[] {
   const actions: LinkAction[] = [];
@@ -88,6 +88,17 @@ function getLinkActions(
       label: isChromeStore ? t.common.chromeStore : t.common.visitSite,
       Icon: isChromeStore ? hugeIcon(Globe02Icon) : hugeIcon(LinkSquare02Icon),
       variant: "default",
+    });
+  } else if (linkPrivate) {
+    actions.push({
+      href: "#link-private",
+      label: t.common.visitSite,
+      Icon: hugeIcon(LinkSquare02Icon),
+      variant: "default",
+      disabledReason:
+        kind === "commercial"
+          ? t.common.linkPrivateClient
+          : t.common.linkPrivate,
     });
   }
   if (links.github) {
@@ -254,10 +265,11 @@ const ProjectDeepDiveRenderer = () => {
             {getLinkActions(config, t).map(
               ({ href, label, Icon, variant, disabledReason }) =>
                 disabledReason ? (
-                  <PrivateSourceButton
+                  <PrivateLinkButton
                     key={href}
                     label={label}
                     reason={disabledReason}
+                    icon={<Icon className="h-4 w-4" aria-hidden />}
                     variant={variant}
                   />
                 ) : (

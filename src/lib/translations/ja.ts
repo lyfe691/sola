@@ -130,6 +130,9 @@ export const ja = {
     sourcePrivate: "ソースコードは非公開です。",
     sourcePrivateClient:
       "クライアント向けに制作したため、ソースコードは非公開です。",
+    linkPrivate: "ライブアプリは非公開です。",
+    linkPrivateClient:
+      "クライアントの社内で使われているため、ライブアプリは非公開です。",
     demo: "デモ",
     moreProjects: "他のプロジェクト",
     onThisPage: "目次",
