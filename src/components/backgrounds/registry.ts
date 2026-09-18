@@ -41,16 +41,6 @@ export const BACKGROUNDS: BackgroundDef[] = [
     component: lazy(() => import("./side-rays/SideRays")),
   },
   {
-    id: "dot-field",
-    label: "Dot Field",
-    component: lazy(() => import("./dot-field/DotField")),
-  },
-  {
-    id: "dot-grid",
-    label: "Dot Grid",
-    component: lazy(() => import("./dot-grid/DotGridBackground")),
-  },
-  {
     id: "aurora-blur",
     label: "Aurora Blur",
     component: lazy(() => import("./aurora-blur/AuroraBlurBackground")),
@@ -59,11 +49,6 @@ export const BACKGROUNDS: BackgroundDef[] = [
     id: "chroma-waves",
     label: "Chroma Waves",
     component: lazy(() => import("./chroma-waves/ChromaWavesBackground")),
-  },
-  {
-    id: "frame-border",
-    label: "Frame Border",
-    component: lazy(() => import("./frame-border/FrameBorderBackground")),
   },
   {
     id: "silk-waves",

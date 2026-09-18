@@ -8,6 +8,7 @@
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import {
+  isBackgroundId,
   NONE_BACKGROUND,
   resolveBackground,
 } from "@/components/backgrounds/registry";
@@ -41,7 +42,12 @@ const readInitial = (storageKey: string, fallback: string): string => {
   try {
     // an explicit choice (any surface: menu, palette) beats the first-visit preset
     const stored = localStorage.getItem(storageKey);
-    if (stored !== null) return resolveBackground(stored);
+    if (stored !== null) {
+      if (stored === NONE_BACKGROUND || isBackgroundId(stored)) return stored;
+      // a saved background that has since been removed: the visitor did ask
+      // for one, so they get the site's default look rather than nothing
+      return resolveBackground(WELCOME_PRESET.background);
+    }
     // migrate the old aurora boolean: enabled -> aurora
     if (localStorage.getItem(LEGACY_AURORA_KEY) === "true") return "aurora";
     if (shouldApplyWelcomePreset()) {
