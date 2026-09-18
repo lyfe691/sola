@@ -14,6 +14,7 @@ import { createPortal } from "react-dom";
 import { ArrowExpandIcon, Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AnimatePresence, motion } from "motion/react";
+import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -206,9 +207,14 @@ export function ExpandableImage({
           className,
         )}
       >
+        {/* width/height only carry the aspect ratio (the class still sizes
+            the image): the box is reserved before a lazy image loads, so the
+            page does not grow under a reader or under a jump to a section */}
         <img
           src={src}
           alt=""
+          width={PROJECT_IMAGE_SIZES[src]?.[0]}
+          height={PROJECT_IMAGE_SIZES[src]?.[1]}
           className="block h-auto w-full"
           loading="lazy"
           decoding="async"

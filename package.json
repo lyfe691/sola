@@ -21,6 +21,7 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "typecheck": "node_modules/@typescript/native/bin/tsc -b",
+    "images:sizes": "bun scripts/image-sizes.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
