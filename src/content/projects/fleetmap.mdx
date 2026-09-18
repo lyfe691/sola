@@ -42,9 +42,9 @@ The interface runs in English and Swiss German, in a light or a dark theme.
 
 ## Two data flows, one thin API
 
-GPS is a push. The phone posts to `POST /api/location`, authenticated as that driver and scoped by row-level security so a van can only be written by its own driver. The handler puts the latest position on the vehicle row and appends to history; Supabase Realtime broadcasts the row change and the dashboard moves the marker. There is no Redis and no WebSocket server of mine. Fan-out is the database's job, which took an entire service out of the deployment.
+GPS is a push. The phone posts its position to a small API, authenticated as that driver and scoped by row-level security, so a van can only be written by its own driver. The handler puts the latest position on the vehicle row and appends to history; Supabase Realtime broadcasts the row change and the dashboard moves the marker. There is no Redis and no WebSocket server of mine. Fan-out is the database's job, which took an entire service out of the deployment.
 
-Orders are a pull. A worker polls the fleet API of the route optimizer the operation already runs, every 60 seconds, and mirrors each rider's routes into `orders` and `stops`. Route lines and ETAs come from `GET /api/route`, a thin proxy in front of OSRM (an open-source routing engine) which I self-host on a Switzerland extract, rather than pay a hosted routing API per request for a screen that recomputes all day.
+Orders are a pull. A worker reads the route planning the fleet already uses, every 60 seconds, and mirrors each driver's routes into orders and stops. Route lines and ETAs come from OSRM (an open-source routing engine), which I self-host on a Switzerland extract rather than pay a hosted routing API per request for a screen that recomputes all day.
 
 ## Why the order sync is a diff, not a rewrite
 
@@ -70,7 +70,7 @@ Abridged: the real guard covers seven columns. Unchanged rows are never written,
 
 ## Made for a screen that stays on
 
-Production is Docker Compose on a single server: the Next.js app, the sync worker and OSRM beside a self-hosted Supabase stack. Nothing reads as late until it is five minutes late, so a minute of traffic doesn't flap the map red.
+A TV pairs with a short display code instead of a password, and the console has a dark theme for a screen that runs overnight. Nothing reads as late until it is five minutes late, so a minute of traffic doesn't flap the map red.
 
 <ProjectGallery
   images={[
@@ -88,6 +88,6 @@ Production is Docker Compose on a single server: the Next.js app, the sync worke
   columns={2}
 />
 
-The TV never sees a password. It presents a display code and gets a read-only session.
+Production is Docker Compose on a single server: the Next.js app, the sync worker and OSRM beside a self-hosted Supabase stack.
 
 The rule that decided most of this build: push the work into something that already exists — the database, the optimizer, the routing engine — and keep the API thin enough that there is nothing in the middle to debug.

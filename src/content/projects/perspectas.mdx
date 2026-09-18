@@ -1,6 +1,6 @@
 # A consulting site its owners publish themselves
 
-perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH: two partners, working for small and mid-sized Swiss companies. Their previous site was a WordPress install. Dominik Künitzer and I scoped the project with the client; the design, the build, the hosting setup and the handover are mine.
+perspectas gmbh is two partners who consult and recruit for small and mid-sized Swiss companies. Dominik Künitzer and I scoped the project with them; the design, the build, the hosting setup and the handover are mine.
 
 <ProjectImage
   src="/projects/perspectas/home-desktop.png"
@@ -103,11 +103,11 @@ Once the partners were editing content themselves, changes from my side stopped 
   columns={2}
 />
 
-## Two integrations that needed care
+## Two details that needed care
 
 The client's job board ships as a web component that injects its own CSS, jQuery and fonts, so it runs in a sandboxed iframe that reports its own height by `postMessage` and has the page's colour tokens handed in. It reads as part of the page in both schemes and cannot touch the layout around it.
 
-The other rule is about motion: rendered markup never branches on `useReducedMotion()`, because it returns false during SSR and true on a reduced-motion visitor's first client render. One tree, with only the values switched after mount, keeps hydration clean.
+The second is about motion: rendered markup never branches on `useReducedMotion()`, because it returns false during SSR and true on a reduced-motion visitor's first client render. One tree, with only the values switched after mount, keeps hydration clean.
 
 <ProjectGallery
   images={[
