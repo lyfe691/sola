@@ -129,6 +129,8 @@ export const en = {
     chromeStore: "Chrome Store",
     visitSite: "Visit Site",
     sourceCode: "Source Code",
+    sourcePrivate: "The source code is private.",
+    sourcePrivateClient: "Built for a client, so the source code is private.",
     demo: "Demo",
     moreProjects: "More Projects",
     onThisPage: "On this page",
@@ -377,7 +379,7 @@ export const en = {
           "A multi-model AI platform that lets you bring your own API keys and talk to the best models — Claude, GPT, Gemini, Grok, and more — all in one place. Built with Next.js 16, the Vercel AI SDK, and Supabase.",
       },
       perspectas: {
-        title: "perspectas",
+        title: "perspectas.ch",
         tagline: "A consulting site built around one yellow dot",
         description:
           "perspectas gmbh is a consulting and recruiting firm near Zürich; I rebuilt their site on Next.js 16 and Sanity. Every text, image and contact detail lives in the CMS, so the two partners publish changes without me. The design spends one loud colour, the yellow of the logo dot, which doubles as the headline's full stop. Live since 11 September 2026.",

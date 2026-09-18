@@ -127,6 +127,9 @@ export const ja = {
     chromeStore: "Chrome ストア",
     visitSite: "サイトを見る",
     sourceCode: "ソースコード",
+    sourcePrivate: "ソースコードは非公開です。",
+    sourcePrivateClient:
+      "クライアント向けに制作したため、ソースコードは非公開です。",
     demo: "デモ",
     moreProjects: "他のプロジェクト",
     onThisPage: "目次",
@@ -372,7 +375,7 @@ export const ja = {
           "自分の API キーを持ち込み、Claude・GPT・Gemini・Grok など最高の AI モデルとひとつの場所で対話できるマルチモデル AI プラットフォーム。Next.js 16、Vercel AI SDK、Supabase で構築。",
       },
       perspectas: {
-        title: "perspectas",
+        title: "perspectas.ch",
         tagline: "黄色い点を軸にしたコンサルティングサイト",
         description:
           "perspectas gmbh はチューリッヒ近郊のコンサルティング・採用支援会社で、そのサイトを Next.js 16 と Sanity で作り直しました。テキストも画像も連絡先もすべて CMS にあるため、2 人のパートナーは私を通さずに公開できます。デザインで目立つ色はロゴの黄色い点ひとつだけで、その点が見出しの句点も兼ねています。2026 年 9 月 11 日から公開中です。",

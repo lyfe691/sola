@@ -43,6 +43,7 @@ import {
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { SegmentedControl } from "@/components/ui/custom/segmented-control";
 import ScrollReveal from "@/components/ScrollReveal";
+import { PrivateSourceButton } from "@/components/private-source-button";
 import { useGridSwap, type GridSwap } from "@/hooks/use-grid-swap";
 import {
   gridCellVariants,
@@ -139,7 +140,13 @@ const ProjectActions = ({
   project: Project;
   t: Translation;
 }) => {
-  if (!project.slug && !project.github && !project.link) return null;
+  if (
+    !project.slug &&
+    !project.github &&
+    !project.link &&
+    !project.sourcePrivate
+  )
+    return null;
 
   return (
     <div className="flex flex-col gap-4 pt-2">
@@ -183,6 +190,18 @@ const ProjectActions = ({
                 />
                 {t.projects.viewGithub}
               </Button>
+            )}
+            {!project.github && project.sourcePrivate && (
+              <PrivateSourceButton
+                label={t.projects.viewGithub}
+                reason={
+                  project.kind === "commercial"
+                    ? t.common.sourcePrivateClient
+                    : t.common.sourcePrivate
+                }
+                variant="default"
+                className="flex-1"
+              />
             )}
             {project.link && (
               <Button

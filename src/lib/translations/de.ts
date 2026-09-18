@@ -130,6 +130,9 @@ export const de = {
     chromeStore: "Chrome Web Store",
     visitSite: "Website besuchen",
     sourceCode: "Quellcode",
+    sourcePrivate: "Der Quellcode ist privat.",
+    sourcePrivateClient:
+      "Für einen Kunden gebaut, der Quellcode ist deshalb privat.",
     demo: "Demo",
     moreProjects: "Weitere Projekte",
     onThisPage: "Auf dieser Seite",
@@ -380,7 +383,7 @@ export const de = {
           "Eine Multi‑Modell‑KI‑Plattform, bei der du deine eigenen API‑Schlüssel mitbringst und mit den besten Modellen sprichst — Claude, GPT, Gemini, Grok und mehr — alles an einem Ort. Gebaut mit Next.js 16, dem Vercel AI SDK und Supabase.",
       },
       perspectas: {
-        title: "perspectas",
+        title: "perspectas.ch",
         tagline: "Beratungs-Website rund um einen gelben Punkt",
         description:
           "perspectas gmbh ist eine Beratungs- und Recruiting-Firma bei Zürich; ich habe ihre Website mit Next.js 16 und Sanity neu gebaut. Jeder Text, jedes Bild und jede Kontaktangabe liegt im CMS, die beiden Partner publizieren also ohne mich. Das Design setzt genau eine laute Farbe ein: das Gelb des Logopunkts, der zugleich der Schlusspunkt der Headline ist. Seit dem 11. September 2026 live.",

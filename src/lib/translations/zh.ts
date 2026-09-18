@@ -123,6 +123,8 @@ export const zh = {
     chromeStore: "Chrome 商店",
     visitSite: "访问网站",
     sourceCode: "源代码",
+    sourcePrivate: "源代码未公开。",
+    sourcePrivateClient: "这是为客户开发的项目，源代码未公开。",
     demo: "演示",
     moreProjects: "更多项目",
     onThisPage: "本页内容",
@@ -367,7 +369,7 @@ export const zh = {
           "自带 API 密钥，与 Claude、GPT、Gemini、Grok 等顶级 AI 模型在同一平台对话的多模型 AI 平台。基于 Next.js 16、Vercel AI SDK 和 Supabase 构建。",
       },
       perspectas: {
-        title: "perspectas",
+        title: "perspectas.ch",
         tagline: "围绕一个黄点做的咨询公司网站",
         description:
           "perspectas gmbh 是苏黎世附近的一家咨询与招聘公司，我用 Next.js 16 和 Sanity 重做了他们的网站。所有文案、图片和联系方式都放在 CMS 里，两位合伙人不用经过我就能发布改动。整个设计只用一种醒目的颜色：logo 上的黄点，它同时也是标题的句号。2026 年 9 月 11 日上线。",

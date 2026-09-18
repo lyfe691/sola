@@ -32,6 +32,7 @@ import {
   useDeepDiveSections,
 } from "@/components/deep-dive-nav";
 import { ProjectDeepDive } from "@/components/ProjectDeepDive";
+import { PrivateSourceButton } from "@/components/private-source-button";
 import { Mdx, SectionHeading, TechStack } from "@/components/mdx";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -70,10 +71,13 @@ interface LinkAction {
   label: string;
   Icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
   variant: "default" | "outline";
+  /** Set when there is nothing to link to: the button renders disabled
+   *  and this is its tooltip. */
+  disabledReason?: string;
 }
 
 function getLinkActions(
-  links: ProjectPageConfig["links"],
+  { links, sourcePrivate, kind }: ProjectPageConfig,
   t: Translation,
 ): LinkAction[] {
   const actions: LinkAction[] = [];
@@ -92,6 +96,17 @@ function getLinkActions(
       label: t.common.sourceCode,
       Icon: hugeIcon(Github01Icon),
       variant: "outline",
+    });
+  } else if (sourcePrivate) {
+    actions.push({
+      href: "#source-private",
+      label: t.common.sourceCode,
+      Icon: hugeIcon(Github01Icon),
+      variant: "outline",
+      disabledReason:
+        kind === "commercial"
+          ? t.common.sourcePrivateClient
+          : t.common.sourcePrivate,
     });
   }
   if (links.demo) {
@@ -236,22 +251,34 @@ const ProjectDeepDiveRenderer = () => {
         >
           <SectionHeading sectionId="links">{t.common.links}</SectionHeading>
           <div className="flex flex-wrap gap-3">
-            {getLinkActions(config.links, t).map(
-              ({ href, label, Icon, variant }) => (
-                <Button
-                  key={href}
-                  nativeButton={false}
-                  size="lg"
-                  variant={variant}
-                  className="gap-2"
-                  render={
-                    <a href={href} target="_blank" rel="noopener noreferrer" />
-                  }
-                >
-                  <Icon className="h-4 w-4" aria-hidden />
-                  {label}
-                </Button>
-              ),
+            {getLinkActions(config, t).map(
+              ({ href, label, Icon, variant, disabledReason }) =>
+                disabledReason ? (
+                  <PrivateSourceButton
+                    key={href}
+                    label={label}
+                    reason={disabledReason}
+                    variant={variant}
+                  />
+                ) : (
+                  <Button
+                    key={href}
+                    nativeButton={false}
+                    size="lg"
+                    variant={variant}
+                    className="gap-2"
+                    render={
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      />
+                    }
+                  >
+                    <Icon className="h-4 w-4" aria-hidden />
+                    {label}
+                  </Button>
+                ),
             )}
           </div>
         </section>

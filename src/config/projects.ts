@@ -28,6 +28,9 @@ export interface ProjectMeta {
   i18nKey: ProjectI18nKey;
   link?: string;
   github?: string;
+  /** The repository exists but is private: the UI shows a disabled source
+   *  button with a tooltip instead of a link that would 404. */
+  sourcePrivate?: boolean;
   technologies: string[];
   date: ProjectDate;
   priority: number;
@@ -383,6 +386,7 @@ export const PROJECTS: ProjectMeta[] = [
     priority: 5,
     art: { preset: "wheat", seed: 3 },
     kind: "commercial",
+    sourcePrivate: true,
     slug: "perspectas",
     deepDive: {
       overview:
@@ -407,6 +411,7 @@ export const PROJECTS: ProjectMeta[] = [
     priority: 4,
     art: { preset: "night", seed: 1 },
     kind: "commercial",
+    sourcePrivate: true,
     slug: "ura",
     deepDive: {
       overview:
@@ -431,6 +436,7 @@ export const PROJECTS: ProjectMeta[] = [
     priority: 6,
     art: { preset: "moss", seed: 1 },
     kind: "commercial",
+    sourcePrivate: true,
     slug: "montu",
     deepDive: {
       overview:
@@ -454,6 +460,7 @@ export const PROJECTS: ProjectMeta[] = [
     priority: 7,
     art: { preset: "caramel", seed: 1 },
     kind: "commercial",
+    sourcePrivate: true,
     slug: "sigrid",
     deepDive: {
       overview:
@@ -476,6 +483,7 @@ export const PROJECTS: ProjectMeta[] = [
     priority: 12,
     art: { preset: "slate", seed: 3 },
     kind: "personal",
+    sourcePrivate: true,
     slug: "qr",
     deepDive: {
       overview:
@@ -527,7 +535,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "fleetmap",
     deepDive: {
       overview:
-        "fleetmap is a real-time map of a delivery fleet. Each van's phone posts its GPS to a thin API, Supabase Realtime pushes the row change out, and a screen in the office moves that marker; orders arrive on their own from the route optimizer the operation already runs, polled every 60 seconds. Three data flows share one stateless API, and the whole stack runs in Docker on a single VPS behind Caddy. It has been in production since summer 2026.",
+        "fleetmap is a real-time map of a delivery fleet. Each van's phone posts its GPS to a thin API, Supabase Realtime pushes the row change out, and a screen in the office moves that marker; orders arrive on their own from the route optimizer the operation already runs, polled every 60 seconds. Three data flows share one stateless API, and the whole stack runs in Docker on a single server. It has been in production since summer 2026.",
     },
   },
 ];

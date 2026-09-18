@@ -132,6 +132,9 @@ export const es = {
     chromeStore: "Chrome Web Store",
     visitSite: "Visitar sitio",
     sourceCode: "Código fuente",
+    sourcePrivate: "El código fuente es privado.",
+    sourcePrivateClient:
+      "Hecho para un cliente, por eso el código fuente es privado.",
     demo: "Demo",
     moreProjects: "Más proyectos",
     onThisPage: "En esta página",
@@ -383,7 +386,7 @@ export const es = {
           "Una plataforma de IA multi‑modelo donde traes tus propias claves API y hablas con los mejores modelos — Claude, GPT, Gemini, Grok y más — todo en un solo lugar. Construido con Next.js 16, el SDK de IA de Vercel y Supabase.",
       },
       perspectas: {
-        title: "perspectas",
+        title: "perspectas.ch",
         tagline: "Sitio de consultoría alrededor de un punto amarillo",
         description:
           "perspectas gmbh es una empresa de consultoría y selección de personal cerca de Zúrich; rehíce su sitio web con Next.js 16 y Sanity. Cada texto, imagen y dato de contacto vive en el CMS, así que los dos socios publican cambios sin mí. El diseño usa un solo color fuerte: el amarillo del punto del logo, que también es el punto final del titular. En línea desde el 11 de septiembre de 2026.",

@@ -129,6 +129,9 @@ export const ko = {
     chromeStore: "Chrome Store",
     visitSite: "사이트 방문",
     sourceCode: "소스 코드",
+    sourcePrivate: "소스 코드는 비공개입니다.",
+    sourcePrivateClient:
+      "클라이언트를 위해 제작한 프로젝트라 소스 코드는 비공개입니다.",
     demo: "Demo",
     moreProjects: "더 많은 프로젝트",
     onThisPage: "목차",
@@ -374,7 +377,7 @@ export const ko = {
           "자신의 API 키를 가져와 Claude, GPT, Gemini, Grok 등 최고의 모델과 모두 한 곳에서 대화할 수 있는 다중 모델 AI 플랫폼입니다. Next.js 16, Vercel AI SDK 및 Supabase로 구축되었습니다.",
       },
       perspectas: {
-        title: "perspectas",
+        title: "perspectas.ch",
         tagline: "노란 점 하나를 중심으로 만든 컨설팅 사이트",
         description:
           "perspectas gmbh는 취리히 근교의 컨설팅·채용 회사이고, 그 웹사이트를 Next.js 16과 Sanity로 다시 만들었습니다. 모든 문구와 이미지, 연락처가 CMS에 있어서 두 파트너가 저를 거치지 않고 직접 게시합니다. 디자인에서 눈에 띄는 색은 로고의 노란 점 하나뿐이고, 그 점이 헤드라인의 마침표 역할도 합니다. 2026년 9월 11일부터 운영 중입니다.",
