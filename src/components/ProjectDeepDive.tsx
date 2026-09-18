@@ -199,7 +199,10 @@ export function ProjectDeepDive({
         art={art}
       />
 
-      <div className="sticky top-0 z-30 -mx-4 bg-background/95 backdrop-blur-xs sm:-mx-6 lg:-mx-8">
+      <div
+        data-deep-dive-bar=""
+        className="sticky top-0 z-30 -mx-4 bg-background/95 backdrop-blur-xs sm:-mx-6 lg:-mx-8"
+      >
         <div className="border-b border-border px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl py-4">
             <div className="flex items-center justify-between gap-3">

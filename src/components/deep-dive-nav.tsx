@@ -8,19 +8,22 @@
  * "On this page" navigation for the deep-dive pages. One discovery pass
  * reads the [data-toc] landmarks out of the rendered page — config sections
  * and MDX headings alike — and a scroll scan keeps the active item current.
- * ≥2xl the proximity rail sits sticky in the right gutter under an
- * "on this page" heading; below that, a slim row under the sticky bar names
- * the current section and expands the same list down over the content.
+ * With a real pointer on a desktop-sized screen the sections are a rail of
+ * hairline ticks on the left edge of the viewport, with one label that
+ * glides from tick to tick; everywhere else, a slim row under the sticky bar
+ * names the current section and expands the same list down over the content.
  */
 
 import { useEffect, useState, type RefObject } from "react";
+import { createPortal } from "react-dom";
+import { motion, useIsPresent } from "motion/react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { LineSidebar } from "@/components/ui/custom/line-sidebar";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { scrollToTarget } from "@/utils/scroll";
+import { EASE_OUT, REVEAL } from "@/utils/transitions";
 
 export interface DeepDiveSection {
   id: string;
@@ -115,47 +118,167 @@ interface SectionNavProps {
 }
 
 /**
- * The proximity rail — only ≥2xl has gutter room for it. In the article
- * column's flow on purpose: an absolute panel spanning the column's height
- * with the rail sticky inside, so it starts below the hero, pins under the
- * sticky bar, and stops with the content. The panel's top-14 matches the
- * sticky top-28 minus the bar height, so the resting and pinned states
- * show the same gap under the bar. Sticky, not fixed: the page-transition
- * ancestor's transform demotes `fixed`.
+ * True once the deep dive's sticky bar has pinned to the top of the
+ * viewport, which is the moment the hero has scrolled away and the reader
+ * is in the article. The bar marks itself with data-deep-dive-bar.
+ */
+function useStickyBarPinned(): boolean {
+  const [pinned, setPinned] = useState(false);
+
+  useEffect(() => {
+    const bar = document.querySelector<HTMLElement>("[data-deep-dive-bar]");
+    if (!bar) return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      // sticky top-0: the bar's top sits above 0 only while it is pinned
+      setPinned(bar.getBoundingClientRect().top <= 1);
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, []);
+
+  return pinned;
+}
+
+/** Row height of a tick, which is also the distance the label glides. */
+const TICK_PITCH = 20;
+/** The longest a tick gets (under the pointer). Every tick is this wide and
+ *  scaled down from its left end, so only a transform ever animates. */
+const TICK_MAX = 28;
+const TICK_REST = 12;
+const TICK_ACTIVE = 20;
+/** Length by distance from the pointed tick: the neighbours lift a little,
+ *  so the rail answers the pointer as one object rather than tick by tick. */
+const TICK_NEAR = [TICK_MAX, 20, 15];
+/** The label is 28px tall (text-xs + py-1.5); this centers it on a row. */
+const LABEL_OFFSET = (TICK_PITCH - 28) / 2;
+
+/**
+ * The desktop register: hairline ticks flush to the left edge of the
+ * viewport, one per section, vertically centered. It stays out of the
+ * hero: it fades in when the sticky bar pins, once the reader is in the
+ * article, stays to the end of the page, and fades out again on the way
+ * back up. The current section's tick is longer and full contrast; the pointed
+ * one is longest. A single label sits beside the rail and glides between
+ * ticks, so scrubbing down the rail reads as one motion instead of a
+ * tooltip re-opening per tick. It enters on a row without gliding (the jump
+ * happens while it is still transparent) and glides only between rows.
+ *
+ * Portaled to <body>: the page-transition ancestor's transform demotes
+ * `fixed`. useIsPresent still sees that ancestor, so the rail leaves with
+ * the page instead of lingering over the next one. Pointer devices only:
+ * the labels live on hover, and a touch screen has none.
  */
 export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
   const { language } = useLanguage();
   const t = translations[language];
+  const isPresent = useIsPresent();
+  const pinned = useStickyBarPinned();
+  const shown = isPresent && pinned;
+  const [pointed, setPointed] = useState<number | null>(null);
+  // survives the pointer leaving, so the label fades out where it was
+  const [label, setLabel] = useState({ index: 0, glide: false });
 
-  if (sections.length < 2) return null;
-  const activeIndex = sections.findIndex((s) => s.id === activeId);
+  if (sections.length < 2 || typeof document === "undefined") return null;
 
-  return (
-    <div className="absolute top-14 bottom-0 left-full ml-16 hidden 2xl:block">
-      <div className="sticky top-28">
-        {/* pl mirrors the rail's marker gutter (markerLength + markerGap)
-            so the heading aligns with the labels */}
-        <p className="mb-2 pl-11 text-xs font-medium text-foreground">
-          {t.common.onThisPage}
-        </p>
-        <LineSidebar
-          label={t.common.onThisPage}
-          items={sections.map((s) => s.label)}
-          activeIndex={activeIndex === -1 ? null : activeIndex}
-          onItemClick={(index) => scrollToSection(sections[index].id)}
-          markerLength={32}
-          markerGap={12}
-          fontSize={0.85}
-          maxShift={12}
-          itemGap={20}
-        />
+  const point = (index: number) => {
+    setLabel({ index, glide: pointed !== null });
+    setPointed(index);
+  };
+
+  return createPortal(
+    <motion.nav
+      aria-label={t.common.onThisPage}
+      initial={{ opacity: 0, x: -12 }}
+      animate={shown ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+      transition={
+        shown
+          ? { duration: 0.5, ease: REVEAL }
+          : { duration: 0.25, ease: EASE_OUT }
+      }
+      // invisible means unreachable too: no clicks, no tab stops
+      inert={!shown}
+      onPointerLeave={() => setPointed(null)}
+      className="fixed top-1/2 left-0 z-30 hidden -translate-y-1/2 lg:can-hover:block"
+    >
+      <ul className="m-0 list-none p-0">
+        {sections.map(({ id, label: text }, index) => {
+          const active = id === activeId;
+          const distance = pointed === null ? null : Math.abs(index - pointed);
+          const length = Math.max(
+            distance !== null ? (TICK_NEAR[distance] ?? TICK_REST) : TICK_REST,
+            active ? TICK_ACTIVE : TICK_REST,
+          );
+          return (
+            <li key={id}>
+              <button
+                type="button"
+                aria-label={text}
+                aria-current={active ? "true" : undefined}
+                onPointerEnter={() => point(index)}
+                onFocus={() => point(index)}
+                onBlur={() => setPointed(null)}
+                onClick={() => scrollToSection(id)}
+                className="flex h-5 w-10 cursor-pointer items-center rounded-r-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+              >
+                <span
+                  aria-hidden="true"
+                  style={{
+                    width: TICK_MAX,
+                    transform: `scaleX(${length / TICK_MAX})`,
+                  }}
+                  className={cn(
+                    "block h-px origin-left transition-[transform,background-color] duration-250 ease-out",
+                    active || distance === 0
+                      ? "bg-foreground"
+                      : "bg-foreground/30",
+                  )}
+                />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      <div
+        aria-hidden="true"
+        style={{
+          transform: `translateY(${label.index * TICK_PITCH + LABEL_OFFSET}px)`,
+        }}
+        className={cn(
+          "pointer-events-none absolute top-0 left-10",
+          label.glide && "transition-transform duration-200 ease-out",
+        )}
+      >
+        <div
+          className={cn(
+            "max-w-88 origin-left truncate rounded-full border border-background/10 bg-foreground px-3 py-1.5 text-xs font-medium whitespace-nowrap text-background shadow-lg transition-[opacity,translate,scale] duration-150 ease-out",
+            pointed === null
+              ? "-translate-x-1 scale-[0.97] opacity-0"
+              : "translate-x-0 scale-100 opacity-100",
+          )}
+        >
+          {sections[label.index]?.label}
+        </div>
       </div>
-    </div>
+    </motion.nav>,
+    document.body,
   );
 }
 
 /**
- * The compact register (<2xl): a slim row under the sticky bar's breadcrumb
+ * The compact register (touch, and anything below lg): a slim row under the
+ * sticky bar's breadcrumb
  * line naming the current section, with a chevron that expands a plain
  * list down over the content — no ruler here, proximity is pointer physics
  * and markers earn nothing on touch. One line in the whole assembly:
@@ -176,7 +299,7 @@ export function DeepDiveSectionMenu({ sections, activeId }: SectionNavProps) {
 
   return (
     <div
-      className="relative px-4 sm:px-6 lg:px-8 2xl:hidden"
+      className="relative px-4 sm:px-6 lg:px-8 lg:can-hover:hidden"
       onKeyDown={(event) => {
         if (event.key === "Escape") setOpen(false);
       }}
