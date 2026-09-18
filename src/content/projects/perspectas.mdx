@@ -1,6 +1,6 @@
 # A consulting site its owners publish themselves
 
-perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH: two partners, working for small and mid-sized Swiss companies. Their site was a WordPress install on a reseller's server, and before that a TYPO3 site whose URLs Google still listed in September 2026. Dominik Künitzer and I scoped the project with the client; the design, the build, the hosting setup and the handover are mine.
+perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH: two partners, working for small and mid-sized Swiss companies. Their previous site was a WordPress install. Dominik Künitzer and I scoped the project with the client; the design, the build, the hosting setup and the handover are mine.
 
 <ProjectImage
   src="/projects/perspectas/home-desktop.png"
@@ -11,7 +11,7 @@ perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH: two partners
 
 ## The constraint that picked the stack
 
-The ask was not a new coat of paint. The partners had a new positioning to express (consulting and recruiting, advisors rather than placement agents), a smaller site to fit it into (private clients, the sparring offer and the blog were all dropped), and one hard requirement: they wanted to change their own text without asking anyone. The old stack never gave them that.
+The ask was not a new coat of paint. The partners had a new positioning to express (consulting and recruiting, advisors rather than placement agents), a smaller site to fit it into, and one hard requirement: they wanted to change their own text without asking anyone. The old stack never gave them that.
 
 So every word a visitor reads lives in Sanity. Seven document types, five object types, and one settings singleton holding every fixed line on every page along with the Impressum and the Datenschutz. Services, projects, testimonials, the people on Über uns, the contact details: all editable, and publishing is a click.
 
@@ -85,7 +85,7 @@ client.fetch<T>(query, params, {
 
 Reads go to the Sanity API rather than its CDN (`useCdn: false`): a re-render triggered by the webhook would otherwise pick up the CDN's older copy and cache it for another hour. Visitors are served from Next's cache either way, and only a regeneration pays for the uncached read. The hourly floor is the backstop. If the webhook breaks, the site is an hour behind rather than frozen at the last build.
 
-By the client's review on 7 September the dataset was theirs, which made the seed script the wrong tool: it uses `createOrReplace` and would have silently discarded their own edits. The review went in as a list of field patches instead, printed as a dry run first, each one pinned to the revision it was written against, applied in a single transaction. 22 documents.
+Once the partners were editing content themselves, changes from my side stopped going through the seed script, which replaces whole documents. They go in as field patches instead: printed as a dry run first, each pinned to the revision it was written against, applied in one transaction.
 
 <ProjectGallery
   images={[
@@ -127,6 +127,6 @@ The other rule is about motion: rendered markup never branches on `useReducedMot
 
 ## What handover means here
 
-The hosting account was bought in perspectas' name, with me as an invited user, so their access outlives mine. At go-live only the two A records changed, the mail records stayed untouched, and the old site stayed up as the rollback. Seventeen redirect rules catch the TYPO3 and WordPress URLs Google had indexed.
+The hosting account is in perspectas' name, with me as an invited user, so their access outlives mine. Redirects catch the URLs of the old site that search engines had indexed.
 
 None of that is visible on the site. It is the part that decides whether a client stays stuck with their developer, and it has to be arranged before the handover rather than renegotiated after it.

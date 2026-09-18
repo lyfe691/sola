@@ -1,6 +1,6 @@
 # A delivery fleet, live on an office TV
 
-fleetmap tracks a delivery fleet in real time. Each van's phone posts its GPS position to an API; a screen in the office moves that van's marker, draws its route, and shows how far behind schedule it is. Orders are never typed in. Below: the three data flows the whole system reduces to, and why the order sync is a diff instead of a rewrite.
+fleetmap tracks a delivery fleet in real time. Each van's phone posts its GPS position to an API; a screen in the office moves that van's marker, draws its route, and shows how far behind schedule it is. Orders are never typed in. Below: the two data flows the whole system reduces to, and why the order sync is a diff instead of a rewrite.
 
 <ProjectImage
   src="/projects/fleetmap/fleetmap-map.png"
@@ -40,13 +40,11 @@ The interface runs in English and Swiss German, in a light or a dark theme.
   columns={3}
 />
 
-## Three data flows, one stateless API
+## Two data flows, one thin API
 
 GPS is a push. The phone posts to `POST /api/location`, authenticated as that driver and scoped by row-level security so a van can only be written by its own driver. The handler puts the latest position on the vehicle row and appends to history; Supabase Realtime broadcasts the row change and the dashboard moves the marker. There is no Redis and no WebSocket server of mine. Fan-out is the database's job, which took an entire service out of the deployment.
 
 Orders are a pull. A worker polls the fleet API of the route optimizer the operation already runs, every 60 seconds, and mirrors each rider's routes into `orders` and `stops`. Route lines and ETAs come from `GET /api/route`, a thin proxy in front of OSRM (an open-source routing engine) which I self-host on a Switzerland extract, rather than pay a hosted routing API per request for a screen that recomputes all day.
-
-Driver login is an exchange. The rider app already holds a short-lived token from the optimizer, posts it to an internal service, and gets a Supabase session back after that token is verified upstream and the rider id is mapped to a van. No second driver password exists anywhere.
 
 ## Why the order sync is a diff, not a rewrite
 
@@ -70,11 +68,9 @@ where id = v_stop_id
 
 Abridged: the real guard covers seven columns. Unchanged rows are never written, so they emit nothing, and stop ids survive across ticks. Stops that vanished from the optimizer's picture are deleted, which makes an empty payload a valid instruction: clear this vehicle.
 
-## Running it on one box
+## Made for a screen that stays on
 
-Production is Docker Compose on a single VPS: Caddy terminating TLS in front of the Next.js app, the sync worker, the driver-session service and OSRM, beside a self-hosted Supabase stack. The box has 4 GB of RAM and cannot build images while running both stacks, so all three images are built locally, shipped as one gzipped tar and loaded. The server never builds.
-
-Two decisions only show up after weeks of uptime. GPS history is pruned nightly by pg_cron to 30 days, keyed on server insert time rather than the device timestamp, because a phone with a skewed clock must not decide retention. And nothing reads as late until it is five minutes late, so a minute of traffic doesn't flap the map red.
+Production is Docker Compose on a single server: the Next.js app, the sync worker and OSRM beside a self-hosted Supabase stack. Nothing reads as late until it is five minutes late, so a minute of traffic doesn't flap the map red.
 
 <ProjectGallery
   images={[
@@ -92,6 +88,6 @@ Two decisions only show up after weeks of uptime. GPS history is pruned nightly 
   columns={2}
 />
 
-The TV never sees a password. It presents a display code, and the server mints a read-only, claim-scoped session from credentials that stay server-side.
+The TV never sees a password. It presents a display code and gets a read-only session.
 
 The rule that decided most of this build: push the work into something that already exists — the database, the optimizer, the routing engine — and keep the API thin enough that there is nothing in the middle to debug.
