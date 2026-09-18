@@ -31,10 +31,17 @@ export function FigureCaption({
   );
 }
 
+/** A figure fills its width and the height follows, which suits landscape
+ *  screenshots. A phone screenshot is more than twice as tall as it is wide,
+ *  so at a landscape width it runs to well over a screen: `phone` caps the
+ *  width instead, and the image reads as a phone. */
+const PHONE_WIDTH = "mx-auto w-full max-w-60";
+
 const SIZE_CLASS = {
   normal: "mx-auto max-w-2xl",
   large: "mx-auto max-w-4xl",
   full: "w-full",
+  phone: PHONE_WIDTH,
 } as const;
 
 export function ProjectImage({
@@ -69,7 +76,14 @@ export function ProjectGallery({
   columns = 2,
   size = "normal",
 }: {
-  images: Array<{ src: string; alt: string; caption?: string }>;
+  /** `phone` marks a portrait phone screenshot: it keeps a phone's width in
+   *  its cell instead of stretching to the column. */
+  images: Array<{
+    src: string;
+    alt: string;
+    caption?: string;
+    phone?: boolean;
+  }>;
   columns?: 2 | 3 | 4;
   /** Single-image large/full is a hero; multi always fills the column grid. */
   size?: "normal" | "large" | "full";
@@ -91,7 +105,10 @@ export function ProjectGallery({
       className={cn("my-8 grid items-start gap-4 sm:gap-5", COL_CLASS[columns])}
     >
       {images.map((image) => (
-        <figure key={image.src} className="min-w-0">
+        <figure
+          key={image.src}
+          className={cn("min-w-0", image.phone && PHONE_WIDTH)}
+        >
           <ExpandableImage src={image.src} alt={image.alt} />
           {image.caption ? (
             <FigureCaption>{image.caption}</FigureCaption>
