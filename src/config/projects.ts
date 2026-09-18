@@ -264,7 +264,7 @@ export const PROJECTS: ProjectMeta[] = [
     },
     priority: 14,
     art: { preset: "moss", seed: 0 },
-    kind: "commercial",
+    kind: "personal",
     slug: "taco",
     deepDive: {
       overview:
