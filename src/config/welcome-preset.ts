@@ -14,8 +14,8 @@ export const CALLOUT_STORAGE_KEY = "sola-theme-callout-v1";
 
 /** First-visit appearance defaults — applied while the callout is undismissed. */
 export const WELCOME_PRESET = {
-  theme: "light" as Theme,
-  background: "liquid-ether",
+  theme: "system" as Theme,
+  background: "aurora",
 } as const;
 
 if (!ALL_THEME_VALUES.includes(WELCOME_PRESET.theme)) {
