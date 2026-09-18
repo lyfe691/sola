@@ -392,37 +392,37 @@ export const es = {
         title: "perspectas.ch",
         tagline: "Sitio de consultoría alrededor de un punto amarillo",
         description:
-          "perspectas gmbh es una empresa de consultoría y selección de personal cerca de Zúrich; rehíce su sitio web con Next.js 16 y Sanity. Cada texto, imagen y dato de contacto vive en el CMS, así que los dos socios publican cambios sin mí. El diseño usa un solo color fuerte: el amarillo del punto del logo, que también es el punto final del titular. En línea desde el 11 de septiembre de 2026.",
+          "El sitio web de [perspectas gmbh](https://www.perspectas.ch), una empresa de consultoría y selección de personal cerca de Zúrich, rehecho con Next.js y Sanity. Cada texto e imagen vive en el CMS, así que los dos socios publican los cambios ellos mismos. El diseño tiene un solo acento: el punto amarillo de su logo, que también es el punto final del titular.",
       },
       ura: {
         title: "Ura",
         tagline: "Motonieve en Laponia: sin conexión y con permisos",
         description:
-          "Ura es navegación de rutas de motonieve para la Laponia finlandesa: una app para iOS y Android más la consola web que mantiene sus datos. Cada paquete publicado lleva 2595 rutas y 3388 lugares cercanos al teléfono, y el motor de ruta mantiene su veredicto con una banda de histéresis de 40–60 m para que un cruce no lo haga parpadear. Cada ruta indica si es libre o si primero hace falta un permiso.",
+          "Ura es navegación para motonieve en la Laponia finlandesa, para iOS y Android. Lleva 2595 rutas y 3388 lugares como gasolineras, cafés y refugios en el teléfono, así que funciona donde no hay señal. Te dice si estás en una ruta y si esa ruta es libre o si primero hace falta un permiso.",
       },
       montu: {
         title: "Montu",
         tagline: "Diario de montaña suizo, trazado desde sus archivos GPX",
         description:
-          "Montu es un diario de travesías de montaña en alemán suizo, hecho para un cliente que escribe las rutas y toma las fotos. Cada travesía es un documento de Sanity: al subir un archivo GPX, la página dibuja la ruta en Mapbox y el perfil de altitud. Hay dos travesías publicadas, y la dificultad es un desplegable con las escalas SAC completas, así que los grados se eligen en vez de escribirse.",
+          "[Montu](https://montu.ch) es un diario de rutas de montaña en alemán suizo, hecho para un cliente que escribe las rutas y toma las fotos él mismo. Sube un archivo GPX y la página dibuja la ruta sobre un mapa de relieve con su perfil de altitud. Rutas, fotos y todos los demás textos se editan en un CMS, así que publicar una ruta nueva no requiere a ningún desarrollador.",
       },
       qr: {
         title: "QR",
         tagline: "QR con estilo y prueba de escaneo",
         description:
-          "qr.ysz.life genera códigos QR enteramente en el navegador: estilos de punto y de esquina, degradados, un logo central y exportación a PNG, SVG, JPEG o WebP. El exceso de estilo es justo lo que impide que un código se lea, así que la cabecera incluye un Scan Test que decodifica la imagen final con un escáner real y muestra lo que leyó. No se sube nada; los últimos diez códigos quedan en localStorage.",
+          "[qr.ysz.life](https://qr.ysz.life) es un generador de códigos QR que funciona por completo en tu navegador. Da estilo a los puntos y las esquinas, añade degradados y un logo, y exporta en PNG, SVG, JPEG o WebP. Una prueba de escaneo integrada vuelve a leer el código terminado, para que sepas que sigue funcionando antes de imprimirlo.",
       },
       vault: {
         title: "Vault",
         tagline: "Keycloak, FastAPI y un realm definido en Terraform",
         description:
-          "Vault es un sandbox OIDC local: Keycloak 26 emite los tokens, PostgreSQL está detrás, FastAPI los verifica contra el JWKS del realm y un frontend en Next.js muestra paneles restringidos por rol para admin y user. El realm, el cliente, los roles y el usuario de demo se declaran en terraform/main.tf, así que la configuración de identidad es un archivo y no un estado de la consola de administración. Un solo comando de docker compose lo levanta.",
+          "Vault es un sandbox local para aprender OpenID Connect. Keycloak emite los tokens, un servicio en FastAPI los verifica y un frontend en Next.js muestra paneles restringidos por rol. La configuración de identidad se declara en Terraform, así que todo se puede desmontar y volver a levantar con un solo comando.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "GPS de cada furgoneta en la pantalla",
         description:
-          "fleetmap es una consola de monitoreo para una flota de reparto: el teléfono de cada furgoneta envía su posición y una pantalla en la oficina muestra cada vehículo en movimiento, con sus paradas, ETA y retraso. La difusión en vivo la hace Supabase Realtime: sin Redis ni un servidor WebSocket propio. Las rutas vienen de una instancia de OSRM que alojo yo mismo con un extracto de Suiza. Funciona en producción en una pantalla táctil de pared.",
+          "fleetmap es un mapa en vivo de una flota de reparto. El teléfono de cada furgoneta informa su posición y una pantalla en la oficina muestra cada vehículo en movimiento, con sus paradas, su ETA y su retraso. Cualquier día pasado se puede reproducir a partir del recorrido grabado. Hecho con Next.js, Supabase y MapLibre.",
       },
     },
   },

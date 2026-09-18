@@ -45,6 +45,7 @@ import {
 } from "@/config/project-deep-dive";
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage } from "@/lib/language-provider";
+import { plainText } from "@/lib/plain-text";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { translations, type Translation } from "@/lib/translations";
 
@@ -210,7 +211,7 @@ const ProjectDeepDiveRenderer = () => {
     <ProjectDeepDive
       title={title}
       subtitle={projectCopy.tagline}
-      description={projectCopy.description}
+      description={plainText(projectCopy.description)}
       art={config.art}
       sectionNav={
         <DeepDiveSectionMenu sections={sections} activeId={activeId} />

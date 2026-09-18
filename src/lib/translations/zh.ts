@@ -374,37 +374,37 @@ export const zh = {
         title: "perspectas.ch",
         tagline: "围绕一个黄点做的咨询公司网站",
         description:
-          "perspectas gmbh 是苏黎世附近的一家咨询与招聘公司，我用 Next.js 16 和 Sanity 重做了他们的网站。所有文案、图片和联系方式都放在 CMS 里，两位合伙人不用经过我就能发布改动。整个设计只用一种醒目的颜色：logo 上的黄点，它同时也是标题的句号。2026 年 9 月 11 日上线。",
+          "苏黎世附近的咨询与招聘公司 [perspectas gmbh](https://www.perspectas.ch) 的网站，我用 Next.js 和 Sanity 重新搭建。所有文案和图片都放在 CMS 里，两位合伙人可以自己发布改动。设计只有一个亮点：logo 上的黄点，它同时也是标题的句号。",
       },
       ura: {
         title: "Ura",
         tagline: "离线雪地摩托导航，还分得清许可路线",
         description:
-          "Ura 是面向芬兰拉普兰的雪地摩托路线导航：一个 iOS 和 Android 应用，加上维护数据的网页控制台。每次发布的数据包把 2595 条路线和周边 3388 个地点装进手机，在线判定引擎用 40–60 米的滞回带保持判断，路口不会闪烁。每条路线都会标明是可以自由骑行，还是需要先取得许可。",
+          "Ura 是面向芬兰拉普兰的雪地摩托导航，支持 iOS 和 Android。它把 2595 条路线和 3388 个地点（加油站、咖啡馆、小屋等）存在手机里，没有信号也能用。它会告诉你是否在路线上，以及这条路线可以自由骑行，还是需要先取得许可。",
       },
       montu: {
         title: "Montu",
         tagline: "由GPX绘出地图与海拔的登山日志",
         description:
-          "Montu 是一个瑞士德语的登山路线日志，为自己撰写路线、拍摄照片的客户而做。每条路线是一份 Sanity 文档：上传 GPX 文件后，页面据此绘出 Mapbox 路线和海拔剖面。目前发布了两条路线；难度是一个覆盖完整 SAC 分级的下拉菜单，只能选择而不是手写。",
+          "[Montu](https://montu.ch) 是一个瑞士德语的登山日志网站，为一位自己写路线、自己拍照的客户而做。他上传一个 GPX 文件，页面就会在地形图上画出路线和海拔剖面。路线、照片和其他所有文字都在 CMS 里编辑，发布新路线不需要开发者。",
       },
       qr: {
         title: "QR",
         tagline: "定制样式的QR码，当场验证可扫",
         description:
-          "qr.ysz.life 是一个完全在浏览器里运行的 QR 码生成器：点形与角形、渐变、中心 logo，并可导出 PNG、SVG、JPEG 或 WebP。样式做得越重，码就越容易扫不出来，所以顶部放了 Scan Test，用真正的解码器把导出的图片重新读一遍并显示结果。不上传任何数据，最近十条记录留在 localStorage 里。",
+          "[qr.ysz.life](https://qr.ysz.life) 是一个完全在浏览器里运行的 QR 码生成器。可以设置点和角的样式，加上渐变和 logo，然后导出为 PNG、SVG、JPEG 或 WebP。内置的扫码测试会把生成的二维码重新读一遍，让你在打印之前就知道它还能扫。",
       },
       vault: {
         title: "Vault",
         tagline: "Keycloak加FastAPI，realm由Terraform定义",
         description:
-          "Vault 是一个本地 OIDC 沙盒：Keycloak 26 签发令牌，后面是 PostgreSQL，FastAPI 用 realm 的 JWKS 验证令牌，Next.js 前端展示按角色限制的 admin 和 user 面板。realm、客户端、角色和演示用户都在 terraform/main.tf 里声明，身份配置因此是一个文件，而不是管理控制台里的状态。一条 docker compose 命令即可启动。",
+          "Vault 是一个用来学习 OpenID Connect 的本地沙盒。Keycloak 签发令牌，FastAPI 服务验证令牌，Next.js 前端展示按角色限制的面板。身份配置用 Terraform 声明，所以一条命令就能把整套环境拆掉再重建。",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "货车GPS实时投送到办公室大屏",
         description:
-          "fleetmap 是一套配送车队监控台：每辆货车的手机上报位置，办公室的大屏实时显示每辆车的移动，以及停靠点、ETA 和延误。实时推送交给 Supabase Realtime，没有 Redis，也没有自建 WebSocket 服务器。路线来自自托管的 OSRM 实例，使用瑞士地图数据。已在一块壁挂触摸屏上正式运行。",
+          "fleetmap 是一张配送车队的实时地图。每辆货车的手机上报位置，办公室的大屏显示每辆车的移动，以及停靠点、ETA 和延误情况。任何一天的行程都可以根据记录的轨迹回放。使用 Next.js、Supabase 和 MapLibre 构建。",
       },
     },
   },

@@ -515,7 +515,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "fleetmap",
     deepDive: {
       overview:
-        "fleetmap is a real-time map of a delivery fleet. Each van's phone posts its GPS to a thin API, Supabase Realtime pushes the row change out, and a screen in the office moves that marker; orders arrive on their own from the route optimizer the operation already runs, polled every 60 seconds. Three data flows share one stateless API, and the whole stack runs in Docker on a single server. It has been in production since summer 2026.",
+        "fleetmap is a live map of a delivery fleet. Each van's phone reports its position, and a screen in the office shows every van moving, with its stops, ETA and how late it is running. Orders arrive on their own from the route planning the fleet already uses, so nobody types anything in. It has been in production since summer 2026.",
     },
   },
 ];

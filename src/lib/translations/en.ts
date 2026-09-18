@@ -385,37 +385,37 @@ export const en = {
         title: "perspectas.ch",
         tagline: "A consulting site built around one yellow dot",
         description:
-          "perspectas gmbh is a consulting and recruiting firm near Zürich; I rebuilt their site on Next.js 16 and Sanity. Every text, image and contact detail lives in the CMS, so the two partners publish changes without me. The design spends one loud colour, the yellow of the logo dot, which doubles as the headline's full stop. Live since 11 September 2026.",
+          "The website of [perspectas gmbh](https://www.perspectas.ch), a consulting and recruiting firm near Zürich, rebuilt on Next.js and Sanity. Every text and image lives in the CMS, so the two partners publish changes themselves. The design has one accent: the yellow dot from their logo, which doubles as the headline's full stop.",
       },
       ura: {
         title: "Ura",
         tagline: "Snowmobile navigation for Lapland, offline and permit-aware",
         description:
-          "Ura is snowmobile route navigation for Finnish Lapland: an iOS and Android app plus the web console that curates its data. Each published bundle puts 2,595 routes and 3,388 nearby places on the phone, and the on-route engine holds its verdict through a 40–60 m hysteresis band so a junction doesn't make it flicker. Every route says whether it is free to ride or needs a permit first.",
+          "Ura is snowmobile navigation for Finnish Lapland, on iOS and Android. It carries 2,595 routes and 3,388 places like fuel stations, cafés and huts on the phone, so it works where there is no signal. It tells you whether you are on a route, and whether that route is free to ride or needs a permit first.",
       },
       montu: {
         title: "Montu",
         tagline: "Swiss mountain journal, mapped from its GPX files",
         description:
-          "Montu is a mountain-tour journal in Swiss German, built for a client who writes the tours and takes the photos. Each tour is one Sanity document: upload a GPX file and the page draws the Mapbox route and the elevation profile from it. Two tours are published, and the difficulty field is a dropdown covering the full SAC scales, so grades are picked rather than typed.",
+          "[Montu](https://montu.ch) is a mountain-tour journal in Swiss German, built for a client who writes the tours and takes the photos himself. He uploads a GPX file, and the page draws the route on a terrain map with its elevation profile. Tours, photos and every other text are edited in a CMS, so publishing a new tour needs no developer.",
       },
       qr: {
         title: "QR",
         tagline: "Styled QR codes, with a decoder attached",
         description:
-          "qr.ysz.life is a QR code generator that runs entirely in the browser: dot and corner styles, gradients, a center logo, and export to PNG, SVG, JPEG or WebP. Heavy styling is what makes a code fail to scan, so the header carries a Scan Test that decodes your finished image with a real scanner and shows what it read back. Nothing is uploaded; the last ten codes stay in localStorage.",
+          "[qr.ysz.life](https://qr.ysz.life) is a QR code generator that runs entirely in your browser. Style the dots and corners, add gradients and a logo, then export as PNG, SVG, JPEG or WebP. A built-in scan test reads the finished code back, so you know it still scans before you print it.",
       },
       vault: {
         title: "Vault",
         tagline: "Keycloak, FastAPI and a realm defined in Terraform",
         description:
-          "Vault is a local OIDC sandbox: Keycloak 26 issues the tokens, PostgreSQL sits behind it, FastAPI verifies them against the realm's JWKS, and a Next.js frontend shows role-gated admin and user dashboards. The realm, client, roles and demo user are declared in terraform/main.tf, so the identity setup is a file rather than a state of the admin console. One docker compose command brings it up.",
+          "Vault is a local sandbox for learning OpenID Connect. Keycloak issues the tokens, a FastAPI service verifies them, and a Next.js frontend shows dashboards gated by role. The identity setup is declared in Terraform, so the whole thing can be torn down and rebuilt with one command.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "Van phones stream GPS to an office TV",
         description:
-          "fleetmap is a monitoring console for a delivery fleet: each van's phone posts its position, and an office screen shows every van moving with its stops, ETA and lateness. Live fan-out is Supabase Realtime's job: no Redis, no WebSocket server of my own. Routes come from an OSRM instance I self-host on a Switzerland extract. It runs in production on a wall-mounted touchscreen.",
+          "fleetmap is a live map of a delivery fleet. Each van's phone reports its position, and a screen in the office shows every van moving, with its stops, ETA and how late it is running. Any past day can be replayed from the recorded track. Built with Next.js, Supabase and MapLibre.",
       },
     },
   },
