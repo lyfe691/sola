@@ -388,12 +388,6 @@ export const zh = {
         description:
           "Montu 是一个瑞士德语的登山路线日志，为自己撰写路线、拍摄照片的客户而做。每条路线是一份 Sanity 文档：上传 GPX 文件后，页面据此绘出 Mapbox 路线和海拔剖面。目前发布了两条路线；难度是一个覆盖完整 SAC 分级的下拉菜单，只能选择而不是手写。",
       },
-      sigrid: {
-        title: "Dulces Momentos de Sigrid",
-        tagline: "四个页面，十七款烘焙作品，没有购物车",
-        description:
-          "为家庭烘焙师、也就是我妈妈做的西班牙语作品目录网站。十七款作品按四个类别筛选，联系页面不接订单，而是直接跳转到 Instagram 和 WhatsApp：她靠私信卖货，所以网站在对话开始的地方就停下。目录放在一个 TypeScript 文件里而不是 CMS，运行不花一分钱。",
-      },
       qr: {
         title: "QR",
         tagline: "定制样式的QR码，当场验证可扫",

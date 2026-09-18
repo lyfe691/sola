@@ -406,12 +406,6 @@ export const es = {
         description:
           "Montu es un diario de travesías de montaña en alemán suizo, hecho para un cliente que escribe las rutas y toma las fotos. Cada travesía es un documento de Sanity: al subir un archivo GPX, la página dibuja la ruta en Mapbox y el perfil de altitud. Hay dos travesías publicadas, y la dificultad es un desplegable con las escalas SAC completas, así que los grados se eligen en vez de escribirse.",
       },
-      sigrid: {
-        title: "Dulces Momentos de Sigrid",
-        tagline: "Cuatro páginas, diecisiete creaciones, sin carrito",
-        description:
-          "Un catálogo web en español para una repostera casera: mi madre. Diecisiete creaciones detrás de cuatro filtros por categoría, y la página de contacto enlaza a Instagram y WhatsApp en lugar de tomar pedidos: ella vende por mensaje, así que el sitio termina donde empieza la conversación. El catálogo vive en un solo archivo TypeScript en lugar de un CMS, y no cuesta nada mantenerlo en línea.",
-      },
       qr: {
         title: "QR",
         tagline: "QR con estilo y prueba de escaneo",

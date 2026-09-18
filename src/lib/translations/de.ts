@@ -405,12 +405,6 @@ export const de = {
         description:
           "Montu ist ein Bergtourenjournal auf Schweizer Hochdeutsch, gebaut für einen Kunden, der die Touren schreibt und die Fotos macht. Jede Tour ist ein Sanity-Dokument: Eine hochgeladene GPX-Datei erzeugt die Mapbox-Route und das Höhenprofil. Zwei Touren sind publiziert, und die Schwierigkeit ist ein Dropdown über die vollen SAC-Skalen, Grade werden also ausgewählt statt getippt.",
       },
-      sigrid: {
-        title: "Dulces Momentos de Sigrid",
-        tagline: "Vier Seiten, siebzehn Backwaren, kein Warenkorb",
-        description:
-          "Eine spanischsprachige Katalog-Website für eine Hobbybäckerin: meine Mutter. Siebzehn Kreationen hinter vier Kategoriefiltern, und die Kontaktseite verlinkt zu Instagram und WhatsApp, statt Bestellungen anzunehmen: Sie verkauft per Nachricht, die Website hört also dort auf, wo das Gespräch beginnt. Der Katalog liegt in einer einzigen TypeScript-Datei statt in einem CMS und kostet im Betrieb nichts.",
-      },
       qr: {
         title: "QR",
         tagline: "QR-Codes gestalten und gleich gegenprüfen",

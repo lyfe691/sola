@@ -399,12 +399,6 @@ export const en = {
         description:
           "Montu is a mountain-tour journal in Swiss German, built for a client who writes the tours and takes the photos. Each tour is one Sanity document: upload a GPX file and the page draws the Mapbox route and the elevation profile from it. Two tours are published, and the difficulty field is a dropdown covering the full SAC scales, so grades are picked rather than typed.",
       },
-      sigrid: {
-        title: "Dulces Momentos de Sigrid",
-        tagline: "Four pages, seventeen bakes, no checkout",
-        description:
-          "A Spanish-language catalogue site for a home baker, my mom. Seventeen creations sit behind four category filters, and the contact page links out to Instagram and WhatsApp instead of taking orders: she sells by message, so the site stops where the conversation starts. The catalogue lives in one TypeScript file instead of a CMS, which costs nothing to run.",
-      },
       qr: {
         title: "QR",
         tagline: "Styled QR codes, with a decoder attached",
