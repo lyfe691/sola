@@ -78,7 +78,6 @@ export const PROJECTS: ProjectMeta[] = [
     id: "kinoa",
     i18nKey: "kinoa",
     link: "https://kinoa.to",
-    github: "https://github.com/lyfe691/kinoa",
     technologies: [
       "Next.js App Router",
       "React Server Components",
@@ -95,10 +94,11 @@ export const PROJECTS: ProjectMeta[] = [
     priority: 1,
     art: { preset: "caramel", seed: 0 },
     kind: "personal",
+    sourcePrivate: true,
     slug: "kinoa",
     deepDive: {
       overview:
-        "Kinoa is a free streaming website for watching films and series — no subscription, no paywall. Built with the Next.js App Router and shadcn/ui, it pulls live metadata from TMDB and streams through third-party hosters with automatic failover. The interface stays minimal: browse trending titles, discover new releases, and hit play right on the detail page without being redirected elsewhere.",
+        "Kinoa is a free streaming site for films and series. It takes its catalogue from TMDB and plays through third-party hosters embedded on the detail page, so you browse, open a title and press play without leaving it; if one server fails you pick another. Accounts are optional and add a watchlist and a history that sync across devices. Built with the Next.js App Router, Supabase and shadcn/ui.",
     },
   },
   {
@@ -128,7 +128,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "sola",
     deepDive: {
       overview:
-        "Sola is the website you are currently on. It represents a modern approach to portfolio design, combining cutting-edge web technologies with thoughtful user experience. Built from the ground up with React and TypeScript, it showcases projects and skills through smooth animations, multiple themes, and a responsive design that works seamlessly across all devices. Its built to be fast and efficient, with a focus on user experience and performance.",
+        "Sola is the website you are on. It is a React 19 and TypeScript app built with Vite and Tailwind CSS, in six languages and eleven themes, with seven animated backgrounds and a painted cover for every project. One manifest drives the router, the layouts and the tab titles, the deep dives are MDX, and every commit runs lint, type checks, tests and a build before it deploys to Vercel.",
     },
   },
   {
@@ -184,7 +184,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "applicare",
     deepDive: {
       overview:
-        "A comprehensive job application tracking system built with React and Spring Boot. Features a modern, intuitive interface for managing job applications, interviews, and career progress.",
+        "AppliCare is a web app for keeping track of job applications. Each application carries a status from applied to accepted, tasks with deadlines can be linked to it, and a dashboard shows totals, a success rate and a graph over time. The frontend is React with Ant Design, the backend is Spring Boot with MongoDB and JWT sign-in, and it was built for two school modules.",
     },
   },
   {
@@ -208,7 +208,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "self",
     deepDive: {
       overview:
-        "Self is a Windows system information display tool that brings the beloved Neofetch experience to Windows users. Built with Python, it provides customizable themes, multiple image rendering modes, and comprehensive system information display with ASCII art or image support.",
+        "Self shows your system information in the terminal next to an image or ASCII art: what Neofetch does on Linux, for Windows. It is written in Python, installs with one PowerShell command, renders images as coloured blocks or braille, and reads its layout and colours from a config file.",
     },
   },
   {
@@ -226,7 +226,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "code-extractor",
     deepDive: {
       overview:
-        "A powerful Chrome extension that allows developers to easily extract and download the complete source code of any website. Used by 1000+ developers worldwide.",
+        "Website Code Extractor is a Chrome and Edge extension that downloads a website's HTML, CSS, JavaScript and images as one ZIP file with the folder structure kept. It is plain JavaScript on Manifest V3 with JSZip, and 6,000 people use it on the Chrome Web Store.",
     },
   },
   {
@@ -244,7 +244,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "thoughts",
     deepDive: {
       overview:
-        "A quiet space separate from my portfolio, designed for simplicity and writing. Built with Next.js, MDX, and Tailwind CSS, and featuring a custom guestbook for visitors to leave their own thoughts.",
+        "Thoughts is a small site where I write reflections, fragments and notes, separate from this portfolio. It is a Next.js app where every post is an MDX file, with a guestbook where visitors can leave a note of their own.",
     },
   },
   {
@@ -268,7 +268,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "taco",
     deepDive: {
       overview:
-        "Taco is a clean, production-ready template site centered around my brother's dog. It demonstrates localization with automatic detection, a simple blog system, and a modular architecture that can be adapted to real projects.",
+        "Taco is a website about my brother's dog, built as a template I can reuse. It has pages in English, Spanish and Japanese with automatic language detection, a blog, a gallery and a contact page, on Next.js, TypeScript and Tailwind CSS.",
     },
   },
   {
@@ -288,7 +288,6 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "chatapp",
     i18nKey: "chatapp",
-    link: "https://chat-app.ch",
     github: "https://github.com/lyfe691/chatapp",
     technologies: [
       "React",
@@ -332,7 +331,7 @@ export const PROJECTS: ProjectMeta[] = [
   {
     id: "docker-service",
     i18nKey: "dockerService",
-    github: "https://github.com/lyfe691/LB-WISS_169-347",
+    github: "https://github.com/lyfe691/m169-347",
     technologies: ["Docker", "Teamwork", "Documentation"],
     date: {
       start: "2024-06",

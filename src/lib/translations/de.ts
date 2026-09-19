@@ -291,99 +291,99 @@ export const de = {
     list: {
       codeExtractor: {
         title: "Website Code Extractor",
-        tagline: "Code mit einem Klick extrahieren",
+        tagline: "Der Code jeder Website als ein ZIP",
         description:
-          "Eine einfache Chrome-Erweiterung, die HTML, CSS, JavaScript und Bilder von Websites extrahiert und sie mit JSZip in eine ZIP-Datei verpackt. Ideal für kleinere Websites – bei grösseren Seiten, die stark von serverseitigem Code abhängen, stösst sie an Grenzen.",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) ist eine Erweiterung für Chrome und Edge, die HTML, CSS, JavaScript und Bilder einer Website als eine ZIP-Datei herunterlädt, samt Ordnerstruktur. Ein Klick, keine Einrichtung. Sie hat 6000 Nutzer im Chrome Web Store und funktioniert am besten mit statischen Seiten.",
       },
       applicare: {
         title: "AppliCare",
-        tagline: "Bewerbungen mühelos im Griff",
+        tagline: "Alle Bewerbungen an einem Ort",
         description:
-          "AppliCare ist eine moderne Bewerbungsmanagement-Plattform, die mit Spring Boot für das Backend, MongoDB Atlas zur Datenspeicherung und React (Vite) mit Ant Design für das Frontend entwickelt wurde. Sie bietet eine intuitive und effiziente Möglichkeit, Bewerbungen mit einer eleganten, responsiven Benutzeroberfläche zu organisieren und zu überwachen.",
+          "[AppliCare](https://applicare.app) behält deine Bewerbungen im Blick. Jede Bewerbung mit ihrem Status erfassen, von beworben bis Angebot, Aufgaben mit Fristen anhängen und den Fortschritt auf einem Dashboard mit Erfolgsquote und Zeitverlauf verfolgen. Gebaut mit React, Ant Design, Spring Boot und MongoDB.",
       },
       osint: {
         title: "OSINT Website",
         tagline: "Schärfe deinen Ermittlerblick",
         description:
-          "Diese OSINT-Website ist ein Passionsprojekt, inspiriert von meinem Interesse an Open Source Intelligence und der sich ständig weiterentwickelnden Welt der digitalen Untersuchungen. Sie bietet interaktive Übungen zur Schärfung investigativer Fähigkeiten und zur Förderung kritischen Denkens.",
+          "[OSINT Exercises](https://osint.ysz.life) ist eine Seite zum Üben von Open Source Intelligence: Informationen aus öffentlichen Quellen finden. Jede Übung liefert einen Hintergrund und eine Reihe von Aufgaben, von leicht bis Experte, und jeder kann über die Seite eine neue Übung einreichen.",
       },
       chatapp: {
         title: "ChatApp",
         tagline: "Chaträume in Echtzeit, auf Spring Boot",
         description:
-          "ChatApp ist eine benutzerfreundliche Chat-Plattform, auf der Benutzer Konten erstellen und sich in verschiedenen Chaträumen mit anderen verbinden können. Mit Spring Boot entwickelt und von MongoDB für effiziente Datenspeicherung unterstützt, bietet ChatApp ein nahtloses Erlebnis für Echtzeitkommunikation.",
+          "ChatApp ist eine Chat-Plattform in Echtzeit: Konto erstellen, E-Mail bestätigen und in Räumen chatten, die man selbst erstellt oder denen man beitritt. Nachrichten laufen über WebSockets, dahinter stehen Spring Boot und MongoDB. Entstanden für ein Schulmodul.",
       },
       vmDetector: {
         title: "Virtual Machine Detector",
         tagline: "Erkennt, ob du in einer VM läufst",
         description:
-          "Ein Tool zur Erkennung, ob ein System in einer virtuellen Maschine läuft.",
+          "Ein kleines Java-Tool, das erkennt, ob es in einer virtuellen Maschine läuft. Es prüft BIOS, CPU, die MAC-Adresse der Netzwerkkarte und die Windows-Registry auf die Spuren, die ein Hypervisor hinterlässt.",
       },
       viewCounter: {
         title: "View Counter",
         tagline: "Ein Seitenaufruf-Zähler auf Redis",
         description:
-          "Einfache Besucherzähler‑App, die Seitenaufrufe zählt. Entwickelt mit Spring Boot und Redis.",
+          "Ein Seitenaufruf-Zähler: Jeder Besuch der Startseite zählt eins hoch, und der Stand liegt in Redis, übersteht also einen Neustart. Ein kleines Spring-Boot-Projekt, um zu lernen, wie Redis in eine Java-Webanwendung passt.",
       },
       dockerService: {
         title: "Docker Service Deployment",
         tagline: "MediaWiki, Nextcloud und Gogs per Compose",
         description:
-          "Dieses Docker‑Compose‑Projekt stellt MediaWiki, Nextcloud und Gogs bereit und fokussiert Teamarbeit, Containerisierung und Dokumentation. Gemeinsam mit Benicio Von Felten entwickelt.",
+          "Ein Docker-Compose-Setup, das MediaWiki, Nextcloud und Gogs nebeneinander betreibt, mit persistenten Daten und Portainer zur Überwachung. Ein Schulprojekt, gemeinsam mit Benicio Von Felten gebaut und dokumentiert.",
       },
       phishing: {
         title: "Phishing Website Tutorial",
         tagline: "Wie Phishing-Seiten funktionieren",
         description:
-          "Dies ist ein Tutorial zur Erstellung einer Phishing-Website. Es wurde mit HTML, CSS und JavaScript erstellt.",
+          "Ein Schritt-für-Schritt-Blick darauf, wie eine Phishing-Seite aufgebaut ist, geschrieben, damit man eine erkennt, wenn man sie sieht. Nur zu Bildungszwecken.",
       },
       otw: {
         title: "OverTheWire Guide",
         tagline: "Bandit, Level für Level",
         description:
-          "Dies ist ein Leitfaden zur Lösung der OverTheWire Wargames.",
+          "Eine Schritt-für-Schritt-Lösung des Wargames [Bandit von OverTheWire](https://overthewire.org/wargames/bandit/), Level für Level, mit einer kurzen Einführung in die Linux-Befehle, die jedes Level braucht.",
       },
       sola: {
         title: "Sola",
-        tagline: "Modernes Portfolio in React und TypeScript",
+        tagline: "Diese Website, in sechs Sprachen und elf Themes",
         description:
-          "Sola ist meine persönliche Website. Entwickelt mit React, TypeScript und Tailwind CSS, präsentiert sie meine Projekte, Fähigkeiten und Erfahrungen in einem klaren, modernen Design.",
+          "Sola ist die Website, auf der du gerade bist. Sie läuft mit React 19, Vite und Tailwind CSS, gibt es in sechs Sprachen und elf Themes und hat sieben animierte Hintergründe, die sich über das Menü in der Ecke wechseln lassen. Der Quellcode liegt [auf GitHub](https://github.com/lyfe691/sola).",
       },
       kinoa: {
         title: "Kinoa",
         tagline: "Kostenlos streamen, ohne Lärm",
         description:
-          "Kinoa ist eine kostenlose Streaming-Website mit Next.js, shadcn/ui und Supabase. Kein Abo nötig — stöbere in Filmen und Serien, schaue mit Inline-Wiedergabe von Drittanbietern und lass das automatische Server-Failover den Rest erledigen.",
+          "[Kinoa](https://kinoa.to) ist eine kostenlose Streaming-Seite für Filme und Serien. Trends durchstöbern, einen Titel öffnen und direkt auf derselben Seite abspielen, ganz ohne Konto; wer sich anmeldet, bekommt eine Watchlist und einen Verlauf, die über alle Geräte synchron bleiben. Gebaut mit Next.js, Supabase und Daten von TMDB.",
       },
       self: {
         title: "Self",
         tagline: "Neofetch, neu gedacht für Windows",
         description:
-          "Self ist ein anpassbares Systeminformations-Tool für Windows, inspiriert von Neofetch und mit Python entwickelt. Es zeigt Systeminformationen zusammen mit Bild- oder ASCII-Art direkt im Terminal an. Mit Unterstützung für Block- und Braille-Darstellung, anpassbaren Designs und einem einfachen PowerShell-Installer bringt es eine saubere, Unix-ähnliche Ästhetik auf Windows.",
+          "Self zeigt deine Systeminformationen im Terminal neben einem Bild oder ASCII-Art, so wie Neofetch unter Linux, nur für Windows. Es wird mit einem PowerShell-Befehl installiert, rendert Bilder als farbige Blöcke oder Braille und hat konfigurierbare Themes. Geschrieben in Python.",
       },
       taco: {
         title: "Taco",
-        tagline: "Ein produktionsreifes Next.js-Template",
+        tagline: "Die Website eines Hundes, als wiederverwendbare Vorlage",
         description:
-          "Ein produktionsreifes Template rund um Taco, den Hund meines Bruders — mit Next.js, TypeScript und Tailwind CSS. Enthält Lokalisierung mit automatischer Erkennung, ein Blog‑System und eine saubere, modulare Architektur für echte Projekte.",
+          "[Taco](https://takitwo.vercel.app) ist eine Website über den Hund meines Bruders, gebaut als Vorlage, die ich wiederverwenden kann: Seiten auf Englisch, Spanisch und Japanisch mit automatischer Spracherkennung, ein Blog, eine Galerie und eine Kontaktseite. Gebaut mit Next.js, TypeScript und Tailwind CSS.",
       },
       thoughts: {
         title: "Thoughts",
         tagline: "Gedanken, Fragmente und Notizen",
         description:
-          "Eine minimalistische persönliche Seite, auf der ich Reflexionen, Fragmente und Notizen teile. Inspiriert von der persönlichen Website von [Shu Ding](https://shud.in), gebaut mit Next.js, MDX und Tailwind. Enthält ein eigenes Gästebuch, in dem Besucher ihre Gedanken hinterlassen können.",
+          "[Thoughts](https://thoughts.ysz.life) ist eine kleine Seite, auf der ich Gedanken, Fragmente und Notizen aufschreibe, getrennt von diesem Portfolio. Beiträge sind MDX-Dateien, und in einem Gästebuch können Besucher eine eigene Notiz hinterlassen. Inspiriert von der persönlichen Seite von [Shu Ding](https://shud.in).",
       },
       magi: {
         title: "magi",
         tagline: "Asynchrones Port-Scanning, korrekt gebaut",
         description:
-          "magi ist ein schneller, asynchroner TCP- und UDP-Portscanner, geschrieben in Rust. Es führt Connect-Scans durch — ein normaler Handshake pro Port — und braucht daher kein Root; es läuft überall dort, wo tokio läuft. Es meldet nie einen Portzustand, den es nicht tatsächlich hergestellt hat: Kann ein Probe nicht laufen, wird er als untestable markiert statt als closed geraten. Begrenzte Nebenläufigkeit hält den Speicher flach — von einem einzelnen Host bis zu einem ganzen /16 — mit Banner-Grabbing, UDP-Scanning und JSON-Ausgabe fürs Scripting.",
+          "[magi](https://magi.ysz.life) ist ein schneller TCP- und UDP-Portscanner, geschrieben in Rust. Er scannt mit ganz normalen Verbindungen, braucht also kein Root, und meldet nur, was er wirklich beobachtet hat: Ein Port, den er nicht testen konnte, gilt als untestable statt als closed. Ein Befehl installiert ihn unter Linux, macOS oder Windows.",
       },
       luma: {
         title: "Luma",
         tagline: "Eigene Keys, jedes Modell",
         description:
-          "Eine Multi‑Modell‑KI‑Plattform, bei der du deine eigenen API‑Schlüssel mitbringst und mit den besten Modellen sprichst — Claude, GPT, Gemini, Grok und mehr — alles an einem Ort. Gebaut mit Next.js 16, dem Vercel AI SDK und Supabase.",
+          "[Luma](https://luma.ysz.life) ist eine Chat-App für alle grossen KI-Modelle: eigene API-Keys mitbringen und innerhalb eines Gesprächs zwischen Claude, GPT, Gemini, Grok und weiteren wechseln. Wer eine frühere Nachricht bearbeitet, verzweigt den Chat, und beide Pfade bleiben erhalten. Die Keys werden verschlüsselt, bevor sie gespeichert werden.",
       },
       perspectas: {
         title: "perspectas.ch",

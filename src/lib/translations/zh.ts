@@ -278,97 +278,99 @@ export const zh = {
     list: {
       codeExtractor: {
         title: "网站代码提取器",
-        tagline: "一键提取网站代码",
+        tagline: "把任何网站的代码打包成一个 ZIP",
         description:
-          "一款简单的 Chrome 扩展，可从网站提取 HTML、CSS、JavaScript 和图片，并用 JSZip 打包为 ZIP。适用于小型网站，便于快速获取网页代码；对严重依赖服务端代码的大型网站存在一定限制。",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) 是一款 Chrome 和 Edge 扩展，可以把网站的 HTML、CSS、JavaScript 和图片连同目录结构一起下载为一个 ZIP 文件。一键完成，无需设置。它在 Chrome 应用商店有 6000 名用户，对静态网站效果最好。",
       },
       applicare: {
         title: "AppliCare",
-        tagline: "轻松管理求职申请",
+        tagline: "所有求职申请，集中在一处",
         description:
-          "AppliCare是一个现代求职申请管理平台，后端使用Spring Boot，数据存储使用MongoDB Atlas，前端使用React（Vite）和Ant Design。它提供了一个直观且高效的方式来组织和监控求职申请，具有时尚的响应式界面。",
+          "[AppliCare](https://applicare.app) 帮你管理求职申请。为每一份申请记录状态，从已投递到收到录用；给它关联带截止日期的任务；在带成功率和时间线的仪表盘上查看进展。使用 React、Ant Design、Spring Boot 和 MongoDB 构建。",
       },
       osint: {
         title: "OSINT网站",
         tagline: "磨炼你的调查直觉",
         description:
-          "这个OSINT网站是一个源于我对开源情报和不断发展的数字调查世界兴趣的项目。它提供互动练习，旨在提升调查技能并鼓励批判性思维。",
+          "[OSINT Exercises](https://osint.ysz.life) 是一个练习开源情报（OSINT）的网站，也就是从公开来源中查找信息。每道练习都有背景说明和一组任务，难度从简单到专家级，任何人都可以通过网站提交新的练习。",
       },
       chatapp: {
         title: "聊天应用",
         tagline: "基于Spring Boot的实时聊天室",
         description:
-          "ChatApp是一个用户友好的聊天平台，用户可以创建账户并在各种聊天室中与他人联系。使用Spring Boot构建，由MongoDB提供高效的数据存储，为实时通信提供无缝体验。",
+          "ChatApp 是一个实时聊天平台：注册账号、验证邮箱后，就可以在自己创建或加入的聊天室里交流。消息通过 WebSocket 传输，后端是 Spring Boot 和 MongoDB。这是为学校的一个模块课程而做的项目。",
       },
       vmDetector: {
         title: "虚拟机检测器",
         tagline: "判断是否运行在虚拟机中",
-        description: "这是一个检测机器是否为虚拟机的工具。",
+        description:
+          "一个小型 Java 工具，用来判断自己是否运行在虚拟机里。它会检查 BIOS、CPU、网卡的 MAC 地址以及 Windows 注册表，寻找虚拟机管理程序留下的痕迹。",
       },
       viewCounter: {
         title: "访问计数器",
         tagline: "基于Redis的页面访问计数器",
         description:
-          "这是一个简单的访问计数器应用程序，用于统计页面被查看的次数。使用Spring Boot和Redis构建。",
+          "一个页面访问计数器：每次访问首页就加一，计数保存在 Redis 里，重启后也不会丢失。这是一个小型 Spring Boot 项目，用来学习 Redis 如何融入 Java Web 应用。",
       },
       dockerService: {
         title: "Docker服务部署",
         tagline: "用Compose部署MediaWiki、Nextcloud和Gogs",
         description:
-          "这个Docker Compose项目部署了MediaWiki、Nextcloud和Gogs，注重团队协作、容器化和文档编写。与Benicio Von Felten共同开发。",
+          "一套 Docker Compose 配置，让 MediaWiki、Nextcloud 和 Gogs 并行运行，数据持久化保存，并用 Portainer 进行监控。这是和 Benicio Von Felten 一起搭建并撰写文档的学校项目。",
       },
       phishing: {
         title: "钓鱼网站教程",
         tagline: "了解钓鱼网页的运作方式",
         description:
-          "这是一个关于如何创建钓鱼网站的教程。使用HTML、CSS和JavaScript构建。",
+          "一步步讲解钓鱼页面是如何搭建出来的，目的是让你在遇到时能够识别它。仅供学习使用。",
       },
       otw: {
         title: "OverTheWire指南",
         tagline: "Bandit，逐关攻略",
-        description: "这是一个关于如何解决OverTheWire战争游戏的指南。",
+        description:
+          "[OverTheWire 的 Bandit](https://overthewire.org/wargames/bandit/) 战争游戏的逐关攻略，并简要介绍每一关用到的 Linux 命令。",
       },
       sola: {
         title: "Sola",
-        tagline: "React与TypeScript打造的现代作品集",
+        tagline: "你正在看的这个网站，六种语言、十一套主题",
         description:
-          "Sola 是我的个人网站。基于 React、TypeScript 与 Tailwind CSS 构建，用以以干净、现代的方式展示我的项目、技能与经验。",
+          "Sola 就是你现在看到的这个网站。它基于 React 19、Vite 和 Tailwind CSS，提供六种语言和十一套主题，还有七种动态背景，可以在角落的菜单里切换。源代码在 [GitHub](https://github.com/lyfe691/sola) 上。",
       },
       kinoa: {
         title: "Kinoa",
         tagline: "免费观影，纯净无扰",
         description:
-          "Kinoa 是基于 Next.js、shadcn/ui 和 Supabase 构建的免费流媒体网站。无需订阅 — 浏览电影和剧集，通过第三方提供商内嵌播放，服务器自动切换，简洁好用。",
+          "[Kinoa](https://kinoa.to) 是一个免费的电影和剧集流媒体网站。浏览热门内容，打开一部作品，在同一页面直接播放，无需账号；登录后，片单和观看记录会在多台设备间同步。使用 Next.js、Supabase 和 TMDB 的数据构建。",
       },
       self: {
         title: "Self",
         tagline: "为Windows重塑的Neofetch",
         description:
-          "Self 是一个可自定义的 Windows 系统信息显示工具，受 Neofetch 启发，并使用 Python 构建。它可在终端中显示系统信息，并配合图像或 ASCII 艺术显示。支持方块或盲文渲染模式、可定制主题，以及简洁的 PowerShell 安装程序，为 Windows 带来清爽的类 Unix 风格美学。",
+          "Self 会在终端里把系统信息和一张图片或 ASCII 艺术并排显示，就像 Linux 上的 Neofetch，只不过面向 Windows。一条 PowerShell 命令即可安装，图片可以用彩色方块或盲文点阵渲染，主题也可以自行配置。用 Python 编写。",
       },
       taco: {
         title: "Taco",
-        tagline: "可直接上线的Next.js模板",
+        tagline: "一只狗的网站，做成了可复用的模板",
         description:
-          "围绕我弟弟的狗狗 Taco 打造的生产级模板网站——基于 Next.js、TypeScript、Tailwind CSS。内置带自动检测的本地化、博客系统，以及适用于真实项目的干净模块化架构。",
+          "[Taco](https://takitwo.vercel.app) 是一个介绍我哥哥的狗的网站，同时也是一套我可以复用的模板：提供英语、西班牙语和日语页面并自动识别语言，还有博客、相册和联系页面。使用 Next.js、TypeScript 和 Tailwind CSS 构建。",
       },
       thoughts: {
         title: "Thoughts",
         tagline: "思绪、片段与笔记",
         description:
-          "一个极简的个人网站，用来分享我的思考、片段与笔记。受 [Shu Ding](https://shud.in) 个人网站启发，使用 Next.js、MDX 和 Tailwind 构建。包含自定义留言簿功能，访客可以留下自己的想法。",
+          "[Thoughts](https://thoughts.ysz.life) 是一个小网站，我在那里写下一些思考、片段和笔记，和这个作品集分开。文章是 MDX 文件，访客还可以在留言簿里留下自己的话。灵感来自 [Shu Ding](https://shud.in) 的个人网站。",
       },
       magi: {
         title: "magi",
         tagline: "以正确性为先的异步端口扫描器",
         description:
-          "magi 是一款用 Rust 编写的快速、异步的 TCP/UDP 端口扫描器。它执行 connect 扫描——对每个端口进行一次正常握手——因此无需 root，并且可以在任何 tokio 能运行的地方运行。它绝不报告自己并未真正建立过的端口状态：当探测无法执行时，会标记为 untestable，而不是臆断为 closed。有界并发让内存保持平稳——从单个主机到整个 /16——并支持 banner 抓取、UDP 扫描以及便于脚本处理的 JSON 输出。",
+          "[magi](https://magi.ysz.life) 是一款用 Rust 编写的快速 TCP/UDP 端口扫描器。它用普通连接进行扫描，因此不需要 root，而且只报告真正观察到的结果：无法测试的端口会标记为 untestable，而不是 closed。在 Linux、macOS 或 Windows 上一条命令即可安装。",
       },
       luma: {
         title: "Luma",
         tagline: "自带密钥，畅聊任意模型",
         description:
-          "自带 API 密钥，与 Claude、GPT、Gemini、Grok 等顶级 AI 模型在同一平台对话的多模型 AI 平台。基于 Next.js 16、Vercel AI SDK 和 Supabase 构建。",
+          "[Luma](https://luma.ysz.life) 是一款支持各大 AI 模型的聊天应用：填入自己的 API 密钥，就能在同一段对话里切换 Claude、GPT、Gemini、Grok 等模型。编辑之前的任意一条消息，对话就会分支，两条路径都会保留。密钥在存储前会先加密。",
       },
       perspectas: {
         title: "perspectas.ch",

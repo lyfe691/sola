@@ -285,97 +285,99 @@ export const ja = {
     list: {
       codeExtractor: {
         title: "ウェブサイトコード抽出ツール",
-        tagline: "ワンクリックでコードを抽出",
+        tagline: "どんなサイトのコードも ZIP ひとつに",
         description:
-          "ウェブサイトから HTML、CSS、JavaScript、画像を抽出し、JSZip で ZIP にまとめるシンプルな Chrome 拡張です。小規模サイトに最適でコードへ素早くアクセスできますが、サーバー側コードに依存する大規模サイトでは制限があります。",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) は、Web サイトの HTML、CSS、JavaScript、画像をフォルダ構成を保ったまま 1 つの ZIP ファイルとしてダウンロードする Chrome / Edge 拡張機能です。ワンクリックで、設定は不要です。Chrome ウェブストアで 6000 人のユーザーがいて、静的なサイトでもっともよく動作します。",
       },
       applicare: {
         title: "AppliCare",
-        tagline: "応募管理をもっと手軽に",
+        tagline: "すべての応募をひとつの場所で",
         description:
-          "AppliCareは、バックエンドにSpring Boot、データストレージにMongoDB Atlas、フロントエンドにReact（Vite）とAnt Designを使用して構築された最新の求職管理プラットフォームです。洗練されたレスポンシブなインターフェースで、求職活動を直感的かつ効率的に整理・監視する方法を提供します。",
+          "[AppliCare](https://applicare.app) は就職・転職活動の応募状況を管理するアプリです。応募ごとに「応募済み」から「内定」までのステータスを記録し、期限つきのタスクを紐づけ、成功率と推移のグラフが並ぶダッシュボードで進み具合を確認できます。React、Ant Design、Spring Boot、MongoDB で構築しました。",
       },
       osint: {
         title: "OSINT ウェブサイト",
         tagline: "調査スキルを磨く",
         description:
-          "このOSINTウェブサイトは、オープンソースインテリジェンスと不断に進化するデジタル調査の世界への関心から生まれたプロジェクトです。調査スキルを磨き、批判的思考を促す対話型の演習を提供しています。",
+          "[OSINT Exercises](https://osint.ysz.life) は、公開情報から情報を見つけ出すオープンソース・インテリジェンス（OSINT）を練習するためのサイトです。各演習には背景説明といくつかの課題があり、難易度は初級からエキスパートまで。新しい演習は誰でもサイトから投稿できます。",
       },
       chatapp: {
         title: "ChatApp",
         tagline: "Spring Boot製のリアルタイムチャット",
         description:
-          "ChatAppは、ユーザーがアカウントを作成し、様々なチャットルームで他のユーザーとつながることができるユーザーフレンドリーなチャットプラットフォームです。Spring Bootで構築され、MongoDBによる効率的なデータストレージを備え、リアルタイムコミュニケーションのためのシームレスな体験を提供します。",
+          "ChatApp はリアルタイムのチャットプラットフォームです。アカウントを作成してメールアドレスを確認すれば、自分で作ったルームや参加したルームで会話できます。メッセージは WebSocket でやり取りされ、裏側では Spring Boot と MongoDB が動いています。学校のモジュールの課題として制作しました。",
       },
       vmDetector: {
         title: "仮想マシン検出ツール",
         tagline: "仮想マシン上かどうかを判定",
-        description: "マシンが仮想マシンであるかどうかを検出するツールです。",
+        description:
+          "自分が仮想マシンの中で動いているかどうかを判定する、小さな Java 製ツールです。BIOS、CPU、ネットワークカードの MAC アドレス、Windows レジストリを調べ、ハイパーバイザーが残す痕跡を探します。",
       },
       viewCounter: {
         title: "ビューカウンター",
         tagline: "Redisで動くページビューカウンター",
         description:
-          "ページの閲覧回数をカウントするシンプルなビューカウンターアプリケーションです。Spring BootとRedisで構築されています。",
+          "ページの閲覧数カウンターです。トップページが開かれるたびに 1 ずつ増え、カウントは Redis に保存されるので再起動しても消えません。Java の Web アプリで Redis をどう使うかを学ぶための、小さな Spring Boot プロジェクトです。",
       },
       dockerService: {
         title: "Dockerサービスデプロイメント",
         tagline: "ComposeでMediaWiki・Nextcloud・Gogsを構築",
         description:
-          "このDocker Composeプロジェクトは、MediaWiki、Nextcloud、Gogsをデプロイし、チームワーク、コンテナ化、ドキュメンテーションに焦点を当てています。Benicio Von Feltenと共同開発。",
+          "MediaWiki、Nextcloud、Gogs を並べて動かす Docker Compose 構成です。データは永続化され、Portainer で監視します。Benicio Von Felten と一緒に構築し、ドキュメントを書いた学校のプロジェクトです。",
       },
       phishing: {
         title: "フィッシングウェブサイトチュートリアル",
         tagline: "フィッシングページの仕組みを学ぶ",
         description:
-          "これは、フィッシングウェブサイトの作成方法に関するチュートリアルです。HTML、CSS、JavaScriptで構築されています。",
+          "フィッシングページがどのように作られているかを順を追って解説し、実物を見たときに見抜けるようにするためのチュートリアルです。教育目的に限ります。",
       },
       otw: {
         title: "OverTheWireガイド",
         tagline: "Banditをレベルごとに攻略",
-        description: "OverTheWireウォーゲームの解決方法に関するガイドです。",
+        description:
+          "[OverTheWire の Bandit](https://overthewire.org/wargames/bandit/) というウォーゲームを、レベルごとに解説した攻略ガイドです。各レベルで必要になる Linux コマンドの簡単な紹介もついています。",
       },
       sola: {
         title: "Sola",
-        tagline: "ReactとTypeScriptで作るモダンなポートフォリオ",
+        tagline: "6 言語と 11 テーマで見られる、このサイト",
         description:
-          "Sola は私の個人サイトです。React・TypeScript・Tailwind CSS で構築し、プロジェクトやスキル、経験をクリーンかつモダンに紹介します。",
+          "Sola は、いまご覧になっているこのサイトです。React 19、Vite、Tailwind CSS で動き、6 つの言語と 11 のテーマに対応し、右上のメニューから切り替えられる 7 種類のアニメーション背景があります。ソースコードは [GitHub](https://github.com/lyfe691/sola) で公開しています。",
       },
       kinoa: {
         title: "Kinoa",
         tagline: "無料でストリーミング、ノイズなし",
         description:
-          "Kinoa は Next.js、shadcn/ui、Supabase で構築した無料ストリーミングサイトです。サブスク不要 — 映画やドラマをサードパーティホスターからインライン再生でき、サーバーが落ちても自動で切り替わります。",
+          "[Kinoa](https://kinoa.to) は映画とドラマの無料ストリーミングサイトです。トレンドを眺めて作品を開き、同じページでそのまま再生できます。アカウントは不要で、ログインすればウォッチリストと視聴履歴が端末間で同期されます。Next.js、Supabase、TMDB のデータで構築しました。",
       },
       self: {
         title: "Self",
         tagline: "Windows向けに再構築したNeofetch",
         description:
-          "Self は、Neofetch にインスパイアされたカスタマイズ可能な Windows 用のシステム情報表示ツールで、Python で構築されています。システム情報を画像や ASCII アートと共にターミナル上に表示します。ブロックと点字の描画モード、テーマのカスタマイズ、簡単な PowerShell インストーラーに対応し、Windows にクリーンで Unix ライクな美しさをもたらします。",
+          "Self は、Linux の Neofetch のように、システム情報を画像や ASCII アートと並べてターミナルに表示する Windows 向けツールです。PowerShell のコマンド 1 つでインストールでき、画像はカラーブロックまたは点字で描画され、テーマも設定できます。Python で書かれています。",
       },
       taco: {
         title: "Taco",
-        tagline: "本番対応のNext.jsテンプレート",
+        tagline: "犬のサイトを、再利用できるテンプレートとして",
         description:
-          "弟の犬 Taco を題材にしたプロダクション品質のテンプレート。Next.js・TypeScript・Tailwind CSS により、言語自動検出付きのローカリゼーション、ブログ機能、モジュール化されたクリーンなアーキテクチャを備えています。",
+          "[Taco](https://takitwo.vercel.app) は兄の犬を紹介するサイトで、使い回せるテンプレートとして作りました。英語・スペイン語・日本語のページと言語の自動判定、ブログ、ギャラリー、問い合わせページがあります。Next.js、TypeScript、Tailwind CSS で構築しました。",
       },
       thoughts: {
         title: "Thoughts",
         tagline: "思索、断片、そしてメモ",
         description:
-          "考えや断片、メモを共有するミニマルな個人サイトです。[Shu Ding](https://shud.in) の個人サイトに触発され、Next.js・MDX・Tailwind CSS で構築しました。訪問者が自分の想いを書き残せる独自のゲストブック機能を備えています。",
+          "[Thoughts](https://thoughts.ysz.life) は、このポートフォリオとは別に、考えたことや断片、メモを書き留めている小さなサイトです。記事は MDX ファイルで、ゲストブックには訪れた人が自分の言葉を残せます。[Shu Ding](https://shud.in) さんの個人サイトに影響を受けました。",
       },
       magi: {
         title: "magi",
         tagline: "正確さを重視した非同期ポートスキャナ",
         description:
-          "magi は Rust で書かれた高速・非同期の TCP/UDP ポートスキャナーです。コネクトスキャン（各ポートへの通常のハンドシェイク）を行うため root は不要で、tokio が動く環境ならどこでも動作します。実際に確立していないポート状態を報告することは決してありません。プローブを実行できない場合は closed と決めつけず untestable として扱います。有界な並行処理により、単一ホストから /16 全体までメモリ使用量を一定に保ち、バナー取得、UDP スキャン、スクリプト連携向けの JSON 出力に対応します。",
+          "[magi](https://magi.ysz.life) は Rust で書かれた高速な TCP/UDP ポートスキャナーです。通常の接続でスキャンするので root は不要で、実際に観測したことだけを報告します。テストできなかったポートは closed ではなく untestable と表示されます。Linux、macOS、Windows にコマンド 1 つでインストールできます。",
       },
       luma: {
         title: "Luma",
         tagline: "自分のキーで、どのモデルとも",
         description:
-          "自分の API キーを持ち込み、Claude・GPT・Gemini・Grok など最高の AI モデルとひとつの場所で対話できるマルチモデル AI プラットフォーム。Next.js 16、Vercel AI SDK、Supabase で構築。",
+          "[Luma](https://luma.ysz.life) は主要な AI モデルをまとめて使えるチャットアプリです。自分の API キーを登録すれば、ひとつの会話の中で Claude、GPT、Gemini、Grok などを切り替えられます。過去のメッセージを編集すると会話が分岐し、どちらの流れも残ります。キーは暗号化してから保存されます。",
       },
       perspectas: {
         title: "perspectas.ch",

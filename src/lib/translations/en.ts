@@ -287,99 +287,99 @@ export const en = {
     list: {
       codeExtractor: {
         title: "Website Code Extractor",
-        tagline: "Extract code with one click",
+        tagline: "Any website's code as one ZIP",
         description:
-          "A simple Chrome extension that extracts HTML, CSS, JavaScript, and images from websites and packages them into a zip file with JSZip. Ideal for smaller sites, it allows quick access to web code, though it may struggle with larger sites that rely heavily on server-side code.",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) is a Chrome and Edge extension that downloads a website's HTML, CSS, JavaScript and images as one ZIP file, with the folder structure kept. One click, no setup. It has 6,000 users on the Chrome Web Store and works best on static sites.",
       },
       applicare: {
         title: "AppliCare",
-        tagline: "Manage your job applications with ease",
+        tagline: "Every job application in one place",
         description:
-          "AppliCare is a modern job application management platform built using Spring Boot for the backend, MongoDB Atlas to store data, and React (Vite) with Ant Design for the frontend. It provides an intuitive and efficient way to organize and monitor job applications with a sleek, responsive interface.",
+          "[AppliCare](https://applicare.app) keeps track of your job applications. Add each one with its status, from applied to offer, attach tasks with deadlines, and follow your progress on a dashboard with a success rate and a timeline. Built with React, Ant Design, Spring Boot and MongoDB.",
       },
       osint: {
         title: "OSINT Website",
         tagline: "Sharpen your investigative instincts",
         description:
-          "This OSINT website is a passion project inspired by my interest in Open Source Intelligence and the ever-evolving world of digital investigations. It features interactive exercises designed to sharpen investigative skills and encourage critical thinking.",
+          "[OSINT Exercises](https://osint.ysz.life) is a site for practising open-source intelligence: finding information from public sources. Each exercise gives a background and a set of tasks, from easy to expert, and anyone can submit a new exercise through the site.",
       },
       chatapp: {
         title: "ChatApp",
         tagline: "Real-time rooms, built on Spring Boot",
         description:
-          "ChatApp is a user-friendly chat platform where individuals can create accounts and connect with others in various chat rooms. Built with Spring Boot and backed by MongoDB for efficient data storage, ChatApp provides a seamless experience for real-time communication.",
+          "ChatApp is a real-time chat platform: create an account, verify your e-mail, and talk in rooms you create or join. Messages travel over WebSockets, with Spring Boot and MongoDB behind them. Built for a school module.",
       },
       vmDetector: {
         title: "Virtual Machine Detector",
         tagline: "Know when you're running in a VM",
         description:
-          "This is a tool that detects if a machine is a virtual machine.",
+          "A small Java tool that tells you whether it is running inside a virtual machine. It checks the BIOS, the CPU, the network card's MAC address and the Windows registry for the traces a hypervisor leaves behind.",
       },
       viewCounter: {
         title: "View Counter",
         tagline: "A page view counter on Redis",
         description:
-          "This is a simple view counter application that counts the number of times a page has been viewed. It is built with Spring Boot and Redis.",
+          "A page view counter: every visit to the home page adds one, and the count lives in Redis, so it survives a restart. A small Spring Boot project for learning how Redis fits into a Java web app.",
       },
       dockerService: {
         title: "Docker Service Deployment",
         tagline: "MediaWiki, Nextcloud, and Gogs in Compose",
         description:
-          "This Docker Compose project deploys MediaWiki, Nextcloud, and Gogs, focusing on teamwork, containerization, and documentation. Developed with Benicio Von Felten.",
+          "A Docker Compose setup that runs MediaWiki, Nextcloud and Gogs side by side, with persistent data and Portainer to watch over them. A school project, built and documented together with Benicio Von Felten.",
       },
       phishing: {
         title: "Phishing Website Tutorial",
         tagline: "A hands-on look at how phishing pages work",
         description:
-          "This is a tutorial on how to create a phishing website. It is built with HTML, CSS, and JavaScript.",
+          "A step-by-step look at how a phishing page is put together, written so you can recognise one when you see it. For education only.",
       },
       otw: {
         title: "OverTheWire Guide",
         tagline: "Bandit, level by level",
         description:
-          "This is a guide on how to solve the OverTheWire wargames.",
+          "A walkthrough of [OverTheWire's Bandit](https://overthewire.org/wargames/bandit/) wargame, level by level, with a short introduction to the Linux commands each level needs.",
       },
       sola: {
         title: "Sola",
-        tagline: "Modern portfolio in React and TypeScript",
+        tagline: "This website, in six languages and eleven themes",
         description:
-          "Sola is my personal website, the one you're on right now. It's built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way.",
+          "Sola is the website you are on. It runs on React 19, Vite and Tailwind CSS, comes in six languages and eleven themes, and has seven animated backgrounds you can switch from the menu in the corner. The source is [on GitHub](https://github.com/lyfe691/sola).",
       },
       kinoa: {
         title: "Kinoa",
         tagline: "Free streaming, no noise",
         description:
-          "Kinoa is a free streaming site built with Next.js, shadcn/ui, and Supabase. No subscription needed — browse films and series, watch with inline playback from third-party hosters, and let automatic server failover handle the rest.",
+          "[Kinoa](https://kinoa.to) is a free streaming site for films and series. Browse what's trending, open a title, and press play on the same page, with no account needed; signing in adds a watchlist and a history that sync across devices. Built with Next.js, Supabase and data from TMDB.",
       },
       self: {
         title: "Self",
         tagline: "Neofetch, reimagined for Windows",
         description:
-          "Self is a customizable Windows system information display tool inspired by Neofetch, built with Python. It displays system stats alongside image or ASCII art directly in the terminal. With support for block and braille render modes, theme customization, and a simple PowerShell installer, it brings a clean, Unix-style aesthetic to Windows.",
+          "Self shows your system information in the terminal next to an image or ASCII art, the way Neofetch does on Linux, but for Windows. It installs with one PowerShell command, renders images as coloured blocks or braille, and has themes you can configure. Written in Python.",
       },
       taco: {
         title: "Taco",
-        tagline: "A production-ready Next.js template",
+        tagline: "A dog's website, built as a reusable template",
         description:
-          "A production‑ready template site centered on Taco, my brother's dog — built with Next.js, TypeScript, and Tailwind CSS. It includes localization with automatic detection, a blog system, and a clean modular architecture suitable for real projects.",
+          "[Taco](https://takitwo.vercel.app) is a website about my brother's dog, built as a template I can reuse: pages in English, Spanish and Japanese with automatic language detection, a blog, a gallery and a contact page. Built with Next.js, TypeScript and Tailwind CSS.",
       },
       thoughts: {
         title: "Thoughts",
         tagline: "Reflections, fragments, and notes",
         description:
-          "A minimal personal site where I share reflections, fragments, and notes. Inspired by [Shu Ding](https://shud.in)’s personal website, built with Next.js, MDX, and Tailwind. Includes a custom guestbook feature where visitors can leave their own thoughts.",
+          "[Thoughts](https://thoughts.ysz.life) is a small site where I write reflections, fragments and notes, separate from this portfolio. Posts are MDX files, and a guestbook lets visitors leave a note of their own. Inspired by [Shu Ding](https://shud.in)’s personal site.",
       },
       magi: {
         title: "magi",
         tagline: "Async port scanning, built to be correct",
         description:
-          "magi is a fast, asynchronous TCP and UDP port scanner written in Rust. It does connect scanning — a normal handshake per port — so it needs no root and runs anywhere tokio does. It never reports a port state it didn’t actually establish: when a probe can’t run, it’s marked untestable rather than guessed closed. Bounded concurrency keeps memory flat from a single host to a whole /16, with banner grabbing, UDP probing, and JSON output for scripting.",
+          "[magi](https://magi.ysz.life) is a fast TCP and UDP port scanner written in Rust. It scans with ordinary connections, so it needs no root, and it only reports what it actually observed: a port it could not test is marked untestable instead of closed. One command installs it on Linux, macOS or Windows.",
       },
       luma: {
         title: "Luma",
         tagline: "Bring your own keys, talk to any model",
         description:
-          "A multi-model AI platform that lets you bring your own API keys and talk to the best models — Claude, GPT, Gemini, Grok, and more — all in one place. Built with Next.js 16, the Vercel AI SDK, and Supabase.",
+          "[Luma](https://luma.ysz.life) is a chat app for every major AI model: bring your own API keys and switch between Claude, GPT, Gemini, Grok and more within one conversation. Edit any earlier message and the chat branches, keeping both paths. Your keys are encrypted before they are stored.",
       },
       perspectas: {
         title: "perspectas.ch",
