@@ -50,6 +50,28 @@ export const REVEAL = [0.45, 0, 0.55, 1] as const;
 // Exported for in-page elements that leave the way a page does (code view's command beat).
 export const CONSUME_IN = [0.5, 0, 0.75, 0] as const;
 
+// ---- Shared-element flight (a deep-dive image travelling to the lightbox) ----
+// A click moves an element that is already on screen, so it is a spring: an
+// eased tween between two boxes reads as a fade from one picture to another.
+// Out lands with a little weight. Back is critically damped, because the
+// image returns into a hairline frame where any undershoot shows as a gap.
+// A layout flight runs on a 0-1000 progress value, so the rest thresholds
+// end it within a thousandth of the trip (under a pixel) instead of letting
+// the spring settle invisibly for another half second.
+const FLIGHT_REST = { restDelta: 1, restSpeed: 10 } as const;
+export const FLIGHT_OUT = {
+  type: "spring",
+  visualDuration: 0.32,
+  bounce: 0.14,
+  ...FLIGHT_REST,
+} as const;
+export const FLIGHT_BACK = {
+  type: "spring",
+  visualDuration: 0.28,
+  bounce: 0,
+  ...FLIGHT_REST,
+} as const;
+
 // Durations (seconds) — long clocks are fine BECAUSE the trigger fires
 // early (top-90% of viewport) and the quart-out front-loads the visible
 // motion; index delays stay capped (staggerDelay) so nothing ever waits to
