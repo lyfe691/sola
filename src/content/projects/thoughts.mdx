@@ -1,69 +1,67 @@
-# Design Intent
+# A notebook, not a portfolio
 
-**thoughts** was built to be a quieter companion to my main portfolio.  
-It’s a space to write down reflections, fragments, and notes that don’t always fit into a polished project.
+Thoughts is where I write the things that do not fit a project page: reflections, fragments and notes. It sits apart from this portfolio on purpose. A portfolio shows finished work, and a notebook is allowed to be unfinished.
 
-The design emphasizes **clarity and simplicity**: minimal layout, careful typography, and enough whitespace for content to breathe. It’s meant to feel personal and unhurried — less like a portfolio, more like a notebook.
+<ProjectImage
+  src="/projects/thoughts/home-desktop.png"
+  alt="The Thoughts home page: a thin navigation with about, thoughts and guestbook in italic serif on the left, and a short introduction in a single column of text"
+  caption="The whole site is one column of text and three links."
+  size="large"
+/>
 
-> “You were never supposed to be here.” — a subtle hint in the 404 page that sets the tone for this site.
+## Text first
 
----
+The design is a single column, careful type and a lot of white space. There are no images, no cards and no dark mode, and the navigation is three words. The fonts are hosted with the site, so the first paint does not wait for anyone else's server.
 
-## Technical Architecture
+Even the dead ends are written. The 404 page is a short verse, and one of its lines sets the tone: “You were never supposed to be here.”
 
-The site uses a **Next.js + MDX** stack for content flexibility and a lightweight publishing flow:
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/thoughts/posts-desktop.png",
+      alt: "The list of posts: each title on the left, a dotted line, and its date on the right",
+      caption: "The posts, newest first.",
+    },
+    {
+      src: "/projects/thoughts/guestbook-desktop.png",
+      alt: "The guestbook: a one-line form for a name and a message, above a list of dated notes from visitors, with the names blurred",
+      caption: "The guestbook. Visitor names are blurred here.",
+    },
+  ]}
+  columns={2}
+/>
 
-- **Next.js App Router** for structure and routing
-- **MDX** for writing articles and reflections
-- **Tailwind CSS** for design consistency
-- **Custom fonts** locally hosted for performance
-- **Vercel Postgres** for dynamic guestbook storage
+## A post is a file
+
+The site is a Next.js app, and every post is an MDX file with a little metadata: a title, a date and a description. Publishing means adding a file to one folder. The page that renders a post imports it by its slug:
 
 <CodeBlock
   code={`// thoughts/[slug]/page.tsx
 const { default: MDXContent, metadata } = await import(
   '../_articles/' + \`\${params.slug}.mdx\`
 )
-
 return (
+  <div lang={metadata.chinese ? "zh-Hans" : "en"}>
+    <MDXContent />
+  </div>
+)`}
+  fileName="page.tsx"
+  lang="typescript"
+/>
 
-<div lang={metadata.chinese ? "zh-Hans" : "en"}>
-  <MDXContent />
-</div>
-)`} fileName="page.tsx" lang="typescript" />
+The `lang` attribute follows the post, so a note written in Chinese is announced as Chinese to browsers and screen readers.
 
----
+## The guestbook
 
-## Features
+Personal sites used to have guestbooks, and I wanted one. Visitors leave a name, which is optional, and a message of up to 280 characters. Entries are stored in Postgres on Vercel, and I can remove one with an admin token. In local development the guestbook falls back to memory, so it works without a database.
 
-- **MDX-powered publishing**  
-  Each thought is a `.mdx` file with metadata (title, date, description). New posts are added by dropping files into the `_articles` folder.
+<ProjectImage
+  src="/projects/thoughts/home-mobile.png"
+  alt="The Thoughts home page on a phone: the three navigation links in a row at the top, and the same single column of text below"
+  caption="On a phone the navigation moves to the top."
+  size="phone"
+/>
 
-- **Guestbook**  
-  Inspired by older web traditions, I implemented a custom **guestbook feature** where visitors can leave their own notes.  
-  It includes moderation (admin tokens) and works with Vercel Postgres, with a memory fallback for local development.
+## Where the idea came from
 
-- **404 page as poetry**  
-  Instead of a standard error, the _not-found_ page doubles as a short verse, making even dead ends part of the site’s character.
-
----
-
-## Inspiration
-
-The project was directly inspired by [Shu Ding](https://shud.in)’s personal website — simple, text-first, and quietly expressive.  
-I wanted a similar place for myself: less polished than my portfolio, more open-ended, and honest in tone.
-
----
-
-## Results
-
-This project gave me:
-
-- A **personal writing space** separate from my portfolio
-- A chance to explore **MDX workflows** in Next.js
-- A custom feature (**guestbook**) that feels retro but modernized
-- A flexible system I can expand with future notes and reflections
-
----
-
-_thoughts isn’t a showcase site — it’s a personal corner of the web. A place to pause, write, and keep track of where my mind drifts._
+The site is directly inspired by [Shu Ding](https://shud.in)’s personal website: simple, text-first and quietly expressive. I wanted a place like that for myself, less polished than a portfolio and more open-ended.

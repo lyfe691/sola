@@ -1,125 +1,76 @@
-# Taco — Production‑ready template with i18n and blog
+# A dog's website that doubles as a template
 
-Taco is a clean Next.js template centered on my brother's dog. It demonstrates a practical foundation for real projects: localization with automatic detection, a simple blog system, shared UI primitives, and a modular architecture.
+Taco is my brother's Pomeranian, and this is his website. I built it as something I could reuse: a small multi-page site with translations, colour themes and a blog already wired up, so the next site of this kind starts from a working base.
 
-## Stack & Approach
+<ProjectImage
+  src="/projects/taco/home-desktop.png"
+  alt="The Taco home page: the headline Meet Taco with two buttons on the left, and a round photo of a cream Pomeranian holding a dandelion on the right"
+  caption="The home page in the default theme."
+  size="large"
+/>
 
-- Next.js + TypeScript for app routing and SSR/ISR
-- Tailwind CSS for a strict, maintainable design system
-- Framer Motion for subtle UI polish (kept minimal)
-- Vercel for fast, zero‑config deployments
+## What is in it
 
-## Internationalization
+Five pages: home, gallery, about, blog and contact. The blog has five posts, each one its own page. The header carries the navigation, a theme menu and a language menu, and on a phone it folds into a single menu button.
 
-Language detection runs on the client with persistence to `localStorage`. A provider exposes the current language, a setter, supported languages and a typed `t` function. This can be wired to UI controls (dropdown/toggle) and used across pages and MDX.
+## Three languages, detected on arrival
 
-### use-translation hook
+The site speaks English, Spanish and Japanese. On a first visit it reads the browser's language and uses it if it is one of the three; otherwise it falls back to English:
 
 <CodeBlock
-  code={`"use client";
-
-import {
-  t as translateRaw,
-  TranslationKey,
-  languages,
-  defaultLanguage,
-  setLanguage as setInternalLanguage,
-  detectUserLanguage,
-} from "@/lib/i18n";
-import { Language } from "@/lib/i18n/languages";
-import {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-  ReactNode,
-} from "react";
-
-interface TranslationContextType {
-currentLanguage: Language;
-setLanguage: (langCode: string) => void;
-t: (key: TranslationKey) => string;
-languages: Language[];
-}
-
-const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
-
-export function TranslationProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(defaultLanguage);
-
-useEffect(() => {
-const storedLang = localStorage.getItem("language");
-const detected = storedLang || detectUserLanguage();
-const lang = languages.find((l) => l.code === detected) || defaultLanguage;
-
-    setInternalLanguage(lang.code);
-    setLanguageState(lang);
-
-}, []);
-
-const setLanguage = (langCode: string) => {
-const lang = languages.find((l) => l.code === langCode);
-if (!lang) return;
-
-    setInternalLanguage(lang.code);
-    setLanguageState(lang);
-    localStorage.setItem("language", langCode);
-
-};
-
-const t = (key: TranslationKey) => translateRaw(key, language.code);
-
-return (
-
-<TranslationContext.Provider
-  value={{ currentLanguage: language, setLanguage, t, languages }}
->
-  {children}
-</TranslationContext.Provider>
-); }
-
-export function useTranslation() {
-  const context = useContext(TranslationContext);
-  if (!context) {
-    throw new Error("useTranslation must be used within a TranslationProvider");
+  code={`export function detectUserLanguage(): string {
+  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+    const browserLang = navigator.language || navigator.languages[0];
+    const langCode = browserLang.split('-')[0];
+    return languages.some(lang => lang.code === langCode)
+      ? langCode
+      : fallbackLanguageCode;
   }
-  return context;
-}`} 
-  fileName="hooks/use-translation.tsx"
-  lang="tsx"
-/>
-
-### Client language init
-
-<CodeBlock
-  code={`"use client";
-
-import { useEffect } from "react";
-import { useTranslation } from "@/hooks/use-translation";
-
-export default function ClientLanguageInit() {
-  const { currentLanguage } = useTranslation();
-
-useEffect(() => {
-console.log("i18n detected def/sys language:", currentLanguage.code);
-}, [currentLanguage]);
-
-return null;
+  return fallbackLanguageCode;
 }`}
-fileName="components/ClientLanguageInit.tsx"
-lang="tsx"
+  fileName="lib/i18n/index.ts"
+  lang="ts"
 />
 
-## Blog
+A choice made in the language menu is saved in `localStorage` and wins over detection on the next visit. The strings live in one JSON file per language, and a provider hands every page the current language and a `t` function, so adding a fourth language is one more file and one more entry in the list.
 
-Content is authored with MDX and rendered through shared components (`MDXComponents`) for consistent typography, code blocks, and links. The same system powers this page, keeping presentation uniform across blog posts and deep dives.
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/taco/language-switcher-desktop.png",
+      alt: "The home page with the language menu open, showing English, Español and 日本語",
+      caption: "The language menu.",
+    },
+    {
+      src: "/projects/taco/blog-desktop.png",
+      alt: "The blog page: the heading Taco's Adventures Blog above a grid of post cards, each with a photo, a date and an author",
+      caption: "The blog.",
+    },
+  ]}
+  columns={2}
+/>
 
-## Architecture
+## Five themes instead of light and dark
 
-- Clear separation of `config`, `content`, `components`, `pages`
-- MDX for content; config maps slugs to metadata and routes
-- Shared primitives (breadcrumbs, buttons, link previews) keep things consistent
+The site does not follow the system's light or dark setting. It has a theme menu with five named themes, Green, Cherry, Sky, Gotham and Night, and the visitor picks one. Green is the default, and Night is the dark one.
 
----
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/taco/home-dark-desktop.png",
+      alt: "The same home page in the Night theme: a navy background with a blue accent",
+      caption: "The Night theme.",
+    },
+    {
+      src: "/projects/taco/home-mobile.png",
+      alt: "The home page on a phone: the hero stacked in one column, with a menu button in place of the navigation",
+      caption: "On a phone.",
+      phone: true,
+    },
+  ]}
+  columns={2}
+/>
 
-This template is pragmatic, localized, and easy to extend.
+## The stack
+
+Next.js with TypeScript, Tailwind CSS for the styling, shadcn/ui for the components, and Vercel for hosting. Nothing here is unusual, which is the point of a template: the next project should be able to take it and change only the content.

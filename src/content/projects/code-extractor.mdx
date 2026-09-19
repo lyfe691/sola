@@ -1,48 +1,63 @@
-# Website Code Extractor
+# One click, one ZIP
 
-What started as a simple personal tool became a Chrome extension used by **850+ developers worldwide**. The Website Code Extractor extension solves a common problem: quickly downloading and analyzing website source code for learning, debugging, or inspiration.
-It works well with static websites, but it's not recommended for dynamic websites that rely on a heavy backend or frameworks like Next.js or React.
+Website Code Extractor is a browser extension for Chrome and Edge. Open any website, click the extension, and it downloads the page's HTML, CSS, JavaScript and images as a single ZIP file, with the folders kept in order. It started as a tool for myself, and 6,000 people now use it.
 
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/code-extractor/code-extractor.png",
-      alt: "Chrome extension development",
-      caption: "Usage of the extension",
-    },
-    {
-      src: "/projects/code-extractor/code-extractor-zoom.png",
-      alt: "Chrome extension development",
-      caption: "Zoomed in view of the Chrome extension",
-    },
-  ]}
-  columns={2}
+<ProjectImage
+  src="/projects/code-extractor/landing-desktop.png"
+  alt="The extension's landing page: the name Website Code Extractor over a dark background of curved bands, a one-sentence description and an Add to Chrome button"
+  caption="The extension's landing page at wce.ysz.life."
+  size="large"
 />
 
-## The Genesis
+## Why I built it
 
-As a developer, I often found myself wanting to examine how certain websites implemented specific features. The browser's "View Source" was limited, and manually saving files was tedious. I needed something that could:
+I often wanted to see how a site did something: a layout, an animation, a small trick. The browser's “View Source” shows one file at a time, and saving pages by hand is slow and loses the structure. I wanted the whole page on my disk, arranged the way the site arranges it, in one step.
 
-- **Extract complete source code** including all assets
-- **Organize files** in a logical folder structure
-- **Download as ZIP** for easy sharing and analysis
-- **Work on any website** with a single click
+## How it works
 
-> "Why isn't there a simple way to download a website's complete source code? Let me build it."
+The popup has one button. Pressing it runs a small script inside the open tab that reads the page's HTML, including its doctype, and hands it back to the extension. The extension then collects every stylesheet, script and image the page links to, downloads them, and puts everything into a ZIP named after the site.
 
-## Impact & Results
+<ProjectImage
+  src="/projects/code-extractor/popup.png"
+  alt="The extension's popup: its icon and name above a single large button that says Extract and Download"
+  caption="The whole interface."
+  className="max-w-sm"
+/>
 
-The extension has become a valuable tool for the developer community:
+The part that makes the download usable is the rewriting of links. A page refers to its files in many ways: full addresses, paths from the site's root, paths relative to the page. The extension turns each one into a full address to download from, then into a folder path inside the ZIP, and writes that path back into the HTML, so the saved page still finds its own files:
 
-- **850+ Active Users**
-- **5/5 Star Rating**
-- **Educational Use**
-- **Professional Use**
+<CodeBlock
+  code={`// simplified from popup.js
+const elements = doc.querySelectorAll('link[href], script[src], img[src]');
+elements.forEach(element => {
+  const attr = element.tagName === 'LINK' ? 'href' : 'src';
+  let url = element.getAttribute(attr);
+  if (url) {
+    if (!url.startsWith('http')) {
+      url = new URL(url, baseUrl).href;
+    }
+    const urlObject = new URL(url);
+    const path = urlObject.hostname + urlObject.pathname;
+    resources.push({ url, path });
+    element.setAttribute(attr, path);
+  }
+});`}
+  fileName="popup.js"
+  lang="js"
+/>
 
-### User Testimonials
+## What it is made of
 
-> "this tool works really great for small websites! the zip packaging works and even keeps the website structure intact, which is awesome. the only downside ive noticed is that the picture paths or icons paths arent the same as on the original site, which is understandable, but overall, its really good." - Realest (google user)
+Plain JavaScript on Manifest V3, the current format for Chrome extensions, with [JSZip](https://stuk.github.io/jszip/) to build the archive. Everything happens inside your browser, so the pages you save stay on your machine. The extension asks for three permissions, the active tab, scripting and downloads, because those are the three things it does.
 
----
+<ProjectImage
+  src="/projects/code-extractor/store-listing-desktop.png"
+  alt="The extension's header on the Chrome Web Store, showing a rating of 5.0 from 5 ratings and 6,000 users"
+  caption="On the Chrome Web Store."
+/>
 
-_The Website Code Extractor proves that simple tools solving real problems can have significant impact in the developer community._
+## Who it is for
+
+It works best on static sites, where the page you see is made of the files the server sends. A site built as an app, with React or Next.js, assembles itself in the browser, so its downloaded files tell you less. One review on the store puts it well: “this tool works really great for small websites! the zip packaging works and even keeps the website structure intact.”
+
+The extension is free and open source. It is on the [Chrome Web Store](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm), and the code is [on GitHub](https://github.com/lyfe691/Website-Code-Extractor).

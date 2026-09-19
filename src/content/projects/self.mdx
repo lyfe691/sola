@@ -1,27 +1,30 @@
-# Bringing Neofetch to Windows
+# Neofetch, for Windows
 
-**Self** is a customizable Windows system information display tool that brings the beloved Unix/Linux Neofetch experience to Windows users. Built entirely with Python, it provides a clean, customizable way to display system information alongside ASCII art or images.
-
-> "Why should Linux users have all the fun?" - The motivation behind Self
-
-The goal was to create a native Windows solution that feels familiar to Neofetch users while leveraging PowerShell's capabilities.
+Self prints your system information in the terminal next to an image or a piece of ASCII art. On Linux that is what [Neofetch](https://github.com/dylanaraps/neofetch) does. I wanted the same thing in PowerShell, so I wrote it in Python.
 
 <ProjectImage
-  src="https://raw.githubusercontent.com/lyfe691/self/refs/heads/main/docs/images/self.png"
-  alt="Self system information display"
-  caption="Self displaying system information with image rendering"
+  src="/projects/self/self.png"
+  alt="Self running in Windows PowerShell: an image drawn from coloured blocks on the left, and a column of system facts from OS to disk on the right, ending with the run time and the terminal's colour palette"
+  caption="Self in Windows PowerShell. The picture on the left is drawn from characters."
   size="large"
 />
 
-## Technical Architecture
+## What it shows
 
-Self is built with **Python** as the core language, utilizing Windows APIs and system calls for accurate information gathering.
+One run prints the operating system, host, kernel, uptime, installed packages, shell, resolution, window manager, theme, terminal, font, CPU, GPU, memory and disk, and ends with the terminal's colour palette. The readings are cached between runs, so the second start is quicker; `self --no-cache` reads everything fresh.
 
-## Installation & Distribution
+## Pictures made of characters
 
-The installation process is designed to be **simple and user-friendly**:
+A terminal cannot show pixels, so Self builds the image out of text. There are two ways to do it:
 
-### Installation via PowerShell
+- **Block** uses the half-block character `▀`. Its top half takes the text colour and its bottom half the background colour, so one character cell carries two pixels in full colour.
+- **Braille** uses the dot patterns of braille characters `⠿`. The dots are finer than blocks, but each cell has a single colour.
+
+I recommend block: at this size colour matters more than resolution. If you would rather have no picture at all, Self prints ASCII art instead: the repository ships a few, from the Windows logo to Totoro, and a template for your own.
+
+## Install and use
+
+One line in PowerShell installs it for the current user. No administrator rights are needed.
 
 <CodeBlock
   code={`iwr -Uri "https://raw.githubusercontent.com/lyfe691/self/main/install.ps1" -UseBasicParsing | iex`}
@@ -29,35 +32,24 @@ The installation process is designed to be **simple and user-friendly**:
   lang="powershell"
 />
 
-## Usage & Configuration
-
-### Command Line Interface
-
-Self provides a comprehensive CLI with multiple options:
+After that, `self` is a command like any other:
 
 <CodeBlock
-  code={`# Basic usage
-self                 # Run with default settings
-self --setup         # Interactive setup wizard
-self --update        # Update to latest version
-
-# Customization options
-
-self --image <file> # Use specific image
-self --ascii <file> # Use ASCII art instead
-self --height <n> # Set image height
-self --width <n> # Set image width
-
-# Advanced options
-
-self --config <path> # Use custom config file
-self --no-cache # Skip cached system info
-self --debug # Run in simplified debug mode
-self --version # Show version information`}
-fileName="cli-usage.sh"
-lang="bash"
+  code={`self                 # run with the default settings
+self --setup         # the setup wizard
+self --update        # update to the latest version
+self --image <file>  # use a specific image
+self --ascii <file>  # use ASCII art instead
+self --height <n>    # set the image height
+self --width <n>     # set the image width
+self --config <path> # use another config file
+self --no-cache      # skip the cached system info`}
+  fileName="usage"
+  lang="bash"
 />
 
----
+## Themes
 
-_Self represents the intersection of system administration, creative coding, and community building—bringing beloved Unix tools to the Windows ecosystem._
+Colours and layout come from a config file. Two themes are built in, default and powershell, and the colours are picked from the sixteen a terminal offers. `self --setup` walks through the choices, so nobody has to edit JSON by hand.
+
+Self is MIT-licensed, and the source is [on GitHub](https://github.com/lyfe691/self).
