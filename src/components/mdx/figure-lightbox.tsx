@@ -226,6 +226,17 @@ function RoundButton({
   );
 }
 
+/** The scrubber's frames, in px: every image is a slice this wide and tall,
+ *  and the one showing opens to its own shape, within these bounds. */
+const SLICE = { width: 24, height: 44, openMin: 40, openMax: 76 } as const;
+
+/**
+ * The scrubber, after the one in Photos: every image is a narrow slice, and
+ * the one showing opens to its own shape with a little air either side. Size
+ * and spacing say which is current, so nothing needs an outline. The tray's
+ * radius (12px) is the slices' radius (rounded-sm, 6px on this site's scale)
+ * plus its padding (6px), so the corners are concentric.
+ */
 function Filmstrip({
   items,
   index,
@@ -237,53 +248,72 @@ function Filmstrip({
   onGo: (index: number) => void;
   labelFor: (index: number) => string;
 }) {
-  const stripRef = useRef<HTMLDivElement>(null);
+  const trayRef = useRef<HTMLDivElement>(null);
 
-  // the strip follows the image, so the current frame is never off its edge
+  // the tray follows the image, so the open frame is never off its edge;
+  // again once the frame has finished opening, when its place is final
   useEffect(() => {
-    const strip = stripRef.current;
-    const frame = strip?.children[index];
-    if (!strip || !(frame instanceof HTMLElement)) return;
-    strip.scrollTo({
-      left: frame.offsetLeft - (strip.clientWidth - frame.clientWidth) / 2,
-      behavior: "smooth",
-    });
+    const tray = trayRef.current;
+    const frame = tray?.children[index];
+    if (!tray || !(frame instanceof HTMLElement)) return;
+    const centre = () =>
+      tray.scrollTo({
+        left: frame.offsetLeft - (tray.clientWidth - frame.clientWidth) / 2,
+        behavior: "smooth",
+      });
+    centre();
+    frame.addEventListener("transitionend", centre, { once: true });
+    return () => frame.removeEventListener("transitionend", centre);
   }, [index]);
 
   return (
     <div
-      ref={stripRef}
+      ref={trayRef}
       data-lenis-prevent
       // its own scroll and taps, not a click on the backdrop
       onClick={(e) => e.stopPropagation()}
-      className="pointer-events-auto flex max-w-full cursor-default gap-2 overflow-x-auto mask-x-from-[calc(100%-1.5rem)] px-6 py-1.5 [scrollbar-width:none]"
+      className="pointer-events-auto flex max-w-[calc(100%-2rem)] cursor-default items-center gap-0.5 overflow-x-auto rounded-[0.75rem] bg-foreground/10 p-1.5 [scrollbar-width:none]"
     >
-      {/* one frame size for every image: a phone shot at its own shape would
-          be a sliver too thin to read or to hit */}
-      {items.map((item, i) => (
-        <button
-          key={item.id}
-          type="button"
-          aria-label={labelFor(i)}
-          aria-current={i === index ? "true" : undefined}
-          onClick={() => onGo(i)}
-          className={cn(
-            "h-10 w-14 shrink-0 cursor-pointer overflow-hidden rounded-md outline-none",
-            "transition-[opacity,box-shadow] duration-200 ease-out",
-            "focus-visible:ring-2 focus-visible:ring-ring/60",
-            i === index
-              ? "opacity-100 ring-2 ring-foreground ring-offset-2 ring-offset-background"
-              : "opacity-40 ring-1 ring-border hover:opacity-100",
-          )}
-        >
-          <img
-            src={item.src}
-            alt=""
-            draggable={false}
-            className="size-full object-cover object-top"
-          />
-        </button>
-      ))}
+      {items.map((item, i) => {
+        const size = PROJECT_IMAGE_SIZES[item.src];
+        const ratio = size ? size[0] / size[1] : 1.6;
+        const showing = i === index;
+        return (
+          <button
+            key={item.id}
+            type="button"
+            aria-label={labelFor(i)}
+            aria-current={showing ? "true" : undefined}
+            onClick={() => onGo(i)}
+            style={{
+              height: SLICE.height,
+              width: showing
+                ? Math.min(
+                    SLICE.openMax,
+                    Math.max(SLICE.openMin, SLICE.height * ratio),
+                  )
+                : SLICE.width,
+            }}
+            className={cn(
+              "shrink-0 cursor-pointer overflow-hidden rounded-sm outline-none",
+              "transition-[width,margin,opacity] duration-300 ease-out",
+              "focus-visible:ring-2 focus-visible:ring-ring/60",
+              // air either side of the open frame, but never against the
+              // tray's own edge, where it would read as uneven padding
+              showing
+                ? "mx-2 opacity-100 first:ml-0 last:mr-0"
+                : "opacity-70 hover:opacity-100",
+            )}
+          >
+            <img
+              src={item.src}
+              alt=""
+              draggable={false}
+              className="size-full object-cover object-top"
+            />
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -442,7 +472,7 @@ function Lightbox({
         aria-hidden="true"
         className={cn(
           "pointer-events-none absolute inset-x-0 top-0 px-4 pt-16 pb-4 sm:px-24",
-          many ? "bottom-28" : "bottom-16",
+          many ? "bottom-32" : "bottom-16",
         )}
       />
 
