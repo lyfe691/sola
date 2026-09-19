@@ -9,13 +9,9 @@ Taco is my brother's Pomeranian, and this is his website. I built it as somethin
   size="large"
 />
 
-## What is in it
-
-It has a home page, a gallery, an about page, a blog and a contact page, and every blog post is a page of its own. The header carries the navigation, a theme menu and a language menu, and on a phone it folds into a single menu button.
-
 ## Languages, detected on arrival
 
-The site speaks English, Spanish and Japanese. On a first visit it reads the browser's language and uses it if it is one of the three; otherwise it falls back to English:
+The site speaks English, Spanish and Japanese. On a first visit it reads the browser's language and uses it if the site has it; otherwise it falls back to English:
 
 <CodeBlock
   code={`export function detectUserLanguage(): string {
@@ -32,7 +28,7 @@ The site speaks English, Spanish and Japanese. On a first visit it reads the bro
   lang="ts"
 />
 
-A choice made in the language menu is saved in `localStorage` and wins over detection on the next visit. The strings live in one JSON file per language, and a provider hands every page the current language and a `t` function, so adding a fourth language is one more file and one more entry in the list.
+A choice made in the language menu is saved in `localStorage` and wins over detection on the next visit. The strings live in one JSON file per language, and a provider hands every page the current language and a `t` function, so adding a language is one more file and one more entry in the list.
 
 <ProjectGallery
   images={[
@@ -52,7 +48,7 @@ A choice made in the language menu is saved in `localStorage` and wins over dete
 
 ## Named themes instead of light and dark
 
-The site does not follow the system's light or dark setting. It has a theme menu with named themes, Green, Cherry, Sky, Gotham and Night, and the visitor picks one. Green is the default, and Night is the dark one.
+The site does not follow the system's light or dark setting. The visitor picks a named theme from a menu: Green is the default, and Night is the dark one.
 
 <ProjectGallery
   images={[
@@ -70,7 +66,3 @@ The site does not follow the system's light or dark setting. It has a theme menu
   ]}
   columns={2}
 />
-
-## The stack
-
-Next.js with TypeScript, Tailwind CSS for the styling, shadcn/ui for the components, and Vercel for hosting. Nothing here is unusual, which is the point of a template: the next project should be able to take it and change only the content.

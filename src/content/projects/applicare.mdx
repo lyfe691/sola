@@ -11,10 +11,9 @@ AppliCare is a web app for keeping track of job applications. It came out of my 
 
 ## What you can do with it
 
-- **Applications.** Each one records the company, the job title, the location, a contact and your notes, and carries a status: applied, pending, screening, interviewing, offer, accepted or rejected. A Manage page filters and sorts them.
+- **Applications.** Each one carries its status, from applied to offer, along with a contact and your notes. A Manage page filters and sorts them.
 - **Tasks.** A task has a deadline and a priority and can be linked to an application, so “send a thank-you note” stays attached to the interview it belongs to.
-- **Dashboard.** Totals for active, rejected and accepted applications, a success rate, a graph of applications over time, and the tasks that are due.
-- **Your account.** Sign in with a username or an e-mail address, reset a forgotten password by e-mail, switch between a light, a dark and a system theme, and delete the account when you are done.
+- **Dashboard.** Totals, a success rate, a graph of applications over time, and the tasks that are due.
 
 <ProjectGallery
   images={[
@@ -34,7 +33,7 @@ AppliCare is a web app for keeping track of job applications. It came out of my 
 
 ## How it is built
 
-The frontend is React with Vite, using [Ant Design](https://ant.design) for its components. The backend is a Spring Boot service that stores its data in MongoDB. Signing in returns a JSON Web Token, a signed pass the browser sends along with every request, and a filter on the server checks it before any controller runs. There are three kinds of records, users, job applications and tasks, and each has its own controller, service and repository.
+The frontend is React with Vite, using [Ant Design](https://ant.design) for its components. The backend is a Spring Boot service that stores its data in MongoDB. Signing in returns a JSON Web Token, a signed pass the browser sends along with every request, and a filter on the server checks it before any controller runs.
 
 The backend ships as a Docker image built in two stages: one that compiles the app, and a smaller one that only runs it.
 
@@ -78,4 +77,4 @@ The backend ships as a Docker image built in two stages: one that compiles the a
 
 ## Where it came from
 
-I built AppliCare between December 2024 and February 2025 for two school modules, one on frontends and one on backends, which is why it is a complete app with both halves written from scratch. The repository also holds the written documentation, with mock-ups and a class diagram.
+I built AppliCare between December 2024 and February 2025 for two school modules, one on frontends and one on backends, which is why it is a complete app with both halves written from scratch.

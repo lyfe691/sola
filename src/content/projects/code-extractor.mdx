@@ -48,7 +48,7 @@ The part that makes the download usable is the rewriting of links. A page refers
 
 ## What it is made of
 
-Plain JavaScript on Manifest V3, the current format for Chrome extensions, with [JSZip](https://stuk.github.io/jszip/) to build the archive. Everything happens inside your browser, so the pages you save stay on your machine. The extension asks for three permissions, the active tab, scripting and downloads, because those are the three things it does.
+Plain JavaScript on Manifest V3, the current format for Chrome extensions, with [JSZip](https://stuk.github.io/jszip/) to build the archive. Everything happens inside your browser, so the pages you save stay on your machine. It asks only for the permissions it uses: the active tab, scripting and downloads.
 
 <ProjectImage
   src="/projects/code-extractor/store-listing-desktop.png"
