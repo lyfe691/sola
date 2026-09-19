@@ -15,6 +15,27 @@ The Finnish snowmobile network is public data, and it is not one network. LIPAS 
 
 The second constraint is signal. Coverage in the fells drops out for stretches of a ride, so an app that asks a server whether you are on a route stops answering exactly where the answer matters. Everything a rider needs has to be on the phone before the ride starts.
 
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/app-ride.png",
+      alt: "The Ura app on a dark map around Kittilä: official routes drawn in green, permit tracks in yellow, the rider as a blue dot, and a pill at the top reading On route with the route's name",
+      caption: "On a route near Kittilä",
+    },
+    {
+      src: "/projects/ura/app-route.png",
+      alt: "A route's detail sheet over the map: the name Levi-Kumputunturi-Pokka, badges reading Official route and Free to ride, the maintainer and the route's LIPAS id",
+      caption: "Route detail: official, free to ride",
+    },
+    {
+      src: "/projects/ura/app-network.png",
+      alt: "The map zoomed out over Finnish Lapland, from Rovaniemi north to Inari, covered by the green and yellow route network",
+      caption: "The network across Lapland",
+    },
+  ]}
+  columns={3}
+/>
+
 ## Holding the verdict
 
 Matching a fix to the network is a nearest-segment lookup: the route geometry goes into a flatbush spatial index at load, and each fix queries it. That part is cheap. The hard part is that a single distance threshold makes the status flicker. Near a junction, or under a tree line where accuracy degrades, "on route" and "off route" trade places every second and the pill becomes noise.
