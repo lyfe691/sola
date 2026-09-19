@@ -141,6 +141,9 @@ export const ja = {
     expandImage: "画像を拡大",
     expandImageNamed: "画像を拡大: {alt}",
     expandedImage: "拡大画像",
+    previousImage: "前の画像",
+    nextImage: "次の画像",
+    imageOf: "画像 {current} / {total}",
     moreOnGithub: "GitHub で見る",
     view: "表示",
     update: {

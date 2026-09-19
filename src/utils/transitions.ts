@@ -55,21 +55,25 @@ export const CONSUME_IN = [0.5, 0, 0.75, 0] as const;
 // eased tween between two boxes reads as a fade from one picture to another.
 // Out lands with a little weight. Back is critically damped, because the
 // image returns into a hairline frame where any undershoot shows as a gap.
-// A layout flight runs on a 0-1000 progress value, so the rest thresholds
-// end it within a thousandth of the trip (under a pixel) instead of letting
-// the spring settle invisibly for another half second.
-const FLIGHT_REST = { restDelta: 1, restSpeed: 10 } as const;
 export const FLIGHT_OUT = {
   type: "spring",
   visualDuration: 0.32,
   bounce: 0.14,
-  ...FLIGHT_REST,
 } as const;
 export const FLIGHT_BACK = {
   type: "spring",
   visualDuration: 0.28,
   bounce: 0,
-  ...FLIGHT_REST,
+} as const;
+
+// ---- Gallery strip (moving between images inside the lightbox) ----
+// The images sit side by side on one strip and the strip moves; the same
+// spring grows the arriving image and settles the leaving one into a
+// neighbour, so a move is one gesture. Nothing fades into anything else.
+export const GALLERY_SLIDE = {
+  type: "spring",
+  visualDuration: 0.4,
+  bounce: 0.12,
 } as const;
 
 // Durations (seconds) — long clocks are fine BECAUSE the trigger fires

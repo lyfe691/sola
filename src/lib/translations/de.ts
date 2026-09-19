@@ -144,6 +144,9 @@ export const de = {
     expandImage: "Bild vergrößern",
     expandImageNamed: "Bild vergrößern: {alt}",
     expandedImage: "Vergrößertes Bild",
+    previousImage: "Vorheriges Bild",
+    nextImage: "Nächstes Bild",
+    imageOf: "Bild {current} von {total}",
     moreOnGithub: "Mehr auf GitHub",
     view: "Ansehen",
     update: {

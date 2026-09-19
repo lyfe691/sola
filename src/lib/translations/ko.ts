@@ -143,6 +143,9 @@ export const ko = {
     expandImage: "이미지 확대",
     expandImageNamed: "이미지 확대: {alt}",
     expandedImage: "확대된 이미지",
+    previousImage: "이전 이미지",
+    nextImage: "다음 이미지",
+    imageOf: "이미지 {current} / {total}",
     moreOnGithub: "GitHub에서 더 보기",
     view: "보기",
     update: {

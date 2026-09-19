@@ -142,6 +142,9 @@ export const en = {
     expandImage: "Expand image",
     expandImageNamed: "Expand image: {alt}",
     expandedImage: "Expanded image",
+    previousImage: "Previous image",
+    nextImage: "Next image",
+    imageOf: "Image {current} of {total}",
     moreOnGithub: "More on GitHub",
     view: "View",
     update: {

@@ -5,13 +5,15 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Article shell: MDXProvider + suspense boundary + spinner. Keeps the
- * deep-dive page focused on layout rather than MDX plumbing.
+ * Article shell: MDXProvider + the figures' shared lightbox + suspense
+ * boundary + spinner. Keeps the deep-dive page focused on layout rather
+ * than MDX plumbing.
  */
 
 import { Suspense, type ReactNode } from "react";
 import { MDXProvider } from "@mdx-js/react";
 import { Spinner } from "@/components/ui/spinner";
+import { FigureLightboxProvider } from "./figure-lightbox";
 import { MDXComponents } from "./MDXComponents";
 
 function MdxFallback() {
@@ -31,7 +33,9 @@ export function Mdx({
 }) {
   return (
     <MDXProvider components={MDXComponents}>
-      <Suspense fallback={fallback}>{children}</Suspense>
+      <FigureLightboxProvider>
+        <Suspense fallback={fallback}>{children}</Suspense>
+      </FigureLightboxProvider>
     </MDXProvider>
   );
 }

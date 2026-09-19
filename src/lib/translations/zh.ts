@@ -135,6 +135,9 @@ export const zh = {
     expandImage: "放大图片",
     expandImageNamed: "放大图片：{alt}",
     expandedImage: "已放大的图片",
+    previousImage: "上一张图片",
+    nextImage: "下一张图片",
+    imageOf: "第 {current} 张，共 {total} 张",
     moreOnGithub: "在 GitHub 上查看更多",
     view: "查看",
     update: {
