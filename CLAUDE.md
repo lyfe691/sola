@@ -33,7 +33,9 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   that needs blank lines goes in a fenced block instead.
 - **Deep-dive images** live in `public/projects/<slug>/`. After adding or
   replacing one run `bun run images:sizes` (a test fails when the size list is
-  stale). Portrait phone shots use `size="phone"` / `phone: true`.
+  stale). The size list also drives the figure layout: a gallery row shares
+  one height with widths from each image's aspect ratio, and phone-only rows
+  sit on a stage, so phone shots need no flag. `columns` = figures per row.
 
 ## Styling
 
