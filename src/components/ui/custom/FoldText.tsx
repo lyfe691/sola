@@ -104,6 +104,11 @@ const FOLD_TEXT_STYLES = `.fold-text {
   display: inline;
 }
 
+.fold-text-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .fold-text-segment {
   display: inline-block;
   line-height: inherit;
@@ -252,11 +257,31 @@ const FoldText = ({
       });
     }
 
-    return Array.from(text).map((char, index) => {
-      if (char === "\n") return <br key={`br-${index}`} />;
-      return renderSegment(
-        char === " " ? "\u00A0" : char,
-        `segment-char-${index}`,
+    // Every character is its own inline-block, and a line may break between
+    // any two inline-blocks. So the letters of a word ride in one nowrap
+    // group and the spaces between groups stay real spaces: a long title
+    // wraps at its words, never inside one ("Website Code Extr / actor").
+    return text.split(/(\s+)/).flatMap((part, partIndex) => {
+      if (!part) return [];
+      if (/^\s+$/.test(part))
+        return part.split(/(\n)/).map((space, index) =>
+          space === "\n" ? (
+            <br key={`br-${partIndex}-${index}`} />
+          ) : space ? (
+            <span
+              className="fold-text-whitespace"
+              key={`ws-${partIndex}-${index}`}
+            >
+              {space}
+            </span>
+          ) : null,
+        );
+      return (
+        <span className="fold-text-word" key={`word-${partIndex}`}>
+          {Array.from(part).map((char, index) =>
+            renderSegment(char, `segment-char-${partIndex}-${index}`),
+          )}
+        </span>
       );
     });
   }, [text, splitBy, hinge, hingeConfig.origin, safePerspective]);
