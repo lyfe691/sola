@@ -189,12 +189,14 @@ function RoundButton({
   label,
   onPress,
   className,
+  style,
   buttonRef,
 }: {
   icon: IconSvgElement;
   label: string;
   onPress: () => void;
   className?: string;
+  style?: React.CSSProperties;
   buttonRef?: React.Ref<HTMLButtonElement>;
 }) {
   return (
@@ -202,6 +204,7 @@ function RoundButton({
       ref={buttonRef}
       type="button"
       aria-label={label}
+      style={style}
       onClick={(e) => {
         e.stopPropagation();
         onPress();
@@ -425,6 +428,9 @@ function Lightbox({
   }, [open, index, onClose, onGo]);
 
   if (!item || !dock) return null;
+  // The arrows flank the image, so they sit at ITS centre: the stage's, which
+  // is above the screen's by half of what the tray and caption take up.
+  const arrowAt = { top: stage ? stage.cy : "50%" };
   const labelFor = (i: number) =>
     t.common.imageOf
       .replace("{current}", String(i + 1))
@@ -627,8 +633,9 @@ function Lightbox({
                   icon={ArrowLeft01Icon}
                   label={t.common.previousImage}
                   onPress={() => onGo(index - 1)}
+                  style={arrowAt}
                   className={cn(
-                    "top-1/2 left-6 -mt-5 hidden sm:grid",
+                    "left-6 -mt-5 hidden sm:grid",
                     index === 0 && "pointer-events-none opacity-0",
                   )}
                 />
@@ -636,8 +643,9 @@ function Lightbox({
                   icon={ArrowRight01Icon}
                   label={t.common.nextImage}
                   onPress={() => onGo(index + 1)}
+                  style={arrowAt}
                   className={cn(
-                    "top-1/2 right-6 -mt-5 hidden sm:grid",
+                    "right-6 -mt-5 hidden sm:grid",
                     index === items.length - 1 &&
                       "pointer-events-none opacity-0",
                   )}
