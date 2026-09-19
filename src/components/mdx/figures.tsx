@@ -88,7 +88,11 @@ function FigureRow({
         style={{ "--share": ratios[index] / total } as CSSProperties}
         className={cn("min-w-0", cell(index))}
       >
-        <ExpandableImage src={image.src} alt={image.alt} />
+        <ExpandableImage
+          src={image.src}
+          alt={image.alt}
+          caption={image.caption}
+        />
         {image.caption ? <FigureCaption>{image.caption}</FigureCaption> : null}
       </figure>
     ));
@@ -155,7 +159,7 @@ export function ProjectImage({
 
   return (
     <figure className={cn("my-8", SIZE_CLASS[size], className)}>
-      <ExpandableImage src={src} alt={alt} />
+      <ExpandableImage src={src} alt={alt} caption={caption} />
       {caption ? <FigureCaption>{caption}</FigureCaption> : null}
     </figure>
   );
@@ -178,7 +182,11 @@ export function ProjectGallery({
       <figure
         className={cn("my-8", size === "full" ? "w-full" : "mx-auto max-w-4xl")}
       >
-        <ExpandableImage src={image.src} alt={image.alt} />
+        <ExpandableImage
+          src={image.src}
+          alt={image.alt}
+          caption={image.caption}
+        />
         {image.caption ? <FigureCaption>{image.caption}</FigureCaption> : null}
       </figure>
     );
