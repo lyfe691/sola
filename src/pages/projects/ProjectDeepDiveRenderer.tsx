@@ -213,6 +213,7 @@ const ProjectDeepDiveRenderer = () => {
       subtitle={projectCopy.tagline}
       description={plainText(projectCopy.description)}
       art={config.art}
+      source={`${config.mdxPath}.mdx`}
       sectionNav={
         <DeepDiveSectionMenu sections={sections} activeId={activeId} />
       }

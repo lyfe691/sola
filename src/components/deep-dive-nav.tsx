@@ -19,6 +19,7 @@ import { createPortal } from "react-dom";
 import { motion, useIsPresent } from "motion/react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import { useDeepDiveBarPinned } from "@/hooks/use-deep-dive-bar-pinned";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
@@ -117,40 +118,6 @@ interface SectionNavProps {
   activeId: string | null;
 }
 
-/**
- * True once the deep dive's sticky bar has pinned to the top of the
- * viewport, which is the moment the hero has scrolled away and the reader
- * is in the article. The bar marks itself with data-deep-dive-bar.
- */
-function useStickyBarPinned(): boolean {
-  const [pinned, setPinned] = useState(false);
-
-  useEffect(() => {
-    const bar = document.querySelector<HTMLElement>("[data-deep-dive-bar]");
-    if (!bar) return;
-    let raf = 0;
-    const update = () => {
-      raf = 0;
-      // sticky top-0: the bar's top sits above 0 only while it is pinned
-      setPinned(bar.getBoundingClientRect().top <= 1);
-    };
-    const schedule = () => {
-      if (!raf) raf = requestAnimationFrame(update);
-    };
-
-    schedule();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-    };
-  }, []);
-
-  return pinned;
-}
-
 /** Row height of a tick, which is also the distance the label glides. */
 const TICK_PITCH = 20;
 /** The longest a tick gets (under the pointer). Every tick is this wide and
@@ -184,7 +151,7 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
   const { language } = useLanguage();
   const t = translations[language];
   const isPresent = useIsPresent();
-  const pinned = useStickyBarPinned();
+  const pinned = useDeepDiveBarPinned();
   const shown = isPresent && pinned;
   const [pointed, setPointed] = useState<number | null>(null);
   // survives the pointer leaving, so the label fades out where it was
@@ -332,7 +299,9 @@ export function DeepDiveSectionMenu({ sections, activeId }: SectionNavProps) {
       <div
         inert={!open}
         className={cn(
-          "absolute inset-x-0 top-full grid rounded-b-3xl bg-background/95 backdrop-blur-xs transition-[grid-template-rows,box-shadow] duration-300 ease-out",
+          // opaque: at 95% the article's white text still ghosts through the
+          // list, and the sheet hangs below the bar, where nothing backs it
+          "absolute inset-x-0 top-full grid rounded-b-3xl bg-background transition-[grid-template-rows,box-shadow] duration-300 ease-out",
           open ? "grid-rows-[1fr] shadow-xl" : "grid-rows-[0fr]",
         )}
       >
