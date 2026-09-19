@@ -128,7 +128,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "sola",
     deepDive: {
       overview:
-        "Sola is the website you are on. It is a React 19 and TypeScript app built with Vite and Tailwind CSS, in six languages and eleven themes, with seven animated backgrounds and a painted cover for every project. One manifest drives the router, the layouts and the tab titles, the deep dives are MDX, and every commit runs lint, type checks, tests and a build before it deploys to Vercel.",
+        "Sola is the website you are currently on. It represents a modern approach to portfolio design, combining cutting-edge web technologies with thoughtful user experience. Built from the ground up with React and TypeScript, it showcases projects and skills through smooth animations, multiple themes, and a responsive design that works seamlessly across all devices. Its built to be fast and efficient, with a focus on user experience and performance.",
     },
   },
   {

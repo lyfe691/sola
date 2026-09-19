@@ -348,9 +348,9 @@ export const es = {
       },
       sola: {
         title: "Sola",
-        tagline: "Este sitio web, en seis idiomas y once temas",
+        tagline: "Portafolio moderno en React y TypeScript",
         description:
-          "Sola es el sitio web en el que estás. Funciona con React 19, Vite y Tailwind CSS, está en seis idiomas y once temas, y tiene siete fondos animados que puedes cambiar desde el menú de la esquina. El código está [en GitHub](https://github.com/lyfe691/sola).",
+          "Sola es mi sitio web personal, el que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna.",
       },
       kinoa: {
         title: "Kinoa",

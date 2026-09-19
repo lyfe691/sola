@@ -332,9 +332,9 @@ export const zh = {
       },
       sola: {
         title: "Sola",
-        tagline: "你正在看的这个网站，六种语言、十一套主题",
+        tagline: "React与TypeScript打造的现代作品集",
         description:
-          "Sola 就是你现在看到的这个网站。它基于 React 19、Vite 和 Tailwind CSS，提供六种语言和十一套主题，还有七种动态背景，可以在角落的菜单里切换。源代码在 [GitHub](https://github.com/lyfe691/sola) 上。",
+          "Sola 是我的个人网站。基于 React、TypeScript 与 Tailwind CSS 构建，用以以干净、现代的方式展示我的项目、技能与经验。",
       },
       kinoa: {
         title: "Kinoa",

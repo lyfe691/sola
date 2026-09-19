@@ -339,9 +339,9 @@ export const ja = {
       },
       sola: {
         title: "Sola",
-        tagline: "6 言語と 11 テーマで見られる、このサイト",
+        tagline: "ReactとTypeScriptで作るモダンなポートフォリオ",
         description:
-          "Sola は、いまご覧になっているこのサイトです。React 19、Vite、Tailwind CSS で動き、6 つの言語と 11 のテーマに対応し、右上のメニューから切り替えられる 7 種類のアニメーション背景があります。ソースコードは [GitHub](https://github.com/lyfe691/sola) で公開しています。",
+          "Sola は私の個人サイトです。React・TypeScript・Tailwind CSS で構築し、プロジェクトやスキル、経験をクリーンかつモダンに紹介します。",
       },
       kinoa: {
         title: "Kinoa",

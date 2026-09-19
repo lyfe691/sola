@@ -345,9 +345,9 @@ export const de = {
       },
       sola: {
         title: "Sola",
-        tagline: "Diese Website, in sechs Sprachen und elf Themes",
+        tagline: "Modernes Portfolio in React und TypeScript",
         description:
-          "Sola ist die Website, auf der du gerade bist. Sie läuft mit React 19, Vite und Tailwind CSS, gibt es in sechs Sprachen und elf Themes und hat sieben animierte Hintergründe, die sich über das Menü in der Ecke wechseln lassen. Der Quellcode liegt [auf GitHub](https://github.com/lyfe691/sola).",
+          "Sola ist meine persönliche Website. Entwickelt mit React, TypeScript und Tailwind CSS, präsentiert sie meine Projekte, Fähigkeiten und Erfahrungen in einem klaren, modernen Design.",
       },
       kinoa: {
         title: "Kinoa",

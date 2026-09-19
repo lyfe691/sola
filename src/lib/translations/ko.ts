@@ -341,9 +341,9 @@ export const ko = {
       },
       sola: {
         title: "Sola",
-        tagline: "여섯 개 언어와 열한 가지 테마로 보는 이 사이트",
+        tagline: "React와 TypeScript로 만든 모던 포트폴리오",
         description:
-          "Sola는 지금 보고 계신 이 웹사이트입니다. React 19, Vite, Tailwind CSS로 동작하고, 여섯 개 언어와 열한 가지 테마를 지원하며, 모서리의 메뉴에서 바꿀 수 있는 일곱 가지 애니메이션 배경이 있습니다. 소스 코드는 [GitHub](https://github.com/lyfe691/sola)에 있습니다.",
+          "Sola는 여러분이 지금 접속하고 있는 제 개인 웹사이트입니다. React, TypeScript 및 Tailwind CSS로 제작되었으며 내 프로젝트, 기술 및 경험을 깔끔하고 현대적인 방식으로 선보이도록 설계되었습니다.",
       },
       kinoa: {
         title: "Kinoa",
