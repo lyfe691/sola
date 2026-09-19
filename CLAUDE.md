@@ -26,6 +26,14 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   Simplified (except the /a page title, which is deliberately Traditional).
 - **Content** is config-driven: `src/config/{projects,certifications,...}.ts`
   plus MDX deep dives in `src/content/projects/`.
+- **MDX code blocks**: inside `<CodeBlock code={`…`}>` write every line after
+  the first with two extra spaces (MDX strips the attribute's indent at
+  compile time, so the code would render two spaces short), and never leave a
+  blank line in the literal (prettier flattens everything after it). Output
+  that needs blank lines goes in a fenced block instead.
+- **Deep-dive images** live in `public/projects/<slug>/`. After adding or
+  replacing one run `bun run images:sizes` (a test fails when the size list is
+  stale). Portrait phone shots use `size="phone"` / `phone: true`.
 
 ## Styling
 

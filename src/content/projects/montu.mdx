@@ -39,19 +39,19 @@ Difficulty is a dropdown carrying the Swiss scales in full: T1 to T6 for hiking,
 
 <CodeBlock
   code={`defineField({
-  name: "skippable",
-  title: "Überspringbar",
-  description: "Kann dieser Abschnitt ausgelassen werden (z.B. via Seilbahn)?",
-  type: "boolean",
-  initialValue: false,
-}),
-defineField({
-  name: "skipAlternative",
-  title: "Alternative",
-  description: "Wie kann dieser Abschnitt umgangen werden?",
-  type: "string",
-  hidden: ({ parent }) => !parent?.skippable,
-}),`}
+    name: "skippable",
+    title: "Überspringbar",
+    description: "Kann dieser Abschnitt ausgelassen werden (z.B. via Seilbahn)?",
+    type: "boolean",
+    initialValue: false,
+  }),
+  defineField({
+    name: "skipAlternative",
+    title: "Alternative",
+    description: "Wie kann dieser Abschnitt umgangen werden?",
+    type: "string",
+    hidden: ({ parent }) => !parent?.skippable,
+  }),`}
   fileName="sanity/schemas/section.ts"
   lang="ts"
 />

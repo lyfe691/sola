@@ -23,16 +23,16 @@ So the engine uses hysteresis, the way a thermostat does not switch the heating 
 
 <CodeBlock
   code={`export const ENGINE_CONFIG: EngineConfig = {
-  onRouteMeters: 40,
-  offRouteMeters: 60,
-  /** a fix with no prior state splits the 40-60 m band here instead of stalling */
-  coldStartMeters: 50,
-  /** the matched route is held unless a rival is closer by more than this */
-  routeSwitchMarginMeters: 15,
-  offRouteHoldMs: 10_000,
-  maxAccuracyMeters: 100,
-  staleFixMs: 30_000,
-};`}
+    onRouteMeters: 40,
+    offRouteMeters: 60,
+    /** a fix with no prior state splits the 40-60 m band here instead of stalling */
+    coldStartMeters: 50,
+    /** the matched route is held unless a rival is closer by more than this */
+    routeSwitchMarginMeters: 15,
+    offRouteHoldMs: 10_000,
+    maxAccuracyMeters: 100,
+    staleFixMs: 30_000,
+  };`}
   fileName="apps/mobile/src/engine/config.ts"
   lang="ts"
 />

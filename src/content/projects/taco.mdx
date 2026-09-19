@@ -19,15 +19,15 @@ The site speaks English, Spanish and Japanese. On a first visit it reads the bro
 
 <CodeBlock
   code={`export function detectUserLanguage(): string {
-  if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
-    const browserLang = navigator.language || navigator.languages[0];
-    const langCode = browserLang.split('-')[0];
-    return languages.some(lang => lang.code === langCode)
-      ? langCode
-      : fallbackLanguageCode;
-  }
-  return fallbackLanguageCode;
-}`}
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      const browserLang = navigator.language || navigator.languages[0];
+      const langCode = browserLang.split('-')[0];
+      return languages.some(lang => lang.code === langCode)
+        ? langCode
+        : fallbackLanguageCode;
+    }
+    return fallbackLanguageCode;
+  }`}
   fileName="lib/i18n/index.ts"
   lang="ts"
 />

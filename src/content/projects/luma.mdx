@@ -62,27 +62,27 @@ Messages render with full rich content: syntax-highlighted code blocks (Shiki), 
 
 <CodeBlock
   code={`app/
-├── api/
-│   ├── chat/route.ts          ← main streaming endpoint
-│   ├── chat/branch/route.ts   ← branch switching
-│   ├── keys/route.ts          ← API key CRUD (encrypted)
-│   ├── title/route.ts         ← auto title generation
-│   └── export/route.ts        ← chat export
-├── auth/callback/route.ts     ← Supabase OAuth callback
-├── c/[chatId]/page.tsx        ← individual chat view
-├── page.tsx                   ← home / new chat
-└── layout.tsx                 ← root layout (providers)
-components/
-├── ai-elements/               ← rich content renderers
-├── chat/                      ← chat UI components
-├── streamdown/                ← streaming markdown config
-└── ui/                        ← shadcn/ui primitives
-lib/
-├── chat-tree.ts               ← tree data structure & branching
-├── chat-storage.ts            ← Supabase client + message cache
-├── encryption.ts              ← AES-256-GCM for API keys
-├── providers.ts               ← provider & model catalogue
-└── prompt-mode.ts             ← search / image / study modes`}
+  ├── api/
+  │   ├── chat/route.ts          ← main streaming endpoint
+  │   ├── chat/branch/route.ts   ← branch switching
+  │   ├── keys/route.ts          ← API key CRUD (encrypted)
+  │   ├── title/route.ts         ← auto title generation
+  │   └── export/route.ts        ← chat export
+  ├── auth/callback/route.ts     ← Supabase OAuth callback
+  ├── c/[chatId]/page.tsx        ← individual chat view
+  ├── page.tsx                   ← home / new chat
+  └── layout.tsx                 ← root layout (providers)
+  components/
+  ├── ai-elements/               ← rich content renderers
+  ├── chat/                      ← chat UI components
+  ├── streamdown/                ← streaming markdown config
+  └── ui/                        ← shadcn/ui primitives
+  lib/
+  ├── chat-tree.ts               ← tree data structure & branching
+  ├── chat-storage.ts            ← Supabase client + message cache
+  ├── encryption.ts              ← AES-256-GCM for API keys
+  ├── providers.ts               ← provider & model catalogue
+  └── prompt-mode.ts             ← search / image / study modes`}
   fileName="project structure"
   lang="text"
 />

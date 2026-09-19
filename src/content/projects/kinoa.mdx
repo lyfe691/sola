@@ -67,17 +67,17 @@ Accounts are optional but unlock watchlist sync and history across devices. Sign
 
 <CodeBlock
   code={`app/
-├── (auth)/              ← register, sign in
-├── (legal)/[slug]/      ← privacy policy, terms
-├── (main)/
-│   ├── page.tsx         ← home: search, trending, rows
-│   ├── movie/[id]/      ← movie detail + inline player
-│   ├── tv/[id]/         ← TV detail + episode navigator
-│   ├── search/          ← full search with genre + sort filters
-│   ├── watchlist/       ← saved titles with backup/restore
-│   ├── settings/        ← profile, security, data management
-│   └── contact/
-└── api/                 ← internal endpoints`}
+  ├── (auth)/              ← register, sign in
+  ├── (legal)/[slug]/      ← privacy policy, terms
+  ├── (main)/
+  │   ├── page.tsx         ← home: search, trending, rows
+  │   ├── movie/[id]/      ← movie detail + inline player
+  │   ├── tv/[id]/         ← TV detail + episode navigator
+  │   ├── search/          ← full search with genre + sort filters
+  │   ├── watchlist/       ← saved titles with backup/restore
+  │   ├── settings/        ← profile, security, data management
+  │   └── contact/
+  └── api/                 ← internal endpoints`}
   fileName="app/"
   lang="text"
 />

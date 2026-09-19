@@ -17,23 +17,23 @@ So the identity configuration lives in `terraform/main.tf` and nowhere else. The
 
 <CodeBlock
   code={`resource "keycloak_realm" "vault" {
-  realm        = "vault-core"
-  enabled      = true
-  display_name = "Vault Core Realm"
-}
-resource "keycloak_role" "admin_role" {
-  realm_id    = keycloak_realm.vault.id
-  name        = "admin"
-  description = "Administrator role"
-}
-resource "keycloak_user_roles" "demo_user_roles" {
-  realm_id = keycloak_realm.vault.id
-  user_id  = keycloak_user.example_user.id
-  role_ids = [
-    keycloak_role.admin_role.id,
-    keycloak_role.user_role.id,
-  ]
-}`}
+    realm        = "vault-core"
+    enabled      = true
+    display_name = "Vault Core Realm"
+  }
+  resource "keycloak_role" "admin_role" {
+    realm_id    = keycloak_realm.vault.id
+    name        = "admin"
+    description = "Administrator role"
+  }
+  resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.admin_role.id,
+      keycloak_role.user_role.id,
+    ]
+  }`}
   fileName="terraform/main.tf"
   lang="hcl"
 />

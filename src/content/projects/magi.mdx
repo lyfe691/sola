@@ -23,13 +23,11 @@ One line installs the latest release and puts `magi` on your `PATH`:
 
 <CodeBlock
   code={`# Linux / macOS
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/lyfe691/magi/releases/latest/download/magi-installer.sh | sh
-
-# Windows (PowerShell)
-
-powershell -ExecutionPolicy Bypass -c "irm https://github.com/lyfe691/magi/releases/latest/download/magi-installer.ps1 | iex"`}
-fileName="install.sh"
-lang="bash"
+  curl --proto '=https' --tlsv1.2 -LsSf https://github.com/lyfe691/magi/releases/latest/download/magi-installer.sh | sh
+  # Windows (PowerShell)
+  powershell -ExecutionPolicy Bypass -c "irm https://github.com/lyfe691/magi/releases/latest/download/magi-installer.ps1 | iex"`}
+  fileName="install.sh"
+  lang="bash"
 />
 
 Prebuilt binaries cover Linux and macOS on x86-64 and arm64, and Windows on x86-64. There are no system libraries to install — with the stable Rust toolchain, `cargo install --path .` builds it the same on every platform.
@@ -38,26 +36,24 @@ Prebuilt binaries cover Linux and macOS on x86-64 and arm64, and Windows on x86-
 
 The target is a hostname, an IP address, or a CIDR block:
 
-<CodeBlock
-  code={`$ magi 45.33.32.156 --ports 22,80,443 --banner
+```console
+$ magi 45.33.32.156 --ports 22,80,443 --banner
 scanning 45.33.32.156 — 3 port(s), up to 512 at a time
 
 2 open port(s):
 
 45.33.32.156
-22/tcp ssh SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13
-80/tcp http`}
-fileName="scan.console"
-lang="console"
-/>
+     22/tcp  ssh         SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13
+     80/tcp  http
+```
 
 A few more shapes — subnets group by host, and `--json` keeps stdout clean for piping:
 
 <CodeBlock
   code={`magi 192.168.1.0/24 --ports 22,80,443      # a whole subnet, grouped by host
-magi 10.0.0.5 --ports 1-65535 -c 1024      # every port, 1024 probes in flight
-magi 192.168.1.1 --ports 53,123,161 --udp  # UDP instead of TCP
-magi scanme.nmap.org -p 22,80 --json | jq  # JSON on stdout, progress on stderr`}
+  magi 10.0.0.5 --ports 1-65535 -c 1024      # every port, 1024 probes in flight
+  magi 192.168.1.1 --ports 53,123,161 --udp  # UDP instead of TCP
+  magi scanme.nmap.org -p 22,80 --json | jq  # JSON on stdout, progress on stderr`}
   fileName="examples.sh"
   lang="bash"
 />
@@ -92,6 +88,24 @@ Keeping the engine in a library means the interesting logic — the concurrency 
 ## The site
 
 magi has its own home at [magi.ysz.life](https://magi.ysz.life): a localized landing page in five languages with a live install block, a frosted-glass terminal demo, and the same burlywood accent the CLI wears — built with Next.js and next-intl.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/magi/landing-desktop.png",
+      alt: "The magi landing page: the headline A port scanner built to be correct, the install command with a copy button, and a terminal window showing a scan of scanme.nmap.org with two open ports",
+      caption:
+        "The landing page: headline, install command, and a scan in the terminal.",
+    },
+    {
+      src: "/projects/magi/landing-mobile.png",
+      alt: "The same landing page on a phone, with the install command and the terminal demo stacked under the headline",
+      caption: "On a phone.",
+      phone: true,
+    },
+  ]}
+  columns={2}
+/>
 
 ## Scanning responsibly
 

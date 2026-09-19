@@ -43,14 +43,14 @@ So the header carries a Scan Test. You drop in the file you just downloaded, `qr
 
 <CodeBlock
   code={`// Recreate instance on every config change (avoids deep-merge bugs in .update())
-useEffect(() => {
-  const Lib = qrLibRef.current
-  if (!Lib || !qrRef.current) return
-  const instance = new Lib(buildOptions(config))
-  qrRef.current.innerHTML = ""
-  instance.append(qrRef.current)
-  qrCodeRef.current = instance
-}, [config, libReady])`}
+  useEffect(() => {
+    const Lib = qrLibRef.current
+    if (!Lib || !qrRef.current) return
+    const instance = new Lib(buildOptions(config))
+    qrRef.current.innerHTML = ""
+    instance.append(qrRef.current)
+    qrCodeRef.current = instance
+  }, [config, libReady])`}
   fileName="components/qr-generator.tsx"
   lang="tsx"
 />

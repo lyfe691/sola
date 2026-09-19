@@ -21,17 +21,17 @@ The corporate manual gives five colours. The site spends four of them quietly an
 
 <CodeBlock
   code={`export function HeroDot({ delay }: { delay: number }) {
-  return (
-    <motion.span
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ type: "spring", duration: 0.6, bounce: 0.45, delay }}
-      className="inline-block text-brand-yellow will-change-transform"
-    >
-      .
-    </motion.span>
-  )
-}`}
+    return (
+      <motion.span
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: "spring", duration: 0.6, bounce: 0.45, delay }}
+        className="inline-block text-brand-yellow will-change-transform"
+      >
+        .
+      </motion.span>
+    )
+  }`}
   fileName="components/site/home/hero-dot.tsx"
   lang="tsx"
 />
@@ -62,23 +62,23 @@ Every Sanity query names the document types it reads, a webhook revalidates by t
 
 <CodeBlock
   code={`export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: false,
-  perspective: "published",
-  stega: false,
-})
-// The webhook revalidates by _type, so this list is the single source
-// for both sanityFetch and /api/revalidate.
-export const CACHE_TAGS = [
-  "siteSettings", "service", "project", "testimonial",
-  "clientReference", "teamMember", "partner",
-] as const
-client.fetch<T>(query, params, {
-  cache: "force-cache",
-  next: { tags, revalidate: 3600 },
-})`}
+    projectId,
+    dataset,
+    apiVersion,
+    useCdn: false,
+    perspective: "published",
+    stega: false,
+  })
+  // The webhook revalidates by _type, so this list is the single source
+  // for both sanityFetch and /api/revalidate.
+  export const CACHE_TAGS = [
+    "siteSettings", "service", "project", "testimonial",
+    "clientReference", "teamMember", "partner",
+  ] as const
+  client.fetch<T>(query, params, {
+    cache: "force-cache",
+    next: { tags, revalidate: 3600 },
+  })`}
   fileName="lib/sanity/client.ts"
   lang="ts"
 />

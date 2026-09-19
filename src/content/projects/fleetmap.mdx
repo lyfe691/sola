@@ -54,15 +54,15 @@ So the mirror is a single Postgres function that diff-applies the picture for on
 
 <CodeBlock
   code={`update stops set
-  seq    = (s->>'seq')::int,
-  status = s->>'status',
-  eta_at = nullif(s->>'eta_at', '')::timestamptz
-where id = v_stop_id
-  and (
-    seq    is distinct from (s->>'seq')::int or
-    status is distinct from s->>'status' or
-    eta_at is distinct from nullif(s->>'eta_at', '')::timestamptz
-  );`}
+    seq    = (s->>'seq')::int,
+    status = s->>'status',
+    eta_at = nullif(s->>'eta_at', '')::timestamptz
+  where id = v_stop_id
+    and (
+      seq    is distinct from (s->>'seq')::int or
+      status is distinct from s->>'status' or
+      eta_at is distinct from nullif(s->>'eta_at', '')::timestamptz
+    );`}
   lang="sql"
 />
 

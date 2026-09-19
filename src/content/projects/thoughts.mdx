@@ -37,14 +37,14 @@ The site is a Next.js app, and every post is an MDX file with a little metadata:
 
 <CodeBlock
   code={`// thoughts/[slug]/page.tsx
-const { default: MDXContent, metadata } = await import(
-  '../_articles/' + \`\${params.slug}.mdx\`
-)
-return (
-  <div lang={metadata.chinese ? "zh-Hans" : "en"}>
-    <MDXContent />
-  </div>
-)`}
+  const { default: MDXContent, metadata } = await import(
+    '../_articles/' + \`\${params.slug}.mdx\`
+  )
+  return (
+    <div lang={metadata.chinese ? "zh-Hans" : "en"}>
+      <MDXContent />
+    </div>
+  )`}
   fileName="page.tsx"
   lang="typescript"
 />
