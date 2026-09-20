@@ -42,13 +42,22 @@ export function FigureCaption({
   className?: string;
 }) {
   return (
-    <figcaption
-      className={cn(
-        "mt-2.5 text-center text-2xs leading-relaxed text-muted-foreground",
-        className,
-      )}
-    >
-      {children}
+    <figcaption className={cn("mt-3 flex justify-center", className)}>
+      {/* the pill the open image carries, at figure scale: the lightbox's
+          proportions held at 11px — snug leading and padding at 1.7× the type,
+          so it stays a thin capsule instead of swelling into a box. Capped to
+          the figure, which in a gallery cell is narrower than the text.
+          The radius is the image's own: past half the pill's height a browser
+          scales it down, so one line rounds to a true capsule and a caption
+          too long for a narrow cell settles into a box instead of an oval. */}
+      <span
+        className={cn(
+          "max-w-full rounded-xl bg-foreground/10 px-4 py-1",
+          "text-center text-2xs leading-snug text-(--prose-strong)",
+        )}
+      >
+        {children}
+      </span>
     </figcaption>
   );
 }
