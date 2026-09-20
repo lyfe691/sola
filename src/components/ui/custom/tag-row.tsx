@@ -9,17 +9,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import { badgeVariants } from "@/components/ui/badge";
 import { TechChip } from "@/components/ui/custom/tech-chip";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Hint } from "@/components/ui/custom/hint";
 import { cn } from "@/lib/utils";
 
 const TAG_GAP = 6;
@@ -85,12 +75,11 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
     };
   }, [tags]);
 
-  const isMobile = useIsMobile();
   const hiddenCount = tags.length - visibleCount;
   const hiddenTags = tags.slice(visibleCount).join(", ");
 
-  // a real button so the hidden tags are reachable by keyboard; on touch a
-  // popover replaces the hover-only tooltip (same split as MenuHint)
+  // a real button so the hidden tags are reachable by keyboard; Hint owns the
+  // tooltip-or-popover split
   const overflowTrigger = (
     <button
       type="button"
@@ -127,25 +116,15 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
       {tags.slice(0, visibleCount).map((tag) => (
         <TechChip key={tag} name={tag} />
       ))}
-      {hiddenCount > 0 &&
-        (isMobile ? (
-          <Popover>
-            <PopoverTrigger render={overflowTrigger} />
-            <PopoverContent
-              side="top"
-              className="w-fit max-w-[220px] p-3 text-center text-xs leading-relaxed"
-            >
-              {hiddenTags}
-            </PopoverContent>
-          </Popover>
-        ) : (
-          <Tooltip>
-            <TooltipTrigger render={overflowTrigger} />
-            <TooltipContent className="max-w-[220px] text-center">
-              {hiddenTags}
-            </TooltipContent>
-          </Tooltip>
-        ))}
+      {hiddenCount > 0 && (
+        <Hint
+          trigger={overflowTrigger}
+          className="max-w-[220px] text-center"
+          popoverClassName="w-fit max-w-[220px] text-center"
+        >
+          {hiddenTags}
+        </Hint>
+      )}
     </div>
   );
 };

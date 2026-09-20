@@ -11,62 +11,36 @@
 
 import { InformationCircleIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Hint } from "@/components/ui/custom/hint";
 
 type MenuHintProps = {
   text: string;
 };
 
 export function MenuHint({ text }: MenuHintProps) {
-  const isMobile = useIsMobile();
-
-  const trigger = (
-    <button
-      type="button"
-      className="inline-flex size-4 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-colors hover:text-muted-foreground"
-      onClick={(event) => event.stopPropagation()}
-      onPointerDown={(event) => event.stopPropagation()}
-      aria-label={text}
-    >
-      <HugeiconsIcon
-        icon={InformationCircleIcon}
-        strokeWidth={2}
-        className="size-3"
-      />
-    </button>
-  );
-
-  if (isMobile) {
-    return (
-      <Popover>
-        <PopoverTrigger render={trigger} />
-        <PopoverContent
-          side="top"
-          align="start"
-          className="w-60 p-3 text-xs leading-relaxed"
-        >
-          {text}
-        </PopoverContent>
-      </Popover>
-    );
-  }
-
   return (
-    <Tooltip>
-      <TooltipTrigger render={trigger} />
-      <TooltipContent side="top" className="max-w-60 text-center">
-        {text}
-      </TooltipContent>
-    </Tooltip>
+    <Hint
+      side="top"
+      popoverAlign="start"
+      className="max-w-60 text-center"
+      popoverClassName="w-60"
+      trigger={
+        <button
+          type="button"
+          className="inline-flex size-4 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-colors hover:text-muted-foreground"
+          onClick={(event) => event.stopPropagation()}
+          onPointerDown={(event) => event.stopPropagation()}
+          aria-label={text}
+        >
+          <HugeiconsIcon
+            icon={InformationCircleIcon}
+            strokeWidth={2}
+            className="size-3"
+          />
+        </button>
+      }
+    >
+      {text}
+    </Hint>
   );
 }

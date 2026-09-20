@@ -15,6 +15,8 @@
  */
 
 import type { CSSProperties, ReactNode } from "react";
+import { Hint } from "@/components/ui/custom/hint";
+import { useTruncated } from "@/hooks/use-truncated";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import {
@@ -36,23 +38,44 @@ export function FigureCaption({
   children: ReactNode;
   className?: string;
 }) {
+  const [textRef, truncated] = useTruncated<HTMLSpanElement>();
+
+  // the pill the open image carries, at figure scale: the lightbox's
+  // proportions held at 11px — snug leading and padding at 1.7× the type, so
+  // it stays a thin capsule instead of swelling into a box. Capped to the
+  // figure, which in a gallery cell is narrower than the text. One line
+  // always: a caption stacked inside its own pill reads as a slab, and a
+  // narrow cell would leave every figure on the row a different height. What
+  // does not fit ends in an ellipsis and the rest is one hover or tap away.
+  const pill = (
+    <span
+      ref={textRef}
+      // only a caption that lost something is reachable and says so
+      tabIndex={truncated ? 0 : undefined}
+      className={cn(
+        "block max-w-full truncate rounded-xl bg-foreground/10 px-4 py-1",
+        "text-2xs leading-snug text-(--prose-strong)",
+        "outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        truncated && "cursor-help",
+      )}
+    >
+      {children}
+    </span>
+  );
+
   return (
     <figcaption className={cn("mt-3 flex justify-center", className)}>
-      {/* the pill the open image carries, at figure scale: the lightbox's
-          proportions held at 11px — snug leading and padding at 1.7× the type,
-          so it stays a thin capsule instead of swelling into a box. Capped to
-          the figure, which in a gallery cell is narrower than the text.
-          The radius is the image's own: past half the pill's height a browser
-          scales it down, so one line rounds to a true capsule and a caption
-          too long for a narrow cell settles into a box instead of an oval. */}
-      <span
-        className={cn(
-          "max-w-full rounded-xl bg-foreground/10 px-4 py-1",
-          "text-center text-2xs leading-snug text-(--prose-strong)",
-        )}
-      >
-        {children}
-      </span>
+      {truncated ? (
+        <Hint
+          trigger={pill}
+          className="max-w-72 text-center"
+          popoverClassName="w-fit max-w-72 text-center"
+        >
+          {children}
+        </Hint>
+      ) : (
+        pill
+      )}
     </figcaption>
   );
 }
