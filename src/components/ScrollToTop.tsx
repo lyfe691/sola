@@ -133,14 +133,16 @@ export default function ScrollToTop() {
             transition: { duration: 0.1, ease: EASE_OUT },
           }}
           transition={{ duration: 0.28, ease: EASE_OUT }}
-          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background/70 text-foreground/80 ring-1 ring-foreground/10 backdrop-blur-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
+          // sized and centred on the Buy Me a Coffee button in index.html,
+          // which is 64 at margin 18 — this clears it by 10
+          className="fixed right-4.5 bottom-23 z-50 flex size-16 items-center justify-center overflow-hidden rounded-4xl bg-background/70 text-foreground/80 ring-1 ring-foreground/10 backdrop-blur-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
         >
           <WaterFill />
           <HugeiconsIcon
             icon={ArrowUpIcon}
             strokeWidth={1.5}
             aria-hidden
-            className="relative size-3.5"
+            className="relative size-5"
           />
         </motion.button>
       )}
