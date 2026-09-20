@@ -25,6 +25,20 @@ import {
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { DeployChip } from "@/components/deploy-diff/deploy-chip";
+import { cn } from "@/lib/utils";
+
+/**
+ * One hover for every link down here: the colour steps up and a rule wipes in
+ * under the label, which stays put. `bg-current` puts the rule on the same
+ * colour the text is travelling to, so the two arrive together.
+ */
+const FOOTER_LINK = cn(
+  // no display of its own — the call site stacks or inlines it
+  "relative w-fit transition-colors duration-200 ease-out",
+  "after:absolute after:inset-x-0 after:-bottom-px after:h-px after:bg-current",
+  "after:origin-left after:scale-x-0 after:transition-transform",
+  "after:duration-200 after:ease-out can-hover:hover:after:scale-x-100",
+);
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -98,26 +112,24 @@ const Footer = () => {
             {/* 這個網站是怎麼造出來的 */}
             <Link
               to={e}
-              className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
+              className="group flex w-fit items-center gap-2 text-xs text-foreground/50 transition-colors duration-200 ease-out hover:text-foreground"
             >
               <HugeiconsIcon
                 icon={InformationCircleIcon}
                 strokeWidth={2}
-                className="size-3.5 transition-transform duration-300 ease-out can-hover:group-hover:rotate-12"
+                className="size-3.5 shrink-0"
               />
-              <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
-                {t.footer.atw}
-              </span>
+              <span className={FOOTER_LINK}>{t.footer.atw}</span>
             </Link>
 
             {/* legal section */}
             <div className="space-y-2">
               <button
                 onClick={() => setIsLegalExpanded(!isLegalExpanded)}
-                className="group inline-flex items-center gap-2 text-xs text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
+                className="group flex w-fit items-center gap-2 text-xs text-foreground/50 transition-colors duration-200 ease-out hover:text-foreground"
               >
                 <div
-                  className={`transition-transform duration-300 ease-out ${isLegalExpanded ? "rotate-90" : ""}`}
+                  className={`shrink-0 transition-transform duration-200 ease-out ${isLegalExpanded ? "rotate-90" : ""}`}
                 >
                   <HugeiconsIcon
                     icon={ArrowRight01Icon}
@@ -125,7 +137,9 @@ const Footer = () => {
                     className="size-3.5"
                   />
                 </div>
-                <span className="font-medium">{t.footer.legal}</span>
+                <span className={cn(FOOTER_LINK, "font-medium")}>
+                  {t.footer.legal}
+                </span>
               </button>
 
               <div
@@ -135,15 +149,13 @@ const Footer = () => {
                   <div className="ml-5 pt-2">
                     <Link
                       to="/privacy"
-                      className="group flex items-center gap-1 text-xs text-foreground/50 hover:text-primary transition-colors duration-300 ease-out w-fit"
+                      className="group flex w-fit items-center gap-1 text-xs text-foreground/50 transition-colors duration-200 ease-out hover:text-foreground"
                     >
-                      <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
-                        {t.footer.privacy}
-                      </span>
+                      <span className={FOOTER_LINK}>{t.footer.privacy}</span>
                       <HugeiconsIcon
                         icon={ArrowUpRight01Icon}
                         strokeWidth={2}
-                        className="size-2.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        className="size-2.5 shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                       />
                     </Link>
                   </div>
@@ -160,16 +172,22 @@ const Footer = () => {
             <div className="space-y-3">
               <Link
                 to="/"
-                className="block text-sm text-foreground/60 hover:text-foreground can-hover:hover:translate-x-1 transition-[color,transform,translate,scale,rotate] duration-300 ease-out"
+                className={cn(
+                  FOOTER_LINK,
+                  "block text-sm text-foreground/60 hover:text-foreground",
+                )}
               >
                 {t.common.home}
               </Link>
-              <div className="w-8 h-px bg-linear-to-r from-foreground/20 to-transparent" />
+              <div className="h-px w-8 bg-foreground/15" />
               {nav.map(({ text, path }) => (
                 <Link
                   key={path}
                   to={path}
-                  className="block text-sm text-foreground/60 hover:text-foreground can-hover:hover:translate-x-1 transition-[color,transform,translate,scale,rotate] duration-300 ease-out"
+                  className={cn(
+                    FOOTER_LINK,
+                    "block text-sm text-foreground/60 hover:text-foreground",
+                  )}
                 >
                   {text}
                 </Link>
@@ -193,26 +211,26 @@ const Footer = () => {
                     title: t.common.copied,
                   });
                 }}
-                className="group flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors duration-300 ease-out hover:cursor-copy"
+                className="group flex w-fit items-center gap-2 text-sm text-foreground/60 transition-colors duration-200 ease-out hover:cursor-copy hover:text-foreground"
               >
                 <HugeiconsIcon
                   icon={Mail01Icon}
                   strokeWidth={2}
-                  className="size-4 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:scale-110"
+                  className="size-4 shrink-0"
                 />
-                <span className="leading-relaxed wrap-break-word">
+                <span className={cn(FOOTER_LINK, "wrap-break-word")}>
                   yanis.sebastian.zuercher@gmail.com
                 </span>
               </button>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-1 text-sm text-foreground/60 hover:text-foreground can-hover:hover:translate-x-1 transition-[color,transform,translate,scale,rotate] duration-300 ease-out"
+                className="group flex w-fit items-center gap-1 text-sm text-foreground/60 transition-colors duration-200 ease-out hover:text-foreground"
               >
-                {t.footer.contactForm}
+                <span className={FOOTER_LINK}>{t.footer.contactForm}</span>
                 <HugeiconsIcon
                   icon={ArrowUpRight01Icon}
                   strokeWidth={2}
-                  className="size-3"
+                  className="size-3 shrink-0"
                 />
               </Link>
             </div>
@@ -231,10 +249,9 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={link.label}
-                  className={`group relative p-2.5 rounded-lg border border-foreground/10 bg-foreground/5 text-foreground/60 hover:text-foreground transition-[color,background-color,transform,translate,scale,rotate] duration-300 ease-out ${link.hoverClass}`}
+                  className={`rounded-lg border border-foreground/10 bg-foreground/5 p-2.5 text-foreground/60 transition-[color,background-color,scale] duration-200 ease-out hover:text-foreground ${link.hoverClass}`}
                 >
-                  <div className="relative z-10">{link.icon}</div>
-                  <div className="absolute inset-0 rounded-lg bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  {link.icon}
                 </a>
               ))}
             </div>
@@ -268,8 +285,7 @@ const Footer = () => {
         </div>
 
         {/* bottom section */}
-        <div className="relative">
-          <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-foreground/20 to-transparent" />
+        <div className="border-t border-foreground/10">
           <div className="flex flex-col items-center gap-2.5 pt-8 text-center">
             <p className="text-xs text-foreground/40 leading-relaxed">
               © {year}{" "}
@@ -285,7 +301,10 @@ const Footer = () => {
               </span>
               <Link
                 to="/changelog"
-                className="font-mono text-xs text-foreground/40 transition-colors hover:text-foreground/80"
+                className={cn(
+                  FOOTER_LINK,
+                  "font-mono text-xs text-foreground/40 hover:text-foreground/80",
+                )}
               >
                 {t.footer.changelog}
               </Link>
