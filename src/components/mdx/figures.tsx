@@ -12,23 +12,39 @@
  * on the same line and the captions sit on one baseline. A row of phones
  * alone cannot fill the block at a sane height; it sits centred on a stage
  * that does.
+ *
+ * A figure is an image or a clip, bare or in a device frame; the row treats
+ * them all alike, by the footprint figure-layout.ts gives them.
  */
 
 import type { CSSProperties, ReactNode } from "react";
+import { PROJECT_IMAGE_TINTS } from "@/config/project-image-sizes";
 import { Hint } from "@/components/ui/custom/hint";
 import { useTruncated } from "@/hooks/use-truncated";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import {
+  type FigureFrame,
+  figureRatio,
   GAP,
   PORTRAIT_BELOW,
-  ratioOf,
   rowShares,
   STAGE_HEIGHT,
   isPortrait,
 } from "./figure-layout";
+import { DeviceFrame, SCREEN_RADIUS } from "./frames";
+import { InlineVideo } from "./InlineVideo";
 
-type FigureImage = { src: string; alt: string; caption?: string };
+type FigureImage = {
+  src: string;
+  alt: string;
+  caption?: string;
+  /** A clip that plays in the figure's place; `src` is then its poster. */
+  video?: string;
+  frame?: FigureFrame;
+  /** What the Safari frame's address field reads. */
+  url?: string;
+};
 type Columns = 2 | 3 | 4;
 
 export function FigureCaption({
@@ -74,6 +90,35 @@ export function FigureCaption({
   );
 }
 
+function FigureMedia({ figure }: { figure: FigureImage }) {
+  const radius = figure.frame ? SCREEN_RADIUS[figure.frame] : undefined;
+  const media = figure.video ? (
+    <InlineVideo
+      src={figure.video}
+      poster={figure.src}
+      label={figure.alt}
+      radius={radius}
+    />
+  ) : (
+    <ExpandableImage
+      src={figure.src}
+      alt={figure.alt}
+      caption={figure.caption}
+      radius={radius}
+    />
+  );
+  if (!figure.frame) return media;
+  return (
+    <DeviceFrame
+      frame={figure.frame}
+      url={figure.url}
+      tint={PROJECT_IMAGE_TINTS[figure.src]}
+    >
+      {media}
+    </DeviceFrame>
+  );
+}
+
 // the row forms where its thumbnails stay legible; below that it stacks
 const ROW_FROM = {
   2: "sm:flex-row",
@@ -98,9 +143,9 @@ function FigureRow({
   images: FigureImage[];
   columns: Columns;
 }) {
-  const ratios = images.map((image) => ratioOf(image.src));
+  const ratios = images.map(figureRatio);
   const total = ratios.reduce((sum, ratio) => sum + ratio, 0);
-  const shares = rowShares(images.map((image) => image.src));
+  const shares = rowShares(images);
   const figures = (cell: (index: number) => string) =>
     images.map((image, index) => (
       <figure
@@ -108,11 +153,7 @@ function FigureRow({
         style={{ "--share": shares[index] } as CSSProperties}
         className={cn("min-w-0", cell(index))}
       >
-        <ExpandableImage
-          src={image.src}
-          alt={image.alt}
-          caption={image.caption}
-        />
+        <FigureMedia figure={image} />
         {image.caption ? <FigureCaption>{image.caption}</FigureCaption> : null}
       </figure>
     ));
@@ -156,33 +197,43 @@ const SIZE_CLASS = {
   full: "w-full",
 } as const;
 
-export function ProjectImage({
-  src,
-  alt,
-  caption,
-  className,
-  size = "normal",
-}: {
-  src: string;
-  alt: string;
-  caption?: string;
+type ProjectImageProps = FigureImage & {
   className?: string;
   size?: keyof typeof SIZE_CLASS;
-}) {
-  if (isPortrait(src)) {
+};
+
+export function ProjectImage({
+  className,
+  size = "normal",
+  ...figure
+}: ProjectImageProps) {
+  if (isPortrait(figure)) {
     return (
       <div className={cn("my-8", className)}>
-        <FigureRow images={[{ src, alt, caption }]} columns={2} />
+        <FigureRow images={[figure]} columns={2} />
       </div>
     );
   }
 
   return (
     <figure className={cn("my-8", SIZE_CLASS[size], className)}>
-      <ExpandableImage src={src} alt={alt} caption={caption} />
-      {caption ? <FigureCaption>{caption}</FigureCaption> : null}
+      <FigureMedia figure={figure} />
+      {figure.caption ? <FigureCaption>{figure.caption}</FigureCaption> : null}
     </figure>
   );
+}
+
+/** A figure in a Safari window; reads cleanest at the full column. */
+export function Safari({
+  size = "full",
+  ...props
+}: Omit<ProjectImageProps, "frame">) {
+  return <ProjectImage {...props} size={size} frame="safari" />;
+}
+
+/** A figure in an iPhone; a phone shot lands on the stage as it does bare. */
+export function IPhone(props: Omit<ProjectImageProps, "frame" | "url">) {
+  return <ProjectImage {...props} frame="iphone" />;
 }
 
 export function ProjectGallery({
@@ -202,11 +253,7 @@ export function ProjectGallery({
       <figure
         className={cn("my-8", size === "full" ? "w-full" : "mx-auto max-w-4xl")}
       >
-        <ExpandableImage
-          src={image.src}
-          alt={image.alt}
-          caption={image.caption}
-        />
+        <FigureMedia figure={image} />
         {image.caption ? <FigureCaption>{image.caption}</FigureCaption> : null}
       </figure>
     );

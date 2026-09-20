@@ -18,21 +18,27 @@ import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { useLanguage } from "@/lib/language-provider";
 import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
+import { RADIUS_INLINE } from "./figure-layout";
 import { FigureLightboxProvider } from "./figure-lightbox";
-import {
-  FigureLightboxContext,
-  RADIUS_INLINE,
-} from "./figure-lightbox-context";
+import { FigureLightboxContext } from "./figure-lightbox-context";
 
 type ExpandableImageProps = {
   src: string;
   alt: string;
   /** Shown with the image when it is open. */
   caption?: string;
+  /** Set by a frame: the corners it cuts the image to. The frame then lifts it. */
+  radius?: string;
   className?: string;
 };
 
-function Thumbnail({ src, alt, caption, className }: ExpandableImageProps) {
+function Thumbnail({
+  src,
+  alt,
+  caption,
+  radius,
+  className,
+}: ExpandableImageProps) {
   const lightbox = useContext(FigureLightboxContext);
   const id = useId();
   const thumbRef = useRef<HTMLImageElement>(null);
@@ -55,9 +61,14 @@ function Thumbnail({ src, alt, caption, className }: ExpandableImageProps) {
       type="button"
       onClick={() => lightbox?.open(id)}
       aria-label={expandLabel}
+      style={radius ? { borderRadius: radius } : undefined}
       className={cn(
-        "group/image relative block w-full overflow-hidden rounded-xl",
-        "bg-muted/20 shadow-(--prose-figure-lift)",
+        "group/image relative block w-full overflow-hidden bg-muted/20",
+        // in a frame the corners and the lift are the frame's, and a ring
+        // outside the button would be cut off by the frame's clip
+        radius
+          ? "focus-visible:ring-inset"
+          : "rounded-xl shadow-(--prose-figure-lift)",
         "cursor-zoom-in outline-none select-none",
         // v4: scale uses the `scale` property — transition `scale`, not transform
         "transition-[scale] duration-200 ease-out",
@@ -75,7 +86,7 @@ function Thumbnail({ src, alt, caption, className }: ExpandableImageProps) {
         alt=""
         width={PROJECT_IMAGE_SIZES[src]?.[0]}
         height={PROJECT_IMAGE_SIZES[src]?.[1]}
-        style={{ borderRadius: RADIUS_INLINE }}
+        style={{ borderRadius: radius ?? RADIUS_INLINE }}
         // the lightbox's flyer is this image while it is away
         className={cn("block h-auto w-full", away && "invisible")}
         loading="lazy"

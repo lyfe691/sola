@@ -27,6 +27,3 @@ export type LightboxApi = {
 };
 
 export const FigureLightboxContext = createContext<LightboxApi | null>(null);
-
-/** Corner radius of an image in the page; the flyer starts and ends on it. */
-export const RADIUS_INLINE = 12;

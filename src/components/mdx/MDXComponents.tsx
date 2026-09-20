@@ -28,7 +28,13 @@ import {
 import { Link } from "react-router";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
-import { FigureCaption, ProjectGallery, ProjectImage } from "./figures";
+import {
+  FigureCaption,
+  IPhone,
+  ProjectGallery,
+  ProjectImage,
+  Safari,
+} from "./figures";
 import { MDXHeading } from "./Heading";
 import { TechStack } from "./TechStack";
 
@@ -285,8 +291,10 @@ const html = {
 
 const shortcodes = {
   CodeBlock,
+  IPhone,
   ProjectImage,
   ProjectGallery,
+  Safari,
   TechStack,
 };
 

@@ -36,6 +36,11 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   stale). The size list also drives the figure layout: a gallery row shares
   one height with widths from each image's aspect ratio, and phone-only rows
   sit on a stage, so phone shots need no flag. `columns` = figures per row.
+- **Device frames**: `<Safari url="…" />` and `<IPhone />` are `<ProjectImage>`
+  with a frame (same props; Safari defaults to `size="full"`); in a gallery
+  give an image `frame: "safari" | "iphone"`. `video="/projects/<slug>/x.mp4"`
+  on any figure plays a muted clip in place: `src` is then its poster PNG
+  (in the size list — it reserves the box), and clips don't open the lightbox.
 
 ## Styling
 

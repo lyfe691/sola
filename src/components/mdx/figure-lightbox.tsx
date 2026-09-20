@@ -62,7 +62,6 @@ import { snapScrollTo } from "@/utils/scroll";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import {
   FigureLightboxContext,
-  RADIUS_INLINE,
   type FigureEntry,
 } from "./figure-lightbox-context";
 
@@ -99,7 +98,14 @@ const FOCUSABLE = "button:not([disabled])";
 
 /** closed → docked (posed over the thumbnail) → open → returning → closed */
 type Phase = "closed" | "docked" | "open" | "returning";
-type Box = { top: number; left: number; width: number; height: number };
+/** A thumbnail's place on screen and its corner: the flyer poses on both. */
+type Box = {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
+  radius: number;
+};
 type View = {
   phase: Phase;
   /** Counts openings; the strip is keyed on it. Only load-bearing when one
@@ -125,10 +131,26 @@ const CLOSED: View = {
 type Stage = { cx: number; cy: number; w: number; h: number };
 
 const boxOf = (node: Element | null | undefined): Box | null => {
-  const rect = node?.getBoundingClientRect();
-  return rect
-    ? { top: rect.top, left: rect.left, width: rect.width, height: rect.height }
-    : null;
+  if (!node) return null;
+  const rect = node.getBoundingClientRect();
+  const style = getComputedStyle(node);
+  // the largest of the four: a framed screen is square where it meets the
+  // chrome and round where the frame's own corners are
+  const radius = Math.max(
+    ...[
+      style.borderTopLeftRadius,
+      style.borderTopRightRadius,
+      style.borderBottomRightRadius,
+      style.borderBottomLeftRadius,
+    ].map((corner) => parseFloat(corner) || 0),
+  );
+  return {
+    top: rect.top,
+    left: rect.left,
+    width: rect.width,
+    height: rect.height,
+    radius,
+  };
 };
 
 const inDocumentOrder = (a: FigureEntry, b: FigureEntry) => {
@@ -545,7 +567,7 @@ function Lightbox({
                     y: dock.top + dock.height / 2 - stage.cy,
                     scale,
                     opacity: 1,
-                    borderRadius: RADIUS_INLINE / scale,
+                    borderRadius: dock.radius / scale,
                   };
             const flight = !open
               ? FLIGHT_BACK
