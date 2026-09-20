@@ -381,6 +381,15 @@ function Lightbox({
   const open = phase === "open";
   const many = items.length > 1;
 
+  // The flight shares its frames with whatever the strip is decoding, and an
+  // article's images decode in one go the first time it opens — enough to
+  // drop the spring's opening frames on a long piece. Only what can be seen
+  // is mounted until the image has landed: the one flying and the neighbours
+  // that peek in beside it. The rest, and the filmstrip, follow.
+  // false again on the next opening for free: a closed view unmounts this
+  const [landed, setLanded] = useState(false);
+  const mounted = (i: number) => landed || Math.abs(i - index) <= 1;
+
   const stage = useStage(stageRef);
   const strip = useMemo(
     () => (stage ? layOut(items, stage) : null),
@@ -542,6 +551,7 @@ function Lightbox({
           className="absolute touch-pan-y"
         >
           {items.map((entry, i) => {
+            if (!mounted(i)) return null;
             const { w, h } = strip.sizes[i];
             const showing = i === index;
             // over the thumbnail: moved to its centre and scaled to its width
@@ -596,7 +606,9 @@ function Lightbox({
                       : FADE,
                 }}
                 onAnimationComplete={() => {
-                  if (showing && phase === "returning") onLanded();
+                  if (!showing) return;
+                  if (phase === "returning") onLanded();
+                  else if (open) setLanded(true);
                 }}
                 onClick={
                   showing
@@ -720,7 +732,7 @@ function Lightbox({
                   <span className="truncate-fade pr-6">{item.caption}</span>
                 </motion.p>
               ) : null}
-              {many ? (
+              {many && landed ? (
                 <Filmstrip
                   items={items}
                   index={index}
