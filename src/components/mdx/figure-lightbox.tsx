@@ -338,10 +338,13 @@ function Filmstrip({
                 : "opacity-70 hover:opacity-100",
             )}
           >
+            {/* a full-size screenshot drawn into a 60px slot is its own
+                decode, and ten of them on the main thread is a stall */}
             <img
               src={item.src}
               alt=""
               draggable={false}
+              decoding="async"
               className="size-full object-cover object-top"
             />
           </button>
@@ -381,14 +384,34 @@ function Lightbox({
   const open = phase === "open";
   const many = items.length > 1;
 
-  // The flight shares its frames with whatever the strip is decoding, and an
-  // article's images decode in one go the first time it opens — enough to
-  // drop the spring's opening frames on a long piece. Only what can be seen
-  // is mounted until the image has landed: the one flying and the neighbours
-  // that peek in beside it. The rest, and the filmstrip, follow.
-  // false again on the next opening for free: a closed view unmounts this
+  // Only three images are ever on screen — the one showing and the two that
+  // peek in — so only those are mounted, at any point, and the window moves
+  // with the index. Mounting the whole article instead put its decoding on
+  // the frames the spring runs on, which dropped them.
+  //
+  // The filmstrip does need all of them, so it waits for the image to land
+  // and then for the rest to decode off the main thread: by the time it
+  // mounts there is nothing left to decode, and it costs layout only. Both
+  // flags are false again on the next opening for free: closing unmounts.
   const [landed, setLanded] = useState(false);
-  const mounted = (i: number) => landed || Math.abs(i - index) <= 1;
+  const [warm, setWarm] = useState(false);
+  useEffect(() => {
+    if (!landed) return;
+    let live = true;
+    void Promise.all(
+      items.map((entry) => {
+        const image = new Image();
+        image.src = entry.src;
+        return image.decode().catch(() => {});
+      }),
+    ).then(() => {
+      if (live) setWarm(true);
+    });
+    return () => {
+      live = false;
+    };
+  }, [landed, items]);
+  const mounted = (i: number) => Math.abs(i - index) <= 1;
 
   const stage = useStage(stageRef);
   const strip = useMemo(
@@ -408,19 +431,31 @@ function Lightbox({
     lastIndex.current = index;
   }, [strip, index, reducedMotion, x]);
 
-  // posed over the thumbnail, the image waits until it can paint, so the
-  // thumbnail is never swapped for a blank frame
+  // Posed over the thumbnail, the image waits until it can paint, so the
+  // thumbnail is never swapped for a blank frame. The neighbours wait with
+  // it: they are mounted for the flight too, and a photograph decoding on
+  // its first frames is exactly what drops them.
   useEffect(() => {
     if (phase !== "docked" || !strip) return;
     let live = true;
     const leave = () => {
       if (live) onReady();
     };
-    (showingRef.current?.decode() ?? Promise.resolve()).then(leave, leave);
+    const neighbours = [index - 1, index + 1]
+      .filter((i) => i >= 0 && i < items.length)
+      .map((i) => {
+        const image = new Image();
+        image.src = items[i].src;
+        return image.decode().catch(() => {});
+      });
+    void Promise.all([
+      showingRef.current?.decode().catch(() => {}),
+      ...neighbours,
+    ]).then(leave, leave);
     return () => {
       live = false;
     };
-  }, [phase, strip, onReady]);
+  }, [phase, strip, onReady, index, items]);
 
   useEffect(() => {
     if (!open) return;
@@ -732,7 +767,7 @@ function Lightbox({
                   <span className="truncate-fade pr-6">{item.caption}</span>
                 </motion.p>
               ) : null}
-              {many && landed ? (
+              {many && warm ? (
                 <Filmstrip
                   items={items}
                   index={index}
