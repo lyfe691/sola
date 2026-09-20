@@ -23,9 +23,7 @@
 }
 
 @theme inline {
-  /* Both are Geist today. They stay two tokens on purpose: the headings are
-     meant to take a face of their own again, and every `font-heading` call
-     site is already pointing at the token that would change. */
+  /* same face today; kept apart so headings can take their own again */
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono:
@@ -572,13 +570,9 @@
 }
 
 /* ---------- deep-dive prose ---------- */
-/* One emphasis scale for MDX articles. The body sits at --muted-foreground and
-   everything that wants weight steps *toward* --foreground rather than jumping
-   all the way to it, so a bold run reads as emphasis instead of highlighter.
-   The steps are mixes and not opacities on purpose: --muted-foreground sits far
-   closer to --foreground in the dark themes than in the light ones, so one
-   fixed alpha lands twice as hard in one scheme as in the other, where a
-   percentage of the way up the scale lands the same in all eleven. */
+/* Emphasis steps from --muted-foreground toward --foreground. Mixes, not
+   alpha: the two sit much closer together in the dark themes, so one fixed
+   opacity lands twice as hard in one scheme as the other. */
 .mdx {
   --prose-strong: color-mix(
     in oklab,
@@ -593,16 +587,12 @@
     var(--muted-foreground) 85%,
     transparent
   );
-  /* A figure is lifted off the page rather than boxed in by a hairline, the
-     way the open one is. A border only ever showed up on the light
-     screenshots anyway — on a dark shot it drew a frame around nothing. */
   --prose-figure-lift:
     0 1px 2px color-mix(in oklab, black 5%, transparent),
     0 14px 34px -14px color-mix(in oklab, black 18%, transparent);
 }
 
-/* Same lift, deeper: a dark page gives black much less to fall on, so the
-   shadow has to be carried further before it reads at all. */
+/* carried further: black has less to fall on here */
 .dark .mdx,
 [data-scheme="dark"] .mdx {
   --prose-figure-lift:
@@ -610,9 +600,7 @@
     0 16px 36px -14px color-mix(in oklab, black 75%, transparent);
 }
 
-/* An inline link is emphasis, not an alarm, so it joins the same scale as bold
-   and wears a hairline underline instead of the full-strength one. Unlayered
-   so it wins over the `link` utility it is refining. */
+/* Unlayered so it wins over the `link` utility it refines. */
 .mdx a.link {
   color: var(--prose-strong);
   text-decoration-color: var(--prose-marker);

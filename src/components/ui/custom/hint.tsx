@@ -5,10 +5,8 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * One short answer to "what does this say?" — a tooltip where there is a
- * pointer to hover with, a popover where there is only a finger. The split is
- * the same everywhere it appears (the menu glyph, a tag row's +N, a truncated
- * figure caption), so it lives here once rather than in each of them.
+ * A short hint: tooltip on a fine pointer, popover on touch. Shared by
+ * MenuHint, TagRow's +N and truncated figure captions.
  */
 
 import type { ReactElement, ReactNode } from "react";
@@ -29,20 +27,14 @@ type Side = "top" | "right" | "bottom" | "left";
 type Align = "start" | "center" | "end";
 
 type HintProps = {
-  /** What the hint says. */
   children: ReactNode;
-  /**
-   * The element it hangs off. Both primitives render into it, so it has to
-   * take a ref and be reachable by keyboard — a real button, not a span.
-   */
+  /** Must take a ref and be focusable — both primitives render into it. */
   trigger: ReactElement;
   side?: Side;
   align?: Align;
-  /** When the panel a finger opens wants to sit differently from the tooltip. */
   popoverAlign?: Align;
-  /** On the tooltip, which carries its own padding. */
+  /** `className` lands on the tooltip, `popoverClassName` on the popover. */
   className?: string;
-  /** On the popover, which is a panel and is given the padding here. */
   popoverClassName?: string;
 };
 

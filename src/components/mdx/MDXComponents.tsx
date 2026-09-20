@@ -109,8 +109,7 @@ const html = {
     </p>
   ),
 
-  // markers only change color: a ::marker sized away from the text loses the
-  // optical centre the browser sets it on
+  // colour only — a sized ::marker loses its optical centre on the text
   ul: ({ children, className }: MdxProps) => (
     <ul
       className={cn(

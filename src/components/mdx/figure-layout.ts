@@ -21,9 +21,8 @@ export const PORTRAIT_BELOW = 0.8;
 export const isPortrait = (src: string) => ratioOf(src) < PORTRAIT_BELOW;
 
 /**
- * Each figure's share of its row. The figures of a row share one height, so a
- * width is that figure's ratio over the row's — grow factors that sum to one,
- * since anything less would leave part of the row unclaimed.
+ * Each figure's share of its row — its ratio over the row's, since a row shares
+ * one height. Shares sum to one; less would leave part of the row unclaimed.
  */
 export const rowShares = (srcs: readonly string[]) => {
   const ratios = srcs.map(ratioOf);
@@ -35,18 +34,8 @@ export const rowShares = (srcs: readonly string[]) => {
 export const STAGE_HEIGHT = 27;
 export const GAP = 1.25;
 
-/**
- * The article column at desktop, in px — the width a row is justified into.
- * Measured, not configured: `max-w-3xl` prose beside the deep-dive rail.
- */
+/** The article column at desktop, in px — measured, not configured. */
 export const ARTICLE_COLUMN = 896;
 
-/**
- * The narrowest a figure may end up. A lone phone on a stage is sized to
- * STAGE_HEIGHT, which at a phone's ratio comes out near 200px, and that is the
- * width at which a phone screenshot still reads and its caption still sits on
- * one line. A phone justified into a row of desktop shots is narrower than a
- * phone alone — at three columns it collapses to a thumbnail — so a row that
- * would push one under this belongs in two rows instead.
- */
+/** Under this a phone screenshot stops being readable (a stage gives it ~200). */
 export const MIN_FIGURE_WIDTH = 170;

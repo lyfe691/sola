@@ -78,8 +78,7 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
   const hiddenCount = tags.length - visibleCount;
   const hiddenTags = tags.slice(visibleCount).join(", ");
 
-  // a real button so the hidden tags are reachable by keyboard; Hint owns the
-  // tooltip-or-popover split
+  // a real button so the hidden tags are reachable by keyboard
   const overflowTrigger = (
     <button
       type="button"

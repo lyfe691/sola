@@ -40,17 +40,11 @@ export function FigureCaption({
 }) {
   const [textRef, truncated] = useTruncated<HTMLSpanElement>();
 
-  // the pill the open image carries, at figure scale: the lightbox's
-  // proportions held at 11px — snug leading and padding at 1.7× the type, so
-  // it stays a thin capsule instead of swelling into a box. Capped to the
-  // figure, which in a gallery cell is narrower than the text. One line
-  // always: a caption stacked inside its own pill reads as a slab, and a
-  // narrow cell would leave every figure on the row a different height. What
-  // does not fit ends in an ellipsis and the rest is one hover or tap away.
+  // rounded-xl, not -full: a browser caps a radius at half the height, so one
+  // line is a capsule and a wrapped one would still be a box, not an oval
   const pill = (
     <span
       ref={textRef}
-      // only a caption that lost something is reachable and says so
       tabIndex={truncated ? 0 : undefined}
       className={cn(
         "block max-w-full truncate rounded-xl bg-foreground/10 px-4 py-1",

@@ -1,11 +1,8 @@
 /**
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
- * Reads the rows every <ProjectGallery> in a deep dive lays out. The row
- * layout is a function of the image sources and the column count, so those
- * are all the rule needs — no MDX has to be compiled to check it.
- *
- * src/content/projects/galleries.test.ts asserts the geometry over these.
+ * The rows every <ProjectGallery> in a deep dive lays out, read from the MDX
+ * rather than compiled. src/content/projects/galleries.test.ts asserts over them.
  */
 
 import { readdirSync, readFileSync } from "node:fs";

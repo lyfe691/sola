@@ -57,8 +57,6 @@ function Thumbnail({ src, alt, caption, className }: ExpandableImageProps) {
       aria-label={expandLabel}
       className={cn(
         "group/image relative block w-full overflow-hidden rounded-xl",
-        // no frame: the figure is lifted off the page the way the open one
-        // is, and a hairline would only ever have shown on the light shots
         "bg-muted/20 shadow-(--prose-figure-lift)",
         "cursor-zoom-in outline-none select-none",
         // v4: scale uses the `scale` property — transition `scale`, not transform

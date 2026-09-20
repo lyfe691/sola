@@ -113,9 +113,6 @@ type MotionHeadingProps = {
   id?: string;
 };
 
-// headings carry the article's contrast, so they keep --foreground; size is
-// what separates them, and one weight across the two top levels keeps a
-// section from reading heavier than the piece it belongs to
 const LEVEL_CLASS: Record<HeadingLevel, string> = {
   h1: "text-2xl font-semibold tracking-tight text-foreground mb-6 mt-8 first:mt-0",
   h2: "text-lg font-semibold tracking-tight text-foreground mb-4 mt-8 first:mt-0",

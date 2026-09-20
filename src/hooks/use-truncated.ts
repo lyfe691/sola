@@ -5,8 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Whether a single-line element is actually cut off, so only the labels that
- * lost something get an affordance to show the rest.
+ * Whether a single-line element is actually cut off.
  */
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
@@ -27,9 +26,7 @@ export function useTruncated<T extends HTMLElement>() {
     const el = ref.current;
     if (!el) return;
 
-    // the element's own box changes with the column; the text inside it does
-    // not, so watching the box is enough — until the webfont swaps in and
-    // re-measures every glyph under it
+    // the box resizes with the column; the webfont swap changes the text
     const observer = new ResizeObserver(measure);
     observer.observe(el);
     measure();

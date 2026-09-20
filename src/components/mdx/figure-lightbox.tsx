@@ -102,10 +102,8 @@ type Phase = "closed" | "docked" | "open" | "returning";
 type Box = { top: number; left: number; width: number; height: number };
 type View = {
   phase: Phase;
-  /** Counts openings, and the strip is keyed on it. A view that closed all
-   *  the way has already unmounted, so this is only load-bearing for the
-   *  overlap: opening one while the last is still flying home, which then
-   *  starts clean rather than inheriting that one's position and slide. */
+  /** Counts openings; the strip is keyed on it. Only load-bearing when one
+   *  opens while the last is still flying home — a closed view has unmounted. */
   session: number;
   items: FigureEntry[];
   index: number;

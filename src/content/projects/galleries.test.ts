@@ -20,14 +20,11 @@ describe("deep-dive galleries", () => {
     expect(rows().length).toBeGreaterThan(10);
   });
 
-  // A phone justified into a row of desktop shots is narrower than a phone
-  // alone, and at three columns it collapses to a thumbnail: unreadable, with
-  // a caption that has to wrap to fit. Give that row fewer columns — a phone
-  // left on a row of its own lands on the stage, at the width it wants.
+  // when this fails, give that gallery fewer columns: a phone left alone on a
+  // row lands on the stage instead, at the width it wants
   it("never justifies a figure down to a thumbnail", () => {
     const thumbnails = rows().flatMap((row) => {
-      // a row of phones alone is not justified into the column; it sits on a
-      // stage, which sizes it on its own terms
+      // an all-phone row sits on a stage, which sizes it on its own terms
       if (row.srcs.every(isPortrait)) return [];
       return rowShares(row.srcs)
         .map((share, index) => ({
