@@ -25,20 +25,12 @@ import {
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { DeployChip } from "@/components/deploy-diff/deploy-chip";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-/**
- * One hover for every link down here: the colour steps up and a rule wipes in
- * under the label, which stays put. `bg-current` puts the rule on the same
- * colour the text is travelling to, so the two arrive together.
- */
-const FOOTER_LINK = cn(
-  // no display of its own — the call site stacks or inlines it
-  "relative w-fit transition-colors duration-200 ease-out",
-  "after:absolute after:inset-x-0 after:-bottom-px after:h-px after:bg-current",
-  "after:origin-left after:scale-x-0 after:transition-transform",
-  "after:duration-200 after:ease-out can-hover:hover:after:scale-x-100",
-);
+/** One hover for every link down here: muted, stepping to foreground. */
+const FOOTER_LINK =
+  "w-fit text-muted-foreground transition-colors duration-200 ease-out hover:text-foreground";
 
 const Footer = () => {
   const year = new Date().getFullYear();
@@ -112,21 +104,21 @@ const Footer = () => {
             {/* 這個網站是怎麼造出來的 */}
             <Link
               to={e}
-              className="group flex w-fit items-center gap-2 text-xs text-foreground/50 transition-colors duration-200 ease-out hover:text-foreground"
+              className={cn(FOOTER_LINK, "flex items-center gap-2 text-xs")}
             >
               <HugeiconsIcon
                 icon={InformationCircleIcon}
                 strokeWidth={2}
                 className="size-3.5 shrink-0"
               />
-              <span className={FOOTER_LINK}>{t.footer.atw}</span>
+              {t.footer.atw}
             </Link>
 
             {/* legal section */}
             <div className="space-y-2">
               <button
                 onClick={() => setIsLegalExpanded(!isLegalExpanded)}
-                className="group flex w-fit items-center gap-2 text-xs text-foreground/50 transition-colors duration-200 ease-out hover:text-foreground"
+                className={cn(FOOTER_LINK, "flex items-center gap-2 text-xs")}
               >
                 <div
                   className={`shrink-0 transition-transform duration-200 ease-out ${isLegalExpanded ? "rotate-90" : ""}`}
@@ -137,9 +129,7 @@ const Footer = () => {
                     className="size-3.5"
                   />
                 </div>
-                <span className={cn(FOOTER_LINK, "font-medium")}>
-                  {t.footer.legal}
-                </span>
+                <span className="font-medium">{t.footer.legal}</span>
               </button>
 
               <div
@@ -149,9 +139,12 @@ const Footer = () => {
                   <div className="ml-5 pt-2">
                     <Link
                       to="/privacy"
-                      className="group flex w-fit items-center gap-1 text-xs text-foreground/50 transition-colors duration-200 ease-out hover:text-foreground"
+                      className={cn(
+                        FOOTER_LINK,
+                        "group flex items-center gap-1 text-xs",
+                      )}
                     >
-                      <span className={FOOTER_LINK}>{t.footer.privacy}</span>
+                      {t.footer.privacy}
                       <HugeiconsIcon
                         icon={ArrowUpRight01Icon}
                         strokeWidth={2}
@@ -170,24 +163,15 @@ const Footer = () => {
               {t.footer.navigation}
             </h3>
             <div className="space-y-3">
-              <Link
-                to="/"
-                className={cn(
-                  FOOTER_LINK,
-                  "block text-sm text-foreground/60 hover:text-foreground",
-                )}
-              >
+              <Link to="/" className={cn(FOOTER_LINK, "block text-sm")}>
                 {t.common.home}
               </Link>
-              <div className="h-px w-8 bg-foreground/15" />
+              <Separator />
               {nav.map(({ text, path }) => (
                 <Link
                   key={path}
                   to={path}
-                  className={cn(
-                    FOOTER_LINK,
-                    "block text-sm text-foreground/60 hover:text-foreground",
-                  )}
+                  className={cn(FOOTER_LINK, "block text-sm")}
                 >
                   {text}
                 </Link>
@@ -211,22 +195,25 @@ const Footer = () => {
                     title: t.common.copied,
                   });
                 }}
-                className="group flex w-fit items-center gap-2 text-sm text-foreground/60 transition-colors duration-200 ease-out hover:cursor-copy hover:text-foreground"
+                className={cn(
+                  FOOTER_LINK,
+                  "flex items-center gap-2 text-sm hover:cursor-copy",
+                )}
               >
                 <HugeiconsIcon
                   icon={Mail01Icon}
                   strokeWidth={2}
                   className="size-4 shrink-0"
                 />
-                <span className={cn(FOOTER_LINK, "wrap-break-word")}>
+                <span className="wrap-break-word">
                   yanis.sebastian.zuercher@gmail.com
                 </span>
               </button>
               <Link
                 to="/contact"
-                className="group flex w-fit items-center gap-1 text-sm text-foreground/60 transition-colors duration-200 ease-out hover:text-foreground"
+                className={cn(FOOTER_LINK, "flex items-center gap-1 text-sm")}
               >
-                <span className={FOOTER_LINK}>{t.footer.contactForm}</span>
+                {t.footer.contactForm}
                 <HugeiconsIcon
                   icon={ArrowUpRight01Icon}
                   strokeWidth={2}
@@ -285,7 +272,8 @@ const Footer = () => {
         </div>
 
         {/* bottom section */}
-        <div className="border-t border-foreground/10">
+        <div>
+          <Separator />
           <div className="flex flex-col items-center gap-2.5 pt-8 text-center">
             <p className="text-xs text-foreground/40 leading-relaxed">
               © {year}{" "}
@@ -301,10 +289,7 @@ const Footer = () => {
               </span>
               <Link
                 to="/changelog"
-                className={cn(
-                  FOOTER_LINK,
-                  "font-mono text-xs text-foreground/40 hover:text-foreground/80",
-                )}
+                className={cn(FOOTER_LINK, "font-mono text-xs")}
               >
                 {t.footer.changelog}
               </Link>
