@@ -85,7 +85,7 @@ const Footer = () => {
             <div className="space-y-4">
               <Link
                 to="/"
-                className="group inline-flex items-center space-x-2 font-heading font-bold text-2xl text-foreground hover:text-primary transition-colors"
+                className="group inline-flex items-center space-x-2 font-heading text-2xl font-bold text-foreground transition-colors duration-200 ease-out hover:text-foreground/60"
               >
                 <span>YSZ</span>
                 <HugeiconsIcon
@@ -104,14 +104,19 @@ const Footer = () => {
             {/* 這個網站是怎麼造出來的 */}
             <Link
               to={e}
-              className={cn(FOOTER_LINK, "flex items-center gap-2 text-xs")}
+              className={cn(
+                FOOTER_LINK,
+                "group flex items-center gap-2 text-xs",
+              )}
             >
               <HugeiconsIcon
                 icon={InformationCircleIcon}
                 strokeWidth={2}
-                className="size-3.5 shrink-0"
+                className="size-3.5 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover:rotate-12"
               />
-              {t.footer.atw}
+              <span className="border-b border-dotted border-current/40">
+                {t.footer.atw}
+              </span>
             </Link>
 
             {/* legal section */}
@@ -197,15 +202,20 @@ const Footer = () => {
                 }}
                 className={cn(
                   FOOTER_LINK,
-                  "flex items-center gap-2 text-sm hover:cursor-copy",
+                  "group flex w-full items-center gap-2 text-sm hover:cursor-copy",
                 )}
               >
                 <HugeiconsIcon
                   icon={Mail01Icon}
                   strokeWidth={2}
-                  className="size-4 shrink-0"
+                  className="size-4 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover:scale-110"
                 />
-                <span className="wrap-break-word">
+                {/* wider than this column between lg and ~1200px; the click
+                    copies all of it either way, and the title shows the rest */}
+                <span
+                  className="truncate"
+                  title="yanis.sebastian.zuercher@gmail.com"
+                >
                   yanis.sebastian.zuercher@gmail.com
                 </span>
               </button>
