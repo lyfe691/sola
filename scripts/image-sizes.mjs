@@ -31,12 +31,25 @@ export function pngSize(path) {
 /** Bytes per pixel for the PNG colour types that carry 8-bit samples. */
 const CHANNELS = { 0: 1, 2: 3, 4: 2, 6: 4 };
 
+/** Rows read from the top; the median of them is the colour. */
+const BAND = 9;
+
+const paeth = (a, b, c) => {
+  const p = a + b - c;
+  const pa = Math.abs(p - a);
+  const pb = Math.abs(p - b);
+  const pc = Math.abs(p - c);
+  return pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
+};
+
 /**
- * The average colour of a PNG's top row of pixels, as `#rrggbb`.
+ * The colour along the top of a PNG, as `#rrggbb`.
  *
- * A device frame paints the strip above a screenshot in this, so the two read
- * as one screen. Returns null for anything but a plain 8-bit non-interlaced
- * PNG — the frame then falls back to a token and nothing breaks.
+ * A device frame fills its screen with this, so the shot and the frame read as
+ * one. The median of the top rows rather than the first one: a capture often
+ * carries a stray border row, and one of those on its own is the wrong answer
+ * by a mile. Returns null for anything but a plain 8-bit non-interlaced PNG —
+ * the frame then falls back to a token and nothing breaks.
  */
 export function pngTopColor(path) {
   const buf = readFileSync(path);
@@ -52,7 +65,7 @@ export function pngTopColor(path) {
   const stride = 1 + width * bpp;
   const parts = [];
   let size = 0;
-  for (let at = 8; at + 8 <= buf.length && size < stride * 4;) {
+  for (let at = 8; at + 8 <= buf.length && size < stride * (BAND + 4);) {
     const length = buf.readUInt32BE(at);
     if (buf.toString("ascii", at + 4, at + 8) === "IDAT") {
       parts.push(buf.subarray(at + 8, at + 8 + length));
@@ -62,39 +75,49 @@ export function pngTopColor(path) {
   }
   if (!parts.length) return null;
 
-  let row;
+  let raw;
   try {
-    row = inflateSync(Buffer.concat(parts), { finishFlush: Z_SYNC_FLUSH });
+    raw = inflateSync(Buffer.concat(parts), { finishFlush: Z_SYNC_FLUSH });
   } catch {
     return null;
   }
-  if (row.length < stride) return null;
-
-  // undo the row filter. The row above row 0 is all zeros, which collapses Up
-  // to a copy, Average to half the left pixel and Paeth to the left pixel.
-  const filter = row[0];
-  const line = Buffer.from(row.subarray(1, stride));
-  for (let i = 0; i < line.length; i += 1) {
-    const left = i >= bpp ? line[i - bpp] : 0;
-    if (filter === 1 || filter === 4) line[i] = (line[i] + left) & 0xff;
-    else if (filter === 3) line[i] = (line[i] + (left >> 1)) & 0xff;
-  }
+  if (raw.length < stride) return null;
 
   const gray = colorType === 0 || colorType === 4;
-  let r = 0;
-  let g = 0;
-  let b = 0;
-  for (let x = 0; x < width; x += 1) {
-    const at = x * bpp;
-    r += line[at];
-    g += gray ? line[at] : line[at + 1];
-    b += gray ? line[at] : line[at + 2];
+  const rows = [];
+  let prev = Buffer.alloc(width * bpp);
+  for (let y = 0; y < BAND && (y + 1) * stride <= raw.length; y += 1) {
+    const filter = raw[y * stride];
+    const line = Buffer.from(raw.subarray(y * stride + 1, (y + 1) * stride));
+    for (let i = 0; i < line.length; i += 1) {
+      const a = i >= bpp ? line[i - bpp] : 0;
+      const b = prev[i];
+      const c = i >= bpp ? prev[i - bpp] : 0;
+      if (filter === 1) line[i] = (line[i] + a) & 0xff;
+      else if (filter === 2) line[i] = (line[i] + b) & 0xff;
+      else if (filter === 3) line[i] = (line[i] + ((a + b) >> 1)) & 0xff;
+      else if (filter === 4) line[i] = (line[i] + paeth(a, b, c)) & 0xff;
+    }
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    for (let x = 0; x < width; x += 1) {
+      const at = x * bpp;
+      r += line[at];
+      g += gray ? line[at] : line[at + 1];
+      b += gray ? line[at] : line[at + 2];
+    }
+    rows.push([r / width, g / width, b / width]);
+    prev = line;
   }
-  const hex = (sum) =>
-    Math.round(sum / width)
-      .toString(16)
-      .padStart(2, "0");
-  return `#${hex(r)}${hex(g)}${hex(b)}`;
+  if (!rows.length) return null;
+
+  const median = (channel) => {
+    const sorted = rows.map((row) => row[channel]).sort((a, b) => a - b);
+    return Math.round(sorted[Math.floor(sorted.length / 2)]);
+  };
+  const hex = (value) => value.toString(16).padStart(2, "0");
+  return `#${hex(median(0))}${hex(median(1))}${hex(median(2))}`;
 }
 
 function walkPngs(dir, visit) {

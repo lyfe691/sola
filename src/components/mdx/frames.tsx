@@ -175,7 +175,7 @@ function IPhoneFrame({
           <span
             key={i}
             aria-hidden="true"
-            className="absolute bg-foreground/10"
+            className="absolute bg-foreground/20"
             style={{
               top: pu(button.top),
               height: pu(button.height),
@@ -195,27 +195,31 @@ function IPhoneFrame({
         {/* positioned, so it paints over the buttons' tucked ends: an in-flow
             box would paint under its positioned siblings whatever the order */}
         <div
-          className="relative bg-foreground/10 shadow-(--prose-figure-lift)"
+          className="relative bg-foreground/20 shadow-(--prose-figure-lift)"
           style={{ padding: pu(PHONE.ring), borderRadius: pu(RING_RADIUS) }}
         >
-          {/* the body carries the shot's own top colour, so the bezel and the
-              strip the island sits in read as the screen running under the
-              glass instead of a themed border around it */}
+          {/* bezel and island are hardware, not chrome: black in every theme,
+              never a theme token and never the shot's colour */}
           <div
-            className={cn(!tint && "bg-background")}
             style={{
               padding: pu(PHONE.bezel),
               borderRadius: pu(BEZEL_RADIUS),
-              background: tint,
+              background: "#000",
             }}
           >
+            {/* the screen's own ground, not a token: with the shot away in
+                the lightbox the frame keeps its depth instead of showing a
+                themed hole — the same as the Safari window's interior */}
             <div
-              className="relative overflow-hidden"
-              style={{ borderRadius: pu(PHONE.screenRadius) }}
+              className={cn("relative overflow-hidden", !tint && "bg-muted")}
+              style={{
+                borderRadius: pu(PHONE.screenRadius),
+                background: tint,
+              }}
             >
               {/* the screenshots are bare viewport captures with content at
                   y=0, so the island cannot sit over them without covering a
-                  logo; it gets a strip of its own out of the body's colour */}
+                  logo; it gets a strip of its own in the shot's top colour */}
               <div
                 aria-hidden="true"
                 className="relative"
@@ -227,7 +231,6 @@ function IPhoneFrame({
                     top: pu(ISLAND.top),
                     width: pu(ISLAND.width),
                     height: pu(ISLAND.height),
-                    // the island is hardware, not chrome: black in every theme
                     background: "#000",
                   }}
                 >
@@ -242,11 +245,6 @@ function IPhoneFrame({
                 </span>
               </div>
               {children}
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 ring-1 ring-border ring-inset"
-                style={{ borderRadius: pu(PHONE.screenRadius) }}
-              />
             </div>
           </div>
         </div>

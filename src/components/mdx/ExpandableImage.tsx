@@ -63,12 +63,12 @@ function Thumbnail({
       aria-label={expandLabel}
       style={radius ? { borderRadius: radius } : undefined}
       className={cn(
-        "group/image relative block w-full overflow-hidden bg-muted/20",
-        // in a frame the corners and the lift are the frame's, and a ring
-        // outside the button would be cut off by the frame's clip
+        "group/image relative block w-full overflow-hidden",
+        // in a frame the corners, the lift and the ground behind the image
+        // are the frame's, and a ring outside the button would be clipped
         radius
           ? "focus-visible:ring-inset"
-          : "rounded-xl shadow-(--prose-figure-lift)",
+          : "rounded-xl bg-muted/20 shadow-(--prose-figure-lift)",
         "cursor-zoom-in outline-none select-none",
         // v4: scale uses the `scale` property — transition `scale`, not transform
         "transition-[scale] duration-200 ease-out",

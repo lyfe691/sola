@@ -67,8 +67,8 @@ export function InlineVideo({
       controls={reducedMotion === true}
       style={radius ? { borderRadius: radius } : undefined}
       className={cn(
-        "block h-auto w-full bg-muted/20",
-        !radius && "rounded-xl shadow-(--prose-figure-lift)",
+        "block h-auto w-full",
+        !radius && "rounded-xl bg-muted/20 shadow-(--prose-figure-lift)",
         className,
       )}
     />
