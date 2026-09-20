@@ -15,24 +15,19 @@
  */
 
 import type { CSSProperties, ReactNode } from "react";
-import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
+import {
+  GAP,
+  PORTRAIT_BELOW,
+  ratioOf,
+  rowShares,
+  STAGE_HEIGHT,
+  isPortrait,
+} from "./figure-layout";
 
 type FigureImage = { src: string; alt: string; caption?: string };
 type Columns = 2 | 3 | 4;
-
-/** Width over height; a screenshot outside the size list counts as 16:10. */
-const ratioOf = (src: string) => {
-  const size = PROJECT_IMAGE_SIZES[src];
-  return size ? size[0] / size[1] : 1.6;
-};
-const PORTRAIT_BELOW = 0.8;
-const isPortrait = (src: string) => ratioOf(src) < PORTRAIT_BELOW;
-
-/** Height of the phones on a stage, and the row gap, in rem. */
-const STAGE_HEIGHT = 27;
-const GAP = 1.25;
 
 export function FigureCaption({
   children,
@@ -88,13 +83,12 @@ function FigureRow({
 }) {
   const ratios = images.map((image) => ratioOf(image.src));
   const total = ratios.reduce((sum, ratio) => sum + ratio, 0);
-  // grow factors are shares of the row: factors that sum to less than one
-  // would leave part of the row unclaimed
+  const shares = rowShares(images.map((image) => image.src));
   const figures = (cell: (index: number) => string) =>
     images.map((image, index) => (
       <figure
         key={image.src}
-        style={{ "--share": ratios[index] / total } as CSSProperties}
+        style={{ "--share": shares[index] } as CSSProperties}
         className={cn("min-w-0", cell(index))}
       >
         <ExpandableImage
