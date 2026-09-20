@@ -74,6 +74,10 @@ const RADIUS_OPEN = 16;
 /** Widest an image is shown, and the space between neighbours on the strip. */
 const MAX_WIDTH = 1400;
 const GAP = 48;
+/** Re-dimming as the page turns: a touch under the slide, so the brightening
+ *  image is settled before the strip is. */
+const SLIDE_FADE = { duration: 0.3, ease: EASE_OUT } as const;
+
 /** A neighbour: smaller and dimmed, so the image showing is never in doubt. */
 const NEIGHBOUR_SCALE = 0.94;
 const NEIGHBOUR_OPACITY = 0.22;
@@ -98,6 +102,11 @@ type Phase = "closed" | "docked" | "open" | "returning";
 type Box = { top: number; left: number; width: number; height: number };
 type View = {
   phase: Phase;
+  /** Counts openings, and the strip is keyed on it. A view that closed all
+   *  the way has already unmounted, so this is only load-bearing for the
+   *  overlap: opening one while the last is still flying home, which then
+   *  starts clean rather than inheriting that one's position and slide. */
+  session: number;
   items: FigureEntry[];
   index: number;
   /** Whether the view has moved off the image it opened on. */
@@ -107,6 +116,7 @@ type View = {
 };
 const CLOSED: View = {
   phase: "closed",
+  session: 0,
   items: [],
   index: 0,
   moved: false,
@@ -444,13 +454,18 @@ function Lightbox({
       aria-labelledby={open ? labelId : undefined}
       aria-hidden={open ? undefined : true}
       className={cn(
+        // It keeps taking the pointer while the image flies home: let the
+        // page through here and a click lands on the thumbnail underneath,
+        // which opens the viewer again on whatever it hit.
         "fixed inset-0 z-100 overflow-hidden select-none",
-        open ? "cursor-zoom-out" : "pointer-events-none",
+        open && "cursor-zoom-out",
       )}
       onPointerDown={() => {
         dragged.current = false;
       }}
       onClick={() => {
+        // mid-flight, a click means "I am done": put the image home now
+        if (phase === "returning") return onLanded();
         // the click that ends a drag is the drag, not a close
         if (!dragged.current) onClose();
       }}
@@ -548,9 +563,17 @@ function Lightbox({
                 animate={pose}
                 transition={{
                   default: flight,
-                  // neighbours belong to the chrome: they arrive once the
-                  // image has, and leave with the backdrop
-                  opacity: showing || moved ? flight : { ...FADE, delay: 0.2 },
+                  // Never a spring: a spring settles by overshooting, which
+                  // on opacity reads as a flicker rather than a fade. Turning
+                  // the page, everything re-dims on the slide's own clock; on
+                  // the way in the neighbours trail the image just enough to
+                  // land with it; on the way out they leave at once, so
+                  // nothing lingers behind an image that has already gone.
+                  opacity: moved
+                    ? SLIDE_FADE
+                    : open
+                      ? { ...FADE, delay: 0.12 }
+                      : FADE,
                 }}
                 onAnimationComplete={() => {
                   if (showing && phase === "returning") onLanded();
@@ -738,7 +761,14 @@ export function FigureLightboxProvider({ children }: { children: ReactNode }) {
     const at = all.findIndex((entry) => entry.id === id);
     const dock = boxOf(all[at]?.thumb());
     if (at < 0 || !dock) return;
-    setView({ phase: "docked", items: all, index: at, moved: false, dock });
+    setView((v) => ({
+      phase: "docked",
+      session: v.session + 1,
+      items: all,
+      index: at,
+      moved: false,
+      dock,
+    }));
   }, []);
 
   const ready = useCallback(
@@ -799,6 +829,7 @@ export function FigureLightboxProvider({ children }: { children: ReactNode }) {
       {children}
       {phase !== "closed" ? (
         <Lightbox
+          key={view.session}
           view={view}
           flyerRef={flyer}
           onReady={ready}
