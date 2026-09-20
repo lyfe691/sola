@@ -2,8 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@import "@fontsource-variable/onest";
-@import "@fontsource-variable/bricolage-grotesque";
+@import "@fontsource-variable/geist";
 @import "@fontsource-variable/jetbrains-mono";
 
 /* scheme attr covers the custom dark themes (cyber/forest/amethyst), which
@@ -24,9 +23,11 @@
 }
 
 @theme inline {
-  --font-sans: "Onest Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-heading:
-    "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Both are Geist today. They stay two tokens on purpose: the headings are
+     meant to take a face of their own again, and every `font-heading` call
+     site is already pointing at the token that would change. */
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
   /* faces load with the /a chunk only — the @fontsource imports live in that page */

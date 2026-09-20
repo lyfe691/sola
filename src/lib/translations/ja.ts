@@ -441,7 +441,7 @@ export const ja = {
     built:
       "[React](https://react.dev) と [TypeScript](https://www.typescriptlang.org) のアプリで、保存から画面までの距離を消すために [Vite](https://vite.dev) で組んでいます。色と余白は [Tailwind CSS](https://tailwindcss.com) と [shadcn/ui](https://ui.shadcn.com) — トークンだけ、生のパレットは使いません。動くものは、界面が [Motion](https://motion.dev)、空が [GSAP](https://gsap.com)。時計は二つ。ボタンが背景の拍を借りないように。",
     faces:
-      "書体は、本文が [Onest](https://fonts.google.com/specimen/Onest)、名前が [Bricolage Grotesque](https://fonts.google.com/specimen/Bricolage+Grotesque)、コードが [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono)、そしてこの頁の墨が [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1)。住まいは [Vercel](https://vercel.com)。源は [GitHub](https://github.com/lyfe691/sola)。",
+      "書体は、本文も名前も [Geist](https://vercel.com/font)、コードが [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono)、そしてこの頁の墨が [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1)。住まいは [Vercel](https://vercel.com)。源は [GitHub](https://github.com/lyfe691/sola)。",
     close: "チューリッヒにて、手組み。ご覧いただきありがとうございます。",
     back: "戻る",
   },
