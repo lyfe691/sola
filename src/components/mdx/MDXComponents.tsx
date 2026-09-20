@@ -109,10 +109,12 @@ const html = {
     </p>
   ),
 
+  // markers only change color: a ::marker sized away from the text loses the
+  // optical centre the browser sets it on
   ul: ({ children, className }: MdxProps) => (
     <ul
       className={cn(
-        "mb-4 ml-5 list-disc space-y-2 marker:text-primary",
+        "mb-4 ml-5 list-disc space-y-2 marker:text-(--prose-marker)",
         className,
       )}
     >
@@ -123,7 +125,7 @@ const html = {
   ol: ({ children, className }: MdxProps) => (
     <ol
       className={cn(
-        "mb-4 ml-5 list-decimal space-y-2 marker:text-primary",
+        "mb-4 ml-5 list-decimal space-y-2 marker:text-muted-foreground",
         className,
       )}
     >
@@ -145,7 +147,7 @@ const html = {
   blockquote: ({ children, className }: MdxProps) => (
     <blockquote
       className={cn(
-        "mb-4 border-l-4 border-primary/30 pl-4 text-sm italic text-muted-foreground",
+        "mb-4 border-l-2 border-(--prose-marker) pl-4 text-sm italic text-muted-foreground",
         className,
       )}
     >
@@ -182,7 +184,7 @@ const html = {
       <code
         className={cn(
           !fenced &&
-            "rounded bg-muted/50 px-1.5 py-0.5 font-mono text-xs text-foreground",
+            "rounded bg-(--prose-chip) px-1.5 py-0.5 font-mono text-xs text-(--prose-strong)",
           className,
         )}
       >
@@ -234,7 +236,7 @@ const html = {
   ),
 
   strong: ({ children, className }: MdxProps) => (
-    <strong className={cn("font-semibold text-foreground", className)}>
+    <strong className={cn("font-medium text-(--prose-strong)", className)}>
       {children}
     </strong>
   ),
@@ -260,7 +262,12 @@ const html = {
   ),
 
   th: ({ children, className }: MdxProps) => (
-    <TableHead className={cn("h-10 text-xs font-medium", className)}>
+    <TableHead
+      className={cn(
+        "h-10 text-xs font-medium text-(--prose-strong)",
+        className,
+      )}
+    >
       {children}
     </TableHead>
   ),
