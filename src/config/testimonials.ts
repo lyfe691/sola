@@ -15,7 +15,8 @@ export type TestimonialI18nKey =
 export interface Testimonial {
   i18nKey: TestimonialI18nKey;
   author: string;
-  company: string;
+  /** Omitted when there is none: the card then shows the role on its own. */
+  company?: string;
   rating: number;
   website?: string;
   linkedin?: string;
@@ -26,7 +27,6 @@ export const testimonials: Testimonial[] = [
   {
     i18nKey: "koenitzer",
     author: "Dominik Könitzer",
-    company: "Spadoom",
     rating: 5,
     website: "https://dk.punds.ch",
     avatar: "https://avatars.githubusercontent.com/u/82450286?v=4",
@@ -34,7 +34,7 @@ export const testimonials: Testimonial[] = [
   {
     i18nKey: "bichsel",
     author: "Jason Bichsel",
-    company: "WISS",
+    company: "SwissGRC",
     rating: 5,
     website: "https://jasonbichsel.com",
     linkedin: "https://linkedin.com/in/jason-bichsel",

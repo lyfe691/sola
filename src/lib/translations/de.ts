@@ -534,12 +534,12 @@ export const de = {
         koenitzer: {
           quote:
             "Mit Yanis in jedem Fach der Softwareentwicklung (IT) zusammenzuarbeiten war ein echtes Highlight. Seine technischen Fähigkeiten, seine Zuverlässigkeit und sein Problemlösungsvermögen waren auf einem anderen Niveau. Ein wirklich außergewöhnlicher Entwickler und Teamkollege.",
-          role: "Praktikant",
+          role: "Arbeitsloser Nichtstuer",
         },
         bichsel: {
           quote:
             "Die Zusammenarbeit mit Yanis war eine fantastische Erfahrung. Er hat mich durch jedes Fach getragen, immer wieder kreative Lösungen für komplexe Probleme gefunden und alles pünktlich geliefert. Ein wirklich außergewöhnlicher Entwickler.",
-          role: "Student",
+          role: "Praktikant",
         },
         venzin: {
           quote:

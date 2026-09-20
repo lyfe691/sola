@@ -528,12 +528,12 @@ export const en = {
         koenitzer: {
           quote:
             "Working with Yanis on every Software Engineering (IT) subject was a genuine highlight. His technical skills, reliability, and problem-solving were on another level. A truly exceptional developer and teammate.",
-          role: "Intern",
+          role: "Unemployed bum",
         },
         bichsel: {
           quote:
             "Working with Yanis was a fantastic experience. He carried me through every subject, consistently bringing creative solutions to complex problems and delivering everything on time. Truly an exceptional developer.",
-          role: "Student",
+          role: "Intern",
         },
         venzin: {
           quote:

@@ -535,12 +535,12 @@ export const es = {
         koenitzer: {
           quote:
             "Trabajar con Yanis en todas las asignaturas de Ingeniería de Software (TI) fue una experiencia memorable. Sus habilidades técnicas, su fiabilidad y su capacidad para resolver problemas estaban a otro nivel. Un desarrollador y compañero de equipo verdaderamente excepcional.",
-          role: "Becario",
+          role: "Vago desempleado",
         },
         bichsel: {
           quote:
             "Trabajar con Yanis fue una experiencia fantástica. Me sacó adelante en todas las asignaturas, aportando siempre soluciones creativas a problemas complejos y entregando todo a tiempo. Un desarrollador verdaderamente excepcional.",
-          role: "Estudiante",
+          role: "Becario",
         },
         venzin: {
           quote:
