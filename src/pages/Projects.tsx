@@ -63,7 +63,6 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Separator } from "@/components/ui/separator";
 import { TagRow } from "@/components/ui/custom/tag-row";
 import {
   CoverCaption,
@@ -150,112 +149,109 @@ const ProjectActions = ({
     return null;
 
   return (
-    <div className="flex flex-col gap-4 pt-2">
-      <Separator />
-      <div className="flex flex-wrap gap-3">
-        {project.slug ? (
-          <IconButton
-            nativeButton={false}
-            render={<Link to={`/projects/${project.slug}`} />}
-            label={t.projects.viewDetails}
-            icon={
+    <div className="flex flex-wrap gap-3 pt-2">
+      {project.slug ? (
+        <IconButton
+          nativeButton={false}
+          render={<Link to={`/projects/${project.slug}`} />}
+          label={t.projects.viewDetails}
+          icon={
+            <HugeiconsIcon
+              icon={FileSearchIcon}
+              strokeWidth={2}
+              className="size-4"
+            />
+          }
+          size="lg"
+          fullWidth
+        />
+      ) : (
+        <>
+          {project.github && (
+            <Button
+              nativeButton={false}
+              size="lg"
+              className="flex-1 gap-2"
+              render={
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+            >
               <HugeiconsIcon
-                icon={FileSearchIcon}
+                icon={Github01Icon}
                 strokeWidth={2}
                 className="size-4"
+                aria-hidden="true"
               />
-            }
-            size="lg"
-            fullWidth
-          />
-        ) : (
-          <>
-            {project.github && (
-              <Button
-                nativeButton={false}
-                size="lg"
-                className="flex-1 gap-2"
-                render={
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  />
-                }
-              >
+              {t.projects.viewGithub}
+            </Button>
+          )}
+          {!project.github && project.sourcePrivate && (
+            <PrivateLinkButton
+              label={t.projects.viewGithub}
+              reason={
+                project.kind === "commercial"
+                  ? t.common.sourcePrivateClient
+                  : t.common.sourcePrivate
+              }
+              icon={
                 <HugeiconsIcon
                   icon={Github01Icon}
                   strokeWidth={2}
                   className="size-4"
                   aria-hidden="true"
                 />
-                {t.projects.viewGithub}
-              </Button>
-            )}
-            {!project.github && project.sourcePrivate && (
-              <PrivateLinkButton
-                label={t.projects.viewGithub}
-                reason={
-                  project.kind === "commercial"
-                    ? t.common.sourcePrivateClient
-                    : t.common.sourcePrivate
-                }
-                icon={
-                  <HugeiconsIcon
-                    icon={Github01Icon}
-                    strokeWidth={2}
-                    className="size-4"
-                    aria-hidden="true"
-                  />
-                }
-                variant="default"
-                className="flex-1"
-              />
-            )}
-            {!project.link && project.linkPrivate && (
-              <PrivateLinkButton
-                label={t.projects.visitProject}
-                reason={
-                  project.kind === "commercial"
-                    ? t.common.linkPrivateClient
-                    : t.common.linkPrivate
-                }
-                icon={
-                  <HugeiconsIcon
-                    icon={ArrowUpRight01Icon}
-                    strokeWidth={2}
-                    className="size-4"
-                    aria-hidden="true"
-                  />
-                }
-                variant="default"
-                className="flex-1"
-              />
-            )}
-            {project.link && (
-              <Button
-                nativeButton={false}
-                size="lg"
-                className="flex-1 gap-2"
-                render={
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  />
-                }
-              >
+              }
+              variant="default"
+              className="flex-1"
+            />
+          )}
+          {!project.link && project.linkPrivate && (
+            <PrivateLinkButton
+              label={t.projects.visitProject}
+              reason={
+                project.kind === "commercial"
+                  ? t.common.linkPrivateClient
+                  : t.common.linkPrivate
+              }
+              icon={
                 <HugeiconsIcon
                   icon={ArrowUpRight01Icon}
                   strokeWidth={2}
                   className="size-4"
+                  aria-hidden="true"
                 />
-                {t.projects.visitProject}
-              </Button>
-            )}
-          </>
-        )}
-      </div>
+              }
+              variant="default"
+              className="flex-1"
+            />
+          )}
+          {project.link && (
+            <Button
+              nativeButton={false}
+              size="lg"
+              className="flex-1 gap-2"
+              render={
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+            >
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                strokeWidth={2}
+                className="size-4"
+              />
+              {t.projects.visitProject}
+            </Button>
+          )}
+        </>
+      )}
     </div>
   );
 };

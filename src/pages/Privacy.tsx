@@ -26,7 +26,6 @@ import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 
 const Privacy = () => {
@@ -1028,9 +1027,9 @@ const Privacy = () => {
             </Card>
           </motion.section>
 
-          <Separator className="my-12" />
-
-          <motion.section id="impressum" {...reveal}>
+          {/* the legal notice is its own part of the page: set apart by
+              space, where it used to be a rule */}
+          <motion.section id="impressum" className="pt-8" {...reveal}>
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].impressum.title}
@@ -1064,7 +1063,7 @@ const Privacy = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-10% 0px" }}
-          className="mt-16 pt-8 border-t border-border"
+          className="mt-16"
         >
           <IconButton
             icon={

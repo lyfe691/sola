@@ -30,7 +30,6 @@ import {
 } from "@/utils/transitions";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import type { HugeGlyph } from "@/lib/huge-icon";
 
 type ServiceKey = keyof Translation["services"]["services"];
@@ -132,8 +131,6 @@ const Services = () => {
                     {t.services.services[service.key].price}
                   </Badge>
                 </div>
-
-                <Separator />
 
                 <p className="text-sm text-foreground/70">
                   {t.services.services[service.key].description}

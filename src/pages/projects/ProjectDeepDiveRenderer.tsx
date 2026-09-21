@@ -37,7 +37,6 @@ import { Mdx, SectionHeading, TechStack } from "@/components/mdx";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import {
   getProjectConfig,
   projectPagesConfig,
@@ -297,8 +296,6 @@ const ProjectDeepDiveRenderer = () => {
           </div>
         </section>
 
-        <Separator />
-
         <Mdx>
           <MDXComponent />
           <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
@@ -308,7 +305,7 @@ const ProjectDeepDiveRenderer = () => {
           id="more-projects"
           data-toc=""
           data-toc-label={t.common.moreProjects}
-          className="scroll-mt-24 border-t border-border pt-12"
+          className="scroll-mt-24"
         >
           <SectionHeading sectionId="more-projects" className="mb-6">
             {t.common.moreProjects}

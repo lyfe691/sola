@@ -15,7 +15,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Card } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "@/lib/language-provider";
 import type { Translation } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -227,7 +226,7 @@ const TestimonialCard = ({
       <blockquote className="text-base italic leading-relaxed text-foreground/80">
         &ldquo;{quote}&rdquo;
       </blockquote>
-      <div className="space-y-4 border-t border-foreground/10 pt-4">
+      <div className="pt-2">
         <AuthorBlock
           author={author}
           role={role}
@@ -270,8 +269,7 @@ const TestimonialCard = ({
         ) : null}
       </div>
 
-      <Separator className="mt-auto" />
-      <div className="pt-3">
+      <div className="pt-2">
         <AuthorBlock
           author={author}
           role={role}

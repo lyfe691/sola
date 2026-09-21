@@ -461,7 +461,7 @@ const About = () => {
               onValueChange={setContributionTab}
               className="gap-0"
             >
-              <div className="border-b border-foreground/8 px-4 py-3">
+              <div className="px-4 py-3">
                 <TabsList className="h-8">
                   {contributionTabs.map(({ value, label }) => (
                     <TabsTrigger
@@ -503,7 +503,7 @@ const About = () => {
                 key={key}
                 as="li"
                 variant="default"
-                className="grid grid-cols-1 gap-5 border-t border-foreground/8 py-8 first:border-t-0 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-10"
+                className="grid grid-cols-1 gap-5 py-8 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-10"
               >
                 <MediaFrame className="sm:col-span-4">
                   <img
