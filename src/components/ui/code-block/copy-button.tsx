@@ -9,8 +9,7 @@
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Tick02Icon, Copy01Icon } from "@hugeicons/core-free-icons";
 
@@ -25,8 +24,7 @@ interface CopyButtonProps {
  */
 export const CopyButton = ({ value, className }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   const onCopy = async () => {
     try {

@@ -6,8 +6,9 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * The single route manifest: AnimatedRoutes renders from it, DocumentTitle
- * resolves tab titles from it. A route cannot exist without a title — adding
- * a page here is the whole job.
+ * resolves tab titles from it, main.tsx starts the landing page's chunk from
+ * it. A route cannot exist without a title — adding a page here is the whole
+ * job.
  *
  * Title voice: the home tab is the name; every other tab is the page's own
  * localized label, alone — the same string the page shows as its heading, so
@@ -23,13 +24,22 @@ export type RouteLayout = "app" | "blank";
 
 type RouteParams = Record<string, string | undefined>;
 
+type PageModule = { default: ComponentType };
+
 export interface AppRoute {
   path: string;
+  /** starts the page's chunk; the router's lazy Component awaits the same one */
+  load: () => Promise<PageModule>;
   Component: LazyExoticComponent<ComponentType>;
   layout: RouteLayout;
   /** tab title — resolved against the active locale */
   title: (t: Translation, params: RouteParams) => string;
 }
+
+const page = (load: () => Promise<PageModule>) => ({
+  load,
+  Component: lazy(load),
+});
 
 const NAME = "Yanis Sebastian Zürcher";
 
@@ -37,61 +47,61 @@ export const APP_ROUTES: AppRoute[] = [
   {
     path: "/",
     layout: "app",
-    Component: lazy(() => import("@/pages/Index")),
+    ...page(() => import("@/pages/Index")),
     title: () => NAME,
   },
   {
     path: "/about",
     layout: "app",
-    Component: lazy(() => import("@/pages/About")),
+    ...page(() => import("@/pages/About")),
     title: (t) => t.about.title,
   },
   {
     path: "/projects",
     layout: "app",
-    Component: lazy(() => import("@/pages/Projects")),
+    ...page(() => import("@/pages/Projects")),
     title: (t) => t.projects.title,
   },
   {
     path: "/skills",
     layout: "app",
-    Component: lazy(() => import("@/pages/Skills")),
+    ...page(() => import("@/pages/Skills")),
     title: (t) => t.skills.title,
   },
   {
     path: "/experience",
     layout: "app",
-    Component: lazy(() => import("@/pages/Experience")),
+    ...page(() => import("@/pages/Experience")),
     title: (t) => t.experience.title,
   },
   {
     path: "/contact",
     layout: "app",
-    Component: lazy(() => import("@/pages/Contact")),
+    ...page(() => import("@/pages/Contact")),
     title: (t) => t.contact.title,
   },
   {
     path: "/services",
     layout: "app",
-    Component: lazy(() => import("@/pages/Services")),
+    ...page(() => import("@/pages/Services")),
     title: (t) => t.services.title,
   },
   {
     path: "/privacy",
     layout: "app",
-    Component: lazy(() => import("@/pages/Privacy")),
+    ...page(() => import("@/pages/Privacy")),
     title: (t) => t.footer.privacy,
   },
   {
     path: "/certifications",
     layout: "app",
-    Component: lazy(() => import("@/pages/Certifications")),
+    ...page(() => import("@/pages/Certifications")),
     title: (t) => t.certifications.title,
   },
   {
     path: "/changelog",
     layout: "app",
-    Component: lazy(() => import("@/pages/Changelog")),
+    ...page(() => import("@/pages/Changelog")),
     title: (t) => t.changelog.title,
   },
   {
@@ -99,19 +109,19 @@ export const APP_ROUTES: AppRoute[] = [
     // in place, keeping the attempted URL for the terminal to quote
     path: "*",
     layout: "blank",
-    Component: lazy(() => import("@/pages/NotFound")),
+    ...page(() => import("@/pages/NotFound")),
     title: () => "404",
   },
   {
     path: "/a",
     layout: "blank",
-    Component: lazy(() => import("@/pages/AboutThisWebsite")),
+    ...page(() => import("@/pages/AboutThisWebsite")),
     title: (t) => t.colophon.title,
   },
   {
     path: "/projects/:slug",
     layout: "blank",
-    Component: lazy(() => import("@/pages/projects/ProjectDeepDiveRenderer")),
+    ...page(() => import("@/pages/projects/ProjectDeepDiveRenderer")),
     title: (t, params) => {
       const config = params.slug ? getProjectConfig(params.slug) : null;
       return config ? t.projects.list[config.i18nKey].title : "404";
@@ -126,17 +136,25 @@ const MATCHABLE = APP_ROUTES.map((route) => ({
   handle: route,
 }));
 
+function matchRoute(pathname: string) {
+  const match = matchRoutes(MATCHABLE, pathname)?.at(-1);
+  return (
+    match && { route: match.route.handle as AppRoute, params: match.params }
+  );
+}
+
 /** tab title for a location, in the active locale */
 export function resolveTitle(pathname: string, t: Translation): string {
-  const match = matchRoutes(MATCHABLE, pathname)?.at(-1);
-  const route = match?.route.handle as AppRoute | undefined;
-  if (!route) return "404";
-  return route.title(t, match?.params ?? {});
+  const match = matchRoute(pathname);
+  return match ? match.route.title(t, match.params) : "404";
 }
 
 /** layout for a location — unmatched paths get blank, same as the 404 route */
 export function resolveLayout(pathname: string): RouteLayout {
-  const match = matchRoutes(MATCHABLE, pathname)?.at(-1);
-  const route = match?.route.handle as AppRoute | undefined;
-  return route?.layout ?? "blank";
+  return matchRoute(pathname)?.route.layout ?? "blank";
+}
+
+/** starts the chunk of the page at a location, ahead of the first render */
+export function preloadRoute(pathname: string) {
+  void matchRoute(pathname)?.route.load();
 }

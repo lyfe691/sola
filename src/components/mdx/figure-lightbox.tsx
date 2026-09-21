@@ -49,8 +49,7 @@ import {
   useReducedMotion,
 } from "motion/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import {
   EASE_OUT,
@@ -372,8 +371,7 @@ function Lightbox({
 }) {
   const { phase, items, index, moved, dock } = view;
   const item = items[index];
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const labelId = useId();
   const reducedMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);

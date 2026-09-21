@@ -13,8 +13,7 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { EASE_EXPO } from "@/utils/transitions";
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000;
@@ -44,8 +43,7 @@ function CloudBackupIcon({ className }: { className?: string }) {
 }
 
 export function UpdateNotification() {
-  const { language } = useLanguage();
-  const t = translations[language].common.update;
+  const t = useTranslation().common.update;
 
   // refetchInterval keeps polling through errors (network hiccups just skip a
   // tick), and refetchOnWindowFocus: "always" covers the old visibilitychange

@@ -24,8 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Caret } from "@/components/deploy-diff/caret";
 import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
 import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { APP_ROUTES } from "@/config/routes";
 import { REVEAL } from "@/utils/transitions";
 
@@ -95,8 +94,7 @@ function TranscriptLine({ line }: { line: string }) {
 const NotFound = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
   const isDark = useIsDarkScheme();
   const reducedMotion = useReducedMotion() ?? false;
 

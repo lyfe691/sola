@@ -26,8 +26,7 @@
 
 import { useEffect } from "react";
 import { useLocation } from "react-router";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { resolveTitle } from "@/config/routes";
 
 // six-dot cells for a–z (standard braille alphabet, U+2800 block)
@@ -50,10 +49,10 @@ const SWEEP_MS = 700; // ceiling for the whole pass — long titles resolve fast
 
 export function DocumentTitle() {
   const { pathname } = useLocation();
-  const { language } = useLanguage();
+  const t = useTranslation();
 
   useEffect(() => {
-    const title = resolveTitle(pathname, translations[language]);
+    const title = resolveTitle(pathname, t);
 
     if (document.hidden) {
       document.title = title;
@@ -91,7 +90,7 @@ export function DocumentTitle() {
       window.clearInterval(interval);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [pathname, language]);
+  }, [pathname, t]);
 
   return null;
 }

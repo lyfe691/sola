@@ -7,8 +7,7 @@
  */
 
 import { Link } from "react-router";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import {
   ArrowRight01Icon,
   ArrowUpRight01Icon,
@@ -34,8 +33,7 @@ const FOOTER_LINK =
 
 const Footer = () => {
   const year = new Date().getFullYear();
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const [isLegalExpanded, setIsLegalExpanded] = useState(false);
 
   const social = SOCIAL_ORDER_FOOTER.map((id) => {

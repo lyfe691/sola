@@ -28,8 +28,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { ThemeMenuContent, ThemeTriggerIcon } from "./theme-toggle";
 import { LanguageMenuContent } from "./language-toggle";
 import { EASE_OUT } from "@/utils/transitions";
@@ -37,8 +36,7 @@ import { EASE_OUT } from "@/utils/transitions";
 type MenuId = "language" | "theme";
 
 export function AppearanceMenu() {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   const [openId, setOpenId] = useState<MenuId | null>(null);
   const [anchor, setAnchor] = useState<{ top: number; right: number } | null>(

@@ -37,8 +37,7 @@ import { useCommandMenu } from "@/hooks/use-command-menu";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTheme } from "./theme-provider";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
@@ -55,7 +54,7 @@ export function CommandMenu() {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const { isOpen, closeCommandMenu } = useCommandMenu();
   useWindowScrollLock(isOpen);
   const { active: codeView, setActive: setCodeView } = useCodeView();

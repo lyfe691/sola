@@ -15,8 +15,7 @@
 import type { ComponentProps } from "react";
 import { Kbd } from "@/components/ui/kbd";
 import { HoverCardContent } from "@/components/ui/hover-card";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { DIFF_TOKENS } from "./diff-tokens";
 import { useIsDarkScheme } from "./use-scheme";
@@ -129,8 +128,7 @@ export function DiffHintContent({
   className,
   ...props
 }: ComponentProps<typeof HoverCardContent>) {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   return (
     <HoverCardContent

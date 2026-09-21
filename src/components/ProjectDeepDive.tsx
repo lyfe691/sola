@@ -42,8 +42,7 @@ import FoldText from "./ui/custom/FoldText";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useDeepDiveBarPinned } from "@/hooks/use-deep-dive-bar-pinned";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { snapScrollTo } from "@/utils/scroll";
 import type { ProjectArt } from "@/config/projects";
@@ -62,8 +61,7 @@ function DeepDiveTrail({
   title: string;
   tone: "hero" | "bar";
 }) {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const hero = tone === "hero";
 
   return (
@@ -116,8 +114,7 @@ function CodeViewChip({
   tone: "hero" | "bar";
 }) {
   const { setActive: setCodeView } = useCodeView();
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const hero = tone === "hero";
 
   return (

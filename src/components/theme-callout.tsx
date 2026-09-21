@@ -14,8 +14,7 @@ import {
   CALLOUT_STORAGE_KEY,
   getWelcomePresetLabels,
 } from "@/config/welcome-preset";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 
 const APPEAR_DELAY = 1200;
 const GAP = 10;
@@ -97,8 +96,7 @@ const renderPresetContent = (
 };
 
 export function ThemeCallout() {
-  const { language } = useLanguage();
-  const t = translations[language].common.callout;
+  const t = useTranslation().common.callout;
   const { themeLabel, backgroundLabel } = getWelcomePresetLabels();
   const calloutContent = renderPresetContent(
     t.background.content,

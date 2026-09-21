@@ -13,14 +13,12 @@ import { FileTree } from "@/components/changelog/FileTree";
 import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
 import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
 import { commitDetailQuery, fileTree } from "@/lib/github-commits";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 
 const MAX_FILES = 20;
 
 export function CommitDetail({ sha }: { sha: string }) {
-  const { language } = useLanguage();
-  const t = translations[language].changelog;
+  const t = useTranslation().changelog;
   const isDark = useIsDarkScheme();
   const query = useQuery(commitDetailQuery(sha));
   const [active, setActive] = useState<string | null>(null);

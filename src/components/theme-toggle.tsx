@@ -29,8 +29,7 @@ import { Switch } from "@/components/ui/switch";
 import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
 import { AnimatePresence, motion } from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 
 const iconClass = "size-4 shrink-0 text-muted-foreground";
@@ -233,8 +232,7 @@ export function ThemeMenuContent({
   const { active: activeBackground, setActive: setBackground } =
     useBackground();
   const { active: codeView, setActive: setCodeView } = useCodeView();
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   const [expanded, setExpanded] = useState<Set<BranchId>>(
     () => new Set(["themes"]),

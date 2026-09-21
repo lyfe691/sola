@@ -23,13 +23,13 @@ import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { Link } from "react-router";
 import type { Language } from "@/config/languages";
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
-import { useLanguage } from "@/lib/language-provider";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import {
   PROJECT_SORT_OPTIONS,
   sortProjects,
   type ProjectSortOption,
 } from "@/lib/project-sort";
-import { translations, type Translation } from "@/lib/translations";
+import type { Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -357,7 +357,7 @@ const Projects = () => {
   const [sortBy, setSortBy] = useState<ProjectSortOption>("featured");
   const [kind, setKind] = useState<KindFilter>("all");
   const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
 
   // at load the cards wait for the page chrome and cascade; a swap keeps its
   // own clock, so after the window a card only ever rises on scroll

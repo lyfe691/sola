@@ -12,25 +12,8 @@
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { translations } from "@/lib/translations";
-import { LANGUAGE_STORAGE_KEY } from "@/lib/language-provider";
-import { SUPPORTED_LANGUAGE_CODES, type Language } from "@/config/languages";
-
-/**
- * The provider tree may be the thing that crashed, so the persisted choice is
- * read straight from storage instead of through useLanguage().
- */
-function readLanguage(): Language {
-  try {
-    const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (stored && (SUPPORTED_LANGUAGE_CODES as string[]).includes(stored)) {
-      return stored as Language;
-    }
-  } catch {
-    /* storage unavailable — fall through to English */
-  }
-  return "en";
-}
+import { en, loadedTranslation } from "@/lib/translations";
+import { readLanguage } from "@/lib/language-provider";
 
 interface Props {
   children: ReactNode;
@@ -54,7 +37,9 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (!this.state.hasError) return this.props.children;
 
-    const t = translations[readLanguage()].errorBoundary;
+    // the provider tree may be the thing that crashed, so the language is
+    // read without it; the dictionary is loaded unless the crash beat it
+    const t = (loadedTranslation(readLanguage()) ?? en).errorBoundary;
 
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-6 text-center text-foreground">

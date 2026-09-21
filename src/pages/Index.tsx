@@ -8,8 +8,7 @@
 
 import { Link } from "react-router";
 import { motion } from "motion/react";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { SpecularButton } from "@/components/ui/custom/specular-button";
@@ -119,7 +118,7 @@ function SocialLink({ id }: { id: SocialId }) {
 
 const Index = () => {
   const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
 
   const descriptions = [
     t.index.description1,

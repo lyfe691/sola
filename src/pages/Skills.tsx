@@ -7,8 +7,7 @@
  */
 
 import { motion } from "motion/react";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import {
   SKILL_GROUPS,
   type Skill,
@@ -73,8 +72,7 @@ const SkillCard = ({
 );
 
 const Skills = () => {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const groups = t.skills.groups as Record<string, string>;
 
   return (

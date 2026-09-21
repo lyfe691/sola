@@ -18,8 +18,8 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { hugeIcon } from "@/lib/huge-icon";
 import { Link } from "react-router";
 import { motion } from "motion/react";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
+import type { Translation } from "@/lib/translations";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import ScrollReveal from "@/components/ScrollReveal";
 import {
@@ -36,8 +36,7 @@ import type { HugeGlyph } from "@/lib/huge-icon";
 type ServiceKey = keyof Translation["services"]["services"];
 
 const Services = () => {
-  const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
 
   const servicesList: {
     icon: HugeGlyph;

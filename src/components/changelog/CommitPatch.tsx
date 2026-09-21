@@ -11,8 +11,7 @@ import { TechFileMark } from "@/components/ui/custom/tech-file-mark";
 import type { DiffLine } from "@/components/deploy-diff/parse-patch";
 import { useCappedDiff } from "@/components/deploy-diff/use-diff-highlight";
 import { toUnifiedDiff, type ChangelogFile } from "@/lib/github-commits";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import type { ThemedTokenWithVariants } from "shiki";
 
@@ -75,8 +74,7 @@ export function CommitPatch({
   file: ChangelogFile;
   scheme: "light" | "dark";
 }) {
-  const { language } = useLanguage();
-  const t = translations[language].changelog;
+  const t = useTranslation().changelog;
   const { rows, lineTokens, truncated } = useCappedDiff(
     file.patch,
     file.filename,

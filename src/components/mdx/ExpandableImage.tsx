@@ -15,8 +15,7 @@ import { useContext, useEffect, useId, useRef } from "react";
 import { ArrowExpandIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { RADIUS_INLINE } from "./figure-layout";
 import { FigureLightboxProvider } from "./figure-lightbox";
@@ -42,8 +41,7 @@ function Thumbnail({
   const lightbox = useContext(FigureLightboxContext);
   const id = useId();
   const thumbRef = useRef<HTMLImageElement>(null);
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const away = lightbox?.awayId === id;
   const register = lightbox?.register;
 

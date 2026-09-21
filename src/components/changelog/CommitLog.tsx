@@ -13,8 +13,8 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 import { DEPLOY_LABEL } from "@/components/deploy-diff/use-page-diff";
 import { commitDetailQuery, type ChangelogCommit } from "@/lib/github-commits";
 import { INTL_LOCALE } from "@/lib/dates";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
+import type { Translation } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { scrollToTarget } from "@/utils/scroll";
 import {
@@ -177,7 +177,7 @@ export function CommitLog({
   revealFrom?: number;
 }) {
   const { language } = useLanguage();
-  const t = translations[language].changelog;
+  const t = useTranslation().changelog;
   const queryClient = useQueryClient();
   const entering = useEntranceWindow();
   const gen = useRef(0);

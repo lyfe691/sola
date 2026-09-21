@@ -8,8 +8,8 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type TranslationAny } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
+import type { TranslationAny } from "@/lib/translations";
 import { motion } from "motion/react";
 import { GITHUB_USER, type ProcessedActivity } from "@/lib/github";
 import { userActivityQuery } from "@/lib/github-activity";
@@ -406,7 +406,7 @@ const ActivityFeedSkeleton = () => (
 
 const ContributionActivityFeed = () => {
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const locale = INTL_LOCALE[language];
 
   const {

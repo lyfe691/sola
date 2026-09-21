@@ -17,8 +17,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { hugeIcon } from "@/lib/huge-icon";
 import { AnimatePresence, motion } from "motion/react";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
@@ -68,8 +67,7 @@ const FieldError = ({ name, error }: { name: string; error?: string }) => (
 );
 
 const Contact = () => {
-  const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   // prefill lands with the navigation (services deep-links); Contact remounts
   // on every route change, so reading the query string once at mount is enough

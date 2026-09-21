@@ -21,8 +21,7 @@ import type Lenis from "lenis";
 import { EASE_OUT } from "@/utils/transitions";
 import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 
 const SCROLL_THRESHOLD = 120;
 const TILE = 44;
@@ -86,8 +85,7 @@ function WaterFill() {
 export default function ScrollToTop() {
   const { pathname } = useLocation();
   const [visible, setVisible] = useState(false);
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   const onLenis = useCallback((instance: Lenis) => {
     const next = instance.scroll > SCROLL_THRESHOLD;

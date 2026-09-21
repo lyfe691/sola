@@ -17,8 +17,7 @@ import {
 } from "react";
 import { Link01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 
 type HeadingLevel = "h1" | "h2" | "h3";
@@ -60,8 +59,7 @@ interface HeadingLinkProps {
  * section TOC (rail / mobile menu) for section navigation.
  */
 export function HeadingLink({ id, children }: HeadingLinkProps) {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const title = flattenText(children).replace(/\s+/g, " ").trim() || id;
   const label = t.common.linkToSection.replace("{title}", title);
 

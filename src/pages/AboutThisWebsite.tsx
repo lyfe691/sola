@@ -13,16 +13,14 @@ import "@fontsource/shippori-mincho-b1/400.css";
 
 import { useNavigate } from "react-router";
 import { RichText } from "@/components/i18n/RichText";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 
 const INK =
   "rounded-sm text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:decoration-foreground/70 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50";
 
 export default function AboutThisWebsite() {
   const navigate = useNavigate();
-  const { language } = useLanguage();
-  const t = translations[language].colophon;
+  const t = useTranslation().colophon;
 
   return (
     <main className="min-h-svh bg-background px-6 py-20 font-mincho text-foreground sm:px-10 sm:py-28">

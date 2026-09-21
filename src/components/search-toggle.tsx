@@ -16,8 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
-import { type Translation, translations } from "@/lib/translations";
-import { useLanguage } from "@/lib/language-provider";
+import { useTranslation } from "@/lib/language-provider";
 
 // ⌘ exists only on Apple keyboards; the shortcut itself binds meta OR ctrl
 // (use-command-menu), so everyone else is told the key they actually have
@@ -29,8 +28,7 @@ const MOD_KEY =
 
 export function SearchToggle() {
   const { toggleCommandMenu } = useCommandMenu();
-  const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
 
   return (
     <Tooltip>

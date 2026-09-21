@@ -12,6 +12,9 @@ import App from "./App.tsx";
 import "./index.css";
 import { Analytics } from "@vercel/analytics/react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { preloadRoute } from "@/config/routes";
+import { readLanguage } from "@/lib/language-provider";
+import { loadTranslation } from "@/lib/translations";
 
 // After a redeploy, an already-open tab may request old chunk hashes that no
 // longer exist. Vite fires this event when a lazy import fails — reload once
@@ -59,6 +62,14 @@ const rootElement = document.getElementById("root");
 if (!rootElement) {
   throw new Error("Failed to find the root element");
 }
+
+// The visitor's dictionary is a chunk of its own unless it is English, so
+// it loads before the first render, side by side with the landing page's
+// chunk, which would otherwise wait for that render to ask for it. A failed
+// load renders anyway: the provider retries it, and the error boundary
+// answers if that fails too.
+preloadRoute(window.location.pathname);
+await loadTranslation(readLanguage()).catch(() => undefined);
 
 // create root
 const root = createRoot(rootElement);

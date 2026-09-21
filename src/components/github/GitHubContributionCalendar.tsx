@@ -30,8 +30,7 @@ import {
 } from "react-activity-calendar";
 import { useQuery } from "@tanstack/react-query";
 import { useTheme } from "@/components/theme-provider";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { getThemeType } from "@/config/themes";
 import {
   getContributionTotal,
@@ -87,7 +86,7 @@ const GitHubContributionCalendar = ({
 }: GitHubContributionCalendarProps) => {
   const { theme } = useTheme();
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   const colorScheme = getThemeType(theme);
   const locale = INTL_LOCALE[language];

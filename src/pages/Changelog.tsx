@@ -14,8 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { CHANGELOG_GITHUB, commitLogQuery } from "@/lib/github-commits";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import {
   HEADER_LEAD,
   scrollPageTitleVariants,
@@ -23,8 +22,7 @@ import {
 } from "@/utils/transitions";
 
 export default function Changelog() {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const copy = t.changelog;
   const [pages, setPages] = useState(1);
   const [revealFrom, setRevealFrom] = useState(0);

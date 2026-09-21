@@ -48,8 +48,8 @@ import TestimonialCard from "@/components/testimonials/TestimonialCard";
 import { testimonials } from "@/config/testimonials";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
+import type { Translation } from "@/lib/translations";
 import { githubContributionsQuery } from "@/lib/github-contributions";
 import { userActivityQuery } from "@/lib/github-activity";
 import { GITHUB_USER } from "@/lib/github";
@@ -204,7 +204,7 @@ function ResumeModal() {
   const [open, setOpen] = useState(false);
   useWindowScrollLock(open);
   const { language } = useLanguage();
-  const t = translations[language].about.resume;
+  const t = useTranslation().about.resume;
   const [selectedLang, setSelectedLang] = useState<"en" | "de">(
     language === "de" ? "de" : "en",
   );
@@ -356,8 +356,7 @@ function ApproachPanel({
 // -------------------------------- Page --------------------------------
 
 const About = () => {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const about = t.about;
   const [contributionTab, setContributionTab] = useState("last");
   const queryClient = useQueryClient();

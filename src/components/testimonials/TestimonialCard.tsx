@@ -16,8 +16,8 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
+import type { Translation } from "@/lib/translations";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import {
@@ -214,8 +214,7 @@ const TestimonialCard = ({
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   useWindowScrollLock(open);
-  const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
 
   const isLongQuote = quote.length > MAX_QUOTE_LENGTH;
   const truncatedQuote = isLongQuote

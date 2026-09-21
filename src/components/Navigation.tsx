@@ -11,9 +11,8 @@ import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useEffect, useState, useCallback, useRef, memo } from "react";
 import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
-import { useLanguage } from "@/lib/language-provider";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
-import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { SearchToggle } from "./search-toggle";
@@ -127,7 +126,7 @@ const Logo = ({ label }: { label: string }) => (
 
 const DesktopNav = () => {
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const location = useLocation();
   const scrolled = useScrolled();
   const linksRef = useRef<HTMLElement>(null);
@@ -241,8 +240,7 @@ const DesktopNav = () => {
 };
 
 const MobileNav = () => {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const location = useLocation();
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);

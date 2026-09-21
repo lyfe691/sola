@@ -20,8 +20,7 @@ import { motion, useIsPresent } from "motion/react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useDeepDiveBarPinned } from "@/hooks/use-deep-dive-bar-pinned";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { scrollToTarget } from "@/utils/scroll";
 import { EASE_OUT, REVEAL } from "@/utils/transitions";
@@ -148,8 +147,7 @@ const LABEL_OFFSET = (TICK_PITCH - 28) / 2;
  * the labels live on hover, and a touch screen has none.
  */
 export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const isPresent = useIsPresent();
   const pinned = useDeepDiveBarPinned();
   const shown = isPresent && pinned;
@@ -258,8 +256,7 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
  */
 export function DeepDiveSectionMenu({ sections, activeId }: SectionNavProps) {
   const [open, setOpen] = useState(false);
-  const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   if (sections.length < 2) return null;
   const current = sections.find((s) => s.id === activeId);

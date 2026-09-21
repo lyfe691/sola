@@ -20,8 +20,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { INTL_LOCALE } from "@/lib/dates";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { useCodeView } from "./code-view-provider";
 import { DIFF_TOKENS } from "./diff-tokens";
 import { useIsDarkScheme } from "./use-scheme";
@@ -30,7 +29,7 @@ import { DEPLOY_LABEL, usePageDiff } from "./use-page-diff";
 export function DeployChip() {
   const { setActive: setCodeView } = useCodeView();
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const isDark = useIsDarkScheme();
 
   // latch on first hover — the query stays enabled so the result (already

@@ -9,8 +9,7 @@
 import React from "react";
 import { motion } from "motion/react";
 import { fadeUpVariants, cardInVariants } from "@/utils/transitions";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { getAllCertifications, isExpired } from "@/config/certifications";
@@ -21,7 +20,7 @@ import { INTL_LOCALE } from "@/lib/dates";
 
 const Certifications: React.FC = () => {
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
   const items = getAllCertifications();
   const formatDate = (iso: string) =>
     new Date(iso).toLocaleDateString(INTL_LOCALE[language], {

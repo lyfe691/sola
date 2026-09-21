@@ -44,10 +44,10 @@ import {
   type ProjectPageConfig,
 } from "@/config/project-deep-dive";
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
-import { useLanguage } from "@/lib/language-provider";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { plainText } from "@/lib/plain-text";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
-import { translations, type Translation } from "@/lib/translations";
+import type { Translation } from "@/lib/translations";
 
 // lazy modules created once at load; first render only looks them up
 const mdxByPath: Record<
@@ -176,7 +176,7 @@ function RelatedProjectCard({
 const ProjectDeepDiveRenderer = () => {
   const { slug } = useParams<{ slug: string }>();
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   const contentRef = useRef<HTMLDivElement>(null);
   // track which slug's MDX has mounted so TOC rediscovers after navigation

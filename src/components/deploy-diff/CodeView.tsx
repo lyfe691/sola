@@ -37,8 +37,7 @@ import { Kbd } from "@/components/ui/kbd";
 import { MenuHint } from "@/components/menu-hint";
 import { cn } from "@/lib/utils";
 import { INTL_LOCALE } from "@/lib/dates";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { Caret } from "./caret";
 import { CommitDiff } from "./CommitDiff";
@@ -293,7 +292,7 @@ function formatCommitBody(body: string): string {
 
 export function CodeView() {
   const { language } = useLanguage();
-  const t = translations[language].common.diff;
+  const t = useTranslation().common.diff;
   const isDark = useIsDarkScheme();
   const location = useLocation();
   const { active, setActive } = useCodeView();

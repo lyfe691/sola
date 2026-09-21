@@ -7,8 +7,7 @@
  */
 
 import { motion } from "motion/react";
-import { useLanguage } from "@/lib/language-provider";
-import { translations, type Translation } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import ScrollReveal from "@/components/ScrollReveal";
 import ExperienceSection from "@/components/experience/ExperienceSection";
 import { WORK, EDUCATION, resolveEntries } from "@/lib/experience";
@@ -19,7 +18,7 @@ import {
 
 const Experience = () => {
   const { language } = useLanguage();
-  const t = translations[language] as Translation;
+  const t = useTranslation();
   const chips = t.experience.chips as Record<string, string>;
 
   const work = resolveEntries(WORK, t, language);

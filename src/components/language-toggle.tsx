@@ -8,8 +8,7 @@
 
 import { Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { useLanguage } from "@/lib/language-provider";
-import { translations } from "@/lib/translations";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { LANGUAGES } from "@/config/languages";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +16,7 @@ import { cn } from "@/lib/utils";
 export function LanguageMenuContent({ onClose }: { onClose: () => void }) {
   const { language, setLanguage, detectedLanguage, detectedLanguageCode } =
     useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   return (
     <div className="min-w-[168px]">

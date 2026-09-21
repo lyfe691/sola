@@ -20,9 +20,8 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useLanguage } from "@/lib/language-provider";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { INTL_LOCALE } from "@/lib/dates";
-import { translations } from "@/lib/translations";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
@@ -33,7 +32,7 @@ import { Card } from "@/components/ui/card";
 const Privacy = () => {
   const n = useNavigate();
   const { language } = useLanguage();
-  const t = translations[language];
+  const t = useTranslation();
 
   const L = {
     en: {
