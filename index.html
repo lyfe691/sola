@@ -187,8 +187,13 @@
     <script type="module" src="/src/main.tsx"></script>
 
     <!-- not a component: it only builds itself on DOMContentLoaded, which has
-         fired before React could inject it -->
+         fired before React could inject it. defer, not blocking: a plain
+         script here holds the parser, so the app (a deferred module) could
+         not start until this third-party host answered. A deferred script
+         still runs before DOMContentLoaded, so the listener it adds still
+         fires; async would not guarantee that. -->
     <script
+      defer
       data-name="BMC-Widget"
       data-cfasync="false"
       src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
