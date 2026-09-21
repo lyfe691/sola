@@ -17,7 +17,7 @@
  * a mapping when a fallback shows up somewhere visible.
  */
 
-import type { ComponentType } from "react";
+import { createElement, type ComponentType } from "react";
 import {
   AppWindowIcon,
   BookOpen02Icon,
@@ -71,7 +71,7 @@ import JavaOriginal from "devicons-react/icons/JavaOriginal";
 import JavascriptOriginal from "devicons-react/icons/JavascriptOriginal";
 import KotlinOriginal from "devicons-react/icons/KotlinOriginal";
 import KubernetesOriginal from "devicons-react/icons/KubernetesOriginal";
-import LinuxOriginal from "devicons-react/icons/LinuxOriginal";
+import LinuxPlain from "devicons-react/icons/LinuxPlain";
 import MarkdownOriginal from "devicons-react/icons/MarkdownOriginal";
 import MongodbOriginal from "devicons-react/icons/MongodbOriginal";
 import MysqlOriginal from "devicons-react/icons/MysqlOriginal";
@@ -104,6 +104,11 @@ export type TechIcon = ComponentType<{
   "aria-hidden"?: boolean | "true" | "false";
 }>;
 
+// the shaded Tux (LinuxOriginal) is ~800 SVG shapes and a 200 KB module;
+// the flat mark in Linux yellow reads the same at chip size
+const LinuxMark: TechIcon = (props) =>
+  createElement(LinuxPlain, { color: "#FCC624", ...props });
+
 /** exact display-name -> mark; variants of one stack share its mark */
 export const TECH_ICONS: Record<string, TechIcon> = {
   "Ant Design": AntdesignOriginal,
@@ -124,10 +129,10 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   Insomnia: InsomniaOriginal,
   Java: JavaOriginal,
   JavaScript: JavascriptOriginal,
-  "Kali Linux": LinuxOriginal,
+  "Kali Linux": LinuxMark,
   Kotlin: KotlinOriginal,
   Kubernetes: KubernetesOriginal,
-  Linux: LinuxOriginal,
+  Linux: LinuxMark,
   MDX: MarkdownOriginal,
   MongoDB: MongodbOriginal,
   MySQL: MysqlOriginal,
