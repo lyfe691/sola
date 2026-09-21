@@ -41,7 +41,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/custom/icon-button";
-import { SegmentedControl } from "@/components/ui/custom/segmented-control";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ScrollReveal from "@/components/ScrollReveal";
 import { PrivateLinkButton } from "@/components/private-link-button";
 import { useGridSwap, type GridSwap } from "@/hooks/use-grid-swap";
@@ -403,12 +403,20 @@ const Projects = () => {
           variants={scrollSubtleVariants}
           className="mb-8 flex flex-col gap-3 sm:mb-12 sm:flex-row sm:items-center sm:justify-between"
         >
-          <SegmentedControl
-            value={kind}
-            onValueChange={setKind}
-            options={kindOptions}
-            aria-label={t.projects.kind.label}
-          />
+          <Tabs value={kind} onValueChange={setKind}>
+            {/* spans the row on phones with equal tabs, like the sort
+                select under it; content-sized from sm up */}
+            <TabsList
+              aria-label={t.projects.kind.label}
+              className="w-full sm:w-fit"
+            >
+              {kindOptions.map(({ value, label }) => (
+                <TabsTrigger key={value} value={value} className="flex-1">
+                  {label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
           <Select
             value={sortBy}
             onValueChange={(value) => setSortBy(value as ProjectSortOption)}

@@ -462,13 +462,9 @@ const About = () => {
               className="gap-0"
             >
               <div className="px-4 py-3">
-                <TabsList className="h-8">
+                <TabsList>
                   {contributionTabs.map(({ value, label }) => (
-                    <TabsTrigger
-                      key={value}
-                      value={value}
-                      className="px-3 text-xs"
-                    >
+                    <TabsTrigger key={value} value={value}>
                       {label}
                     </TabsTrigger>
                   ))}
@@ -476,7 +472,7 @@ const About = () => {
               </div>
               <TabsContent
                 value={contributionTab}
-                className="mt-0 overflow-hidden p-4 sm:p-5"
+                className="overflow-hidden p-4 sm:p-5"
               >
                 <GitHubContributionCalendar year={selectedContributionYear} />
               </TabsContent>

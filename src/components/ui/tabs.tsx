@@ -1,21 +1,83 @@
-"use client"
-
+import { createContext, useContext, useId } from "react"
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cva, type VariantProps } from "class-variance-authority"
+import { LayoutGroup, motion, type Transition } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
-function Tabs({
-  className,
-  orientation = "horizontal",
-  ...props
-}: TabsPrimitive.Root.Props) {
+const transitions = {
+  spring: { type: "spring", bounce: 0.25, duration: 0.45 },
+  smooth: { type: "spring", bounce: 0, duration: 0.3 },
+} satisfies Record<string, Transition>
+
+const tabsListVariants = cva(
+  "relative inline-flex w-fit items-center text-muted-foreground data-vertical:flex-col data-vertical:items-stretch",
+  {
+    variants: {
+      variant: {
+        default: "rounded-full bg-muted p-1 data-vertical:rounded-2xl",
+        rail: "p-1 before:absolute before:inset-x-0 before:inset-y-2 before:rounded-full before:bg-muted data-vertical:before:inset-x-2 data-vertical:before:inset-y-0 data-vertical:before:rounded-2xl",
+        line: "gap-4 border-border data-horizontal:border-b data-vertical:gap-1 data-vertical:border-r",
+      },
+    },
+    defaultVariants: { variant: "default" },
+  }
+)
+
+const tabsTriggerVariants = cva(
+  "relative isolate inline-flex items-center justify-center gap-1.5 text-sm font-medium whitespace-nowrap transition-colors outline-none select-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/30 data-disabled:pointer-events-none data-disabled:opacity-50 data-active:text-foreground data-vertical:justify-start [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  {
+    variants: {
+      variant: {
+        default: "h-7 rounded-full px-3",
+        rail: "h-10 rounded-full px-3",
+        line: "h-9 rounded-md px-1 data-vertical:h-8 data-vertical:px-2",
+      },
+    },
+    defaultVariants: { variant: "default" },
+  }
+)
+
+const tabsIndicatorVariants = cva("absolute -z-10", {
+  variants: {
+    variant: {
+      default:
+        "inset-0 rounded-full bg-background shadow-sm dark:border dark:border-input dark:bg-input/30",
+      rail: "inset-0 rounded-full border border-border bg-background shadow-sm dark:bg-input/30",
+      line: "rounded-full bg-foreground",
+    },
+    orientation: {
+      horizontal: "",
+      vertical: "",
+    },
+  },
+  compoundVariants: [
+    {
+      variant: "line",
+      orientation: "horizontal",
+      className: "inset-x-0 -bottom-px h-0.5",
+    },
+    {
+      variant: "line",
+      orientation: "vertical",
+      className: "inset-y-0 -right-px w-0.5",
+    },
+  ],
+  defaultVariants: { variant: "default", orientation: "horizontal" },
+})
+
+type TabsListOptions = VariantProps<typeof tabsListVariants> & {
+  spring?: boolean
+}
+
+const TabsListContext = createContext<TabsListOptions>({})
+
+function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
-      data-orientation={orientation}
       className={cn(
-        "group/tabs flex gap-2 data-horizontal:flex-col",
+        "flex gap-4 data-horizontal:flex-col data-vertical:items-start",
         className
       )}
       {...props}
@@ -23,46 +85,45 @@ function Tabs({
   )
 }
 
-const tabsListVariants = cva(
-  "group/tabs-list inline-flex w-fit items-center justify-center rounded-full p-1 text-muted-foreground group-data-horizontal/tabs:h-9 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col group-data-vertical/tabs:rounded-2xl data-[variant=line]:rounded-none",
-  {
-    variants: {
-      variant: {
-        default: "bg-muted",
-        line: "gap-1 bg-transparent",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
-  }
-)
-
 function TabsList({
   className,
   variant = "default",
+  spring = true,
+  children,
   ...props
-}: TabsPrimitive.List.Props & VariantProps<typeof tabsListVariants>) {
+}: TabsPrimitive.List.Props & TabsListOptions) {
+  const id = useId()
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
       data-variant={variant}
       className={cn(tabsListVariants({ variant }), className)}
       {...props}
-    />
+    >
+      <TabsListContext value={{ variant, spring }}>
+        <LayoutGroup id={id}>{children}</LayoutGroup>
+      </TabsListContext>
+    </TabsPrimitive.List>
   )
 }
 
 function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
+  const { variant, spring } = useContext(TabsListContext)
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
-      className={cn(
-        "relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-2 rounded-full border border-transparent! px-3 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start group-data-vertical/tabs:rounded-2xl group-data-vertical/tabs:px-3 group-data-vertical/tabs:py-1.5 hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 aria-disabled:pointer-events-none aria-disabled:opacity-50 dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        "group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent",
-        "data-active:bg-background data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 dark:data-active:text-foreground",
-        "after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-horizontal/tabs:after:inset-x-0 group-data-horizontal/tabs:after:bottom-[-5px] group-data-horizontal/tabs:after:h-0.5 group-data-vertical/tabs:after:inset-y-0 group-data-vertical/tabs:after:-right-1 group-data-vertical/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100",
-        className
+      className={cn(tabsTriggerVariants({ variant }), className)}
+      render={({ children, ...tabProps }, { active, orientation }) => (
+        <button {...tabProps}>
+          {active && (
+            <motion.span
+              layoutId="indicator"
+              transition={spring ? transitions.spring : transitions.smooth}
+              className={tabsIndicatorVariants({ variant, orientation })}
+            />
+          )}
+          {children}
+        </button>
       )}
       {...props}
     />
@@ -79,4 +140,4 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   )
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
+export { Tabs, TabsList, TabsTrigger, TabsContent }
