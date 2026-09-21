@@ -125,11 +125,15 @@ export default function Aurora({
     const ctn = ctnDom.current;
     if (!ctn) return;
 
+    // The field is soft all over (its edge feathers across half a viewport),
+    // so it renders at CSS pixels: device pixels would quadruple the shader
+    // work on a retina screen for nothing visible, and the full-screen
+    // triangle has no edge on screen for antialiasing to smooth.
     const renderer = new Renderer({
       alpha: true,
       premultipliedAlpha: true,
-      antialias: true,
-      dpr: Math.min(window.devicePixelRatio || 1, 2),
+      antialias: false,
+      dpr: 1,
     });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
