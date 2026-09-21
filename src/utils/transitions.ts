@@ -190,8 +190,8 @@ export const useEntranceWindow = (ms = 1000) => {
 // been re-ordered underneath, the arrival settles in from 12px below on the
 // reveal curve, staggered in reading order. Exit is faster than enter and
 // both are long enough to be seen as a crossfade rather than a cut;
-// transform and opacity only, so a card's frosted backdrop is never cut
-// off by a leftover filter.
+// transform and opacity only, which the compositor runs without repainting
+// a card.
 export const SWAP_EXIT = 0.2;
 export const SWAP_ENTER = 0.32;
 export const SWAP_STAGGER = 0.04;

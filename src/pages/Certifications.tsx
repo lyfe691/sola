@@ -70,7 +70,7 @@ const Certifications: React.FC = () => {
               return (
                 <motion.article
                   key={c.id}
-                  className="group rounded-xl border bg-card/60 backdrop-blur-xs p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20"
+                  className="group rounded-xl border bg-card/60 p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20"
                   variants={cardIn}
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start">

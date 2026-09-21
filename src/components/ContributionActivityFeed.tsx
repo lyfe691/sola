@@ -388,7 +388,7 @@ const ActivityItem = ({
 
 const ActivityFeedSkeleton = () => (
   <div
-    className={`divide-y divide-foreground/6 overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs ${FEED_FADE}`}
+    className={`divide-y divide-foreground/6 overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${FEED_FADE}`}
     aria-hidden
   >
     {Array.from({ length: 5 }).map((_, index) => (
@@ -444,7 +444,7 @@ const ContributionActivityFeed = () => {
         {loading ? (
           <ActivityFeedSkeleton />
         ) : isError ? (
-          <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs">
+          <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1">
             <div className="p-12 text-center">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
                 <HugeiconsIcon
@@ -461,7 +461,7 @@ const ContributionActivityFeed = () => {
           </div>
         ) : (
           <div
-            className={`overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 backdrop-blur-xs ${
+            className={`overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${
               hasTail ? FEED_FADE : ""
             }`}
           >

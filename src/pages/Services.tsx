@@ -108,7 +108,7 @@ const Services = () => {
             // visibly beat row two (160/240ms) at page load
             delay={HEADER_LEAD + staggerDelay(index % 2)}
           >
-            <Card className="group relative h-full gap-0 overflow-visible bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg">
+            <Card className="group relative h-full gap-0 overflow-visible bg-card/40 p-0 transition-shadow duration-300 hover:shadow-lg">
               {service.highlight && (
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 shadow-xs">
                   {service.highlight}

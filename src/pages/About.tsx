@@ -455,7 +455,7 @@ const About = () => {
         </ScrollReveal>
 
         <ScrollReveal variant="default" delay={HEADER_LEAD}>
-          <Card className="gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md">
+          <Card className="gap-0 overflow-hidden bg-card/40 p-0">
             <Tabs
               value={contributionTab}
               onValueChange={setContributionTab}

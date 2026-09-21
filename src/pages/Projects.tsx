@@ -125,7 +125,7 @@ const localizeProjects = (t: Translation, language: Language): Project[] => {
 };
 
 const cardClassName =
-  "group h-full gap-0 overflow-hidden bg-card/40 p-0 backdrop-blur-md transition-shadow duration-300 hover:shadow-lg";
+  "group h-full gap-0 overflow-hidden bg-card/40 p-0 transition-shadow duration-300 hover:shadow-lg";
 
 /** The cover sits in the card the way the About page mounts its media: a
  *  6px mat, corners nesting inside the card's own radius (the card is

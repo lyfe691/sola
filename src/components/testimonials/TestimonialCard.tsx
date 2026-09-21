@@ -244,7 +244,7 @@ const TestimonialCard = ({
   );
 
   const cardContent = (
-    <Card className="group relative flex h-full flex-col gap-4 overflow-hidden bg-card/40 p-6 backdrop-blur-md">
+    <Card className="group relative flex h-full flex-col gap-4 overflow-hidden bg-card/40 p-6">
       <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
         <HugeiconsIcon
           icon={QuoteDownIcon}

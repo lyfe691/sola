@@ -253,7 +253,7 @@ const Contact = () => {
 
         {/* right: form card */}
         <ScrollReveal variant="default" delay={HEADER_LEAD}>
-          <Card className="gap-0 bg-card/60 p-6 backdrop-blur-md sm:p-8">
+          <Card className="gap-0 bg-card/60 p-6 sm:p-8">
             <form
               onSubmit={handleSubmit}
               noValidate

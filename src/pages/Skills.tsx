@@ -58,7 +58,7 @@ const SkillCard = ({
   delay: number;
 }) => (
   <ScrollReveal variant="default" delay={delay}>
-    <Card className="bg-card/40 backdrop-blur-md">
+    <Card className="bg-card/40">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
