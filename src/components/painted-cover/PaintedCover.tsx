@@ -26,6 +26,7 @@
 import {
   useCallback,
   useEffect,
+  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -34,7 +35,7 @@ import {
 } from "react";
 import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
 import { cn } from "@/lib/utils";
-import { coverArtwork } from "./artwork";
+import { coverSvg } from "./artwork";
 import { mountQueue } from "./mount-queue";
 import { notchedOutline } from "./notch";
 import {
@@ -250,11 +251,16 @@ export function PaintedCover({
   const notchRef = useRef<HTMLDivElement>(null);
   const { near, visible } = useNearViewport(rootRef, { enabled: live });
   const resolved = useMemo(() => resolveArt(art), [art]);
-  // a static cover is the painting; a live one paints the gradient the
-  // canvas fades in over
-  const painting = useMemo(
-    () => (live ? baseGradient(resolved) : coverArtwork(resolved)),
+  // a live cover paints the gradient its canvas fades in over; a static one
+  // is the painting itself, inline SVG with its ids scoped to this cover
+  const id = useId().replace(/[^\w-]/g, "");
+  const gradient = useMemo(
+    () => (live ? baseGradient(resolved) : undefined),
     [live, resolved],
+  );
+  const artwork = useMemo(
+    () => (live ? undefined : { __html: coverSvg(resolved, `${id}-`) }),
+    [live, resolved, id],
   );
   const [controller, setController] = useState<CoverController | null>(null);
 
@@ -373,11 +379,13 @@ export function PaintedCover({
         <div
           ref={hostRef}
           className={cn(
-            "absolute inset-0 bg-cover bg-center",
+            "absolute inset-0 bg-cover bg-center [&>svg]:block [&>svg]:size-full",
             size === "card" &&
               "transition-transform duration-500 ease-out can-hover:group-hover:scale-[1.03]",
           )}
-          style={{ backgroundImage: painting }}
+          style={gradient ? { backgroundImage: gradient } : undefined}
+          dangerouslySetInnerHTML={artwork}
+          aria-hidden="true"
         />
         {!live && (
           <div

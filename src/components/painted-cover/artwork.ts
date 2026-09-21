@@ -10,7 +10,10 @@
  * curved band of light laid across it, a darker fold beside the band, a
  * faint echo on its other side, a leak of light where the band leaves the
  * frame, and a vignette. One small SVG per cover — a few blurred strokes,
- * nothing the browser has to think about — inlined as a data URI.
+ * nothing the browser has to think about — inlined into the page. Not a
+ * CSS background: Chrome builds every SVG background image as a document
+ * of its own, and the projects grid paid for twenty-two of them in one
+ * style pass.
  *
  * The ingredients never change; the band's path does. Each cover draws one
  * of six compositions (COMPOSITIONS) and jitters it, both decided by a hash
@@ -157,7 +160,11 @@ export function coverBand(art: CoverArt): CoverBand {
   return draw(art).band;
 }
 
-export function coverSvg(art: CoverArt): string {
+/**
+ * The cover as SVG markup. `id` prefixes its gradient and filter ids:
+ * inline, every cover on a page shares one id namespace.
+ */
+export function coverSvg(art: CoverArt, id = ""): string {
   const { colors, seed = 0 } = art;
   const p = coverPalette({ colors });
   const turn = seed / (2 * Math.PI);
@@ -185,27 +192,22 @@ export function coverSvg(art: CoverArt): string {
   return (
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice">` +
     `<defs>` +
-    `<linearGradient id="f" ${line}><stop offset="0" stop-color="${p.dark}"/><stop offset="0.5" stop-color="${p.vivid}"/><stop offset="1" stop-color="${p.dusk}"/></linearGradient>` +
-    `<radialGradient id="k" cx="${r(band.leak[0])}%" cy="${r(band.leak[1])}%" r="48%"><stop offset="0" stop-color="${p.light}" stop-opacity="0.5"/><stop offset="1" stop-color="${p.light}" stop-opacity="0"/></radialGradient>` +
-    `<radialGradient id="v" cx="50%" cy="50%" r="72%"><stop offset="0.5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/></radialGradient>` +
+    `<linearGradient id="${id}f" ${line}><stop offset="0" stop-color="${p.dark}"/><stop offset="0.5" stop-color="${p.vivid}"/><stop offset="1" stop-color="${p.dusk}"/></linearGradient>` +
+    `<radialGradient id="${id}k" cx="${r(band.leak[0])}%" cy="${r(band.leak[1])}%" r="48%"><stop offset="0" stop-color="${p.light}" stop-opacity="0.5"/><stop offset="1" stop-color="${p.light}" stop-opacity="0"/></radialGradient>` +
+    `<radialGradient id="${id}v" cx="50%" cy="50%" r="72%"><stop offset="0.5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.55"/></radialGradient>` +
     // filter regions cover the whole frame and then some: a region sized to
     // a stroke's own box clips the blur where the band leaves the frame
-    `<filter id="s" filterUnits="userSpaceOnUse" x="-400" y="-500" width="${W + 800}" height="${H + 1000}"><feGaussianBlur stdDeviation="${r(blur)}"/></filter>` +
-    `<filter id="t" filterUnits="userSpaceOnUse" x="-400" y="-500" width="${W + 800}" height="${H + 1000}"><feGaussianBlur stdDeviation="70"/></filter>` +
+    `<filter id="${id}s" filterUnits="userSpaceOnUse" x="-400" y="-500" width="${W + 800}" height="${H + 1000}"><feGaussianBlur stdDeviation="${r(blur)}"/></filter>` +
+    `<filter id="${id}t" filterUnits="userSpaceOnUse" x="-400" y="-500" width="${W + 800}" height="${H + 1000}"><feGaussianBlur stdDeviation="70"/></filter>` +
     `</defs>` +
-    `<rect width="${W}" height="${H}" fill="url(#f)"/>` +
-    `<path d="${path([fx, fy])}" fill="none" stroke="${p.dusk}" stroke-width="170" stroke-linecap="round" opacity="0.7" filter="url(#t)"/>` +
-    `<path d="${path([0, 0])}" fill="none" stroke="${p.pale}" stroke-width="${r(width)}" stroke-linecap="round" opacity="0.95" filter="url(#s)"/>` +
-    `<path d="${path([-fx * 1.27, -fy * 1.27])}" fill="none" stroke="${p.light}" stroke-width="90" stroke-linecap="round" opacity="0.3" filter="url(#t)"/>` +
-    `<rect width="${W}" height="${H}" fill="url(#k)"/>` +
-    `<rect width="${W}" height="${H}" fill="url(#v)"/>` +
+    `<rect width="${W}" height="${H}" fill="url(#${id}f)"/>` +
+    `<path d="${path([fx, fy])}" fill="none" stroke="${p.dusk}" stroke-width="170" stroke-linecap="round" opacity="0.7" filter="url(#${id}t)"/>` +
+    `<path d="${path([0, 0])}" fill="none" stroke="${p.pale}" stroke-width="${r(width)}" stroke-linecap="round" opacity="0.95" filter="url(#${id}s)"/>` +
+    `<path d="${path([-fx * 1.27, -fy * 1.27])}" fill="none" stroke="${p.light}" stroke-width="90" stroke-linecap="round" opacity="0.3" filter="url(#${id}t)"/>` +
+    `<rect width="${W}" height="${H}" fill="url(#${id}k)"/>` +
+    `<rect width="${W}" height="${H}" fill="url(#${id}v)"/>` +
     `</svg>`
   );
-}
-
-/** The painting as a CSS background-image value. */
-export function coverArtwork(art: CoverArt): string {
-  return `url("data:image/svg+xml,${encodeURIComponent(coverSvg(art))}")`;
 }
 
 const r = (n: number) => Math.round(n * 100) / 100;

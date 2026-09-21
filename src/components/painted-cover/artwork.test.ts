@@ -3,13 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import {
-  CAPTION_CLEAR_Y,
-  CAPTION_WIDTH,
-  coverArtwork,
-  coverBand,
-  coverSvg,
-} from "./artwork";
+import { CAPTION_CLEAR_Y, CAPTION_WIDTH, coverBand, coverSvg } from "./artwork";
 import { coverPalette } from "./palette";
 import { ART_PRESETS, PRESETS, resolveArt } from "./presets";
 
@@ -57,6 +51,15 @@ describe("coverSvg", () => {
     const art = resolveArt({ preset: "moss", seed: 2 });
     expect(coverSvg(art)).toBe(coverSvg(art));
   });
+
+  it("scopes every id, so covers inlined in one page never share defs", () => {
+    const scoped = coverSvg(PRESETS.cobalt, "c1-");
+    const ids = [...scoped.matchAll(/id="([^"]+)"/g)].map((m) => m[1]);
+    const refs = [...scoped.matchAll(/url\(#([^)]+)\)/g)].map((m) => m[1]);
+    expect(ids.length).toBeGreaterThan(0);
+    for (const id of ids) expect(id.startsWith("c1-")).toBe(true);
+    for (const ref of refs) expect(ids).toContain(ref);
+  });
 });
 
 describe("coverBand", () => {
@@ -97,15 +100,5 @@ describe("coverBand", () => {
       }),
     );
     expect(entries.size).toBeGreaterThanOrEqual(4);
-  });
-});
-
-describe("coverArtwork", () => {
-  it("is a CSS image of the encoded SVG", () => {
-    const value = coverArtwork(PRESETS.night);
-    expect(value.startsWith('url("data:image/svg+xml,')).toBe(true);
-    expect(decodeURIComponent(value.slice(24, -2))).toBe(
-      coverSvg(PRESETS.night),
-    );
   });
 });
