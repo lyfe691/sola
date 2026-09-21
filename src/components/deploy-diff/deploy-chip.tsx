@@ -71,39 +71,33 @@ export function DeployChip() {
       </TooltipTrigger>
       <TooltipContent
         side="top"
-        className="w-56 flex-col items-stretch select-none"
+        className="w-56 flex-col items-stretch gap-1 text-left select-none"
       >
-        <div className="space-y-1 text-left">
-          {/* a command name, not copy — and the title the code view opens
-              under, so the tooltip reads as its preview */}
-          <p className="font-mono">git show</p>
-          {state.status === "loading" && (
-            <div className="space-y-1.5 py-1" aria-hidden="true">
-              <div className="h-2.5 w-full animate-pulse rounded-full bg-background/10" />
-              <div className="h-2.5 w-2/3 animate-pulse rounded-full bg-background/10" />
-            </div>
-          )}
-          {commit && (
-            <>
-              <p className="line-clamp-2 leading-relaxed">{commit.subject}</p>
-              <p
-                style={DIFF_TOKENS[isDark ? "light" : "dark"]}
-                className="font-mono text-[10px] font-normal text-background/60"
-              >
-                <span className="text-(--diff-add-fg)">
-                  +{commit.additions}
-                </span>{" "}
-                <span className="text-(--diff-del-fg)">
-                  −{commit.deletions}
-                </span>
-                {formattedDate && <> · {formattedDate}</>}
-              </p>
-            </>
-          )}
-          <p className="pt-0.5 font-normal leading-relaxed text-background/70">
-            {t.common.diff.deployed}
-          </p>
-        </div>
+        {/* a command name, not copy — and the title the code view opens
+            under, so the tooltip reads as its preview */}
+        <p className="font-mono">git show</p>
+        {state.status === "loading" && (
+          <div className="space-y-1.5 py-1" aria-hidden="true">
+            <div className="h-2.5 w-full animate-pulse rounded-full bg-background/10" />
+            <div className="h-2.5 w-2/3 animate-pulse rounded-full bg-background/10" />
+          </div>
+        )}
+        {commit && (
+          <>
+            <p className="line-clamp-2 leading-relaxed">{commit.subject}</p>
+            <p
+              style={DIFF_TOKENS[isDark ? "light" : "dark"]}
+              className="font-mono text-[10px] font-normal text-background/60"
+            >
+              <span className="text-(--diff-add-fg)">+{commit.additions}</span>{" "}
+              <span className="text-(--diff-del-fg)">−{commit.deletions}</span>
+              {formattedDate && <> · {formattedDate}</>}
+            </p>
+          </>
+        )}
+        <p className="pt-0.5 font-normal leading-relaxed text-background/70">
+          {t.common.diff.deployed}
+        </p>
       </TooltipContent>
     </Tooltip>
   );

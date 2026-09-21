@@ -262,8 +262,7 @@ function ExitBubble({
         </TooltipTrigger>
         <TooltipContent side="bottom">
           {label}
-          {/* h-4 keeps the keycap inside the text line so the tooltip doesn't grow */}
-          <Kbd className="h-4 min-w-4 px-1 text-[10px]">esc</Kbd>
+          <Kbd>esc</Kbd>
         </TooltipContent>
       </Tooltip>
     </motion.div>,

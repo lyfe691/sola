@@ -194,7 +194,6 @@ export function AppearanceMenu() {
             }}
             variant="ghost"
             size="icon"
-            className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
             onClick={() => toggle(id)}
             aria-haspopup="menu"
             aria-expanded={openId === id}
@@ -213,11 +212,7 @@ export function AppearanceMenu() {
     <>
       {renderTrigger(
         "language",
-        <HugeiconsIcon
-          icon={AiTranslateIcon}
-          strokeWidth={2}
-          className="size-4"
-        />,
+        <HugeiconsIcon icon={AiTranslateIcon} strokeWidth={2} />,
         t.common.a11y.toggleLanguage,
         t.common.command.groups.language,
       )}

@@ -15,16 +15,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Kbd, KbdGroup } from "@/components/ui/kbd";
+import { Kbd } from "@/components/ui/kbd";
 import { useTranslation } from "@/lib/language-provider";
-
-// ⌘ exists only on Apple keyboards; the shortcut itself binds meta OR ctrl
-// (use-command-menu), so everyone else is told the key they actually have
-const MOD_KEY =
-  typeof navigator !== "undefined" &&
-  /Mac|iPhone|iPad|iPod/i.test(navigator.platform || navigator.userAgent)
-    ? "⌘"
-    : "Ctrl";
 
 export function SearchToggle() {
   const { toggleCommandMenu } = useCommandMenu();
@@ -37,22 +29,16 @@ export function SearchToggle() {
           <Button
             variant="ghost"
             size="icon"
-            className="w-9 h-9 rounded-full transition-colors hover:bg-muted"
             onClick={toggleCommandMenu}
             aria-label={t.common.search}
           />
         }
       >
-        <HugeiconsIcon icon={SearchIcon} strokeWidth={2} className="size-4" />
-        <span className="sr-only">{t.common.search}</span>
+        <HugeiconsIcon icon={SearchIcon} strokeWidth={2} />
       </TooltipTrigger>
       <TooltipContent>
-        <KbdGroup>
-          <p>{t.common.search}</p>
-          <Kbd className="h-4 min-w-4 text-[10px]">{MOD_KEY}</Kbd>
-          <span>+</span>
-          <Kbd className="h-4 min-w-4 text-[10px]">K</Kbd>
-        </KbdGroup>
+        {t.common.search}
+        <Kbd>⌘ + K</Kbd>
       </TooltipContent>
     </Tooltip>
   );

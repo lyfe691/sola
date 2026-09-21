@@ -181,7 +181,7 @@ export function LinkPreview({
         <span
           className={cn(
             "inline-flex min-w-0 items-center gap-1.5",
-            !compact && "px-3 py-1.5",
+            !compact && "px-2.5 py-1",
           )}
         >
           {favicon ? (
