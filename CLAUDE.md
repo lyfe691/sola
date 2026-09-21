@@ -22,6 +22,9 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   whole job. Layouts: `app` (nav + footer) and `blank` (nothing).
 - **i18n**: hand-rolled. `src/lib/translations/{en,de,es,ja,ko,zh}.ts`; `en.ts`
   defines the `Translation` type, so every locale must mirror new keys.
+  Components read the active dictionary with `useTranslation()`; never
+  import a locale file — only English is bundled, the rest are lazy chunks
+  (`main.tsx` loads the visitor's before the first render).
   No user-facing string literals in components — add a key. zh is
   Simplified (except the /a page title, which is deliberately Traditional).
 - **Content** is config-driven: `src/config/{projects,certifications,...}.ts`
