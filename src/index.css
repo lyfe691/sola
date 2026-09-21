@@ -521,6 +521,19 @@
   }
 }
 
+/* ---------- Buy Me a Coffee (index.html) ---------- */
+/* the widget paints its button at z-index 9999, over every dialog and
+   drawer; while one is open, the button steps aside */
+:root:has(
+    [data-slot="dialog-content"],
+    [data-slot="alert-dialog-content"],
+    [data-slot="sheet-content"],
+    [data-slot="drawer-popup"]
+  )
+  #bmc-wbtn {
+  visibility: hidden;
+}
+
 /* ---------- theme transition (view transitions api) ---------- */
 /* one animation: the next theme wipes in as a circle from the click point
    (origin/radius set by theme-provider, skipped under reduced motion there);
