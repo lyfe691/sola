@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Globe02Icon,
   Linkedin02Icon,
@@ -82,7 +82,7 @@ const AuthorLinks = ({
 
   if (compact) {
     return (
-      <div className="mt-2 flex flex-wrap gap-1.5">
+      <div className="mt-3 flex flex-wrap gap-1.5">
         {website ? (
           <a
             href={website}
@@ -118,7 +118,7 @@ const AuthorLinks = ({
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="mt-3 flex flex-wrap gap-2">
       {website ? (
         <LinkPreview
           href={website}
@@ -181,7 +181,7 @@ const AuthorBlock = ({
     />
     <div className="min-w-0 flex-1">
       <p className="font-medium text-sm sm:text-base">{author}</p>
-      <p className="text-xs text-foreground/60 sm:mb-3 sm:text-sm">
+      <p className="text-xs text-foreground/60 sm:text-sm">
         {company
           ? t.about.testimonials.roleAtCompany
               .replace("{role}", role)
@@ -213,6 +213,9 @@ const TestimonialCard = ({
   const isMobile = useIsMobile();
   const [open, setOpen] = useState(false);
   useWindowScrollLock(open);
+  // opening focuses the popup itself: by default focus lands on the first
+  // link, and a focused link preview opens its tooltip unasked
+  const popupRef = useRef<HTMLDivElement>(null);
   const t = useTranslation();
 
   const isLongQuote = quote.length > MAX_QUOTE_LENGTH;
@@ -295,7 +298,7 @@ const TestimonialCard = ({
       <>
         {cardContent}
         <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
-          <DrawerContent>
+          <DrawerContent ref={popupRef} initialFocus={popupRef}>
             <DrawerHeader>
               <DrawerTitle>{t.about.testimonials.modalTitle}</DrawerTitle>
               <DrawerDescription>
@@ -305,7 +308,9 @@ const TestimonialCard = ({
                 />
               </DrawerDescription>
             </DrawerHeader>
-            <div className="min-h-0 flex-1 overflow-y-auto p-4">
+            {/* no footer below it, so the content keeps its own clearance
+                from the drawer's rounded bottom */}
+            <div className="min-h-0 flex-1 overflow-y-auto p-4 pb-8">
               {fullTestimonialContent}
             </div>
           </DrawerContent>
@@ -318,7 +323,7 @@ const TestimonialCard = ({
     <>
       {cardContent}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent ref={popupRef} initialFocus={popupRef}>
           <DialogHeader>
             <DialogTitle>{t.about.testimonials.modalTitle}</DialogTitle>
             <DialogDescription>
