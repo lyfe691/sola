@@ -13,6 +13,7 @@
  * hover states.
  */
 
+import type { ComponentProps } from "react";
 import { badgeVariants } from "@/components/ui/badge";
 import { TECH_ICONS, TECH_ICON_FALLBACK } from "@/config/tech-icons";
 import { cn } from "@/lib/utils";
@@ -20,15 +21,14 @@ import { cn } from "@/lib/utils";
 export function TechChip({
   name,
   className,
-}: {
-  name: string;
-  className?: string;
-}) {
+  ...props
+}: { name: string } & ComponentProps<"span">) {
   const Icon = TECH_ICONS[name] ?? TECH_ICON_FALLBACK;
 
   // Badge's base classes size any direct <svg> child to 12px themselves
   return (
     <span
+      {...props}
       className={cn(
         badgeVariants({ variant: "secondary" }),
         "font-normal",

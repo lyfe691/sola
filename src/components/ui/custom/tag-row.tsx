@@ -94,27 +94,26 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
       ref={containerRef}
       className={cn("relative flex gap-1.5 overflow-hidden", className)}
     >
-      {/* hidden mirror used only to measure natural tag widths */}
-      <div
-        aria-hidden
-        className="pointer-events-none invisible absolute left-0 top-0 flex gap-1.5"
-      >
-        {tags.map((tag) => (
-          <span key={tag} data-measure="tag" className="inline-flex">
-            <TechChip name={tag} />
-          </span>
-        ))}
-        <span
-          data-measure="more"
-          className={cn(badgeVariants({ variant: "secondary" }), "font-normal")}
-        >
-          +{tags.length}
-        </span>
-      </div>
-
-      {tags.slice(0, visibleCount).map((tag) => (
-        <TechChip key={tag} name={tag} />
+      {/* every tag renders once; the ones past the fit leave the row but stay
+          laid out, so their natural widths can still be measured */}
+      {tags.map((tag, i) => (
+        <TechChip
+          key={tag}
+          name={tag}
+          data-measure="tag"
+          className={cn(i >= visibleCount && "invisible absolute")}
+        />
       ))}
+      <span
+        aria-hidden
+        data-measure="more"
+        className={cn(
+          badgeVariants({ variant: "secondary" }),
+          "invisible absolute font-normal",
+        )}
+      >
+        +{tags.length}
+      </span>
       {hiddenCount > 0 && (
         <Hint
           trigger={overflowTrigger}
