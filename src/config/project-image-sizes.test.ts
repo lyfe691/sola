@@ -8,7 +8,7 @@ import { collect } from "../../scripts/image-sizes.mjs";
 import { PROJECT_IMAGE_SIZES } from "./project-image-sizes";
 
 describe("PROJECT_IMAGE_SIZES", () => {
-  it("matches the PNGs on disk (run `bun run images:sizes` when this fails)", () => {
-    expect(PROJECT_IMAGE_SIZES).toEqual(collect());
+  it("matches the images on disk (run `bun run images:sizes` when this fails)", async () => {
+    expect(PROJECT_IMAGE_SIZES).toEqual(await collect());
   });
 });

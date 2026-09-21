@@ -3,7 +3,7 @@
 Vault is a local OIDC sandbox. OIDC — OpenID Connect, the identity layer sitting on top of OAuth 2.0 — is easy to read about and hard to hold onto until you have stood one up yourself, so I built one: Keycloak 26 as the provider, PostgreSQL behind it, a FastAPI service that verifies the tokens, and a Next.js frontend with a sign-in page and two role-gated dashboards.
 
 <ProjectImage
-  src="/projects/vault/vault-login.png"
+  src="/projects/vault/vault-login.webp"
   alt="Vault sign-in page: a centered white card titled Welcome back with username and password fields and a black Sign in button"
   caption="The sign-in page. The demo account's credentials are printed under the form, because the whole realm is disposable."
   size="large"
@@ -45,7 +45,7 @@ So the identity configuration lives in `terraform/main.tf` and nowhere else. The
 Authorization is a second, separate step. A `require_roles` dependency reads `realm_access.roles` from the decoded payload and answers 403 naming the roles it wanted. `/admin` requires `admin`, `/user` requires `user`, and `/me` requires only a valid token.
 
 <ProjectImage
-  src="/projects/vault/vault-portal.png"
+  src="/projects/vault/vault-portal.webp"
   alt="Authenticated portal card reading Hello, demo with Admin and User badges above Admin Dashboard and User Dashboard buttons"
   caption="After sign-in, the frontend decodes the cookie and renders one badge per realm role."
 />
@@ -55,12 +55,12 @@ The demo user holds both roles, so both dashboards open. Drop `user` from the Te
 <ProjectGallery
   images={[
     {
-      src: "/projects/vault/vault-user.png",
+      src: "/projects/vault/vault-user.webp",
       alt: "User Dashboard card with Admin Access and User badges and links back to Home and to the Admin Dashboard",
       caption: "User dashboard",
     },
     {
-      src: "/projects/vault/vault-admin.png",
+      src: "/projects/vault/vault-admin.webp",
       alt: "Admin Dashboard card with a single Admin badge and links back to Home and to the User Dashboard",
       caption: "Admin dashboard, gated on the realm admin role",
     },

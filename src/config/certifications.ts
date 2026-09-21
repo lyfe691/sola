@@ -80,7 +80,7 @@ export const certifications: Certification[] = [
     skills: ["JavaScript", "Algorithms", "Data Structures"],
     issuerLogo: "/certificates/issuer/free_code_camp_logo.jpg",
     certificateImage:
-      "/certificates/js-fcc_algorithms-ds_Yanis-Sebastian-Zürcher.png",
+      "/certificates/js-fcc_algorithms-ds_Yanis-Sebastian-Zürcher.webp",
   },
   {
     id: "mimo-fullstack",
@@ -91,7 +91,7 @@ export const certifications: Certification[] = [
     url: "https://www.virtualbadge.io/certificate-validator?credential=56c5227a-95c9-4b7f-a462-8bf34303d644",
     skills: ["Full-Stack", "Web Development"],
     issuerLogo: "/certificates/issuer/mimo_logo.png",
-    certificateImage: "/certificates/mimo_ft_Yanis-Sebastian-Zürcher.png",
+    certificateImage: "/certificates/mimo_ft_Yanis-Sebastian-Zürcher.webp",
   },
 ];
 

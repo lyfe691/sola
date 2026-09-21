@@ -11,8 +11,8 @@ import {
   ratioOf,
 } from "./figure-layout";
 
-const desktop = "/projects/perspectas/home-desktop.png";
-const phone = "/projects/perspectas/home-mobile.png";
+const desktop = "/projects/perspectas/home-desktop.webp";
+const phone = "/projects/perspectas/home-mobile.webp";
 
 describe("figureRatio", () => {
   it("a frame only ever adds height", () => {

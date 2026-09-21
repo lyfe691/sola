@@ -4,7 +4,7 @@ Website Code Extractor is a browser extension for Chrome and Edge. Open any webs
 
 <Safari
   url="wce.ysz.life"
-  src="/projects/code-extractor/landing-desktop.png"
+  src="/projects/code-extractor/landing-desktop.webp"
   alt="The extension's landing page: the name Website Code Extractor over a dark background of curved bands, a one-sentence description and an Add to Chrome button"
   caption="The extension's landing page at wce.ysz.life."
 />
@@ -18,7 +18,7 @@ I often wanted to see how a site did something: a layout, an animation, a small 
 The popup has one button. Pressing it runs a small script inside the open tab that reads the page's HTML, including its doctype, and hands it back to the extension. The extension then collects every stylesheet, script and image the page links to, downloads them, and puts everything into a ZIP named after the site.
 
 <ProjectImage
-  src="/projects/code-extractor/popup.png"
+  src="/projects/code-extractor/popup.webp"
   alt="The extension's popup: its icon and name above a single large button that says Extract and Download"
   caption="The whole interface."
   className="max-w-sm"
@@ -51,7 +51,7 @@ The part that makes the download usable is the rewriting of links. A page refers
 Plain JavaScript on Manifest V3, the current format for Chrome extensions, with [JSZip](https://stuk.github.io/jszip/) to build the archive. Everything happens inside your browser, so the pages you save stay on your machine. It asks only for the permissions it uses: the active tab, scripting and downloads.
 
 <ProjectImage
-  src="/projects/code-extractor/store-listing-desktop.png"
+  src="/projects/code-extractor/store-listing-desktop.webp"
   alt="The extension's header on the Chrome Web Store, showing a rating of 5.0 from 5 ratings and 6,000 users"
   caption="On the Chrome Web Store."
 />
