@@ -99,21 +99,7 @@
   --animate-accordion-down: accordion-down 0.2s var(--ease-out);
   --animate-accordion-up: accordion-up 0.2s var(--ease-out);
   --animate-shine: shine 5s linear infinite;
-  /* press feedback (Button): one pass — the circle expands from the pointer
-     to cover the control while fading out. forwards holds the ended state
-     until React unmounts the ripple, so there's no flash at the seam. */
-  --animate-ripple: ripple 600ms var(--ease-out) forwards;
 
-  @keyframes ripple {
-    from {
-      scale: 0;
-      opacity: 0.3;
-    }
-    to {
-      scale: 1;
-      opacity: 0;
-    }
-  }
   @keyframes shine {
     0% {
       background-position: 100%;
