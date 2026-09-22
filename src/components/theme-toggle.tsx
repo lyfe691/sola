@@ -266,18 +266,21 @@ export function ThemeMenuContent({
   } | null>(null);
   const themeTreeRef = useRef<HTMLDivElement>(null);
 
-  const previewRow =
-    (value: string) => (event: React.SyntheticEvent<HTMLElement>) => {
-      const tree = themeTreeRef.current;
-      if (!tree) return;
-      const row = event.currentTarget.getBoundingClientRect();
-      setPreview({
-        value,
-        top: row.top + row.height / 2,
-        right: window.innerWidth - tree.getBoundingClientRect().left + 12,
-      });
-    };
+  const showPreview = (value: string, row: HTMLElement) => {
+    const tree = themeTreeRef.current;
+    if (!tree) return;
+    const box = row.getBoundingClientRect();
+    setPreview({
+      value,
+      top: box.top + box.height / 2,
+      right: window.innerWidth - tree.getBoundingClientRect().left + 12,
+    });
+  };
 
+  // the preview is a hover affordance: a tap on a touch screen fires an
+  // emulated hover and a focus, which flashed the panel on every pick. Only
+  // a real mouse, or keyboard focus, opens it (base-ui's hover cards are
+  // mouse-only for the same reason).
   const renderThemeLeaf = (option: (typeof THEMES)[number]) => (
     <TreeLeaf
       key={option.value}
@@ -285,8 +288,16 @@ export function ThemeMenuContent({
       label={option.label}
       isSelected={theme === option.value}
       onClick={selectTheme(option.value)}
-      onMouseEnter={previewRow(option.value)}
-      onFocus={previewRow(option.value)}
+      onPointerEnter={(event) => {
+        if (event.pointerType === "mouse") {
+          showPreview(option.value, event.currentTarget);
+        }
+      }}
+      onFocus={(event) => {
+        if (event.currentTarget.matches(":focus-visible")) {
+          showPreview(option.value, event.currentTarget);
+        }
+      }}
     />
   );
 
