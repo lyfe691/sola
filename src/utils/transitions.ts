@@ -66,6 +66,15 @@ export const FLIGHT_BACK = {
   bounce: 0,
 } as const;
 
+// ---- Size morph (a dialog changing size in place to fit what it shows) ----
+// A spring like the flights, with a little life; the bounce stays inside
+// the content's own padding.
+export const MORPH = {
+  type: "spring",
+  visualDuration: 0.42,
+  bounce: 0.18,
+} as const;
+
 // ---- Gallery strip (moving between images inside the lightbox) ----
 // The images sit side by side on one strip and the strip moves; the same
 // spring grows the arriving image and settles the leaving one into a

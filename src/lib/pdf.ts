@@ -5,9 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * pdf.js, loaded the first time a document is asked for. The library and its
- * worker are chunks of their own — nothing on the site needs them until a
- * PDF is read in place — and a document, once open, stays open for the visit.
+ * pdf.js, loaded on first use; an open document stays open for the visit.
  */
 
 import type { PDFDocumentProxy } from "pdfjs-dist";
@@ -26,10 +24,6 @@ const loadLibrary = () => {
   return library;
 };
 
-/**
- * A document by URL. Every caller gets the same promise; a failed load is
- * forgotten, so the next call retries.
- */
 export function loadPdf(url: string): Promise<PDFDocumentProxy> {
   let pending = documents.get(url);
   if (!pending) {

@@ -5,9 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * A PDF's pages, one under the other on a desk, drawn by pdf.js at the
- * desk's width and the screen's pixel density. A page keeps its box from the
- * moment its size is known, so the stack never shifts as the pages come in.
+ * A PDF's pages on a desk, drawn by pdf.js at the desk's width.
  */
 
 import {
@@ -22,8 +20,6 @@ import { Spinner } from "@/components/ui/spinner";
 import { loadPdf } from "@/lib/pdf";
 import { cn } from "@/lib/utils";
 
-/** 2x is sharp on any screen; a 3x phone would draw 2.25x the pixels for
- *  nothing visible at this size. */
 const MAX_DPR = 2;
 
 type Pages =
@@ -53,11 +49,9 @@ function usePages(url: string): Pages {
       live = false;
     };
   }, [url]);
-  // a stale answer is the previous document's: show loading, not its pages
   return pages.url === url ? pages : { url, status: "loading" };
 }
 
-/** The width the pages are laid out at, kept current as the desk resizes. */
 function useColumnWidth() {
   const ref = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
@@ -90,7 +84,7 @@ function Page({ page, width }: { page: PDFPageProxy; width: number }) {
     const task = page.render({ canvas: node, viewport });
     task.promise.then(
       () => setDrawn(true),
-      () => {}, // cancelled: a newer width took over
+      () => {},
     );
     return () => task.cancel();
   }, [page, width, baseWidth]);
@@ -119,9 +113,7 @@ export function PdfPages({
   className,
 }: {
   url: string;
-  /** What the document is, for assistive tech; the pages are pictures. */
   label: string;
-  /** Shown in place of the pages when the document cannot be drawn. */
   fallback: ReactNode;
   className?: string;
 }) {

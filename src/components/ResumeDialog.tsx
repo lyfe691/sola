@@ -5,15 +5,8 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * The resume. On a desktop, a small card — pick a language, read or
- * download — that grows in place into a reader with the pages inside, and
- * shrinks back. The box is the only thing that moves: both of its sizes are
- * known before a switch, it starts gliding to the next one at once, the
- * view it held blurs out inside it on the same clock, and the next view
- * arrives once the old one is gone. Content is centred in the box, so
- * nothing slides; the box closes in or opens up around it.
- *
- * On a phone it is a bottom sheet that opens straight onto the pages.
+ * The resume: on desktop a card that grows in place into a reader with
+ * the PDF's pages inside; on a phone a sheet that opens onto the pages.
  */
 
 import { useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
@@ -55,7 +48,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { loadPdf } from "@/lib/pdf";
-import { EASE_OUT } from "@/utils/transitions";
+import { EASE_OUT, MORPH } from "@/utils/transitions";
 
 type ResumeLanguage = "en" | "de";
 const RESUME_LANGUAGES: readonly ResumeLanguage[] = ["en", "de"];
@@ -78,22 +71,15 @@ const openResume = (language: ResumeLanguage) => {
   window.open(pdfFor(language), "_blank", "noopener");
 };
 
-/** The box's two widths (px), and how tall a page is worth reading at. */
 const CARD_WIDTH = 448;
 const READER_WIDTH = 896;
 const READER_HEIGHT = 1024;
-/** Clearance to the screen's edges: a card keeps 1rem a side, the reader 1.5rem. */
 const CARD_GUTTER = 32;
 const READER_GUTTER = 48;
 
-/** One switch, three clocks on the UI curve: the view leaving is gone in
- *  the time the box takes to get well under way, the next view arrives as
- *  the box settles. */
-const RESIZE = { duration: 0.32, ease: EASE_OUT } as const;
 const LEAVE = { duration: 0.18, ease: EASE_OUT } as const;
 const ARRIVE = { duration: 0.26, ease: EASE_OUT } as const;
 
-/** A view leaves and arrives the same way: soft, and a touch smaller. */
 const view = {
   initial: { opacity: 0, scale: 0.98, filter: "blur(4px)" },
   animate: { opacity: 1, scale: 1, filter: "blur(0px)", transition: ARRIVE },
@@ -112,8 +98,6 @@ const useViewport = () => ({
   height: useSyncExternalStore(subscribeViewport, () => window.innerHeight),
 });
 
-// --------------------------------- Pieces ---------------------------------
-
 function LanguageTabs({
   value,
   onChange,
@@ -123,7 +107,6 @@ function LanguageTabs({
   value: ResumeLanguage;
   onChange: (language: ResumeLanguage) => void;
   label: string;
-  /** As tall as an icon button, for a row of them. */
   compact?: boolean;
 }) {
   return (
@@ -203,8 +186,6 @@ function Pages({
   );
 }
 
-// --------------------------------- The box ---------------------------------
-
 function Sheet({
   current,
   onView,
@@ -218,10 +199,7 @@ function Sheet({
 }) {
   const copy = useTranslation().about.resume;
   const readRef = useRef<HTMLButtonElement>(null);
-  // The card's height is measured while it shows, so the box knows where to
-  // go before the reader has even started to leave. The card is held as a
-  // node, not a ref: it mounts with the popup, after this component, and
-  // the measuring has to start when it arrives.
+  // held as a node: the card mounts with the popup, after this component
   const [card, setCard] = useState<HTMLDivElement | null>(null);
   const [cardHeight, setCardHeight] = useState<number | null>(null);
   const viewport = useViewport();
@@ -250,11 +228,11 @@ function Sheet({
             width: reading ? readerWidth : cardWidth,
             height: reading ? readerHeight : (cardHeight ?? "auto"),
           }}
-          transition={RESIZE}
+          transition={MORPH}
         />
       }
-      // Its content centred (not the grid the popup ships with), so a view
-      // holds still at the screen's centre while the box changes around it.
+      // flex, not the popup's grid: a grid would stretch the content to the
+      // box's current height and the box would never shrink back
       className="flex max-w-none items-center justify-center gap-0 overflow-hidden p-0 sm:max-w-none"
     >
       <AnimatePresence mode="wait" initial={false}>
@@ -340,8 +318,6 @@ function Sheet({
   );
 }
 
-// --------------------------------- Dialog ---------------------------------
-
 export default function ResumeDialog() {
   const isMobile = useIsMobile();
   const copy = useTranslation().about.resume;
@@ -353,7 +329,6 @@ export default function ResumeDialog() {
   );
   useWindowScrollLock(open);
 
-  // every open starts at the card
   const openDialog = () => {
     setView("card");
     setOpen(true);
@@ -379,7 +354,6 @@ export default function ResumeDialog() {
       iconPosition="left"
       label={copy.buttonLabel}
       onClick={openDialog}
-      // the document starts loading on the way in, so the pages are close behind
       onPointerEnter={() => void loadPdf(pdfFor(language))}
       onFocus={() => void loadPdf(pdfFor(language))}
     />
@@ -390,7 +364,6 @@ export default function ResumeDialog() {
       <>
         {trigger}
         <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
-          {/* a fixed height, so the desk has room to scroll in */}
           <DrawerContent className="[--drawer-height:calc(100dvh-6rem)]">
             <DrawerHeader>
               <DrawerTitle>{copy.title}</DrawerTitle>
