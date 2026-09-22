@@ -139,7 +139,7 @@ export function PdfPages({
       aria-label={label}
       aria-busy={state.status === "loading"}
       className={cn(
-        "relative scroll-fade overflow-y-auto overscroll-contain bg-muted/40",
+        "relative overflow-y-auto overscroll-contain bg-muted/40",
         className,
       )}
     >
