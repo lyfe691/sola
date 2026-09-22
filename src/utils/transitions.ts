@@ -7,7 +7,13 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { useInView, type Variants } from "motion/react";
+import {
+  createGeneratorEasing,
+  generateLinearEasing,
+  spring,
+  useInView,
+  type Variants,
+} from "motion/react";
 
 /**
  * Central motion system.
@@ -74,6 +80,28 @@ export const MORPH = {
   visualDuration: 0.42,
   bounce: 0.18,
 } as const;
+
+/**
+ * A spring as CSS timing, for motion the browser runs itself (a view
+ * transition's pseudo-elements): the spring's full settle time, and a
+ * linear() curve sampled from motion's own generator — the same spring as
+ * the rest of the vocabulary, not a cubic-bezier guess at one.
+ */
+export const cssSpring = ({
+  visualDuration,
+  bounce,
+}: {
+  visualDuration: number;
+  bounce: number;
+}) => {
+  const { ease, duration } = createGeneratorEasing(
+    { visualDuration, bounce },
+    100,
+    spring,
+  );
+  const ms = Math.round(duration * 1000);
+  return { duration: `${ms}ms`, easing: generateLinearEasing(ease, ms) };
+};
 
 // ---- Gallery strip (moving between images inside the lightbox) ----
 // The images sit side by side on one strip and the strip moves; the same
