@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import ScrollReveal from "@/components/ScrollReveal";
-import { HEADER_LEAD, staggerDelay } from "@/utils/transitions";
+import { Reveal } from "@/components/Reveal";
 import ExperienceItem from "@/components/experience/ExperienceItem";
 import { INTL_LOCALE } from "@/lib/dates";
 import { formatDuration, type ExperienceEntry } from "@/lib/experience";
@@ -34,7 +33,7 @@ const ExperienceSection = ({
 
   return (
     <section>
-      <ScrollReveal variant="default">
+      <Reveal>
         <div className="mb-6 flex items-center gap-2.5">
           <h2 className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
             {title}
@@ -43,15 +42,11 @@ const ExperienceSection = ({
             {String(entries.length).padStart(2, "0")}
           </span>
         </div>
-      </ScrollReveal>
+      </Reveal>
 
       <div className="flex flex-col">
-        {entries.map((entry, index) => (
-          <ScrollReveal
-            key={entry.key}
-            variant="default"
-            delay={HEADER_LEAD + staggerDelay(index)}
-          >
+        {entries.map((entry) => (
+          <Reveal key={entry.key}>
             <ExperienceItem
               entry={entry}
               isWork={isWork}
@@ -61,7 +56,7 @@ const ExperienceSection = ({
               }
               locationLabel={chips[entry.locationType] ?? entry.locationType}
             />
-          </ScrollReveal>
+          </Reveal>
         ))}
       </div>
     </section>

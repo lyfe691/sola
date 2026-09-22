@@ -9,7 +9,7 @@
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
 import { Link } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
@@ -17,13 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
 import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
 import ResumeDialog from "@/components/ResumeDialog";
-import ScrollReveal from "@/components/ScrollReveal";
-import {
-  HEADER_LEAD,
-  scrollChildVariants,
-  scrollContainerVariants,
-  staggerDelay,
-} from "@/utils/transitions";
+import { Reveal } from "@/components/Reveal";
 import { RichText } from "@/components/i18n/RichText";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
@@ -166,13 +160,12 @@ function ApproachPanel({
 }) {
   return (
     <section className="mb-10">
-      <ScrollReveal variant="title">
+      <Reveal>
         <SectionHeading>{title}</SectionHeading>
-      </ScrollReveal>
+      </Reveal>
       {/* the cells share borders/dividers — one fused panel, revealed whole
           (individual cells would tear the frame apart mid-animation) */}
-      <ScrollReveal
-        variant="default"
+      <Reveal
         className={cn(
           "grid overflow-hidden rounded-2xl border border-foreground/12",
           "bg-linear-to-b from-foreground/[0.04] to-transparent",
@@ -196,7 +189,7 @@ function ApproachPanel({
             </p>
           </div>
         ))}
-      </ScrollReveal>
+      </Reveal>
     </section>
   );
 }
@@ -244,50 +237,37 @@ const About = () => {
     <div className="flex w-full flex-col">
       <meta name="description" content={t.seo.about.description} />
 
-      {/* outer container staggers the two columns; the copy column is itself
-          a container so title → paras → resume actually cascade */}
-      <ScrollReveal
-        variant="container"
-        className="mb-16 grid grid-cols-1 items-center gap-10 md:mb-24 md:grid-cols-12"
-      >
-        <motion.div
-          variants={scrollContainerVariants}
-          className="flex flex-col gap-5 md:col-span-7"
-        >
-          <motion.h1
-            variants={scrollChildVariants}
-            className="text-4xl font-bold"
-          >
+      <div className="mb-16 grid grid-cols-1 items-center gap-10 md:mb-24 md:grid-cols-12">
+        <div className="flex flex-col gap-5 md:col-span-7">
+          <Reveal as="h1" className="text-4xl font-bold">
             {about.title}
-          </motion.h1>
-          <motion.p
-            variants={scrollChildVariants}
+          </Reveal>
+          <Reveal
+            as="p"
             className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg"
           >
             <RichText text={about.intro} previewExternal />
-          </motion.p>
-          <motion.p
-            variants={scrollChildVariants}
+          </Reveal>
+          <Reveal
+            as="p"
             className="max-w-xl text-base leading-relaxed text-foreground/75 sm:text-lg"
           >
             <RichText text={about.hobbies} previewExternal />
-          </motion.p>
-          <motion.div variants={scrollChildVariants} className="pt-1">
+          </Reveal>
+          <Reveal className="pt-1">
             <ResumeDialog />
-          </motion.div>
-        </motion.div>
-        <motion.div variants={scrollChildVariants} className="md:col-span-5">
+          </Reveal>
+        </div>
+        <Reveal className="md:col-span-5">
           <AboutPortrait
             src="https://avatars.githubusercontent.com/u/162759797?v=4"
             alt="Yanis Sebastian Zürcher"
           />
-        </motion.div>
-      </ScrollReveal>
+        </Reveal>
+      </div>
 
-      {/* each block triggers on its own viewport entry — the feed sits below
-          the fold and would otherwise animate unseen with the section top */}
       <section className="mb-16 md:mb-20">
-        <ScrollReveal variant="title">
+        <Reveal>
           <SectionHeading
             trailing={
               <LinkPreview
@@ -300,9 +280,9 @@ const About = () => {
           >
             {about.github.title}
           </SectionHeading>
-        </ScrollReveal>
+        </Reveal>
 
-        <ScrollReveal variant="default" delay={HEADER_LEAD}>
+        <Reveal>
           <Card className="gap-0 overflow-hidden bg-card/40 p-0">
             <Tabs
               value={contributionTab}
@@ -326,27 +306,24 @@ const About = () => {
               </TabsContent>
             </Tabs>
           </Card>
-        </ScrollReveal>
+        </Reveal>
 
-        <ScrollReveal variant="default">
+        <Reveal>
           <ContributionActivityFeed />
-        </ScrollReveal>
+        </Reveal>
       </section>
 
       <section className="mb-16 md:mb-20">
-        <ScrollReveal variant="title">
+        <Reveal>
           <SectionHeading>{about.interests.title}</SectionHeading>
-        </ScrollReveal>
+        </Reveal>
         <ul className="flex flex-col">
           {INTERESTS.map(({ key, image }) => {
             const item = about.interests[key];
             return (
-              // each row reveals when reached — a tall list revealed from the
-              // section top would finish animating below the fold, unseen
-              <ScrollReveal
+              <Reveal
                 key={key}
                 as="li"
-                variant="default"
                 className="grid grid-cols-1 gap-5 py-8 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-10"
               >
                 <MediaFrame className="sm:col-span-4">
@@ -368,14 +345,14 @@ const About = () => {
                     {item.description}
                   </p>
                 </div>
-              </ScrollReveal>
+              </Reveal>
             );
           })}
         </ul>
       </section>
 
       <section className="mb-16 md:mb-20">
-        <ScrollReveal variant="title">
+        <Reveal>
           <SectionHeading
             trailing={
               <Link
@@ -396,20 +373,13 @@ const About = () => {
           >
             {about.testimonials.title}
           </SectionHeading>
-        </ScrollReveal>
+        </Reveal>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {testimonials.map((testimonial, index) => {
+          {testimonials.map((testimonial) => {
             const copy = about.testimonials.items[testimonial.i18nKey];
             return (
-              // per-card trigger: staggers within a desktop row, and each
-              // card reveals when reached in the mobile single column
-              <ScrollReveal
-                key={testimonial.i18nKey}
-                variant="default"
-                delay={HEADER_LEAD + staggerDelay(index)}
-                className="h-full"
-              >
+              <Reveal key={testimonial.i18nKey} className="h-full">
                 <TestimonialCard
                   quote={copy.quote}
                   author={testimonial.author}
@@ -420,7 +390,7 @@ const About = () => {
                   linkedin={testimonial.linkedin}
                   avatar={testimonial.avatar}
                 />
-              </ScrollReveal>
+              </Reveal>
             );
           })}
         </div>

@@ -6,15 +6,10 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { motion } from "motion/react";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
-import ScrollReveal from "@/components/ScrollReveal";
+import { Reveal } from "@/components/Reveal";
 import ExperienceSection from "@/components/experience/ExperienceSection";
 import { WORK, EDUCATION, resolveEntries } from "@/lib/experience";
-import {
-  scrollPageTitleVariants,
-  scrollSubtleVariants,
-} from "@/utils/transitions";
 
 const Experience = () => {
   const { language } = useLanguage();
@@ -28,20 +23,12 @@ const Experience = () => {
     <div className="flex w-full flex-col">
       <meta name="description" content={t.seo.experience.description} />
 
-      <ScrollReveal variant="header">
-        <motion.h1
-          variants={scrollPageTitleVariants}
-          className="mb-4 text-4xl font-bold"
-        >
-          {t.experience.title}
-        </motion.h1>
-        <motion.p
-          variants={scrollSubtleVariants}
-          className="mb-10 max-w-2xl text-muted-foreground"
-        >
-          {t.experience.subtitle}
-        </motion.p>
-      </ScrollReveal>
+      <Reveal as="h1" className="mb-4 text-4xl font-bold">
+        {t.experience.title}
+      </Reveal>
+      <Reveal as="p" className="mb-10 max-w-2xl text-muted-foreground">
+        {t.experience.subtitle}
+      </Reveal>
 
       <div className="mb-16 sm:mb-24">
         <ExperienceSection

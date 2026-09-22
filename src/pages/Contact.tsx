@@ -25,15 +25,9 @@ import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
 import { useNavigate, useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
-import ScrollReveal from "@/components/ScrollReveal";
+import { Reveal } from "@/components/Reveal";
 import { SOCIAL_LINKS } from "@/config/social";
-import {
-  EASE_OUT,
-  EASE_OUT_QUART,
-  HEADER_LEAD,
-  scrollPageTitleVariants,
-  scrollSubtleVariants,
-} from "@/utils/transitions";
+import { EASE_OUT } from "@/utils/transitions";
 
 type FieldName = "name" | "email" | "subject" | "message";
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
@@ -179,40 +173,24 @@ const Contact = () => {
 
       <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
         {/* left: intro, expectations, direct links */}
-        <ScrollReveal variant="header" className="flex flex-col gap-8">
-          <motion.div
-            variants={scrollPageTitleVariants}
-            className="flex flex-col gap-4"
-          >
+        <div className="flex flex-col gap-8">
+          <Reveal className="flex flex-col gap-4">
             <h1 className="text-4xl font-bold">{t.contact.title}</h1>
             <p className="max-w-md text-foreground/60">
               {t.contact.description}
             </p>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
-            variants={scrollSubtleVariants}
-            className="flex flex-col gap-8"
-          >
+          <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-4">
-              <h2 className="text-sm font-semibold">
+              <Reveal as="h2" className="text-sm font-semibold">
                 {t.contact.expectations.title}
-              </h2>
+              </Reveal>
               <ul className="flex flex-col gap-3">
-                {/* bespoke horizontal micro-cascade — same curve family and
-                    clock as the reveal register; x-slides have no shared
-                    variant, so this stays inline by design */}
                 {t.contact.expectations.items.map((item, i) => (
-                  <motion.li
+                  <Reveal
+                    as="li"
                     key={i}
-                    initial={{ opacity: 0, x: -24 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 0.6,
-                      delay: 0.05 + 0.08 * i,
-                      ease: EASE_OUT_QUART,
-                    }}
                     className="flex items-start gap-3 text-sm text-foreground/70"
                   >
                     <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
@@ -223,12 +201,12 @@ const Contact = () => {
                       />
                     </span>
                     {item}
-                  </motion.li>
+                  </Reveal>
                 ))}
               </ul>
             </div>
 
-            <div className="flex flex-col gap-4">
+            <Reveal className="flex flex-col gap-4">
               <h2 className="text-sm font-semibold">{t.contact.reachOut}</h2>
               <div className="flex flex-wrap gap-2">
                 {DIRECT_LINKS.map(({ id, label, href, Icon }) => {
@@ -247,12 +225,12 @@ const Contact = () => {
                   );
                 })}
               </div>
-            </div>
-          </motion.div>
-        </ScrollReveal>
+            </Reveal>
+          </div>
+        </div>
 
         {/* right: form card */}
-        <ScrollReveal variant="default" delay={HEADER_LEAD}>
+        <Reveal>
           <Card className="gap-0 bg-card/60 p-6 sm:p-8">
             <form
               onSubmit={handleSubmit}
@@ -355,7 +333,7 @@ const Contact = () => {
               />
             </form>
           </Card>
-        </ScrollReveal>
+        </Reveal>
       </div>
     </div>
   );

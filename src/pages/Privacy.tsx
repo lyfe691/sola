@@ -8,8 +8,7 @@
  * WARNING: Copying this file is strictly prohibited - it will lead to legal action.
  */
 
-import { motion } from "motion/react";
-import { fadeUpVariants, cardInVariants } from "@/utils/transitions";
+import { Reveal } from "@/components/Reveal";
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
 import {
@@ -795,30 +794,12 @@ const Privacy = () => {
     n(-1);
   };
 
-  // shared in-view pair from transitions.ts — one register-owned shape,
-  // so Privacy can't drift from Certifications
-  const fadeUp = fadeUpVariants;
-  const cardIn = cardInVariants;
-  // Reveal-on-scroll props shared by every section card.
-  const reveal = {
-    variants: cardIn,
-    initial: "hidden" as const,
-    whileInView: "visible" as const,
-    viewport: { once: true, margin: "-10% 0px" },
-  };
-
   return (
     <>
       <meta name="description" content={t.seo.privacy.description} />
 
       <div className="max-w-4xl mx-auto">
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-10% 0px" }}
-          className="mb-8"
-        >
+        <Reveal className="mb-8">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -838,16 +819,10 @@ const Privacy = () => {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-        </motion.div>
+        </Reveal>
       </div>
 
-      <motion.div
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-10% 0px" }}
-        className="mb-16 text-center"
-      >
+      <Reveal className="mb-16 text-center">
         <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-wrap wrap-break-word">
           {L[privacyLanguage].pageTitle}
         </h1>
@@ -859,12 +834,12 @@ const Privacy = () => {
             </span>
           </span>
         </div>
-      </motion.div>
+      </Reveal>
 
       <div className="max-w-4xl mx-auto">
         <div className="space-y-8">
           {/* Intro card */}
-          <motion.section id="introduction" {...reveal}>
+          <Reveal as="section" id="introduction">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].intro.title}
@@ -889,11 +864,11 @@ const Privacy = () => {
                 </p>
               </div>
             </Card>
-          </motion.section>
+          </Reveal>
 
           {/* Two-column cards where space allows */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <motion.section id="hosting" {...reveal}>
+            <Reveal as="section" id="hosting">
               <Card className="gap-0 h-full px-6">
                 <h2 className="text-xl font-semibold text-foreground mb-4">
                   {L[privacyLanguage].hosting.title}
@@ -908,9 +883,9 @@ const Privacy = () => {
                   {L[privacyLanguage].hosting.legal}
                 </p>
               </Card>
-            </motion.section>
+            </Reveal>
 
-            <motion.section id="analytics" {...reveal}>
+            <Reveal as="section" id="analytics">
               <Card className="gap-0 h-full px-6">
                 <h2 className="text-xl font-semibold text-foreground mb-4">
                   {L[privacyLanguage].analytics.title}
@@ -925,10 +900,10 @@ const Privacy = () => {
                   {L[privacyLanguage].analytics.legal}
                 </p>
               </Card>
-            </motion.section>
+            </Reveal>
           </div>
 
-          <motion.section id="cookies" {...reveal}>
+          <Reveal as="section" id="cookies">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].cookies.title}
@@ -937,9 +912,9 @@ const Privacy = () => {
                 {L[privacyLanguage].cookies.p1}
               </p>
             </Card>
-          </motion.section>
+          </Reveal>
 
-          <motion.section id="contact" {...reveal}>
+          <Reveal as="section" id="contact">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].contact.title}
@@ -954,9 +929,9 @@ const Privacy = () => {
                 {L[privacyLanguage].contact.legal}
               </p>
             </Card>
-          </motion.section>
+          </Reveal>
 
-          <motion.section id="github" {...reveal}>
+          <Reveal as="section" id="github">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].github.title}
@@ -971,9 +946,9 @@ const Privacy = () => {
                 {L[privacyLanguage].github.legal}
               </p>
             </Card>
-          </motion.section>
+          </Reveal>
 
-          <motion.section id="processors" {...reveal}>
+          <Reveal as="section" id="processors">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].processors.title}
@@ -982,9 +957,9 @@ const Privacy = () => {
                 {L[privacyLanguage].processors.p1}
               </p>
             </Card>
-          </motion.section>
+          </Reveal>
 
-          <motion.section id="rights" {...reveal}>
+          <Reveal as="section" id="rights">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].rights.title}
@@ -1014,9 +989,9 @@ const Privacy = () => {
                 {L[privacyLanguage].rights.p2}
               </p>
             </Card>
-          </motion.section>
+          </Reveal>
 
-          <motion.section id="changes" {...reveal}>
+          <Reveal as="section" id="changes">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].changes.title}
@@ -1025,11 +1000,11 @@ const Privacy = () => {
                 {L[privacyLanguage].changes.p1}
               </p>
             </Card>
-          </motion.section>
+          </Reveal>
 
           {/* the legal notice is its own part of the page: set apart by
               space, where it used to be a rule */}
-          <motion.section id="impressum" className="pt-8" {...reveal}>
+          <Reveal as="section" id="impressum" className="pt-8">
             <Card className="gap-0 h-full px-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
                 {L[privacyLanguage].impressum.title}
@@ -1055,16 +1030,10 @@ const Privacy = () => {
                 </p>
               </div>
             </Card>
-          </motion.section>
+          </Reveal>
         </div>
 
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-10% 0px" }}
-          className="mt-16"
-        >
+        <Reveal className="mt-16">
           <IconButton
             icon={
               <HugeiconsIcon
@@ -1081,7 +1050,7 @@ const Privacy = () => {
           >
             {L[privacyLanguage].back}
           </IconButton>
-        </motion.div>
+        </Reveal>
       </div>
     </>
   );

@@ -68,6 +68,11 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 - Two registers: UI controls are short + `EASE_OUT`; content reveals and
   page transitions glide (`REVEAL`/`SMOOTH`, longer). The owner prefers
   smooth glide over snappy timing — don't "optimize" durations down.
+- Scroll reveals: wrap each block that should arrive on its own in
+  `<Reveal>` (`as="li"` etc.). Never pass delays or nest reveals — one
+  queue (`src/lib/reveal.ts`) starts blocks in reading order, and one CSS
+  rule (index.css, "scroll reveals") animates them. A motion component with
+  its own states takes the queue's delay through `useReveal`.
 - Backgrounds (`src/components/backgrounds/`) intentionally do NOT gate on
   prefers-reduced-motion (owner decision); framer-driven UI motion is
   gated globally via `MotionConfig reducedMotion="user"`.
