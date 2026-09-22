@@ -7,7 +7,12 @@
  */
 
 import { Link, useLocation } from "react-router";
-import { motion, AnimatePresence, type Variants } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useReducedMotion,
+  type Variants,
+} from "motion/react";
 import { useEffect, useState, useCallback, useRef, memo } from "react";
 import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
@@ -18,29 +23,89 @@ import { MAIN_NAVIGATION } from "@/config/navigation";
 import { SearchToggle } from "./search-toggle";
 import { AppearanceMenu } from "./appearance-menu";
 import { useCodeView } from "./deploy-diff/code-view-provider";
-import { EASE_OUT } from "@/utils/transitions";
+import { CONSUME_IN, EASE_OUT, REVEAL } from "@/utils/transitions";
 
-const overlayVariants = {
-  hidden: { opacity: 0, transition: { duration: 0.25, ease: EASE_OUT } },
-  visible: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
+// ---- The phone menu, after Apple's globalnav ----
+// One surface: the bar's sheet drops from the top edge until it fills the
+// screen, and while it is still travelling the links fall into place from
+// just above, top row first. Closing runs it backwards: the links lift away,
+// bottom row first, and a beat later the sheet rolls back up behind the bar.
+// Both move on the glide curve (a symmetric ease-in-out, as Apple's does), so
+// the sheet's edge builds speed and settles instead of snapping open.
+
+/** the sheet covers the screen in half the viewport's height in ms, clamped,
+ *  so its edge moves at the same speed on every phone */
+const sheetDuration = () =>
+  Math.min(0.48, Math.max(0.24, window.innerHeight / 2000));
+/** the links are on their way out before the sheet starts back up */
+const SHEET_CLOSE_DELAY = 0.08;
+/** the bar's island ↔ full-width change (its duration-200 transition) */
+const BAR_MORPH = 0.2;
+/** closing, the bar keeps its full width while the sheet rolls up, and
+ *  gathers back into the island as the sheet's edge reaches it */
+const barReturnDelay = () => SHEET_CLOSE_DELAY + sheetDuration() - BAR_MORPH;
+
+/** how far the links fall into place from, and how long they take */
+const LINK_DROP = 8;
+const LINK_DURATION = 0.24;
+/** the first link waits for the sheet to be well on its way; each next one
+ *  follows a beat behind, so they arrive top to bottom */
+const LINK_LEAD = 0.2;
+const LINK_STAGGER = 0.02;
+
+const sheetVariants: Variants = {
+  hidden: () => ({
+    scaleY: 0,
+    transition: {
+      duration: sheetDuration(),
+      ease: REVEAL,
+      delay: SHEET_CLOSE_DELAY,
+    },
+  }),
+  visible: () => ({
+    scaleY: 1,
+    transition: { duration: sheetDuration(), ease: REVEAL },
+  }),
 };
-
-const menuListVariants = {
-  hidden: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
-  visible: { transition: { delayChildren: 0.04, staggerChildren: 0.06 } },
-};
-
-const menuItemVariants = {
+/** reduced motion drops the travel, so the sheet fades in and out instead of
+ *  snapping (a snap would leave the links fading out over the page) */
+const sheetFadeVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 12,
-    transition: { duration: 0.2, ease: EASE_OUT },
+    transition: {
+      duration: LINK_DURATION,
+      ease: REVEAL,
+      delay: SHEET_CLOSE_DELAY,
+    },
   },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { type: "spring", stiffness: 120, damping: 20, mass: 1 },
+    transition: { duration: LINK_DURATION, ease: REVEAL },
   },
+};
+
+type LinkSlot = { index: number; total: number };
+
+const linkVariants: Variants = {
+  // leaving, every link starts at once and the lower ones finish sooner, so
+  // the list clears from the bottom up
+  hidden: ({ index, total }: LinkSlot) => ({
+    opacity: 0,
+    y: -LINK_DROP,
+    transition: {
+      duration: Math.min(0.16 + LINK_STAGGER * (total - index), LINK_DURATION),
+      ease: REVEAL,
+    },
+  }),
+  visible: ({ index }: LinkSlot) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: LINK_DURATION,
+      ease: REVEAL,
+      delay: LINK_LEAD + index * LINK_STAGGER,
+    },
+  }),
 };
 
 interface ToggleGroupProps {
@@ -64,6 +129,16 @@ const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
 });
 ToggleGroup.displayName = "ToggleGroup";
 
+/** Apple's two-step: the lines slide together onto the middle, then swing
+ *  into the X — gathering in, releasing out. Closing plays the same steps
+ *  backwards. Each value starts from wherever it is, so a quick second tap
+ *  turns the glyph around mid-move instead of jumping. */
+const GLYPH_STEPS = {
+  duration: 0.24,
+  times: [0, 0.5, 1],
+  ease: [CONSUME_IN, EASE_OUT],
+};
+
 /** the two-line trigger glyph that morphs into an X while the menu is open */
 const MenuGlyph = ({ open }: { open: boolean }) => (
   <div className="relative flex h-4 w-5 items-center justify-center">
@@ -72,25 +147,25 @@ const MenuGlyph = ({ open }: { open: boolean }) => (
         className="absolute left-0 h-[1.4px] w-full rounded-full bg-current"
         initial={false}
         animate={{
-          rotate: open ? 45 : 0,
-          y: open ? 0 : -3,
+          y: open ? [null, 0, 0] : [null, 0, -3],
+          rotate: open ? [null, 0, 45] : [null, 0, 0],
         }}
         style={{ top: "50%", marginTop: "-0.7px", transformOrigin: "center" }}
-        transition={{ duration: 0.3, ease: EASE_OUT }}
+        transition={GLYPH_STEPS}
       />
       <motion.span
         className="absolute left-0 h-[1.4px] w-full rounded-full bg-current"
         initial={false}
         animate={{
-          rotate: open ? -45 : 0,
-          y: open ? 0 : 3,
+          y: open ? [null, 0, 0] : [null, 0, 3],
+          rotate: open ? [null, 0, -45] : [null, 0, 0],
         }}
         style={{
           bottom: "50%",
           marginBottom: "-0.7px",
           transformOrigin: "center",
         }}
-        transition={{ duration: 0.3, ease: EASE_OUT }}
+        transition={GLYPH_STEPS}
       />
     </div>
   </div>
@@ -245,6 +320,13 @@ const MobileNav = () => {
   const scrolled = useScrolled();
   const [menuOpen, setMenuOpen] = useState(false);
   useWindowScrollLock(menuOpen);
+  const reduceMotion = useReducedMotion();
+  // on screen from the moment the menu opens until its exit has finished.
+  // Set while rendering, so the render that closes the menu already knows
+  // it is closing: the bar's transition picks its delay up as it starts.
+  const [menuShown, setMenuShown] = useState(false);
+  if (menuOpen && !menuShown) setMenuShown(true);
+  const closing = menuShown && !menuOpen;
 
   const links = [
     { label: t.common.home, path: "/" },
@@ -339,7 +421,9 @@ const MobileNav = () => {
 
   return (
     <>
-      {/* the bar stays above the overlay so its trigger doubles as the close (X) */}
+      {/* the bar stays above the menu so its trigger doubles as the close (X).
+          Open, it is the top of the sheet: solid, so the island's surface
+          never thins out over the page while the sheet is still arriving */}
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50 lg:hidden">
         <div className="px-3 sm:px-5">
           <motion.div
@@ -347,11 +431,18 @@ const MobileNav = () => {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: EASE_OUT }}
+            style={
+              closing && !reduceMotion
+                ? { transitionDelay: `${barReturnDelay()}s` }
+                : undefined
+            }
             className={cn(
               "pointer-events-auto mx-auto flex items-center justify-between gap-2 transition-[margin,padding,border-radius,background-color,border-color,box-shadow] duration-200 ease-out",
               scrolled && !menuOpen
-                ? "mt-3 rounded-full border border-foreground/10 bg-background/70 px-2 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
-                : "mt-0 rounded-none border border-transparent bg-transparent px-1 py-4",
+                ? "mt-3 rounded-full border border-foreground/10 bg-background px-2 py-2 shadow-lg shadow-black/5"
+                : "mt-0 rounded-none border border-transparent px-1 py-4",
+              !scrolled && !menuOpen && "bg-transparent",
+              menuOpen && "bg-background",
             )}
           >
             <button
@@ -372,35 +463,41 @@ const MobileNav = () => {
         </div>
       </header>
 
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={() => setMenuShown(false)}>
         {menuOpen && (
           <motion.div
-            variants={overlayVariants as Variants}
             initial="hidden"
             animate="visible"
             exit="hidden"
             onClick={close}
-            className="fixed inset-0 z-40 bg-background/80 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 lg:hidden"
           >
-            <motion.nav
+            {/* the sheet: a flat, square rectangle, so growing it by scale
+                looks the same as growing its height and costs a composite */}
+            <motion.div
+              aria-hidden
+              variants={reduceMotion ? sheetFadeVariants : sheetVariants}
+              className="absolute inset-0 origin-top bg-background"
+            />
+            <nav
               ref={navRef}
-              variants={menuListVariants as Variants}
               aria-label={t.common.a11y.primaryNav}
-              className="flex h-full flex-col justify-center gap-1 overflow-y-auto overscroll-contain px-8"
+              className="relative flex h-full flex-col overflow-y-auto overscroll-contain px-6 pt-18 pb-12 sm:px-7"
             >
-              {links.map((link) => {
+              {links.map((link, index) => {
                 const active = isActive(link.path);
                 return (
                   <motion.div
                     key={link.path}
-                    variants={menuItemVariants as Variants}
+                    custom={{ index, total: links.length } satisfies LinkSlot}
+                    variants={linkVariants}
                   >
                     <Link
                       to={link.path}
                       onClick={close}
                       aria-current={active ? "page" : undefined}
                       className={cn(
-                        "inline-flex font-heading text-4xl font-semibold tracking-tight transition-colors",
+                        "inline-flex py-1.5 font-heading text-3xl font-semibold tracking-tight transition-colors",
                         active
                           ? "text-primary"
                           : "text-foreground/70 hover:text-foreground",
@@ -411,7 +508,7 @@ const MobileNav = () => {
                   </motion.div>
                 );
               })}
-            </motion.nav>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
