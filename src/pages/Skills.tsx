@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { motion } from "motion/react";
 import { useTranslation } from "@/lib/language-provider";
 import {
   SKILL_GROUPS,
@@ -15,13 +14,7 @@ import {
   type Proficiency,
 } from "@/config/skills";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ScrollReveal from "@/components/ScrollReveal";
-import {
-  HEADER_LEAD,
-  staggerDelay,
-  scrollPageTitleVariants,
-  scrollSubtleVariants,
-} from "@/utils/transitions";
+import { Reveal } from "@/components/Reveal";
 
 const ProficiencyDots = ({ level }: { level: Proficiency }) => (
   <div className="flex gap-1">
@@ -48,16 +41,8 @@ const SkillRow = ({ skill: { name, icon: Icon, level } }: { skill: Skill }) => (
   </div>
 );
 
-const SkillCard = ({
-  group,
-  title,
-  delay,
-}: {
-  group: SkillGroup;
-  title: string;
-  delay: number;
-}) => (
-  <ScrollReveal variant="default" delay={delay}>
+const SkillCard = ({ group, title }: { group: SkillGroup; title: string }) => (
+  <Reveal>
     <Card className="bg-card/40">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
@@ -68,7 +53,7 @@ const SkillCard = ({
         ))}
       </CardContent>
     </Card>
-  </ScrollReveal>
+  </Reveal>
 );
 
 const Skills = () => {
@@ -79,28 +64,19 @@ const Skills = () => {
     <div className="flex flex-col w-full">
       <meta name="description" content={t.seo.skills.description} />
 
-      <ScrollReveal variant="header">
-        <motion.h1
-          variants={scrollPageTitleVariants}
-          className="mb-4 text-4xl font-bold"
-        >
-          {t.skills.title}
-        </motion.h1>
-        <motion.p
-          variants={scrollSubtleVariants}
-          className="mb-10 max-w-2xl text-foreground/60"
-        >
-          {t.skills.subtitle}
-        </motion.p>
-      </ScrollReveal>
+      <Reveal as="h1" className="mb-4 text-4xl font-bold">
+        {t.skills.title}
+      </Reveal>
+      <Reveal as="p" className="mb-10 max-w-2xl text-foreground/60">
+        {t.skills.subtitle}
+      </Reveal>
 
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
-        {SKILL_GROUPS.map((group, index) => (
+        {SKILL_GROUPS.map((group) => (
           <SkillCard
             key={group.id}
             group={group}
             title={groups[group.id] ?? group.id}
-            delay={HEADER_LEAD + staggerDelay(index)}
           />
         ))}
       </div>

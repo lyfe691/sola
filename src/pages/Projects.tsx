@@ -7,7 +7,7 @@
  */
 
 import { useMemo, useRef, useState, type ReactNode } from "react";
-import { motion, useInView } from "motion/react";
+import { motion } from "motion/react";
 import {
   ArrowUpRight01Icon,
   Calendar03Icon,
@@ -42,18 +42,11 @@ import {
 } from "@/components/ui/select";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ScrollReveal from "@/components/ScrollReveal";
+import { Reveal } from "@/components/Reveal";
+import { useReveal } from "@/hooks/use-reveal";
 import { PrivateLinkButton } from "@/components/private-link-button";
 import { useGridSwap, type GridSwap } from "@/hooks/use-grid-swap";
-import {
-  gridCellVariants,
-  HEADER_LEAD,
-  staggerDelay,
-  useEntranceWindow,
-  scrollPageTitleVariants,
-  scrollSubtleVariants,
-  type GridCellCustom,
-} from "@/utils/transitions";
+import { gridCellVariants, type GridCellCustom } from "@/utils/transitions";
 import { RichText } from "@/components/i18n/RichText";
 import { Card } from "@/components/ui/card";
 import {
@@ -299,8 +292,8 @@ const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
 );
 
 /**
- * One slot of the grid. At rest a cell reveals on scroll like every card on
- * the site. While a swap runs, a cell whose occupant changed dissolves where
+ * One slot of the grid. At rest a cell reveals on scroll like every block on
+ * the site, when the reveal queue lets it in. While a swap runs, a cell whose occupant changed dissolves where
  * it is and re-enters in its new slot instead; a card that has arrived
  * through a swap is simply shown from then on — it never waits on a scroll
  * reveal again, so one that landed just under the fold can't fade back out.
@@ -308,30 +301,27 @@ const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
 const ProjectCell = ({
   project,
   t,
-  delay,
   swap,
   arrived,
 }: {
   project: Project;
   t: Translation;
-  /** load-cascade delay (ms), 0 once the page has entered */
-  delay: number;
   swap: GridSwap | null;
   arrived: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
+  const delay = useReveal(ref);
   const phase = swap?.changed.has(project.id) ? swap.phase : null;
   const state =
     phase === "out"
       ? "swapOut"
       : phase === "in" || arrived
         ? "swapIn"
-        : inView
+        : delay !== null
           ? "visible"
           : "hidden";
   const custom: GridCellCustom = {
-    delay,
+    delay: delay ?? 0,
     rank: swap?.rank.get(project.id) ?? 0,
   };
 
@@ -354,10 +344,6 @@ const Projects = () => {
   const [kind, setKind] = useState<KindFilter>("all");
   const { language } = useLanguage();
   const t = useTranslation();
-
-  // at load the cards wait for the page chrome and cascade; a swap keeps its
-  // own clock, so after the window a card only ever rises on scroll
-  const entering = useEntranceWindow();
 
   const sortOptions = useMemo(() => buildSortOptions(t), [t]);
   const kindOptions = useMemo(
@@ -390,63 +376,53 @@ const Projects = () => {
     <div className="flex flex-col w-full">
       <meta name="description" content={t.seo.projects.description} />
 
-      {/* title then toolbar — one cascade so the toolbar never lands after
-          the first card it sits on */}
-      <ScrollReveal variant="header">
-        <motion.h1
-          variants={scrollPageTitleVariants}
-          className="mb-8 text-4xl font-bold sm:mb-12"
-        >
-          {t.projects.title}
-        </motion.h1>
-        <motion.div
-          variants={scrollSubtleVariants}
-          className="mb-8 flex flex-col gap-3 sm:mb-12 sm:flex-row sm:items-center sm:justify-between"
-        >
-          <Tabs value={kind} onValueChange={setKind}>
-            {/* spans the row on phones with equal tabs, like the sort
+      <Reveal as="h1" className="mb-8 text-4xl font-bold sm:mb-12">
+        {t.projects.title}
+      </Reveal>
+      <Reveal className="mb-8 flex flex-col gap-3 sm:mb-12 sm:flex-row sm:items-center sm:justify-between">
+        <Tabs value={kind} onValueChange={setKind}>
+          {/* spans the row on phones with equal tabs, like the sort
                 select under it; content-sized from sm up */}
-            <TabsList
-              aria-label={t.projects.kind.label}
-              className="w-full sm:w-fit"
-            >
-              {kindOptions.map(({ value, label }) => (
-                <TabsTrigger key={value} value={value} className="flex-1">
-                  {label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-          <Select
-            value={sortBy}
-            onValueChange={(value) => setSortBy(value as ProjectSortOption)}
+          <TabsList
+            aria-label={t.projects.kind.label}
+            className="w-full sm:w-fit"
           >
-            <SelectTrigger
-              aria-label={t.projects.sortBy}
-              className="w-full sm:w-44"
-            >
-              <HugeiconsIcon
-                icon={SortByDown01Icon}
-                strokeWidth={2}
-                className="size-4"
-                aria-hidden="true"
-              />
-              <SelectValue>{() => t.projects.sortOptions[sortBy]}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>{t.projects.sortBy}</SelectLabel>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.icon}
-                    <span>{option.label}</span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </motion.div>
-      </ScrollReveal>
+            {kindOptions.map(({ value, label }) => (
+              <TabsTrigger key={value} value={value} className="flex-1">
+                {label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        <Select
+          value={sortBy}
+          onValueChange={(value) => setSortBy(value as ProjectSortOption)}
+        >
+          <SelectTrigger
+            aria-label={t.projects.sortBy}
+            className="w-full sm:w-44"
+          >
+            <HugeiconsIcon
+              icon={SortByDown01Icon}
+              strokeWidth={2}
+              className="size-4"
+              aria-hidden="true"
+            />
+            <SelectValue>{() => t.projects.sortOptions[sortBy]}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>{t.projects.sortBy}</SelectLabel>
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.icon}
+                  <span>{option.label}</span>
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </Reveal>
 
       {/* keyed by project, so a re-order moves cards instead of re-mounting
           them; the swap driver decides which cells animate */}
@@ -471,12 +447,11 @@ const Projects = () => {
             </Empty>
           </motion.div>
         )}
-        {shown.map((project, index) => (
+        {shown.map((project) => (
           <ProjectCell
             key={project.id}
             project={project}
             t={t}
-            delay={entering ? HEADER_LEAD + staggerDelay(index) : 0}
             swap={swap}
             arrived={arrived.has(project.id)}
           />

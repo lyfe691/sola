@@ -9,7 +9,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CommitDetail } from "@/components/changelog/CommitDetail";
-import { ScrollReveal } from "@/components/ScrollReveal";
+import { Reveal } from "@/components/Reveal";
 import { DEPLOY_LABEL } from "@/components/deploy-diff/use-page-diff";
 import { commitDetailQuery, type ChangelogCommit } from "@/lib/github-commits";
 import { INTL_LOCALE } from "@/lib/dates";
@@ -17,11 +17,6 @@ import { useLanguage, useTranslation } from "@/lib/language-provider";
 import type { Translation } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { scrollToTarget } from "@/utils/scroll";
-import {
-  HEADER_LEAD,
-  staggerDelay,
-  useEntranceWindow,
-} from "@/utils/transitions";
 
 type Copy = Translation["changelog"];
 
@@ -168,18 +163,10 @@ function CommitRow({
   );
 }
 
-export function CommitLog({
-  commits,
-  revealFrom = 0,
-}: {
-  commits: ChangelogCommit[];
-  /** Index of the first row in the latest page — those rise in after load. */
-  revealFrom?: number;
-}) {
+export function CommitLog({ commits }: { commits: ChangelogCommit[] }) {
   const { language } = useLanguage();
   const t = useTranslation().changelog;
   const queryClient = useQueryClient();
-  const entering = useEntranceWindow();
   const gen = useRef(0);
   const scrolledHash = useRef<string | null>(null);
   const [picked, setPicked] = useState<string | null | "hash">("hash");
@@ -264,18 +251,10 @@ export function CommitLog({
 
   return (
     <ol className="min-w-0">
-      {rows.map((commit, index) => (
-        <ScrollReveal
+      {rows.map((commit) => (
+        <Reveal
           key={commit.sha}
           as="li"
-          variant="subtle"
-          delay={
-            entering
-              ? HEADER_LEAD + staggerDelay(index)
-              : index >= revealFrom
-                ? staggerDelay(index - revealFrom)
-                : 0
-          }
           className="min-w-0 border-b border-foreground/8"
         >
           <CommitRow
@@ -289,7 +268,7 @@ export function CommitLog({
             onToggle={toggle}
             onPrefetch={prefetch}
           />
-        </ScrollReveal>
+        </Reveal>
       ))}
     </ol>
   );

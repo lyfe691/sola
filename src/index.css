@@ -537,6 +537,46 @@
   visibility: hidden;
 }
 
+/* ---------- scroll reveals ---------- */
+/* <Reveal> (src/components/Reveal.tsx): a block waits hidden a short way
+   down until the queue in src/lib/reveal.ts lets it in, then fades and
+   rises into place on the glide curve, after the delay the queue handed
+   it. Mirrors REVEAL_RISE / REVEAL_DURATION in transitions.ts (the project
+   grid plays the same reveal through motion). transform rather than
+   translate, so a block's own translate and scale utilities compose with
+   it instead of being overridden. */
+:root {
+  --reveal-rise: 32px;
+  --reveal-duration: 0.7s;
+}
+
+[data-reveal] {
+  transition:
+    opacity var(--reveal-duration) var(--ease-smooth) var(--reveal-delay, 0ms),
+    transform var(--reveal-duration) var(--ease-smooth) var(--reveal-delay, 0ms);
+}
+
+[data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: translateY(var(--reveal-rise));
+}
+
+/* reduced motion: blocks still arrive in order, but only fade (the global
+   rule above makes that fade near-instant) */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal]:not([data-revealed]) {
+    transform: none;
+  }
+}
+
+/* a printed page never scrolls, so nothing on it may wait to be revealed */
+@media print {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 /* ---------- theme transition (view transitions api) ---------- */
 /* one animation: the next theme wipes in as a circle from the click point
    (origin/radius set by theme-provider, skipped under reduced motion there);
