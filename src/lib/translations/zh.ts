@@ -536,13 +536,16 @@ export const zh = {
       link: "证书",
     },
     resume: {
-      title: "申请完整简历",
-      description:
-        "我的简历公开版本审查了一些敏感信息。如果您需要完整版本，请[联系我](https://sola.ysz.life/contact)或发送邮件至 [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com)。",
-      viewButton: "查看审查版本",
-      downloadButton: "下载审查版本",
-      languageLabel: "语言:",
       buttonLabel: "简历",
+      title: "简历",
+      description:
+        "两页，英文或德文。这里隐去了地址和电话号码；完整版发一封[邮件](mailto:yanis.sebastian.zuercher@gmail.com)即可。",
+      languageLabel: "语言",
+      read: "在此阅读",
+      download: "下载 PDF",
+      open: "打开 PDF",
+      back: "返回",
+      failed: "无法在此显示。请改为打开 PDF。",
     },
     github: {
       title: "GitHub 活动",

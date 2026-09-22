@@ -60,6 +60,9 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
 
+  /* a rendered document's page: white in every theme, dark ones included */
+  --color-paper: oklch(1 0 0);
+
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
 

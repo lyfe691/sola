@@ -7,34 +7,16 @@
  */
 
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { ArrowRight01Icon, Download01Icon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { motion, useReducedMotion } from "motion/react";
 import { Link } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerFooter,
-  DrawerTitle,
-  DrawerDescription,
-} from "@/components/ui/drawer";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
 import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
-import { IconButton } from "@/components/ui/custom/icon-button";
+import ResumeDialog from "@/components/ResumeDialog";
 import ScrollReveal from "@/components/ScrollReveal";
 import {
   HEADER_LEAD,
@@ -47,8 +29,7 @@ import { LinkPreview } from "@/components/ui/custom/link-preview";
 import TestimonialCard from "@/components/testimonials/TestimonialCard";
 import { testimonials } from "@/config/testimonials";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
-import { useLanguage, useTranslation } from "@/lib/language-provider";
+import { useTranslation } from "@/lib/language-provider";
 import type { Translation } from "@/lib/translations";
 import { githubContributionsQuery } from "@/lib/github-contributions";
 import { userActivityQuery } from "@/lib/github-activity";
@@ -85,29 +66,6 @@ const APPROACH_KEYS: readonly ApproachKey[] = [
   "simplicity",
   "learning",
 ];
-
-// --------------------------------- Resume ---------------------------------
-
-const getResumePath = (language: string) =>
-  language === "de" ? "/sola_de.pdf" : "/sola_en.pdf";
-
-const downloadResume = (language: string) => {
-  const resumePath = getResumePath(language);
-  const fileName =
-    language === "de"
-      ? "Lebenslauf_Yanis-Sebastian-Zürcher.pdf"
-      : "Resume_Yanis-Sebastian-Zürcher.pdf";
-  const link = document.createElement("a");
-  link.href = resumePath;
-  link.download = fileName;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
-const viewResume = (language: string) => {
-  window.open(getResumePath(language), "_blank");
-};
 
 // --------------------------------- Shared ---------------------------------
 
@@ -194,116 +152,6 @@ function AboutPortrait({ src, alt }: { src: string; alt: string }) {
         )}
       </div>
     </MediaFrame>
-  );
-}
-
-// -------------------------------- Resume UI --------------------------------
-
-function ResumeModal() {
-  const isMobile = useIsMobile();
-  const [open, setOpen] = useState(false);
-  useWindowScrollLock(open);
-  const { language } = useLanguage();
-  const t = useTranslation().about.resume;
-  const [selectedLang, setSelectedLang] = useState<"en" | "de">(
-    language === "de" ? "de" : "en",
-  );
-
-  const close = () => setOpen(false);
-
-  const languagePicker = (
-    <div className="flex items-center justify-between gap-4">
-      <span className="text-sm font-medium">{t.languageLabel}</span>
-      <ToggleGroup
-        value={[selectedLang]}
-        onValueChange={(value) =>
-          value[0] && setSelectedLang(value[0] as "en" | "de")
-        }
-        variant="outline"
-        size="sm"
-      >
-        <ToggleGroupItem value="en">EN</ToggleGroupItem>
-        <ToggleGroupItem value="de">DE</ToggleGroupItem>
-      </ToggleGroup>
-    </div>
-  );
-
-  const actions = (
-    <>
-      <Button
-        onClick={() => {
-          viewResume(selectedLang);
-          close();
-        }}
-      >
-        {t.viewButton}
-      </Button>
-      <Button
-        variant="outline"
-        onClick={() => {
-          downloadResume(selectedLang);
-          close();
-        }}
-      >
-        {t.downloadButton}
-      </Button>
-    </>
-  );
-
-  const trigger = (
-    <IconButton
-      variant="default"
-      size="lg"
-      className="w-full border-foreground/20 sm:w-auto"
-      icon={
-        <HugeiconsIcon
-          icon={Download01Icon}
-          strokeWidth={2}
-          className="size-4"
-        />
-      }
-      iconPosition="left"
-      label={t.buttonLabel}
-      onClick={() => setOpen(true)}
-    />
-  );
-
-  if (isMobile) {
-    return (
-      <>
-        {trigger}
-        <Drawer open={open} onOpenChange={setOpen} showSwipeHandle>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>{t.title}</DrawerTitle>
-              <DrawerDescription>
-                <RichText text={t.description} />
-              </DrawerDescription>
-            </DrawerHeader>
-            <div className="p-4">{languagePicker}</div>
-            <DrawerFooter>{actions}</DrawerFooter>
-          </DrawerContent>
-        </Drawer>
-      </>
-    );
-  }
-
-  return (
-    <>
-      {trigger}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader className="pr-8">
-            <DialogTitle>{t.title}</DialogTitle>
-            <DialogDescription>
-              <RichText text={t.description} />
-            </DialogDescription>
-          </DialogHeader>
-          {languagePicker}
-          <DialogFooter className="sm:flex-col">{actions}</DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
   );
 }
 
@@ -425,7 +273,7 @@ const About = () => {
             <RichText text={about.hobbies} previewExternal />
           </motion.p>
           <motion.div variants={scrollChildVariants} className="pt-1">
-            <ResumeModal />
+            <ResumeDialog />
           </motion.div>
         </motion.div>
         <motion.div variants={scrollChildVariants} className="md:col-span-5">

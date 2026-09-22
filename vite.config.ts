@@ -176,6 +176,7 @@ export default defineConfig({
       "@react-three/fiber",
       "gsap",
       "react-activity-calendar",
+      "pdfjs-dist",
     ],
   },
 });

@@ -544,13 +544,16 @@ export const ja = {
       link: "認定資格",
     },
     resume: {
-      title: "完全版履歴書のリクエスト",
-      description:
-        "公開版の履歴書には、機密情報の一部が検閲されています。完全版が必要な場合は、[お問い合わせ](https://sola.ysz.life/contact)いただくか、[yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com) までメールをお送りください。",
-      viewButton: "検閲版を表示",
-      downloadButton: "検閲版をダウンロード",
-      languageLabel: "言語:",
       buttonLabel: "履歴書",
+      title: "履歴書",
+      description:
+        "2ページ、英語またはドイツ語。ここでは住所と電話番号を伏せています。完全版は[メール](mailto:yanis.sebastian.zuercher@gmail.com)でお送りします。",
+      languageLabel: "言語",
+      read: "ここで読む",
+      download: "PDFをダウンロード",
+      open: "PDFを開く",
+      back: "戻る",
+      failed: "ここでは表示できませんでした。代わりにPDFを開いてください。",
     },
     github: {
       title: "GitHub アクティビティ",

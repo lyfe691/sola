@@ -552,13 +552,17 @@ export const de = {
       link: "Zertifikate",
     },
     resume: {
-      title: "Vollständigen Lebenslauf anfordern",
-      description:
-        "Die öffentliche Version meines Lebenslaufs hat einige sensible Informationen zensiert. Wenn Sie die vollständige Version benötigen, [kontaktieren Sie mich](https://sola.ysz.life/contact) bitte oder senden Sie eine E-Mail an [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
-      viewButton: "Zensierte Version ansehen",
-      downloadButton: "Zensierte Version herunterladen",
-      languageLabel: "Sprache:",
       buttonLabel: "Lebenslauf",
+      title: "Lebenslauf",
+      description:
+        "Zwei Seiten, auf Deutsch oder Englisch. Adresse und Telefonnummer sind hier geschwärzt; die vollständige Fassung gibt es per [E-Mail](mailto:yanis.sebastian.zuercher@gmail.com).",
+      languageLabel: "Sprache",
+      read: "Hier lesen",
+      download: "PDF herunterladen",
+      open: "PDF öffnen",
+      back: "Zurück",
+      failed:
+        "Liess sich hier nicht darstellen. Öffnen Sie stattdessen das PDF.",
     },
     github: {
       title: "GitHub-Aktivität",

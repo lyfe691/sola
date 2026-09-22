@@ -553,13 +553,16 @@ export const es = {
       link: "Certificaciones",
     },
     resume: {
-      title: "Solicitar currículum completo",
-      description:
-        "La versión pública de mi currículum tiene información sensible censurada. Si necesitas la versión completa, por favor [contáctame](https://sola.ysz.life/contact) o envía un email a [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
-      viewButton: "Ver versión censurada",
-      downloadButton: "Descargar versión censurada",
-      languageLabel: "Idioma:",
       buttonLabel: "Currículum",
+      title: "Currículum",
+      description:
+        "Dos páginas, en inglés o alemán. Aquí mi dirección y mi teléfono van tachados; la copia completa está a un [correo](mailto:yanis.sebastian.zuercher@gmail.com) de distancia.",
+      languageLabel: "Idioma",
+      read: "Leerlo aquí",
+      download: "Descargar PDF",
+      open: "Abrir PDF",
+      back: "Volver",
+      failed: "No se pudo mostrar aquí. Abre el PDF en su lugar.",
     },
     github: {
       title: "Actividad de GitHub",

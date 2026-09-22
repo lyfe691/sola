@@ -546,13 +546,16 @@ export const ko = {
       link: "인증",
     },
     resume: {
-      title: "전체 이력서 요청",
-      description:
-        "내 이력서의 공개 버전에는 일부 민감한 정보가 검열되어 있습니다. 정식 버전이 필요하신 경우 [연락처](https://sola.ysz.life/contact) 또는 [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com)로 이메일을 보내주세요.",
-      viewButton: "검열된 버전 보기",
-      downloadButton: "검열된 버전 다운로드",
-      languageLabel: "언어:",
       buttonLabel: "이력서",
+      title: "이력서",
+      description:
+        "두 페이지, 영어 또는 독일어. 여기서는 주소와 전화번호를 가렸습니다. 전체 버전은 [이메일](mailto:yanis.sebastian.zuercher@gmail.com)로 보내드립니다.",
+      languageLabel: "언어",
+      read: "여기서 읽기",
+      download: "PDF 다운로드",
+      open: "PDF 열기",
+      back: "뒤로",
+      failed: "여기서는 표시할 수 없습니다. 대신 PDF를 열어 주세요.",
     },
     github: {
       title: "GitHub 활동",

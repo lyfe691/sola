@@ -546,13 +546,16 @@ export const en = {
       link: "Certifications",
     },
     resume: {
-      title: "Request Full Resume",
-      description:
-        "The public version of my resume has some sensitive information censored. If you need the full version, please [contact me](https://sola.ysz.life/contact) or send an email to [yanis.sebastian.zuercher@gmail.com](mailto:yanis.sebastian.zuercher@gmail.com).",
-      viewButton: "View Censored Version",
-      downloadButton: "Download Censored Version",
-      languageLabel: "Language:",
       buttonLabel: "Resume",
+      title: "Resume",
+      description:
+        "Two pages, in English or German. My address and phone number are blacked out here; the full copy is an [email](mailto:yanis.sebastian.zuercher@gmail.com) away.",
+      languageLabel: "Language",
+      read: "Read it here",
+      download: "Download PDF",
+      open: "Open PDF",
+      back: "Back",
+      failed: "Couldn't render it here. Open the PDF instead.",
     },
     github: {
       title: "GitHub Activity",
