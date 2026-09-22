@@ -312,6 +312,10 @@ export default function ResumeDialog() {
   };
 
   const showView = (next: View) => {
+    // a second press while the box is already heading there changes nothing
+    // (the old view stays live for a frame or two before the swap)
+    const root = document.documentElement;
+    if (running.current && root.dataset.resumeMorph === next) return;
     const sheet = sheetRef.current;
     if (!sheet || reducedMotion || !document.startViewTransition) {
       setView(next);
@@ -321,7 +325,6 @@ export default function ResumeDialog() {
     // the page stays live underneath and the theme wipe's root rules never
     // apply), and the dialog's parts are named only while the root carries
     // the attribute. Its value says which way the box is going.
-    const root = document.documentElement;
     const surface = getComputedStyle(sheet);
     const vars = {
       "--morph-duration": MORPH_TIMING.duration,

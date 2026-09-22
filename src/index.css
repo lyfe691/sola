@@ -542,7 +542,8 @@
    (origin/radius set by theme-provider, skipped under reduced motion there);
    the old frame holds still beneath it. pointer-events: none so mid-wipe
    clicks — e.g. trying themes in an open menu — reach the page, not the
-   overlay. */
+   overlay. The resume morph (below) relies on it too: base-ui counts a press
+   on <html> as outside the dialog, so an overlay taking clicks would close it. */
 ::view-transition {
   pointer-events: none;
 }
