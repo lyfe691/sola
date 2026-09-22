@@ -25,9 +25,11 @@ const overlayVariants = {
   visible: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
 };
 
+// a light cascade: a short beat between links and a quick settle each, so the
+// list arrives as one smooth gesture rather than a slow, weighted drop
 const menuListVariants = {
-  hidden: { transition: { staggerChildren: 0.03, staggerDirection: -1 } },
-  visible: { transition: { delayChildren: 0.04, staggerChildren: 0.06 } },
+  hidden: { transition: { staggerChildren: 0.02, staggerDirection: -1 } },
+  visible: { transition: { delayChildren: 0.04, staggerChildren: 0.035 } },
 };
 
 const menuItemVariants = {
@@ -39,7 +41,7 @@ const menuItemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 120, damping: 20, mass: 1 },
+    transition: { duration: 0.4, ease: EASE_OUT },
   },
 };
 
@@ -350,7 +352,7 @@ const MobileNav = () => {
             className={cn(
               "pointer-events-auto mx-auto flex items-center justify-between gap-2 transition-[margin,padding,border-radius,background-color,border-color,box-shadow] duration-200 ease-out",
               scrolled && !menuOpen
-                ? "mt-3 rounded-full border border-foreground/10 bg-background/70 px-2 py-2 shadow-lg shadow-black/5 backdrop-blur-2xl"
+                ? "mt-3 rounded-full border border-foreground/10 bg-background px-2 py-2 shadow-lg shadow-black/5"
                 : "mt-0 rounded-none border border-transparent bg-transparent px-1 py-4",
             )}
           >
@@ -380,7 +382,7 @@ const MobileNav = () => {
             animate="visible"
             exit="hidden"
             onClick={close}
-            className="fixed inset-0 z-40 bg-background/80 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-40 bg-background lg:hidden"
           >
             <motion.nav
               ref={navRef}

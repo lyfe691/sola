@@ -67,7 +67,15 @@ function useColumnWidth() {
   return { ref, width };
 }
 
-function Page({ page, width }: { page: PDFPageProxy; width: number }) {
+function Page({
+  page,
+  width,
+  paused,
+}: {
+  page: PDFPageProxy;
+  width: number;
+  paused: boolean;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [drawn, setDrawn] = useState(false);
   const { width: baseWidth, height: baseHeight } = page.getViewport({
@@ -76,7 +84,7 @@ function Page({ page, width }: { page: PDFPageProxy; width: number }) {
 
   useEffect(() => {
     const node = canvas.current;
-    if (!node || width <= 0) return;
+    if (!node || width <= 0 || paused) return;
     const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
     const viewport = page.getViewport({ scale: (width * dpr) / baseWidth });
     node.width = Math.round(viewport.width);
@@ -87,7 +95,7 @@ function Page({ page, width }: { page: PDFPageProxy; width: number }) {
       () => {},
     );
     return () => task.cancel();
-  }, [page, width, baseWidth]);
+  }, [page, width, baseWidth, paused]);
 
   return (
     <div
@@ -110,11 +118,16 @@ export function PdfPages({
   url,
   label,
   fallback,
+  paused = false,
   className,
 }: {
   url: string;
   label: string;
   fallback: ReactNode;
+  /** lay the pages out but hold off drawing them: pdf.js draws on the main
+   *  thread, a slice every frame, so whatever is animating around the pages
+   *  holds it until it has landed */
+  paused?: boolean;
   className?: string;
 }) {
   const state = usePages(url);
@@ -136,7 +149,12 @@ export function PdfPages({
       >
         {state.status === "ready"
           ? state.pages.map((page, i) => (
-              <Page key={`${url}#${i}`} page={page} width={width} />
+              <Page
+                key={`${url}#${i}`}
+                page={page}
+                width={width}
+                paused={paused}
+              />
             ))
           : null}
       </div>

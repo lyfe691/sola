@@ -542,7 +542,8 @@
    (origin/radius set by theme-provider, skipped under reduced motion there);
    the old frame holds still beneath it. pointer-events: none so mid-wipe
    clicks — e.g. trying themes in an open menu — reach the page, not the
-   overlay. */
+   overlay. The resume morph (below) relies on it too: base-ui counts a press
+   on <html> as outside the dialog, so an overlay taking clicks would close it. */
 ::view-transition {
   pointer-events: none;
 }
@@ -568,6 +569,107 @@
     clip-path: circle(
       var(--theme-wipe-radius, 142%) at var(--theme-wipe-origin, 50% 50%)
     );
+  }
+}
+
+/* ---------- resume morph (view transitions api) ---------- */
+/* The desktop resume dialog turning from its card into its reader and back
+   (ResumeDialog.tsx). Its parts are named only while the root carries
+   data-resume-morph (the view the box is heading for), and the root itself
+   steps out: the page stays live underneath, and none of the theme wipe's
+   root rules above ever apply to it. */
+:root[data-resume-morph] {
+  view-transition-name: none;
+}
+
+:root[data-resume-morph] [data-morph-part="surface"] {
+  view-transition-name: resume-surface;
+}
+
+:root[data-resume-morph] [data-morph-part="content"] {
+  view-transition-name: resume-content;
+}
+
+:root[data-resume-morph]
+  [data-morph-part="surface"]
+  [data-slot="dialog-title"] {
+  view-transition-name: resume-title;
+}
+
+/* the close button the vendored popup renders as its last child */
+:root[data-resume-morph]
+  [data-morph-part="surface"]
+  > [data-slot="dialog-close"] {
+  view-transition-name: resume-close;
+}
+
+/* one spring for everything that moves (the component sets it) */
+::view-transition-group(resume-surface),
+::view-transition-group(resume-content),
+::view-transition-group(resume-title),
+::view-transition-group(resume-close) {
+  animation-duration: var(--morph-duration);
+  animation-timing-function: var(--morph-easing);
+}
+
+/* the box: its group is resized, not scaled, so it wears the dialog's own
+   surface (handed over by the component) and its corners, ring and shadow
+   are true at every size. Its own pictures would be stretched photos of
+   that surface, so they sit this one out. */
+::view-transition-group(resume-surface) {
+  border-radius: var(--morph-radius);
+  background-color: var(--morph-surface);
+  box-shadow: var(--morph-shadow);
+}
+
+::view-transition-old(resume-surface),
+::view-transition-new(resume-surface) {
+  display: none;
+}
+
+/* the content: the same box, clipped to its corners, with its two pictures
+   at their own size (a picture scaled to a moving box is a smear). The
+   card leads with its top-left corner, where its title is; the reader with
+   its top-right one, so its tools ride that corner beside the close button
+   instead of sliding under it while the box opens. */
+::view-transition-group(resume-content) {
+  border-radius: var(--morph-radius);
+  overflow: clip;
+}
+
+::view-transition-old(resume-content),
+::view-transition-new(resume-content),
+::view-transition-old(resume-title),
+::view-transition-new(resume-title) {
+  inline-size: auto;
+}
+
+:root[data-resume-morph="reader"]::view-transition-new(resume-content),
+:root[data-resume-morph="card"]::view-transition-old(resume-content) {
+  inset-inline-end: 0;
+}
+
+/* two different views, so a plain crossfade rather than the additive one:
+   the leaver goes first, the arrival follows on the UI clock */
+::view-transition-old(resume-content) {
+  mix-blend-mode: normal;
+  animation: resume-leave 180ms var(--ease-out) both;
+}
+
+::view-transition-new(resume-content) {
+  mix-blend-mode: normal;
+  animation: resume-arrive 260ms var(--ease-out) 90ms both;
+}
+
+@keyframes resume-leave {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes resume-arrive {
+  from {
+    opacity: 0;
   }
 }
 

@@ -13,10 +13,14 @@ import type { PDFDocumentProxy } from "pdfjs-dist";
 let library: Promise<typeof import("pdfjs-dist")> | null = null;
 const documents = new Map<string, Promise<PDFDocumentProxy>>();
 
+// The legacy build, not the modern one: the modern build calls
+// Map.prototype.getOrInsertComputed, which browsers only recently shipped, and
+// a page render throws on any browser without it. The legacy build carries its
+// own polyfills, on both sides of the worker.
 const loadLibrary = () => {
   library ??= Promise.all([
-    import("pdfjs-dist"),
-    import("pdfjs-dist/build/pdf.worker.min.mjs?url"),
+    import("pdfjs-dist/legacy/build/pdf.mjs"),
+    import("pdfjs-dist/legacy/build/pdf.worker.min.mjs?url"),
   ]).then(([pdfjs, worker]) => {
     pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
     return pdfjs;
