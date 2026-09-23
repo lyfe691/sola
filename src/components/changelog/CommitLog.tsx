@@ -9,9 +9,23 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CommitDetail } from "@/components/changelog/CommitDetail";
+import { CommitRail, railWidth } from "@/components/changelog/CommitRail";
+import {
+  CommitStats,
+  ScopeChip,
+  TypeChip,
+} from "@/components/changelog/CommitMeta";
 import { Reveal } from "@/components/Reveal";
+import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
 import { DEPLOY_LABEL } from "@/components/deploy-diff/use-page-diff";
-import { commitDetailQuery, type ChangelogCommit } from "@/lib/github-commits";
+import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
+import { commitGraph, type GraphRow } from "@/lib/commit-graph";
+import {
+  commitDetailQuery,
+  commitHeadline,
+  detailStats,
+  type ChangelogCommit,
+} from "@/lib/github-commits";
 import { INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import type { Translation } from "@/lib/translations";
@@ -56,18 +70,19 @@ function writeHash(shortSha: string | null) {
 
 export function CommitLogSkeleton() {
   return (
-    <ol aria-hidden="true">
+    <ol aria-hidden="true" className="relative">
+      <span className="absolute inset-y-0 left-[6.25px] w-[1.5px] bg-foreground/10 mask-b-from-50%" />
       {SKELETON_SUBJECTS.map((width, i) => (
-        <li key={i} className="border-b border-foreground/8">
-          <div className="flex items-baseline gap-3 py-2.5">
-            <span className="h-3 w-14 animate-pulse rounded-sm bg-primary/15" />
+        <li key={i} className="relative pl-[18px]">
+          <span className="absolute top-[18.5px] left-[3.5px] size-[7px] animate-pulse rounded-full bg-foreground/15" />
+          <div className="space-y-2 px-3 py-3.5">
             <span
               className={cn(
-                "h-3 animate-pulse rounded-sm bg-foreground/8",
+                "block h-3 animate-pulse rounded-sm bg-foreground/8",
                 width,
               )}
             />
-            <span className="ml-auto h-3 w-10 animate-pulse rounded-sm bg-foreground/6" />
+            <span className="block h-2.5 w-28 animate-pulse rounded-sm bg-foreground/6" />
           </div>
         </li>
       ))}
@@ -77,6 +92,9 @@ export function CommitLogSkeleton() {
 
 function CommitRow({
   commit,
+  graph,
+  lanes,
+  isLast,
   isOpen,
   isPending,
   mounted,
@@ -87,6 +105,9 @@ function CommitRow({
   onPrefetch,
 }: {
   commit: ChangelogCommit;
+  graph: GraphRow;
+  lanes: number;
+  isLast: boolean;
   isOpen: boolean;
   isPending: boolean;
   mounted: boolean;
@@ -97,75 +118,107 @@ function CommitRow({
   onPrefetch: (sha: string) => void;
 }) {
   const panelId = `commit-${commit.shortSha}`;
+  const headline = commitHeadline(commit);
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={() => onToggle(commit.sha)}
-        onPointerEnter={() => onPrefetch(commit.sha)}
-        onFocus={() => onPrefetch(commit.sha)}
-        aria-expanded={isOpen}
-        aria-controls={panelId}
-        aria-busy={isPending || undefined}
-        className={cn(
-          "group -mx-3 flex w-[calc(100%+1.5rem)] cursor-pointer rounded-xl px-3 py-2.5 text-left touch-manipulation select-none",
-          "transition-[color,background-color] duration-200 ease-out",
-          "can-hover:hover:bg-muted/50",
-          isOpen && "bg-muted/40",
-        )}
-      >
-        <span className="flex min-w-0 flex-1 origin-left items-baseline gap-3 transition-[scale] duration-150 ease-out group-active:scale-[0.99] motion-reduce:transition-none">
-          <span
-            className={cn(
-              "w-16 shrink-0 font-mono text-xs text-primary",
-              isPending && "animate-pulse",
-            )}
-          >
-            {commit.shortSha}
-          </span>
+    <li
+      className="group/row relative min-w-0"
+      style={{ paddingLeft: railWidth(lanes) + 2 }}
+    >
+      {/* the rail stays out of the reveal and only fades with it: rows rise
+          a beat apart, and a rail that rose with them would tear at every
+          row boundary */}
+      <CommitRail
+        row={graph}
+        lanes={lanes}
+        merge={headline.pr !== undefined}
+        live={live}
+        pending={isPending}
+        fadeOut={isLast && graph.outgoing}
+        className="transition-opacity duration-(--reveal-duration) ease-smooth group-has-[[data-reveal]:not([data-revealed])]/row:opacity-0"
+      />
+      <Reveal className="min-w-0">
+        <button
+          type="button"
+          onClick={() => onToggle(commit.sha)}
+          onPointerEnter={() => onPrefetch(commit.sha)}
+          onFocus={() => onPrefetch(commit.sha)}
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          aria-busy={isPending || undefined}
+          className={cn(
+            "flex w-full min-w-0 cursor-pointer flex-col gap-1.5 rounded-xl px-3 py-2.5 text-left touch-manipulation select-none",
+            "transition-[background-color,scale] duration-200 ease-out active:scale-[0.99]",
+            "can-hover:hover:bg-muted/50",
+            isOpen && "bg-muted/40",
+          )}
+        >
           <span className="sr-only">{isOpen ? t.collapse : t.expand}</span>
-          <span className="min-w-0 flex-1 truncate text-sm text-foreground">
-            {commit.subject}
+          <span className="flex min-w-0 items-baseline gap-3">
+            <span className="min-w-0 flex-1 text-[15px] leading-6 text-foreground">
+              {headline.pr !== undefined ? (
+                <span className="mr-2 font-mono text-xs text-primary">
+                  {t.pr.replace("{number}", String(headline.pr))}
+                </span>
+              ) : null}
+              {headline.text}
+            </span>
+            <span className="hidden shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground sm:inline">
+              {date}
+            </span>
+          </span>
+          <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5">
+            {headline.type ? <TypeChip type={headline.type} /> : null}
+            {headline.scope ? <ScopeChip scope={headline.scope} /> : null}
+            <span className="font-mono text-[11px] text-muted-foreground">
+              {commit.shortSha}
+              <span className="sm:hidden"> · {date}</span>
+            </span>
             {live ? (
-              <span className="ml-2 font-mono text-[10px] font-normal text-primary/70">
+              <span className="font-mono text-[11px] text-primary">
                 {t.thisDeploy}
               </span>
             ) : null}
+            {commit.stats ? (
+              <CommitStats stats={commit.stats} className="sm:ml-auto" />
+            ) : null}
           </span>
-          <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground">
-            {date}
-          </span>
-        </span>
-      </button>
-      <div
-        className={cn(
-          "grid min-w-0 transition-[grid-template-rows,opacity] duration-500 ease-out-quart motion-reduce:transition-none",
-          isOpen
-            ? "grid-rows-[1fr] opacity-100"
-            : "pointer-events-none grid-rows-[0fr] opacity-0",
-        )}
-      >
-        <div className="min-h-0 min-w-0 overflow-hidden">
-          <div
-            id={panelId}
-            role="region"
-            aria-label={commit.subject}
-            aria-hidden={!isOpen}
-            inert={!isOpen}
-            className="min-w-0 px-3 pb-5 pt-1 sm:px-0"
-          >
-            {mounted ? <CommitDetail sha={commit.sha} /> : null}
+        </button>
+        <div
+          className={cn(
+            "grid min-w-0 transition-[grid-template-rows,opacity] duration-500 ease-out-quart motion-reduce:transition-none",
+            isOpen
+              ? "grid-rows-[1fr] opacity-100"
+              : "pointer-events-none grid-rows-[0fr] opacity-0",
+          )}
+        >
+          <div className="min-h-0 min-w-0 overflow-hidden">
+            <div
+              id={panelId}
+              role="region"
+              aria-label={headline.text}
+              aria-hidden={!isOpen}
+              inert={!isOpen}
+              className="min-w-0 pt-2 pb-6 pl-3"
+            >
+              {mounted ? (
+                <CommitDetail
+                  sha={commit.sha}
+                  lead={headline.pr !== undefined ? headline.text : undefined}
+                />
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      </Reveal>
+    </li>
   );
 }
 
 export function CommitLog({ commits }: { commits: ChangelogCommit[] }) {
   const { language } = useLanguage();
   const t = useTranslation().changelog;
+  const isDark = useIsDarkScheme();
   const queryClient = useQueryClient();
   const gen = useRef(0);
   const scrolledHash = useRef<string | null>(null);
@@ -188,7 +241,10 @@ export function CommitLog({ commits }: { commits: ChangelogCommit[] }) {
   const open = picked === "hash" ? fromHash : picked;
   const rows =
     pinned && !fromList
-      ? [pinned, ...commits.filter((commit) => commit.sha !== pinned.sha)]
+      ? [
+          { ...pinned, stats: detailStats(pinned) },
+          ...commits.filter((commit) => commit.sha !== pinned.sha),
+        ]
       : commits;
 
   useEffect(() => {
@@ -249,26 +305,34 @@ export function CommitLog({ commits }: { commits: ChangelogCommit[] }) {
         }).format(new Date(iso))
       : "";
 
+  // a commit pinned from the URL sits outside the loaded history, so it
+  // stands alone instead of drawing a lane down the whole list
+  const graph = commitGraph(
+    rows.map((commit) =>
+      commit.sha === pinned?.sha && !fromList
+        ? { sha: commit.sha, parents: [] }
+        : commit,
+    ),
+  );
+
   return (
-    <ol className="min-w-0">
-      {rows.map((commit) => (
-        <Reveal
+    <ol className="min-w-0" style={DIFF_TOKENS[isDark ? "dark" : "light"]}>
+      {rows.map((commit, i) => (
+        <CommitRow
           key={commit.sha}
-          as="li"
-          className="min-w-0 border-b border-foreground/8"
-        >
-          <CommitRow
-            commit={commit}
-            isOpen={open === commit.sha}
-            isPending={pending === commit.sha}
-            mounted={opened.has(commit.sha) || open === commit.sha}
-            live={matchesDeploy(commit.sha)}
-            date={formatDate(commit.date)}
-            t={t}
-            onToggle={toggle}
-            onPrefetch={prefetch}
-          />
-        </Reveal>
+          commit={commit}
+          graph={graph.rows[i]}
+          lanes={graph.lanes}
+          isLast={i === rows.length - 1}
+          isOpen={open === commit.sha}
+          isPending={pending === commit.sha}
+          mounted={opened.has(commit.sha) || open === commit.sha}
+          live={matchesDeploy(commit.sha)}
+          date={formatDate(commit.date)}
+          t={t}
+          onToggle={toggle}
+          onPrefetch={prefetch}
+        />
       ))}
     </ol>
   );

@@ -36,6 +36,7 @@ const stubFetch = (body: unknown, ok = true, status = ok ? 200 : 500) => {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.unstubAllEnvs();
 });
 
 describe("parsePage / parseSha", () => {
@@ -87,6 +88,38 @@ describe("getCommitLog", () => {
     expect(page.hasMore).toBe(true);
     expect(page.commits[0].shortSha).toHaveLength(7);
     expect(page.commits[0].subject).toBe("feat: 0");
+  });
+
+  it("attaches each commit's diff stats when a token is set", async () => {
+    vi.stubEnv("GITHUB_TOKEN", "test");
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      status: 200,
+      json: async () =>
+        url.includes("/commits?")
+          ? [listItem()]
+          : {
+              ...listItem(),
+              stats: { additions: 5, deletions: 2 },
+              files: [
+                {
+                  filename: "src/a.tsx",
+                  status: "modified",
+                  additions: 5,
+                  deletions: 2,
+                },
+              ],
+            },
+    }));
+    vi.stubGlobal("fetch", fetchMock);
+    const { getCommitLog } = await load();
+    const page = await getCommitLog(1);
+    expect(page.commits[0].stats).toEqual({
+      additions: 5,
+      deletions: 2,
+      files: 1,
+      paths: ["src/a.tsx"],
+    });
   });
 
   it("throws when upstream fails", async () => {

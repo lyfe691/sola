@@ -24,6 +24,15 @@ export interface ChangelogCommit {
   date: string;
   htmlUrl: string;
   author: string;
+  parents: string[];
+  stats?: ChangelogStats;
+}
+
+export interface ChangelogStats {
+  additions: number;
+  deletions: number;
+  files: number;
+  paths: string[];
 }
 
 export interface ChangelogFile {
@@ -50,6 +59,7 @@ export interface ChangelogPage {
 interface GitHubListCommit {
   sha: string;
   html_url: string;
+  parents?: { sha: string }[];
   commit: {
     message: string;
     author?: { name?: string; date?: string } | null;
@@ -137,6 +147,7 @@ function mapListCommit(data: GitHubListCommit): ChangelogCommit {
     date: data.commit.author?.date ?? "",
     htmlUrl: data.html_url,
     author: data.author?.login ?? data.commit.author?.name ?? "",
+    parents: (data.parents ?? []).map((parent) => parent.sha),
   };
 }
 
@@ -179,6 +190,24 @@ export function parseSha(raw: string | undefined): string | null {
   return raw.toLowerCase();
 }
 
+const STAT_PATHS = 40;
+
+async function attachStats(commits: ChangelogCommit[]): Promise<void> {
+  const details = await Promise.allSettled(
+    commits.map((commit) => getCommitDetail(commit.sha)),
+  );
+  details.forEach((detail, i) => {
+    if (detail.status !== "fulfilled") return;
+    const { additions, deletions, files } = detail.value;
+    commits[i].stats = {
+      additions,
+      deletions,
+      files: files.length,
+      paths: files.slice(0, STAT_PATHS).map((file) => file.filename),
+    };
+  });
+}
+
 export async function getCommitLog(page: number): Promise<ChangelogPage> {
   const cached = listCache.get(page);
   if (cached && Date.now() - cached.at < LIST_TTL_MS) return cached.data;
@@ -189,6 +218,9 @@ export async function getCommitLog(page: number): Promise<ChangelogPage> {
   );
 
   const commits = data.map(mapListCommit);
+  // one detail call per commit: without a token that would spend GitHub's
+  // anonymous hourly budget in two page loads, so the log goes out bare
+  if (process.env.GITHUB_TOKEN) await attachStats(commits);
   const result: ChangelogPage = {
     commits,
     page,

@@ -462,6 +462,7 @@ export const ko = {
     files: "{count}개 파일",
     expand: "커밋 표시",
     collapse: "커밋 숨기기",
+    pr: "PR #{number}",
   },
   footer: {
     atw: "이 웹사이트에 대해",

@@ -7,7 +7,7 @@ import path from "path";
 import type { IncomingMessage, ServerResponse } from "http";
 import type { Connect } from "vite";
 import { getGitHubActivity } from "./api/github-activity.ts";
-import githubCommits from "./api/github-commits.ts";
+import githubCommits, { getCommitLog } from "./api/github-commits.ts";
 
 const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
 
@@ -121,6 +121,36 @@ function apiDevPlugin(): Plugin {
   };
 }
 
+const CHANGELOG_SNAPSHOT = "virtual:changelog-snapshot";
+
+/**
+ * The changelog's first page, fetched once when the bundle is built, so the
+ * page opens on its history instead of on a placeholder. A failed fetch
+ * ships `null` and the page loads the log at runtime as before.
+ */
+function changelogSnapshotPlugin(): Plugin {
+  const resolved = `\0${CHANGELOG_SNAPSHOT}`;
+
+  return {
+    name: "changelog-snapshot",
+    resolveId(id) {
+      return id === CHANGELOG_SNAPSHOT ? resolved : undefined;
+    },
+    async load(id) {
+      if (id !== resolved) return undefined;
+      if (process.env.VITEST) return "export default null;";
+      try {
+        const page = await getCommitLog(1);
+        const snapshot = { page, at: Date.now() };
+        return `export default ${JSON.stringify(snapshot)};`;
+      } catch (error) {
+        this.warn(`changelog snapshot skipped: ${String(error)}`);
+        return "export default null;";
+      }
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
@@ -132,6 +162,7 @@ export default defineConfig({
   },
   plugins: [
     apiDevPlugin(),
+    changelogSnapshotPlugin(),
     {
       enforce: "pre",
       ...mdx({

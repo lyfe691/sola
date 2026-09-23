@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { fileTree, type ChangelogFile } from "./github-commits";
+import { commitHeadline, fileTree, type ChangelogFile } from "./github-commits";
 
 const file = (filename: string): ChangelogFile => ({
   filename,
@@ -38,5 +38,35 @@ describe("fileTree", () => {
       "a.ts",
       "b.ts",
     ]);
+  });
+});
+
+describe("commitHeadline", () => {
+  it("splits a conventional subject", () => {
+    expect(
+      commitHeadline({
+        subject: "perf(motion): one reveal queue instead of per-block delays",
+        body: "",
+      }),
+    ).toEqual({
+      text: "one reveal queue instead of per-block delays",
+      type: "perf",
+      scope: "motion",
+    });
+  });
+
+  it("reads a merge as its PR title", () => {
+    expect(
+      commitHeadline({
+        subject: "merge pr #63",
+        body: "Quick wins: no theme preview on tap\n\nmore",
+      }),
+    ).toEqual({ text: "Quick wins: no theme preview on tap", pr: 63 });
+  });
+
+  it("keeps a free-form subject whole", () => {
+    expect(commitHeadline({ subject: "initial commit", body: "" })).toEqual({
+      text: "initial commit",
+    });
   });
 });

@@ -460,6 +460,7 @@ export const ja = {
     files: "{count} ファイル",
     expand: "コミットを表示",
     collapse: "コミットを非表示",
+    pr: "PR #{number}",
   },
   footer: {
     atw: "このウェブサイトについて",

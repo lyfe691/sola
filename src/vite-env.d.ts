@@ -8,6 +8,12 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
+declare module "virtual:changelog-snapshot" {
+  import type { ChangelogPage } from "@/lib/github-commits";
+  const snapshot: { page: ChangelogPage; at: number } | null;
+  export default snapshot;
+}
+
 declare module "*.mdx" {
   interface MDXProps {
     components?: Record<string, React.ComponentType<Record<string, unknown>>>;

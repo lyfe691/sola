@@ -468,6 +468,7 @@ export const de = {
     files: "{count} Dateien",
     expand: "Commit anzeigen",
     collapse: "Commit ausblenden",
+    pr: "PR #{number}",
   },
   footer: {
     atw: "Über diese Website",

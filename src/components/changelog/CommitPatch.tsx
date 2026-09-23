@@ -6,11 +6,10 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { CopyButton } from "@/components/ui/code-block";
 import { TechFileMark } from "@/components/ui/custom/tech-file-mark";
 import type { DiffLine } from "@/components/deploy-diff/parse-patch";
 import { useCappedDiff } from "@/components/deploy-diff/use-diff-highlight";
-import { toUnifiedDiff, type ChangelogFile } from "@/lib/github-commits";
+import type { ChangelogFile } from "@/lib/github-commits";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import type { ThemedTokenWithVariants } from "shiki";
@@ -90,14 +89,13 @@ export function CommitPatch({
 
   return (
     <figure className="code-block group relative my-0 w-full min-w-0 overflow-hidden rounded-xl bg-(--code) text-sm ring-1 ring-inset ring-border">
-      <figcaption className="flex min-w-0 items-center gap-2 border-b border-border py-1.5 pl-4 pr-2 font-mono text-xs text-(--code-foreground)">
+      <figcaption className="flex min-w-0 items-center gap-2 border-b border-border px-4 py-2.5 font-mono text-xs text-(--code-foreground)">
         <TechFileMark
           filename={file.filename}
           className="size-3.5 shrink-0"
           size={14}
         />
         <span className="min-w-0 truncate">{file.filename}</span>
-        <CopyButton value={toUnifiedDiff(file)} className="ml-auto shrink-0" />
       </figcaption>
       <div className="max-h-[min(32rem,70vh)] min-w-0 overflow-y-auto overscroll-contain py-2 font-mono text-xs leading-5 [scrollbar-width:thin]">
         <table className="w-full table-fixed border-separate border-spacing-0">

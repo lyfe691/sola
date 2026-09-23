@@ -454,6 +454,7 @@ export const zh = {
     files: "{count} 个文件",
     expand: "显示提交",
     collapse: "隐藏提交",
+    pr: "PR #{number}",
   },
   footer: {
     atw: "关于这个网站",

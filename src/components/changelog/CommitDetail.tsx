@@ -17,7 +17,7 @@ import { useTranslation } from "@/lib/language-provider";
 
 const MAX_FILES = 20;
 
-export function CommitDetail({ sha }: { sha: string }) {
+export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
   const t = useTranslation().changelog;
   const isDark = useIsDarkScheme();
   const query = useQuery(commitDetailQuery(sha));
@@ -57,12 +57,16 @@ export function CommitDetail({ sha }: { sha: string }) {
     shown.find((file) => file.filename === active) ?? shown[0] ?? null;
   const overflow = commit.files.length > MAX_FILES;
   const scheme = isDark ? "dark" : "light";
+  const body =
+    lead && commit.body.startsWith(lead)
+      ? commit.body.slice(lead.length).trim()
+      : commit.body;
 
   return (
     <div className="min-w-0 space-y-4" style={DIFF_TOKENS[scheme]}>
-      {commit.body ? (
-        <p className="max-w-prose text-sm leading-relaxed whitespace-pre-wrap text-foreground/65 sm:pl-[4.75rem]">
-          {commit.body}
+      {body ? (
+        <p className="max-w-prose text-sm leading-relaxed whitespace-pre-wrap text-foreground/65">
+          {body}
         </p>
       ) : null}
 

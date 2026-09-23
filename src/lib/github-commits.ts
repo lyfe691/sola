@@ -10,6 +10,7 @@
  */
 
 import { queryOptions } from "@tanstack/react-query";
+import snapshot from "virtual:changelog-snapshot";
 
 export const CHANGELOG_REPO = "lyfe691/sola";
 export const CHANGELOG_GITHUB = `https://github.com/${CHANGELOG_REPO}/commits/main`;
@@ -22,6 +23,15 @@ export interface ChangelogCommit {
   date: string;
   htmlUrl: string;
   author: string;
+  parents: string[];
+  stats?: ChangelogStats;
+}
+
+export interface ChangelogStats {
+  additions: number;
+  deletions: number;
+  files: number;
+  paths: string[];
 }
 
 export interface ChangelogFile {
@@ -59,11 +69,15 @@ export async function fetchCommitDetail(
   return (await res.json()) as ChangelogCommitDetail;
 }
 
+const FIRST_PAGE_TTL_MS = 5 * 60_000;
+
 export const commitLogQuery = (page: number) =>
   queryOptions({
     queryKey: ["github-commits", "log", page],
     queryFn: () => fetchCommitLog(page),
-    staleTime: Infinity,
+    initialData: page === 1 ? snapshot?.page : undefined,
+    initialDataUpdatedAt: page === 1 ? snapshot?.at : undefined,
+    staleTime: page === 1 ? FIRST_PAGE_TTL_MS : Infinity,
     gcTime: Infinity,
     retry: false,
     refetchOnWindowFocus: false,
@@ -81,12 +95,47 @@ export const commitDetailQuery = (sha: string) =>
     refetchOnReconnect: false,
   });
 
-/** Rebuild a `diff --git` header around GitHub's hunk-only patch. */
-export function toUnifiedDiff(file: ChangelogFile): string {
-  const a = file.previousFilename ?? file.filename;
-  const b = file.filename;
-  const header = `diff --git a/${a} b/${b}`;
-  return file.patch ? `${header}\n${file.patch}` : header;
+/** The list's row stats, for a commit that arrived through the detail endpoint. */
+export function detailStats(detail: ChangelogCommitDetail): ChangelogStats {
+  return {
+    additions: detail.additions,
+    deletions: detail.deletions,
+    files: detail.files.length,
+    paths: detail.files.map((file) => file.filename),
+  };
+}
+
+export interface CommitHeadline {
+  text: string;
+  pr?: number;
+  type?: string;
+  scope?: string;
+}
+
+const MERGE_RE = /^merge (?:pr|pull request) #(\d+)/i;
+const CONVENTIONAL_RE = /^([a-z]+)(?:\(([^)]+)\))?!?:\s+(.+)$/i;
+
+/**
+ * A merge reads as its PR's title (the body's first line); a conventional
+ * subject splits into type, scope and the sentence after the colon.
+ */
+export function commitHeadline(
+  commit: Pick<ChangelogCommit, "subject" | "body">,
+): CommitHeadline {
+  const merge = MERGE_RE.exec(commit.subject);
+  if (merge) {
+    const title = commit.body.split("\n")[0].trim();
+    return { text: title || commit.subject, pr: Number(merge[1]) };
+  }
+  const conventional = CONVENTIONAL_RE.exec(commit.subject);
+  if (conventional) {
+    return {
+      text: conventional[3],
+      type: conventional[1].toLowerCase(),
+      scope: conventional[2],
+    };
+  }
+  return { text: commit.subject };
 }
 
 const STATUS_LETTER: Record<string, string> = {
