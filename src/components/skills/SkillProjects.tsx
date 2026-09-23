@@ -6,8 +6,16 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useRef, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { Link } from "react-router";
+import { PreviewCard } from "@base-ui/react/preview-card";
 import {
   Drawer,
   DrawerContent,
@@ -15,11 +23,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import type { ProjectMeta } from "@/config/projects";
 import { projectsUsing, skillLabels, type Skill } from "@/config/skills";
 import { TECH_ICONS } from "@/config/tech-icons";
@@ -161,12 +164,138 @@ function ProjectList({
   );
 }
 
+const CardHandle = createContext<PreviewCard.Handle<Skill> | null>(null);
+
+// how long the pointer must hold still before a pending switch is decided
+const SETTLE_MS = 120;
+
+function SkillCardBody({ skill }: { skill: Skill }) {
+  const projects = projectsUsing(skill.name);
+  const usedIn = useUsedIn(projects.length);
+
+  return (
+    <>
+      <p className="px-2.5 pt-1.5 pb-1 text-xs text-muted-foreground">
+        {usedIn}
+      </p>
+      <ProjectList skill={skill} projects={projects} className="max-h-96" />
+    </>
+  );
+}
+
 /**
- * Desktop: hovering a row previews its projects beside it. Each row owns its
- * card, so crossing a neighbouring row on the way into a card never opens
- * the neighbour's: that takes a rest of the open delay on it.
+ * Desktop: one hover card for the page, gliding to whichever row is hovered
+ * (the theme menu's preview moves the same way). Base UI hands an open card
+ * to any row the pointer touches, so a sweep from a row into its card would
+ * give it away to every neighbour crossed on the way. Instead a switch
+ * waits until the pointer comes to rest: on the new row the card follows,
+ * on the old row or the card it stays, anywhere else it closes.
  */
-export function SkillHoverCard({
+export function SkillCards({
+  enabled,
+  children,
+}: {
+  enabled: boolean;
+  children: ReactNode;
+}) {
+  const [handle] = useState(() => PreviewCard.createHandle<Skill>());
+  const active = useRef<Element | null>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+  const [intent] = useState(() => {
+    let pending: Element | null = null;
+    let timer: number | undefined;
+
+    const decide = () => {
+      stop();
+      const row = pending;
+      pending = null;
+      if (row?.matches(":hover")) {
+        active.current = row;
+        handle.open(row.id);
+      } else if (
+        !active.current?.matches(":hover") &&
+        !popupRef.current?.matches(":hover")
+      ) {
+        handle.close();
+      }
+    };
+    const restart = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(decide, SETTLE_MS);
+    };
+    const stop = () => {
+      window.clearTimeout(timer);
+      document.removeEventListener("pointermove", restart);
+    };
+
+    return {
+      isPending: () => pending !== null,
+      switchTo: (row: Element) => {
+        pending = row;
+        restart();
+        document.addEventListener("pointermove", restart);
+      },
+      stop,
+    };
+  });
+
+  useEffect(() => intent.stop, [intent]);
+
+  const onOpenChange = (
+    open: boolean,
+    details: PreviewCard.Root.ChangeEventDetails,
+  ) => {
+    const trigger = details.trigger ?? null;
+    if (
+      open &&
+      details.reason === "trigger-hover" &&
+      handle.isOpen &&
+      trigger &&
+      trigger !== active.current
+    ) {
+      details.cancel();
+      intent.switchTo(trigger);
+      return;
+    }
+    // the old row letting go while a switch is pending: the rest decides
+    if (!open && intent.isPending()) {
+      details.cancel();
+      return;
+    }
+    if (open && trigger) active.current = trigger;
+  };
+
+  return (
+    <CardHandle.Provider value={handle}>
+      {children}
+      {enabled ? (
+        <PreviewCard.Root handle={handle} onOpenChange={onOpenChange}>
+          {({ payload }) => (
+            <PreviewCard.Portal>
+              <PreviewCard.Positioner
+                side="right"
+                sideOffset={12}
+                className="isolate z-50 transition-[top,left,right,bottom] duration-200 ease-out"
+              >
+                <PreviewCard.Popup
+                  ref={popupRef}
+                  className="h-(--popup-height,auto) w-80 origin-(--transform-origin) overflow-clip rounded-2xl bg-popover p-1.5 text-sm text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-hidden transition-[height,opacity,scale] duration-200 ease-out data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 dark:ring-foreground/10"
+                >
+                  <PreviewCard.Viewport className="relative size-full [&_[data-current]]:transition-opacity [&_[data-current]]:duration-200 [&_[data-current][data-starting-style]]:opacity-0 [&_[data-previous]]:w-full [&_[data-previous]]:transition-opacity [&_[data-previous]]:duration-100 [&_[data-previous][data-ending-style]]:opacity-0">
+                    {payload ? <SkillCardBody skill={payload} /> : null}
+                  </PreviewCard.Viewport>
+                </PreviewCard.Popup>
+              </PreviewCard.Positioner>
+            </PreviewCard.Portal>
+          )}
+        </PreviewCard.Root>
+      ) : null}
+    </CardHandle.Provider>
+  );
+}
+
+/** A row that shows the page's hover card for its skill. A click does nothing. */
+export function SkillCardTrigger({
   skill,
   className,
   children,
@@ -175,26 +304,18 @@ export function SkillHoverCard({
   className?: string;
   children: ReactNode;
 }) {
-  const projects = projectsUsing(skill.name);
-  const usedIn = useUsedIn(projects.length);
+  const handle = useContext(CardHandle) ?? undefined;
 
   return (
-    <HoverCard>
-      <HoverCardTrigger delay={300} render={<div />} className={className}>
-        {children}
-      </HoverCardTrigger>
-      <HoverCardContent
-        side="right"
-        sideOffset={12}
-        alignOffset={0}
-        className="w-80 rounded-2xl p-1.5"
-      >
-        <p className="px-2.5 pt-1.5 pb-1 text-xs text-muted-foreground">
-          {usedIn}
-        </p>
-        <ProjectList skill={skill} projects={projects} className="max-h-96" />
-      </HoverCardContent>
-    </HoverCard>
+    <PreviewCard.Trigger
+      handle={handle}
+      payload={skill}
+      delay={300}
+      render={<div />}
+      className={className}
+    >
+      {children}
+    </PreviewCard.Trigger>
   );
 }
 

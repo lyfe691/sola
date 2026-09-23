@@ -20,8 +20,9 @@ import {
 } from "@/config/skills";
 import { Reveal } from "@/components/Reveal";
 import {
+  SkillCards,
+  SkillCardTrigger,
   SkillDrawer,
-  SkillHoverCard,
   SkillTile,
 } from "@/components/skills/SkillProjects";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -117,9 +118,9 @@ function SkillRow({
     );
   } else {
     row = (
-      <SkillHoverCard skill={skill} className={cn(ROW, HOVERABLE)}>
+      <SkillCardTrigger skill={skill} className={cn(ROW, HOVERABLE)}>
         {body}
-      </SkillHoverCard>
+      </SkillCardTrigger>
     );
   }
 
@@ -183,17 +184,19 @@ const Skills = () => {
         {t.skills.subtitle}
       </Reveal>
 
-      <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
-        {SKILL_GROUPS.map((group) => (
-          <SkillSection
-            key={group.id}
-            group={group}
-            title={groups[group.id] ?? group.id}
-            isMobile={isMobile}
-            onOpen={openSkill}
-          />
-        ))}
-      </div>
+      <SkillCards enabled={!isMobile}>
+        <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
+          {SKILL_GROUPS.map((group) => (
+            <SkillSection
+              key={group.id}
+              group={group}
+              title={groups[group.id] ?? group.id}
+              isMobile={isMobile}
+              onOpen={openSkill}
+            />
+          ))}
+        </div>
+      </SkillCards>
 
       {picked ? (
         <SkillDrawer
