@@ -20,9 +20,8 @@ import {
 } from "@/config/skills";
 import { Reveal } from "@/components/Reveal";
 import {
-  SkillCards,
-  SkillCardTrigger,
   SkillDrawer,
+  SkillHoverCard,
   SkillTile,
 } from "@/components/skills/SkillProjects";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -39,8 +38,11 @@ const LEVEL_TONE: Record<Proficiency, string> = {
 
 const ROW =
   "group flex w-full min-w-0 items-center gap-3 rounded-2xl px-2 py-2 text-left";
+// desktop rows only show the hover card; phone rows are tapped for the drawer
+const HOVERABLE =
+  "transition-colors duration-200 ease-out can-hover:hover:bg-muted/50 data-popup-open:bg-muted/50";
 const PRESSABLE =
-  "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out can-hover:hover:bg-muted/50 data-popup-open:bg-muted/50 active:scale-[0.99]";
+  "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out active:scale-[0.99] active:bg-muted/50";
 
 function SkillRowBody({
   skill,
@@ -115,9 +117,9 @@ function SkillRow({
     );
   } else {
     row = (
-      <SkillCardTrigger skill={skill} className={cn(ROW, PRESSABLE)}>
+      <SkillHoverCard skill={skill} className={cn(ROW, HOVERABLE)}>
         {body}
-      </SkillCardTrigger>
+      </SkillHoverCard>
     );
   }
 
@@ -181,19 +183,17 @@ const Skills = () => {
         {t.skills.subtitle}
       </Reveal>
 
-      <SkillCards enabled={!isMobile}>
-        <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
-          {SKILL_GROUPS.map((group) => (
-            <SkillSection
-              key={group.id}
-              group={group}
-              title={groups[group.id] ?? group.id}
-              isMobile={isMobile}
-              onOpen={openSkill}
-            />
-          ))}
-        </div>
-      </SkillCards>
+      <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
+        {SKILL_GROUPS.map((group) => (
+          <SkillSection
+            key={group.id}
+            group={group}
+            title={groups[group.id] ?? group.id}
+            isMobile={isMobile}
+            onOpen={openSkill}
+          />
+        ))}
+      </div>
 
       {picked ? (
         <SkillDrawer

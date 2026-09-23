@@ -6,15 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import {
-  createContext,
-  useContext,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useRef, type ReactNode } from "react";
 import { Link } from "react-router";
-import { PreviewCard } from "@base-ui/react/preview-card";
 import {
   Drawer,
   DrawerContent,
@@ -22,6 +15,11 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import type { ProjectMeta } from "@/config/projects";
 import { projectsUsing, skillLabels, type Skill } from "@/config/skills";
 import { TECH_ICONS } from "@/config/tech-icons";
@@ -163,68 +161,12 @@ function ProjectList({
   );
 }
 
-const CardHandle = createContext<PreviewCard.Handle<Skill> | null>(null);
-
-function SkillCardBody({ skill }: { skill: Skill }) {
-  const projects = projectsUsing(skill.name);
-  const usedIn = useUsedIn(projects.length);
-
-  return (
-    <>
-      <p className="px-2.5 pt-1.5 pb-1 text-xs text-muted-foreground">
-        {usedIn}
-      </p>
-      <ProjectList skill={skill} projects={projects} className="max-h-96" />
-    </>
-  );
-}
-
 /**
- * Desktop: one hover card for the page. Every row is a trigger for it, so
- * moving between rows glides the card to the new row instead of closing
- * one card and opening another.
+ * Desktop: hovering a row previews its projects beside it. Each row owns its
+ * card, so crossing a neighbouring row on the way into a card never opens
+ * the neighbour's: that takes a rest of the open delay on it.
  */
-export function SkillCards({
-  enabled,
-  children,
-}: {
-  enabled: boolean;
-  children: ReactNode;
-}) {
-  const [handle] = useState(() => PreviewCard.createHandle<Skill>());
-
-  return (
-    <CardHandle.Provider value={handle}>
-      {children}
-      {enabled ? (
-        <PreviewCard.Root handle={handle}>
-          {({ payload }) => (
-            <PreviewCard.Portal>
-              <PreviewCard.Positioner
-                side="right"
-                sideOffset={12}
-                className="isolate z-50 transition-[top,left,right,bottom] duration-300 ease-out-quart"
-              >
-                <PreviewCard.Popup className="h-(--popup-height,auto) w-80 origin-(--transform-origin) overflow-clip rounded-2xl bg-popover p-1.5 text-sm text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-hidden transition-[height,opacity,scale] duration-300 ease-out-quart data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 dark:ring-foreground/10">
-                  <PreviewCard.Viewport className="relative size-full [&_[data-current]]:transition-opacity [&_[data-current]]:duration-200 [&_[data-current][data-starting-style]]:opacity-0 [&_[data-previous]]:w-full [&_[data-previous]]:transition-opacity [&_[data-previous]]:duration-200 [&_[data-previous][data-ending-style]]:opacity-0">
-                    {payload ? <SkillCardBody skill={payload} /> : null}
-                  </PreviewCard.Viewport>
-                </PreviewCard.Popup>
-              </PreviewCard.Positioner>
-            </PreviewCard.Portal>
-          )}
-        </PreviewCard.Root>
-      ) : null}
-    </CardHandle.Provider>
-  );
-}
-
-/**
- * A row that previews its projects in the page's hover card. The card is
- * mouse-only by design (Base UI keeps preview cards out of keyboard and
- * screen-reader flow), so the row itself links to the projects page.
- */
-export function SkillCardTrigger({
+export function SkillHoverCard({
   skill,
   className,
   children,
@@ -233,18 +175,26 @@ export function SkillCardTrigger({
   className?: string;
   children: ReactNode;
 }) {
-  const handle = useContext(CardHandle) ?? undefined;
+  const projects = projectsUsing(skill.name);
+  const usedIn = useUsedIn(projects.length);
 
   return (
-    <PreviewCard.Trigger
-      handle={handle}
-      payload={skill}
-      delay={300}
-      render={<Link to="/projects" />}
-      className={className}
-    >
-      {children}
-    </PreviewCard.Trigger>
+    <HoverCard>
+      <HoverCardTrigger delay={300} render={<div />} className={className}>
+        {children}
+      </HoverCardTrigger>
+      <HoverCardContent
+        side="right"
+        sideOffset={12}
+        alignOffset={0}
+        className="w-80 rounded-2xl p-1.5"
+      >
+        <p className="px-2.5 pt-1.5 pb-1 text-xs text-muted-foreground">
+          {usedIn}
+        </p>
+        <ProjectList skill={skill} projects={projects} className="max-h-96" />
+      </HoverCardContent>
+    </HoverCard>
   );
 }
 
