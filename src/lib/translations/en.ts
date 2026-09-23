@@ -433,6 +433,17 @@ export const en = {
       security: "Security",
       tools: "Tools",
     },
+    levels: {
+      1: "Learning",
+      2: "Familiar",
+      3: "Comfortable",
+      4: "Proficient",
+      5: "Advanced",
+    },
+    usedIn: "Used in {count} projects",
+    usedInOne: "Used in 1 project",
+    projectCount: "{count} projects",
+    projectCountOne: "1 project",
   },
   notFound: {
     backHome: "Go back home",

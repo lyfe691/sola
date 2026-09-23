@@ -431,6 +431,17 @@ export const ja = {
       security: "セキュリティ",
       tools: "ツール",
     },
+    levels: {
+      1: "学習中",
+      2: "基礎",
+      3: "実用",
+      4: "熟練",
+      5: "上級",
+    },
+    usedIn: "{count}件のプロジェクトで使用",
+    usedInOne: "1件のプロジェクトで使用",
+    projectCount: "{count}件のプロジェクト",
+    projectCountOne: "1件のプロジェクト",
   },
   notFound: {
     backHome: "ホームに戻る",

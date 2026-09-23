@@ -13,6 +13,7 @@ import {
 } from "react-icons/si";
 import { Cursor02Icon } from "@hugeicons/core-free-icons";
 import { hugeIcon } from "@/lib/huge-icon";
+import { PROJECTS, type ProjectMeta } from "@/config/projects";
 import { TECH_ICONS, type TechIcon } from "@/config/tech-icons";
 import type { IconType } from "react-icons";
 
@@ -134,3 +135,25 @@ export const SKILL_GROUPS: SkillGroup[] = SKILL_GROUPS_RAW.map((group) => ({
   ...group,
   skills: [...group.skills].sort((a, b) => b.level - a.level),
 }));
+
+/** Project technology labels that also count as the skill. */
+export const SKILL_ALIASES: Record<string, string[]> = {
+  React: ["React (Vite)"],
+  Vite: ["React (Vite)"],
+  "Next.js": ["Next.js App Router"],
+};
+
+/** Every technology label that counts as the skill. */
+export function skillLabels(name: string): string[] {
+  return [name, ...(SKILL_ALIASES[name] ?? [])];
+}
+
+const BY_PRIORITY = [...PROJECTS].sort((a, b) => b.priority - a.priority);
+
+/** The projects that list the skill among their technologies, featured first. */
+export function projectsUsing(name: string): ProjectMeta[] {
+  const labels = skillLabels(name);
+  return BY_PRIORITY.filter((project) =>
+    project.technologies.some((tech) => labels.includes(tech)),
+  );
+}
