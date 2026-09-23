@@ -51,8 +51,9 @@ import {
   ZapIcon,
 } from "@hugeicons/core-free-icons";
 import { hugeIcon } from "@/lib/huge-icon";
+import { cn } from "@/lib/utils";
+import { SiGnubash, SiNginx } from "react-icons/si";
 import AntdesignOriginal from "devicons-react/icons/AntdesignOriginal";
-import BashOriginal from "devicons-react/icons/BashOriginal";
 import ChromeOriginal from "devicons-react/icons/ChromeOriginal";
 import CplusplusOriginal from "devicons-react/icons/CplusplusOriginal";
 import Css3Original from "devicons-react/icons/Css3Original";
@@ -77,7 +78,6 @@ import MongodbOriginal from "devicons-react/icons/MongodbOriginal";
 import MysqlOriginal from "devicons-react/icons/MysqlOriginal";
 import NestjsOriginal from "devicons-react/icons/NestjsOriginal";
 import NextjsOriginal from "devicons-react/icons/NextjsOriginal";
-import NginxOriginal from "devicons-react/icons/NginxOriginal";
 import NodejsOriginal from "devicons-react/icons/NodejsOriginal";
 import NotionOriginal from "devicons-react/icons/NotionOriginal";
 import NpmOriginal from "devicons-react/icons/NpmOriginal";
@@ -109,10 +109,31 @@ export type TechIcon = ComponentType<{
 const LinuxMark: TechIcon = (props) =>
   createElement(LinuxPlain, { color: "#FCC624", ...props });
 
+// black (or near-black) marks vanish on a dark surface: flip or lift them
+// wherever the scheme is dark, so every chip and tile can show them
+const onDark =
+  (Icon: TechIcon, adjust = "dark:invert"): TechIcon =>
+  ({ className, ...props }) =>
+    createElement(Icon, { ...props, className: cn(className, adjust) });
+
+// devicons draw these as a dark box and a tiny wordmark; the simple-icons
+// marks read at tile size, bash in the text colour, nginx in its green
+const BashMark: TechIcon = (props) => createElement(SiGnubash, props);
+const NginxMark: TechIcon = (props) =>
+  createElement(SiNginx, { color: "#009639", ...props });
+
+const FramerMotionMark = onDark(FramermotionOriginal);
+const GithubMark = onDark(GithubOriginal);
+const MarkdownMark = onDark(MarkdownOriginal);
+const MysqlMark = onDark(MysqlOriginal, "dark:brightness-200");
+const RustMark = onDark(RustOriginal);
+const ThreejsMark = onDark(ThreejsOriginal);
+const VercelMark = onDark(VercelOriginal);
+
 /** exact display-name -> mark; variants of one stack share its mark */
 export const TECH_ICONS: Record<string, TechIcon> = {
   "Ant Design": AntdesignOriginal,
-  Bash: BashOriginal,
+  Bash: BashMark,
   "C++": CplusplusOriginal,
   "Chrome Extension": ChromeOriginal,
   CSS: Css3Original,
@@ -121,9 +142,9 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   ESLint: EslintOriginal,
   FastAPI: FastapiOriginal,
   Figma: FigmaOriginal,
-  "Framer Motion": FramermotionOriginal,
+  "Framer Motion": FramerMotionMark,
   Git: GitOriginal,
-  GitHub: GithubOriginal,
+  GitHub: GithubMark,
   "GitHub Actions": GithubactionsOriginal,
   HTML: Html5Original,
   Insomnia: InsomniaOriginal,
@@ -133,13 +154,13 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   Kotlin: KotlinOriginal,
   Kubernetes: KubernetesOriginal,
   Linux: LinuxMark,
-  MDX: MarkdownOriginal,
+  MDX: MarkdownMark,
   MongoDB: MongodbOriginal,
-  MySQL: MysqlOriginal,
+  MySQL: MysqlMark,
   NestJS: NestjsOriginal,
   "Next.js": NextjsOriginal,
   "Next.js App Router": NextjsOriginal,
-  Nginx: NginxOriginal,
+  Nginx: NginxMark,
   "Node.js": NodejsOriginal,
   Notion: NotionOriginal,
   npm: NpmOriginal,
@@ -152,18 +173,18 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   "React (Vite)": ReactOriginal,
   "React Server Components": ReactOriginal,
   Redis: RedisOriginal,
-  Rust: RustOriginal,
+  Rust: RustMark,
   "Spring Boot": SpringOriginal,
   Supabase: SupabaseOriginal,
   "Tailwind CSS": TailwindcssOriginal,
   Terraform: TerraformOriginal,
-  "Three.js": ThreejsOriginal,
+  "Three.js": ThreejsMark,
   TypeScript: TypescriptOriginal,
-  Vercel: VercelOriginal,
-  "Vercel AI SDK": VercelOriginal,
+  Vercel: VercelMark,
+  "Vercel AI SDK": VercelMark,
   Vite: ViteOriginal,
   "VS Code": VscodeOriginal,
-  tokio: RustOriginal,
+  tokio: RustMark,
 
   // ---- concept tags (hugeicons, monochrome) ----
   "ASCII Art": hugeIcon(TextFontIcon),
