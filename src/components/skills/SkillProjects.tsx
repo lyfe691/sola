@@ -8,8 +8,7 @@
 
 import { useRef, type ReactNode } from "react";
 import { Link } from "react-router";
-import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
-import { PopupArrow } from "@/components/ui/custom/popup-arrow";
+import type { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 import {
   Drawer,
   DrawerContent,
@@ -201,12 +200,9 @@ export function SkillPopover({
       <PopoverContent
         side="right"
         align="center"
-        sideOffset={14}
+        sideOffset={12}
         className="w-80 gap-0 rounded-2xl p-1.5"
       >
-        <PopoverPrimitive.Arrow className="flex data-[side=bottom]:-top-2 data-[side=left]:-right-[13.5px] data-[side=left]:rotate-90 data-[side=right]:-left-[13.5px] data-[side=right]:-rotate-90 data-[side=top]:-bottom-2 data-[side=top]:rotate-180">
-          <PopupArrow />
-        </PopoverPrimitive.Arrow>
         <PopoverTitle className="sr-only">{skill.name}</PopoverTitle>
         <PopoverDescription className="px-2.5 pt-1.5 pb-1 text-xs">
           {usedIn}
