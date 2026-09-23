@@ -41,7 +41,7 @@ const ROW =
   "group flex w-full min-w-0 items-center gap-3 rounded-2xl px-2 py-2 text-left";
 // desktop rows only show the hover card; phone rows are tapped for the drawer
 const HOVERABLE =
-  "transition-colors duration-200 ease-out can-hover:hover:bg-muted/50 data-popup-open:bg-muted/50";
+  "transition-colors duration-200 ease-out can-hover:hover:bg-muted/50 data-active:bg-muted/50";
 const PRESSABLE =
   "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out active:scale-[0.99] active:bg-muted/50";
 
@@ -75,7 +75,7 @@ function SkillRowBody({
           icon={ArrowRight01Icon}
           strokeWidth={2}
           aria-hidden="true"
-          className="size-4 shrink-0 text-muted-foreground/50 transition-[translate,color] duration-200 ease-out group-data-popup-open:text-foreground can-hover:group-hover:translate-x-0.5 can-hover:group-hover:text-foreground"
+          className="size-4 shrink-0 text-muted-foreground/50 transition-[translate,color] duration-200 ease-out group-data-active:text-foreground can-hover:group-hover:translate-x-0.5 can-hover:group-hover:text-foreground"
         />
       ) : null}
     </>
@@ -104,9 +104,19 @@ function SkillRow({
   );
 
   let row: ReactNode;
-  if (count === 0) {
+  if (!isMobile) {
+    row = (
+      <SkillCardTrigger
+        skill={skill}
+        openable={count > 0}
+        className={cn(ROW, count > 0 && HOVERABLE)}
+      >
+        {body}
+      </SkillCardTrigger>
+    );
+  } else if (count === 0) {
     row = <div className={ROW}>{body}</div>;
-  } else if (isMobile) {
+  } else {
     row = (
       <button
         type="button"
@@ -115,12 +125,6 @@ function SkillRow({
       >
         {body}
       </button>
-    );
-  } else {
-    row = (
-      <SkillCardTrigger skill={skill} className={cn(ROW, HOVERABLE)}>
-        {body}
-      </SkillCardTrigger>
     );
   }
 

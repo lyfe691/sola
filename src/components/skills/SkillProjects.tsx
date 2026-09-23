@@ -8,14 +8,26 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useState,
+  type PointerEvent,
   type ReactNode,
+  type Ref,
 } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router";
-import { PreviewCard } from "@base-ui/react/preview-card";
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+} from "motion/react";
 import {
   Drawer,
   DrawerContent,
@@ -30,6 +42,7 @@ import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useTranslation } from "@/lib/language-provider";
 import { countLabel } from "@/lib/plural";
 import { cn } from "@/lib/utils";
+import { EASE_OUT } from "@/utils/transitions";
 
 const STACK_MAX = 7;
 
@@ -164,11 +177,6 @@ function ProjectList({
   );
 }
 
-const CardHandle = createContext<PreviewCard.Handle<Skill> | null>(null);
-
-// how long the pointer must hold still before a pending switch is decided
-const SETTLE_MS = 120;
-
 function SkillCardBody({ skill }: { skill: Skill }) {
   const projects = projectsUsing(skill.name);
   const usedIn = useUsedIn(projects.length);
@@ -183,13 +191,90 @@ function SkillCardBody({ skill }: { skill: Skill }) {
   );
 }
 
+// ---- Desktop: one hover card for the page ----
+
+const CARD_WIDTH = 320;
+const CARD_GAP = 12; // between a row and its card
+const VIEW_MARGIN = 16; // the card keeps this much viewport on every side
+const OPEN_DELAY = 300; // a rest on a row before the card first appears
+const SWITCH_DELAY = 100; // a hold on another row before the card moves there
+const CLOSE_DELAY = 200; // after leaving the rows and the card
+// the theme preview's move (theme-toggle.tsx): keep the two alike
+const GLIDE = { duration: 0.2, ease: EASE_OUT } as const;
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+/** The row the card belongs to, and where it goes (document coordinates). */
+interface Anchor {
+  skill: Skill;
+  row: HTMLElement;
+  side: "left" | "right";
+  x: number;
+  centre: number;
+  /** the visible range the card is kept inside */
+  view: { top: number; bottom: number };
+}
+
+function anchorFor(skill: Skill, row: HTMLElement): Anchor {
+  const rect = row.getBoundingClientRect();
+  const fitsRight =
+    rect.right + CARD_GAP + CARD_WIDTH <= window.innerWidth - VIEW_MARGIN;
+  return {
+    skill,
+    row,
+    side: fitsRight ? "right" : "left",
+    x:
+      window.scrollX +
+      (fitsRight ? rect.right + CARD_GAP : rect.left - CARD_GAP - CARD_WIDTH),
+    centre: window.scrollY + rect.top + rect.height / 2,
+    view: {
+      top: window.scrollY + VIEW_MARGIN,
+      bottom: window.scrollY + window.innerHeight - VIEW_MARGIN,
+    },
+  };
+}
+
+const cross = (a: Point, b: Point, p: Point) =>
+  (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
+
+function inTriangle(p: Point, a: Point, b: Point, c: Point) {
+  const ab = cross(a, b, p);
+  const bc = cross(b, c, p);
+  const ca = cross(c, a, p);
+  return (ab >= 0 && bc >= 0 && ca >= 0) || (ab <= 0 && bc <= 0 && ca <= 0);
+}
+
+function useTimer() {
+  const id = useRef<number | undefined>(undefined);
+  const clear = useCallback(() => window.clearTimeout(id.current), []);
+  const start = useCallback((ms: number, fn: () => void) => {
+    window.clearTimeout(id.current);
+    id.current = window.setTimeout(fn, ms);
+  }, []);
+  useEffect(() => clear, [clear]);
+  return useMemo(() => ({ start, clear }), [start, clear]);
+}
+
+/** What the rows report. A row with nothing to show settles the card away. */
+interface Rows {
+  /** the skill whose row the card is on */
+  active: string | null;
+  enter: (skill: Skill | null, row: HTMLElement, event: PointerEvent) => void;
+  move: (skill: Skill | null, row: HTMLElement, event: PointerEvent) => void;
+  leave: (row: HTMLElement, event: PointerEvent) => void;
+}
+
+const RowsContext = createContext<Rows | null>(null);
+
 /**
- * Desktop: one hover card for the page, gliding to whichever row is hovered
- * (the theme menu's preview moves the same way). Base UI hands an open card
- * to any row the pointer touches, so a sweep from a row into its card would
- * give it away to every neighbour crossed on the way. Instead a switch
- * waits until the pointer comes to rest: on the new row the card follows,
- * on the old row or the card it stays, anywhere else it closes.
+ * The rows report the pointer; one card glides to the row it settles on and
+ * cross-fades its projects, the way the theme menu's preview follows its
+ * rows. The card sits beside the row, so the way into its far items crosses
+ * the rows above or below: a row under that way only takes the card once
+ * the pointer holds on it without heading for the card.
  */
 export function SkillCards({
   enabled,
@@ -198,124 +283,196 @@ export function SkillCards({
   enabled: boolean;
   children: ReactNode;
 }) {
-  const [handle] = useState(() => PreviewCard.createHandle<Skill>());
-  const active = useRef<Element | null>(null);
-  const popupRef = useRef<HTMLDivElement>(null);
-  const [intent] = useState(() => {
-    let pending: Element | null = null;
-    let timer: number | undefined;
+  const [anchor, setAnchor] = useState<Anchor | null>(null);
+  const pending = useTimer();
+  const closing = useTimer();
+  // where the pointer left the active row: the apex of the way into the card
+  const leftAt = useRef<Point | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-    const decide = () => {
-      stop();
-      const row = pending;
-      pending = null;
-      if (row?.matches(":hover")) {
-        active.current = row;
-        handle.open(row.id);
-      } else if (
-        !active.current?.matches(":hover") &&
-        !popupRef.current?.matches(":hover")
-      ) {
-        handle.close();
-      }
-    };
-    const restart = () => {
-      window.clearTimeout(timer);
-      timer = window.setTimeout(decide, SETTLE_MS);
-    };
-    const stop = () => {
-      window.clearTimeout(timer);
-      document.removeEventListener("pointermove", restart);
-    };
+  const settle = useCallback((next: Anchor | null) => {
+    leftAt.current = null;
+    setAnchor(next);
+  }, []);
+  const hide = useCallback(() => settle(null), [settle]);
 
+  const rows = useMemo<Rows>(() => {
+    const settleOn = (skill: Skill | null, row: HTMLElement) => () =>
+      settle(skill ? anchorFor(skill, row) : null);
     return {
-      isPending: () => pending !== null,
-      switchTo: (row: Element) => {
-        pending = row;
-        restart();
-        document.addEventListener("pointermove", restart);
+      active: anchor?.skill.name ?? null,
+      enter(skill, row, event) {
+        if (event.pointerType !== "mouse") return;
+        closing.clear();
+        if (row === anchor?.row) pending.clear();
+        else
+          pending.start(
+            anchor ? SWITCH_DELAY : OPEN_DELAY,
+            settleOn(skill, row),
+          );
       },
-      stop,
+      move(skill, row, event) {
+        const from = leftAt.current;
+        if (!anchor || row === anchor.row || !from) return;
+        const card = cardRef.current?.getBoundingClientRect();
+        if (!card) return;
+        const edge = anchor.side === "right" ? card.left : card.right;
+        const heading = inTriangle(
+          { x: event.clientX, y: event.clientY },
+          from,
+          { x: edge, y: card.top },
+          { x: edge, y: card.bottom },
+        );
+        if (heading) pending.start(SWITCH_DELAY, settleOn(skill, row));
+      },
+      leave(row, event) {
+        pending.clear();
+        if (row === anchor?.row) {
+          leftAt.current = { x: event.clientX, y: event.clientY };
+        }
+      },
     };
-  });
-
-  useEffect(() => intent.stop, [intent]);
-
-  const onOpenChange = (
-    open: boolean,
-    details: PreviewCard.Root.ChangeEventDetails,
-  ) => {
-    const trigger = details.trigger ?? null;
-    if (
-      open &&
-      details.reason === "trigger-hover" &&
-      handle.isOpen &&
-      trigger &&
-      trigger !== active.current
-    ) {
-      details.cancel();
-      intent.switchTo(trigger);
-      return;
-    }
-    // the old row letting go while a switch is pending: the rest decides
-    if (!open && intent.isPending()) {
-      details.cancel();
-      return;
-    }
-    if (open && trigger) active.current = trigger;
-  };
+  }, [anchor, pending, closing, settle]);
 
   return (
-    <CardHandle.Provider value={handle}>
-      {children}
-      {enabled ? (
-        <PreviewCard.Root handle={handle} onOpenChange={onOpenChange}>
-          {({ payload }) => (
-            <PreviewCard.Portal>
-              <PreviewCard.Positioner
-                side="right"
-                sideOffset={12}
-                className="isolate z-50 transition-[top,left,right,bottom] duration-200 ease-out"
-              >
-                <PreviewCard.Popup
-                  ref={popupRef}
-                  className="h-(--popup-height,auto) w-80 origin-(--transform-origin) overflow-clip rounded-2xl bg-popover p-1.5 text-sm text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-hidden transition-[height,opacity,scale] duration-200 ease-out data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0 dark:ring-foreground/10"
-                >
-                  <PreviewCard.Viewport className="relative size-full [&_[data-current]]:transition-opacity [&_[data-current]]:duration-200 [&_[data-current][data-starting-style]]:opacity-0 [&_[data-previous]]:w-full [&_[data-previous]]:transition-opacity [&_[data-previous]]:duration-100 [&_[data-previous][data-ending-style]]:opacity-0">
-                    {payload ? <SkillCardBody skill={payload} /> : null}
-                  </PreviewCard.Viewport>
-                </PreviewCard.Popup>
-              </PreviewCard.Positioner>
-            </PreviewCard.Portal>
-          )}
-        </PreviewCard.Root>
-      ) : null}
-    </CardHandle.Provider>
+    <RowsContext.Provider value={rows}>
+      {/* the portal'd card is a child, so leaving means leaving both */}
+      <div
+        onPointerEnter={(event) => {
+          if (event.pointerType === "mouse") closing.clear();
+        }}
+        onPointerLeave={(event) => {
+          if (event.pointerType === "mouse") closing.start(CLOSE_DELAY, hide);
+        }}
+      >
+        {children}
+        {enabled
+          ? createPortal(
+              <AnimatePresence>
+                {anchor ? (
+                  <SkillCard
+                    key="skill-card"
+                    ref={cardRef}
+                    anchor={anchor}
+                    onPointerEnter={() => {
+                      leftAt.current = null;
+                    }}
+                  />
+                ) : null}
+              </AnimatePresence>,
+              document.body,
+            )
+          : null}
+      </div>
+    </RowsContext.Provider>
   );
 }
 
-/** A row that shows the page's hover card for its skill. A click does nothing. */
+function SkillCard({
+  ref,
+  anchor,
+  onPointerEnter,
+}: {
+  ref: Ref<HTMLDivElement>;
+  anchor: Anchor;
+  onPointerEnter: () => void;
+}) {
+  const reducedMotion = useReducedMotion();
+  const x = useMotionValue(anchor.x);
+  const y = useMotionValue(anchor.centre);
+  const height = useMotionValue(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const placedAt = useRef<Anchor | null>(null);
+
+  useLayoutEffect(() => {
+    const h = contentRef.current?.offsetHeight ?? 0;
+    const top = Math.max(
+      anchor.view.top,
+      Math.min(anchor.centre - h / 2, anchor.view.bottom - h),
+    );
+    // a first placement is not a move, nor is a re-run for the same row (a
+    // StrictMode remount rewinds the values to their initials)
+    const moved = placedAt.current !== null && placedAt.current !== anchor;
+    if (moved && !reducedMotion) {
+      animate(x, anchor.x, GLIDE);
+      animate(y, top, GLIDE);
+      animate(height, h, GLIDE);
+    } else {
+      x.jump(anchor.x);
+      y.jump(top);
+      height.jump(h);
+    }
+    placedAt.current = anchor;
+  }, [anchor, reducedMotion, x, y, height]);
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{
+        x,
+        y,
+        width: CARD_WIDTH,
+        transformOrigin:
+          anchor.side === "right" ? "left center" : "right center",
+      }}
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={GLIDE}
+      className="absolute top-0 left-0 z-50"
+      onPointerEnter={onPointerEnter}
+    >
+      <motion.div
+        style={{ height }}
+        className="overflow-clip rounded-2xl bg-popover text-sm text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
+      >
+        <div ref={contentRef} className="relative p-1.5">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.div
+              key={anchor.skill.name}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={GLIDE}
+            >
+              <SkillCardBody skill={anchor.skill} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/**
+ * A row of the desktop list: an openable one shows the page's hover card for
+ * its skill, any other settles it away. A click does nothing.
+ */
 export function SkillCardTrigger({
   skill,
+  openable,
   className,
   children,
 }: {
   skill: Skill;
+  openable: boolean;
   className?: string;
   children: ReactNode;
 }) {
-  const handle = useContext(CardHandle) ?? undefined;
+  const rows = useContext(RowsContext);
+  if (!rows) throw new Error("SkillCardTrigger needs SkillCards");
+  const shows = openable ? skill : null;
 
   return (
-    <PreviewCard.Trigger
-      handle={handle}
-      payload={skill}
-      delay={300}
-      render={<div />}
+    <div
+      data-active={rows.active === skill.name ? "" : undefined}
       className={className}
+      onPointerEnter={(event) => rows.enter(shows, event.currentTarget, event)}
+      onPointerMove={(event) => rows.move(shows, event.currentTarget, event)}
+      onPointerLeave={(event) => rows.leave(event.currentTarget, event)}
     >
       {children}
-    </PreviewCard.Trigger>
+    </div>
   );
 }
 
