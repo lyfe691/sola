@@ -27,6 +27,7 @@ import {
   motion,
   useMotionValue,
   useReducedMotion,
+  type MotionStyle,
 } from "motion/react";
 import {
   Drawer,
@@ -121,7 +122,7 @@ function ProjectItem({
         <span className="min-w-0 flex-1 truncate text-sm font-medium text-foreground">
           {title}
         </span>
-        <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground">
+        <span className="shrink-0 font-mono text-2xs tabular-nums text-muted-foreground">
           {project.date.start.slice(0, 4)}
         </span>
       </span>
@@ -444,18 +445,15 @@ function SkillCard({
   return (
     <motion.div
       ref={ref}
-      style={{
-        x,
-        y,
-        width: CARD_WIDTH,
-        transformOrigin:
-          anchor.side === "right" ? "left center" : "right center",
-      }}
+      style={{ x, y, "--card-w": `${CARD_WIDTH}px` } as MotionStyle}
       initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={GLIDE}
-      className="absolute top-0 left-0 z-50"
+      className={cn(
+        "absolute top-0 left-0 z-50 w-(--card-w)",
+        anchor.side === "right" ? "origin-left" : "origin-right",
+      )}
       onPointerEnter={onPointerEnter}
     >
       <motion.div

@@ -90,8 +90,7 @@ const PageShell = ({ children }: { children: ReactNode }) => {
         initial="initial"
         animate="animate"
         exit="exit"
-        style={{ transformOrigin: "50% 42%" }}
-        className="flex flex-1 flex-col"
+        className="flex flex-1 origin-[50%_42%] flex-col"
       >
         <Suspense fallback={<div className="flex-1" />}>
           {active ? <CodeView /> : children}

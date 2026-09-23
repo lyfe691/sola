@@ -84,38 +84,35 @@ const SIZES: Record<ButtonSize, string> = {
   lg: "px-[30px] py-[14px] text-[1rem] sm:px-10 sm:py-[18px] sm:text-[1.15rem] leading-none",
 };
 
-interface Colorway {
+interface Glass {
   tint: string;
   tintOpacity: number;
   text: string;
+  shadow: boolean;
+}
+
+interface Rim {
   line: string;
   base: string;
-  shadow: boolean;
 }
 
 /**
  * Glass colorways per variant, mirroring the shadcn Button's rest-state token
- * families. The rim (base) is dim and mostly neutral; the glint (line) is a
- * pale bright cast of the variant color so the moving light always outshines
- * the static edge.
+ * families.
  */
-const VARIANTS: Record<SpecularVariant, Colorway> = {
+const VARIANTS: Record<SpecularVariant, Glass> = {
   // Primary-tinted glass: the accent lives in the tint, a primary-leaning
   // rim, and a pale primary glint.
   default: {
     tint: "var(--primary)",
     tintOpacity: 0.15,
     text: "var(--foreground)",
-    line: "color-mix(in oklch, var(--primary) 40%, white)",
-    base: "color-mix(in oklch, var(--primary) 55%, var(--muted-foreground))",
     shadow: true,
   },
   secondary: {
     tint: "var(--secondary)",
     tintOpacity: 0.6,
     text: "var(--secondary-foreground)",
-    line: "color-mix(in oklch, var(--foreground) 25%, white)",
-    base: "var(--muted-foreground)",
     shadow: true,
   },
   // outline is the pure reference glass, defined by its rim.
@@ -123,8 +120,6 @@ const VARIANTS: Record<SpecularVariant, Colorway> = {
     tint: "var(--foreground)",
     tintOpacity: 0,
     text: "var(--foreground)",
-    line: "color-mix(in oklch, var(--foreground) 25%, white)",
-    base: "var(--muted-foreground)",
     shadow: true,
   },
   // ghost is invisible until lit: no surface, no rim, no shadow.
@@ -132,8 +127,6 @@ const VARIANTS: Record<SpecularVariant, Colorway> = {
     tint: "var(--foreground)",
     tintOpacity: 0,
     text: "var(--foreground)",
-    line: "color-mix(in oklch, var(--foreground) 25%, white)",
-    base: "transparent",
     shadow: false,
   },
   // Mirrors the shadcn soft destructive (bg-destructive/10 text-destructive).
@@ -141,9 +134,36 @@ const VARIANTS: Record<SpecularVariant, Colorway> = {
     tint: "var(--destructive)",
     tintOpacity: 0.1,
     text: "var(--destructive)",
+    shadow: true,
+  },
+};
+
+/**
+ * The rim the shader draws, per variant, apart from the glass so the style
+ * the button renders reads only theme tokens. The base is dim and mostly
+ * neutral; the glint (line) is a pale bright cast of the variant color so the
+ * moving light always outshines the static edge.
+ */
+const RIMS: Record<SpecularVariant, Rim> = {
+  default: {
+    line: "color-mix(in oklch, var(--primary) 40%, white)",
+    base: "color-mix(in oklch, var(--primary) 55%, var(--muted-foreground))",
+  },
+  secondary: {
+    line: "color-mix(in oklch, var(--foreground) 25%, white)",
+    base: "var(--muted-foreground)",
+  },
+  outline: {
+    line: "color-mix(in oklch, var(--foreground) 25%, white)",
+    base: "var(--muted-foreground)",
+  },
+  ghost: {
+    line: "color-mix(in oklch, var(--foreground) 25%, white)",
+    base: "transparent",
+  },
+  destructive: {
     line: "color-mix(in oklch, var(--destructive) 45%, white)",
     base: "var(--destructive)",
-    shadow: true,
   },
 };
 
@@ -312,11 +332,12 @@ export function SpecularButton({
   const startRef = React.useRef<(() => void) | null>(null);
 
   const way = VARIANTS[variant] ?? VARIANTS.default;
+  const rim = RIMS[variant] ?? RIMS.default;
   const tintC = tint ?? way.tint;
   const tintO = tintOpacity ?? way.tintOpacity;
   const textC = textColor ?? way.text;
-  const lineC = lineColor ?? way.line;
-  const baseC = baseColor ?? way.base;
+  const lineC = lineColor ?? rim.line;
+  const baseC = baseColor ?? rim.base;
 
   // Declared before the setup effect so propsRef is populated on mount, then
   // pokes the loop awake after every commit so prop changes take effect even
@@ -665,8 +686,8 @@ export function SpecularButton({
       <span
         ref={fxRef}
         aria-hidden
-        className="pointer-events-none absolute [&_canvas]:block [&_canvas]:size-full"
-        style={{ inset: -PAD }}
+        className="pointer-events-none absolute -inset-(--pad) [&_canvas]:block [&_canvas]:size-full"
+        style={{ "--pad": `${PAD}px` } as React.CSSProperties}
       />
       <span>{children}</span>
     </button>

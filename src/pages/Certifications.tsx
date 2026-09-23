@@ -66,7 +66,7 @@ const Certifications: React.FC = () => {
                               {c.title}
                             </h2>
                             {expired && (
-                              <span className="px-2 py-0.5 text-[10px] rounded bg-destructive/10 border border-destructive/30 text-destructive shrink-0">
+                              <span className="px-2 py-0.5 text-3xs rounded bg-destructive/10 border border-destructive/30 text-destructive shrink-0">
                                 {t.certifications.expired}
                               </span>
                             )}
@@ -144,11 +144,7 @@ const Certifications: React.FC = () => {
                     {c.skills && c.skills.length > 0 ? (
                       <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
                         {c.skills.map((s, idx) => (
-                          <Badge
-                            key={idx}
-                            variant="secondary"
-                            className="font-normal"
-                          >
+                          <Badge key={idx} variant="chip">
                             {s}
                           </Badge>
                         ))}

@@ -1,4 +1,10 @@
-import { useEffect, useRef, useMemo, useCallback } from "react";
+import {
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  type CSSProperties,
+} from "react";
 import * as THREE from "three";
 import { cn } from "@/lib/utils";
 
@@ -393,11 +399,8 @@ const ChromaWaves: React.FC<ChromaWavesProps> = ({
 
   return (
     <div
-      className={cn("relative overflow-hidden", className)}
-      style={{
-        width: widthStyle,
-        height: heightStyle,
-      }}
+      className={cn("relative overflow-hidden", className, "h-(--h) w-(--w)")}
+      style={{ "--w": widthStyle, "--h": heightStyle } as CSSProperties}
     >
       <div ref={containerRef} className="absolute inset-0" />
       {children && (

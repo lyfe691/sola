@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CommitDetail } from "@/components/changelog/CommitDetail";
 import { CommitRail, railWidth } from "@/components/changelog/CommitRail";
@@ -16,9 +16,7 @@ import {
   TypeChip,
 } from "@/components/changelog/CommitMeta";
 import { Reveal } from "@/components/Reveal";
-import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
 import { DEPLOY_LABEL } from "@/components/deploy-diff/use-page-diff";
-import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
 import { commitGraph, type GraphRow } from "@/lib/commit-graph";
 import {
   commitDetailQuery,
@@ -73,7 +71,7 @@ export function CommitLogSkeleton() {
     <ol aria-hidden="true" className="relative">
       <span className="absolute inset-y-0 left-[6.25px] w-[1.5px] bg-foreground/10 mask-b-from-50%" />
       {SKELETON_SUBJECTS.map((width, i) => (
-        <li key={i} className="relative pl-[18px]">
+        <li key={i} className="relative pl-4.5">
           <span className="absolute top-[18.5px] left-[3.5px] size-[7px] animate-pulse rounded-full bg-foreground/15" />
           <div className="space-y-2 px-3 py-3.5">
             <span
@@ -122,8 +120,8 @@ function CommitRow({
 
   return (
     <li
-      className="group/row relative min-w-0"
-      style={{ paddingLeft: railWidth(lanes) + 2 }}
+      className="group/row relative min-w-0 pl-(--rail-w)"
+      style={{ "--rail-w": `${railWidth(lanes) + 2}px` } as CSSProperties}
     >
       {/* the rail stays out of the reveal and only fades with it: rows rise
           a beat apart, and a rail that rose with them would tear at every
@@ -155,7 +153,7 @@ function CommitRow({
         >
           <span className="sr-only">{isOpen ? t.collapse : t.expand}</span>
           <span className="flex min-w-0 items-baseline gap-3">
-            <span className="min-w-0 flex-1 text-[15px] leading-6 text-foreground">
+            <span className="min-w-0 flex-1 text-sm-plus leading-6 text-foreground">
               {headline.pr !== undefined ? (
                 <span className="mr-2 font-mono text-xs text-primary">
                   {t.pr.replace("{number}", String(headline.pr))}
@@ -163,19 +161,19 @@ function CommitRow({
               ) : null}
               {headline.text}
             </span>
-            <span className="hidden shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground sm:inline">
+            <span className="hidden shrink-0 font-mono text-2xs tabular-nums text-muted-foreground sm:inline">
               {date}
             </span>
           </span>
           <span className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1.5">
             {headline.type ? <TypeChip type={headline.type} /> : null}
             {headline.scope ? <ScopeChip scope={headline.scope} /> : null}
-            <span className="font-mono text-[11px] text-muted-foreground">
+            <span className="font-mono text-2xs text-muted-foreground">
               {commit.shortSha}
               <span className="sm:hidden"> · {date}</span>
             </span>
             {live ? (
-              <span className="font-mono text-[11px] text-primary">
+              <span className="font-mono text-2xs text-primary">
                 {t.thisDeploy}
               </span>
             ) : null}
@@ -218,7 +216,6 @@ function CommitRow({
 export function CommitLog({ commits }: { commits: ChangelogCommit[] }) {
   const { language } = useLanguage();
   const t = useTranslation().changelog;
-  const isDark = useIsDarkScheme();
   const queryClient = useQueryClient();
   const gen = useRef(0);
   const scrolledHash = useRef<string | null>(null);
@@ -316,7 +313,7 @@ export function CommitLog({ commits }: { commits: ChangelogCommit[] }) {
   );
 
   return (
-    <ol className="min-w-0" style={DIFF_TOKENS[isDark ? "dark" : "light"]}>
+    <ol className="min-w-0">
       {rows.map((commit, i) => (
         <CommitRow
           key={commit.sha}

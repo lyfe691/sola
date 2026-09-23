@@ -231,7 +231,7 @@ const Contact = () => {
 
         {/* right: form card */}
         <Reveal>
-          <Card className="gap-0 bg-card/60 p-6 sm:p-8">
+          <Card variant="soft" className="gap-0 p-6 sm:p-8">
             <form
               onSubmit={handleSubmit}
               noValidate

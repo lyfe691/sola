@@ -41,7 +41,6 @@ import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { Caret } from "./caret";
 import { CommitDiff } from "./CommitDiff";
-import { DIFF_TOKENS } from "./diff-tokens";
 import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
 import { resolvePagePath } from "./page-sources";
@@ -345,11 +344,7 @@ export function CodeView() {
   }, [commit, language]);
 
   return (
-    <main
-      id="main"
-      style={DIFF_TOKENS[scheme]}
-      className="flex min-h-screen flex-1 flex-col bg-background"
-    >
+    <main id="main" className="flex min-h-screen flex-1 flex-col bg-background">
       {/* the nav is gone in this mode — the exit bubble is the only UI
           above the code */}
       <ExitBubble

@@ -29,11 +29,7 @@ export function TechChip({
   return (
     <span
       {...props}
-      className={cn(
-        badgeVariants({ variant: "secondary" }),
-        "font-normal",
-        className,
-      )}
+      className={cn(badgeVariants({ variant: "chip" }), className)}
     >
       <Icon aria-hidden="true" className="shrink-0" />
       {name}

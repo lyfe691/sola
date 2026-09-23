@@ -85,8 +85,13 @@ const Services = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
         {servicesList.map((service) => (
           <Reveal key={service.key}>
-            <Card className="group relative h-full gap-0 overflow-visible bg-card/40 p-0 transition-shadow duration-300 hover:shadow-lg">
+            <Card
+              variant="translucent"
+              lift
+              className="group relative h-full gap-0 overflow-visible p-0"
+            >
               {service.highlight && (
+                // eslint-disable-next-line shadcn/no-restyle -- it floats over the card's edge
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 shadow-xs">
                   {service.highlight}
                 </Badge>
@@ -103,8 +108,8 @@ const Services = () => {
                     </h3>
                   </div>
                   <Badge
-                    variant="outline"
-                    className="hidden shrink-0 border-primary/20 bg-primary/10 font-medium text-primary sm:ml-auto sm:inline-flex"
+                    variant="tint"
+                    className="hidden shrink-0 sm:ml-auto sm:inline-flex"
                   >
                     {t.services.services[service.key].price}
                   </Badge>
@@ -158,7 +163,7 @@ const Services = () => {
       </div>
 
       <Reveal>
-        <Card className="bg-linear-to-br from-primary/20 via-primary/10 to-card p-5 sm:p-6 md:p-8">
+        <Card variant="highlight" className="p-5 sm:p-6 md:p-8">
           <h2 className="text-xl font-medium text-foreground">
             {t.services.customRequirements.title}
           </h2>

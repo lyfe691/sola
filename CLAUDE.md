@@ -7,11 +7,11 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 ## Verify
 
 - `bun run lint` — must stay at 0 errors (warnings tolerated). It includes
-  all six `@shadcn/lint` design-system rules as errors; violations that
-  predate them are baselined in `eslint-suppressions.json`. New code must
-  comply: never grow the baseline (no `--suppress-all` to silence new
-  findings). After fixing old ones, run
-  `bun node_modules/eslint/bin/eslint.js . --prune-suppressions`.
+  all six `@shadcn/lint` design-system rules as errors, with no baseline.
+  A dynamic value goes in a CSS custom property that a class reads
+  (`w-(--w)`); a component's sanctioned exceptions are contracts in
+  eslint.config.js; a one-off gets an `eslint-disable-next-line` with its
+  reason.
 - `bun run format:check` — prettier; `bun run format` fixes
 - `bun run typecheck` — `tsc -b` over src/ and api/ (plain `tsc --noEmit`
   checks nothing: the root tsconfig is solution-style with `files: []`)

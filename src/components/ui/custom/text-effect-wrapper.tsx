@@ -400,7 +400,7 @@ export function CyclingTextEffect({
               speedReveal={speedReveal}
               speedSegment={speedSegment}
               trigger={true}
-              style={{ display: "block" }}
+              className="block"
             >
               {texts[currentIndex]}
             </TextEffectWrapper>

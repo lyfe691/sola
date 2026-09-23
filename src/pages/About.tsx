@@ -98,7 +98,7 @@ function MediaFrame({
   );
 }
 
-const MEDIA_INNER = "size-full overflow-hidden rounded-[0.875rem] bg-muted/20";
+const MEDIA_INNER = "size-full overflow-hidden rounded-xl bg-muted/20";
 
 // -------------------------------- Portrait --------------------------------
 
@@ -184,7 +184,7 @@ function ApproachPanel({
             <h3 className="text-base font-semibold tracking-tight sm:text-lg">
               {label}
             </h3>
-            <p className="text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+            <p className="text-sm leading-relaxed text-muted-foreground sm:text-sm-plus">
               <RichText text={text} />
             </p>
           </div>
@@ -283,7 +283,7 @@ const About = () => {
         </Reveal>
 
         <Reveal>
-          <Card className="gap-0 overflow-hidden bg-card/40 p-0">
+          <Card variant="translucent" className="gap-0 overflow-hidden p-0">
             <Tabs
               value={contributionTab}
               onValueChange={setContributionTab}
@@ -341,7 +341,7 @@ const About = () => {
                   <h3 className="text-base font-medium sm:text-lg">
                     {item.title}
                   </h3>
-                  <p className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+                  <p className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-sm-plus">
                     {item.description}
                   </p>
                 </div>

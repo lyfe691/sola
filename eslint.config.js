@@ -20,6 +20,15 @@ export default tseslint.config(
       "react-refresh": reactRefresh,
       shadcn,
     },
+    settings: {
+      shadcn: {
+        // behaviour with no look of its own: a preview around a plain link,
+        // and an icon painted in its context's text colour
+        ignoreImports: [
+          "^@/components/ui/custom/(link-preview|chevron-to-arrow)$",
+        ],
+      },
+    },
     rules: {
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
@@ -30,13 +39,76 @@ export default tseslint.config(
         "warn",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
-      // design-system rules; violations that predate them live in
-      // eslint-suppressions.json, so only new code has to comply
-      "shadcn/no-restyle": ["error", { allow: ["layout"] }],
+      "shadcn/no-restyle": [
+        "error",
+        {
+          // the site's own utilities (index.css)
+          allow: ["layout", "link", "scroll-fade"],
+          contracts: [
+            // a container's padding and gap belong to the page it sits in
+            {
+              pattern: "^(Card|Tabs|Command)$|(Content|Header|Footer|Empty)$",
+              allow: ["layout", "spacing"],
+            },
+            // an empty state is framed by the page it sits in
+            { pattern: "^Empty$", allow: ["layout", "spacing", "shape"] },
+            // a title's size is its context's call
+            { pattern: "Title$", allow: ["layout", "typography"] },
+            // an icon takes its context's colour
+            { pattern: "^Spinner$", allow: ["layout", "color"] },
+            // a skeleton takes the shape of what it stands in for
+            { pattern: "^Skeleton$", allow: ["layout", "shape"] },
+            // an image may fade in once it has loaded
+            {
+              pattern: "^AvatarImage$",
+              allow: ["layout", "effects", "motion"],
+            },
+            // over artwork a breadcrumb takes its tone from what is behind it
+            {
+              pattern: "^Breadcrumb(List|Page|Separator)$",
+              allow: ["layout", "color", "typography"],
+            },
+            // a prose table takes the article's density and colours
+            {
+              pattern: "^Table(Head|Cell)?$",
+              allow: ["layout", "color", "typography"],
+            },
+          ],
+        },
+      ],
       "shadcn/no-raw-colors": "error",
-      "shadcn/no-arbitrary-values": ["error", { allow: ["layout"] }],
-      "shadcn/no-inline-styles": "error",
-      "shadcn/no-unknown-classes": "error",
+      // a transition's property list has no scale to draw from; the exact
+      // classes are one-off structural values with no token to stand for
+      "shadcn/no-arbitrary-values": [
+        "error",
+        {
+          allow: [
+            "layout",
+            "transition",
+            "pb-[env(safe-area-inset-bottom)]",
+            "rounded-[inherit]",
+            "rounded-[3px]",
+            "rounded-[0.75rem]",
+            "ring-[1.5px]",
+            "bg-size-[200%_100%]",
+            "underline-offset-[0.2em]",
+            "mask-[url(/apple-touch-icon.png)]",
+            "bg-size-[160px_160px]",
+          ],
+        },
+      ],
+      "shadcn/no-inline-styles": [
+        "error",
+        {
+          // motion values have to arrive through style; motion writes them
+          contracts: [{ pattern: "^motion\\.", allow: ["x", "y", "height"] }],
+        },
+      ],
+      // FoldText injects its own stylesheet at runtime
+      "shadcn/no-unknown-classes": [
+        "error",
+        { allow: ["fold-text", "fold-text-*"] },
+      ],
       "shadcn/require-static-classes": "error",
     },
   },

@@ -14,7 +14,7 @@
  * names the current section and expands the same list down over the content.
  */
 
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useState, type CSSProperties, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { motion, useIsPresent } from "motion/react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
@@ -199,12 +199,14 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
               >
                 <span
                   aria-hidden="true"
-                  style={{
-                    width: TICK_MAX,
-                    transform: `scaleX(${length / TICK_MAX})`,
-                  }}
+                  style={
+                    {
+                      "--tick-w": `${TICK_MAX}px`,
+                      "--tick-scale": length / TICK_MAX,
+                    } as CSSProperties
+                  }
                   className={cn(
-                    "block h-px origin-left transition-[transform,background-color] duration-250 ease-out",
+                    "block h-px w-(--tick-w) origin-left scale-x-(--tick-scale) transition-[scale,background-color] duration-250 ease-out",
                     active || distance === 0
                       ? "bg-foreground"
                       : "bg-foreground/30",
@@ -217,11 +219,13 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
       </ul>
       <div
         aria-hidden="true"
-        style={{
-          transform: `translateY(${label.index * TICK_PITCH + LABEL_OFFSET}px)`,
-        }}
+        style={
+          {
+            "--label-y": `${label.index * TICK_PITCH + LABEL_OFFSET}px`,
+          } as CSSProperties
+        }
         className={cn(
-          "pointer-events-none absolute top-0 left-10",
+          "pointer-events-none absolute top-0 left-10 translate-y-(--label-y)",
           label.glide && "transition-transform duration-200 ease-out",
         )}
       >

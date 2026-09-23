@@ -22,8 +22,6 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Caret } from "@/components/deploy-diff/caret";
-import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
-import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
 import { useTranslation } from "@/lib/language-provider";
 import { APP_ROUTES } from "@/config/routes";
 import { REVEAL } from "@/utils/transitions";
@@ -95,7 +93,6 @@ const NotFound = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const t = useTranslation();
-  const isDark = useIsDarkScheme();
   const reducedMotion = useReducedMotion() ?? false;
 
   // display form of the attempted path: human-readable, never unbounded
@@ -278,7 +275,6 @@ const NotFound = () => {
         initial={{ opacity: 0, y: 16, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.7, ease: REVEAL }}
-        style={DIFF_TOKENS[isDark ? "dark" : "light"]}
         className="w-full max-w-2xl overflow-hidden rounded-xl bg-popover shadow-2xl ring-1 ring-foreground/5 dark:ring-foreground/10"
       >
         {/* window bar: traffic lights in the diff palette, macOS title */}
@@ -286,7 +282,7 @@ const NotFound = () => {
           <span className="size-3 rounded-full bg-(--diff-del-fg)/90" />
           <span className="size-3 rounded-full bg-(--diff-mod-fg)/90" />
           <span className="size-3 rounded-full bg-(--diff-add-fg)/90" />
-          <span className="pointer-events-none absolute inset-x-0 text-center text-[11px] font-medium text-muted-foreground/70">
+          <span className="pointer-events-none absolute inset-x-0 text-center text-2xs font-medium text-muted-foreground/70">
             sola — zsh
           </span>
         </div>
@@ -295,7 +291,7 @@ const NotFound = () => {
           onClick={() => {
             if (isDone) inputRef.current?.focus({ preventScroll: true });
           }}
-          className={`relative whitespace-pre-wrap font-mono text-[13px] leading-relaxed text-muted-foreground sm:text-sm ${isDone ? "cursor-text" : ""}`}
+          className={`relative whitespace-pre-wrap font-mono text-xs-plus leading-relaxed text-muted-foreground sm:text-sm ${isDone ? "cursor-text" : ""}`}
         >
           {/* the scripted session, invisible — reserves the window's final
               size so the live transcript never grows the frame */}

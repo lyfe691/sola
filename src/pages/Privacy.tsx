@@ -1046,7 +1046,6 @@ const Privacy = () => {
             size="sm"
             iconPosition="left"
             onClick={h}
-            className="inline-flex items-center gap-2 text-sm "
           >
             {L[privacyLanguage].back}
           </IconButton>

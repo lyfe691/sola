@@ -116,14 +116,13 @@ const localizeProjects = (t: Translation, language: Language): Project[] => {
   }));
 };
 
-const cardClassName =
-  "group h-full gap-0 overflow-hidden bg-card/40 p-0 transition-shadow duration-300 hover:shadow-lg";
+const cardClassName = "group h-full gap-0 overflow-hidden p-0";
 
 /** The cover sits in the card the way the About page mounts its media: a
  *  6px mat, corners nesting inside the card's own radius (the card is
  *  rounded-4xl, so the inset radius is that minus the mat). No hairline:
  *  the date's notch cuts the outline, and a ring can't follow the cut. */
-const coverClassName = "rounded-[calc(var(--radius-4xl)_-_0.375rem)]";
+const coverClassName = "rounded-4xl-inner";
 
 const ProjectActions = ({
   project,
@@ -260,7 +259,7 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
 );
 
 const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
-  <Card className={cardClassName}>
+  <Card variant="translucent" lift className={cardClassName}>
     <div className="p-1.5 pb-0">
       <PaintedCover
         art={project.art}
@@ -274,7 +273,7 @@ const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
         notch={
           <time
             dateTime={project.date.start}
-            className="block px-5 py-2 font-mono text-[11px] leading-4 font-bold tracking-[0.14em] text-foreground uppercase sm:px-6"
+            className="block px-5 py-2 font-mono text-2xs leading-4 font-bold tracking-label text-foreground uppercase sm:px-6"
           >
             {project.dateLabel}
           </time>

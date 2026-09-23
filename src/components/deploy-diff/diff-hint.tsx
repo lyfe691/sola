@@ -17,24 +17,19 @@ import { Kbd } from "@/components/ui/kbd";
 import { HoverCardContent } from "@/components/ui/hover-card";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
-import { DIFF_TOKENS } from "./diff-tokens";
-import { useIsDarkScheme } from "./use-scheme";
 
 /**
  * Miniature of what the code view shows — a commit (dot + sha) and its diff,
- * one line removed, one added. Painted with the code view's own DIFF_TOKENS
- * so the preview colors are exactly the real thing's.
+ * one line removed, one added. Painted with the code view's own diff
+ * tokens so the preview colors are exactly the real thing's.
  */
 function DiffHintArt() {
-  const isDark = useIsDarkScheme();
-
   return (
     <svg
       viewBox="0 0 152 76"
       // block, or the inline baseline gap makes the wrapper taller than the
       // art and its bottom corners escape the wrapper's rounding
       className="block w-full"
-      style={DIFF_TOKENS[isDark ? "dark" : "light"]}
       aria-hidden="true"
     >
       {/* panel ground — square-cornered; the wrapper's rounded-lg clips it
@@ -135,7 +130,7 @@ export function DiffHintContent({
       className={cn(
         // p-1 keeps the art concentric with the card: rounded-3xl (22px)
         // minus the 4px inset = 18px = the art wrapper's rounded-2xl
-        "flex w-52 flex-col items-stretch gap-1.5 p-1 text-xs font-medium select-none",
+        "flex w-52 flex-col items-stretch gap-1.5 p-1 select-none",
         className,
       )}
       {...props}
@@ -143,12 +138,13 @@ export function DiffHintContent({
       <div className="overflow-hidden rounded-2xl">
         <DiffHintArt />
       </div>
-      <div className="space-y-0.5 px-2 pt-0.5 pb-1.5 text-left">
+      <div className="space-y-0.5 px-2 pt-0.5 pb-1.5 text-left text-xs font-medium">
         {/* a command name, not copy — every locale keeps "git diff".
             The chip is the mode's toggle key (see code-view-provider). */}
         <div className="flex items-center justify-between gap-2">
           <p className="font-mono">git diff</p>
-          <Kbd className="h-4 min-w-4 px-1 text-[10px]">D</Kbd>
+          {/* eslint-disable-next-line shadcn/no-restyle -- the key sits in the hint's 10px caption */}
+          <Kbd className="h-4 min-w-4 px-1 text-3xs">D</Kbd>
         </div>
         <p className="font-normal leading-relaxed text-popover-foreground/70">
           {t.common.diff.hint}

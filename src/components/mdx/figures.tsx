@@ -162,10 +162,12 @@ function FigureRow({
     return (
       <div className="rounded-2xl bg-muted/50 px-5 py-8 sm:px-10 sm:py-10">
         <div
-          className="mx-auto flex gap-4 sm:gap-5"
-          style={{
-            maxWidth: `calc(${total} * ${STAGE_HEIGHT}rem + ${(images.length - 1) * GAP}rem)`,
-          }}
+          className="mx-auto flex max-w-(--stage-w) gap-4 sm:gap-5"
+          style={
+            {
+              "--stage-w": `calc(${total} * ${STAGE_HEIGHT}rem + ${(images.length - 1) * GAP}rem)`,
+            } as CSSProperties
+          }
         >
           {figures(() => "[flex:var(--share)_1_0%]")}
         </div>
@@ -185,7 +187,11 @@ function FigureRow({
         ),
       )}
       {spare > 0 ? (
-        <div aria-hidden="true" style={{ flex: `${spare} 1 0%` }} />
+        <div
+          aria-hidden="true"
+          className="[flex:var(--share)_1_0%]"
+          style={{ "--share": spare } as CSSProperties}
+        />
       ) : null}
     </div>
   );

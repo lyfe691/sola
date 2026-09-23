@@ -35,6 +35,17 @@
 
   /* one micro step below text-xs — captions, chips, timestamps */
   --text-2xs: 0.6875rem;
+  /* the smallest mono labels: kbd keys, the deploy chip */
+  --text-3xs: 0.625rem;
+  /* half steps above xs and sm: small print, and list titles / body copy */
+  --text-xs-plus: 0.8125rem;
+  --text-sm-plus: 0.9375rem;
+
+  /* display titles pull in and sit tight; uppercase labels open up */
+  --leading-display: 0.95;
+  --tracking-display: -0.04em;
+  --tracking-label: 0.14em;
+  --tracking-eyebrow: 0.18em;
 
   --color-border: var(--border);
   --color-input: var(--input);
@@ -73,6 +84,8 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  /* concentric with a 4xl card, for a panel inset 0.375rem inside it */
+  --radius-4xl-inner: calc(var(--radius-4xl) - 0.375rem);
 
   /* motion — custom easing curves; these override Tailwind's built-in ease-*
      utilities, so every `ease-out` / `ease-in-out` class uses the intended curve.
@@ -150,6 +163,23 @@
   }
 }
 
+/* diff accents, one set per scheme; a surface painted in the opposite
+   scheme (the deploy chip) takes the other set through its data-scheme */
+:root,
+[data-scheme="light"] {
+  --diff-add-fg: var(--color-emerald-600);
+  --diff-del-fg: var(--color-rose-600);
+  --diff-mod-fg: var(--color-amber-600);
+  --diff-ren-fg: var(--color-sky-600);
+}
+.dark,
+[data-scheme="dark"] {
+  --diff-add-fg: var(--color-emerald-400);
+  --diff-del-fg: var(--color-rose-400);
+  --diff-mod-fg: var(--color-amber-400);
+  --diff-ren-fg: var(--color-sky-400);
+}
+
 @utility link {
   @apply text-primary hover:text-primary/80 underline underline-offset-2 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm;
 }
@@ -162,6 +192,37 @@
   overflow: hidden;
   white-space: nowrap;
   mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
+}
+
+/* the footer's glow and its outlined SOLA wordmark */
+@utility footer-glow {
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--foreground) 12%, transparent) 0%,
+    color-mix(in oklab, var(--foreground) 8%, transparent) 25%,
+    color-mix(in oklab, var(--foreground) 4%, transparent) 50%,
+    color-mix(in oklab, var(--foreground) 2%, transparent) 75%,
+    transparent 100%
+  );
+}
+@utility footer-wordmark {
+  font-size: min(14.2vw, 210px);
+  height: 0.74em;
+  mask-image: linear-gradient(to bottom, #000 50%, transparent 95%);
+}
+@utility footer-wordmark-ink {
+  --ink: color-mix(in oklab, var(--foreground) 45%, transparent);
+  letter-spacing: 0.15em;
+  padding-left: 0.15em;
+  text-shadow:
+    0 -1.5px 0 var(--ink),
+    1.5px 0 0 var(--ink),
+    0 1.5px 0 var(--ink),
+    -1.5px 0 0 var(--ink),
+    1px 1px 0 var(--ink),
+    -1px -1px 0 var(--ink),
+    1px -1px 0 var(--ink),
+    -1px 1px 0 var(--ink);
 }
 
 /* Inspired by Vercel */

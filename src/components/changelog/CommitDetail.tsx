@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CommitPatch } from "@/components/changelog/CommitPatch";
 import { FileTree } from "@/components/changelog/FileTree";
-import { DIFF_TOKENS } from "@/components/deploy-diff/diff-tokens";
 import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
 import { commitDetailQuery, fileTree } from "@/lib/github-commits";
 import { useTranslation } from "@/lib/language-provider";
@@ -63,7 +62,7 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
       : commit.body;
 
   return (
-    <div className="min-w-0 space-y-4" style={DIFF_TOKENS[scheme]}>
+    <div className="min-w-0 space-y-4">
       {body ? (
         <p className="max-w-prose text-sm leading-relaxed whitespace-pre-wrap text-foreground/65">
           {body}
@@ -72,7 +71,7 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
 
       {tree.length > 0 ? (
         <div className="min-w-0">
-          <p className="mb-2 font-mono text-[11px] text-muted-foreground">
+          <p className="mb-2 font-mono text-2xs text-muted-foreground">
             {t.files.replace("{count}", String(commit.files.length))}
             <span className="ml-3 text-(--diff-add-fg)">
               +{commit.additions}

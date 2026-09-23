@@ -516,7 +516,7 @@ const ContributionActivityFeed = () => {
               />
             }
             size="lg"
-            className="rounded-full border-foreground/20 transition-colors duration-200"
+            rim
             label={t.common.moreOnGithub}
             onClick={() =>
               window.open(

@@ -60,7 +60,7 @@ function SkillRowBody({
     <>
       <SkillTile skill={skill} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[15px] leading-5 font-medium text-foreground">
+        <span className="block truncate text-sm-plus leading-5 font-medium text-foreground">
           {skill.name}
         </span>
         <span className="mt-0.5 block truncate text-xs leading-4 text-muted-foreground">

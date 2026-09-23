@@ -14,6 +14,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type CSSProperties,
 } from "react";
 import type { PDFPageProxy } from "pdfjs-dist";
 import { Spinner } from "@/components/ui/spinner";
@@ -99,8 +100,10 @@ function Page({
 
   return (
     <div
-      className="overflow-hidden rounded-md bg-paper shadow-md ring-1 ring-foreground/10"
-      style={{ aspectRatio: `${baseWidth} / ${baseHeight}` }}
+      className="aspect-(--page-ratio) overflow-hidden rounded-md bg-paper shadow-md ring-1 ring-foreground/10"
+      style={
+        { "--page-ratio": `${baseWidth} / ${baseHeight}` } as CSSProperties
+      }
     >
       <canvas
         ref={canvas}

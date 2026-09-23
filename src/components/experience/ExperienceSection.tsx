@@ -35,7 +35,7 @@ const ExperienceSection = ({
     <section>
       <Reveal>
         <div className="mb-6 flex items-center gap-2.5">
-          <h2 className="font-mono text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+          <h2 className="font-mono text-xs font-medium uppercase tracking-eyebrow text-muted-foreground">
             {title}
           </h2>
           <span className="font-mono text-2xs text-muted-foreground/50">

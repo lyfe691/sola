@@ -16,6 +16,7 @@ import {
   useState,
   type ReactNode,
   type RefObject,
+  type CSSProperties,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
@@ -730,7 +731,7 @@ export function ParticleImage({
   lifespan = 400,
   showImage = true,
   imageOpacity = 1,
-  backgroundColor = "transparent",
+  backgroundColor,
   cursorInteraction = true,
   cursorStrength = 0.08,
   cursorRadius = 90,
@@ -745,8 +746,19 @@ export function ParticleImage({
   return (
     <div
       ref={root}
-      className={cn("relative overflow-hidden", className)}
-      style={{ width, height, backgroundColor }}
+      className={cn(
+        "relative overflow-hidden",
+        className,
+        "h-(--h) w-(--w)",
+        backgroundColor && "bg-(--bg)",
+      )}
+      style={
+        {
+          "--w": typeof width === "number" ? `${width}px` : width,
+          "--h": typeof height === "number" ? `${height}px` : height,
+          "--bg": backgroundColor,
+        } as CSSProperties
+      }
     >
       <Canvas
         className="absolute inset-0 size-full"

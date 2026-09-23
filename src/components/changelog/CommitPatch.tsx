@@ -12,6 +12,7 @@ import { useCappedDiff } from "@/components/deploy-diff/use-diff-highlight";
 import type { ChangelogFile } from "@/lib/github-commits";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
+import type { CSSProperties } from "react";
 import type { ThemedTokenWithVariants } from "shiki";
 
 function DiffLineRow({
@@ -56,7 +57,13 @@ function DiffLineRow({
       <td className="pr-3 whitespace-pre-wrap break-all align-top">
         {tokens
           ? tokens.map((token, i) => (
-              <span key={i} style={{ color: token.variants[scheme]?.color }}>
+              <span
+                key={i}
+                className="text-(--token)"
+                style={
+                  { "--token": token.variants[scheme]?.color } as CSSProperties
+                }
+              >
                 {token.content}
               </span>
             ))
@@ -110,7 +117,7 @@ export function CommitPatch({
                 <tr key={row.key}>
                   <td
                     colSpan={2}
-                    className="bg-muted/40 px-3 py-1 text-[11px] whitespace-pre-wrap break-all text-muted-foreground/70 select-none"
+                    className="bg-muted/40 px-3 py-1 text-2xs whitespace-pre-wrap break-all text-muted-foreground/70 select-none"
                   >
                     {row.text}
                   </td>
@@ -128,7 +135,7 @@ export function CommitPatch({
               <tr>
                 <td
                   colSpan={2}
-                  className="px-3 py-2 text-[11px] text-muted-foreground/70 italic"
+                  className="px-3 py-2 text-2xs text-muted-foreground/70 italic"
                 >
                   {t.truncated}
                 </td>

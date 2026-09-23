@@ -21,6 +21,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
 } from "react";
 import {
   ActivityCalendar,
@@ -216,8 +217,8 @@ const GitHubContributionCalendar = ({
     >
       <div
         ref={bodyRef}
-        className="contribution-calendar__body"
-        style={{ minHeight: calendarMinHeight }}
+        className="contribution-calendar__body min-h-(--calendar-h)"
+        style={{ "--calendar-h": `${calendarMinHeight}px` } as CSSProperties}
       >
         {showError ? (
           <div className="flex h-full min-h-[inherit] items-center justify-center rounded-lg border border-dashed border-foreground/12 bg-foreground/[0.02] px-4 py-8 text-center text-sm text-muted-foreground">
@@ -253,7 +254,7 @@ const GitHubContributionCalendar = ({
             <Skeleton className="h-3.5 w-44" />
             <div className="flex items-center gap-1.5">
               <Skeleton className="h-3.5 w-8" />
-              <div className="flex gap-[3px]">
+              <div className="flex gap-0.75">
                 {Array.from({ length: HEATMAP_LEVELS }).map((_, level) => (
                   <Skeleton key={level} className="size-[11px] rounded-[3px]" />
                 ))}

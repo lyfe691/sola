@@ -31,6 +31,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type ReactNode,
   type RefObject,
 } from "react";
@@ -47,6 +48,7 @@ import {
   motion,
   useMotionValue,
   useReducedMotion,
+  type MotionStyle,
 } from "motion/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { useTranslation } from "@/lib/language-provider";
@@ -317,17 +319,21 @@ function Filmstrip({
             aria-label={labelFor(i)}
             aria-current={showing ? "true" : undefined}
             onClick={() => onGo(i)}
-            style={{
-              height: SLICE.height,
-              width: showing
-                ? Math.min(
-                    SLICE.openMax,
-                    Math.max(SLICE.openMin, SLICE.height * ratio),
-                  )
-                : SLICE.width,
-            }}
+            style={
+              {
+                "--slice-h": `${SLICE.height}px`,
+                "--slice-w": `${
+                  showing
+                    ? Math.min(
+                        SLICE.openMax,
+                        Math.max(SLICE.openMin, SLICE.height * ratio),
+                      )
+                    : SLICE.width
+                }px`,
+              } as CSSProperties
+            }
             className={cn(
-              "shrink-0 cursor-pointer overflow-hidden rounded-sm outline-none",
+              "h-(--slice-h) w-(--slice-w) shrink-0 cursor-pointer overflow-hidden rounded-sm outline-none",
               "transition-[width,margin,opacity] duration-300 ease-out",
               "focus-visible:ring-2 focus-visible:ring-ring/60",
               // air either side of the open frame, but never against the
@@ -502,7 +508,9 @@ function Lightbox({
   if (!item || !dock) return null;
   // The arrows flank the image, so they sit at ITS centre: the stage's, which
   // is above the screen's by half of what the tray and caption take up.
-  const arrowAt = { top: stage ? stage.cy : "50%" };
+  const arrowAt = {
+    "--arrow-y": stage ? `${stage.cy}px` : "50%",
+  } as CSSProperties;
   const labelFor = (i: number) =>
     t.common.imageOf
       .replace("{current}", String(i + 1))
@@ -562,7 +570,13 @@ function Lightbox({
       {strip && stage ? (
         <motion.div
           // a point at the stage's centre; the images hang off it
-          style={{ x, left: stage.cx, top: stage.cy }}
+          style={
+            {
+              x,
+              "--cx": `${stage.cx}px`,
+              "--cy": `${stage.cy}px`,
+            } as MotionStyle
+          }
           drag={open && many ? "x" : false}
           dragMomentum={false}
           dragDirectionLock
@@ -581,7 +595,7 @@ function Lightbox({
             if (go !== 0 && to >= 0 && to < items.length) onGo(to);
             else animate(x, -strip.centres[index], GALLERY_SLIDE);
           }}
-          className="absolute touch-pan-y"
+          className="absolute top-(--cy) left-(--cx) touch-pan-y"
         >
           {items.map((entry, i) => {
             if (!mounted(i)) return null;
@@ -651,14 +665,16 @@ function Lightbox({
                         if (!dragged.current) onGo(i);
                       }
                 }
-                style={{
-                  left: strip.centres[i] - w / 2,
-                  top: -h / 2,
-                  width: w,
-                  height: h,
-                }}
+                style={
+                  {
+                    "--left": `${strip.centres[i] - w / 2}px`,
+                    "--top": `${-h / 2}px`,
+                    "--w": `${w}px`,
+                    "--h": `${h}px`,
+                  } as MotionStyle
+                }
                 className={cn(
-                  "absolute",
+                  "absolute top-(--top) left-(--left) h-(--h) w-(--w)",
                   open && "pointer-events-auto",
                   !showing && "cursor-pointer",
                 )}
@@ -723,7 +739,7 @@ function Lightbox({
                   onPress={() => onGo(index - 1)}
                   style={arrowAt}
                   className={cn(
-                    "left-6 -mt-5 hidden sm:grid",
+                    "top-(--arrow-y) left-6 -mt-5 hidden sm:grid",
                     index === 0 && "pointer-events-none opacity-0",
                   )}
                 />
@@ -733,7 +749,7 @@ function Lightbox({
                   onPress={() => onGo(index + 1)}
                   style={arrowAt}
                   className={cn(
-                    "right-6 -mt-5 hidden sm:grid",
+                    "top-(--arrow-y) right-6 -mt-5 hidden sm:grid",
                     index === items.length - 1 &&
                       "pointer-events-none opacity-0",
                   )}

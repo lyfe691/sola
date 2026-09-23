@@ -48,10 +48,12 @@ export function PrivateLinkButton({
             tabIndex={-1}
             size="lg"
             variant={variant}
-            className="w-full gap-2"
+            className="w-full"
           >
-            {icon}
-            {label}
+            <span className="inline-flex items-center gap-2">
+              {icon}
+              {label}
+            </span>
           </Button>
         </span>
       }

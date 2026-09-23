@@ -11,7 +11,13 @@
  * flies it out of this slot and back.
  */
 
-import { useContext, useEffect, useId, useRef } from "react";
+import {
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  type CSSProperties,
+} from "react";
 import { ArrowExpandIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
@@ -59,9 +65,10 @@ function Thumbnail({
       type="button"
       onClick={() => lightbox?.open(id)}
       aria-label={expandLabel}
-      style={radius ? { borderRadius: radius } : undefined}
+      style={radius ? ({ "--corner": radius } as CSSProperties) : undefined}
       className={cn(
         "group/image relative block w-full overflow-hidden",
+        radius && "rounded-(--corner)",
         // in a frame the corners, the lift and the ground behind the image
         // are the frame's, and a ring outside the button would be clipped
         radius
@@ -84,9 +91,12 @@ function Thumbnail({
         alt=""
         width={PROJECT_IMAGE_SIZES[src]?.[0]}
         height={PROJECT_IMAGE_SIZES[src]?.[1]}
-        style={{ borderRadius: radius ?? RADIUS_INLINE }}
+        style={{ "--corner": radius ?? RADIUS_INLINE } as CSSProperties}
         // the lightbox's flyer is this image while it is away
-        className={cn("block h-auto w-full", away && "invisible")}
+        className={cn(
+          "block h-auto w-full rounded-(--corner)",
+          away && "invisible",
+        )}
         loading="lazy"
         decoding="async"
       />

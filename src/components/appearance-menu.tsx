@@ -18,7 +18,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
 import { Button } from "@/components/ui/button";
@@ -242,12 +242,13 @@ export function AppearanceMenu() {
                 duration: 0.16,
                 ease: EASE_OUT,
               }}
-              style={{
-                position: "fixed",
-                top: anchor.top,
-                right: anchor.right,
-              }}
-              className="z-50 overflow-hidden rounded-3xl bg-popover p-1.5 text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-none dark:ring-foreground/10"
+              style={
+                {
+                  "--top": `${anchor.top}px`,
+                  "--right": `${anchor.right}px`,
+                } as MotionStyle
+              }
+              className="fixed top-(--top) right-(--right) z-50 overflow-hidden rounded-3xl bg-popover p-1.5 text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-none dark:ring-foreground/10"
             >
               {/*
                 Grow from the trigger corner on open. This lives on a nested
@@ -262,8 +263,7 @@ export function AppearanceMenu() {
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.95 }}
                 transition={{ duration: 0.16, ease: EASE_OUT }}
-                style={{ transformOrigin: "top right" }}
-                className="max-h-[calc(100dvh-5rem)] overflow-x-hidden overflow-y-auto overscroll-contain"
+                className="max-h-[calc(100dvh-5rem)] origin-top-right overflow-x-hidden overflow-y-auto overscroll-contain"
               >
                 {openId === "theme" ? (
                   <ThemeMenuContent onClose={close} />

@@ -226,11 +226,11 @@ const FoldText = ({
           }
         >
           <span
-            className="fold-text-piece"
+            className="fold-text-piece origin-(--fold-origin)"
             data-fold-hinge={hinge}
             style={
               {
-                transformOrigin: hingeConfig.origin,
+                "--fold-origin": hingeConfig.origin,
                 "--fold-crease": 0,
               } as CSSProperties
             }

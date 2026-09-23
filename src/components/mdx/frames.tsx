@@ -11,7 +11,7 @@
  * computes from the same numbers holds at any size.
  */
 
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { SquareLock02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { cn } from "@/lib/utils";
@@ -67,69 +67,74 @@ function SafariFrame({
   // the window takes the page's own colour, the way Safari tints its chrome
   // from the site it is showing, so the bar is depth rather than a themed lid
   const ink = tint ? inkOn(tint) : null;
-  const on = (percent: number) =>
-    ink ? `color-mix(in oklab, ${ink} ${percent}%, transparent)` : undefined;
+  const on = (percent: number, ground = "transparent") =>
+    ink ? `color-mix(in oklab, ${ink} ${percent}%, ${ground})` : undefined;
 
   return (
-    <div className="@container">
+    <div
+      className="@container"
+      style={
+        {
+          "--bar": su(SAFARI.bar),
+          "--light": su(LIGHT.size),
+          "--light-inset": su(LIGHT.inset),
+          "--light-gap": su(LIGHT.gap),
+          "--field-w": su(FIELD.width),
+          "--field-h": su(FIELD.height),
+          "--field-inset": su(FIELD.inset),
+          "--field-radius": su(FIELD.radius),
+          "--field-gap": su(FIELD.gap),
+          "--field-icon": su(FIELD.icon),
+          "--field-text": su(FIELD.text),
+          "--tint": tint,
+          "--bar-ground": on(5, tint),
+          "--bar-line": on(10),
+          "--light-ground": on(12),
+          "--field-ground": on(9),
+          "--field-ink": on(55),
+        } as CSSProperties
+      }
+    >
       <div
         className={cn(
           "overflow-hidden rounded-xl shadow-(--prose-figure-lift) ring-1 ring-border",
-          !tint && "bg-background",
+          tint ? "bg-(--tint)" : "bg-background",
         )}
-        style={{ background: tint }}
       >
         <div
           aria-hidden="true"
           className={cn(
-            "grid grid-cols-[1fr_auto_1fr] items-center",
-            !tint && "border-b border-border bg-muted",
+            "grid h-(--bar) grid-cols-[1fr_auto_1fr] items-center border-b px-(--light-inset)",
+            ink
+              ? "border-(--bar-line) bg-(--bar-ground)"
+              : "border-border bg-muted",
           )}
-          style={{
-            height: su(SAFARI.bar),
-            paddingInline: su(LIGHT.inset),
-            background: tint
-              ? `color-mix(in oklab, ${ink} 5%, ${tint})`
-              : undefined,
-            borderBottom: ink ? `1px solid ${on(10)}` : undefined,
-          }}
         >
-          <span className="flex" style={{ gap: su(LIGHT.gap) }}>
+          <span className="flex gap-(--light-gap)">
             {[0, 1, 2].map((light) => (
               <span
                 key={light}
-                className={cn("rounded-full", !ink && "bg-foreground/10")}
-                style={{
-                  width: su(LIGHT.size),
-                  height: su(LIGHT.size),
-                  background: on(12),
-                }}
+                className={cn(
+                  "size-(--light) rounded-full",
+                  ink ? "bg-(--light-ground)" : "bg-foreground/10",
+                )}
               />
             ))}
           </span>
           <span
             className={cn(
-              "flex items-center justify-center leading-none",
-              !ink && "bg-foreground/10 text-muted-foreground",
+              "flex h-(--field-h) w-(--field-w) items-center justify-center gap-(--field-gap) rounded-(--field-radius) px-(--field-inset) text-(length:--field-text) leading-none",
+              ink
+                ? "bg-(--field-ground) text-(--field-ink)"
+                : "bg-foreground/10 text-muted-foreground",
             )}
-            style={{
-              width: su(FIELD.width),
-              height: su(FIELD.height),
-              paddingInline: su(FIELD.inset),
-              borderRadius: su(FIELD.radius),
-              gap: su(FIELD.gap),
-              fontSize: su(FIELD.text),
-              background: on(9),
-              color: on(55),
-            }}
           >
             {url ? (
               <>
                 <HugeiconsIcon
                   icon={SquareLock02Icon}
                   strokeWidth={2}
-                  className="shrink-0"
-                  style={{ width: su(FIELD.icon), height: su(FIELD.icon) }}
+                  className="size-(--field-icon) shrink-0"
                 />
                 <span className="min-w-0 truncate">{url}</span>
               </>
@@ -169,79 +174,68 @@ function IPhoneFrame({
   children: ReactNode;
 }) {
   return (
-    <div className="@container">
-      <div className="relative" style={{ marginInline: pu(PHONE.side) }}>
+    <div
+      className="@container"
+      style={
+        {
+          "--side": pu(PHONE.side),
+          "--button-w": pu(PHONE.side + BUTTON.under),
+          "--button-radius": pu(BUTTON.radius),
+          "--phone-ring": pu(PHONE.ring),
+          "--ring-radius": pu(RING_RADIUS),
+          "--bezel": pu(PHONE.bezel),
+          "--bezel-radius": pu(BEZEL_RADIUS),
+          "--screen-radius": pu(PHONE.screenRadius),
+          "--status-bar": pu(PHONE.statusBar),
+          "--island-top": pu(ISLAND.top),
+          "--island-w": pu(ISLAND.width),
+          "--island-h": pu(ISLAND.height),
+          "--camera": pu(ISLAND.camera),
+          "--camera-inset": pu(ISLAND.cameraInset),
+          "--tint": tint,
+        } as CSSProperties
+      }
+    >
+      <div className="relative mx-(--side)">
         {BUTTONS.map((button, i) => (
           <span
             key={i}
             aria-hidden="true"
-            className="absolute bg-foreground/20"
-            style={{
-              top: pu(button.top),
-              height: pu(button.height),
-              width: pu(PHONE.side + BUTTON.under),
-              ...(button.edge === "left"
-                ? {
-                    left: pu(-PHONE.side),
-                    borderRadius: `${pu(BUTTON.radius)} 0 0 ${pu(BUTTON.radius)}`,
-                  }
-                : {
-                    right: pu(-PHONE.side),
-                    borderRadius: `0 ${pu(BUTTON.radius)} ${pu(BUTTON.radius)} 0`,
-                  }),
-            }}
+            className={cn(
+              "absolute top-(--top) h-(--height) w-(--button-w) bg-foreground/20",
+              button.edge === "left"
+                ? "-left-(--side) rounded-l-(--button-radius)"
+                : "-right-(--side) rounded-r-(--button-radius)",
+            )}
+            style={
+              {
+                "--top": pu(button.top),
+                "--height": pu(button.height),
+              } as CSSProperties
+            }
           />
         ))}
         {/* positioned, so it paints over the buttons' tucked ends: an in-flow
             box would paint under its positioned siblings whatever the order */}
-        <div
-          className="relative bg-foreground/20 shadow-(--prose-figure-lift)"
-          style={{ padding: pu(PHONE.ring), borderRadius: pu(RING_RADIUS) }}
-        >
+        <div className="relative rounded-(--ring-radius) bg-foreground/20 p-(--phone-ring) shadow-(--prose-figure-lift)">
           {/* bezel and island are hardware, not chrome: black in every theme,
               never a theme token and never the shot's colour */}
-          <div
-            style={{
-              padding: pu(PHONE.bezel),
-              borderRadius: pu(BEZEL_RADIUS),
-              background: "#000",
-            }}
-          >
+          <div className="rounded-(--bezel-radius) bg-black p-(--bezel)">
             {/* the screen's own ground, not a token: with the shot away in
                 the lightbox the frame keeps its depth instead of showing a
                 themed hole — the same as the Safari window's interior */}
             <div
-              className={cn("relative overflow-hidden", !tint && "bg-muted")}
-              style={{
-                borderRadius: pu(PHONE.screenRadius),
-                background: tint,
-              }}
+              className={cn(
+                "relative overflow-hidden rounded-(--screen-radius)",
+                tint ? "bg-(--tint)" : "bg-muted",
+              )}
             >
               {/* the screenshots are bare viewport captures with content at
                   y=0, so the island cannot sit over them without covering a
                   logo; it gets a strip of its own in the shot's top colour */}
-              <div
-                aria-hidden="true"
-                className="relative"
-                style={{ height: pu(PHONE.statusBar) }}
-              >
-                <span
-                  className="absolute left-1/2 -translate-x-1/2 rounded-full"
-                  style={{
-                    top: pu(ISLAND.top),
-                    width: pu(ISLAND.width),
-                    height: pu(ISLAND.height),
-                    background: "#000",
-                  }}
-                >
-                  <span
-                    className="absolute top-1/2 -translate-y-1/2 rounded-full bg-white/15"
-                    style={{
-                      right: pu(ISLAND.cameraInset),
-                      width: pu(ISLAND.camera),
-                      height: pu(ISLAND.camera),
-                    }}
-                  />
+              <div aria-hidden="true" className="relative h-(--status-bar)">
+                <span className="absolute top-(--island-top) left-1/2 h-(--island-h) w-(--island-w) -translate-x-1/2 rounded-full bg-black">
+                  <span className="absolute top-1/2 right-(--camera-inset) size-(--camera) -translate-y-1/2 rounded-full bg-white/15" />
                 </span>
               </div>
               {children}

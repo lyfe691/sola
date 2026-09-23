@@ -83,7 +83,7 @@ export function FileTree({
   if (nodes.length === 0) return null;
 
   return (
-    <ul className="min-w-0 font-mono text-[12px] leading-6">
+    <ul className="min-w-0 font-mono text-xs leading-6">
       {nodes.map((node) => (
         <FileTreeNode
           key={node.path}

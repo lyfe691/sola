@@ -11,6 +11,7 @@
  * themes, see use-scheme.ts), so this stays presentational.
  */
 
+import type { CSSProperties } from "react";
 import type { ThemedTokenWithVariants } from "shiki";
 import { cn } from "@/lib/utils";
 import type { Translation } from "@/lib/translations";
@@ -82,7 +83,13 @@ function DiffLineRow({
         </span>
         {tokens
           ? tokens.map((token, i) => (
-              <span key={i} style={{ color: token.variants[scheme]?.color }}>
+              <span
+                key={i}
+                className="text-(--token)"
+                style={
+                  { "--token": token.variants[scheme]?.color } as CSSProperties
+                }
+              >
                 {token.content}
               </span>
             ))

@@ -76,9 +76,10 @@ export function CommitRail({
   return (
     <svg
       aria-hidden="true"
+      fill="none"
       width={railWidth(lanes)}
       className={cn(
-        "pointer-events-none absolute inset-y-0 left-0 h-full overflow-visible fill-none",
+        "pointer-events-none absolute inset-y-0 left-0 h-full overflow-visible",
         fadeOut &&
           "[mask-image:linear-gradient(to_bottom,#000_30px,transparent)]",
         className,

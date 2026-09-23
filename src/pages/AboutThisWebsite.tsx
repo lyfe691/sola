@@ -26,7 +26,7 @@ export default function AboutThisWebsite() {
     <main className="min-h-svh bg-background px-6 py-20 font-mincho text-foreground sm:px-10 sm:py-28">
       <meta name="robots" content="noindex, nofollow" />
 
-      <article className="max-w-lg text-[15px] font-normal leading-loose">
+      <article className="max-w-lg text-sm-plus font-normal leading-loose">
         <h1 className="font-mincho font-normal">{t.title}</h1>
 
         <div className="mt-6 space-y-6 text-foreground/70">
@@ -45,7 +45,7 @@ export default function AboutThisWebsite() {
         <button
           type="button"
           onClick={() => navigate(-1)}
-          className="mt-10 text-[13px] text-foreground/55 transition-colors hover:text-foreground focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50"
+          className="mt-10 text-xs-plus text-foreground/55 transition-colors hover:text-foreground focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50"
         >
           ← {t.back}
         </button>

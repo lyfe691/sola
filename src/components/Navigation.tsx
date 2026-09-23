@@ -71,26 +71,20 @@ const MenuGlyph = ({ open }: { open: boolean }) => (
   <div className="relative flex h-4 w-5 items-center justify-center">
     <div className="relative h-[10px] w-[18px]">
       <motion.span
-        className="absolute left-0 h-[1.4px] w-full rounded-full bg-current"
+        className="absolute inset-y-0 left-0 my-auto h-[1.4px] w-full rounded-full bg-current"
         initial={false}
         animate={{
           rotate: open ? 45 : 0,
           y: open ? 0 : -3,
         }}
-        style={{ top: "50%", marginTop: "-0.7px", transformOrigin: "center" }}
         transition={{ duration: 0.3, ease: EASE_OUT }}
       />
       <motion.span
-        className="absolute left-0 h-[1.4px] w-full rounded-full bg-current"
+        className="absolute inset-y-0 left-0 my-auto h-[1.4px] w-full rounded-full bg-current"
         initial={false}
         animate={{
           rotate: open ? -45 : 0,
           y: open ? 0 : 3,
-        }}
-        style={{
-          bottom: "50%",
-          marginBottom: "-0.7px",
-          transformOrigin: "center",
         }}
         transition={{ duration: 0.3, ease: EASE_OUT }}
       />
@@ -116,11 +110,7 @@ const Logo = ({ label }: { label: string }) => (
   >
     <span
       aria-hidden
-      className="size-6 shrink-0 bg-foreground"
-      style={{
-        mask: "url(/apple-touch-icon.png) center / contain no-repeat",
-        WebkitMask: "url(/apple-touch-icon.png) center / contain no-repeat",
-      }}
+      className="size-6 shrink-0 bg-foreground mask-[url(/apple-touch-icon.png)] mask-contain mask-center mask-no-repeat"
     />
     <span className="font-heading text-lg font-bold tracking-tight">Sola</span>
   </Link>

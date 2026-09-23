@@ -156,7 +156,7 @@ const AuthorBlock = ({
   linkedin,
   avatar,
   t,
-  avatarClassName,
+  avatarSize,
   showLinks = false,
   compactLinks = false,
   website,
@@ -168,7 +168,7 @@ const AuthorBlock = ({
   website?: string;
   avatar?: string;
   t: Translation;
-  avatarClassName: string;
+  avatarSize: "md" | "lg";
   showLinks?: boolean;
   compactLinks?: boolean;
 }) => (
@@ -177,7 +177,7 @@ const AuthorBlock = ({
       author={author}
       linkedin={linkedin}
       avatar={avatar}
-      className={avatarClassName}
+      className={avatarSize === "lg" ? "size-14" : "size-10"}
     />
     <div className="min-w-0 flex-1">
       <p className="font-medium text-sm sm:text-base">{author}</p>
@@ -238,7 +238,7 @@ const TestimonialCard = ({
           website={website}
           avatar={avatar}
           t={t}
-          avatarClassName="size-14"
+          avatarSize="lg"
           showLinks
         />
       </div>
@@ -246,7 +246,10 @@ const TestimonialCard = ({
   );
 
   const cardContent = (
-    <Card className="group relative flex h-full flex-col gap-4 overflow-hidden bg-card/40 p-6">
+    <Card
+      variant="translucent"
+      className="group relative flex h-full flex-col gap-4 overflow-hidden p-6"
+    >
       <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
         <HugeiconsIcon
           icon={QuoteDownIcon}
@@ -281,7 +284,7 @@ const TestimonialCard = ({
           website={website}
           avatar={avatar}
           t={t}
-          avatarClassName="size-10"
+          avatarSize="md"
           showLinks
           compactLinks
         />

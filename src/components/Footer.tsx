@@ -63,17 +63,7 @@ const Footer = () => {
   return (
     <footer className="relative w-full border-t border-foreground/5 bg-background/5">
       {/* bottom glow effect */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none"
-        style={{
-          background: `linear-gradient(to top,
-            color-mix(in oklab, var(--foreground) 12%, transparent) 0%,
-            color-mix(in oklab, var(--foreground) 8%, transparent) 25%,
-            color-mix(in oklab, var(--foreground) 4%, transparent) 50%,
-            color-mix(in oklab, var(--foreground) 2%, transparent) 75%,
-            transparent 100%)`,
-        }}
-      />
+      <div className="footer-glow absolute bottom-0 left-0 right-0 h-96 pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-6 sm:px-8 py-12">
         {/* main content */}
@@ -255,26 +245,10 @@ const Footer = () => {
 
         {/* SOLA wordmark */}
         <div
-          className="relative w-full mb-4 select-none"
+          className="footer-wordmark relative w-full mb-4 select-none"
           aria-hidden="true"
-          style={{
-            fontSize: "min(14.2vw, 210px)",
-            height: "0.74em",
-            maskImage: "linear-gradient(to bottom, #000 50%, transparent 95%)",
-            WebkitMaskImage:
-              "linear-gradient(to bottom, #000 50%, transparent 95%)",
-          }}
         >
-          <div
-            className="absolute inset-0 flex justify-center font-heading font-bold uppercase leading-none whitespace-nowrap text-background"
-            style={{
-              fontSize: "inherit",
-              letterSpacing: "0.15em",
-              paddingLeft: "0.15em",
-              textShadow:
-                "0 -1.5px 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1.5px 0 0 color-mix(in oklab, var(--foreground) 45%, transparent), 0 1.5px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1.5px 0 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1px 1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1px -1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), 1px -1px 0 color-mix(in oklab, var(--foreground) 45%, transparent), -1px 1px 0 color-mix(in oklab, var(--foreground) 45%, transparent)",
-            }}
-          >
+          <div className="absolute inset-0 flex justify-center font-heading font-bold uppercase leading-none whitespace-nowrap text-background footer-wordmark-ink">
             SOLA
           </div>
         </div>

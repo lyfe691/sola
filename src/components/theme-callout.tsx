@@ -6,9 +6,20 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  type MotionStyle,
+} from "motion/react";
 import { Button } from "@/components/ui/button";
 import {
   CALLOUT_STORAGE_KEY,
@@ -217,21 +228,28 @@ export function ThemeCallout() {
             reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.97 }
           }
           transition={{ type: "spring", stiffness: 380, damping: 28 }}
-          className="fixed z-40 w-64 max-w-[calc(100vw-2rem)] rounded-2xl bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
-          style={{
-            top: pos.top,
-            right: pos.right,
-            transformOrigin: `calc(100% - ${pos.arrowRight + ARROW_W / 2}px) -${ARROW_H}px`,
-          }}
+          className="fixed top-(--top) right-(--right) z-40 w-64 max-w-[calc(100vw-2rem)] origin-(--origin) rounded-2xl bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
+          style={
+            {
+              "--top": `${pos.top}px`,
+              "--right": `${pos.right}px`,
+              "--origin": `calc(100% - ${pos.arrowRight + ARROW_W / 2}px) -${ARROW_H}px`,
+            } as MotionStyle
+          }
         >
           <svg
             width={ARROW_W}
             height={ARROW_H}
             viewBox={`0 0 ${ARROW_W} ${ARROW_H}`}
             aria-hidden
-            className="absolute overflow-visible"
+            className="absolute top-(--arrow-top) right-(--arrow-right) overflow-visible"
             // 1px overlap so the fill swallows the card's ring line at the seam
-            style={{ right: pos.arrowRight, top: -(ARROW_H - 1) }}
+            style={
+              {
+                "--arrow-right": `${pos.arrowRight}px`,
+                "--arrow-top": `${-(ARROW_H - 1)}px`,
+              } as CSSProperties
+            }
           >
             <path
               d="M0 9 L7.8 1.7 Q10 -0.3 12.2 1.7 L20 9 Z"
@@ -248,17 +266,12 @@ export function ThemeCallout() {
           <p className="text-sm font-semibold leading-snug tracking-tight">
             {t.background.title}
           </p>
-          <p className="mt-1 text-[0.8125rem] leading-relaxed text-muted-foreground">
+          <p className="mt-1 text-xs-plus leading-relaxed text-muted-foreground">
             {calloutContent}
           </p>
           <div className="mt-3 flex justify-end">
-            <Button
-              type="button"
-              size="sm"
-              onClick={dismiss}
-              className="h-7 rounded-full px-3 text-xs"
-            >
-              {t.done}
+            <Button type="button" size="sm" onClick={dismiss} className="h-7">
+              <span className="text-xs">{t.done}</span>
             </Button>
           </div>
         </motion.div>

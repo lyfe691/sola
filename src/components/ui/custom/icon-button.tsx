@@ -31,11 +31,14 @@ const PILL_BG = {
 const PILL = {
   stretched: {
     width: "w-[max(28%,2.25rem)]",
-    reserve: "calc(max(28%, 2.25rem) + 0.25rem)",
+    reserve: {
+      left: "pl-[calc(max(28%,2.25rem)+0.25rem)]",
+      right: "pr-[calc(max(28%,2.25rem)+0.25rem)]",
+    },
   },
   compact: {
     width: "w-9",
-    reserve: "2.5rem",
+    reserve: { left: "pl-10", right: "pr-10" },
   },
 } as const;
 
@@ -46,6 +49,8 @@ export interface IconButtonProps extends React.ComponentProps<typeof Button> {
   iconPosition?: "left" | "right";
   /** Stretch to the container; the pill widens to 28% of the button. */
   fullWidth?: boolean;
+  /** A faint border around the fill. */
+  rim?: boolean;
 }
 
 export function IconButton({
@@ -56,6 +61,7 @@ export function IconButton({
   hideLabel = false,
   iconPosition = "right",
   fullWidth = false,
+  rim = false,
   children,
   ...props
 }: IconButtonProps) {
@@ -69,14 +75,17 @@ export function IconButton({
       className={cn(
         "group/btn relative overflow-hidden",
         fullWidth && "w-full",
+        rim && "border-foreground/20",
         className,
       )}
       {...props}
     >
       {!hideLabel && (
         <span
-          className="relative z-10 text-center transition-[transform,translate,scale,rotate,opacity] duration-300 ease-out can-hover:group-hover/btn:scale-95 can-hover:group-hover/btn:opacity-0"
-          style={{ [isRight ? "paddingRight" : "paddingLeft"]: pill.reserve }}
+          className={cn(
+            "relative z-10 text-center transition-[transform,translate,scale,rotate,opacity] duration-300 ease-out can-hover:group-hover/btn:scale-95 can-hover:group-hover/btn:opacity-0",
+            pill.reserve[isRight ? "right" : "left"],
+          )}
         >
           {children ?? label}
         </span>

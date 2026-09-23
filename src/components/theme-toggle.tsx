@@ -27,7 +27,7 @@ import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { Switch } from "@/components/ui/switch";
 import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { EASE_OUT } from "@/utils/transitions";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
@@ -348,8 +348,8 @@ export function ThemeMenuContent({
                 animate={{ opacity: 1, x: 0, y: preview.top }}
                 exit={{ opacity: 0, x: 6 }}
                 transition={{ duration: 0.2, ease: EASE_OUT }}
-                style={{ top: 0, right: preview.right }}
-                className="pointer-events-none fixed z-50"
+                style={{ "--right": `${preview.right}px` } as MotionStyle}
+                className="pointer-events-none fixed top-0 right-(--right) z-50"
               >
                 {/* card shell mirrors HoverCardContent; -translate-y-1/2
                     centers it on the hovered row (outer element owns the

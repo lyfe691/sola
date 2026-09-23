@@ -112,9 +112,10 @@ function LanguageTabs({
           <TabsTrigger
             key={language}
             value={language}
-            className={compact ? "h-6 px-2.5 uppercase" : "uppercase"}
+            // eslint-disable-next-line shadcn/no-restyle -- the compact switcher is a size smaller than any Tabs size
+            className={compact ? "h-6 px-2.5" : undefined}
           >
-            {language}
+            <span className="uppercase">{language}</span>
           </TabsTrigger>
         ))}
       </TabsList>
@@ -210,6 +211,7 @@ function Sheet({
         // transition-none: the popup's duration-100 alone transitions every
         // property (transition-property starts as all), which would ease the
         // size swap under the morph instead of handing it the final box
+        // eslint-disable-next-line shadcn/no-restyle -- the morph (a view transition) owns this motion
         "gap-0 overflow-hidden p-0 transition-none",
         // each view sizes the box in CSS, and the morph only moves between
         // the two sizes, so nothing here measures or clamps. The card keeps
@@ -221,7 +223,7 @@ function Sheet({
     >
       {reading ? (
         <div data-morph-part="content" className="flex min-h-0 flex-col">
-          <div className="flex items-center gap-2 px-4 pt-4 pr-[3.375rem] pb-3">
+          <div className="flex items-center gap-2 px-4 pt-4 pr-13.5 pb-3">
             <Button
               variant="ghost"
               size="icon-sm"
@@ -383,7 +385,8 @@ export default function ResumeDialog() {
     <IconButton
       variant="default"
       size="lg"
-      className="w-full border-foreground/20 sm:w-auto"
+      rim
+      className="w-full sm:w-auto"
       icon={
         <HugeiconsIcon
           icon={Download01Icon}

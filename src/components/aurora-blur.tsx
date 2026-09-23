@@ -1,4 +1,5 @@
 import React, { useRef, useMemo } from "react";
+import { cn } from "@/lib/utils";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -293,11 +294,8 @@ const AuroraBlur: React.FC<AuroraBlurProps> = ({
 
   return (
     <div
-      className={`relative overflow-hidden ${className || ""}`}
-      style={{
-        width: widthStyle,
-        height: heightStyle,
-      }}
+      className={cn("relative overflow-hidden", className, "h-(--h) w-(--w)")}
+      style={{ "--w": widthStyle, "--h": heightStyle } as React.CSSProperties}
     >
       <Canvas
         className="absolute inset-0 w-full h-full"

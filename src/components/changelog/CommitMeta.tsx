@@ -47,7 +47,7 @@ const MAX_MARKS = 3;
 
 export function TypeChip({ type }: { type: string }) {
   return (
-    <Badge variant="secondary" className="font-normal">
+    <Badge variant="chip">
       <HugeiconsIcon
         icon={TYPE_ICON[type] ?? GitCommitIcon}
         strokeWidth={2}
@@ -59,11 +59,7 @@ export function TypeChip({ type }: { type: string }) {
 }
 
 export function ScopeChip({ scope }: { scope: string }) {
-  return (
-    <Badge variant="outline" className="font-normal text-muted-foreground">
-      {scope}
-    </Badge>
-  );
+  return <Badge variant="chip-outline">{scope}</Badge>;
 }
 
 /** Lit blocks grow with the size of the change (1 → 5 across ~4 → ~1000 lines). */
@@ -82,7 +78,7 @@ function DiffBar({ additions, deletions }: ChangelogStats) {
         <span
           key={i}
           className={cn(
-            "size-2 rounded-[2px]",
+            "size-2 rounded-xs",
             i < added
               ? "bg-(--diff-add-fg)"
               : i < lit
@@ -110,7 +106,7 @@ export function CommitStats({
   return (
     <span
       className={cn(
-        "flex items-center gap-2.5 font-mono text-[11px] tabular-nums",
+        "flex items-center gap-2.5 font-mono text-2xs tabular-nums",
         className,
       )}
     >

@@ -299,8 +299,13 @@ const Watercolor: React.FC<WatercolorProps> = ({
   return (
     <div
       ref={containerRef}
-      className={cn("relative overflow-hidden", className)}
-      style={{ width, height }}
+      className={cn("relative overflow-hidden", className, "h-(--h) w-(--w)")}
+      style={
+        {
+          "--w": typeof width === "number" ? `${width}px` : width,
+          "--h": typeof height === "number" ? `${height}px` : height,
+        } as React.CSSProperties
+      }
       onPointerMove={handlePointerMove}
     >
       <Canvas

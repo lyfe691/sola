@@ -117,6 +117,7 @@ export function CommandMenu() {
     <>
       <CommandInput
         placeholder={t.common.command.placeholder}
+        // eslint-disable-next-line shadcn/no-restyle -- 16px on phones, or iOS zooms into the field
         className={isMobile ? "text-base" : undefined}
       />
       {/* scroll-fade masks the list's own edges (scroll-aware: crisp at the
@@ -248,6 +249,7 @@ export function CommandMenu() {
           <DrawerHeader className="sr-only">
             <DrawerTitle>{t.common.command.placeholder}</DrawerTitle>
           </DrawerHeader>
+          {/* eslint-disable-next-line shadcn/no-restyle -- the drawer is the surface; the palette sits flush in it */}
           <Command className="h-auto min-h-0 rounded-none bg-transparent p-3 pb-4">
             {commandContent}
           </Command>

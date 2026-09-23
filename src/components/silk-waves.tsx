@@ -295,10 +295,10 @@ const SilkWaves: React.FC<SilkWavesProps> = ({
     <div
       ref={containerRef}
       className={cn(
-        "relative w-full h-full overflow-hidden bg-transparent",
+        "relative w-full h-full min-h-[inherit] overflow-hidden bg-transparent",
         className,
       )}
-      style={{ minHeight: "inherit", ...style }}
+      style={style}
     />
   );
 };

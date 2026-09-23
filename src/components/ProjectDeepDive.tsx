@@ -215,10 +215,7 @@ function DeepDiveHero({
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="max-w-4xl px-6 text-center">
           {/* match FoldText metrics so mount doesn't reflow/stutter */}
-          <h1
-            className="mb-6 min-h-[1.1em] text-5xl font-extrabold tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl"
-            style={{ lineHeight: 0.95 }}
-          >
+          <h1 className="mb-6 min-h-[1.1em] text-5xl leading-display font-extrabold tracking-display sm:text-6xl md:text-7xl lg:text-8xl">
             {showTitle ? (
               <FoldText
                 text={title}
@@ -242,10 +239,7 @@ function DeepDiveHero({
             )}
           </h1>
 
-          <p
-            className="mx-auto min-h-[1.5em] max-w-2xl text-base font-light tracking-[-0.04em] sm:text-lg md:text-xl"
-            style={{ lineHeight: 0.95 }}
-          >
+          <p className="mx-auto min-h-[1.5em] max-w-2xl text-base leading-display font-light tracking-display sm:text-lg md:text-xl">
             {showSubtitle ? (
               <FoldText
                 text={subtitle}

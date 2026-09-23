@@ -22,7 +22,6 @@ import {
 import { INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { useCodeView } from "./code-view-provider";
-import { DIFF_TOKENS } from "./diff-tokens";
 import { useIsDarkScheme } from "./use-scheme";
 import { DEPLOY_LABEL, usePageDiff } from "./use-page-diff";
 
@@ -86,8 +85,8 @@ export function DeployChip() {
           <>
             <p className="line-clamp-2 leading-relaxed">{commit.subject}</p>
             <p
-              style={DIFF_TOKENS[isDark ? "light" : "dark"]}
-              className="font-mono text-[10px] font-normal text-background/60"
+              data-scheme={isDark ? "light" : "dark"}
+              className="font-mono text-3xs font-normal text-background/60"
             >
               <span className="text-(--diff-add-fg)">+{commit.additions}</span>{" "}
               <span className="text-(--diff-del-fg)">−{commit.deletions}</span>

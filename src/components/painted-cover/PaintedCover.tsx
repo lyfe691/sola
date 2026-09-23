@@ -32,6 +32,7 @@ import {
   useRef,
   useState,
   type ReactNode,
+  type CSSProperties,
 } from "react";
 import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
 import { cn } from "@/lib/utils";
@@ -373,24 +374,33 @@ export function PaintedCover({
       {/* the painting: everything the notch cuts, so the notch content and
           the caption stay whole */}
       <div
-        className="absolute inset-0"
-        style={outline ? { clipPath: `path("${outline}")` } : undefined}
+        className={cn(
+          "absolute inset-0",
+          outline && "[clip-path:var(--outline)]",
+        )}
+        style={
+          outline
+            ? ({ "--outline": `path("${outline}")` } as CSSProperties)
+            : undefined
+        }
       >
         <div
           ref={hostRef}
           className={cn(
-            "absolute inset-0 bg-cover bg-center [&>svg]:block [&>svg]:size-full",
+            "absolute inset-0 bg-(image:--gradient) bg-cover bg-center [&>svg]:block [&>svg]:size-full",
             size === "card" &&
               "transition-transform duration-500 ease-out can-hover:group-hover:scale-[1.03]",
           )}
-          style={gradient ? { backgroundImage: gradient } : undefined}
+          style={
+            gradient ? ({ "--gradient": gradient } as CSSProperties) : undefined
+          }
           dangerouslySetInnerHTML={artwork}
           aria-hidden="true"
         />
         {!live && (
           <div
-            className="pointer-events-none absolute inset-0 opacity-30 mix-blend-overlay"
-            style={{ backgroundImage: GRAIN, backgroundSize: "160px 160px" }}
+            className="pointer-events-none absolute inset-0 bg-(image:--grain) bg-size-[160px_160px] opacity-30 mix-blend-overlay"
+            style={{ "--grain": GRAIN } as CSSProperties}
             aria-hidden="true"
           />
         )}

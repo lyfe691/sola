@@ -14,7 +14,7 @@ export const RoseIcon: React.FC<React.SVGProps<SVGSVGElement>> = ({
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
-    className={`lucide lucide-rose-icon lucide-rose ${className ?? ""}`}
+    className={className}
     {...props}
   >
     <path d="M17 10h-1a4 4 0 1 1 4-4v.534" />

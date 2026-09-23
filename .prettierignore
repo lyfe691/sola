@@ -9,5 +9,3 @@ dist
 src/components/ui/*
 !src/components/ui/custom
 !src/components/ui/code-block
-# written by eslint --suppress-all / --prune-suppressions in its own format
-eslint-suppressions.json

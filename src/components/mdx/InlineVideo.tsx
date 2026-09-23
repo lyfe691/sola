@@ -10,7 +10,7 @@
  * lightbox; under reduced motion it waits for a press on its own controls.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { useReducedMotion } from "motion/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { cn } from "@/lib/utils";
@@ -65,9 +65,10 @@ export function InlineVideo({
       playsInline
       preload="metadata"
       controls={reducedMotion === true}
-      style={radius ? { borderRadius: radius } : undefined}
+      style={radius ? ({ "--corner": radius } as CSSProperties) : undefined}
       className={cn(
         "block h-auto w-full",
+        radius && "rounded-(--corner)",
         !radius && "rounded-xl bg-muted/20 shadow-(--prose-figure-lift)",
         className,
       )}
