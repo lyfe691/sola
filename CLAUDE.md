@@ -6,7 +6,12 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 
 ## Verify
 
-- `bun run lint` — must stay at 0 errors (warnings tolerated)
+- `bun run lint` — must stay at 0 errors (warnings tolerated). It includes
+  all six `@shadcn/lint` design-system rules as errors; violations that
+  predate them are baselined in `eslint-suppressions.json`. New code must
+  comply: never grow the baseline (no `--suppress-all` to silence new
+  findings). After fixing old ones, run
+  `bun node_modules/eslint/bin/eslint.js . --prune-suppressions`.
 - `bun run format:check` — prettier; `bun run format` fixes
 - `bun run typecheck` — `tsc -b` over src/ and api/ (plain `tsc --noEmit`
   checks nothing: the root tsconfig is solution-style with `files: []`)

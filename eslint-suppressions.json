@@ -1,0 +1,423 @@
+{
+  "src/components/Command.tsx": {
+    "shadcn/no-restyle": {
+      "count": 8
+    }
+  },
+  "src/components/ContributionActivityFeed.tsx": {
+    "shadcn/no-restyle": {
+      "count": 5
+    }
+  },
+  "src/components/Footer.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    },
+    "shadcn/no-inline-styles": {
+      "count": 9
+    }
+  },
+  "src/components/Navigation.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 3
+    },
+    "shadcn/no-inline-styles": {
+      "count": 8
+    }
+  },
+  "src/components/ProjectDeepDive.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 4
+    },
+    "shadcn/no-inline-styles": {
+      "count": 2
+    },
+    "shadcn/no-restyle": {
+      "count": 6
+    }
+  },
+  "src/components/ResumeDialog.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    },
+    "shadcn/no-restyle": {
+      "count": 9
+    }
+  },
+  "src/components/UpdateNotification.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    }
+  },
+  "src/components/appearance-menu.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 4
+    }
+  },
+  "src/components/aurora-blur.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/components/changelog/CommitDetail.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    },
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/changelog/CommitLog.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 7
+    },
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/components/changelog/CommitMeta.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    },
+    "shadcn/no-restyle": {
+      "count": 3
+    }
+  },
+  "src/components/changelog/CommitPatch.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    },
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/changelog/CommitRail.tsx": {
+    "shadcn/no-raw-colors": {
+      "count": 1
+    }
+  },
+  "src/components/changelog/FileTree.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    }
+  },
+  "src/components/chroma-waves.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/components/deep-dive-nav.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 3
+    },
+    "shadcn/no-inline-styles": {
+      "count": 3
+    }
+  },
+  "src/components/deploy-diff/CodeView.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    },
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/deploy-diff/CommitDiff.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/deploy-diff/deploy-chip.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    },
+    "shadcn/no-inline-styles": {
+      "count": 1
+    },
+    "shadcn/no-restyle": {
+      "count": 1
+    }
+  },
+  "src/components/deploy-diff/diff-hint.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    },
+    "shadcn/no-inline-styles": {
+      "count": 1
+    },
+    "shadcn/no-restyle": {
+      "count": 6
+    }
+  },
+  "src/components/experience/ExperienceItem.tsx": {
+    "shadcn/no-restyle": {
+      "count": 7
+    }
+  },
+  "src/components/experience/ExperienceSection.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    }
+  },
+  "src/components/github/GitHubContributionCalendar.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    },
+    "shadcn/no-inline-styles": {
+      "count": 1
+    },
+    "shadcn/no-restyle": {
+      "count": 1
+    }
+  },
+  "src/components/i18n/RichText.tsx": {
+    "shadcn/require-static-classes": {
+      "count": 1
+    }
+  },
+  "src/components/mdx/ExpandableImage.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    },
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/components/mdx/Heading.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    }
+  },
+  "src/components/mdx/InlineVideo.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/mdx/MDXComponents.tsx": {
+    "shadcn/no-restyle": {
+      "count": 7
+    }
+  },
+  "src/components/mdx/Mdx.tsx": {
+    "shadcn/no-restyle": {
+      "count": 1
+    }
+  },
+  "src/components/mdx/figure-lightbox.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 5
+    },
+    "shadcn/no-inline-styles": {
+      "count": 11
+    }
+  },
+  "src/components/mdx/figures.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/components/mdx/frames.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 39
+    }
+  },
+  "src/components/painted-cover/PaintedCover.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 4
+    }
+  },
+  "src/components/particle-image/ParticleImage.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 3
+    }
+  },
+  "src/components/pdf-pages.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    },
+    "shadcn/no-restyle": {
+      "count": 1
+    }
+  },
+  "src/components/private-link-button.tsx": {
+    "shadcn/no-restyle": {
+      "count": 1
+    }
+  },
+  "src/components/silk-waves.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/skills/SkillProjects.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    },
+    "shadcn/no-inline-styles": {
+      "count": 5
+    },
+    "shadcn/no-restyle": {
+      "count": 3
+    }
+  },
+  "src/components/testimonials/TestimonialAvatar.tsx": {
+    "shadcn/no-restyle": {
+      "count": 5
+    }
+  },
+  "src/components/testimonials/TestimonialCard.tsx": {
+    "shadcn/no-restyle": {
+      "count": 19
+    },
+    "shadcn/require-static-classes": {
+      "count": 1
+    }
+  },
+  "src/components/theme-callout.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    },
+    "shadcn/no-inline-styles": {
+      "count": 5
+    },
+    "shadcn/no-restyle": {
+      "count": 3
+    }
+  },
+  "src/components/theme-toggle.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 3
+    },
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/components/ui/chart.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/components/ui/custom/FoldText.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    },
+    "shadcn/no-unknown-classes": {
+      "count": 8
+    }
+  },
+  "src/components/ui/custom/icon-button.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/ui/custom/specular-button.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 4
+    }
+  },
+  "src/components/ui/custom/text-effect-wrapper.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/components/ui/icons/RoseIcon.tsx": {
+    "shadcn/no-unknown-classes": {
+      "count": 3
+    }
+  },
+  "src/components/ui/input-otp.tsx": {
+    "shadcn/no-unknown-classes": {
+      "count": 1
+    }
+  },
+  "src/components/ui/navigation-menu.tsx": {
+    "shadcn/no-unknown-classes": {
+      "count": 6
+    }
+  },
+  "src/components/ui/sidebar.tsx": {
+    "shadcn/no-raw-colors": {
+      "count": 49
+    }
+  },
+  "src/components/watercolor.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 2
+    }
+  },
+  "src/layouts/PageShell.tsx": {
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/pages/About.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 3
+    },
+    "shadcn/no-restyle": {
+      "count": 11
+    }
+  },
+  "src/pages/AboutThisWebsite.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    }
+  },
+  "src/pages/Certifications.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 1
+    },
+    "shadcn/no-restyle": {
+      "count": 1
+    }
+  },
+  "src/pages/Contact.tsx": {
+    "shadcn/no-restyle": {
+      "count": 4
+    }
+  },
+  "src/pages/Index.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 7
+    },
+    "shadcn/no-restyle": {
+      "count": 4
+    }
+  },
+  "src/pages/NotFound.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 2
+    },
+    "shadcn/no-inline-styles": {
+      "count": 1
+    }
+  },
+  "src/pages/Privacy.tsx": {
+    "shadcn/no-restyle": {
+      "count": 46
+    }
+  },
+  "src/pages/Projects.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 3
+    },
+    "shadcn/no-restyle": {
+      "count": 8
+    }
+  },
+  "src/pages/Services.tsx": {
+    "shadcn/no-restyle": {
+      "count": 18
+    }
+  },
+  "src/pages/Skills.tsx": {
+    "shadcn/no-arbitrary-values": {
+      "count": 3
+    }
+  },
+  "src/pages/projects/ProjectDeepDiveRenderer.tsx": {
+    "shadcn/no-restyle": {
+      "count": 7
+    }
+  }
+}
