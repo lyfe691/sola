@@ -237,6 +237,11 @@ function anchorFor(skill: Skill, row: HTMLElement): Anchor {
   };
 }
 
+const point = (event: { clientX: number; clientY: number }): Point => ({
+  x: event.clientX,
+  y: event.clientY,
+});
+
 const cross = (a: Point, b: Point, p: Point) =>
   (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
 
@@ -273,8 +278,9 @@ const RowsContext = createContext<Rows | null>(null);
  * The rows report the pointer; one card glides to the row it settles on and
  * cross-fades its projects, the way the theme menu's preview follows its
  * rows. The card sits beside the row, so the way into its far items crosses
- * the rows above or below: a row under that way only takes the card once
- * the pointer holds on it without heading for the card.
+ * the rows above or below, or leaves the rows altogether when the card
+ * reaches past them: whatever is under that way waits, and the card is kept,
+ * for as long as the pointer keeps heading for the card.
  */
 export function SkillCards({
   enabled,
@@ -289,12 +295,40 @@ export function SkillCards({
   // where the pointer left the active row: the apex of the way into the card
   const leftAt = useRef<Point | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
-
-  const settle = useCallback((next: Anchor | null) => {
-    leftAt.current = null;
-    setAnchor(next);
+  // the document listener that follows the pointer outside the rows
+  const approach = useRef<(() => void) | null>(null);
+  const endApproach = useCallback(() => {
+    approach.current?.();
+    approach.current = null;
   }, []);
+  useEffect(() => endApproach, [endApproach]);
+
+  const settle = useCallback(
+    (next: Anchor | null) => {
+      leftAt.current = null;
+      endApproach();
+      setAnchor(next);
+    },
+    [endApproach],
+  );
   const hide = useCallback(() => settle(null), [settle]);
+
+  /** whether the pointer is inside the way from the active row into the card */
+  const heading = useCallback(
+    (p: Point) => {
+      const from = leftAt.current;
+      const card = cardRef.current?.getBoundingClientRect();
+      if (!anchor || !from || !card) return false;
+      const edge = anchor.side === "right" ? card.left : card.right;
+      return inTriangle(
+        p,
+        from,
+        { x: edge, y: card.top },
+        { x: edge, y: card.bottom },
+      );
+    },
+    [anchor],
+  );
 
   const rows = useMemo<Rows>(() => {
     const settleOn = (skill: Skill | null, row: HTMLElement) => () =>
@@ -312,38 +346,40 @@ export function SkillCards({
           );
       },
       move(skill, row, event) {
-        const from = leftAt.current;
-        if (!anchor || row === anchor.row || !from) return;
-        const card = cardRef.current?.getBoundingClientRect();
-        if (!card) return;
-        const edge = anchor.side === "right" ? card.left : card.right;
-        const heading = inTriangle(
-          { x: event.clientX, y: event.clientY },
-          from,
-          { x: edge, y: card.top },
-          { x: edge, y: card.bottom },
-        );
-        if (heading) pending.start(SWITCH_DELAY, settleOn(skill, row));
+        if (!anchor || row === anchor.row) return;
+        if (heading(point(event)))
+          pending.start(SWITCH_DELAY, settleOn(skill, row));
       },
       leave(row, event) {
         pending.clear();
-        if (row === anchor?.row) {
-          leftAt.current = { x: event.clientX, y: event.clientY };
-        }
+        if (row === anchor?.row) leftAt.current = point(event);
       },
     };
-  }, [anchor, pending, closing, settle]);
+  }, [anchor, pending, closing, settle, heading]);
+
+  const leaveRows = (event: PointerEvent) => {
+    if (event.pointerType !== "mouse") return;
+    closing.start(CLOSE_DELAY, hide);
+    if (!heading(point(event))) return;
+    const follow = (move: globalThis.PointerEvent) => {
+      if (heading(point(move))) closing.start(CLOSE_DELAY, hide);
+    };
+    endApproach();
+    document.addEventListener("pointermove", follow);
+    approach.current = () =>
+      document.removeEventListener("pointermove", follow);
+  };
 
   return (
     <RowsContext.Provider value={rows}>
       {/* the portal'd card is a child, so leaving means leaving both */}
       <div
         onPointerEnter={(event) => {
-          if (event.pointerType === "mouse") closing.clear();
+          if (event.pointerType !== "mouse") return;
+          closing.clear();
+          endApproach();
         }}
-        onPointerLeave={(event) => {
-          if (event.pointerType === "mouse") closing.start(CLOSE_DELAY, hide);
-        }}
+        onPointerLeave={leaveRows}
       >
         {children}
         {enabled
