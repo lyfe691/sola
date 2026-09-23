@@ -6,10 +6,12 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Icons for tech chips (project cards, deep-dive tech stack, experience
- * rows). Every chip gets an icon, from exactly two sources with
- * non-overlapping jobs:
- *   - devicons-react — brand marks only (the official devicon set; the one
- *     place logos come from, colored by the brand)
+ * rows) and skill tiles. Every name gets an icon, and brands and concepts
+ * never share a source:
+ *   - brand marks: devicons-react first, colored by the brand; simple-icons
+ *     (react-icons/si) where devicons has no mark or draws one that fails at
+ *     tile size, in its brand colour via brand(); Motion's own mark, which
+ *     no set ships yet
  *   - hugeicons — semantic glyphs for concept tags (i18n, CLI, Teamwork,
  *     …); they inherit the chip's muted text color, so brands read colored
  *     and concepts read quiet
@@ -17,14 +19,13 @@
  * a mapping when a fallback shows up somewhere visible.
  */
 
-import { createElement, type ComponentType } from "react";
+import { createElement, type ComponentProps, type ComponentType } from "react";
 import {
   AppWindowIcon,
   BookOpen02Icon,
   CableIcon,
   CheckListIcon,
   Chemistry01Icon,
-  ComponentIcon,
   ComputerTerminal01Icon,
   CpuIcon,
   CubeIcon,
@@ -50,9 +51,22 @@ import {
   WorkflowSquare01Icon,
   ZapIcon,
 } from "@hugeicons/core-free-icons";
+import { FaAws } from "react-icons/fa6";
+import {
+  SiBurpsuite,
+  SiCursor,
+  SiGnubash,
+  SiKalilinux,
+  SiMetasploit,
+  SiNginx,
+  SiObsidian,
+  SiOwasp,
+  SiRadixui,
+  SiShadcnui,
+  SiWireshark,
+} from "react-icons/si";
 import { hugeIcon } from "@/lib/huge-icon";
 import { cn } from "@/lib/utils";
-import { SiGnubash, SiNginx } from "react-icons/si";
 import AntdesignOriginal from "devicons-react/icons/AntdesignOriginal";
 import ChromeOriginal from "devicons-react/icons/ChromeOriginal";
 import CplusplusOriginal from "devicons-react/icons/CplusplusOriginal";
@@ -103,10 +117,18 @@ export type TechIcon = ComponentType<{
   "aria-hidden"?: boolean | "true" | "false";
 }>;
 
+/** A one-colour mark painted in its brand colour. */
+const brand =
+  (
+    Icon: ComponentType<ComponentProps<TechIcon> & { color?: string }>,
+    color: string,
+  ): TechIcon =>
+  (props) =>
+    createElement(Icon, { color, ...props });
+
 // the shaded Tux (LinuxOriginal) is ~800 SVG shapes and a 200 KB module;
 // the flat mark in Linux yellow reads the same at chip size
-const LinuxMark: TechIcon = (props) =>
-  createElement(LinuxPlain, { color: "#FCC624", ...props });
+const LinuxMark = brand(LinuxPlain, "#FCC624");
 
 // black (or near-black) marks vanish on a dark surface: flip or lift them
 // wherever the scheme is dark, so every chip and tile can show them
@@ -115,8 +137,6 @@ const onDark =
   ({ className, ...props }) =>
     createElement(Icon, { ...props, className: cn(className, adjust) });
 
-// devicons draw these as a dark box and a tiny wordmark; the simple-icons
-// marks read at tile size, bash in the text colour, nginx in its green
 // Motion (formerly Framer Motion) has no mark in the icon sets yet; this is
 // the one motion.dev serves, in the text colour like its white-on-black logo
 const MotionMark: TechIcon = ({ size, ...props }) =>
@@ -134,9 +154,9 @@ const MotionMark: TechIcon = ({ size, ...props }) =>
     }),
   );
 
-const BashMark: TechIcon = (props) => createElement(SiGnubash, props);
-const NginxMark: TechIcon = (props) =>
-  createElement(SiNginx, { color: "#009639", ...props });
+// devicons draw bash as a near-black box and nginx as a tiny wordmark; the
+// simple-icons marks read at tile size (bash in the text colour)
+const NginxMark = brand(SiNginx, "#009639");
 
 const GithubMark = onDark(GithubOriginal);
 const MarkdownMark = onDark(MarkdownOriginal);
@@ -148,10 +168,13 @@ const VercelMark = onDark(VercelOriginal);
 /** exact display-name -> mark; variants of one stack share its mark */
 export const TECH_ICONS: Record<string, TechIcon> = {
   "Ant Design": AntdesignOriginal,
-  Bash: BashMark,
+  AWS: FaAws,
+  Bash: SiGnubash,
+  "Burp Suite": brand(SiBurpsuite, "#FF6633"),
   "C++": CplusplusOriginal,
   "Chrome Extension": ChromeOriginal,
   CSS: Css3Original,
+  Cursor: SiCursor,
   Django: DjangoPlain,
   Docker: DockerOriginal,
   ESLint: EslintOriginal,
@@ -164,11 +187,12 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   Insomnia: InsomniaOriginal,
   Java: JavaOriginal,
   JavaScript: JavascriptOriginal,
-  "Kali Linux": LinuxMark,
+  "Kali Linux": onDark(brand(SiKalilinux, "#557C94"), "dark:brightness-175"),
   Kotlin: KotlinOriginal,
   Kubernetes: KubernetesOriginal,
   Linux: LinuxMark,
   MDX: MarkdownMark,
+  Metasploit: brand(SiMetasploit, "#2596CD"),
   MongoDB: MongodbOriginal,
   Motion: MotionMark,
   MySQL: MysqlMark,
@@ -179,11 +203,14 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   "Node.js": NodejsOriginal,
   Notion: NotionOriginal,
   npm: NpmOriginal,
+  Obsidian: brand(SiObsidian, "#7C3AED"),
+  OWASP: SiOwasp,
   PostgreSQL: PostgresqlOriginal,
   Postman: PostmanOriginal,
   Powershell: PowershellPlain,
   PowerShell: PowershellPlain,
   Python: PythonOriginal,
+  "Radix UI": SiRadixui,
   React: ReactOriginal,
   "React (Vite)": ReactOriginal,
   "React Server Components": ReactOriginal,
@@ -199,6 +226,7 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   "Vercel AI SDK": VercelMark,
   Vite: ViteOriginal,
   "VS Code": VscodeOriginal,
+  Wireshark: brand(SiWireshark, "#1679A7"),
   tokio: RustMark,
 
   // ---- concept tags (hugeicons, monochrome) ----
@@ -218,6 +246,7 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   JSZip: hugeIcon(FileZipIcon),
   MINT: hugeIcon(Chemistry01Icon),
   Networking: hugeIcon(Wifi01Icon),
+  // no vector mark exists at icon size (nmap.org ships a raster wordmark)
   Nmap: hugeIcon(RadarIcon),
   OSINT: hugeIcon(SearchIcon),
   "Office 365": hugeIcon(Office365Icon),
@@ -236,7 +265,7 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   "Windows API": hugeIcon(AppWindowIcon),
   "cargo-dist": hugeIcon(Package01Icon),
   i18n: hugeIcon(TranslateIcon),
-  "shadcn/ui": hugeIcon(ComponentIcon),
+  "shadcn/ui": SiShadcnui,
 };
 
 /** last-resort glyph so no chip is ever icon-less */
