@@ -440,6 +440,18 @@ export const es = {
       security: "Seguridad",
       tools: "Herramientas",
     },
+    levels: {
+      1: "Aprendiendo",
+      2: "Básico",
+      3: "Con soltura",
+      4: "Competente",
+      5: "Avanzado",
+    },
+    usedIn: "Usado en {count} proyectos",
+    usedInOne: "Usado en 1 proyecto",
+    projectCount: "{count} proyectos",
+    projectCountOne: "1 proyecto",
+    everyProject: "Todos los proyectos",
   },
   notFound: {
     backHome: "Regresar al inicio",

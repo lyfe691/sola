@@ -6,10 +6,12 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Icons for tech chips (project cards, deep-dive tech stack, experience
- * rows). Every chip gets an icon, from exactly two sources with
- * non-overlapping jobs:
- *   - devicons-react — brand marks only (the official devicon set; the one
- *     place logos come from, colored by the brand)
+ * rows) and skill tiles. Every name gets an icon, and brands and concepts
+ * never share a source:
+ *   - brand marks: devicons-react first, colored by the brand; simple-icons
+ *     (react-icons/si) where devicons has no mark or draws one that fails at
+ *     tile size, in its brand colour via brand(); Motion's own mark, which
+ *     no set ships yet
  *   - hugeicons — semantic glyphs for concept tags (i18n, CLI, Teamwork,
  *     …); they inherit the chip's muted text color, so brands read colored
  *     and concepts read quiet
@@ -17,14 +19,13 @@
  * a mapping when a fallback shows up somewhere visible.
  */
 
-import { createElement, type ComponentType } from "react";
+import { createElement, type ComponentProps, type ComponentType } from "react";
 import {
   AppWindowIcon,
   BookOpen02Icon,
   CableIcon,
   CheckListIcon,
   Chemistry01Icon,
-  ComponentIcon,
   ComputerTerminal01Icon,
   CpuIcon,
   CubeIcon,
@@ -39,7 +40,6 @@ import {
   Office365Icon,
   Package01Icon,
   RadarIcon,
-  ReloadIcon,
   SaleTag01Icon,
   SearchIcon,
   Shield01Icon,
@@ -50,9 +50,35 @@ import {
   WorkflowSquare01Icon,
   ZapIcon,
 } from "@hugeicons/core-free-icons";
+import { FaAws } from "react-icons/fa6";
+import {
+  SiBaseui,
+  SiBurpsuite,
+  SiClaude,
+  SiCursor,
+  SiGnubash,
+  SiKalilinux,
+  SiKeycloak,
+  SiMapbox,
+  SiMaplibre,
+  SiMdx,
+  SiMetasploit,
+  SiNginx,
+  SiObsidian,
+  SiOwasp,
+  SiRadixui,
+  SiReactquery,
+  SiSanity,
+  SiShadcnui,
+  SiVitest,
+  SiWireshark,
+  SiZod,
+} from "react-icons/si";
 import { hugeIcon } from "@/lib/huge-icon";
+import { cn } from "@/lib/utils";
 import AntdesignOriginal from "devicons-react/icons/AntdesignOriginal";
-import BashOriginal from "devicons-react/icons/BashOriginal";
+import BunOriginal from "devicons-react/icons/BunOriginal";
+import CapacitorOriginal from "devicons-react/icons/CapacitorOriginal";
 import ChromeOriginal from "devicons-react/icons/ChromeOriginal";
 import CplusplusOriginal from "devicons-react/icons/CplusplusOriginal";
 import Css3Original from "devicons-react/icons/Css3Original";
@@ -61,7 +87,6 @@ import DockerOriginal from "devicons-react/icons/DockerOriginal";
 import EslintOriginal from "devicons-react/icons/EslintOriginal";
 import FastapiOriginal from "devicons-react/icons/FastapiOriginal";
 import FigmaOriginal from "devicons-react/icons/FigmaOriginal";
-import FramermotionOriginal from "devicons-react/icons/FramermotionOriginal";
 import GitOriginal from "devicons-react/icons/GitOriginal";
 import GithubOriginal from "devicons-react/icons/GithubOriginal";
 import GithubactionsOriginal from "devicons-react/icons/GithubactionsOriginal";
@@ -77,7 +102,6 @@ import MongodbOriginal from "devicons-react/icons/MongodbOriginal";
 import MysqlOriginal from "devicons-react/icons/MysqlOriginal";
 import NestjsOriginal from "devicons-react/icons/NestjsOriginal";
 import NextjsOriginal from "devicons-react/icons/NextjsOriginal";
-import NginxOriginal from "devicons-react/icons/NginxOriginal";
 import NodejsOriginal from "devicons-react/icons/NodejsOriginal";
 import NotionOriginal from "devicons-react/icons/NotionOriginal";
 import NpmOriginal from "devicons-react/icons/NpmOriginal";
@@ -104,66 +128,130 @@ export type TechIcon = ComponentType<{
   "aria-hidden"?: boolean | "true" | "false";
 }>;
 
+/** A one-colour mark painted in its brand colour. */
+const brand =
+  (
+    Icon: ComponentType<ComponentProps<TechIcon> & { color?: string }>,
+    color: string,
+  ): TechIcon =>
+  (props) =>
+    createElement(Icon, { color, ...props });
+
 // the shaded Tux (LinuxOriginal) is ~800 SVG shapes and a 200 KB module;
 // the flat mark in Linux yellow reads the same at chip size
-const LinuxMark: TechIcon = (props) =>
-  createElement(LinuxPlain, { color: "#FCC624", ...props });
+const LinuxMark = brand(LinuxPlain, "#FCC624");
+
+// black (or near-black) marks vanish on a dark surface: flip or lift them
+// wherever the scheme is dark, so every chip and tile can show them
+const onDark =
+  (Icon: TechIcon, adjust = "dark:invert"): TechIcon =>
+  ({ className, ...props }) =>
+    createElement(Icon, { ...props, className: cn(className, adjust) });
+
+// Motion (formerly Framer Motion) has no mark in the icon sets yet; this is
+// the one motion.dev serves, in the text colour like its white-on-black logo
+const MotionMark: TechIcon = ({ size, ...props }) =>
+  createElement(
+    "svg",
+    {
+      viewBox: "0 0 25.364 9",
+      width: size ?? "1em",
+      height: size ?? "1em",
+      fill: "currentColor",
+      ...props,
+    },
+    createElement("path", {
+      d: "M 9.587 0 L 4.57 9 L 0 9 L 3.917 1.972 C 4.524 0.883 6.039 0 7.301 0 Z M 20.794 2.25 C 20.794 1.007 21.817 0 23.079 0 C 24.341 0 25.364 1.007 25.364 2.25 C 25.364 3.493 24.341 4.5 23.079 4.5 C 21.817 4.5 20.794 3.493 20.794 2.25 Z M 10.443 0 L 15.013 0 L 9.997 9 L 5.427 9 Z M 15.841 0 L 20.411 0 L 16.494 7.028 C 15.887 8.117 14.372 9 13.11 9 L 10.825 9 Z",
+    }),
+  );
+
+// devicons draw bash as a near-black box and nginx as a tiny wordmark; the
+// simple-icons marks read at tile size (bash in the text colour)
+const NginxMark = brand(SiNginx, "#009639");
+
+const GithubMark = onDark(GithubOriginal);
+const MarkdownMark = onDark(MarkdownOriginal);
+const MysqlMark = onDark(MysqlOriginal, "dark:brightness-200");
+const RustMark = onDark(RustOriginal);
+const ThreejsMark = onDark(ThreejsOriginal);
+const VercelMark = onDark(VercelOriginal);
 
 /** exact display-name -> mark; variants of one stack share its mark */
 export const TECH_ICONS: Record<string, TechIcon> = {
   "Ant Design": AntdesignOriginal,
-  Bash: BashOriginal,
+  AWS: FaAws,
+  "Base UI": SiBaseui,
+  Bash: SiGnubash,
+  Bun: BunOriginal,
+  "Burp Suite": brand(SiBurpsuite, "#FF6633"),
   "C++": CplusplusOriginal,
+  Capacitor: CapacitorOriginal,
   "Chrome Extension": ChromeOriginal,
+  "Claude Code": brand(SiClaude, "#D97757"),
   CSS: Css3Original,
+  Cursor: SiCursor,
   Django: DjangoPlain,
   Docker: DockerOriginal,
   ESLint: EslintOriginal,
   FastAPI: FastapiOriginal,
   Figma: FigmaOriginal,
-  "Framer Motion": FramermotionOriginal,
   Git: GitOriginal,
-  GitHub: GithubOriginal,
+  GitHub: GithubMark,
   "GitHub Actions": GithubactionsOriginal,
   HTML: Html5Original,
   Insomnia: InsomniaOriginal,
   Java: JavaOriginal,
   JavaScript: JavascriptOriginal,
-  "Kali Linux": LinuxMark,
+  "Kali Linux": onDark(brand(SiKalilinux, "#557C94"), "dark:brightness-175"),
+  Keycloak: SiKeycloak,
   Kotlin: KotlinOriginal,
   Kubernetes: KubernetesOriginal,
   Linux: LinuxMark,
-  MDX: MarkdownOriginal,
+  Mapbox: SiMapbox,
+  MapLibre: brand(SiMaplibre, "#396CB2"),
+  Markdown: MarkdownMark,
+  MDX: SiMdx,
+  Metasploit: brand(SiMetasploit, "#2596CD"),
   MongoDB: MongodbOriginal,
-  MySQL: MysqlOriginal,
+  Motion: MotionMark,
+  MySQL: MysqlMark,
   NestJS: NestjsOriginal,
   "Next.js": NextjsOriginal,
   "Next.js App Router": NextjsOriginal,
-  Nginx: NginxOriginal,
+  Nginx: NginxMark,
   "Node.js": NodejsOriginal,
   Notion: NotionOriginal,
   npm: NpmOriginal,
+  Obsidian: brand(SiObsidian, "#7C3AED"),
+  OWASP: SiOwasp,
   PostgreSQL: PostgresqlOriginal,
   Postman: PostmanOriginal,
   Powershell: PowershellPlain,
   PowerShell: PowershellPlain,
   Python: PythonOriginal,
+  "Radix UI": SiRadixui,
   React: ReactOriginal,
   "React (Vite)": ReactOriginal,
+  "React Query": brand(SiReactquery, "#FF4154"),
   "React Server Components": ReactOriginal,
   Redis: RedisOriginal,
-  Rust: RustOriginal,
+  Rust: RustMark,
+  Sanity: SiSanity,
   "Spring Boot": SpringOriginal,
   Supabase: SupabaseOriginal,
   "Tailwind CSS": TailwindcssOriginal,
+  "TanStack Query": brand(SiReactquery, "#FF4154"),
   Terraform: TerraformOriginal,
-  "Three.js": ThreejsOriginal,
+  "Three.js": ThreejsMark,
   TypeScript: TypescriptOriginal,
-  Vercel: VercelOriginal,
-  "Vercel AI SDK": VercelOriginal,
+  Vercel: VercelMark,
+  "Vercel AI SDK": VercelMark,
   Vite: ViteOriginal,
+  Vitest: brand(SiVitest, "#00FF74"),
   "VS Code": VscodeOriginal,
-  tokio: RustOriginal,
+  Wireshark: brand(SiWireshark, "#1679A7"),
+  Zod: brand(SiZod, "#408AFF"),
+  tokio: RustMark,
 
   // ---- concept tags (hugeicons, monochrome) ----
   "ASCII Art": hugeIcon(TextFontIcon),
@@ -182,13 +270,13 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   JSZip: hugeIcon(FileZipIcon),
   MINT: hugeIcon(Chemistry01Icon),
   Networking: hugeIcon(Wifi01Icon),
+  // no vector mark exists at icon size (nmap.org ships a raster wordmark)
   Nmap: hugeIcon(RadarIcon),
   OSINT: hugeIcon(SearchIcon),
   "Office 365": hugeIcon(Office365Icon),
   OverTheWire: hugeIcon(Sword01Icon),
   "Package Management": hugeIcon(Package01Icon),
   "Project Management": hugeIcon(CheckListIcon),
-  "React Query": hugeIcon(ReloadIcon),
   SEO: hugeIcon(SearchIcon),
   Shiki: hugeIcon(HighlighterIcon),
   "System Information": hugeIcon(CpuIcon),
@@ -200,7 +288,7 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   "Windows API": hugeIcon(AppWindowIcon),
   "cargo-dist": hugeIcon(Package01Icon),
   i18n: hugeIcon(TranslateIcon),
-  "shadcn/ui": hugeIcon(ComponentIcon),
+  "shadcn/ui": SiShadcnui,
 };
 
 /** last-resort glyph so no chip is ever icon-less */
@@ -218,7 +306,7 @@ const FILE_TECH: Record<string, string> = {
   jsx: "React",
   css: "CSS",
   html: "HTML",
-  md: "MDX",
+  md: "Markdown",
   mdx: "MDX",
   sh: "Bash",
   rs: "Rust",
@@ -237,7 +325,7 @@ const LANG_TECH: Record<string, string> = {
   cjs: "JavaScript",
   css: "CSS",
   html: "HTML",
-  md: "MDX",
+  md: "Markdown",
   mdx: "MDX",
   bash: "Bash",
   sh: "Bash",

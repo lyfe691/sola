@@ -424,6 +424,18 @@ export const zh = {
       security: "安全",
       tools: "工具",
     },
+    levels: {
+      1: "学习中",
+      2: "了解",
+      3: "熟悉",
+      4: "熟练",
+      5: "精通",
+    },
+    usedIn: "用于 {count} 个项目",
+    usedInOne: "用于 1 个项目",
+    projectCount: "{count} 个项目",
+    projectCountOne: "1 个项目",
+    everyProject: "所有项目",
   },
   notFound: {
     backHome: "返回首页",

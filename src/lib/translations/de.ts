@@ -439,6 +439,18 @@ export const de = {
       security: "Sicherheit",
       tools: "Tools",
     },
+    levels: {
+      1: "Am Lernen",
+      2: "Grundkenntnisse",
+      3: "Sicher",
+      4: "Versiert",
+      5: "Fortgeschritten",
+    },
+    usedIn: "In {count} Projekten verwendet",
+    usedInOne: "In 1 Projekt verwendet",
+    projectCount: "{count} Projekte",
+    projectCountOne: "1 Projekt",
+    everyProject: "Jedes Projekt",
   },
   notFound: {
     backHome: "Zurück zur Startseite",

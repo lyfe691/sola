@@ -433,6 +433,18 @@ export const ko = {
       security: "보안",
       tools: "도구",
     },
+    levels: {
+      1: "학습 중",
+      2: "기초",
+      3: "익숙함",
+      4: "능숙",
+      5: "고급",
+    },
+    usedIn: "{count}개 프로젝트에서 사용",
+    usedInOne: "1개 프로젝트에서 사용",
+    projectCount: "프로젝트 {count}개",
+    projectCountOne: "프로젝트 1개",
+    everyProject: "모든 프로젝트",
   },
   notFound: {
     backHome: "홈으로 돌아가기",
