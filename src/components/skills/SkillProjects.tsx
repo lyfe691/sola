@@ -8,7 +8,6 @@
 
 import { useRef, type ReactNode } from "react";
 import { Link } from "react-router";
-import type { Popover as PopoverPrimitive } from "@base-ui/react/popover";
 import {
   Drawer,
   DrawerContent,
@@ -24,7 +23,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { ProjectMeta } from "@/config/projects";
-import { skillLabels, type Skill } from "@/config/skills";
+import { projectsUsing, skillLabels, type Skill } from "@/config/skills";
 import { TECH_ICONS } from "@/config/tech-icons";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useTranslation } from "@/lib/language-provider";
@@ -162,41 +161,22 @@ function ProjectList({
   );
 }
 
-/** Desktop: the row itself opens a card of the projects beside it. */
+/** Desktop: the row opens a card of its projects beside it. */
 export function SkillPopover({
   skill,
-  projects,
   className,
   children,
 }: {
   skill: Skill;
-  projects: ProjectMeta[];
   className?: string;
   children: ReactNode;
 }) {
+  const projects = projectsUsing(skill.name);
   const usedIn = useUsedIn(projects.length);
-  const hoverOpened = useRef(false);
-
-  const onOpenChange = (
-    open: boolean,
-    details: PopoverPrimitive.Root.ChangeEventDetails,
-  ) => {
-    if (open) {
-      hoverOpened.current = details.reason === "trigger-hover";
-      return;
-    }
-    // hover opened it, so a click on the row means "keep this", not "close"
-    if (hoverOpened.current && details.reason === "trigger-press") {
-      hoverOpened.current = false;
-      details.cancel();
-    }
-  };
 
   return (
-    <Popover onOpenChange={onOpenChange}>
-      <PopoverTrigger openOnHover delay={300} className={className}>
-        {children}
-      </PopoverTrigger>
+    <Popover>
+      <PopoverTrigger className={className}>{children}</PopoverTrigger>
       <PopoverContent
         side="right"
         align="center"
@@ -216,18 +196,16 @@ export function SkillPopover({
 /** Phones: one drawer for the page, showing whichever skill was tapped. */
 export function SkillDrawer({
   skill,
-  projects,
-  level,
   open,
   onOpenChange,
 }: {
   skill: Skill;
-  projects: ProjectMeta[];
-  level: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
   const popupRef = useRef<HTMLDivElement>(null);
+  const t = useTranslation().skills;
+  const projects = projectsUsing(skill.name);
   const usedIn = useUsedIn(projects.length);
   useWindowScrollLock(open);
 
@@ -238,7 +216,7 @@ export function SkillDrawer({
           <SkillTile skill={skill} className="mb-1 size-14 rounded-2xl" />
           <DrawerTitle className="text-lg">{skill.name}</DrawerTitle>
           <DrawerDescription>
-            {level} · {usedIn}
+            {t.levels[skill.level]} · {usedIn}
           </DrawerDescription>
         </DrawerHeader>
         <ProjectList

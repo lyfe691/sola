@@ -444,6 +444,7 @@ export const en = {
     usedInOne: "Used in 1 project",
     projectCount: "{count} projects",
     projectCountOne: "1 project",
+    everyProject: "Every project",
   },
   notFound: {
     backHome: "Go back home",

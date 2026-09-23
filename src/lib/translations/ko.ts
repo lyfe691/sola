@@ -444,6 +444,7 @@ export const ko = {
     usedInOne: "1개 프로젝트에서 사용",
     projectCount: "프로젝트 {count}개",
     projectCountOne: "프로젝트 1개",
+    everyProject: "모든 프로젝트",
   },
   notFound: {
     backHome: "홈으로 돌아가기",

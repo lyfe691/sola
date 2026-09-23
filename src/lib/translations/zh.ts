@@ -435,6 +435,7 @@ export const zh = {
     usedInOne: "用于 1 个项目",
     projectCount: "{count} 个项目",
     projectCountOne: "1 个项目",
+    everyProject: "所有项目",
   },
   notFound: {
     backHome: "返回首页",

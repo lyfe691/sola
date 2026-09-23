@@ -442,6 +442,7 @@ export const ja = {
     usedInOne: "1件のプロジェクトで使用",
     projectCount: "{count}件のプロジェクト",
     projectCountOne: "1件のプロジェクト",
+    everyProject: "すべてのプロジェクト",
   },
   notFound: {
     backHome: "ホームに戻る",

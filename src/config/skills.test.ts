@@ -6,11 +6,11 @@ import { describe, expect, it } from "vitest";
 import { projectsUsing, SKILL_ALIASES, SKILL_GROUPS } from "./skills";
 
 describe("projectsUsing", () => {
-  it("finds the projects that list a skill, featured first", () => {
+  it("finds the projects that list a skill, newest first", () => {
     const ids = projectsUsing("TypeScript").map((project) => project.id);
     expect(ids).toContain("sola");
-    const priorities = projectsUsing("TypeScript").map((p) => p.priority);
-    expect(priorities).toEqual([...priorities].sort((a, b) => b - a));
+    const starts = projectsUsing("TypeScript").map((p) => p.date.start);
+    expect(starts).toEqual([...starts].sort().reverse());
   });
 
   it("counts an alias label as the skill", () => {

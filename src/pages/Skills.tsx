@@ -11,6 +11,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { useTranslation } from "@/lib/language-provider";
 import {
+  EVERY_PROJECT,
   SKILL_GROUPS,
   projectsUsing,
   type Proficiency,
@@ -40,9 +41,16 @@ const ROW =
 const PRESSABLE =
   "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out can-hover:hover:bg-muted/50 data-popup-open:bg-muted/50 active:scale-[0.99]";
 
-function SkillRowBody({ skill, count }: { skill: Skill; count: number }) {
+function SkillRowBody({
+  skill,
+  usage,
+  openable,
+}: {
+  skill: Skill;
+  usage: string | null;
+  openable: boolean;
+}) {
   const t = useTranslation().skills;
-  const projects = countLabel(count, t.projectCountOne, t.projectCount);
 
   return (
     <>
@@ -55,10 +63,10 @@ function SkillRowBody({ skill, count }: { skill: Skill; count: number }) {
           <span className={LEVEL_TONE[skill.level]}>
             {t.levels[skill.level]}
           </span>
-          {count > 0 ? ` · ${projects}` : null}
+          {usage ? ` · ${usage}` : null}
         </span>
       </span>
-      {count > 0 ? (
+      {openable ? (
         <HugeiconsIcon
           icon={ArrowRight01Icon}
           strokeWidth={2}
@@ -79,11 +87,20 @@ function SkillRow({
   isMobile: boolean;
   onOpen: (skill: Skill) => void;
 }) {
-  const projects = projectsUsing(skill.name);
-  const body = <SkillRowBody skill={skill} count={projects.length} />;
+  const t = useTranslation().skills;
+  const everywhere = EVERY_PROJECT.has(skill.name);
+  const count = everywhere ? 0 : projectsUsing(skill.name).length;
+  const usage = everywhere
+    ? t.everyProject
+    : count > 0
+      ? countLabel(count, t.projectCountOne, t.projectCount)
+      : null;
+  const body = (
+    <SkillRowBody skill={skill} usage={usage} openable={count > 0} />
+  );
 
   let row: ReactNode;
-  if (projects.length === 0) {
+  if (count === 0) {
     row = <div className={ROW}>{body}</div>;
   } else if (isMobile) {
     row = (
@@ -97,11 +114,7 @@ function SkillRow({
     );
   } else {
     row = (
-      <SkillPopover
-        skill={skill}
-        projects={projects}
-        className={cn(ROW, PRESSABLE)}
-      >
+      <SkillPopover skill={skill} className={cn(ROW, PRESSABLE)}>
         {body}
       </SkillPopover>
     );
@@ -182,8 +195,6 @@ const Skills = () => {
       {picked ? (
         <SkillDrawer
           skill={picked}
-          projects={projectsUsing(picked.name)}
-          level={t.skills.levels[picked.level]}
           open={open && isMobile}
           onOpenChange={setOpen}
         />

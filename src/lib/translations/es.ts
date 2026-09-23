@@ -451,6 +451,7 @@ export const es = {
     usedInOne: "Usado en 1 proyecto",
     projectCount: "{count} proyectos",
     projectCountOne: "1 proyecto",
+    everyProject: "Todos los proyectos",
   },
   notFound: {
     backHome: "Regresar al inicio",

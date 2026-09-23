@@ -148,16 +148,22 @@ export function skillLabels(name: string): string[] {
   return [name, ...(SKILL_ALIASES[name] ?? [])];
 }
 
-const BY_PRIORITY = [...PROJECTS].sort((a, b) => b.priority - a.priority);
+// newest first, the order the projects page calls "Newest"
+const BY_NEWEST = [...PROJECTS].sort(
+  (a, b) => b.date.start.localeCompare(a.date.start) || a.priority - b.priority,
+);
+
+/** Skills every project was built with: too universal to list per project. */
+export const EVERY_PROJECT = new Set(["Git"]);
 
 const USED_IN = new Map<string, ProjectMeta[]>();
 
-/** The projects that list the skill among their technologies, featured first. */
+/** The projects that list the skill among their technologies, newest first. */
 export function projectsUsing(name: string): ProjectMeta[] {
   let projects = USED_IN.get(name);
   if (!projects) {
     const labels = skillLabels(name);
-    projects = BY_PRIORITY.filter((project) =>
+    projects = BY_NEWEST.filter((project) =>
       project.technologies.some((tech) => labels.includes(tech)),
     );
     USED_IN.set(name, projects);

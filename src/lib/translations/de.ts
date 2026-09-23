@@ -450,6 +450,7 @@ export const de = {
     usedInOne: "In 1 Projekt verwendet",
     projectCount: "{count} Projekte",
     projectCountOne: "1 Projekt",
+    everyProject: "Jedes Projekt",
   },
   notFound: {
     backHome: "Zurück zur Startseite",
