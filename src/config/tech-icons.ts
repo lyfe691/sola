@@ -62,7 +62,6 @@ import DockerOriginal from "devicons-react/icons/DockerOriginal";
 import EslintOriginal from "devicons-react/icons/EslintOriginal";
 import FastapiOriginal from "devicons-react/icons/FastapiOriginal";
 import FigmaOriginal from "devicons-react/icons/FigmaOriginal";
-import FramermotionOriginal from "devicons-react/icons/FramermotionOriginal";
 import GitOriginal from "devicons-react/icons/GitOriginal";
 import GithubOriginal from "devicons-react/icons/GithubOriginal";
 import GithubactionsOriginal from "devicons-react/icons/GithubactionsOriginal";
@@ -118,11 +117,27 @@ const onDark =
 
 // devicons draw these as a dark box and a tiny wordmark; the simple-icons
 // marks read at tile size, bash in the text colour, nginx in its green
+// Motion (formerly Framer Motion) has no mark in the icon sets yet; this is
+// the one motion.dev serves, in the text colour like its white-on-black logo
+const MotionMark: TechIcon = ({ size, ...props }) =>
+  createElement(
+    "svg",
+    {
+      viewBox: "0 0 25.364 9",
+      width: size ?? "1em",
+      height: size ?? "1em",
+      fill: "currentColor",
+      ...props,
+    },
+    createElement("path", {
+      d: "M 9.587 0 L 4.57 9 L 0 9 L 3.917 1.972 C 4.524 0.883 6.039 0 7.301 0 Z M 20.794 2.25 C 20.794 1.007 21.817 0 23.079 0 C 24.341 0 25.364 1.007 25.364 2.25 C 25.364 3.493 24.341 4.5 23.079 4.5 C 21.817 4.5 20.794 3.493 20.794 2.25 Z M 10.443 0 L 15.013 0 L 9.997 9 L 5.427 9 Z M 15.841 0 L 20.411 0 L 16.494 7.028 C 15.887 8.117 14.372 9 13.11 9 L 10.825 9 Z",
+    }),
+  );
+
 const BashMark: TechIcon = (props) => createElement(SiGnubash, props);
 const NginxMark: TechIcon = (props) =>
   createElement(SiNginx, { color: "#009639", ...props });
 
-const FramerMotionMark = onDark(FramermotionOriginal);
 const GithubMark = onDark(GithubOriginal);
 const MarkdownMark = onDark(MarkdownOriginal);
 const MysqlMark = onDark(MysqlOriginal, "dark:brightness-200");
@@ -142,7 +157,6 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   ESLint: EslintOriginal,
   FastAPI: FastapiOriginal,
   Figma: FigmaOriginal,
-  "Framer Motion": FramerMotionMark,
   Git: GitOriginal,
   GitHub: GithubMark,
   "GitHub Actions": GithubactionsOriginal,
@@ -156,6 +170,7 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   Linux: LinuxMark,
   MDX: MarkdownMark,
   MongoDB: MongodbOriginal,
+  Motion: MotionMark,
   MySQL: MysqlMark,
   NestJS: NestjsOriginal,
   "Next.js": NextjsOriginal,

@@ -68,7 +68,7 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       skill("Next.js", 4),
       skill("shadcn/ui", 5),
       skill("Radix UI", 4, SiRadixui),
-      skill("Framer Motion", 4),
+      skill("Motion", 4),
       skill("Vite", 4),
       skill("Figma", 3),
     ],
