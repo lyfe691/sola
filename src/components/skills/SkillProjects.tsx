@@ -179,7 +179,6 @@ export function SkillPopover({
       <PopoverTrigger className={className}>{children}</PopoverTrigger>
       <PopoverContent
         side="right"
-        align="center"
         sideOffset={12}
         className="w-80 gap-0 rounded-2xl p-1.5"
       >
