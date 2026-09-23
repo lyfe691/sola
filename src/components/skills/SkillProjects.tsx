@@ -8,6 +8,8 @@
 
 import { useRef, type ReactNode } from "react";
 import { Link } from "react-router";
+import { Popover as PopoverPrimitive } from "@base-ui/react/popover";
+import { PopupArrow } from "@/components/ui/custom/popup-arrow";
 import {
   Drawer,
   DrawerContent,
@@ -18,13 +20,16 @@ import {
 import {
   Popover,
   PopoverContent,
+  PopoverDescription,
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import type { ProjectMeta } from "@/config/projects";
 import { skillLabels, type Skill } from "@/config/skills";
 import { TECH_ICONS } from "@/config/tech-icons";
+import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useTranslation } from "@/lib/language-provider";
+import { countLabel } from "@/lib/plural";
 import { cn } from "@/lib/utils";
 
 const STACK_MAX = 7;
@@ -52,7 +57,7 @@ export function SkillTile({
 
 function useUsedIn(count: number): string {
   const t = useTranslation().skills;
-  return count === 1 ? t.usedInOne : t.usedIn.replace("{count}", String(count));
+  return countLabel(count, t.usedInOne, t.usedIn);
 }
 
 /** The project's stack as icons, the skill itself first and in colour. */
@@ -75,12 +80,12 @@ function ProjectStack({
     .slice(0, STACK_MAX);
 
   return (
-    <span aria-hidden="true" className="flex items-center gap-1.5 pt-1">
+    <span aria-hidden="true" className="flex items-center gap-2 pt-1.5">
       {stack.map(({ tech, Icon, active }) => (
         <Icon
           key={tech}
-          size={14}
-          className={cn("size-3.5 shrink-0", !active && "opacity-55 grayscale")}
+          size={16}
+          className={cn("size-4 shrink-0", !active && "opacity-60 grayscale")}
         />
       ))}
     </span>
@@ -171,21 +176,41 @@ export function SkillPopover({
   children: ReactNode;
 }) {
   const usedIn = useUsedIn(projects.length);
+  const hoverOpened = useRef(false);
+
+  const onOpenChange = (
+    open: boolean,
+    details: PopoverPrimitive.Root.ChangeEventDetails,
+  ) => {
+    if (open) {
+      hoverOpened.current = details.reason === "trigger-hover";
+      return;
+    }
+    // hover opened it, so a click on the row means "keep this", not "close"
+    if (hoverOpened.current && details.reason === "trigger-press") {
+      hoverOpened.current = false;
+      details.cancel();
+    }
+  };
 
   return (
-    <Popover>
+    <Popover onOpenChange={onOpenChange}>
       <PopoverTrigger openOnHover delay={300} className={className}>
         {children}
       </PopoverTrigger>
       <PopoverContent
         side="right"
-        align="start"
-        sideOffset={12}
+        align="center"
+        sideOffset={14}
         className="w-80 gap-0 rounded-2xl p-1.5"
       >
-        <PopoverTitle className="px-2.5 pt-1.5 pb-1 text-xs font-normal text-muted-foreground">
+        <PopoverPrimitive.Arrow className="flex data-[side=bottom]:-top-2 data-[side=left]:-right-[13.5px] data-[side=left]:rotate-90 data-[side=right]:-left-[13.5px] data-[side=right]:-rotate-90 data-[side=top]:-bottom-2 data-[side=top]:rotate-180">
+          <PopupArrow />
+        </PopoverPrimitive.Arrow>
+        <PopoverTitle className="sr-only">{skill.name}</PopoverTitle>
+        <PopoverDescription className="px-2.5 pt-1.5 pb-1 text-xs">
           {usedIn}
-        </PopoverTitle>
+        </PopoverDescription>
         <ProjectList skill={skill} projects={projects} className="max-h-96" />
       </PopoverContent>
     </Popover>
@@ -208,6 +233,7 @@ export function SkillDrawer({
 }) {
   const popupRef = useRef<HTMLDivElement>(null);
   const usedIn = useUsedIn(projects.length);
+  useWindowScrollLock(open);
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} showSwipeHandle>

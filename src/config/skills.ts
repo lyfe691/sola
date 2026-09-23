@@ -150,10 +150,17 @@ export function skillLabels(name: string): string[] {
 
 const BY_PRIORITY = [...PROJECTS].sort((a, b) => b.priority - a.priority);
 
+const USED_IN = new Map<string, ProjectMeta[]>();
+
 /** The projects that list the skill among their technologies, featured first. */
 export function projectsUsing(name: string): ProjectMeta[] {
-  const labels = skillLabels(name);
-  return BY_PRIORITY.filter((project) =>
-    project.technologies.some((tech) => labels.includes(tech)),
-  );
+  let projects = USED_IN.get(name);
+  if (!projects) {
+    const labels = skillLabels(name);
+    projects = BY_PRIORITY.filter((project) =>
+      project.technologies.some((tech) => labels.includes(tech)),
+    );
+    USED_IN.set(name, projects);
+  }
+  return projects;
 }

@@ -24,6 +24,7 @@ import {
   SkillTile,
 } from "@/components/skills/SkillProjects";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { countLabel } from "@/lib/plural";
 import { cn } from "@/lib/utils";
 
 const LEVEL_TONE: Record<Proficiency, string> = {
@@ -41,10 +42,7 @@ const PRESSABLE =
 
 function SkillRowBody({ skill, count }: { skill: Skill; count: number }) {
   const t = useTranslation().skills;
-  const projects =
-    count === 1
-      ? t.projectCountOne
-      : t.projectCount.replace("{count}", String(count));
+  const projects = countLabel(count, t.projectCountOne, t.projectCount);
 
   return (
     <>

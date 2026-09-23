@@ -3,7 +3,7 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { projectsUsing, SKILL_ALIASES } from "./skills";
+import { projectsUsing, SKILL_ALIASES, SKILL_GROUPS } from "./skills";
 
 describe("projectsUsing", () => {
   it("finds the projects that list a skill, featured first", () => {
@@ -26,6 +26,19 @@ describe("projectsUsing", () => {
           `${skill} → ${label}`,
         ).toBe(true);
       }
+    }
+  });
+
+  it("finds nothing for a skill no project lists", () => {
+    expect(projectsUsing("not-a-real-skill")).toEqual([]);
+  });
+
+  it("keys every alias by a skill on the page", () => {
+    const names = new Set(
+      SKILL_GROUPS.flatMap((group) => group.skills.map((skill) => skill.name)),
+    );
+    for (const skill of Object.keys(SKILL_ALIASES)) {
+      expect(names.has(skill), skill).toBe(true);
     }
   });
 });

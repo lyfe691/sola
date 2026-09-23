@@ -11,6 +11,11 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import {
+  ARROW_H,
+  ARROW_W,
+  PopupArrow,
+} from "@/components/ui/custom/popup-arrow";
+import {
   CALLOUT_STORAGE_KEY,
   getWelcomePresetLabels,
 } from "@/config/welcome-preset";
@@ -18,8 +23,6 @@ import { useTranslation } from "@/lib/language-provider";
 
 const APPEAR_DELAY = 1200;
 const GAP = 10;
-const ARROW_W = 20;
-const ARROW_H = 9;
 const CORNER_INSET = 16;
 const EDGE_PADDING = 16;
 
@@ -224,26 +227,10 @@ export function ThemeCallout() {
             transformOrigin: `calc(100% - ${pos.arrowRight + ARROW_W / 2}px) -${ARROW_H}px`,
           }}
         >
-          <svg
-            width={ARROW_W}
-            height={ARROW_H}
-            viewBox={`0 0 ${ARROW_W} ${ARROW_H}`}
-            aria-hidden
-            className="absolute overflow-visible"
-            // 1px overlap so the fill swallows the card's ring line at the seam
+          <PopupArrow
+            className="absolute"
             style={{ right: pos.arrowRight, top: -(ARROW_H - 1) }}
-          >
-            <path
-              d="M0 9 L7.8 1.7 Q10 -0.3 12.2 1.7 L20 9 Z"
-              className="fill-popover"
-            />
-            <path
-              d="M0 9 L7.8 1.7 Q10 -0.3 12.2 1.7 L20 9"
-              fill="none"
-              strokeWidth="1"
-              className="stroke-foreground/5 dark:stroke-foreground/10"
-            />
-          </svg>
+          />
 
           <p className="text-sm font-semibold leading-snug tracking-tight">
             {t.background.title}
