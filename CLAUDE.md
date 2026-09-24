@@ -82,6 +82,9 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   queue (`src/lib/reveal.ts`) starts blocks in reading order, and one CSS
   rule (index.css, "scroll reveals") animates them. A motion component with
   its own states takes the queue's delay through `useReveal`.
+- Content entrances start from `HIDDEN_OPACITY` (0.001), never 0: Chrome's
+  LCP skips a paint at opacity 0, so a fade from 0 adds its whole glide to
+  LCP. Invisible either way; exits may still end at 0.
 - Backgrounds (`src/components/backgrounds/`) intentionally do NOT gate on
   prefers-reduced-motion (owner decision); framer-driven UI motion is
   gated globally via `MotionConfig reducedMotion="user"`.

@@ -10,6 +10,7 @@ import {
   type Variants,
 } from "motion/react";
 import React, { useState, useEffect, useRef } from "react";
+import { HIDDEN_OPACITY } from "@/utils/transitions";
 
 type PresetType = "blur" | "fade-in-blur" | "scale" | "fade" | "slide";
 
@@ -44,7 +45,7 @@ const defaultStaggerTimes: Record<PerType, number> = {
 };
 
 const defaultContainerVariants: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: HIDDEN_OPACITY },
   visible: {
     opacity: 1,
     transition: {
@@ -57,7 +58,7 @@ const defaultContainerVariants: Variants = {
 };
 
 const defaultItemVariants: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: HIDDEN_OPACITY },
   visible: {
     opacity: 1,
   },
@@ -71,7 +72,7 @@ const presetVariants: Record<
   blur: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, filter: "blur(12px)", y: 8 },
+      hidden: { opacity: HIDDEN_OPACITY, filter: "blur(12px)", y: 8 },
       visible: { opacity: 1, filter: "blur(0px)", y: 0 },
       exit: { opacity: 0, filter: "blur(12px)", y: 8 },
     },
@@ -79,7 +80,7 @@ const presetVariants: Record<
   "fade-in-blur": {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, y: 15, filter: "blur(12px)" },
+      hidden: { opacity: HIDDEN_OPACITY, y: 15, filter: "blur(12px)" },
       visible: { opacity: 1, y: 0, filter: "blur(0px)" },
       exit: { opacity: 0, y: 15, filter: "blur(12px)" },
     },
@@ -87,7 +88,7 @@ const presetVariants: Record<
   scale: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, scale: 0 },
+      hidden: { opacity: HIDDEN_OPACITY, scale: 0 },
       visible: { opacity: 1, scale: 1 },
       exit: { opacity: 0, scale: 0 },
     },
@@ -95,7 +96,7 @@ const presetVariants: Record<
   fade: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0 },
+      hidden: { opacity: HIDDEN_OPACITY },
       visible: { opacity: 1 },
       exit: { opacity: 0 },
     },
@@ -103,7 +104,7 @@ const presetVariants: Record<
   slide: {
     container: defaultContainerVariants,
     item: {
-      hidden: { opacity: 0, y: 25 },
+      hidden: { opacity: HIDDEN_OPACITY, y: 25 },
       visible: { opacity: 1, y: 0 },
       exit: { opacity: 0, y: -25 },
     },

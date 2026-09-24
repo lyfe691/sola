@@ -13,14 +13,14 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { EASE_OUT, SMOOTH } from "@/utils/transitions";
+import { EASE_OUT, HIDDEN_OPACITY, SMOOTH } from "@/utils/transitions";
 
 const CYCLE_MS = 5600;
 const ENTER_STAGGER = 0.032;
 const EXIT_STAGGER = 0.016;
 
 const letterVariants: Variants = {
-  initial: { opacity: 0, y: "0.22em", filter: "blur(6px)" },
+  initial: { opacity: HIDDEN_OPACITY, y: "0.22em", filter: "blur(6px)" },
   animate: (i: number) => ({
     opacity: 1,
     y: 0,

@@ -20,11 +20,11 @@ import {
   type SocialId,
 } from "@/config/social";
 import { cn } from "@/lib/utils";
-import { REVEAL } from "@/utils/transitions";
+import { HIDDEN_OPACITY, REVEAL } from "@/utils/transitions";
 
 const homeAnimations = {
   container: {
-    hidden: { opacity: 0 },
+    hidden: { opacity: HIDDEN_OPACITY },
     show: {
       opacity: 1,
       // delayChildren outlasts the 0.5s route blur so the first beat
@@ -34,7 +34,7 @@ const homeAnimations = {
   },
   // one child variant for the badge and the CTA row — they animate the same
   item: {
-    hidden: { opacity: 0, y: 20, scale: 0.98 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 20, scale: 0.98 },
     show: {
       opacity: 1,
       y: 0,
@@ -43,7 +43,7 @@ const homeAnimations = {
     },
   },
   heading: {
-    hidden: { opacity: 0, y: 24, scale: 0.985 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 24, scale: 0.985 },
     show: {
       opacity: 1,
       y: 0,
@@ -52,7 +52,7 @@ const homeAnimations = {
     },
   },
   description: {
-    hidden: { opacity: 0, y: 22, scale: 0.99 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 22, scale: 0.99 },
     show: {
       opacity: 1,
       y: 0,
@@ -61,14 +61,14 @@ const homeAnimations = {
     },
   },
   socialsContainer: {
-    hidden: { opacity: 0 },
+    hidden: { opacity: HIDDEN_OPACITY },
     show: {
       opacity: 1,
       transition: { staggerChildren: 0.08, when: "beforeChildren" as const },
     },
   },
   socialItem: {
-    hidden: { opacity: 0, y: 16, scale: 0.98 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 16, scale: 0.98 },
     show: {
       opacity: 1,
       y: 0,
