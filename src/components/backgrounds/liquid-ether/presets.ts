@@ -75,37 +75,37 @@ const LIQUID_ETHER_PRESETS: Record<
     ...darkBase,
     colors: ["#5227FF", "#FF9FFC", "#B497CF"],
   },
-  cloud: {
+  life: {
     ...lightBase,
-    colors: ["#88BFFF", "#B8DBFF", "#F2F7FF"],
+    colors: ["#3E9B4F", "#E8C547", "#F3E7A6"],
+  },
+  sakura: {
+    ...lightBase,
+    colors: ["#D6608A", "#F4A7B9", "#FFF4F6"],
+  },
+  glacier: {
+    ...lightBase,
+    colors: ["#2A8FB0", "#5CC8D8", "#EAF8FA"],
+  },
+  dune: {
+    ...lightBase,
+    colors: ["#C8643C", "#F0C08A", "#FAEBD7"],
   },
   cyber: {
     ...darkBase,
-    colors: ["#E879F9", "#22D3EE", "#A855F7"],
+    colors: ["#19E3F0", "#FF2E88", "#3D5AFE"],
   },
   forest: {
     ...darkBase,
-    colors: ["#059669", "#34D399", "#10B981"],
+    colors: ["#2F8F5B", "#7FD19B", "#F2C14E"],
   },
   amethyst: {
     ...darkBase,
-    colors: ["#8B5CF6", "#C4B5FD", "#E9D5FF"],
+    colors: ["#8B5CF6", "#D08CF0", "#E9D5FF"],
   },
-  vintage: {
-    ...lightBase,
-    colors: ["#E8A050", "#FFD9A8", "#FFE7C7"],
-  },
-  coffee: {
-    ...lightBase,
-    colors: ["#B8885C", "#D4B896", "#F5E6D8"],
-  },
-  life: {
-    ...lightBase,
-    colors: ["#3CB88A", "#5FD4A8", "#DDF9EE"],
-  },
-  rose: {
-    ...lightBase,
-    colors: ["#E84868", "#FF9DB0", "#FFE8ED"],
+  ember: {
+    ...darkBase,
+    colors: ["#C2331F", "#FF7A2F", "#FFC56B"],
   },
 };
 

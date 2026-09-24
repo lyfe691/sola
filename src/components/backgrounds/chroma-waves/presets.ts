@@ -74,37 +74,37 @@ export const CHROMA_WAVES_PRESETS: Record<
     color: "#E8F2FF",
     backgroundColor: "#3D5A8C",
   }),
-  cloud: buildPreset(lightBase, {
-    color: "#FAFCFF",
-    backgroundColor: "#88BFFF",
+  life: buildPreset(lightBase, {
+    color: "#FBF8E6",
+    backgroundColor: "#5FAE5A",
+  }),
+  sakura: buildPreset(lightBase, {
+    color: "#FFF6F8",
+    backgroundColor: "#E8849F",
+  }),
+  glacier: buildPreset(lightBase, {
+    color: "#F4FCFD",
+    backgroundColor: "#4DB8CC",
+  }),
+  dune: buildPreset(lightBase, {
+    color: "#FFF8EE",
+    backgroundColor: "#D9825B",
   }),
   cyber: buildPreset(darkBase, {
-    color: "#F0ABFC",
-    backgroundColor: "#6D28D9",
+    color: "#B8F5FA",
+    backgroundColor: "#0E7C8C",
   }),
   forest: buildPreset(darkBase, {
-    color: "#D1FAE5",
-    backgroundColor: "#047857",
+    color: "#F7E3A8",
+    backgroundColor: "#1F6B45",
   }),
   amethyst: buildPreset(darkBase, {
-    color: "#F5E1FF",
-    backgroundColor: "#7C3AED",
+    color: "#F3E3FF",
+    backgroundColor: "#6D3FD6",
   }),
-  vintage: buildPreset(lightBase, {
-    color: "#FFF6E8",
-    backgroundColor: "#E8A050",
-  }),
-  coffee: buildPreset(lightBase, {
-    color: "#FFFAF4",
-    backgroundColor: "#B8885C",
-  }),
-  life: buildPreset(lightBase, {
-    color: "#F0FDF7",
-    backgroundColor: "#2EC98A",
-  }),
-  rose: buildPreset(lightBase, {
-    color: "#FFF5F7",
-    backgroundColor: "#C41E3A",
+  ember: buildPreset(darkBase, {
+    color: "#FFE0B0",
+    backgroundColor: "#B8401E",
   }),
 };
 

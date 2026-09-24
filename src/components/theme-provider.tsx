@@ -21,7 +21,7 @@ import {
   type Theme,
   ALL_THEME_VALUES,
   getThemeType,
-  isTheme,
+  toTheme,
 } from "@/config/themes";
 
 type ThemeProviderProps = {
@@ -53,9 +53,13 @@ const resolveTheme = (theme: Theme) =>
 const readInitialTheme = (storageKey: string, defaultTheme: Theme): Theme => {
   try {
     // an explicit choice (any surface: menu, palette) beats the first-visit
-    // preset; a stale/renamed id falls through instead of reaching classList
+    // preset; a retired id is stored as its heir, an unknown one falls through
     const stored = localStorage.getItem(storageKey);
-    if (stored && isTheme(stored)) return stored;
+    const theme = stored && toTheme(stored);
+    if (theme) {
+      if (theme !== stored) localStorage.setItem(storageKey, theme);
+      return theme;
+    }
     if (shouldApplyWelcomePreset()) return WELCOME_PRESET.theme;
     return defaultTheme;
   } catch {
@@ -93,7 +97,7 @@ export function ThemeProvider({
       root.classList.remove(...ALL_THEME_VALUES.filter((t) => t !== "system"));
       root.classList.add(resolveTheme(theme));
       // the dark: variant matches this attr too — custom dark themes
-      // (cyber, forest, amethyst) never carry the literal `dark` class
+      // (cyber, forest, …) never carry the literal `dark` class
       root.dataset.scheme = getThemeType(theme);
       // persisted for the pre-paint stamp in index.html — custom themes
       // (cyber, forest, …) carry a type the inline script can't derive

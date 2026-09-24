@@ -7,24 +7,23 @@
  */
 
 import {
-  BanknoteIcon,
-  CircuitBoardIcon,
-  CloudIcon,
-  Coffee01Icon,
-  DiamondIcon,
+  FireIcon,
+  GemIcon,
+  HologramIcon,
   LaptopIcon,
   Moon02Icon,
   PineTreeIcon,
   Plant02Icon,
+  SakuraIcon,
+  SnowIcon,
   Sun03Icon,
+  SunsetIcon,
 } from "@hugeicons/core-free-icons";
-import { RoseIcon } from "@/components/ui/icons/RoseIcon";
 import { hugeIcon } from "@/lib/huge-icon";
 import type { ComponentType } from "react";
 
-// every icon source used here (hugeicons glyphs, custom svg components)
-// accepts this prop surface; a concrete type keeps <Icon className/aria-hidden>
-// call sites type-checkable, which bare ElementType unions are not
+// the prop surface of a hugeIcon glyph; a concrete type keeps
+// <Icon className/aria-hidden> call sites type-checkable
 export type ThemeIcon = ComponentType<{
   className?: string;
   "aria-hidden"?: boolean | "true" | "false";
@@ -70,18 +69,32 @@ export const THEMES = [
     type: "light",
   },
   {
-    value: "cyber",
-    label: "Cyberpunk",
-    icon: hugeIcon(CircuitBoardIcon),
-    isCustom: true,
-    type: "dark",
-  },
-  {
-    value: "cloud",
-    label: "Cloud",
-    icon: hugeIcon(CloudIcon),
+    value: "sakura",
+    label: "Sakura",
+    icon: hugeIcon(SakuraIcon),
     isCustom: true,
     type: "light",
+  },
+  {
+    value: "glacier",
+    label: "Glacier",
+    icon: hugeIcon(SnowIcon),
+    isCustom: true,
+    type: "light",
+  },
+  {
+    value: "dune",
+    label: "Dune",
+    icon: hugeIcon(SunsetIcon),
+    isCustom: true,
+    type: "light",
+  },
+  {
+    value: "cyber",
+    label: "Cyberpunk",
+    icon: hugeIcon(HologramIcon),
+    isCustom: true,
+    type: "dark",
   },
   {
     value: "forest",
@@ -93,30 +106,16 @@ export const THEMES = [
   {
     value: "amethyst",
     label: "Amethyst",
-    icon: hugeIcon(DiamondIcon),
+    icon: hugeIcon(GemIcon),
     isCustom: true,
     type: "dark",
   },
   {
-    value: "vintage",
-    label: "Vintage",
-    icon: hugeIcon(BanknoteIcon),
+    value: "ember",
+    label: "Ember",
+    icon: hugeIcon(FireIcon),
     isCustom: true,
-    type: "light",
-  },
-  {
-    value: "coffee",
-    label: "Coffee",
-    icon: hugeIcon(Coffee01Icon),
-    isCustom: true,
-    type: "light",
-  },
-  {
-    value: "rose",
-    label: "Rose",
-    icon: RoseIcon,
-    isCustom: true,
-    type: "light",
+    type: "dark",
   },
   // literal inference (not ThemeConfig[]) keeps Theme a closed union, so the
   // per-theme preset tables in backgrounds/ stay exhaustively checked — a new
@@ -127,9 +126,21 @@ export const THEMES = [
 export const ALL_THEME_VALUES = THEMES.map((t) => t.value);
 export type Theme = (typeof ALL_THEME_VALUES)[number];
 
-/** membership check for values from storage — narrows instead of casting */
-export const isTheme = (value: string): value is Theme =>
+/** membership check — narrows instead of casting */
+const isTheme = (value: string): value is Theme =>
   (ALL_THEME_VALUES as readonly string[]).includes(value);
+
+/** retired ids a returning visitor may still have stored, and their heirs */
+const RETIRED_THEMES = new Map<string, Theme>([
+  ["cloud", "glacier"],
+  ["rose", "sakura"],
+  ["vintage", "dune"],
+  ["coffee", "dune"],
+]);
+
+/** a stored id as a current theme: retired ids map on, unknown ones drop */
+export const toTheme = (value: string): Theme | null =>
+  isTheme(value) ? value : (RETIRED_THEMES.get(value) ?? null);
 
 /** resolve light/dark "type" for a given theme (handles "system"). */
 export const getThemeType = (currentTheme: Theme): "light" | "dark" => {

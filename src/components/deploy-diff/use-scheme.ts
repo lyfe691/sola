@@ -6,8 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Whether the active theme is a dark one. The `dark:` Tailwind variant only
- * matches the literal `.dark` class, so custom dark themes (cyber, forest,
- * amethyst, …) never trigger it — this resolves the theme class on <html>
+ * matches the literal `.dark` class, so custom dark themes (cyber, forest, …)
+ * never trigger it — this resolves the theme class on <html>
  * through the THEMES config instead, the same way use-background-theme does.
  */
 

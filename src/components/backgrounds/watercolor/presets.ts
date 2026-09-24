@@ -58,14 +58,14 @@ const darkBase: Omit<WatercolorPreset, "color1" | "color2"> = {
 const WATERCOLOR_PRESETS: Record<Exclude<Theme, "system">, WatercolorPreset> = {
   light: { ...lightBase, color1: "#9EC8FF", color2: "#D4EAFF" },
   dark: { ...darkBase, color1: "#3D5A8C", color2: "#9EC8FF" },
-  cloud: { ...lightBase, color1: "#B8DBFF", color2: "#F2F7FF" },
-  cyber: { ...darkBase, color1: "#6D28D9", color2: "#22D3EE" },
-  forest: { ...darkBase, color1: "#047857", color2: "#A7F3D0" },
-  amethyst: { ...darkBase, color1: "#5B21B6", color2: "#E9D5FF" },
-  vintage: { ...lightBase, color1: "#E8A050", color2: "#FFE7C7" },
-  coffee: { ...lightBase, color1: "#B8885C", color2: "#F5E6D8" },
-  life: { ...lightBase, color1: "#3CB88A", color2: "#DDF9EE" },
-  rose: { ...lightBase, color1: "#C41E3A", color2: "#FFE8ED" },
+  life: { ...lightBase, color1: "#7CC46A", color2: "#F3E7A6" },
+  sakura: { ...lightBase, color1: "#F4A7B9", color2: "#FFF4F6" },
+  glacier: { ...lightBase, color1: "#5CC8D8", color2: "#EAF8FA" },
+  dune: { ...lightBase, color1: "#E89B6A", color2: "#FAEBD7" },
+  cyber: { ...darkBase, color1: "#0E7C8C", color2: "#FF2E88" },
+  forest: { ...darkBase, color1: "#1F6B45", color2: "#F2C14E" },
+  amethyst: { ...darkBase, color1: "#6D3FD6", color2: "#E9D5FF" },
+  ember: { ...darkBase, color1: "#C2331F", color2: "#FFC56B" },
 };
 
 export const getWatercolorPreset = (theme: Theme): WatercolorPreset =>

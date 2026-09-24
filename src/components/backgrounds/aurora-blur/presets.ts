@@ -97,100 +97,100 @@ export const AURORA_BLUR_PRESETS: Record<
       { color: "#0F141C", blend: 0.54 },
     ],
   }),
-  cloud: buildPreset(lightBase, {
+  life: buildPreset(lightBase, {
     layers: [
-      { color: "#6BA8F0", speed: 0.32, intensity: 0.78 },
-      { color: "#9EC8FF", speed: 0.14, intensity: 0.58 },
-      { color: "#78B4FF", speed: 0.18, intensity: 0.44 },
-      { color: "#D4EAFF", speed: 0.07, intensity: 0.48 },
+      { color: "#3E9B4F", speed: 0.33, intensity: 0.78 },
+      { color: "#E8C547", speed: 0.15, intensity: 0.58 },
+      { color: "#7CC46A", speed: 0.19, intensity: 0.44 },
+      { color: "#F3E7A6", speed: 0.08, intensity: 0.48 },
     ],
     skyLayers: [
-      { color: "#B8D9FF", blend: 0.58 },
-      { color: "#88BFFF", blend: 0.68 },
+      { color: "#E9E3A8", blend: 0.58 },
+      { color: "#8CC47A", blend: 0.68 },
+    ],
+  }),
+  sakura: buildPreset(lightBase, {
+    layers: [
+      { color: "#D6608A", speed: 0.33, intensity: 0.78 },
+      { color: "#F4A7B9", speed: 0.15, intensity: 0.58 },
+      { color: "#E8849F", speed: 0.19, intensity: 0.44 },
+      { color: "#FBD3DD", speed: 0.08, intensity: 0.48 },
+    ],
+    skyLayers: [
+      { color: "#FBD3DD", blend: 0.58 },
+      { color: "#F0A0B8", blend: 0.68 },
+    ],
+  }),
+  glacier: buildPreset(lightBase, {
+    layers: [
+      { color: "#2A8FB0", speed: 0.33, intensity: 0.78 },
+      { color: "#A8E6EE", speed: 0.15, intensity: 0.58 },
+      { color: "#5CC8D8", speed: 0.19, intensity: 0.44 },
+      { color: "#EAF8FA", speed: 0.08, intensity: 0.48 },
+    ],
+    skyLayers: [
+      { color: "#C8EEF3", blend: 0.58 },
+      { color: "#6CCBDB", blend: 0.68 },
+    ],
+  }),
+  dune: buildPreset(lightBase, {
+    layers: [
+      { color: "#C8643C", speed: 0.33, intensity: 0.78 },
+      { color: "#F0C08A", speed: 0.15, intensity: 0.58 },
+      { color: "#E89B6A", speed: 0.19, intensity: 0.44 },
+      { color: "#FAEBD7", speed: 0.08, intensity: 0.48 },
+    ],
+    skyLayers: [
+      { color: "#F5D6B0", blend: 0.58 },
+      { color: "#E0A070", blend: 0.68 },
     ],
   }),
   cyber: buildPreset(darkBase, {
     layers: [
-      { color: "#E879F9", speed: 0.38, intensity: 0.52 },
-      { color: "#A78BFA", speed: 0.18, intensity: 0.36 },
-      { color: "#60A5FA", speed: 0.22, intensity: 0.18 },
-      { color: "#22D3EE", speed: 0.1, intensity: 0.2 },
+      { color: "#19E3F0", speed: 0.34, intensity: 0.46 },
+      { color: "#FF2E88", speed: 0.16, intensity: 0.32 },
+      { color: "#3D5AFE", speed: 0.2, intensity: 0.16 },
+      { color: "#B8F5FA", speed: 0.09, intensity: 0.16 },
     ],
     skyLayers: [
-      { color: "#1E1033", blend: 0.44 },
-      { color: "#0B1220", blend: 0.56 },
+      { color: "#141A3A", blend: 0.46 },
+      { color: "#0B1026", blend: 0.54 },
     ],
   }),
   forest: buildPreset(darkBase, {
     layers: [
-      { color: "#A7F3D0", speed: 0.33, intensity: 0.44 },
-      { color: "#34D399", speed: 0.15, intensity: 0.32 },
-      { color: "#6EE7B7", speed: 0.19, intensity: 0.14 },
-      { color: "#D1FAE5", speed: 0.08, intensity: 0.15 },
+      { color: "#7FD19B", speed: 0.34, intensity: 0.46 },
+      { color: "#2F8F5B", speed: 0.16, intensity: 0.32 },
+      { color: "#F2C14E", speed: 0.2, intensity: 0.16 },
+      { color: "#C8EBD2", speed: 0.09, intensity: 0.16 },
     ],
     skyLayers: [
-      { color: "#142820", blend: 0.47 },
-      { color: "#0C1812", blend: 0.53 },
+      { color: "#12261C", blend: 0.46 },
+      { color: "#08140F", blend: 0.54 },
     ],
   }),
   amethyst: buildPreset(darkBase, {
     layers: [
-      { color: "#E9D5FF", speed: 0.33, intensity: 0.44 },
-      { color: "#C4B5FD", speed: 0.15, intensity: 0.32 },
-      { color: "#A78BFA", speed: 0.19, intensity: 0.14 },
-      { color: "#F5E1FF", speed: 0.08, intensity: 0.15 },
+      { color: "#D08CF0", speed: 0.34, intensity: 0.46 },
+      { color: "#8B5CF6", speed: 0.16, intensity: 0.32 },
+      { color: "#6D3FD6", speed: 0.2, intensity: 0.16 },
+      { color: "#E9D5FF", speed: 0.09, intensity: 0.16 },
     ],
     skyLayers: [
-      { color: "#241A33", blend: 0.47 },
-      { color: "#120C1A", blend: 0.53 },
+      { color: "#221433", blend: 0.46 },
+      { color: "#110A1C", blend: 0.54 },
     ],
   }),
-  vintage: buildPreset(lightBase, {
+  ember: buildPreset(darkBase, {
     layers: [
-      { color: "#E8A050", speed: 0.31, intensity: 0.76 },
-      { color: "#FFD9A8", speed: 0.14, intensity: 0.56 },
-      { color: "#F0B060", speed: 0.17, intensity: 0.42 },
-      { color: "#FFE8C8", speed: 0.08, intensity: 0.46 },
+      { color: "#FF7A2F", speed: 0.34, intensity: 0.46 },
+      { color: "#FFC56B", speed: 0.16, intensity: 0.32 },
+      { color: "#C2331F", speed: 0.2, intensity: 0.16 },
+      { color: "#FFE0B0", speed: 0.09, intensity: 0.16 },
     ],
     skyLayers: [
-      { color: "#FFD9A8", blend: 0.58 },
-      { color: "#E8A868", blend: 0.68 },
-    ],
-  }),
-  coffee: buildPreset(lightBase, {
-    layers: [
-      { color: "#B8885C", speed: 0.31, intensity: 0.76 },
-      { color: "#E8D0B0", speed: 0.14, intensity: 0.56 },
-      { color: "#C8A078", speed: 0.17, intensity: 0.42 },
-      { color: "#F5E6D8", speed: 0.08, intensity: 0.46 },
-    ],
-    skyLayers: [
-      { color: "#E8D0B0", blend: 0.58 },
-      { color: "#C8A078", blend: 0.68 },
-    ],
-  }),
-  life: buildPreset(lightBase, {
-    layers: [
-      { color: "#2EC98A", speed: 0.33, intensity: 0.78 },
-      { color: "#7FE8C0", speed: 0.15, intensity: 0.58 },
-      { color: "#48D8A0", speed: 0.19, intensity: 0.44 },
-      { color: "#C8F5E4", speed: 0.08, intensity: 0.48 },
-    ],
-    skyLayers: [
-      { color: "#8FE8C8", blend: 0.58 },
-      { color: "#48C898", blend: 0.68 },
-    ],
-  }),
-  rose: buildPreset(lightBase, {
-    layers: [
-      { color: "#C41E3A", speed: 0.33, intensity: 0.78 },
-      { color: "#FF8FA8", speed: 0.15, intensity: 0.58 },
-      { color: "#E84868", speed: 0.19, intensity: 0.44 },
-      { color: "#FFD0DA", speed: 0.08, intensity: 0.48 },
-    ],
-    skyLayers: [
-      { color: "#FF9DB0", blend: 0.58 },
-      { color: "#E84868", blend: 0.68 },
+      { color: "#2A160C", blend: 0.46 },
+      { color: "#140A06", blend: 0.54 },
     ],
   }),
 };
