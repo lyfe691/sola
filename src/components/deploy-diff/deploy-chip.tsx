@@ -55,7 +55,6 @@ export function DeployChip() {
           <button
             type="button"
             onClick={() => setCodeView(true)}
-            aria-label={t.common.diff.showDiff}
             className="group inline-flex items-center gap-1.5 font-mono text-xs text-foreground/40 transition-[color,transform] duration-200 ease-out hover:text-foreground/80 active:scale-[0.97]"
           />
         }
@@ -67,6 +66,7 @@ export function DeployChip() {
           className="size-[5px] shrink-0 rounded-full bg-primary/70 transition-colors duration-200 group-hover:bg-primary"
         />
         {DEPLOY_LABEL}
+        <span className="sr-only">{t.common.diff.showDiff}</span>
       </TooltipTrigger>
       <TooltipContent
         side="top"

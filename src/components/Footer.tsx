@@ -135,9 +135,9 @@ const Footer = () => {
 
           {/* navigation */}
           <div className="space-y-6">
-            <h3 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
+            <h2 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
               {t.footer.navigation}
-            </h3>
+            </h2>
             <div className="space-y-3">
               <Link to="/" className={cn(FOOTER_LINK, "block text-sm")}>
                 {t.common.home}
@@ -157,9 +157,9 @@ const Footer = () => {
 
           {/* contact */}
           <div className="space-y-6">
-            <h3 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
+            <h2 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
               {t.footer.contact}
-            </h3>
+            </h2>
             <div className="space-y-4">
               <button
                 onClick={() => {
@@ -206,9 +206,9 @@ const Footer = () => {
 
           {/* social links */}
           <div className="space-y-6">
-            <h3 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
+            <h2 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
               {t.footer.connect}
-            </h3>
+            </h2>
             <div className="grid w-fit grid-cols-4 gap-2">
               {SOCIAL_ORDER_FOOTER.map((id) => {
                 const { href, label, icon: Icon } = SOCIAL_LINKS[id];

@@ -103,9 +103,9 @@ const Services = () => {
                     <div className="rounded-xl bg-linear-to-br from-accent/20 to-transparent p-2.5">
                       <service.icon className="h-6 w-6 text-primary/80" />
                     </div>
-                    <h3 className="truncate text-base font-medium text-foreground transition-colors group-hover:text-primary sm:text-lg">
+                    <h2 className="truncate text-base font-medium text-foreground transition-colors group-hover:text-primary sm:text-lg">
                       {t.services.services[service.key].title}
-                    </h3>
+                    </h2>
                   </div>
                   <Badge
                     variant="tint"

@@ -125,7 +125,6 @@ function CodeViewChip({
           <button
             type="button"
             onClick={() => setCodeView(true)}
-            aria-label={t.common.diff.showDiff}
             className={cn(
               "inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full text-xs",
               "outline-none transition-[background-color,color,scale] duration-150 ease-out",
@@ -144,6 +143,7 @@ function CodeViewChip({
           aria-hidden="true"
         />
         <span className="font-mono">{source}</span>
+        <span className="sr-only">{t.common.diff.showDiff}</span>
       </HoverCardTrigger>
       <DiffHintContent side={hero ? "top" : "bottom"} />
     </HoverCard>
