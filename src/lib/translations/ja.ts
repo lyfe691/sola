@@ -60,7 +60,6 @@ export const ja = {
   common: {
     home: "ホーム",
     present: "現在",
-    back: "戻る",
     overview: "概要",
     a11y: {
       openMenu: "メニューを開く",
@@ -71,6 +70,7 @@ export const ja = {
       commandPalette: "コマンドパレット",
       commandPaletteHint: "コマンドを検索…",
       scrollToTop: "トップへ戻る",
+      terminal: "ターミナル",
     },
     menu: {
       themes: "テーマ",

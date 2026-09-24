@@ -57,7 +57,6 @@ export const zh = {
   common: {
     home: "首页",
     present: "至今",
-    back: "返回",
     overview: "概览",
     a11y: {
       openMenu: "打开菜单",
@@ -68,6 +67,7 @@ export const zh = {
       commandPalette: "命令面板",
       commandPaletteHint: "搜索命令…",
       scrollToTop: "回到顶部",
+      terminal: "终端",
     },
     menu: {
       themes: "主题",
