@@ -516,32 +516,43 @@ export function SkillDrawer({
   open,
   onOpenChange,
 }: {
-  skill: Skill;
+  skill: Skill | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
   const popupRef = useRef<HTMLDivElement>(null);
-  const t = useTranslation().skills;
-  const projects = projectsUsing(skill.name);
-  const usedIn = useUsedIn(projects.length);
   useWindowScrollLock(open);
 
+  // mounted before the first open: base-ui skips the enter slide for a
+  // drawer that mounts already open
   return (
     <Drawer open={open} onOpenChange={onOpenChange} showSwipeHandle>
       <DrawerContent ref={popupRef} initialFocus={popupRef}>
-        <DrawerHeader className="items-center gap-1.5 pt-3">
-          <SkillTile skill={skill} className="mb-1 size-14 rounded-2xl" />
-          <DrawerTitle className="text-lg">{skill.name}</DrawerTitle>
-          <DrawerDescription>
-            {t.levels[skill.level]} · {usedIn}
-          </DrawerDescription>
-        </DrawerHeader>
-        <ProjectList
-          skill={skill}
-          projects={projects}
-          className="flex-1 px-2 pt-3 pb-8"
-        />
+        {skill ? <SkillDrawerBody skill={skill} /> : null}
       </DrawerContent>
     </Drawer>
+  );
+}
+
+function SkillDrawerBody({ skill }: { skill: Skill }) {
+  const t = useTranslation().skills;
+  const projects = projectsUsing(skill.name);
+  const usedIn = useUsedIn(projects.length);
+
+  return (
+    <>
+      <DrawerHeader className="items-center gap-1.5 pt-3">
+        <SkillTile skill={skill} className="mb-1 size-14 rounded-2xl" />
+        <DrawerTitle className="text-lg">{skill.name}</DrawerTitle>
+        <DrawerDescription>
+          {t.levels[skill.level]} · {usedIn}
+        </DrawerDescription>
+      </DrawerHeader>
+      <ProjectList
+        skill={skill}
+        projects={projects}
+        className="flex-1 px-2 pt-3 pb-8"
+      />
+    </>
   );
 }

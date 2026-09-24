@@ -202,13 +202,11 @@ const Skills = () => {
         </div>
       </SkillCards>
 
-      {picked ? (
-        <SkillDrawer
-          skill={picked}
-          open={open && isMobile}
-          onOpenChange={setOpen}
-        />
-      ) : null}
+      <SkillDrawer
+        skill={picked}
+        open={open && isMobile}
+        onOpenChange={setOpen}
+      />
     </div>
   );
 };
