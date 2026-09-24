@@ -8,6 +8,7 @@
 
 import {
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   type CSSProperties,
@@ -286,7 +287,9 @@ const FoldText = ({
     });
   }, [text, splitBy, hinge, hingeConfig.origin, safePerspective]);
 
-  useEffect(() => {
+  // before paint: the first FoldText of a session must not show a frame
+  // of unstyled text while its stylesheet is still missing
+  useLayoutEffect(() => {
     ensureFoldTextStyles();
   }, []);
 
@@ -294,7 +297,7 @@ const FoldText = ({
     onCompleteRef.current = onComplete;
   }, [onComplete]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window === "undefined") return undefined;
 
     const root = rootRef.current;
@@ -379,8 +382,9 @@ const FoldText = ({
     } else if (trigger === "loop") {
       play(true);
     } else {
-      // wait one frame so layout/paint of the new text nodes settle before
-      // promoting them to compositor layers (avoids a hitch on mount)
+      // folded before the first paint; the timeline itself waits a frame so
+      // the new text nodes settle before they become compositor layers
+      gsap.set(pieces, fromVars);
       const raf = requestAnimationFrame(() => play(false));
       return () => {
         cancelAnimationFrame(raf);
