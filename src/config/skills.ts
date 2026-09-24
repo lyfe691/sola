@@ -3,14 +3,13 @@
  */
 
 import { PROJECTS, type ProjectMeta } from "@/config/projects";
-import { TECH_ICONS, type TechIcon } from "@/config/tech-icons";
 
 // 1-5 scale: 1=learning, 2=familiar, 3=comfortable, 4=proficient, 5=advanced
 export type Proficiency = 1 | 2 | 3 | 4 | 5;
 
+/** A skill wears the registry's mark (TECH_ICONS), the one its project chips show too. */
 export interface Skill {
   name: string;
-  icon: TechIcon;
   level: Proficiency;
 }
 
@@ -19,11 +18,8 @@ export interface SkillGroup {
   skills: Skill[];
 }
 
-/** A skill wears the registry's mark: the one its project chips show too. */
 function skill(name: string, level: Proficiency): Skill {
-  const icon = TECH_ICONS[name];
-  if (!icon) throw new Error(`No mark for skill "${name}" in TECH_ICONS`);
-  return { name, icon, level };
+  return { name, level };
 }
 
 const SKILL_GROUPS_RAW: SkillGroup[] = [

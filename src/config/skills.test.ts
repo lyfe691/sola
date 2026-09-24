@@ -4,6 +4,17 @@
 
 import { describe, expect, it } from "vitest";
 import { projectsUsing, SKILL_ALIASES, SKILL_GROUPS } from "./skills";
+import { TECH_ICONS } from "./tech-icons";
+
+describe("SKILL_GROUPS", () => {
+  it("gives every skill a mark in the icon registry", () => {
+    for (const group of SKILL_GROUPS) {
+      for (const skill of group.skills) {
+        expect(TECH_ICONS[skill.name], skill.name).toBeDefined();
+      }
+    }
+  });
+});
 
 describe("projectsUsing", () => {
   it("finds the projects that list a skill, newest first", () => {

@@ -38,7 +38,8 @@ import {
 } from "@/components/ui/drawer";
 import type { ProjectMeta } from "@/config/projects";
 import { projectsUsing, skillLabels, type Skill } from "@/config/skills";
-import { TECH_ICONS } from "@/config/tech-icons";
+import { TechMark } from "@/components/ui/custom/tech-mark";
+import { useTechIcons } from "@/hooks/use-tech-icons";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useTranslation } from "@/lib/language-provider";
 import { countLabel } from "@/lib/plural";
@@ -54,7 +55,6 @@ export function SkillTile({
   skill: Skill;
   className?: string;
 }) {
-  const Icon = skill.icon;
   return (
     <span
       aria-hidden="true"
@@ -63,7 +63,7 @@ export function SkillTile({
         className,
       )}
     >
-      <Icon className="size-5" size={20} />
+      <TechMark name={skill.name} className="size-5" size={20} />
     </span>
   );
 }
@@ -82,11 +82,12 @@ function ProjectStack({
   skill: Skill;
 }) {
   const labels = skillLabels(skill.name);
+  const icons = useTechIcons()?.TECH_ICONS ?? {};
   const stack = project.technologies
-    .filter((tech) => TECH_ICONS[tech])
+    .filter((tech) => icons[tech])
     .map((tech) => ({
       tech,
-      Icon: TECH_ICONS[tech],
+      Icon: icons[tech],
       active: labels.includes(tech),
     }))
     .sort((a, b) => Number(b.active) - Number(a.active))

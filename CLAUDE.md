@@ -98,6 +98,10 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 - A react-icons pack is one module: importing one icon from anything the entry
   reaches ships every icon the site uses from that pack. The social marks
   live in `src/components/icons/brand-marks.tsx` for that reason.
+- Tech marks render through `<TechMark name>` (`useTechIcons` for lookups):
+  the registry in `src/config/tech-icons.ts` is its own chunk and pages
+  don't wait for it. Import it directly only where a mark must exist on the
+  first frame (the changelog's commit rows derive layout from it).
 
 ## Deploy
 

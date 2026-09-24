@@ -15,7 +15,7 @@
 
 import type { ComponentProps } from "react";
 import { badgeVariants } from "@/components/ui/badge";
-import { TECH_ICONS, TECH_ICON_FALLBACK } from "@/config/tech-icons";
+import { TechMark } from "@/components/ui/custom/tech-mark";
 import { cn } from "@/lib/utils";
 
 export function TechChip({
@@ -23,15 +23,13 @@ export function TechChip({
   className,
   ...props
 }: { name: string } & ComponentProps<"span">) {
-  const Icon = TECH_ICONS[name] ?? TECH_ICON_FALLBACK;
-
   // Badge's base classes size any direct <svg> child to 12px themselves
   return (
     <span
       {...props}
       className={cn(badgeVariants({ variant: "chip" }), className)}
     >
-      <Icon aria-hidden="true" className="shrink-0" />
+      <TechMark name={name} aria-hidden="true" className="shrink-0" />
       {name}
     </span>
   );
