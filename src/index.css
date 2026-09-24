@@ -194,17 +194,7 @@
   mask-image: linear-gradient(to right, black calc(100% - 1.5rem), transparent);
 }
 
-/* the footer's glow and its outlined SOLA wordmark */
-@utility footer-glow {
-  background: linear-gradient(
-    to top,
-    color-mix(in oklab, var(--foreground) 12%, transparent) 0%,
-    color-mix(in oklab, var(--foreground) 8%, transparent) 25%,
-    color-mix(in oklab, var(--foreground) 4%, transparent) 50%,
-    color-mix(in oklab, var(--foreground) 2%, transparent) 75%,
-    transparent 100%
-  );
-}
+/* the footer's outlined SOLA wordmark */
 @utility footer-wordmark {
   font-size: min(14.2vw, 210px);
   height: 0.74em;

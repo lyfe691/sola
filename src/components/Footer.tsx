@@ -62,9 +62,6 @@ const Footer = () => {
 
   return (
     <footer className="relative w-full border-t border-foreground/5 bg-background/5">
-      {/* bottom glow effect */}
-      <div className="footer-glow absolute bottom-0 left-0 right-0 h-96 pointer-events-none" />
-
       <div className="relative mx-auto max-w-7xl px-6 sm:px-8 py-12">
         {/* main content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
