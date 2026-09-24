@@ -180,6 +180,42 @@
   --diff-ren-fg: var(--color-sky-400);
 }
 
+/* social brand colours (src/config/social.ts). A chip fills with a little of
+   its brand mixed into the theme's page, and inks in that hue taken deep in
+   light schemes, pale in dark ones, so the brand reads without shouting */
+[data-brand] {
+  --brand-fill: light-dark(
+    color-mix(in oklab, var(--brand) 16%, var(--background)),
+    color-mix(in oklab, var(--brand) 28%, var(--card))
+  );
+  --brand-ink: light-dark(
+    oklch(from var(--brand) 0.42 calc(c * 0.9) h),
+    oklch(from var(--brand) 0.86 calc(c * 0.7) h)
+  );
+}
+[data-brand="github"] {
+  --brand: var(--foreground);
+  --brand-ink: var(--foreground);
+}
+[data-brand="email"] {
+  --brand: light-dark(oklch(0.58 0.2 28), oklch(0.7 0.18 28));
+}
+[data-brand="linkedin"] {
+  --brand: light-dark(oklch(0.53 0.16 255), oklch(0.7 0.14 250));
+}
+[data-brand="leetcode"] {
+  --brand: light-dark(oklch(0.66 0.16 65), oklch(0.8 0.16 70));
+}
+[data-brand="hackthebox"] {
+  --brand: light-dark(oklch(0.6 0.18 135), oklch(0.85 0.2 130));
+}
+[data-brand="chess"] {
+  --brand: light-dark(oklch(0.58 0.15 135), oklch(0.75 0.14 130));
+}
+[data-brand="tiktok"] {
+  --brand: light-dark(oklch(0.58 0.23 15), oklch(0.7 0.2 12));
+}
+
 @utility link {
   @apply text-primary hover:text-primary/80 underline underline-offset-2 transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm;
 }

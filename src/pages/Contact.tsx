@@ -7,15 +7,8 @@
  */
 
 import { useState, useRef } from "react";
-import {
-  Github01Icon,
-  Linkedin02Icon,
-  Mail01Icon,
-  SentIcon,
-  Tick02Icon,
-} from "@hugeicons/core-free-icons";
+import { SentIcon, Tick02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { hugeIcon } from "@/lib/huge-icon";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslation } from "@/lib/language-provider";
 import { Input } from "@/components/ui/input";
@@ -34,9 +27,9 @@ const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
 const DIRECT_LINKS = [
-  { ...SOCIAL_LINKS.email, Icon: hugeIcon(Mail01Icon) },
-  { ...SOCIAL_LINKS.github, Icon: hugeIcon(Github01Icon) },
-  { ...SOCIAL_LINKS.linkedin, Icon: hugeIcon(Linkedin02Icon) },
+  SOCIAL_LINKS.email,
+  SOCIAL_LINKS.github,
+  SOCIAL_LINKS.linkedin,
 ] as const;
 
 const FieldError = ({ name, error }: { name: string; error?: string }) => (
@@ -209,7 +202,7 @@ const Contact = () => {
             <Reveal className="flex flex-col gap-4">
               <h2 className="text-sm font-semibold">{t.contact.reachOut}</h2>
               <div className="flex flex-wrap gap-2">
-                {DIRECT_LINKS.map(({ id, label, href, Icon }) => {
+                {DIRECT_LINKS.map(({ id, label, href, icon: Icon }) => {
                   const external = href.startsWith("http");
                   return (
                     <a

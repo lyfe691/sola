@@ -14,10 +14,9 @@ import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { SpecularButton } from "@/components/ui/custom/specular-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
 import {
+  SOCIAL_BRAND_FILL,
   SOCIAL_LINKS,
   SOCIAL_ORDER_HERO,
-  SOCIAL_ICONS,
-  SOCIAL_HOVER_ACCENTS,
   type SocialId,
 } from "@/config/social";
 import { cn } from "@/lib/utils";
@@ -81,8 +80,7 @@ const homeAnimations = {
 
 function SocialLink({ id }: { id: SocialId }) {
   const social = SOCIAL_LINKS[id];
-  const Icon = SOCIAL_ICONS[id];
-  const hoverClass = SOCIAL_HOVER_ACCENTS[id];
+  const Icon = social.icon;
 
   return (
     <motion.a
@@ -90,13 +88,13 @@ function SocialLink({ id }: { id: SocialId }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={social.label}
+      data-brand={id}
       variants={homeAnimations.socialItem}
       className={cn(
-        "group relative inline-flex items-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset transition-colors duration-200 ease-out will-change-transform transform-gpu",
-        "active:bg-foreground/12",
-        "md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-300",
-        "hover:text-foreground",
-        hoverClass,
+        "group relative inline-flex items-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset outline-none transition-[color,background-color,border-color,scale] duration-200 ease-out will-change-transform transform-gpu active:scale-97",
+        "md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-400 md:ease-smooth",
+        "focus-visible:border-transparent focus-visible:bg-(--brand-fill) focus-visible:text-(--brand-ink) focus-visible:ring-2 focus-visible:ring-ring/50",
+        SOCIAL_BRAND_FILL,
       )}
     >
       {/* fixed icon zone — the icon is centered, never pixel-pinned */}
@@ -104,10 +102,11 @@ function SocialLink({ id }: { id: SocialId }) {
         <Icon className="size-5 md:size-6" aria-hidden="true" />
       </span>
       {/* width-to-measure reveal: the grid track grows 0fr -> 1fr so the pill
-          fits whatever the label renders at — no char-count width map */}
-      <span className="hidden md:grid md:grid-cols-[0fr] md:transition-[grid-template-columns] md:duration-300 md:ease-out md:can-hover:group-hover:grid-cols-[1fr]">
+          fits whatever the label renders at — no char-count width map. One
+          in-out curve: a closing pill mirrors its opening neighbour */}
+      <span className="hidden md:grid md:grid-cols-[0fr] md:transition-[grid-template-columns] md:duration-400 md:ease-smooth md:group-focus-visible:grid-cols-[1fr] md:can-hover:group-hover:grid-cols-[1fr]">
         <span className="overflow-hidden">
-          <span className="block translate-x-4 pr-5 text-sm font-medium whitespace-nowrap opacity-0 blur-xs transition-[transform,translate,scale,rotate,opacity,filter] duration-200 ease-out delay-100 can-hover:group-hover:translate-x-0 can-hover:group-hover:opacity-100 can-hover:group-hover:blur-none">
+          <span className="block pr-5 text-sm font-medium whitespace-nowrap opacity-0 transition-opacity duration-400 ease-smooth group-focus-visible:opacity-100 can-hover:group-hover:opacity-100">
             {social.label}
           </span>
         </span>

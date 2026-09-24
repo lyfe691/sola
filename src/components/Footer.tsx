@@ -16,10 +16,9 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
+  SOCIAL_BRAND_FILL,
   SOCIAL_LINKS,
   SOCIAL_ORDER_FOOTER,
-  SOCIAL_ICONS,
-  SOCIAL_HOVER_ACCENTS,
 } from "@/config/social";
 import { useState } from "react";
 import { toast } from "@/components/ui/toast";
@@ -35,19 +34,6 @@ const Footer = () => {
   const year = new Date().getFullYear();
   const t = useTranslation();
   const [isLegalExpanded, setIsLegalExpanded] = useState(false);
-
-  const social = SOCIAL_ORDER_FOOTER.map((id) => {
-    const s = SOCIAL_LINKS[id];
-    const Icon = SOCIAL_ICONS[id];
-    const accent =
-      id === "github" ? "hover:bg-foreground/10" : SOCIAL_HOVER_ACCENTS[id];
-    return {
-      icon: <Icon className="w-4 h-4" aria-hidden="true" />,
-      href: s.href,
-      label: s.label,
-      hoverClass: `${accent} can-hover:hover:scale-110`,
-    };
-  });
 
   const nav = [
     { text: t.nav.about, path: "/about" },
@@ -223,19 +209,29 @@ const Footer = () => {
             <h3 className="text-sm font-semibold tracking-wider text-foreground/80 uppercase">
               {t.footer.connect}
             </h3>
-            <div className="flex flex-wrap gap-2">
-              {social.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={link.label}
-                  className={`rounded-lg border border-foreground/10 bg-foreground/5 p-2.5 text-foreground/60 transition-[color,background-color,scale] duration-200 ease-out hover:text-foreground ${link.hoverClass}`}
-                >
-                  {link.icon}
-                </a>
-              ))}
+            <div className="grid w-fit grid-cols-4 gap-2">
+              {SOCIAL_ORDER_FOOTER.map((id) => {
+                const { href, label, icon: Icon } = SOCIAL_LINKS[id];
+                return (
+                  <a
+                    key={id}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    data-brand={id}
+                    className={cn(
+                      "group rounded-lg border border-foreground/10 bg-foreground/5 p-2.5 text-foreground/60 transition-colors duration-200 ease-out",
+                      SOCIAL_BRAND_FILL,
+                    )}
+                  >
+                    <Icon
+                      className="size-4 transition-[scale] duration-150 ease-out group-active:scale-90"
+                      aria-hidden="true"
+                    />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>
