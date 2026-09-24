@@ -1,5 +1,5 @@
 import { type Theme } from "@/config/themes";
-import type { LiquidEtherProps } from "@/components/LiquidEther";
+import type { LiquidEtherProps } from "./LiquidEther";
 import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type LiquidEtherPreset = Required<

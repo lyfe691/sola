@@ -15,7 +15,7 @@
 
 import { type Theme, getThemeType } from "@/config/themes";
 import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
-import type { AuroraLayer, SkyLayer } from "@/components/aurora-blur";
+import type { AuroraLayer, SkyLayer } from "./AuroraBlur";
 
 export type AuroraBlurPreset = {
   speed: number;

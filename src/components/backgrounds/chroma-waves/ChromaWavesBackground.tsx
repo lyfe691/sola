@@ -10,7 +10,7 @@
  * registered in the background registry.
  */
 
-import ChromaWaves from "@/components/chroma-waves";
+import ChromaWaves from "./ChromaWaves";
 import { useBackgroundTheme } from "@/components/backgrounds/use-background-theme";
 import { getChromaWavesPreset, CHROMA_WAVES_THEME_CLASS_KEYS } from "./presets";
 

@@ -1,5 +1,5 @@
 import { type Theme } from "@/config/themes";
-import type { SilkWavesProps } from "@/components/silk-waves";
+import type { SilkWavesProps } from "./SilkWaves";
 import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type SilkWavesPreset = Required<

@@ -1,4 +1,4 @@
-import Watercolor from "@/components/watercolor";
+import Watercolor from "./Watercolor";
 import { useBackgroundTheme } from "@/components/backgrounds/use-background-theme";
 import { getWatercolorPreset } from "./presets";
 import { BACKGROUND_THEME_CLASS_KEYS } from "@/components/backgrounds/preset-utils";
