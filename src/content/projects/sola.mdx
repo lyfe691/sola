@@ -31,31 +31,29 @@ Performance was a **key priority** from the start. Here's what I implemented:
 
 <CodeBlock
   code={`// image optimization with lazy loading
-const OptimizedImage = ({ src, alt, ...props }: { src: string, alt: string, [key: string]: any }) => {
-  return (
-    <img 
-      src={src} 
-      alt={alt}
-      loading="lazy"
-      decoding="async"
-      {...props}
-    />
-  );
-};
-
-// memoized expensive calculations
-const ExpensiveComponent = memo(({ data }: { data: any[] }) => {
-const processedData = useMemo(() => {
-return data.map(item => ({
-...item,
-processed: heavyCalculation(item)
-}));
-}, [data]);
-
-return <div>{/* render */}</div>;
-});`}
-fileName="optimization-techniques.tsx"
-lang="typescript"
+  const OptimizedImage = ({ src, alt, ...props }: { src: string, alt: string, [key: string]: any }) => {
+    return (
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        {...props}
+      />
+    );
+  };
+  // memoized expensive calculations
+  const ExpensiveComponent = memo(({ data }: { data: any[] }) => {
+    const processedData = useMemo(() => {
+      return data.map(item => ({
+        ...item,
+        processed: heavyCalculation(item)
+      }));
+    }, [data]);
+    return <div>{/* render */}</div>;
+  });`}
+  fileName="optimization-techniques.tsx"
+  lang="typescript"
 />
 
 The result? A portfolio that loads quickly and feels responsive on all devices.
