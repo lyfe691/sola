@@ -34,7 +34,7 @@ import {
   type ReactNode,
   type CSSProperties,
 } from "react";
-import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
+import type { Program, Renderer } from "ogl";
 import { cn } from "@/lib/utils";
 import { coverSvg } from "./artwork";
 import { mountQueue } from "./mount-queue";
@@ -90,11 +90,6 @@ interface CoverController {
   dispose: () => void;
 }
 
-const toRGB = (hex: string) => {
-  const c = new Color(hex);
-  return [c.r, c.g, c.b] as [number, number, number];
-};
-
 /** Px between the element and the viewport; 0 when on screen. */
 const distanceToViewport = (element: Element) => {
   const rect = element.getBoundingClientRect();
@@ -109,16 +104,22 @@ const distanceToViewport = (element: Element) => {
  * caller keeps the base gradient.
  */
 function createCover(
+  ogl: typeof import("ogl"),
   host: HTMLElement,
   art: ResolvedArt,
   size: PaintedCoverProps["size"],
   time: { current: number },
   onFirstFrame: () => void,
 ): CoverController | null {
+  const toRGB = (hex: string) => {
+    const c = new ogl.Color(hex);
+    return [c.r, c.g, c.b] as [number, number, number];
+  };
+
   let renderer: Renderer;
   let program: Program;
   try {
-    renderer = new Renderer({
+    renderer = new ogl.Renderer({
       dpr: 1,
       alpha: false,
       antialias: false,
@@ -127,7 +128,7 @@ function createCover(
     });
     if (!renderer.isWebgl2) throw new Error("WebGL2 unavailable");
     const gl = renderer.gl;
-    program = new Program(gl, {
+    program = new ogl.Program(gl, {
       vertex: VERTEX,
       fragment: fragmentFor(STEPS[size]),
       depthTest: false,
@@ -152,8 +153,8 @@ function createCover(
 
   const gl = renderer.gl;
   const canvas = gl.canvas as HTMLCanvasElement;
-  const geometry = new Triangle(gl);
-  const mesh = new Mesh(gl, { geometry, program });
+  const geometry = new ogl.Triangle(gl);
+  const mesh = new ogl.Mesh(gl, { geometry, program });
 
   let raf = 0;
   let last = 0;
@@ -327,14 +328,19 @@ export function PaintedCover({
     if (!host || !near) return;
     let cancelled = false;
     let cover: CoverController | null = null;
-    const cancelQueue = mountQueue.enqueue({
-      priority: () => distanceToViewport(host),
-      run: () => {
-        if (cancelled) return;
-        cover = createCover(host, resolved, size, time, fireReady);
-        if (cover) setController(cover);
-        else fireReady();
-      },
+    let cancelQueue = () => {};
+    // ogl only loads for a live cover: the projects grid draws static art
+    void import("ogl").then((ogl) => {
+      if (cancelled) return;
+      cancelQueue = mountQueue.enqueue({
+        priority: () => distanceToViewport(host),
+        run: () => {
+          if (cancelled) return;
+          cover = createCover(ogl, host, resolved, size, time, fireReady);
+          if (cover) setController(cover);
+          else fireReady();
+        },
+      });
     });
     return () => {
       cancelled = true;

@@ -2,6 +2,10 @@
 
 Vite 8 + React 19 + TypeScript strict + Tailwind v4, deployed on Vercel.
 `api/` holds Vercel serverless functions (GitHub activity proxy, version).
+`vite/` holds the build plugins: dev API proxy, changelog snapshot, per-icon
+Hugeicons imports, and the route + font preloads written into index.html
+(route-preload reads `src/config/routes.ts`: keep each route's `path` before
+its page `import`, or the build fails and says so).
 Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 
 ## Verify
@@ -81,6 +85,16 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 - Backgrounds (`src/components/backgrounds/`) intentionally do NOT gate on
   prefers-reduced-motion (owner decision); framer-driven UI motion is
   gated globally via `MotionConfig reducedMotion="user"`.
+
+## First load
+
+- Everything main.tsx, App, the layouts, Navigation and Footer import
+  statically reaches every visitor before the first paint. WebGL libraries
+  (ogl, three), shiki and interaction-only UI (the command palette) load
+  through a dynamic `import()` inside the effect or component that needs them.
+- A react-icons pack is one module: importing one icon from anything the entry
+  reaches ships every icon the site uses from that pack. The social marks
+  live in `src/components/icons/brand-marks.tsx` for that reason.
 
 ## Deploy
 

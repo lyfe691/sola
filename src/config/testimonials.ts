@@ -29,7 +29,7 @@ export const testimonials: Testimonial[] = [
     author: "Dominik Könitzer",
     rating: 5,
     website: "https://dk.punds.ch",
-    avatar: "https://avatars.githubusercontent.com/u/82450286?v=4",
+    avatar: "https://avatars.githubusercontent.com/u/82450286?v=4&s=144",
   },
   {
     i18nKey: "bichsel",

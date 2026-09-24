@@ -5,14 +5,14 @@
 
 import type { ComponentType } from "react";
 import { Mail01Icon } from "@hugeicons/core-free-icons";
-import { FaLinkedinIn } from "react-icons/fa6";
 import {
-  SiChessdotcom,
-  SiGithub,
-  SiHackthebox,
-  SiLeetcode,
-  SiTiktok,
-} from "react-icons/si";
+  ChessMark,
+  GithubMark,
+  HackTheBoxMark,
+  LeetcodeMark,
+  LinkedinMark,
+  TiktokMark,
+} from "@/components/icons/brand-marks";
 import { hugeIcon } from "@/lib/huge-icon";
 
 export type SocialId =
@@ -40,7 +40,7 @@ export const SOCIAL_LINKS: Record<SocialId, SocialLink> = {
     id: "github",
     label: "GitHub",
     href: "https://github.com/lyfe691",
-    icon: SiGithub,
+    icon: GithubMark,
   },
   email: {
     id: "email",
@@ -52,31 +52,31 @@ export const SOCIAL_LINKS: Record<SocialId, SocialLink> = {
     id: "linkedin",
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/yanis-sebastian-zürcher/",
-    icon: FaLinkedinIn,
+    icon: LinkedinMark,
   },
   leetcode: {
     id: "leetcode",
     label: "LeetCode",
     href: "https://leetcode.com/u/lyfe691/",
-    icon: SiLeetcode,
+    icon: LeetcodeMark,
   },
   hackthebox: {
     id: "hackthebox",
     label: "Hack The Box",
     href: "https://profile.hackthebox.com/profile/019ebdeb-cfb3-708a-9d67-dde825d9bfb3",
-    icon: SiHackthebox,
+    icon: HackTheBoxMark,
   },
   chess: {
     id: "chess",
     label: "Chess.com",
     href: "https://chess.com/member/moment_o",
-    icon: SiChessdotcom,
+    icon: ChessMark,
   },
   tiktok: {
     id: "tiktok",
     label: "TikTok",
     href: "https://www.tiktok.com/@seeyuh.0",
-    icon: SiTiktok,
+    icon: TiktokMark,
   },
 };
 

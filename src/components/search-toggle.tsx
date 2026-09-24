@@ -9,7 +9,7 @@
 import { SearchIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "./ui/button";
-import { useCommandMenu } from "@/hooks/use-command-menu";
+import { loadCommandMenu, useCommandMenu } from "@/hooks/use-command-menu";
 import {
   Tooltip,
   TooltipContent,
@@ -30,6 +30,8 @@ export function SearchToggle() {
             variant="ghost"
             size="icon"
             onClick={toggleCommandMenu}
+            onPointerEnter={() => void loadCommandMenu()}
+            onFocus={() => void loadCommandMenu()}
             aria-label={t.common.search}
           />
         }
