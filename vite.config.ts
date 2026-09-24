@@ -1,155 +1,16 @@
-import { defineConfig, loadEnv, type Plugin } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@mdx-js/rollup";
 import remarkGfm from "remark-gfm";
 import path from "path";
-import type { IncomingMessage, ServerResponse } from "http";
-import type { Connect } from "vite";
-import { getGitHubActivity } from "./api/github-activity.ts";
-import githubCommits, { getCommitLog } from "./api/github-commits.ts";
+import { apiDevPlugin } from "./vite/api-dev.ts";
+import { changelogSnapshotPlugin } from "./vite/changelog-snapshot.ts";
+import { hugeiconsPerIcon } from "./vite/hugeicons.ts";
+import { routePreload } from "./vite/route-preload.ts";
+import { fontPreload } from "./vite/font-preload.ts";
 
 const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
-
-function applyLocalEnv(mode: string) {
-  const env = loadEnv(mode, process.cwd(), "");
-  if (env.GITHUB_TOKEN) {
-    process.env.GITHUB_TOKEN = env.GITHUB_TOKEN;
-  }
-}
-
-function apiDevPlugin(): Plugin {
-  const versionPayload = JSON.stringify({ version: "dev" });
-
-  return {
-    name: "api-dev",
-    enforce: "pre",
-    config(_, { mode }) {
-      applyLocalEnv(mode);
-    },
-    configureServer(server) {
-      applyLocalEnv(server.config.mode);
-
-      const handleApi = async (
-        req: IncomingMessage,
-        res: ServerResponse,
-        next: Connect.NextFunction,
-      ) => {
-        const pathname = req.url?.split("?")[0];
-
-        if (pathname === "/api/version" && req.method === "GET") {
-          res.setHeader("Content-Type", "application/json");
-          res.setHeader("Cache-Control", "no-store");
-          res.end(versionPayload);
-          return;
-        }
-
-        if (pathname === "/api/github-commits" && req.method === "GET") {
-          try {
-            const url = new URL(req.url ?? "/", "http://localhost");
-            await githubCommits(
-              {
-                query: {
-                  page: url.searchParams.get("page") ?? undefined,
-                  sha: url.searchParams.get("sha") ?? undefined,
-                },
-              },
-              {
-                setHeader: (key, value) => res.setHeader(key, value),
-                status: (code) => ({
-                  json: (body: unknown) => {
-                    res.statusCode = code;
-                    res.setHeader("Content-Type", "application/json");
-                    res.end(JSON.stringify(body));
-                  },
-                }),
-              },
-            );
-          } catch (error) {
-            console.error("[github-commits dev]", error);
-            res.statusCode = 502;
-            res.setHeader("Content-Type", "application/json");
-            res.end(JSON.stringify({ error: "failed to load commits" }));
-          }
-          return;
-        }
-
-        if (pathname !== "/api/github-activity" || req.method !== "GET") {
-          next();
-          return;
-        }
-
-        try {
-          const url = new URL(req.url ?? "/", "http://localhost");
-          const username = url.searchParams.get("username");
-          if (!username) {
-            res.statusCode = 400;
-            res.setHeader("Content-Type", "application/json");
-            res.end(JSON.stringify({ error: "username is required" }));
-            return;
-          }
-
-          const processed = await getGitHubActivity(username);
-          res.statusCode = 200;
-          res.setHeader("Content-Type", "application/json");
-          res.setHeader(
-            "Cache-Control",
-            "public, s-maxage=300, stale-while-revalidate=600",
-          );
-          res.end(JSON.stringify(processed));
-        } catch (error) {
-          console.error("[github-activity dev]", error);
-          // mirror the production handler's branching (api/github-activity.ts)
-          const notAllowed =
-            error instanceof Error &&
-            error.message === "username is not allowed";
-          res.statusCode = notAllowed ? 403 : 502;
-          res.setHeader("Content-Type", "application/json");
-          res.end(
-            JSON.stringify({
-              error: notAllowed
-                ? "username is not allowed"
-                : "failed to load activity",
-            }),
-          );
-        }
-      };
-
-      // Vite serves `api/*.ts` as source unless we intercept first.
-      server.middlewares.stack.unshift({ route: "", handle: handleApi });
-    },
-  };
-}
-
-const CHANGELOG_SNAPSHOT = "virtual:changelog-snapshot";
-
-/**
- * The changelog's first page, fetched once when the bundle is built, so the
- * page opens on its history instead of on a placeholder. A failed fetch
- * ships `null` and the page loads the log at runtime as before.
- */
-function changelogSnapshotPlugin(): Plugin {
-  const resolved = `\0${CHANGELOG_SNAPSHOT}`;
-
-  return {
-    name: "changelog-snapshot",
-    resolveId(id) {
-      return id === CHANGELOG_SNAPSHOT ? resolved : undefined;
-    },
-    async load(id) {
-      if (id !== resolved) return undefined;
-      if (process.env.VITEST) return "export default null;";
-      try {
-        const page = await getCommitLog(1);
-        const snapshot = { page, at: Date.now() };
-        return `export default ${JSON.stringify(snapshot)};`;
-      } catch (error) {
-        this.warn(`changelog snapshot skipped: ${String(error)}`);
-        return "export default null;";
-      }
-    },
-  };
-}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -163,6 +24,9 @@ export default defineConfig({
   plugins: [
     apiDevPlugin(),
     changelogSnapshotPlugin(),
+    hugeiconsPerIcon(),
+    routePreload(),
+    fontPreload("geist-latin-wght-normal"),
     {
       enforce: "pre",
       ...mdx({
