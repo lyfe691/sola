@@ -53,6 +53,7 @@ const SKILL_GROUPS_RAW: SkillGroup[] = [
       skill("Vite", 4),
       skill("Base UI", 4),
       skill("Three.js", 3),
+      skill("MapLibre", 3),
       skill("TanStack Query", 3),
       skill("MDX", 3),
       skill("Capacitor", 3),
@@ -132,7 +133,7 @@ export const SKILL_GROUPS: SkillGroup[] = SKILL_GROUPS_RAW.map((group) => ({
 
 /** Project technology labels that also count as the skill. */
 export const SKILL_ALIASES: Record<string, string[]> = {
-  React: ["React (Vite)"],
+  React: ["React (Vite)", "Next.js", "Next.js App Router"],
   Vite: ["React (Vite)"],
   "Next.js": ["Next.js App Router"],
   "TanStack Query": ["React Query"],
