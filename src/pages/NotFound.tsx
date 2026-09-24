@@ -366,7 +366,7 @@ const NotFound = () => {
             autoCorrect="off"
             autoComplete="off"
             spellCheck={false}
-            aria-label="Terminal"
+            aria-label={t.common.a11y.terminal}
             tabIndex={isDone ? 0 : -1}
           />
         </pre>

@@ -7,7 +7,8 @@
  */
 
 import { createElement } from "react";
-import { techIconForCode } from "@/config/tech-icons";
+import { MarkSlot } from "@/components/ui/custom/tech-mark";
+import { useTechIcons } from "@/hooks/use-tech-icons";
 
 /** Filename-inferred TECH_ICONS mark — same registry as deep-dive chips. */
 export function TechFileMark({
@@ -21,7 +22,9 @@ export function TechFileMark({
   className?: string;
   size?: number;
 }) {
-  return createElement(techIconForCode({ filename, lang }), {
+  const icons = useTechIcons();
+  if (!icons) return <MarkSlot className={className} size={size} />;
+  return createElement(icons.techIconForCode({ filename, lang }), {
     "aria-hidden": true,
     className,
     size,

@@ -1,4 +1,4 @@
-import LiquidEther from "@/components/LiquidEther";
+import LiquidEther from "./LiquidEther";
 import { useBackgroundTheme } from "@/components/backgrounds/use-background-theme";
 import { getLiquidEtherPreset } from "./presets";
 import { BACKGROUND_THEME_CLASS_KEYS } from "@/components/backgrounds/preset-utils";

@@ -22,7 +22,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { TECH_ICONS, TECH_ICON_FALLBACK } from "@/config/tech-icons";
+import { TechMark } from "@/components/ui/custom/tech-mark";
 import { cn } from "@/lib/utils";
 
 /** px/s — ambient drift, slow enough to read in passing */
@@ -34,10 +34,9 @@ const SPEED = 30;
  * inherit the muted text color while brand marks keep their colors.
  */
 export const StackItem = ({ name }: { name: string }) => {
-  const Icon = TECH_ICONS[name] ?? TECH_ICON_FALLBACK;
   return (
     <span className="inline-flex items-center gap-2 font-mono text-sm lowercase whitespace-nowrap text-foreground/60">
-      <Icon size={18} aria-hidden="true" className="shrink-0" />
+      <TechMark name={name} size={18} aria-hidden="true" className="shrink-0" />
       {name}
     </span>
   );

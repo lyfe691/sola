@@ -1,4 +1,4 @@
-import SilkWaves from "@/components/silk-waves";
+import SilkWaves from "./SilkWaves";
 import { useBackgroundTheme } from "@/components/backgrounds/use-background-theme";
 import { getSilkWavesPreset } from "./presets";
 import { BACKGROUND_THEME_CLASS_KEYS } from "@/components/backgrounds/preset-utils";

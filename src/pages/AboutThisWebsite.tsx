@@ -11,19 +11,42 @@
 
 import "@fontsource/shippori-mincho-b1/400.css";
 
+import { use } from "react";
 import { useNavigate } from "react-router";
 import { RichText } from "@/components/i18n/RichText";
-import { useTranslation } from "@/lib/language-provider";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 
 const INK =
   "rounded-sm text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:decoration-foreground/70 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50";
 
+const FACE = '400 1em "Shippori Mincho B1"';
+const faces = new Map<string, Promise<unknown>>();
+
+/**
+ * The page is set in one face, so it holds (suspended, like its chunk) until
+ * that face has loaded for its own text: swapping it in under the blur-in
+ * reflowed every line. Capped, so a failed font never blocks the page.
+ */
+function faceFor(language: string, text: string) {
+  let ready = faces.get(language);
+  if (!ready) {
+    ready = Promise.race([
+      document.fonts.load(FACE, text).catch(() => undefined),
+      new Promise((resolve) => setTimeout(resolve, 2000)),
+    ]);
+    faces.set(language, ready);
+  }
+  return ready;
+}
+
 export default function AboutThisWebsite() {
   const navigate = useNavigate();
+  const { language } = useLanguage();
   const t = useTranslation().colophon;
+  use(faceFor(language, Object.values(t).join(" ")));
 
   return (
-    <main className="min-h-svh bg-background px-6 py-20 font-mincho text-foreground sm:px-10 sm:py-28">
+    <div className="min-h-svh bg-background px-6 py-20 font-mincho text-foreground sm:px-10 sm:py-28">
       <meta name="robots" content="noindex, nofollow" />
 
       <article className="max-w-lg text-sm-plus font-normal leading-loose">
@@ -50,6 +73,6 @@ export default function AboutThisWebsite() {
           ← {t.back}
         </button>
       </article>
-    </main>
+    </div>
   );
 }

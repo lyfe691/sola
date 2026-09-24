@@ -63,7 +63,6 @@ export const de = {
   common: {
     home: "Startseite",
     present: "Heute",
-    back: "Zurück",
     overview: "Überblick",
     a11y: {
       openMenu: "Menü öffnen",
@@ -74,6 +73,7 @@ export const de = {
       commandPalette: "Befehlspalette",
       commandPaletteHint: "Befehl suchen…",
       scrollToTop: "Nach oben scrollen",
+      terminal: "Terminal",
     },
     menu: {
       themes: "Designs",

@@ -109,14 +109,23 @@ export const GALLERY_SLIDE = {
   bounce: 0.12,
 } as const;
 
+// ---- Where every entrance starts ----
+// Invisible (under one colour level, even on white) but never exactly 0.
+// Chrome's Largest Contentful Paint skips anything painted at opacity 0, and
+// a fade runs on the compositor without repainting, so content that faded
+// in from 0 only counted once its glide had finished: the glide was added
+// to LCP on every page. Entrances start here; exits may still end at 0.
+// Mirrored by the reveal's hidden state in index.css.
+export const HIDDEN_OPACITY = 0.001;
+
 // ---- Page (route) transition: "consumes itself" ----
 // The old page shrinks + blurs as it accelerates away (consumed inward); the new page
 // re-emerges from that same blurred, slightly-scaled state and settles. Because exit ends
-// exactly where enter begins (scale 0.96 / blur 8 / opacity 0), the swap under
+// exactly where enter begins (scale 0.96 / blur 8 / HIDDEN_OPACITY), the swap under
 // AnimatePresence mode="wait" reads as ONE continuous implode->reform, and the blur masks
 // the content change so it feels smooth, not like a hard cut.
 export const pageTransitionVariants = {
-  initial: { opacity: 0, scale: 0.96, filter: "blur(8px)" },
+  initial: { opacity: HIDDEN_OPACITY, scale: 0.96, filter: "blur(8px)" },
   animate: {
     opacity: 1,
     scale: 1,
@@ -124,7 +133,7 @@ export const pageTransitionVariants = {
     transition: { duration: 0.5, ease: SMOOTH },
   },
   exit: {
-    opacity: 0,
+    opacity: HIDDEN_OPACITY,
     scale: 0.96,
     filter: "blur(8px)",
     transition: { duration: 0.32, ease: CONSUME_IN },
@@ -182,7 +191,7 @@ export interface GridCellCustom {
  * straight from swapOut with no intermediate render.
  */
 export const gridCellVariants = {
-  hidden: { opacity: 0, y: REVEAL_RISE, scale: 1 },
+  hidden: { opacity: HIDDEN_OPACITY, y: REVEAL_RISE, scale: 1 },
   visible: ({ delay = 0 }: GridCellCustom = {}) => ({
     opacity: 1,
     y: 0,

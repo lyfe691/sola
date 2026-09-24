@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" source("../src");
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -638,8 +638,9 @@
     transform var(--reveal-duration) var(--ease-smooth) var(--reveal-delay, 0ms);
 }
 
+/* 0.001, not 0: HIDDEN_OPACITY in transitions.ts says why */
 [data-reveal]:not([data-revealed]) {
-  opacity: 0;
+  opacity: 0.001;
   transform: translateY(var(--reveal-rise));
 }
 

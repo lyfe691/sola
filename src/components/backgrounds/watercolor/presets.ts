@@ -1,5 +1,5 @@
 import { type Theme } from "@/config/themes";
-import type { WatercolorProps } from "@/components/watercolor";
+import type { WatercolorProps } from "./Watercolor";
 import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
 export type WatercolorPreset = Required<

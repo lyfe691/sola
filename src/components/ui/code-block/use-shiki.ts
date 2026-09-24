@@ -7,11 +7,6 @@
  */
 
 import { useEffect, useState } from "react";
-// `shiki/bundle/web` trims to web-oriented grammars plus the smaller JS
-// engine — cpp/wasm ARE still included, but every grammar splits into its own
-// lazy chunk that only loads on first use. Unsupported languages fall back to
-// plain text.
-import { codeToHtml } from "shiki/bundle/web";
 import type { BundledLanguage, SpecialLanguage } from "shiki";
 
 export type CodeBlockLanguage = BundledLanguage | SpecialLanguage;
@@ -32,11 +27,19 @@ export const useShikiHighlight = (
   useEffect(() => {
     let cancelled = false;
 
-    codeToHtml(code, {
-      lang,
-      themes: { light: "github-light", dark: "github-dark" },
-      defaultColor: false,
-    })
+    // `shiki/bundle/web` trims to web-oriented grammars plus the smaller JS
+    // engine, and every grammar splits into its own chunk that loads on first
+    // use. The import stays dynamic so the highlighter never delays the page
+    // that shows the code: the plain-text fallback paints first. Unsupported
+    // languages stay plain text.
+    import("shiki/bundle/web")
+      .then(({ codeToHtml }) =>
+        codeToHtml(code, {
+          lang,
+          themes: { light: "github-light", dark: "github-dark" },
+          defaultColor: false,
+        }),
+      )
       .then((out) => {
         if (!cancelled) setHtml(out);
       })

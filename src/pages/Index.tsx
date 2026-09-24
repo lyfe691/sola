@@ -20,11 +20,11 @@ import {
   type SocialId,
 } from "@/config/social";
 import { cn } from "@/lib/utils";
-import { REVEAL } from "@/utils/transitions";
+import { HIDDEN_OPACITY, REVEAL } from "@/utils/transitions";
 
 const homeAnimations = {
   container: {
-    hidden: { opacity: 0 },
+    hidden: { opacity: HIDDEN_OPACITY },
     show: {
       opacity: 1,
       // delayChildren outlasts the 0.5s route blur so the first beat
@@ -34,7 +34,7 @@ const homeAnimations = {
   },
   // one child variant for the badge and the CTA row — they animate the same
   item: {
-    hidden: { opacity: 0, y: 20, scale: 0.98 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 20, scale: 0.98 },
     show: {
       opacity: 1,
       y: 0,
@@ -43,7 +43,7 @@ const homeAnimations = {
     },
   },
   heading: {
-    hidden: { opacity: 0, y: 24, scale: 0.985 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 24, scale: 0.985 },
     show: {
       opacity: 1,
       y: 0,
@@ -52,7 +52,7 @@ const homeAnimations = {
     },
   },
   description: {
-    hidden: { opacity: 0, y: 22, scale: 0.99 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 22, scale: 0.99 },
     show: {
       opacity: 1,
       y: 0,
@@ -61,14 +61,14 @@ const homeAnimations = {
     },
   },
   socialsContainer: {
-    hidden: { opacity: 0 },
+    hidden: { opacity: HIDDEN_OPACITY },
     show: {
       opacity: 1,
       transition: { staggerChildren: 0.08, when: "beforeChildren" as const },
     },
   },
   socialItem: {
-    hidden: { opacity: 0, y: 16, scale: 0.98 },
+    hidden: { opacity: HIDDEN_OPACITY, y: 16, scale: 0.98 },
     show: {
       opacity: 1,
       y: 0,
@@ -141,7 +141,6 @@ const Index = () => {
           href="https://kinoa.to"
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Visit Kinoa"
           className="group relative z-30 mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 transition-[background-color,box-shadow] duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:mb-3 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
         >
           <span className="text-2xs font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-xs-plus">

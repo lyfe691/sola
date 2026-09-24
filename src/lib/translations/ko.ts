@@ -62,7 +62,6 @@ export const ko = {
   common: {
     home: "홈",
     present: "현재",
-    back: "뒤로",
     overview: "개요",
     a11y: {
       openMenu: "메뉴 열기",
@@ -73,6 +72,7 @@ export const ko = {
       commandPalette: "명령 팔레트",
       commandPaletteHint: "명령 검색…",
       scrollToTop: "맨 위로",
+      terminal: "터미널",
     },
     menu: {
       themes: "테마",

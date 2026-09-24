@@ -142,11 +142,12 @@ function collectUsedPaths(): Set<string> {
     }
   }
 
-  // Files that rebind `t` to a translation subtree (e.g. common.update).
+  // Files that rebind `t` to a translation subtree (e.g. common.update, or
+  // `useTranslation().colophon`).
   for (const file of files) {
     const content = fs.readFileSync(file, "utf8");
     const rebind =
-      /const\s+t\s*=\s*translations\[language\]\.([a-zA-Z_$][\w$]*(?:\.[a-zA-Z_$][\w$]*)*)/;
+      /const\s+t\s*=\s*(?:translations\[language\]|useTranslation\(\))\.([a-zA-Z_$][\w$]*(?:\.[a-zA-Z_$][\w$]*)*)/;
     const base = content.match(rebind)?.[1];
     if (!base) continue;
 
@@ -193,6 +194,9 @@ function collectUsedPaths(): Set<string> {
   // ErrorBoundary reads translations[readLanguage()].errorBoundary — there is
   // no static `t.…` chain for the scanner to find
   addPath(used, "errorBoundary");
+
+  // CodeView hands `common.diff` to CommitDiff as a prop, where it is `t`
+  addPath(used, "common.diff");
 
   addPath(used, "common.update");
   addPath(used, "services.badges.mostPopular");

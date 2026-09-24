@@ -15,6 +15,13 @@ interface CommandMenuState {
   closeCommandMenu: () => void;
 }
 
+/**
+ * The palette is its own chunk (cmdk and its dialog stack stay out of the
+ * first load). It is warmed on intent — a held ⌘/Ctrl, the search button
+ * hovered or focused — so the first open doesn't wait on the network.
+ */
+export const loadCommandMenu = () => import("@/components/Command");
+
 export const useCommandMenu = create<CommandMenuState>((set) => ({
   isOpen: false,
   toggleCommandMenu: () => set((state) => ({ isOpen: !state.isOpen })),
@@ -27,6 +34,7 @@ export function useCommandMenuKeyboardShortcut() {
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey) void loadCommandMenu();
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         toggleCommandMenu();

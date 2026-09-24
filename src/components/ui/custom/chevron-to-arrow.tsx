@@ -15,6 +15,7 @@ export function ChevronToArrowIcon({ className }: { className?: string }) {
     <HugeiconsIcon
       icon={ArrowRight02Icon}
       strokeWidth={2}
+      aria-hidden="true"
       className={cn(
         "size-4",
         // The line (first path): starts invisible, scales/fades in on hover

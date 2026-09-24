@@ -10,7 +10,7 @@
  * registered in the background registry.
  */
 
-import AuroraBlur from "@/components/aurora-blur";
+import AuroraBlur from "./AuroraBlur";
 import { cn } from "@/lib/utils";
 import { useBackgroundTheme } from "@/components/backgrounds/use-background-theme";
 import {

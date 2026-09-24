@@ -13,7 +13,7 @@ import { BrowserRouter } from "react-router";
 import { ThemeProvider } from "./components/theme-provider";
 import ScrollToTop from "./components/ScrollToTop";
 import { LanguageProvider } from "./lib/language-provider";
-import { CommandMenu } from "./components/Command";
+import { CommandMenuHost } from "./components/CommandMenuHost";
 import { useCommandMenuKeyboardShortcut } from "./hooks/use-command-menu";
 import { AnimatedRoutes } from "./components/AnimatedRoutes";
 import ClickSpark from "./components/ui/custom/click-spark";
@@ -60,7 +60,7 @@ const App = () => (
                           <DocumentTitle />
                           <CanonicalUrl />
                           <KeyboardShortcuts />
-                          <CommandMenu />
+                          <CommandMenuHost />
                           <AnimatedRoutes />
                           <ScrollToTop />
                         </CodeViewProvider>

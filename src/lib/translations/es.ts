@@ -65,7 +65,6 @@ export const es = {
   common: {
     home: "Inicio",
     present: "Presente",
-    back: "Volver",
     overview: "Resumen",
     a11y: {
       openMenu: "Abrir menú",
@@ -76,6 +75,7 @@ export const es = {
       commandPalette: "Paleta de comandos",
       commandPaletteHint: "Busca un comando…",
       scrollToTop: "Volver arriba",
+      terminal: "Terminal",
     },
     menu: {
       themes: "Temas",

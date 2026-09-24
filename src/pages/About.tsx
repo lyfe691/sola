@@ -28,6 +28,7 @@ import type { Translation } from "@/lib/translations";
 import { githubContributionsQuery } from "@/lib/github-contributions";
 import { userActivityQuery } from "@/lib/github-activity";
 import { GITHUB_USER } from "@/lib/github";
+import { whenIdle } from "@/lib/idle";
 import { cn } from "@/lib/utils";
 
 const ParticleImage = lazy(() =>
@@ -108,6 +109,11 @@ function AboutPortrait({ src, alt }: { src: string; alt: string }) {
   const particleCount = isMobile
     ? PORTRAIT_PARTICLES_COARSE
     : PORTRAIT_PARTICLES;
+  // three.js is the heaviest chunk on the page: it waits until the page has
+  // loaded and gone idle, so it never competes with the portrait itself,
+  // which stays visible underneath until the particles take over
+  const [idle, setIdle] = useState(false);
+  useEffect(() => whenIdle(() => setIdle(true)), []);
 
   return (
     <MediaFrame>
@@ -118,9 +124,9 @@ function AboutPortrait({ src, alt }: { src: string; alt: string }) {
           src={src}
           alt={alt}
           className="absolute inset-0 size-full object-cover"
-          decoding="async"
+          fetchPriority="high"
         />
-        {!reduceMotion && (
+        {idle && !reduceMotion && (
           <Suspense fallback={null}>
             <ParticleImage
               imageUrl={src}
