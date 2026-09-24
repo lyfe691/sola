@@ -46,11 +46,11 @@ export interface PaintedPreset {
 }
 
 export const PRESETS: Record<ArtPreset, PaintedPreset> = {
-  night: { colors: ["#0a0d16", "#2c3550"], scale: 1.35, speed: 0.3 },
-  midnight: { colors: ["#141c4a", "#4a5fa8"], scale: 1.35, speed: 0.3 },
+  night: { colors: ["#0b1022", "#9fb3dc"], scale: 1.35, speed: 0.3 },
+  midnight: { colors: ["#161f52", "#a9b8f0"], scale: 1.35, speed: 0.3 },
   cobalt: { colors: ["#12306b", "#6f97d6"], scale: 1.35, speed: 0.3 },
   caramel: { colors: ["#a5652b", "#f4dab4"], scale: 1.3, speed: 0.3 },
-  starry: { colors: ["#243b7a", "#f2d06b"], scale: 1.35, speed: 0.3 },
+  starry: { colors: ["#243b7a", "#f4e4b0"], scale: 1.35, speed: 0.3 },
   irises: { colors: ["#4b3f8f", "#efe5c2"], scale: 1.35, speed: 0.3 },
   almond: { colors: ["#4fa3a5", "#f3efe4"], scale: 1.35, speed: 0.3 },
   wheat: { colors: ["#b8862b", "#fff0c4"], scale: 1.4, speed: 0.3 },

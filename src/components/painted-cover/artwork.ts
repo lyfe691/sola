@@ -16,7 +16,7 @@
  * style pass.
  *
  * The ingredients never change; the band's path does. Each cover draws one
- * of six compositions (COMPOSITIONS) and jitters it, both decided by a hash
+ * of four compositions (COMPOSITIONS) and jitters it, both decided by a hash
  * of the cover's two colours and its seed. So two projects differ even on
  * the default seed, the same project always paints the same cover, and the
  * seed stays the knob for telling two covers on one preset apart.
@@ -53,8 +53,9 @@ export interface CoverBand {
 type Jitter = (n: number) => number;
 
 /**
- * The six paths a band of light can take. Every one leaves the lower left
- * to the caption: a band may dip low only on the right.
+ * The four paths a band of light can take, each crossing the whole frame so
+ * none leaves it empty or lopsided. Every one leaves the lower left to the
+ * caption: a band may dip low only on the right.
  */
 const COMPOSITIONS: ReadonlyArray<(j: Jitter) => CoverBand> = [
   // rising: mid-height on the left, high on the right
@@ -90,17 +91,6 @@ const COMPOSITIONS: ReadonlyArray<(j: Jitter) => CoverBand> = [
     fold: [0, 150],
     leak: [50 + j(14), 4 + j(4)],
   }),
-  // sweep: poured from the top, bending out to the right
-  (j) => ({
-    curve: [
-      [520 + j(90), -140],
-      [640 + j(70), 180 + j(40)],
-      [980 + j(70), 330 + j(40)],
-      [ART_W + 120, 380 + j(50)],
-    ],
-    fold: [-130, 95],
-    leak: [44 + j(8), 3 + j(3)],
-  }),
   // valley: high at both ends, dipping to mid-height in the middle
   (j) => ({
     curve: [
@@ -111,17 +101,6 @@ const COMPOSITIONS: ReadonlyArray<(j: Jitter) => CoverBand> = [
     ],
     fold: [0, 150],
     leak: [84 + j(8), 8 + j(6)],
-  }),
-  // drop: a steep slash down the right side, out through the bottom
-  (j) => ({
-    curve: [
-      [ART_W + 120, 20 + j(40)],
-      [1210 + j(60), 130 + j(40)],
-      [1010 + j(50), 390 + j(40)],
-      [980 + j(60), ART_H + 160],
-    ],
-    fold: [130, 90],
-    leak: [88 + j(6), 6 + j(5)],
   }),
 ];
 

@@ -85,20 +85,19 @@ describe("coverBand", () => {
     }
   });
 
-  it("draws more than one composition across the presets", () => {
-    // a band that enters from the left edge, from the top, or from the right
-    const entries = new Set(
+  it("draws every composition across the presets", () => {
+    // by shape: controls well above the ends crown, well below them dip,
+    // otherwise the band rises or falls across the frame
+    const shapes = new Set(
       bands.map(({ band }) => {
-        const [x, y] = band.curve[0];
-        return x < 0
-          ? y < 200
-            ? "left-high"
-            : "left-mid"
-          : y < 0
-            ? "top"
-            : "right";
+        const [start, c1, c2, end] = band.curve;
+        const ends = (start[1] + end[1]) / 2;
+        const controls = (c1[1] + c2[1]) / 2;
+        if (controls < ends - 150) return "arch";
+        if (controls > ends + 150) return "valley";
+        return start[1] > end[1] ? "rising" : "falling";
       }),
     );
-    expect(entries.size).toBeGreaterThanOrEqual(4);
+    expect([...shapes].sort()).toEqual(["arch", "falling", "rising", "valley"]);
   });
 });
