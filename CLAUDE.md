@@ -107,6 +107,8 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 
 - Vercel; `vercel.json` rewrites SPA routes but deliberately excludes
   `/assets/` (missing chunks must 404, or the immutable cache header pins
-  HTML under a JS URL). `main.tsx` reloads once on `vite:preloadError`.
+  HTML under a JS URL) and `/.well-known/` (machine probes such as
+  Lighthouse's `ai-catalog.json` must 404, not parse our HTML as their
+  format). `main.tsx` reloads once on `vite:preloadError`.
 - The GitHub token is `GITHUB_TOKEN` (not `VITE_`-prefixed) — see
   `.env.example`.

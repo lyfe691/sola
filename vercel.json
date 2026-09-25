@@ -47,5 +47,10 @@
       ]
     }
   ],
-  "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/((?!assets/|\\.well-known/).*)",
+      "destination": "/index.html"
+    }
+  ]
 }
