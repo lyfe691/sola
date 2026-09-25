@@ -6,6 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import type { CSSProperties } from "react";
 import { TechFileMark } from "@/components/ui/custom/tech-file-mark";
 import { useTheme } from "@/components/theme-provider";
 import { getThemeType } from "@/config/themes";
@@ -21,17 +22,14 @@ interface CodeBlockProps {
   className?: string;
 }
 
-/* The shadcn-docs header touch: a small language mark next to the filename.
-   Same TECH_ICONS registry as deep-dive chips and the changelog file tree. */
-
 /**
  * Plain-text fallback that mirrors Shiki's `pre.shiki > code > span.line` markup,
  * so line numbers and layout stay identical before highlighting resolves.
  */
-const FallbackCode = ({ code }: { code: string }) => (
+const FallbackCode = ({ lines }: { lines: string[] }) => (
   <pre className="shiki">
     <code>
-      {code.split("\n").map((line, i) => (
+      {lines.map((line, i) => (
         <span key={i} className="line">
           {line}
         </span>
@@ -56,11 +54,13 @@ export const CodeBlock = ({
   const { theme } = useTheme();
   const codeTheme = getThemeType(theme);
   const value = code.replace(/\n+$/, "");
+  const lines = value.split("\n");
   const html = useShikiHighlight(value, lang);
 
   return (
     <figure
       data-code-theme={codeTheme}
+      style={{ "--line-digits": String(lines.length).length } as CSSProperties}
       className={cn(
         "code-block group relative my-6 overflow-hidden rounded-xl bg-(--code) text-sm ring-1 ring-border",
         className,
@@ -87,7 +87,7 @@ export const CodeBlock = ({
         {html ? (
           <div dangerouslySetInnerHTML={{ __html: html }} />
         ) : (
-          <FallbackCode code={value} />
+          <FallbackCode lines={lines} />
         )}
       </div>
     </figure>

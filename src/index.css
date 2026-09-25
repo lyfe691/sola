@@ -874,15 +874,18 @@
 }
 
 /* the number cell is sticky and paints its own --code ground, so code
-   slides underneath it on horizontal scroll (the shadcn-docs behavior) */
+   slides underneath it on horizontal scroll (the shadcn-docs behavior).
+   The gap is padding, not margin: a margin is unpainted, so scrolled code
+   would show through it. --line-digits (set by CodeBlock) fits every cell
+   to the longest number, or wider numbers spill and stop right-aligning. */
 .code-block .shiki .line::before {
   content: counter(sh-line);
   position: sticky;
   left: 0;
   display: inline-block;
-  width: 1.75rem;
-  padding-left: 1rem;
-  margin-right: 1.25rem;
+  box-sizing: content-box;
+  width: calc(var(--line-digits) * 1ch);
+  padding-inline: 1rem 1.25rem;
   text-align: right;
   background-color: var(--code);
   color: var(--code-number);
