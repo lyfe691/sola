@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/lib/language-provider";
@@ -18,19 +18,31 @@ interface CopyButtonProps {
   className?: string;
 }
 
+const COPIED_MS = 2000;
+
+const GLYPH =
+  "col-start-1 row-start-1 size-3.5 transition-[opacity,scale,filter] duration-300";
+const GLYPH_HIDDEN = "scale-50 opacity-0 blur-xs";
+
 /**
- * Copy-to-clipboard icon button. Quiet until the block is hovered (always shown
- * on touch); on success the copy glyph crossfades to a check, then back.
+ * Copy-to-clipboard icon button. Quiet until the block is hovered (always
+ * shown where nothing hovers); on success the copy glyph blurs into a check,
+ * then back.
  */
 export const CopyButton = ({ value, className }: CopyButtonProps) => {
   const [copied, setCopied] = useState(false);
   const t = useTranslation();
 
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), COPIED_MS);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
   const onCopy = async () => {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
       toast.add({ type: "error", title: t.common.copyFailed });
     }
@@ -42,28 +54,26 @@ export const CopyButton = ({ value, className }: CopyButtonProps) => {
       onClick={onCopy}
       aria-label={copied ? t.common.copied : t.common.copyCode}
       className={cn(
-        "relative inline-flex size-7 items-center justify-center rounded-md text-muted-foreground",
-        "opacity-0 transition duration-200 hover:bg-foreground/10 hover:text-foreground",
-        "group-hover:opacity-100 focus-visible:opacity-100 [@media(pointer:coarse)]:opacity-100",
+        "grid size-7 place-items-center rounded-md text-muted-foreground",
+        // opaque at rest and on hover: without a header the button sits over the code
+        "bg-(--code) hover:bg-[color-mix(in_oklab,var(--code),var(--foreground)_10%)] hover:text-foreground",
+        "transition-[color,background-color,opacity,scale] active:scale-95",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        // the check stays visible after the pointer leaves the block
+        !copied &&
+          "can-hover:opacity-0 can-hover:group-hover:opacity-100 focus-visible:opacity-100",
         className,
       )}
     >
       <HugeiconsIcon
         icon={Copy01Icon}
         strokeWidth={2}
-        className={cn(
-          "size-3.5 transition duration-200 ease-out",
-          copied && "scale-90 opacity-0",
-        )}
+        className={cn(GLYPH, copied && GLYPH_HIDDEN)}
       />
       <HugeiconsIcon
         icon={Tick02Icon}
         strokeWidth={2}
-        className={cn(
-          "absolute inset-0 m-auto size-3.5 text-primary transition duration-200 ease-out",
-          copied ? "scale-100 opacity-100" : "scale-90 opacity-0",
-        )}
+        className={cn(GLYPH, "text-primary", !copied && GLYPH_HIDDEN)}
       />
     </button>
   );
