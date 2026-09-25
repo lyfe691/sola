@@ -162,8 +162,11 @@ const DesktopNav = () => {
   }, [location.pathname, language, snapToActive]);
 
   useEffect(() => {
-    window.addEventListener("resize", snapToActive);
-    return () => window.removeEventListener("resize", snapToActive);
+    const nav = linksRef.current;
+    if (!nav) return;
+    const observer = new ResizeObserver(snapToActive);
+    observer.observe(nav);
+    return () => observer.disconnect();
   }, [snapToActive]);
 
   return (
