@@ -249,8 +249,7 @@ export function ThemeMenuContent({
     });
 
   // apply the theme but keep the menu open so themes can be tried in place
-  const selectTheme = (value: string) => (event: React.MouseEvent) =>
-    setTheme(value as Theme, event);
+  const selectTheme = (value: string) => () => setTheme(value as Theme);
 
   // ONE shared preview panel for the whole theme tree — per-row hover cards
   // at zero delay stack up while the outgoing ones exit; a single panel

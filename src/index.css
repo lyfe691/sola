@@ -667,12 +667,12 @@
 }
 
 /* ---------- theme transition (view transitions api) ---------- */
-/* one animation: the next theme wipes in as a circle from the click point
-   (origin/radius set by theme-provider, skipped under reduced motion there);
-   the old frame holds still beneath it. pointer-events: none so mid-wipe
-   clicks — e.g. trying themes in an open menu — reach the page, not the
-   overlay. The resume morph (below) relies on it too: base-ui counts a press
-   on <html> as outside the dialog, so an overlay taking clicks would close it. */
+/* The old frame holds still and the next theme arrives over it (skipped
+   under reduced motion in theme-provider). pointer-events: none so clicks
+   mid-transition — e.g. trying themes in an open menu — reach the page, not
+   the overlay. The resume morph (below) relies on it too: base-ui counts a
+   press on <html> as outside the dialog, so an overlay taking clicks would
+   close it. */
 ::view-transition {
   pointer-events: none;
 }
@@ -687,17 +687,12 @@
 }
 
 ::view-transition-new(root) {
-  animation: theme-wipe 700ms var(--ease-out);
+  animation: theme-dissolve 450ms var(--ease-out) both;
 }
 
-@keyframes theme-wipe {
+@keyframes theme-dissolve {
   from {
-    clip-path: circle(0% at var(--theme-wipe-origin, 50% 50%));
-  }
-  to {
-    clip-path: circle(
-      var(--theme-wipe-radius, 142%) at var(--theme-wipe-origin, 50% 50%)
-    );
+    opacity: 0;
   }
 }
 

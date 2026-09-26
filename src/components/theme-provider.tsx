@@ -13,6 +13,7 @@ import {
   useState,
   useCallback,
 } from "react";
+import { flushSync } from "react-dom";
 import {
   shouldApplyWelcomePreset,
   WELCOME_PRESET,
@@ -32,7 +33,7 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
-  setTheme: (theme: Theme, event?: React.MouseEvent | MouseEvent) => void;
+  setTheme: (theme: Theme) => void;
 };
 
 // default undefined so the useTheme guard actually catches out-of-provider
@@ -49,6 +50,40 @@ const getSystemTheme = () =>
 
 const resolveTheme = (theme: Theme) =>
   theme === "system" ? getSystemTheme() : theme;
+
+/**
+ * While a whole-page view transition runs, the browser hit-tests every press
+ * to <html>, so a press meant for the theme menu read as an outside click
+ * and closed it. A press during the dissolve ends it and is handed, with its
+ * click, to what is under the pointer.
+ */
+const landPressesDuring = (transition: ViewTransition) => {
+  const root = document.documentElement;
+  const onPointerDown = (press: PointerEvent) => {
+    if (press.target !== root) return;
+    press.stopImmediatePropagation();
+    press.preventDefault();
+    transition.skipTransition();
+    const aimed = document.elementFromPoint(press.clientX, press.clientY);
+    if (!aimed || aimed === root) return;
+    aimed.dispatchEvent(new PointerEvent("pointerdown", press));
+    // the click still goes to <html>, the common ancestor of the press and
+    // its release
+    const forwardClick = (click: MouseEvent) => {
+      if (click.target !== root) return;
+      click.stopImmediatePropagation();
+      aimed.dispatchEvent(new MouseEvent("click", click));
+    };
+    window.addEventListener("click", forwardClick, {
+      capture: true,
+      once: true,
+    });
+  };
+  window.addEventListener("pointerdown", onPointerDown, { capture: true });
+  const done = () =>
+    window.removeEventListener("pointerdown", onPointerDown, { capture: true });
+  transition.finished.then(done, done);
+};
 
 const readInitialTheme = (storageKey: string, defaultTheme: Theme): Theme => {
   try {
@@ -117,7 +152,7 @@ export function ThemeProvider({
   }, [theme]);
 
   const handleSetTheme = useCallback(
-    (newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
+    (newTheme: Theme) => {
       const apply = () => {
         try {
           localStorage.setItem(storageKey, newTheme);
@@ -128,7 +163,6 @@ export function ThemeProvider({
       };
 
       const animate =
-        event &&
         "startViewTransition" in document &&
         !window.matchMedia("(prefers-reduced-motion: reduce)").matches &&
         resolveTheme(theme) !== resolveTheme(newTheme);
@@ -138,24 +172,9 @@ export function ThemeProvider({
         return;
       }
 
-      // percentages, not px: circle() % radii resolve against the snapshot
-      // box diagonal / √2, and Chromium places px clip-paths on the snapshot
-      // unscaled under fractional display scales
-      const { clientX: x, clientY: y } = event;
-      const { innerWidth: w, innerHeight: h } = window;
-      const radius = Math.hypot(Math.max(x, w - x), Math.max(y, h - y));
-
-      const root = document.documentElement;
-      root.style.setProperty(
-        "--theme-wipe-origin",
-        `${(x / w) * 100}% ${(y / h) * 100}%`,
-      );
-      root.style.setProperty(
-        "--theme-wipe-radius",
-        `${(radius / (Math.hypot(w, h) / Math.SQRT2)) * 100}%`,
-      );
-
-      document.startViewTransition(apply);
+      // one synchronous commit, so the new theme's classes are on <html>
+      // before the browser photographs it
+      landPressesDuring(document.startViewTransition(() => flushSync(apply)));
     },
     [storageKey, theme],
   );
