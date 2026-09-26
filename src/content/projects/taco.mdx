@@ -129,7 +129,13 @@ On a visit, the provider first checks `localStorage` for a language picked earli
 
 `navigator.language` returns a tag like `es-MX`. The function keeps the part before the hyphen and uses it if the site has that language, English otherwise. All of this runs in the browser after the page has loaded, which keeps every page static: the HTML is prerendered once and the URLs are the same in every language.
 
-Adding a language takes a JSON file, an import that puts it in the map, and an entry in `languages.ts` with a code, a display name and a flag. The language menu is built from that list, so it needs no change of its own.
+Adding a language takes three steps:
+
+1. A JSON file with every string, in the same shape as `en.json`.
+2. An import that puts it in the map, where the type checks it against English.
+3. An entry in `languages.ts` with a code, a display name and a flag.
+
+The language menu is built from that list, so it needs no change of its own.
 
 <ProjectGallery
   images={[

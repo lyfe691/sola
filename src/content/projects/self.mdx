@@ -42,7 +42,16 @@ Self installs with one line in PowerShell:
 iwr -Uri "https://raw.githubusercontent.com/lyfe691/self/main/install.ps1" -UseBasicParsing | iex
 ```
 
-The script downloads Self into a `self` folder in the user's profile, adds a `self.bat` launcher, puts the folder on the user's `PATH` and installs the Python packages with pip. It needs Python, but no administrator rights. `self --setup` then asks for the display type, the picture or drawing, the colour theme and, for pictures, the size, and saves the answers to `config.json`. `self --update` fetches the latest version and leaves the config, the cache and the user's own pictures alone.
+The script downloads Self into a `self` folder in the user's profile, adds a `self.bat` launcher, puts the folder on the user's `PATH` and installs the Python packages with pip. It needs Python, but no administrator rights. After that, `self` is a command like any other:
+
+| Command               | Does                                                                                                       |
+| --------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `self`                | Prints the picture and the facts                                                                           |
+| `self --setup`        | Asks for the display type, the picture or drawing, the theme and the size, and saves them to `config.json` |
+| `self --image <file>` | Uses another picture, from the `images` folder or any path                                                 |
+| `self --ascii <name>` | Uses a drawing from the `ascii` folder instead of a picture                                                |
+| `self --no-cache`     | Gathers the facts fresh instead of from the five-minute cache                                              |
+| `self --update`       | Fetches the latest version and leaves the config, the cache and your own pictures alone                    |
 
 <ProjectImage
   src="/projects/self/setup.webp"
@@ -97,7 +106,14 @@ Braille mode trades colour for resolution. Unicode's braille block starts at U+2
   lang="python"
 />
 
-The picture is converted to greyscale, a dot is raised where a pixel is darker than 127, and the whole cell takes the average colour of its eight pixels. A braille cell covers four times as many pixels as a block cell, but on a dark terminal the dots trace the dark parts of a picture and most of its colour is lost, which is why the README recommends block mode.
+The picture is converted to greyscale, a dot is raised where a pixel is darker than 127, and the whole cell takes the average colour of its eight pixels. Side by side, the two modes trade the same things:
+
+| Mode    | Pixels per character       | Colour                                  |
+| ------- | -------------------------- | --------------------------------------- |
+| Block   | 2, one above the other     | Every pixel keeps its own colour        |
+| Braille | 8, as dots on a 2 × 4 grid | One colour per cell, each dot on or off |
+
+On a dark terminal the braille dots trace the dark parts of a picture and most of its colour is lost, which is why the README recommends block mode.
 
 ### A five-minute cache for the facts
 

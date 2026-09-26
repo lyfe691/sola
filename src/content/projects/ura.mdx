@@ -14,7 +14,15 @@ A rider looks at the phone for a second at a time, at a junction, often in the d
 
 ## One answer at the top of the screen
 
-The line at the top answers the question a rider has at a junction. On a route, it shows a green dot and the route's name. Off a route, it turns amber and shows how far away the nearest one is, with an arrow pointing back to it. Far from any route, or outside Finland, it says that instead. The screen stays on while Ura follows you, so a quick look doesn't mean unlocking the phone with gloves on.
+The line at the top answers the question a rider has at a junction:
+
+| Where you are                          | The line shows                                                    |
+| -------------------------------------- | ----------------------------------------------------------------- |
+| On a route                             | A green dot and the route's name                                  |
+| Off a route                            | Amber, how far away the nearest route is, and an arrow back to it |
+| Far from any route, or outside Finland | A note that says so                                               |
+
+The screen stays on while Ura follows you, so a quick look doesn't mean unlocking the phone with gloves on.
 
 <ProjectGallery
   images={[
@@ -36,7 +44,11 @@ The line at the top answers the question a rider has at a junction. On a route, 
 
 ## A verdict that holds still
 
-A phone's GPS position drifts, more so under trees, and a plain distance check would flip between on and off route every few seconds near a junction. Ura only calls you off a route once you've been clearly away from it for ten seconds. Coming back counts straight away: the moment you're on the route again, the line turns green and names it. Where two routes run side by side, it keeps the name of the one you're on instead of swapping between them.
+A phone's GPS position drifts, more so under trees, and a plain distance check would flip between on and off route every few seconds near a junction. So Ura treats the two directions differently:
+
+- **Leaving takes ten seconds.** Ura only calls you off a route once you've been clearly away from it for that long.
+- **Coming back is immediate.** The moment you're on the route again, the line turns green and names it.
+- **Parallel routes keep their name.** Where two routes run side by side, the line stays with the one you're on instead of swapping between them.
 
 <IPhone
   src="/projects/ura/ride-back.webp"

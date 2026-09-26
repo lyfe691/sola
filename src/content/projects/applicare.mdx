@@ -26,7 +26,16 @@ An application moves from applied through interviews to an offer, and ends accep
 
 ## The dashboard
 
-The dashboard sums up the search in four numbers: all applications, the ones in screening or interviews, the success rate, and the ones still open. Below them, a chart counts applications over time and a breakdown shows the share in each status. The Tasks tab sits next to the overview.
+The dashboard sums up the search in four numbers:
+
+| Number       | Counts                                           |
+| ------------ | ------------------------------------------------ |
+| Applications | Every application sent                           |
+| In progress  | The ones in screening or interviews              |
+| Success rate | Accepted applications, as a share of all of them |
+| Open         | Everything that isn't accepted or rejected yet   |
+
+Below them, a chart counts applications over time and a breakdown shows the share in each status. The Tasks tab sits next to the overview.
 
 <ProjectImage
   src="/projects/applicare/dashboard.webp"
@@ -53,7 +62,12 @@ The client is React on Vite with Ant Design components, and it talks to the API 
 
 ### A status has its own endpoint
 
-On the server the status is a plain string on the `JobApplication` document, and the list of stages lives in the client, so adding a stage is a change to the frontend alone. Changing a status goes through its own endpoint: the dropdown sends `PATCH /api/applications/{id}/status?status=OFFER`, which sets the status and `lastUpdated` and leaves every other field as it is. Editing the whole application goes through `PUT`, which replaces the document.
+On the server the status is a plain string on the `JobApplication` document, and the list of stages lives in the client, so adding a stage is a change to the frontend alone. Changing a status goes through its own endpoint, apart from editing the application:
+
+| Request                                            | Sent by             | Changes                                    |
+| -------------------------------------------------- | ------------------- | ------------------------------------------ |
+| `PATCH /api/applications/{id}/status?status=OFFER` | The status dropdown | The status and `lastUpdated`, nothing else |
+| `PUT /api/applications/{id}`                       | The edit form       | The whole application                      |
 
 The dashboard reads the same field in groups. Accepted and Rejected are final, so every other stage counts as open. Screening and Interviewing count as in progress, and the success rate is accepted applications over all of them. The browser works all of this out in a `useMemo` over the list the API returns, and a second one turns the applied dates into the running total behind the chart.
 

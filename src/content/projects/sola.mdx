@@ -104,7 +104,22 @@ A Show git diff switch in the menu brings the same history to any page: it swaps
 
 ## Getting around
 
-⌘K, or Ctrl+K, opens a palette for moving around from the keyboard: it goes to any page, switches the theme, language or background, and turns on the git diff. The whole site is translated, and it opens in the language the browser asks for. An address that doesn't exist lands in a small terminal, which answers with git's error for a missing path and a hint for the way home.
+⌘K, or Ctrl+K, opens a palette that searches everything on the site in the current language:
+
+- **Pages and projects**, with a live preview of the page or its header beside the list.
+- **Every section of every project article**, so a result lands on the heading it matched.
+- **Skills, roles, certifications and services**, with the details of each.
+- **Themes, languages and backgrounds**, each previewed before you pick it.
+
+<ProjectImage
+  src="/projects/sola/palette.webp"
+  video="/projects/sola/palette.mp4"
+  alt="The palette open over the home page: typing watch together finds two sections of the Kinoa article and the Kinoa project, with Kinoa's header previewed beside the list, and typing sakura finds the theme, previewed as a small page in its pinks"
+  caption="Searching the site, then a theme."
+  size="full"
+/>
+
+The whole site is translated, and it opens in the language the browser asks for. An address that doesn't exist lands in a small terminal, which answers with git's error for a missing path and a hint for the way home.
 
 <ProjectImage
   src="/projects/sola/home-ja.webp"
@@ -121,7 +136,13 @@ Sola is a React app in TypeScript, built with Vite, styled with Tailwind CSS and
 
 Every entrance on the site is a fade, and each one used to start from opacity 0. Chrome's Largest Contentful Paint (LCP), the moment the largest piece of content on screen counts as drawn, skips anything painted at opacity 0, and a fade runs on the compositor without painting again. So a block counted only once its fade had finished, and every page's LCP carried a 0.7-second glide. In a Chrome trace with the CPU slowed four times, the contact page's subtitle started its reveal at 941 ms and counted at 1536 ms.
 
-Entrances now start at 0.001, which is less than one step of an 8-bit colour channel even on white. Nothing looks different, but the browser counts the paint as soon as the fade begins. In the same trace, the projects page counted at 1136 ms instead of 2764 ms and the home page at 1120 ms instead of 2032 ms.
+Entrances now start at 0.001, which is less than one step of an 8-bit colour channel even on white. Nothing looks different, but the browser counts the paint as soon as the fade begins. In the same trace:
+
+| Page     | Largest paint counted, before | After   |
+| -------- | ----------------------------- | ------- |
+| Contact  | 1536 ms                       | 804 ms  |
+| Projects | 2764 ms                       | 1136 ms |
+| Home     | 2032 ms                       | 1120 ms |
 
 ### One list of routes
 

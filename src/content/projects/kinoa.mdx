@@ -1,8 +1,10 @@
 # Free films and series, and a place to watch them together
 
-[Kinoa](https://kinoa.to) is a free site for watching films and series, with a social side built around the player: profiles, a feed, comments, messages and rooms for watching together. Around 10,000 people use it each month, and about a thousand of them have an account.
+[Kinoa](https://kinoa.to) is a free site for watching films and series, with a social side built around the player: profiles, a feed, comments, messages and rooms for watching together. It started as a search box and a player, and everything else came one release at a time.
 
-It started in November 2025 as a search box and a player. Everything below was added since, one release at a time.
+| People a month | Accounts     | Online since  |
+| -------------- | ------------ | ------------- |
+| Around 10,000  | Around 1,000 | November 2025 |
 
 <Safari
   url="kinoa.to"
@@ -59,7 +61,11 @@ Kinoa remembers where you stopped. Continue Watching brings you back to the same
 
 ## Watching together
 
-A room is a link. The host picks a title and shares the room, and everyone who joins watches the same moment, with a chat beside the player. When the host pauses, skips ahead or switches episode, the room follows. Hosts can hand hosting to someone else, remove people and ban them, and each room can be listed in the public directory or kept to the people who have the link.
+A room is a link. The host picks a title and shares the room, and everyone who joins watches the same moment, with a chat beside the player. When the host pauses, skips ahead or switches episode, the room follows. The host also runs the room:
+
+- **Handing over.** Hosting can pass to anyone else in the room, and if the host's tab closes, the room gives it to someone who's still there.
+- **Moderation.** The host can remove people and ban them from coming back.
+- **Visibility.** A room can be listed in the public directory or kept to the people who have the link.
 
 <ProjectImage
   src="/projects/kinoa/watch-together.webp"
@@ -71,9 +77,12 @@ A room is a link. The host picks a title and shares the room, and everyone who j
 
 ## Profiles, the feed and messages
 
-Every account gets a handle and a public page at kinoa.to/@name, with favorites, a watchlist and what was watched recently. One switch makes the whole profile private. People follow each other, like titles and comment on them, and the feed shows comments, favorites and follows from everyone on Kinoa, newest first.
+Around the player sits a small social network:
 
-Direct messages have reactions, editing and deleting, and blocking and reporting. A notification bell collects replies, mentions, likes and follows as they happen, and says when a title you follow comes out.
+- **Profiles.** Every account gets a handle and a public page at kinoa.to/@name, with favorites, a watchlist and what was watched recently. One switch makes the whole profile private.
+- **The feed.** People follow each other, like titles and comment on them, and the feed shows comments, favorites and follows from everyone on Kinoa, newest first.
+- **Messages.** Direct messages have reactions, editing and deleting, and blocking and reporting.
+- **Notifications.** A bell collects replies, mentions, likes and follows as they happen, and says when a title you follow comes out.
 
 <ProjectImage
   src="/projects/kinoa/profile.webp"
@@ -106,7 +115,14 @@ Kinoa picks the visitor's language from the browser, and every part of the inter
 
 ## Design and motion
 
-Kinoa uses a warm palette of cream and espresso with a caramel accent, in a light and a dark theme that follow the system unless you pick one. It moves in small ways that confirm what happened. Pages stream in and reveal each part where its placeholder stood, the sidebar glides open and closed, a rejected form shakes the field that's wrong, and dialogs change size smoothly instead of jumping. All of it steps back for visitors who ask their system for reduced motion. Kinoa also installs as an app, from the browser on a computer or Android, or with a short guide on an iPhone.
+Kinoa uses a warm palette of cream and espresso with a caramel accent, in a light and a dark theme that follow the system unless you pick one. It moves in small ways that confirm what happened:
+
+- Pages stream in, and each part appears where its placeholder stood.
+- The sidebar glides open and closed.
+- A rejected form shakes the field that's wrong.
+- Dialogs change size smoothly instead of jumping.
+
+All of it steps back for visitors who ask their system for reduced motion. Kinoa also installs as an app, from the browser on a computer or Android, or with a short guide on an iPhone.
 
 <Safari
   url="kinoa.to"
@@ -158,11 +174,22 @@ Reloads cost a buffer, so a guest only reloads after drifting several seconds fo
 
 ### Rules the database enforces
 
-Only the host can steer a room. That rule is a row-level security policy on the room's control channel rather than a check in the app, so it holds for any client, and an integration test signs in as a guest, sends every control command and checks that the host receives none of them. Handles work the same way: they're claimed through one database function that owns every rule, from length and reserved names to moderation, and a unique index settles two people claiming the same name at once.
+Two rules live in the database rather than the app, so they hold for any client:
+
+- **Only the host steers a room.** It's a row-level security policy on the room's control channel. An integration test signs in as a guest, sends every control command and checks that the host receives none of them.
+- **Handles are claimed in one place.** One database function owns every rule, from length and reserved names to moderation, and a unique index settles two people claiming the same name at once.
 
 ### Fewer round trips
 
-Checking who is signed in goes over the network to Supabase Auth, and a movie page used to do it three times in one render, the feed page four. The session helpers now share one cached result per render, so it happens once. A watchlist row now carries the title, poster and backdrop it's drawn with, so a long list renders from one query instead of fetching every title from TMDB. And the version check every open tab makes every five minutes is answered from Vercel's edge cache instead of running a function each time.
+Three costs ran far more often than they needed to:
+
+| Work                                                  | Before                                                  | After                                         |
+| ----------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------- |
+| Checking who is signed in                             | 3 calls to Supabase Auth on a movie page, 4 on the feed | 1 per render, shared by every helper          |
+| Drawing a watchlist                                   | A TMDB request for every title on it                    | One database query: each row carries its card |
+| The version check each open tab makes every 5 minutes | A serverless function each time                         | Vercel's edge cache                           |
+
+Checking a session isn't a local decode: it goes over the network, which is why doing it once per render mattered.
 
 ### Keeping the translations complete
 

@@ -89,7 +89,16 @@ The site is a Next.js app with shadcn/ui on Radix and Tailwind. [qr-code-styling
 
 A QR code stores its data together with Reed–Solomon error-correction codewords, at one of four levels: L can restore about 7% of the codewords, M 15%, Q 25% and H 30%. A logo spends that allowance. qr-code-styling multiplies the size setting by the level's percentage and by the number of modules in the code, and treats the result as the most modules the logo may cover. It then clears the largest block under that number, an odd count across so it sits in the middle, and fits the logo into it.
 
-The level also changes the code itself. `https://ysz.life` is 16 bytes. At H it needs a version 3 symbol of 29 × 29 modules, and at the default size setting of 0.35 the logo gets 9 × 9 of them. Q and M fit in version 2 (25 × 25) with 7 × 7 and 5 × 5, and L drops to version 1 (21 × 21) with 3 × 3. All four decoded in the Scan Test, because a lower level shrinks the logo to fit the smaller budget.
+The level also changes the code itself. For `https://ysz.life`, 16 bytes, at the default size setting of 0.35:
+
+| Level | Recovers  | Symbol             | Room for the logo |
+| ----- | --------- | ------------------ | ----------------- |
+| L     | About 7%  | Version 1, 21 × 21 | 3 × 3 modules     |
+| M     | About 15% | Version 2, 25 × 25 | 5 × 5 modules     |
+| Q     | About 25% | Version 2, 25 × 25 | 7 × 7 modules     |
+| H     | About 30% | Version 3, 29 × 29 | 9 × 9 modules     |
+
+All four decoded in the Scan Test, because a lower level shrinks the logo to fit the smaller budget.
 
 <ProjectImage
   src="/projects/qr/error-correction-levels.webp"
@@ -119,7 +128,17 @@ A logo that small defeats the purpose of adding one, so loading an image raises 
 
 ### Which colours still scan
 
-Colour gets no such budget. qr-code-styling draws whatever it is given, and a scanner needs contrast between the modules and the background. I exported variations of the default code and ran each through the Scan Test. Navy on white passed, and so did a transparent background and white on navy. A grey foreground on white passed down to `#888888` and failed from `#999999` on. Yellow `#ffd400` failed, and so did a gradient from navy to a pale lavender, `#e0e0ff`, although the corner squares stayed navy.
+Colour gets no such budget. qr-code-styling draws whatever it is given, and a scanner needs contrast between the modules and the background. I exported variations of the default code and ran each through the Scan Test:
+
+| Code                                                                | Scan Test |
+| ------------------------------------------------------------------- | --------- |
+| Navy on white, the default                                          | Passes    |
+| Navy on a transparent background                                    | Passes    |
+| White on navy                                                       | Passes    |
+| Grey `#888888` on white                                             | Passes    |
+| Grey `#999999` on white, and anything lighter                       | Fails     |
+| Yellow `#ffd400` on white                                           | Fails     |
+| A gradient from navy to pale lavender `#e0e0ff`, corners still navy | Fails     |
 
 The decoder is qr-scanner, which is built on jsQR, a JavaScript port of Google's ZXing library. It runs in a Web Worker, or uses the browser's own `BarcodeDetector` where one exists, and the dialog imports it on the first scan, so it adds nothing to the page until someone uses it. A pass is still one decoder's result, and phone cameras differ, so a code that fails here needs more contrast before it goes to print.
 

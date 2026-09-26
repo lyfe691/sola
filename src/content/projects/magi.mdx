@@ -12,9 +12,27 @@ magi is a command-line port scanner I wrote in Rust. It does connect scanning: e
 
 ## Scanning a host
 
-You give magi a target and it probes the ports you ask for, 1 to 1024 unless you say otherwise. The target can be a hostname, an IP address or a whole subnet in CIDR notation, and ports can be single numbers, ranges or a mix. Open ports are listed under their host with the usual service name, and `--banner` adds the first line each service sends back, such as an SSH server's version. While a longer scan runs, a counter shows how many ports have been probed and how many are open.
+You give magi a target and the ports to probe. Open ports are listed under their host with the usual service name, and while a longer scan runs, a counter shows how many ports have been probed and how many are open. The run above is against 45.33.32.156, scanme.nmap.org, a host the Nmap project keeps up for testing scanners, and it took about a second.
 
-The run above is against 45.33.32.156, scanme.nmap.org, a host the Nmap project keeps up for testing scanners, and it took about a second. Flags set how many probes run at once (512 by default), how long each one waits for an answer, and an optional cap on how many start per second. A subnet larger than a /16 is refused, so a mistyped prefix can't turn into millions of probes.
+The target can take three forms:
+
+| Target           | Example           | What magi does                                 |
+| ---------------- | ----------------- | ---------------------------------------------- |
+| A hostname       | `scanme.nmap.org` | Resolves it and scans every address it returns |
+| An IP address    | `45.33.32.156`    | Scans that address, with no DNS lookup         |
+| A subnet in CIDR | `192.168.1.0/24`  | Scans every host in it, up to a /16            |
+
+The /16 limit is there so a mistyped prefix can't turn into millions of probes. Everything else is a flag:
+
+| Flag                  | What it sets                                   | Default  |
+| --------------------- | ---------------------------------------------- | -------- |
+| `-p`, `--ports`       | Ports to probe, as a list, a range or a mix    | `1-1024` |
+| `-c`, `--concurrency` | Probes in flight at once                       | 512      |
+| `-t`, `--timeout`     | How long each probe waits for an answer, in ms | 1000     |
+| `-r`, `--rate`        | Most probes started per second                 | No cap   |
+| `-b`, `--banner`      | Read the first line each open service sends    | Off      |
+| `-u`, `--udp`         | Probe UDP instead of TCP                       | TCP      |
+| `-j`, `--json`        | Print the results as JSON                      | A table  |
 
 <CodeBlock
   code={`magi 192.168.1.0/24 --ports 22,80,443      # a whole subnet, grouped by host
@@ -39,7 +57,15 @@ Everything meant for a person goes to stderr: the line that opens the scan, the 
 
 ## UDP
 
-`--udp` probes UDP instead. UDP has no handshake, so magi reads the verdict from how the host reacts to an empty datagram: a reply means open, an ICMP port-unreachable means closed, and silence until the timeout means `open|filtered`. An open service that ignores an empty datagram and a firewall that drops it look the same from outside, and magi says so instead of picking one. In this run 53 and 161 came back closed and are left out, while 123 stayed silent for the whole second.
+`--udp` probes UDP instead. UDP has no handshake, so magi sends an empty datagram and reads the verdict from how the host reacts:
+
+| The host…                             | magi reports                    |
+| ------------------------------------- | ------------------------------- |
+| Replies                               | `open`                          |
+| Answers with an ICMP port-unreachable | Closed, and leaves the port out |
+| Stays silent until the timeout        | `open\|filtered`                |
+
+Silence is ambiguous: an open service that ignores an empty datagram and a firewall that drops it look the same from outside, so magi doesn't pick one. In this run 53 and 161 came back closed and are left out, while 123 stayed silent for the whole second.
 
 <ProjectImage
   src="/projects/magi/udp.webp"
@@ -51,7 +77,16 @@ Everything meant for a person goes to stderr: the line that opens the scan, the 
 
 ## Ports it couldn't test
 
-When a probe can't run at all, magi doesn't count the port as closed. It counts it as untested and ends the scan with a warning that says how many there were and why. scanme.nmap.org has an IPv4 and an IPv6 address, and magi scans every address a name resolves to. On a network without IPv6 routing, the connections to the IPv6 address fail with "network unreachable" before anything is sent, so the three ports there are reported as untested. When the cause is running out of file descriptors, the warning says to lower `--concurrency` or raise the open-file limit.
+A TCP probe can end four ways, and only two of them say anything about the port:
+
+| The connection…                                       | magi counts the port as | Why                                       |
+| ----------------------------------------------------- | ----------------------- | ----------------------------------------- |
+| Completes                                             | Open                    | Something is listening                    |
+| Is refused, or times out                              | Not open                | The host answered no, or nothing answered |
+| Fails because the process ran out of file descriptors | Untested                | The probe never ran                       |
+| Fails for any other reason                            | Untested                | Nothing reached the port                  |
+
+Untested ports aren't folded into the closed count. The scan ends with a warning that says how many there were and why, and when the cause is running out of file descriptors it says to lower `--concurrency` or raise the open-file limit. In the clip below, scanme.nmap.org resolves to an IPv4 and an IPv6 address. On a network without IPv6 routing, the connections to the IPv6 address fail with "network unreachable" before anything is sent, so its three ports are reported as untested.
 
 <ProjectImage
   src="/projects/magi/untestable.webp"
@@ -63,7 +98,15 @@ When a probe can't run at all, magi doesn't count the port as closed. It counts 
 
 ## Installing it
 
-Release builds cover Linux and macOS on x86-64 and arm64, and Windows on x86-64, and each installs with one command that puts `magi` on your `PATH`. [magi.ysz.life](https://magi.ysz.life) leads with that command for the visitor's platform, PowerShell on Windows and a shell script everywhere else, with a menu to switch. With a stable Rust toolchain it also builds from a checkout, with `cargo install --path .`
+Each release installs with one command that puts `magi` on your `PATH`:
+
+| Platform | Builds        | Installer         |
+| -------- | ------------- | ----------------- |
+| Linux    | x86-64, arm64 | Shell script      |
+| macOS    | x86-64, arm64 | Shell script      |
+| Windows  | x86-64        | PowerShell script |
+
+[magi.ysz.life](https://magi.ysz.life) leads with the command for the visitor's platform, with a menu to switch. With a stable Rust toolchain it also builds from a checkout, with `cargo install --path .`
 
 <Safari
   url="magi.ysz.life"
@@ -121,7 +164,7 @@ The optional rate cap is a tokio interval ticked before each spawn. The semaphor
 
 ### Telling closed from untested
 
-A TCP connect settles the question in two cases: it completes and the port is open, or the host refuses it and the port is closed. A connect that times out also counts as not open, since no reply came back. Every other error says nothing about the port, and it's sorted into one of two untested kinds:
+The table under "Ports it couldn't test" is one function. It sorts the error from a failed connect, and anything that isn't a refusal or a timeout becomes one of two untested kinds:
 
 <CodeBlock
   code={`fn classify_connect_error(e: &io::Error) -> ProbeOutcome {

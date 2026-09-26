@@ -26,7 +26,11 @@ Each chat keeps its own model, so one conversation can run on Claude and the nex
 
 ## Asking
 
-The input takes text, images and files such as PDFs, CSVs and Markdown, pasted, dropped onto it or picked from the plus menu. The same menu sets a mode for the next message. Create image asks the model to answer with a picture, Web search has it look things up and cite its sources, and Study and learn asks for structured teaching with worked examples.
+The input takes text, images and files such as PDFs, CSVs and Markdown, pasted, dropped onto it or picked from the plus menu. The same menu sets a mode for the next message:
+
+- **Create image** asks the model to answer with a picture.
+- **Web search** has it look things up and cite its sources.
+- **Study and learn** asks for structured teaching with worked examples.
 
 <ProjectImage
   src="/projects/luma/modes.webp"
@@ -60,7 +64,17 @@ Replies stream in as Markdown. Code blocks are highlighted and carry copy and do
 
 Nothing in a conversation is overwritten. Editing a message you sent adds a new version next to the old one, with a fresh reply under it, and arrows under the message flip between the versions. Retrying an answer does the same on the reply side, and the retry menu can send the question to another model, so two models' answers to the same message sit one arrow apart.
 
-New chats are titled by a small, cheap model on one of your keys. The sidebar lists them with the pinned ones first, and each can be pinned, renamed or deleted from there. Ctrl+K searches every chat, grouped by date, and the other common actions have shortcuts too: a new chat, the file picker, the model picker, the sidebar. Settings can export all your chats as a download, or delete them.
+New chats are titled by a small, cheap model on one of your keys. The sidebar lists them with the pinned ones first, and each can be pinned, renamed or deleted from there. Settings can export all your chats as a download, or delete them. The common actions have shortcuts, with Ctrl on Windows and ⌘ on a Mac:
+
+| Shortcut             | Does                               |
+| -------------------- | ---------------------------------- |
+| Ctrl K               | Search every chat, grouped by date |
+| Ctrl Shift O         | Start a new chat                   |
+| Ctrl M               | Open the model picker              |
+| Ctrl U               | Attach a file                      |
+| Ctrl Shift S         | Show or hide the sidebar           |
+| Shift Esc            | Jump to the message input          |
+| Ctrl Shift Backspace | Delete the open chat               |
 
 ## Your API keys
 
@@ -142,7 +156,13 @@ A key is encrypted with AES-256-GCM under a fresh random IV and stored as IV, ci
 
 ### What goes back to the model
 
-A stored reply keeps everything the screen shows: reasoning, text, tool calls and their results. The history sent with the next request is rebuilt from the tree on the server, and three things are stripped from it first. A generated image is swapped for the text `[image was generated]`, because the base64 would otherwise ride along with every later request. Reasoning stays on screen but is never replayed, since OpenAI's Responses API can reject reasoning items from history. Provider metadata is deleted, which also keeps a thread usable when the next turn goes to a different provider.
+A stored reply keeps everything the screen shows: reasoning, text, tool calls and their results. The history sent with the next request is rebuilt from the tree on the server, and three things are stripped from it first:
+
+| Part of the reply | Sent back as                     | Why                                                                                     |
+| ----------------- | -------------------------------- | --------------------------------------------------------------------------------------- |
+| A generated image | The text `[image was generated]` | The base64 would otherwise ride along with every later request                          |
+| Reasoning         | Nothing, it stays on screen only | OpenAI's Responses API can reject reasoning items replayed from history                 |
+| Provider metadata | Nothing                          | It points at one provider's earlier responses, so a thread can switch providers mid-way |
 
 Attachments stay in a private bucket, and each request signs fresh links to them that expire after ten minutes.
 

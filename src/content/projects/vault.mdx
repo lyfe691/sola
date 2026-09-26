@@ -36,7 +36,13 @@ After signing in, the frontend calls the backend's `/me`. The cookie is `HttpOnl
 
 ## The API decides
 
-The buttons only mirror the roles. Every protected route in the API depends on `verify_token`, which reads the token from an `Authorization: Bearer` header or, when there is none, from the cookie. A missing, expired or forged token gets a 401. A valid token without the right role gets a 403 from a second dependency, `require_roles`, which looks for the role in the token's `realm_access.roles` claim. `/admin` and `/user` each require their role, and `/me` needs only a valid token.
+The buttons only mirror the roles. Every protected route in the API depends on `verify_token`, which reads the token from an `Authorization: Bearer` header or, when there is none, from the cookie. A missing, expired or forged token gets a 401. A valid token without the right role gets a 403 from a second dependency, `require_roles`, which looks for the role in the token's `realm_access.roles` claim:
+
+| Route    | Needs            | Without it |
+| -------- | ---------------- | ---------- |
+| `/me`    | Any valid token  | 401        |
+| `/user`  | The `user` role  | 403        |
+| `/admin` | The `admin` role | 403        |
 
 <ProjectImage
   src="/projects/vault/api.webp"
@@ -48,7 +54,14 @@ The buttons only mirror the roles. Every protected route in the API depends on `
 
 ## Keycloak, configured by Terraform
 
-Docker Compose runs Keycloak 26.2 in development mode, with a PostgreSQL 16 database for its state. Keycloak's admin console can click together a realm, a client, two roles and a user in a few minutes, but it keeps no record of how it got there. In Vault that configuration lives in `terraform/main.tf`: the `vault-core` realm, the `admin` and `user` realm roles, a `demo` user holding both, and the `vault-app` client. A changed setting shows up in a diff, and `terraform apply` brings the realm back to exactly what the file describes.
+Docker Compose runs Keycloak 26.2 in development mode, with a PostgreSQL 16 database for its state. Keycloak's admin console can click together a realm, a client, two roles and a user in a few minutes, but it keeps no record of how it got there. In Vault that configuration lives in `terraform/main.tf`:
+
+- **The realm**, `vault-core`, that everything else lives in.
+- **Two realm roles**, `admin` and `user`.
+- **A demo user**, `demo`, holding both.
+- **The client**, `vault-app`, the app signs in through.
+
+A changed setting shows up in a diff, and `terraform apply` brings the realm back to exactly what the file describes.
 
 <ProjectImage
   src="/projects/vault/terraform-apply.webp"

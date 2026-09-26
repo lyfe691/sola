@@ -42,7 +42,11 @@ Thoughts is a Next.js app on Vercel. The posts are compiled from MDX and rendere
 
 ### Signing the guestbook
 
-A `POST` to `/api/guestbook` runs its checks in order and writes only if all of them pass. The form has a hidden `website` field that a person never sees and a form-filling bot usually does: any value in it gets the request rejected. The message is trimmed and has to be between 1 and 280 characters, and the name is cut to 50. Then the route looks up the latest entry from the same sender and answers 429 if it is less than 30 seconds old.
+A `POST` to `/api/guestbook` runs three checks in order and writes only if all of them pass:
+
+1. **The hidden field is empty.** The form has a `website` field a person never sees and a form-filling bot usually does, and any value in it gets the request rejected.
+2. **The message fits.** It's trimmed and has to be between 1 and 280 characters, and the name is cut to 50.
+3. **The sender isn't rushing.** The route looks up the latest entry from the same sender and answers 429 if it's less than 30 seconds old.
 
 A sender is identified by a SHA-256 hash of the client's address, taken from the first entry in `x-forwarded-for`, and the hash is all the table keeps. It is enough to recognise the same sender twice, which is what the rate limit and the delete check below need.
 
@@ -98,7 +102,15 @@ This is abridged: the real handler has a second branch that keeps entries in an 
 
 ### Moderation
 
-Every row carries two flags, `approved` and `rejected`, and the public list returns only rows that are approved and not rejected. Whether a new entry is approved on arrival comes from one environment variable, which defaults to yes. With it off, new entries wait in a queue, and the visitor sees a note that theirs is pending instead of seeing it at the top of the list.
+Every row carries two flags, and together they decide where an entry is:
+
+| `approved` | `rejected` | The entry                      |
+| ---------- | ---------- | ------------------------------ |
+| Yes        | No         | Shows in the public list       |
+| No         | No         | Waits in the admin queue       |
+| Either     | Yes        | Is hidden, and the row is kept |
+
+Whether a new entry is approved on arrival comes from one environment variable, which defaults to yes. With it off, new entries wait in the queue, and the visitor sees a note that theirs is pending instead of seeing it at the top of the list.
 
 The queue is a token-protected admin page. It lists pending entries oldest first, each with an approve and a reject button, and a second view lists the approved ones with a delete button. Rejecting an entry sets its flag and keeps the row. The rate limit reads every row from a sender, so a rejected entry still counts toward that sender's 30 seconds.
 

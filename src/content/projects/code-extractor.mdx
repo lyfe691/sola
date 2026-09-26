@@ -84,7 +84,16 @@ Back in the popup, `DOMParser` turns the HTML into a document that stays inert: 
   lang="js"
 />
 
-Every reference is resolved against the tab's address first, so a root-relative `/css/site.css`, a relative `../img/logo.png` and a protocol-relative `//cdn.example.com/lib.js` all become full URLs. The hostname and path of that URL then do two jobs: they are the file's path inside the archive, and they replace the attribute's value in the HTML. The saved `index.html` sits at the top of the site's folder, so the new relative path leads to the saved file. Query strings are dropped along the way, since a cache-busting `?v=3` is not part of a file name.
+Every reference is resolved against the tab's address first, so every form becomes a full URL. The hostname and path of that URL then do two jobs: they are the file's path inside the archive, and they replace the attribute's value in the HTML. For a page at `https://example.com/blog/post.html`:
+
+| Written in the page        | Resolved to                        | Saved and linked as        |
+| -------------------------- | ---------------------------------- | -------------------------- |
+| `/css/site.css`            | `https://example.com/css/site.css` | `example.com/css/site.css` |
+| `../img/logo.png`          | `https://example.com/img/logo.png` | `example.com/img/logo.png` |
+| `//cdn.example.com/lib.js` | `https://cdn.example.com/lib.js`   | `cdn.example.com/lib.js`   |
+| `/app.js?v=3`              | `https://example.com/app.js?v=3`   | `example.com/app.js`       |
+
+The saved `index.html` sits at the top of the site's folder, so the new relative path leads to the saved file. Query strings are dropped along the way, since a cache-busting `?v=3` is not part of a file name.
 
 Two tags from htmx.org as the server sent them, then as they read in the saved `index.html`, where `XMLSerializer` writes them back in XHTML style:
 
@@ -98,7 +107,16 @@ Two tags from htmx.org as the server sent them, then as they read in the saved `
 
 ### Fetching from other servers
 
-Fetching a stylesheet from another server is what CORS stops an ordinary web page from doing. Extension pages are exempt for the hosts listed in the manifest's `host_permissions`, so the manifest asks for all `http` and `https` hosts next to `activeTab`, `scripting` and `downloads`. Chrome presents that at install time as permission to read and change data on every website, which is broad. The extension uses it for one thing: fetching, from the popup and only after a click, the files the open page already references.
+Fetching a stylesheet from another server is what CORS stops an ordinary web page from doing. Extension pages are exempt for the hosts listed in the manifest's `host_permissions`, and the manifest asks for four things:
+
+| Permission                     | Used for                                                   |
+| ------------------------------ | ---------------------------------------------------------- |
+| `activeTab`                    | Reaching the open tab, and only after the click            |
+| `scripting`                    | Running the function that reads its HTML                   |
+| `downloads`                    | Saving the ZIP                                             |
+| `http://*/*` and `https://*/*` | Fetching the page's files from whichever server holds them |
+
+Chrome presents the last one at install time as permission to read and change data on every website, which is broad. The extension uses it for one thing: fetching, from the popup and only after a click, the files the open page already references.
 
 The popup fetches them all at once with `Promise.all`. A fetch that fails is logged and skipped, so one missing image doesn't cost the whole archive. JSZip then builds the file, and `chrome.downloads.download` saves it, asking where first.
 
