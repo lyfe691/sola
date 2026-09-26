@@ -197,11 +197,12 @@ const ProjectDeepDiveRenderer = () => {
   const reducedMotion = useReducedMotion();
   const landedOn = useRef<string | undefined>(undefined);
   useEffect(() => {
-    if (!mdxReady || !hash) return;
-    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
-    if (!target) return;
+    if (!mdxReady) return;
     const opening = landedOn.current !== slug;
     landedOn.current = slug;
+    if (!hash) return;
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (!target) return;
     scrollToTarget(target, { immediate: opening || !!reducedMotion });
   }, [mdxReady, hash, slug, reducedMotion]);
 
