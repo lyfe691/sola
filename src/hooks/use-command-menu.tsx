@@ -9,9 +9,15 @@
 import { create } from "zustand";
 import { useEffect } from "react";
 
+/** what the palette searches when it opens: everything, or projects only */
+export type CommandMenuScope = "all" | "projects";
+
 interface CommandMenuState {
   isOpen: boolean;
+  scope: CommandMenuScope;
   toggleCommandMenu: () => void;
+  /** open searching `scope`; a project page opens it on projects */
+  openCommandMenu: (scope: CommandMenuScope) => void;
   closeCommandMenu: () => void;
 }
 
@@ -24,7 +30,10 @@ export const loadCommandMenu = () => import("@/components/Command");
 
 export const useCommandMenu = create<CommandMenuState>((set) => ({
   isOpen: false,
-  toggleCommandMenu: () => set((state) => ({ isOpen: !state.isOpen })),
+  scope: "all",
+  toggleCommandMenu: () =>
+    set((state) => ({ isOpen: !state.isOpen, scope: "all" })),
+  openCommandMenu: (scope) => set({ isOpen: true, scope }),
   closeCommandMenu: () => set({ isOpen: false }),
 }));
 

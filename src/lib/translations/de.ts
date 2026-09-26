@@ -107,6 +107,8 @@ export const de = {
     },
     none: "Keiner",
     search: "Suche",
+    searchSite: "Website durchsuchen…",
+    searchProjects: "Projekte durchsuchen…",
     copied: "Kopiert.",
     copyCode: "Code kopieren",
     copyFailed: "Kopieren fehlgeschlagen.",

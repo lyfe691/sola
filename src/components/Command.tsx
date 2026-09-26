@@ -7,14 +7,13 @@
  */
 
 import { useMemo, useState, type ReactNode } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { SearchRemoveIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Command,
   CommandDialog,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
@@ -41,6 +40,7 @@ import type { Translation } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { ResultRow } from "./command-palette/results";
 import { ResultPreview } from "./command-palette/preview";
+import { PaletteInput } from "./command-palette/palette-input";
 import {
   useSiteSearch,
   type GroupKind,
@@ -122,7 +122,14 @@ function Palette({ mobile }: { mobile: boolean }) {
   const { theme, setTheme } = useTheme();
   const { language, setLanguage } = useLanguage();
   const t = useTranslation();
-  const { closeCommandMenu } = useCommandMenu();
+  const { closeCommandMenu, scope: openedWith } = useCommandMenu();
+  // the scope it opened with; clearing it widens this open to the whole site
+  const [scope, setScope] = useState(openedWith);
+  const { pathname } = useLocation();
+  const currentProjectId = PROJECTS.find(
+    (project) =>
+      project.slug && pathname.startsWith(`/projects/${project.slug}`),
+  )?.id;
   const { active: codeView, setActive: setCodeView } = useCodeView();
   const { active: activeBackground, setActive: setBackground } =
     useBackground();
@@ -143,7 +150,12 @@ function Palette({ mobile }: { mobile: boolean }) {
     ],
     [diffLabel],
   );
-  const { groups, searching } = useSiteSearch(query, actions);
+  const { groups, searching } = useSiteSearch(
+    query,
+    actions,
+    scope,
+    currentProjectId,
+  );
   const labels = groupLabels(t);
   const headings: Record<GroupKind, ReactNode> = {
     ...labels,
@@ -202,7 +214,10 @@ function Palette({ mobile }: { mobile: boolean }) {
       )}
     >
       {groups.map((group) => (
-        <CommandGroup key={group.kind} heading={headings[group.kind]}>
+        <CommandGroup
+          key={group.label ?? group.kind}
+          heading={group.label ?? headings[group.kind]}
+        >
           {group.hits.map((hit) => (
             <CommandItem
               key={hit.doc.id}
@@ -210,7 +225,11 @@ function Palette({ mobile }: { mobile: boolean }) {
               data-checked={isCurrent(hit.doc) ? "true" : undefined}
               onSelect={() => run(hit.doc)}
             >
-              <ResultRow hit={hit} quoteBesidePreview={!mobile} />
+              <ResultRow
+                hit={hit}
+                quoteBesidePreview={!mobile}
+                groupedByContext={group.label !== undefined}
+              />
             </CommandItem>
           ))}
         </CommandGroup>
@@ -265,12 +284,18 @@ function Palette({ mobile }: { mobile: boolean }) {
           : undefined
       }
     >
-      <CommandInput
+      <PaletteInput
         value={query}
         onValueChange={setQuery}
-        placeholder={t.common.command.placeholder}
-        // eslint-disable-next-line shadcn/no-restyle -- 16px on phones, or iOS zooms into the field
-        className={mobile ? "text-base" : undefined}
+        placeholder={
+          scope === "projects"
+            ? t.common.searchProjects
+            : t.common.command.placeholder
+        }
+        scope={scope === "projects" ? t.nav.projects : undefined}
+        clearScopeLabel={t.common.searchSite}
+        onClearScope={() => setScope("all")}
+        large={mobile}
       />
       {empty ? (
         nothingFound

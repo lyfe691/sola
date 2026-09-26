@@ -7,6 +7,7 @@
  */
 
 import { useDeferredValue, useMemo } from "react";
+import type { CommandMenuScope } from "@/hooks/use-command-menu";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { createSearch, type SearchHit } from "@/lib/search/engine";
 import {
@@ -22,7 +23,12 @@ export type GroupKind = Exclude<SiteKind, "action">;
 export interface ResultGroup {
   kind: GroupKind;
   hits: SearchHit<SiteDoc>[];
+  /** a heading of its own, in place of the kind's */
+  label?: string;
 }
+
+/** what a scoped palette searches */
+const PROJECT_KINDS: ReadonlySet<SiteKind> = new Set(["project", "section"]);
 
 /** how many results a group shows before it gives way to the next */
 const CAP: Record<GroupKind, number> = {
@@ -52,18 +58,47 @@ const unmatched = (doc: SiteDoc): SearchHit<SiteDoc> => ({
   body: [],
 });
 
-/** the site's documents searched for `query`, grouped by what they are */
-export function useSiteSearch(query: string, actions: SiteDoc[]) {
+/**
+ * The site's documents searched for `query`, grouped by what they are.
+ * Scoped to projects, only projects and their deep-dive sections take part,
+ * and before anything is typed the current project's sections come first.
+ */
+export function useSiteSearch(
+  query: string,
+  actions: SiteDoc[],
+  scope: CommandMenuScope,
+  currentProjectId?: string,
+) {
   const t = useTranslation();
   const { language } = useLanguage();
-  const docs = useMemo(
-    () => [...buildSiteDocs(t, language), ...actions],
-    [t, language, actions],
-  );
+  const docs = useMemo(() => {
+    const all = [...buildSiteDocs(t, language), ...actions];
+    return scope === "projects"
+      ? all.filter((doc) => PROJECT_KINDS.has(doc.kind))
+      : all;
+  }, [t, language, actions, scope]);
   const search = useMemo(() => createSearch(docs), [docs]);
   const deferred = useDeferredValue(query);
 
   const groups = useMemo<ResultGroup[]>(() => {
+    if (!deferred.trim() && scope === "projects") {
+      const here = docs.filter(
+        (doc) => doc.kind === "section" && doc.projectId === currentProjectId,
+      );
+      const projects = docs.filter((doc) => doc.kind === "project");
+      return [
+        ...(here.length
+          ? [
+              {
+                kind: "section" as const,
+                label: here[0].kind === "section" ? here[0].project : undefined,
+                hits: here.map(unmatched),
+              },
+            ]
+          : []),
+        { kind: "project" as const, hits: projects.map(unmatched) },
+      ];
+    }
     if (!deferred.trim()) {
       return RESTING.map((kind) => ({
         kind,
@@ -85,7 +120,7 @@ export function useSiteSearch(query: string, actions: SiteDoc[]) {
           b.hits[0].score - a.hits[0].score ||
           KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind),
       );
-  }, [search, deferred, docs]);
+  }, [search, deferred, docs, scope, currentProjectId]);
 
   return { groups, searching: deferred.trim().length > 0 };
 }

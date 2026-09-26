@@ -261,12 +261,16 @@ export function ResultTile({
 export function ResultRow({
   hit,
   quoteBesidePreview = false,
+  groupedByContext = false,
 }: {
   hit: SearchHit<SiteDoc>;
   /** drop the quote where the preview pane shows it (lg and up) */
   quoteBesidePreview?: boolean;
+  /** the group's heading already names the context (a project's sections) */
+  groupedByContext?: boolean;
 }) {
   const { doc } = hit;
+  const context = groupedByContext ? undefined : doc.context;
   const snippet =
     doc.body && hit.body.length ? excerpt(doc.body, hit.body, 110, 14) : null;
 
@@ -277,14 +281,12 @@ export function ResultRow({
         <span className="truncate">
           <Highlight text={doc.title} ranges={hit.title} />
         </span>
-        {(doc.context || snippet) && (
+        {(context || snippet) && (
           <span className="truncate text-xs font-normal text-muted-foreground">
-            {doc.context && (
-              <Highlight text={doc.context} ranges={hit.context} />
-            )}
+            {context && <Highlight text={context} ranges={hit.context} />}
             {snippet && (
               <span className={cn(quoteBesidePreview && "lg:hidden")}>
-                {doc.context && <span aria-hidden> · </span>}
+                {context && <span aria-hidden> · </span>}
                 <Highlight text={snippet.text} ranges={snippet.ranges} />
               </span>
             )}

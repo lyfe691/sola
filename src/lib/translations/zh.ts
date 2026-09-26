@@ -100,6 +100,8 @@ export const zh = {
     },
     none: "无",
     search: "搜索",
+    searchSite: "搜索网站…",
+    searchProjects: "搜索项目…",
     copied: "已复制。",
     copyCode: "复制代码",
     copyFailed: "复制失败。",

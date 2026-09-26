@@ -106,6 +106,8 @@ export const en = {
     },
     none: "None",
     search: "Search",
+    searchSite: "Search the site…",
+    searchProjects: "Search projects…",
     copied: "Copied.",
     copyCode: "Copy code",
     copyFailed: "Couldn't copy code.",

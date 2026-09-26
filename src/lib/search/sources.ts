@@ -51,7 +51,8 @@ export type SiteDoc = SearchDoc &
         kind: "section";
         to: string;
         art: ProjectArt;
-        /** the deep dive's hero: its project's title and tagline */
+        /** its project, and the deep dive's hero: title and tagline */
+        projectId: string;
         project: string;
         tagline: string;
       }
@@ -186,6 +187,7 @@ export function buildSiteDocs(t: Translation, language: Language): SiteDoc[] {
         body: section.text,
         to: `${to}#${section.id}`,
         art: project.art,
+        projectId: project.id,
         project: copy.title,
         tagline: copy.tagline,
       });

@@ -26,7 +26,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { ArrowLeft02Icon, CodeXmlIcon } from "@hugeicons/core-free-icons";
+import {
+  ArrowLeft02Icon,
+  CodeXmlIcon,
+  SearchIcon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Link } from "react-router";
 import {
@@ -38,6 +42,13 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Kbd } from "@/components/ui/kbd";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+} from "@/components/ui/input-group";
+import { loadCommandMenu, useCommandMenu } from "@/hooks/use-command-menu";
 import FoldText from "./ui/custom/FoldText";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
@@ -106,16 +117,9 @@ function DeepDiveTrail({
  * name rather than a bare glyph, and in the hero it sits in the far corner
  * from the trail, the way a caption sits on a plate.
  */
-function CodeViewChip({
-  source,
-  tone,
-}: {
-  source: string;
-  tone: "hero" | "bar";
-}) {
+function CodeViewChip({ source }: { source: string }) {
   const { setActive: setCodeView } = useCodeView();
   const t = useTranslation();
-  const hero = tone === "hero";
 
   return (
     <HoverCard>
@@ -126,12 +130,9 @@ function CodeViewChip({
             type="button"
             onClick={() => setCodeView(true)}
             className={cn(
-              "inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full text-xs",
+              "inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full bg-black/25 py-1.5 pr-3.5 pl-3 text-xs text-white/80",
               "outline-none transition-[background-color,color,scale] duration-150 ease-out",
-              "active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-ring/40",
-              hero
-                ? "bg-black/25 py-1.5 pr-3.5 pl-3 text-white/80 hover:bg-black/40 hover:text-white"
-                : "px-2 py-1 text-muted-foreground hover:bg-foreground/5 hover:text-foreground",
+              "hover:bg-black/40 hover:text-white active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-ring/40",
             )}
           />
         }
@@ -145,8 +146,49 @@ function CodeViewChip({
         <span className="font-mono">{source}</span>
         <span className="sr-only">{t.common.diff.showDiff}</span>
       </HoverCardTrigger>
-      <DiffHintContent side={hero ? "top" : "bottom"} />
+      <DiffHintContent side="top" />
     </HoverCard>
+  );
+}
+
+const MAC =
+  typeof navigator !== "undefined" &&
+  /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
+
+/**
+ * The docked bar hides the site navigation and its search button, so the
+ * bar carries search itself: the palette's own input group, shortcut at its
+ * end, with one button laid over the whole field. The button is the group's
+ * control, so the group draws its focus ring.
+ */
+function SearchField() {
+  const { openCommandMenu } = useCommandMenu();
+  const t = useTranslation();
+
+  return (
+    <InputGroup className="h-8 w-32 shrink-0 sm:w-56 lg:w-64">
+      <InputGroupAddon>
+        <HugeiconsIcon icon={SearchIcon} strokeWidth={2} aria-hidden="true" />
+      </InputGroupAddon>
+      <InputGroupText className="min-w-0 flex-1">
+        <span className="truncate pl-1.5">
+          <span className="sm:hidden">{t.common.search}</span>
+          <span className="hidden sm:inline">{t.common.searchProjects}</span>
+        </span>
+      </InputGroupText>
+      <InputGroupAddon align="inline-end" className="hidden sm:flex">
+        <Kbd>{MAC ? "⌘K" : "Ctrl K"}</Kbd>
+      </InputGroupAddon>
+      <button
+        type="button"
+        data-slot="input-group-control"
+        aria-label={t.common.searchProjects}
+        onClick={() => openCommandMenu("projects")}
+        onPointerEnter={() => void loadCommandMenu()}
+        onFocus={() => void loadCommandMenu()}
+        className="absolute inset-0 cursor-pointer rounded-[inherit] outline-none transition-colors hover:bg-foreground/5"
+      />
+    </InputGroup>
   );
 }
 
@@ -209,7 +251,7 @@ function DeepDiveHero({
       </div>
 
       <div className="absolute right-5 bottom-4 z-10 sm:right-7 sm:bottom-5">
-        <CodeViewChip source={source} tone="hero" />
+        <CodeViewChip source={source} />
       </div>
 
       <div className="absolute inset-0 flex items-center justify-center">
@@ -334,7 +376,7 @@ export function ProjectDeepDive({
           <div className="border-b border-border px-4 sm:px-6 lg:px-8">
             <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 py-4">
               <DeepDiveTrail title={title} tone="bar" />
-              <CodeViewChip source={source} tone="bar" />
+              <SearchField />
             </div>
           </div>
           {sectionNav}

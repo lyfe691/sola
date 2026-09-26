@@ -106,6 +106,8 @@ export const ko = {
     },
     none: "없음",
     search: "검색",
+    searchSite: "사이트 검색…",
+    searchProjects: "프로젝트 검색…",
     copied: "복사되었습니다.",
     copyCode: "코드 복사",
     copyFailed: "코드를 복사할 수 없습니다.",

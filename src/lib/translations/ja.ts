@@ -104,6 +104,8 @@ export const ja = {
     },
     none: "なし",
     search: "検索",
+    searchSite: "サイトを検索…",
+    searchProjects: "プロジェクトを検索…",
     copied: "コピーしました。",
     copyCode: "コードをコピー",
     copyFailed: "コピーできませんでした。",
