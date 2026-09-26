@@ -6,16 +6,18 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, type ReactNode } from "react";
 import { useLocation } from "react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { pageTransitionVariants } from "@/utils/transitions";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { preloadRoute } from "@/config/routes";
+import { preloadable } from "@/lib/preloadable";
 import { getLenis, snapScrollTo } from "@/utils/scroll";
 
 // lazy like the route pages — the diff renderer (and shiki behind it) only
 // loads once someone actually flips the mode on
-const CodeView = lazy(() =>
+const { load: loadCodeView, Component: CodeView } = preloadable(() =>
   import("@/components/deploy-diff/CodeView").then((m) => ({
     default: m.CodeView,
   })),
@@ -27,6 +29,13 @@ const CodeView = lazy(() =>
 const PageShell = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
   const { active, setActive } = useCodeView();
+
+  useEffect(() => {
+    preloadRoute(location.pathname);
+  }, [location.pathname]);
+  useEffect(() => {
+    if (active) void loadCodeView();
+  }, [active]);
 
   // A route change underneath the mode (command palette, back/forward) exits
   // it. The new page starts at the top, but only once the exit has finished —

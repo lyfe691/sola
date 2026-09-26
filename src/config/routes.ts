@@ -15,10 +15,12 @@
  * tab and page can never say different things.
  */
 
-import { lazy, type ComponentType, type LazyExoticComponent } from "react";
+import type { ComponentType } from "react";
 import { matchRoutes } from "react-router";
 import type { Translation } from "@/lib/translations";
 import { getProjectConfig } from "@/config/project-deep-dive";
+import { preloadable } from "@/lib/preloadable";
+import { articleFor } from "@/pages/projects/articles";
 
 export type RouteLayout = "app" | "blank";
 
@@ -28,18 +30,17 @@ type PageModule = { default: ComponentType };
 
 export interface AppRoute {
   path: string;
-  /** starts the page's chunk; the router's lazy Component awaits the same one */
+  /** starts the page's chunk; Component renders at once when it is in */
   load: () => Promise<PageModule>;
-  Component: LazyExoticComponent<ComponentType>;
+  Component: ComponentType;
+  /** starts what the page loads for itself, alongside its chunk */
+  preload?: (params: RouteParams) => void;
   layout: RouteLayout;
   /** tab title — resolved against the active locale */
   title: (t: Translation, params: RouteParams) => string;
 }
 
-const page = (load: () => Promise<PageModule>) => ({
-  load,
-  Component: lazy(load),
-});
+const page = (load: () => Promise<PageModule>) => preloadable(load);
 
 const NAME = "Yanis Sebastian Zürcher";
 
@@ -122,6 +123,7 @@ export const APP_ROUTES: AppRoute[] = [
     path: "/projects/:slug",
     layout: "blank",
     ...page(() => import("@/pages/projects/ProjectDeepDiveRenderer")),
+    preload: (params) => void articleFor(params.slug)?.load(),
     title: (t, params) => {
       const config = params.slug ? getProjectConfig(params.slug) : null;
       return config ? t.projects.list[config.i18nKey].title : "404";
@@ -156,5 +158,8 @@ export function resolveLayout(pathname: string): RouteLayout {
 
 /** starts the chunk of the page at a location, ahead of the first render */
 export function preloadRoute(pathname: string) {
-  void matchRoute(pathname)?.route.load();
+  const match = matchRoute(pathname);
+  if (!match) return;
+  void match.route.load();
+  match.route.preload?.(match.params);
 }

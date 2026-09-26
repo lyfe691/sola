@@ -10,14 +10,7 @@
  * Hero motion lives in ProjectDeepDive; this file is static markup only.
  */
 
-import {
-  lazy,
-  useEffect,
-  useRef,
-  useState,
-  type ComponentType,
-  type LazyExoticComponent,
-} from "react";
+import { useEffect, useRef, useState, type ComponentType } from "react";
 import { Link, Navigate, useLocation, useParams } from "react-router";
 import { useReducedMotion } from "motion/react";
 import {
@@ -49,17 +42,7 @@ import { plainText } from "@/lib/plain-text";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { scrollToTarget } from "@/utils/scroll";
 import type { Translation } from "@/lib/translations";
-
-// lazy modules created once at load; first render only looks them up
-const mdxByPath: Record<
-  string,
-  LazyExoticComponent<ComponentType>
-> = Object.fromEntries(
-  Object.values(projectPagesConfig).map((config) => [
-    config.mdxPath,
-    lazy(() => import(`@/content/projects/${config.mdxPath}.mdx`)),
-  ]),
-);
+import { articleFor } from "./articles";
 
 function MountSignal({ onMount }: { onMount: () => void }) {
   useEffect(() => {
@@ -207,7 +190,7 @@ const ProjectDeepDiveRenderer = () => {
   }, [mdxReady, hash, slug, reducedMotion]);
 
   const config = slug ? getProjectConfig(slug) : undefined;
-  const MDXComponent = config ? (mdxByPath[config.mdxPath] ?? null) : null;
+  const MDXComponent = articleFor(slug)?.Component ?? null;
 
   if (!slug) {
     return <Navigate to="/projects" replace />;
