@@ -6,7 +6,8 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
  * Runs a grid re-order as a view transition (CSS in index.css, "grid
- * swap"). Every slot on screen is named for the swap in reading order, so
+ * swap"). From two columns up, every slot on screen is named for the swap
+ * in reading order, so
  * the browser crossfades each one from the card it held to the card it
  * holds after the update. The root steps out of the transition, so
  * everything else stays live, and slots off screen change unphotographed.
@@ -56,11 +57,21 @@ export function useGridSwap(gridRef: RefObject<HTMLElement | null>) {
         update();
         return;
       }
+      const root = document.documentElement;
+      // one column (a phone): the page dissolves as one picture, the way a
+      // theme switch does. Named slots there slide the cards below one whose
+      // height changed, and iOS WebKit draws captured cards offset
+      if (getComputedStyle(grid).gridTemplateColumns.split(" ").length < 2) {
+        running.current = null;
+        delete root.dataset.gridSwap;
+        slotsOf(grid).forEach(unname);
+        document.startViewTransition(() => flushSync(update));
+        return;
+      }
       const before = onScreen(slotsOf(grid));
       const first = before[0] ?? 0;
       name(slotsOf(grid), before, first);
 
-      const root = document.documentElement;
       root.dataset.gridSwap = "";
       const transition = document.startViewTransition(() => {
         // one synchronous commit, so the new order is in place before the
