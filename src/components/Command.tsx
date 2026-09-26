@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { SearchRemoveIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -49,15 +49,21 @@ import {
 export function CommandMenu() {
   const t = useTranslation();
   const { isOpen, closeCommandMenu } = useCommandMenu();
-  useWindowScrollLock(isOpen);
+  const [committedClosed, setCommittedClosed] = useState(false);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setCommittedClosed(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  const open = isOpen && committedClosed;
+  useWindowScrollLock(open);
   const isMobile = useIsMobile();
 
   if (isMobile) {
     return (
       <Drawer
-        open={isOpen}
-        onOpenChange={(open) => {
-          if (!open) closeCommandMenu();
+        open={open}
+        onOpenChange={(next) => {
+          if (!next) closeCommandMenu();
         }}
         showSwipeHandle
       >
@@ -73,7 +79,7 @@ export function CommandMenu() {
 
   return (
     <CommandDialog
-      open={isOpen}
+      open={open}
       onOpenChange={closeCommandMenu}
       // sr-only dialog name — the defaults in ui/command.tsx are English-only
       title={t.common.a11y.commandPalette}
