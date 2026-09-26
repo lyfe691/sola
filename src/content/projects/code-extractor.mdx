@@ -1,61 +1,110 @@
-# One click, one ZIP
+# A browser extension that saves a page and its files as a ZIP
 
-Website Code Extractor is a browser extension for Chrome and Edge. Open any website, click the extension, and it downloads the page's HTML, CSS, JavaScript and images as a single ZIP file, with the folders kept in order. It started as a tool for myself, and 6,000 people now use it.
+[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) is a Chrome and Edge extension that downloads the page in the current tab as one ZIP file. The archive holds the HTML and every stylesheet, script and image it references, in folders that mirror the servers they came from, and the HTML's links are rewritten to point at the saved copies. I built it in August 2024 to study how other sites are put together, and around 6,000 people use it now, according to the Chrome Web Store.
 
 <Safari
-  url="wce.ysz.life"
-  src="/projects/code-extractor/landing-desktop.webp"
-  alt="The extension's landing page: the name Website Code Extractor over a dark background of curved bands, a one-sentence description and an Add to Chrome button"
-  caption="The extension's landing page at wce.ysz.life."
+  url="htmx.org"
+  src="/projects/code-extractor/hero.webp"
+  video="/projects/code-extractor/hero.mp4"
+  alt="The htmx.org home page with the extension's dark popup open at the top right; the Extract & Download button is pressed, reads Extracting… for a moment and returns"
+  caption="Saving htmx.org."
 />
 
-## Why I built it
+## Saving a page
 
-I often wanted to see how a site did something: a layout, an animation, a small trick. The browser's “View Source” shows one file at a time, and saving pages by hand is slow and loses the structure. I wanted the whole page on my disk, arranged the way the site arranges it, in one step.
+The popup has one button. Clicking it reads the page in the active tab, fetches every file the page links to and packs everything into a ZIP named after the site, here `htmx.org.zip`, and Chrome then asks where to save it. On htmx.org, building the archive took under a second.
 
-## How it works
+Pages that can't be scripted, such as `chrome://` and `edge://` pages, `about:` pages and other extensions' pages, get an error in the popup instead.
 
-The popup has one button. Pressing it runs a small script inside the open tab that reads the page's HTML, including its doctype, and hands it back to the extension. The extension then collects every stylesheet, script and image the page links to, downloads them, and puts everything into a ZIP named after the site.
+## What the archive holds
+
+The ZIP opens to one folder named after the site, with `index.html` at its top. Every other file sits under a folder named after the server it came from, followed by that server's own path. htmx.org's stylesheet, scripts and images land under `htmx.org/htmx.org/`, and the script for its GitHub star button under `buttons.github.io/`, so two servers' files with the same name can't collide. The copy of htmx.org held 53 files and 2.4 MB, and the site's Atom feed was one of them: the page links it from a `<link>` tag, which the extension collects like a stylesheet.
 
 <ProjectImage
-  src="/projects/code-extractor/popup.webp"
-  alt="The extension's popup: its icon and name above a single large button that says Extract and Download"
-  caption="The whole interface."
-  className="max-w-sm"
+  src="/projects/code-extractor/zip-contents.webp"
+  alt="The contents of htmx.org.zip, 53 files and 2.4 MB: a htmx.org folder with index.html, a buttons.github.io folder with buttons.js, and a second htmx.org folder with atom.xml, favicon.svg, css/site.css, 44 images and four scripts"
+  caption="What the ZIP for htmx.org holds."
+  size="full"
 />
 
-The part that makes the download usable is the rewriting of links. A page refers to its files in many ways: full addresses, paths from the site's root, paths relative to the page. The extension turns each one into a full address to download from, then into a folder path inside the ZIP, and writes that path back into the HTML, so the saved page still finds its own files:
+## Opening the copy
+
+Every stylesheet, script and image reference in the saved `index.html` points at the saved file, so the page opens straight from the folder with its styles and images in place. Links to other pages stay as they were, since the extension saves one page at a time.
+
+<ProjectImage
+  src="/projects/code-extractor/saved-copy.webp"
+  alt="The saved htmx.org opened from the unzipped folder, scrolled to the quick start code block and the book section with the Hypermedia Systems cover image"
+  caption="The saved htmx.org, opened from the folder."
+  size="full"
+/>
+
+## How it's built
+
+The extension is plain JavaScript on Manifest V3. A popup page with one script does all the work, and JSZip builds the archive.
+
+### Reading the page as it stands
+
+The click runs a small function inside the tab through `chrome.scripting.executeScript`. Chrome serializes the function and runs it in the page, so it can't reach anything in the popup, and it hands back plain strings: the root element's `outerHTML` and the doctype. `outerHTML` leaves the doctype out, and a page saved without one opens in quirks mode, the legacy rendering mode browsers keep for pages written before the standards, so the doctype is serialized on its own and written back in front.
+
+The saved HTML is therefore the page as it stands in the tab, after its scripts ran. A page that builds its markup in JavaScript is saved with the markup it built.
+
+### Rewriting the links
+
+Back in the popup, `DOMParser` turns the HTML into a document that stays inert: its scripts don't run and its images don't load. The popup then walks every `<link href>`, `<script src>` and `<img src>`:
 
 <CodeBlock
-  code={`// simplified from popup.js
-  const elements = doc.querySelectorAll('link[href], script[src], img[src]');
-  elements.forEach(element => {
-    const attr = element.tagName === 'LINK' ? 'href' : 'src';
-    let url = element.getAttribute(attr);
-    if (url) {
-      if (!url.startsWith('http')) {
-        url = new URL(url, baseUrl).href;
-      }
-      const urlObject = new URL(url);
-      const path = urlObject.hostname + urlObject.pathname;
-      resources.push({ url, path });
-      element.setAttribute(attr, path);
-    }
-  });`}
+  code={`function resolveResourceLinks(doc, baseUrl) {
+      const resources = [];
+      const elements = doc.querySelectorAll('link[href], script[src], img[src]');
+      elements.forEach(element => {
+          let attr;
+          if (element.tagName === 'LINK') {
+              attr = 'href';
+          } else if (element.tagName === 'IMG' || element.tagName === 'SCRIPT') {
+              attr = 'src';
+          } else {
+              attr = element.hasAttribute('src') ? 'src' : 'href';
+          }
+          let url = element.getAttribute(attr);
+          if (url) {
+              if (!url.startsWith('http')) {
+                  url = new URL(url, baseUrl).href;
+              }
+              const urlObject = new URL(url);
+              let path = urlObject.hostname + urlObject.pathname;
+              path = path.startsWith('/') ? path.slice(1) : path;
+              path = path.replace(/\\/\\//g, '/');
+              resources.push({ url, path });
+              element.setAttribute(attr, path);
+          }
+      });
+      return resources;
+  }`}
   fileName="popup.js"
   lang="js"
 />
 
-## What it is made of
+Every reference is resolved against the tab's address first, so a root-relative `/css/site.css`, a relative `../img/logo.png` and a protocol-relative `//cdn.example.com/lib.js` all become full URLs. The hostname and path of that URL then do two jobs: they are the file's path inside the archive, and they replace the attribute's value in the HTML. The saved `index.html` sits at the top of the site's folder, so the new relative path leads to the saved file. Query strings are dropped along the way, since a cache-busting `?v=3` is not part of a file name.
 
-Plain JavaScript on Manifest V3, the current format for Chrome extensions, with [JSZip](https://stuk.github.io/jszip/) to build the archive. Everything happens inside your browser, so the pages you save stay on your machine. It asks only for the permissions it uses: the active tab, scripting and downloads.
+Two tags from htmx.org as the server sent them, then as they read in the saved `index.html`, where `XMLSerializer` writes them back in XHTML style:
 
-<ProjectImage
+```text
+<link rel="stylesheet" href="/css/site.css">
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<link rel="stylesheet" href="htmx.org/css/site.css" />
+<script async="" defer="" src="buttons.github.io/buttons.js"></script>
+```
+
+### Fetching from other servers
+
+Fetching a stylesheet from another server is what CORS stops an ordinary web page from doing. Extension pages are exempt for the hosts listed in the manifest's `host_permissions`, so the manifest asks for all `http` and `https` hosts next to `activeTab`, `scripting` and `downloads`. Chrome presents that at install time as permission to read and change data on every website, which is broad. The extension uses it for one thing: fetching, from the popup and only after a click, the files the open page already references.
+
+The popup fetches them all at once with `Promise.all`. A fetch that fails is logged and skipped, so one missing image doesn't cost the whole archive. JSZip then builds the file, and `chrome.downloads.download` saves it, asking where first.
+
+<Safari
+  url="chromewebstore.google.com"
   src="/projects/code-extractor/store-listing-desktop.webp"
-  alt="The extension's header on the Chrome Web Store, showing a rating of 5.0 from 5 ratings and 6,000 users"
-  caption="On the Chrome Web Store."
+  alt="The extension's page on the Chrome Web Store: the folder icon, a rating of 5.0 from 5 ratings, 6,000 users, and the popup as the first screenshot"
+  caption="The Chrome Web Store listing."
 />
-
-## Who it is for
-
-It works best on static sites, where the page you see is made of the files the server sends. A site built as an app, with React or Next.js, assembles itself in the browser, so its downloaded files tell you less. One review on the store puts it well: “this tool works really great for small websites! the zip packaging works and even keeps the website structure intact.”

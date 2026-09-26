@@ -294,7 +294,7 @@ export const en = {
         title: "Website Code Extractor",
         tagline: "Any website's code as one ZIP",
         description:
-          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) is a Chrome and Edge extension that downloads a website's HTML, CSS, JavaScript and images as one ZIP file, with the folder structure kept. One click, no setup. It has 6,000 users on the Chrome Web Store and works best on static sites.",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) is a Chrome and Edge extension that downloads a website's HTML, CSS, JavaScript and images as one ZIP file, with the folder structure kept. One click, no setup. It has about 6,000 users on the Chrome Web Store and works best on static sites.",
       },
       applicare: {
         title: "AppliCare",
@@ -354,7 +354,7 @@ export const en = {
         title: "Kinoa",
         tagline: "Free streaming, no noise",
         description:
-          "[Kinoa](https://kinoa.to) is a free streaming site for films and series. Browse what's trending, open a title, and press play on the same page, with no account needed; signing in adds a watchlist and a history that sync across devices. Built with Next.js, Supabase and data from TMDB.",
+          "[Kinoa](https://kinoa.to) is a free streaming site for films and series. Open a title and press play on the same page, no account needed; with an account you get a public @handle, a watchlist, a feed and messages, and Watch Together rooms where friends follow one host's playback. Titles come from TMDB, and the video plays in embedded players from third-party hosters.",
       },
       self: {
         title: "Self",
@@ -394,9 +394,9 @@ export const en = {
       },
       ura: {
         title: "Ura",
-        tagline: "Snowmobile navigation for Lapland, offline and permit-aware",
+        tagline: "Snowmobile navigation for Lapland, even offline",
         description:
-          "Ura is snowmobile navigation for Finnish Lapland, on iOS and Android. It carries 2,595 routes and 3,388 places like fuel stations, cafés and huts on the phone, so it works where there is no signal. It tells you whether you are on a route, and whether that route is free to ride or needs a permit first.",
+          "Ura is snowmobile navigation for Finnish Lapland, on iOS and Android. It carries around 2,900 routes and 3,500 places like fuel stations, cafés and huts on the phone, so it works where there is no signal. It tells you whether you are on a route, and when you aren't, how far away the nearest one is.",
       },
       montu: {
         title: "Montu",

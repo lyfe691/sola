@@ -1,49 +1,106 @@
-# Neofetch, for Windows
+# Neofetch-style system info for Windows PowerShell
 
-Self prints your system information in the terminal next to an image or a piece of ASCII art. On Linux that is what [Neofetch](https://github.com/dylanaraps/neofetch) does. I wanted the same thing in PowerShell, so I wrote it in Python.
+Self prints a picture and a column of system facts side by side in Windows PowerShell, the way [Neofetch](https://github.com/dylanaraps/neofetch) does on Linux. The picture can be any image file, redrawn in the terminal with coloured text characters, and the facts run from the Windows edition down to the disks.
 
 <ProjectImage
-  src="/projects/self/self.webp"
-  alt="Self running in Windows PowerShell: an image drawn from coloured blocks on the left, and a column of system facts from OS to disk on the right, ending with the run time and the terminal's colour palette"
-  caption="Self in Windows PowerShell. The picture on the left is drawn from characters."
-  size="large"
+  src="/projects/self/hero.webp"
+  video="/projects/self/hero.mp4"
+  alt="A full-screen PowerShell window: self is typed at the prompt, the screen clears, and a pixelated portrait drawn in coloured blocks appears on the left with a column of system facts on the right, from OS to disk, ending with the run time and a row of colour swatches"
+  caption="Typing self in PowerShell."
+  size="full"
 />
 
-## Pictures made of characters
+## What it prints
 
-A terminal cannot show pixels, so Self builds the image out of text. There are two ways to do it:
+On the left is a picture from the `images` folder, or any file passed with `--image`, scaled to a height and width given in characters. Each character cell holds two pixels, and every pixel keeps its own colour through 24-bit escape codes, so a photo or a drawing stays recognisable at a few dozen characters across. A braille mode draws finer dots instead, with one colour per cell.
 
-- **Block** uses the half-block character `▀`. Its top half takes the text colour and its bottom half the background colour, so one character cell carries two pixels in full colour.
-- **Braille** uses the dot patterns of braille characters `⠿`. The dots are finer than blocks, but each cell has a single colour.
+On the right, under `user@host`, come the Windows edition, uptime, package counts from Chocolatey, Scoop and winget, the shell, screen resolution and theme, the processor, graphics card, memory and disks. The config decides which lines appear, and a colour theme sets the labels. The column ends with how long gathering the facts took and a row of the sixteen classic console colours.
 
-I recommend block: at this size colour matters more than resolution. If you would rather have no picture at all, Self prints ASCII art instead: the repository ships a few, from the Windows logo to Totoro, and a template for your own.
+<ProjectImage
+  src="/projects/self/block-mode.webp"
+  alt="Self's output with a different picture: an anime character with cyan hair against a pale, sandy background, drawn in coloured blocks next to the same column of system facts"
+  caption="Another picture, drawn at the same size."
+  size="full"
+/>
 
-## Install and use
+## ASCII art
 
-One line in PowerShell installs it for the current user. No administrator rights are needed.
+`--ascii` swaps the picture for a drawing from the `ascii` folder: a plain text file that Self prints exactly as it is written. Anything made of characters works, including drawings built from braille dots, like this one.
+
+<ProjectImage
+  src="/projects/self/ascii-art.webp"
+  alt="Self's output with a text drawing of Totoro holding an umbrella, made of braille dots, next to the column of system facts with green labels"
+  caption="Totoro from the ascii folder, with the green theme."
+  size="full"
+/>
+
+## Installing and setting up
+
+Self installs with one line in PowerShell:
+
+```powershell
+iwr -Uri "https://raw.githubusercontent.com/lyfe691/self/main/install.ps1" -UseBasicParsing | iex
+```
+
+The script downloads Self into a `self` folder in the user's profile, adds a `self.bat` launcher, puts the folder on the user's `PATH` and installs the Python packages with pip. It needs Python, but no administrator rights. `self --setup` then asks for the display type, the picture or drawing, the colour theme and, for pictures, the size, and saves the answers to `config.json`. `self --update` fetches the latest version and leaves the config, the cache and the user's own pictures alone.
+
+<ProjectImage
+  src="/projects/self/setup.webp"
+  video="/projects/self/setup.mp4"
+  alt="A full-screen PowerShell window running self --setup: the wizard lists the display types, then the drawings in the ascii folder, then the colour themes, and the answers 3, 7 and 5 pick ASCII art, the Totoro drawing and the green theme before it reports where the configuration was saved"
+  caption="self --setup, choosing the Totoro drawing and the green theme."
+  size="full"
+/>
+
+## How it's built
+
+Self is a small Python program in four modules: the display, the picture, the facts and the colour themes. Pillow reads and resizes the images, psutil reports memory, disks and uptime, and colorama provides the theme colours.
+
+### Two pixels per character
+
+A terminal cell is about twice as tall as it is wide. The half-block character `▀` fills the top half of a cell with the foreground colour and leaves the bottom half to the background colour, so a cell with both set holds two roughly square pixels. `rgb_to_ansi` builds the two escape codes, `\033[38;2;r;g;bm` for the foreground and `\033[48;2;r;g;bm` for the background, and block mode walks the image two rows at a time:
 
 <CodeBlock
-  code={`iwr -Uri "https://raw.githubusercontent.com/lyfe691/self/main/install.ps1" -UseBasicParsing | iex`}
-  fileName="install.ps1"
-  lang="powershell"
+  code={`for y in range(0, img_height, 2):
+      line = ""
+      for x in range(img_width):
+          r_upper, g_upper, b_upper = pixels[x, y]
+          if y + 1 < img_height:
+              r_lower, g_lower, b_lower = pixels[x, y + 1]
+          else:
+              r_lower, g_lower, b_lower = r_upper, g_upper, b_upper
+          # '▀' character (upper half block)
+          line += f"{rgb_to_ansi(r_upper, g_upper, b_upper)}{rgb_to_ansi(r_lower, g_lower, b_lower, bg=True)}▀{RESET}"
+      lines.append(line)`}
+  fileName="image_handler.py"
+  lang="python"
 />
 
-After that, `self` is a command like any other:
+When height and width are equal, block mode doubles the width, because a square picture needs twice as many columns as rows. The 26 by 26 setting in the clip at the top becomes a 52 × 52 pixel image, resized by Pillow with nearest-neighbour sampling and printed as 26 rows of 52 characters.
+
+### Padding by visible width
+
+Those rows are long. Every cell carries a foreground code, a background code, the character and a reset, so one row of that picture runs to about 1,900 characters for 52 visible columns, and `len()` counts all of them. To line the facts up beside the picture, Self measures each row after a regular expression strips the escape codes, then pads the shorter rows with spaces to the widest.
+
+### Eight dots per braille character
+
+Braille mode trades colour for resolution. Unicode's braille block starts at U+2800 and encodes a cell's eight dots as bits of the offset, so any pattern on a 2 × 4 grid is a single character. The numbering is historical: dots 1 to 3 run down the left column and 4 to 6 down the right, and dots 7 and 8 were added later for eight-dot braille, so the bottom row is bits 6 and 7. The map from pixel position to bit reads:
 
 <CodeBlock
-  code={`self                 # run with the default settings
-  self --setup         # the setup wizard
-  self --update        # update to the latest version
-  self --image <file>  # use a specific image
-  self --ascii <file>  # use ASCII art instead
-  self --height <n>    # set the image height
-  self --width <n>     # set the image width
-  self --config <path> # use another config file
-  self --no-cache      # skip the cached system info`}
-  fileName="usage"
-  lang="bash"
+  code={`bit_position_map = {
+      (0, 0): 0, (1, 0): 3,
+      (0, 1): 1, (1, 1): 4,
+      (0, 2): 2, (1, 2): 5,
+      (0, 3): 6, (1, 3): 7
+  }`}
+  fileName="image_handler.py"
+  lang="python"
 />
 
-## Themes
+The picture is converted to greyscale, a dot is raised where a pixel is darker than 127, and the whole cell takes the average colour of its eight pixels. A braille cell covers four times as many pixels as a block cell, but on a dark terminal the dots trace the dark parts of a picture and most of its colour is lost, which is why the README recommends block mode.
 
-Colours and layout come from a config file. It ships with a default theme and a PowerShell one, and the colours are the terminal's own. `self --setup` walks through the choices, so nobody has to edit JSON by hand.
+### A five-minute cache for the facts
+
+The psutil library answers uptime, memory and disks directly. Most other lines come from short PowerShell commands: the Windows edition, the theme from the registry, the package counts. Each lookup starts its own `powershell.exe` with a two-second timeout, so one slow answer can't hold up the rest, and with `-NoProfile`, so the user's profile script doesn't run every time. The ten slower lookups run in parallel on a thread pool.
+
+The result is kept in `cache/sysinfo.json` for five minutes, and `--no-cache` skips it. The "Executed in" line times this step: on my machine a fresh run takes about a second, and a cached one 0.00 seconds. Rendered pictures are cached too, for a day, keyed on the file's path and modification time, the size and the mode.

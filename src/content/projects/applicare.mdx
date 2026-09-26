@@ -1,80 +1,140 @@
-# Every job application in one place
+# A job-application tracker with a Spring Boot API
 
-AppliCare is a web app for keeping track of job applications. It came out of my own job search: I was losing track of where I had applied, what stage each application was at, and which follow-ups I still owed.
+[AppliCare](https://applicare.app) keeps track of job applications: where each one stands, the tasks that go with it, and how the search is going overall. I built both halves between December 2024 and February 2025, a React client on Ant Design and a Spring Boot API that stores its data in MongoDB.
 
 <Safari
-  url="applicare.app"
-  src="/projects/applicare/landing-desktop.webp"
-  alt="The AppliCare landing page: the name with a beta tag, the line Manage your job applications with ease, a Get Started button, and a preview of the dashboard below"
-  caption="The landing page at applicare.app."
+  url="applicare.app/manage"
+  src="/projects/applicare/add.webp"
+  video="/projects/applicare/add.mp4"
+  alt="The Manage page: New Application opens a form, Lakeside Systems, Frontend Developer, Zürich and a salary are typed in, Create adds the row, and the table scrolls down to it"
+  caption="Adding an application, on a demo account."
 />
 
-## What you can do with it
+## Applications
 
-- **Applications.** Each one carries its status, from applied to offer, along with a contact and your notes. A Manage page filters and sorts them.
-- **Tasks.** A task has a deadline and a priority and can be linked to an application, so “send a thank-you note” stays attached to the interview it belongs to.
-- **Dashboard.** Totals, a success rate, a graph of applications over time, and the tasks that are due.
+Every application lives in one table on the Manage page, with its company, position, status and the date it was sent. Adding one takes the company, the title and a status; the salary, a contact, the link to the posting and notes are there when you have them. The search box filters as you type, and the columns sort and filter.
 
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/applicare/dashboard.webp",
-      alt: "The AppliCare dashboard with its totals, a graph of applications over time and a list of tasks",
-      caption: "The dashboard.",
-    },
-    {
-      src: "/projects/applicare/manage.webp",
-      alt: "The Manage page: a table of job applications with their status, and controls to filter and sort them",
-      caption: "The Manage page.",
-    },
-  ]}
-  columns={2}
+An application moves from applied through interviews to an offer, and ends accepted or rejected. The status column is a dropdown, and a pick saves right away, with its colour following the stage.
+
+<ProjectImage
+  src="/projects/applicare/status.webp"
+  video="/projects/applicare/status.mp4"
+  alt="The Manage table: the status of Clearwater Labs is changed from Pending to Interviewing and the status of Evergreen Energy from Offer to Accepted, each confirmed by a message at the top"
+  caption="Each status saves as soon as it changes."
+  size="full"
 />
 
-## How it is built
+## The dashboard
 
-The frontend is React with Vite, using [Ant Design](https://ant.design) for its components. The backend is a Spring Boot service that stores its data in MongoDB. Signing in returns a JSON Web Token, a signed pass the browser sends along with every request, and a filter on the server checks it before any controller runs.
+The dashboard sums up the search in four numbers: all applications, the ones in screening or interviews, the success rate, and the ones still open. Below them, a chart counts applications over time and a breakdown shows the share in each status. The Tasks tab sits next to the overview.
 
-The backend ships as a Docker image built in two stages: one that compiles the app, and a smaller one that only runs it.
+<ProjectImage
+  src="/projects/applicare/dashboard.webp"
+  video="/projects/applicare/dashboard.mp4"
+  alt="The dashboard: switching to the Tasks tab and back to Overview, where the applications-over-time chart draws in beside the status breakdown, and a tooltip follows the pointer along the chart"
+  caption="The overview and the Tasks tab."
+  size="full"
+/>
+
+## Tasks
+
+A task has a title, a short description, a deadline and a priority of high, medium or low, and it can be linked to one of the applications, whose company then shows as a tag. The list is sorted by deadline, so the next thing due is always at the top. Ticking a task crosses it out.
+
+<ProjectImage
+  src="/projects/applicare/tasks.webp"
+  alt="The Tasks tab: tasks such as Send references and Prepare system design answers, each with a due date, a tag for the related company, a priority badge and buttons to edit and delete"
+  caption="Tasks, the next deadline first."
+  size="full"
+/>
+
+## How it's built
+
+The client is React on Vite with Ant Design components, and it talks to the API through one Axios instance. The API is Spring Boot with Spring Security and Spring Data MongoDB, built into a Docker image. Accounts, applications and tasks are three MongoDB collections, and every application and task carries the id of the user it belongs to.
+
+### A status has its own endpoint
+
+On the server the status is a plain string on the `JobApplication` document, and the list of stages lives in the client, so adding a stage is a change to the frontend alone. Changing a status goes through its own endpoint: the dropdown sends `PATCH /api/applications/{id}/status?status=OFFER`, which sets the status and `lastUpdated` and leaves every other field as it is. Editing the whole application goes through `PUT`, which replaces the document.
+
+The dashboard reads the same field in groups. Accepted and Rejected are final, so every other stage counts as open. Screening and Interviewing count as in progress, and the success rate is accepted applications over all of them. The browser works all of this out in a `useMemo` over the list the API returns, and a second one turns the applied dates into the running total behind the chart.
+
+### Signing in with a token
+
+Login checks the password against its BCrypt hash and returns a JSON Web Token, a signed string the client sends back with every request. AppliCare's token is signed with HS256, carries the username as its subject and the user's id as a `userId` claim, and expires after a configured time. The client keeps it in `localStorage`, and an Axios interceptor adds it to each request as `Authorization: Bearer …`.
+
+The security configuration is stateless: `/api/auth/**` is open, and every other route needs an authenticated request. A filter that runs once per request, ahead of Spring's own username-and-password filter, is what makes a request authenticated:
 
 <CodeBlock
-  code={`FROM eclipse-temurin:21-jdk-alpine as build
-  WORKDIR /workspace/app
-  COPY mvnw .
-  COPY .mvn .mvn
-  COPY pom.xml .
-  COPY src src
-  RUN chmod +x ./mvnw
-  RUN ./mvnw install -DskipTests
-  RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
-  FROM eclipse-temurin:21-jre-alpine
-  VOLUME /tmp
-  ARG DEPENDENCY=/workspace/app/target/dependency
-  COPY --from=build \${DEPENDENCY}/BOOT-INF/lib /app/lib
-  COPY --from=build \${DEPENDENCY}/META-INF /app/META-INF
-  COPY --from=build \${DEPENDENCY}/BOOT-INF/classes /app
-  ENTRYPOINT ["java","-cp","app:app/lib/*","com.applicare.applicare.ApplicareApplication"]`}
-  fileName="Dockerfile"
-  lang="dockerfile"
+  code={`public class JwtAuthenticationFilter extends OncePerRequestFilter {
+      private final JwtUtil jwtUtil;
+      public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+          this.jwtUtil = jwtUtil;
+      }
+      @Override
+      protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+              throws ServletException, IOException {
+          String authHeader = request.getHeader("Authorization");
+          if (authHeader != null && authHeader.startsWith("Bearer ")) {
+              String token = authHeader.substring(7);
+              if (jwtUtil.validateToken(token)) {
+                  String username = jwtUtil.getUsernameFromToken(token);
+                  UsernamePasswordAuthenticationToken authentication =
+                      new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                  SecurityContextHolder.getContext().setAuthentication(authentication);
+              }
+          }
+          filterChain.doFilter(request, response);
+      }
+  }`}
+  fileName="filter/JwtAuthenticationFilter.java"
+  lang="java"
 />
+
+The filter never rejects a request itself. A missing or invalid token leaves the security context empty, and Spring Security turns the request away further down the chain. `validateToken` parses the token with the signing key, which checks the signature and the expiry date in one call, so a forged token and an expired one fail the same way. On the client, the Axios response interceptor treats a 401 or 403 as an expired session: it clears the stored user and sends the browser to the login page, so session expiry is handled in one place for every page.
+
+### Every read and write belongs to its owner
+
+The token says who is calling, and the services decide what that caller may touch. Controllers read the `userId` claim from the same header and pass it down, and no service takes an owner from the request body. Creating an application stamps the caller's id on it. Reading one, updating it, deleting it and changing its status all load the stored document first and compare its owner with the caller:
+
+<CodeBlock
+  code={`public JobApplication updateApplication(String id, JobApplication application, String userId) {
+      JobApplication existingApp = jobApplicationRepository.findById(id)
+          .orElseThrow(() -> new RuntimeException("Application not found"));
+      if (!existingApp.getUserId().equals(userId)) {
+          throw new RuntimeException("Not authorized to update this application");
+      }
+      application.setId(existingApp.getId());
+      application.setUserId(userId);
+      application.setAppliedDate(existingApp.getAppliedDate());
+      application.setLastUpdated(LocalDateTime.now());
+      return jobApplicationRepository.save(application);
+  }`}
+  fileName="service/JobApplicationService.java"
+  lang="java"
+/>
+
+An update also copies the id and the original applied date from the stored document, so a request body can neither move an application to another user nor change when it was sent. Lists are queried by the caller's id, and editing, completing and deleting a task are checked the same way. Deleting an account removes the user's tasks and applications before the user record itself.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/applicare/login-desktop.webp",
-      alt: "The login screen: a card with fields for a username or e-mail address and a password, and links to register or reset the password",
+      src: "/projects/applicare/login.webp",
+      frame: "safari",
+      url: "applicare.app/login",
+      alt: "The AppliCare login screen: a card with fields for a username or email address and a password, and links to register or reset the password",
       caption: "Signing in.",
     },
     {
-      src: "/projects/applicare/landing-mobile.webp",
+      src: "/projects/applicare/dashboard-mobile.webp",
       frame: "iphone",
-      alt: "The landing page on a phone, with the headline, the button and the dashboard preview in one column",
-      caption: "On a phone.",
+      alt: "The dashboard on a phone: the four numbers in a two-by-two grid above the applications-over-time chart",
+      caption: "The dashboard.",
+    },
+    {
+      src: "/projects/applicare/manage-mobile.webp",
+      frame: "iphone",
+      alt: "The Manage page on a phone: the search box, the New Application button and the table of companies and positions",
+      caption: "The Manage page.",
     },
   ]}
-  columns={2}
+  columns={3}
 />
-
-## Where it came from
-
-I built AppliCare between December 2024 and February 2025 for two school modules, one on frontends and one on backends, which is why it is a complete app with both halves written from scratch.

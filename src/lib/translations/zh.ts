@@ -285,7 +285,7 @@ export const zh = {
         title: "网站代码提取器",
         tagline: "把任何网站的代码打包成一个 ZIP",
         description:
-          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) 是一款 Chrome 和 Edge 扩展，可以把网站的 HTML、CSS、JavaScript 和图片连同目录结构一起下载为一个 ZIP 文件。一键完成，无需设置。它在 Chrome 应用商店有 6000 名用户，对静态网站效果最好。",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) 是一款 Chrome 和 Edge 扩展，可以把网站的 HTML、CSS、JavaScript 和图片连同目录结构一起下载为一个 ZIP 文件。一键完成，无需设置。它在 Chrome 应用商店有约 6000 名用户，对静态网站效果最好。",
       },
       applicare: {
         title: "AppliCare",
@@ -345,7 +345,7 @@ export const zh = {
         title: "Kinoa",
         tagline: "免费观影，纯净无扰",
         description:
-          "[Kinoa](https://kinoa.to) 是一个免费的电影和剧集流媒体网站。浏览热门内容，打开一部作品，在同一页面直接播放，无需账号；登录后，片单和观看记录会在多台设备间同步。使用 Next.js、Supabase 和 TMDB 的数据构建。",
+          "[Kinoa](https://kinoa.to) 是一个免费的电影和剧集流媒体网站。打开一部作品，在同一页面直接播放，无需账号；注册账号后还有公开的 @用户名主页、片单、动态、私信，以及跟随房主播放进度一起观看的 Watch Together 房间。作品信息来自 TMDB，视频由第三方托管站点的嵌入式播放器播放。",
       },
       self: {
         title: "Self",
@@ -385,9 +385,9 @@ export const zh = {
       },
       ura: {
         title: "Ura",
-        tagline: "离线雪地摩托导航，还分得清许可路线",
+        tagline: "拉普兰雪地摩托导航，离线也能用",
         description:
-          "Ura 是面向芬兰拉普兰的雪地摩托导航，支持 iOS 和 Android。它把 2595 条路线和 3388 个地点（加油站、咖啡馆、小屋等）存在手机里，没有信号也能用。它会告诉你是否在路线上，以及这条路线可以自由骑行，还是需要先取得许可。",
+          "Ura 是面向芬兰拉普兰的雪地摩托导航，支持 iOS 和 Android。它把约 2900 条路线和约 3500 个地点（加油站、咖啡馆、小屋等）存在手机里，没有信号也能用。它会告诉你是否在路线上；不在的话，离最近的路线还有多远。",
       },
       montu: {
         title: "Montu",

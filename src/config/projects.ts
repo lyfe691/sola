@@ -72,7 +72,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "magi",
     deepDive: {
       overview:
-        "magi is a fast, asynchronous TCP and UDP port scanner written in Rust. It does connect scanning — a normal handshake on each port — so it needs no root and runs anywhere tokio does. Within that scope it is built to be trustworthy: it never reports a port state it didn't actually establish, and when a probe can't run it says so (untestable) rather than guessing closed. Bounded concurrency over tokio keeps memory flat whether you scan a single host or a whole /16, with banner grabbing, UDP probing, CIDR expansion, and JSON output for piping into tools like jq.",
+        "magi is a command-line port scanner for TCP and UDP, written in Rust on tokio, with prebuilt releases for Linux, macOS and Windows and a small site at magi.ysz.life. The scanning core is a library with its own integration tests, and the command-line tool is a thin layer over it.",
     },
   },
   {
@@ -104,7 +104,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "kinoa",
     deepDive: {
       overview:
-        "Kinoa is a free streaming site for films and series. It takes its catalogue from TMDB and plays through third-party hosters embedded on the detail page, so you browse, open a title and press play without leaving it; if one server fails you pick another. Accounts are optional and add a watchlist and a history that sync across devices. Built with the Next.js App Router, Supabase and shadcn/ui.",
+        "Kinoa is a free site for films and series with a social layer around the player: profiles, a feed, comments, messages and Watch Together rooms. I've built it since November 2025 as a Next.js app on Supabase, and around 10,000 people use it each month.",
     },
   },
   {
@@ -160,7 +160,6 @@ export const PROJECTS: ProjectMeta[] = [
       "Base UI",
       "shadcn/ui",
       "Three.js",
-      "Zod",
     ],
     date: {
       start: "2026-03",
@@ -172,7 +171,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "luma",
     deepDive: {
       overview:
-        "Luma is a multi-model AI platform where you bring your own API keys and talk to the best models from OpenAI, Anthropic, Google, xAI, Mistral, Cohere, DeepSeek, and more — all through a single, polished interface. Built with Next.js 16, the Vercel AI SDK, and Supabase, it features a tree-based conversation model with full branching support, encrypted key storage, streaming markdown rendering, web search, image generation, and rich content display including code highlighting, math, and diagrams.",
+        "Luma is a web chat app for many model providers that runs on the user's own API keys, built with Next.js, the Vercel AI SDK and Supabase. Conversations are stored as a tree of messages, and keys are encrypted with AES-256-GCM and decrypted on the server only for the request that uses them.",
     },
   },
   {
@@ -200,7 +199,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "applicare",
     deepDive: {
       overview:
-        "AppliCare is a web app for keeping track of job applications. Each application carries a status from applied to accepted, tasks with deadlines can be linked to it, and a dashboard shows totals, a success rate and a graph over time. The frontend is React with Ant Design, the backend is Spring Boot with MongoDB and JWT sign-in, and it was built for two school modules.",
+        "AppliCare is a job-application tracker I built end to end, from the React interface to the Java API and the database behind it. The API ties every request to its user through a signed token, so each account only ever sees its own applications and tasks.",
     },
   },
   {
@@ -225,7 +224,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "self",
     deepDive: {
       overview:
-        "Self shows your system information in the terminal next to an image or ASCII art: what Neofetch does on Linux, for Windows. It is written in Python, installs with one PowerShell command, renders images as coloured blocks or braille, and reads its layout and colours from a config file.",
+        "Self brings Neofetch's picture-and-facts screen to Windows PowerShell. I wrote it in Python in May 2025; it installs per user with one PowerShell command and is configured with a short setup wizard.",
     },
   },
   {
@@ -243,7 +242,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "code-extractor",
     deepDive: {
       overview:
-        "Website Code Extractor is a Chrome and Edge extension that downloads a website's HTML, CSS, JavaScript and images as one ZIP file with the folder structure kept. It is plain JavaScript on Manifest V3 with JSZip, and 6,000 people use it on the Chrome Web Store.",
+        "Website Code Extractor is a one-button Chrome and Edge extension for saving a page to study how it's built. The ZIP it downloads opens straight from the folder, because the stylesheets, scripts and images its HTML references are saved next to it and linked by their new paths.",
     },
   },
   {
@@ -268,7 +267,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "thoughts",
     deepDive: {
       overview:
-        "Thoughts is a small site where I write reflections, fragments and notes, separate from this portfolio. It is a Next.js app where every post is an MDX file, with a guestbook where visitors can leave a note of their own.",
+        "Thoughts is my writing site, kept apart from this portfolio: a few pages of plain text and a guestbook that anyone can sign. I built it in August 2025 as a Next.js app on Vercel, with the posts as MDX files and the guestbook in Postgres.",
     },
   },
   {
@@ -284,7 +283,6 @@ export const PROJECTS: ProjectMeta[] = [
       "i18n",
       "shadcn/ui",
       "Radix UI",
-      "Zod",
       "Vercel",
     ],
     date: {
@@ -296,7 +294,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "taco",
     deepDive: {
       overview:
-        "Taco is a website about my brother's dog, built as a template I can reuse. It has pages in English, Spanish and Japanese with automatic language detection, a blog, a gallery and a contact page, on Next.js, TypeScript and Tailwind CSS.",
+        "Taco is my brother's Pomeranian, and this is his website. I set it up so the next small site of its kind can start from the same code and only swap in new colours and new text.",
     },
   },
   {
@@ -422,7 +420,6 @@ export const PROJECTS: ProjectMeta[] = [
       "Sanity",
       "SEO",
       "Base UI",
-      "Vercel",
     ],
     date: { start: "2026-09" },
     priority: 5,
@@ -432,7 +429,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "perspectas",
     deepDive: {
       overview:
-        "perspectas gmbh is a consulting and recruiting firm in Wetzikon ZH. I replaced their WordPress site with a Next.js and Sanity build, live since 11 September 2026. Every line of text and every image now lives in a CMS the two partners log into themselves, which is the one thing the old stack never gave them. The hosting account and the domain are in their name, not mine.",
+        "perspectas gmbh is a consulting and recruiting firm in Wetzikon, near Zürich, run by two partners. Its website is in German and speaks to two audiences at once: companies that need help with staffing, and people looking for their next role.",
     },
   },
   {
@@ -464,7 +461,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "ura",
     deepDive: {
       overview:
-        "Ura is snowmobile route navigation for Finnish Lapland, built as a client project. It ships as a Capacitor app that carries the whole national route network offline and a web console where routes are imported, corrected and published to it. The engine answers one question on every position fix: are you on a route, and is that route free to ride or does it need a Metsähallitus permit.",
+        "I designed and built Ura for a client: the rider app for iPhone and Android, and ura-app.com, the website that introduces it. The app is written in React and TypeScript and runs on both phones through Capacitor, with its map drawn by MapLibre.",
     },
   },
   {
@@ -491,7 +488,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "montu",
     deepDive: {
       overview:
-        "Montu is a mountain-tour journal in Swiss German at montu.ch, built for someone who writes the tours and takes the photographs himself. Next.js 16 on the front, Sanity behind it: the hero slideshow, the navigation labels, the legal pages and every tour are CMS fields, so publishing a tour needs no deploy. Each tour's Mapbox route and elevation profile are derived on the server from one uploaded GPX file. Two tours are live.",
+        "Montu is a journal of Swiss mountain tours in German, from summer crossings to ski and splitboard tours, written and photographed by the friend I built it for. Each tour page is his account of the day, with the route, the figures and the way there and back alongside for anyone who wants to follow it.",
     },
   },
   {
@@ -505,7 +502,7 @@ export const PROJECTS: ProjectMeta[] = [
       "Tailwind CSS",
       "shadcn/ui",
       "qr-code-styling",
-      "Base UI",
+      "qr-scanner",
       "Radix UI",
     ],
     date: { start: "2026-04" },
@@ -516,7 +513,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "qr",
     deepDive: {
       overview:
-        "qr.ysz.life generates QR codes in the browser. You paste a link or type text, change the dot and corner shapes, the colors, the gradients and the center logo, then download PNG, SVG, JPEG or WebP. There is no backend: rendering runs client-side through qr-code-styling, and the last ten codes stay in localStorage. Because styling is what makes a code fail to decode, the header keeps a Scan Test that reads a finished image back with a real scanner.",
+        "qr.ysz.life is a QR code generator for styled codes: dot shapes, colours and gradients, and a logo in the middle. Because styling is what breaks a code, it also decodes exported images to check that they still scan.",
     },
   },
   {
@@ -535,7 +532,6 @@ export const PROJECTS: ProjectMeta[] = [
       "shadcn/ui",
       "Radix UI",
       "Tailwind CSS",
-      "Zod",
     ],
     date: { start: "2025-05" },
     priority: 15,
@@ -544,7 +540,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "vault",
     deepDive: {
       overview:
-        "Vault is a local OpenID Connect sandbox: Keycloak 26 as the provider, PostgreSQL behind it, a FastAPI service that verifies RS256 tokens against the realm's key set, and a Next.js frontend with a sign-in page and two role-gated dashboards. The part worth copying is the provisioning. The realm, the client, both roles and the demo user are declared in Terraform, so a broken setup is one destroy-and-apply rather than another pass through the admin console.",
+        "Vault is an OpenID Connect sandbox that runs on one machine, with Keycloak and its database in Docker. Everything Keycloak needs, from the realm to the demo user, is written in Terraform, so one terraform apply rebuilds the whole identity setup from nothing.",
     },
   },
   {
@@ -565,7 +561,6 @@ export const PROJECTS: ProjectMeta[] = [
       "Three.js",
       "Vitest",
       "Bash",
-      "GitHub Actions",
     ],
     date: { start: "2026-06", end: "present" },
     priority: 3,
@@ -576,7 +571,7 @@ export const PROJECTS: ProjectMeta[] = [
     slug: "fleetmap",
     deepDive: {
       overview:
-        "fleetmap is a live map of a delivery fleet. Each van's phone reports its position, and a screen in the office shows every van moving, with its stops, ETA and how late it is running. Orders arrive on their own from the route planning the fleet already uses, so nobody types anything in. It has been in production since summer 2026.",
+        "I built fleetmap for a delivery company in Switzerland, as the screen its office keeps on the wall. It is a Next.js app on Supabase, with the map drawn by MapLibre and the road routes and arrival times worked out by OSRM.",
     },
   },
 ];

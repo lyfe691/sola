@@ -1,117 +1,170 @@
-# Design Philosophy
+# The portfolio you're reading
 
-The design philosophy behind Sola centers on **minimalism with purpose**. Every element serves a function, from the subtle animations that guide user attention to the carefully chosen typography hierarchy.
+Sola is my portfolio, the site you're on at [sola.ysz.life](https://sola.ysz.life). It holds my projects, the tools I work with, where I've worked and a way to reach me, and I've been building it since February 2025. Most of my time on it goes into how its pages look and move.
 
-> "Good design is as little design as possible" - Dieter Rams
-
-The goal was to create a space where content breathes and visitors can focus on what matters most.
-
-## Technical Architecture
-
-Built with a **component-first approach** using React and TypeScript for type safety. The architecture includes:
-
-- **Vite** for fast development builds
-- **Tailwind CSS** for consistent styling and design system
-- **Motion** for smooth animations and transitions
-- **React Router** for client-side routing
-- **shadcn/ui** for accessible, customizable components; works well with Tailwind CSS
-
-## Performance & Development
-
-Performance was a **key priority** from the start. Here's what I implemented:
-
-1. **Code Splitting**: Dynamic imports for route-based splitting
-2. **Lazy Loading**: Images load only when needed
-3. **Bundle Optimization**: Tree shaking and minification
-4. **Caching Strategy**: React Query for efficient data management
-5. **SEO**: React 19 native document metadata for SEO
-6. **i18n**: Custom React i18next for internationalization
-
-### Example: Optimization Techniques
-
-<CodeBlock
-  code={`// image optimization with lazy loading
-  const OptimizedImage = ({ src, alt, ...props }: { src: string, alt: string, [key: string]: any }) => {
-    return (
-      <img
-        src={src}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        {...props}
-      />
-    );
-  };
-  // memoized expensive calculations
-  const ExpensiveComponent = memo(({ data }: { data: any[] }) => {
-    const processedData = useMemo(() => {
-      return data.map(item => ({
-        ...item,
-        processed: heavyCalculation(item)
-      }));
-    }, [data]);
-    return <div>{/* render */}</div>;
-  });`}
-  fileName="optimization-techniques.tsx"
-  lang="typescript"
+<Safari
+  url="sola.ysz.life"
+  src="/projects/sola/hero.webp"
+  video="/projects/sola/hero.mp4"
+  alt="The home page in the Ember theme over the Aurora background: the greeting Hello, I'm Yanis rises in, the line below it spells out a new sentence, the name changes to Sebi, and pressing View projects blurs the page away and brings in the projects grid"
+  caption="The home page, then View projects."
 />
 
-The result? A portfolio that loads quickly and feels responsive on all devices.
+## The home page
 
----
+The home page is a greeting and a way onward. The name in it cycles through the ones I go by, Yanis, Sebi and lyfe691, and pressing it skips to the next. The line under it cycles too, each sentence spelled out letter by letter from a blur. Above the greeting, a small link points to what I'm working on now.
 
-## Development Process
+The two buttons are glass, edged with a soft rim of light and a glint that sweeps around them and turns toward the pointer. The social links below open into their name and brand colour on hover. Moving to another page blurs the current one away, and the next one comes into focus from the same blur. On a first visit, a note by the menu says which theme and background I picked and where to change them.
 
-### Initial Planning
+## Themes and backgrounds
 
-I began by researching contemporary portfolio trends and UX patterns, reviewing dozens of developer sites to see what works—and what doesn’t. In the process I discovered [shadcn/ui](https://ui.shadcn.com/) by [shadcn](https://shadcn.com). Although it isn’t a portfolio, this open-source design system impressed me with its minimal, clean aesthetic and ease of use, and it became a key inspiration for my project.
+The menu at the top right changes how the whole site looks. Next to light, dark and following the system, there are custom themes with palettes of their own, and hovering one shows a small preview before you pick it. A new theme dissolves in over the old one in under half a second, and the menu stays open, so the next one is a click away.
 
-### Implementation Phases
-
-The development was broken into focused phases:
-
-1. **Foundation**: Basic routing and layout structure
-2. **Components**: Building the core UI component library
-3. **Content**: Adding project data and content management
-4. **Animations**: Implementing smooth transitions and micro-interactions
-5. **Optimization**: Performance tuning and accessibility improvements
-
----
-
-## Results & Impact
-
-The portfolio has successfully achieved its goals:
-
-- **100 Lighthouse Score** across all metrics (Performance, Accessibility, Best Practices, SEO)
-- **Sub-second loading times** on most connections
-- **Positive feedback** from peers and potential employers
-- **Increased visibility** in the developer community
-
-### Key Metrics
-
-| Metric         | Score | Target |
-| -------------- | ----- | ------ |
-| Performance    | 100   | 90+    |
-| Accessibility  | 100   | 95+    |
-| Best Practices | 100   | 95+    |
-| SEO            | 100   | 90+    |
+Behind every page can run an animated background, a WebGL scene that takes its colours from the theme, picked from the same menu. Some are soft gradients, others move like silk or watercolour, and one is a fluid that follows the pointer.
 
 <ProjectImage
-  src="/projects/sola/lighthouse.webp"
-  alt="Performance metrics"
-  caption="Lighthouse performance results"
+  src="/projects/sola/theme.webp"
+  video="/projects/sola/theme.mp4"
+  alt="The appearance menu open over the plain light home page: picking Forest turns the page dark green, Sakura turns it pink, and under Backgrounds, Watercolor and then Silk Waves fill the page behind the greeting in Sakura's pinks"
+  caption="Forest, then Sakura, then two backgrounds."
+  size="full"
 />
 
-## Future Enhancements
+## Projects
 
-I'm always looking for ways to improve the project. Here are some ideas:
+The projects page is a grid of cards. Each has a cover in the project's own colours, its dates set into a notch at the corner, a short description and the technologies it uses. A filter separates personal projects from work for clients, and a menu sorts them as featured, newest, oldest or by name.
 
-- **Blog Integration**: Technical writing section
-- **Interactive Demos**: Live code examples for projects
-- **now** page: inspired by a [now](https://nownownow.com/) page.
+When the order changes, every card on screen crossfades with a short blur into the one that takes its place, so the grid keeps its shape while its contents change.
 
-&amp; whatever else I can think of.
+<ProjectImage
+  src="/projects/sola/projects.webp"
+  video="/projects/sola/projects.mp4"
+  alt="The projects page in the light theme: choosing Commercial swaps Kinoa and Sola for fleetmap and Ura, All brings them back, and sorting by newest and then by name crossfades each card into the next"
+  caption="Filtering and sorting the projects."
+  size="full"
+/>
 
----
+## Project pages
 
-_This project&mdash;with over [300 clean commits](https://github.com/lyfe691/sola/commits/main)&mdash;represents not just a portfolio, but a testament to modern web development practices and attention to detail._
+Projects with more to show open into an article like this one. It starts under a header of slowly moving watercolour in the project's colours, with the dates, an overview, the tech stack and links below. The articles are mostly screenshots and short clips at full size, framed as a browser window or a phone where that helps.
+
+Once the header scrolls away, a rail of ticks along the left edge marks each section, and hovering it names them. Clicking a screenshot opens it full screen, with the article's other images alongside.
+
+<Safari
+  url="sola.ysz.life/projects/kinoa"
+  src="/projects/sola/deep-dive.webp"
+  video="/projects/sola/deep-dive.mp4"
+  alt="The Kinoa article: its caramel watercolour header, then a scroll past the overview, tech stack and links to the first clip, where the tick rail appears on the left edge and hovering it shows the section names"
+  caption="The Kinoa article, from its header to the first clip."
+/>
+
+## Skills
+
+The skills page groups what I work with, from languages to tools, and gives each skill a level and the number of my projects that use it. Hovering a skill opens a card beside it that lists those projects, newest first, each with its tagline and the technologies it was built with. The card stays open and glides from row to row as the pointer moves down a column.
+
+<ProjectImage
+  src="/projects/sola/skills.webp"
+  video="/projects/sola/skills.mp4"
+  alt="The skills page in the light theme: as the pointer moves over React, Tailwind CSS, Next.js, Motion and Three.js, a card beside the column lists the projects that use each one, with their taglines, years and tech marks"
+  caption="The card follows the pointer down the column."
+  size="full"
+/>
+
+## About and experience
+
+The about page has a short introduction beside my portrait, which is drawn in particles that drift apart and settle back into the picture. Below it is my GitHub activity: a calendar of the past year's contributions, which can also show a single year, and the latest events from my repositories. The experience page lays out where I've worked and studied as a timeline.
+
+<ProjectImage
+  src="/projects/sola/about-github.webp"
+  alt="The about page scrolled to GitHub Activity: a contribution calendar from September to September with Overview, 2026 and 2025 tabs, and below it Recent Activity listing the latest pushes to this site"
+  caption="GitHub activity on the about page."
+  size="full"
+/>
+
+## The changelog
+
+The changelog is this site's git history, read from GitHub. Each commit shows its kind and the part of the site it touched, marks for the file types it changed and a bar of lines added and removed, along a rail that shows where branches merged back in. The commit the live site was built from is labelled. Opening one shows its full message, a tree of the files it changed and the diff of each.
+
+<ProjectImage
+  src="/projects/sola/changelog.webp"
+  video="/projects/sola/changelog.mp4"
+  alt="The changelog in the light theme: opening the latest commit, the next theme dissolves in, and presses still land, shows its message, a tree of three changed files and the diff of theme-provider.tsx"
+  caption="A commit opened in the changelog."
+  size="full"
+/>
+
+A Show git diff switch in the menu brings the same history to any page: it swaps the page for the last commit that changed it. On a project article, the file name in the header does the same.
+
+<Safari
+  url="sola.ysz.life"
+  src="/projects/sola/git-diff.webp"
+  alt="The home page swapped for its git diff: the commit perf(motion): content counts as painted when its entrance starts, its message, and the diff of src/pages/Index.tsx, where opacity 0 becomes HIDDEN_OPACITY"
+  caption="The home page's latest change."
+/>
+
+## Getting around
+
+⌘K, or Ctrl+K, opens a palette for moving around from the keyboard: it goes to any page, switches the theme, language or background, and turns on the git diff. The whole site is translated, and it opens in the language the browser asks for. An address that doesn't exist lands in a small terminal, which answers with git's error for a missing path and a hint for the way home.
+
+<ProjectImage
+  src="/projects/sola/home-ja.webp"
+  alt="The home page in Japanese in the light theme: the greeting こんにちは、私は Yanis above the translated line and buttons"
+  caption="The home page in Japanese."
+  size="full"
+/>
+
+## How it's built
+
+Sola is a React app in TypeScript, built with Vite, styled with Tailwind CSS and shadcn/ui components, and animated with Motion. The backgrounds are drawn with three.js and OGL. It's deployed on Vercel, where serverless functions fetch the GitHub activity and the changelog's commits.
+
+### Content counts as painted when it starts to appear
+
+Every entrance on the site is a fade, and each one used to start from opacity 0. Chrome's Largest Contentful Paint (LCP), the moment the largest piece of content on screen counts as drawn, skips anything painted at opacity 0, and a fade runs on the compositor without painting again. So a block counted only once its fade had finished, and every page's LCP carried a 0.7-second glide. In a Chrome trace with the CPU slowed four times, the contact page's subtitle started its reveal at 941 ms and counted at 1536 ms.
+
+Entrances now start at 0.001, which is less than one step of an 8-bit colour channel even on white. Nothing looks different, but the browser counts the paint as soon as the fade begins. In the same trace, the projects page counted at 1136 ms instead of 2764 ms and the home page at 1120 ms instead of 2032 ms.
+
+### One list of routes
+
+Every page is one entry in `src/config/routes.ts`: its path, the code to load, the layout and the tab title.
+
+<CodeBlock
+  code={`{
+    path: "/projects",
+    layout: "app",
+    ...page(() => import("@/pages/Projects")),
+    title: (t) => t.projects.title,
+  },`}
+  fileName="src/config/routes.ts"
+  lang="ts"
+/>
+
+The router renders from that list, and so does a build step that writes a small script into `index.html`. The script matches the address against the same list and starts downloading that page's code while the main bundle is still arriving, where before the page's code was requested only after the whole bundle had downloaded and run. The build fails if an entry's path and page stop pairing up, so the list and the script can't drift apart.
+
+### One language per visitor
+
+Every translation used to ship in the startup bundle, 156 KB minified, although a visitor reads one. English is still bundled as the fallback, and every other language is its own chunk of about 11 KB compressed, fetched before the first render alongside the page's code, so a German visit waits no longer than an English one. Switching language keeps the current words on screen until the new ones have loaded.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/sola/home-dark-desktop.webp",
+      frame: "safari",
+      url: "sola.ysz.life",
+      alt: "The home page in the dark theme over the Aurora background: the greeting Hello, I'm Sebi with the Contact me and View projects buttons",
+      caption: "The home page in the dark theme.",
+    },
+    {
+      src: "/projects/sola/projects-mobile.webp",
+      frame: "iphone",
+      alt: "The projects page on a phone in the dark theme over the Aurora background: the filter and sort controls above the Kinoa card and the top of the Sola card",
+      caption: "Projects on a phone.",
+    },
+    {
+      src: "/projects/sola/about-mobile.webp",
+      frame: "iphone",
+      alt: "The about page on a phone in the dark theme over the Aurora background: the introduction, a Resume button and the top of the particle portrait",
+      caption: "About on a phone.",
+    },
+  ]}
+  columns={3}
+/>

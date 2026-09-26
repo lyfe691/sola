@@ -1,20 +1,119 @@
-# A dog's website that doubles as a template
+# A website for my brother's dog, built to be reused
 
-Taco is my brother's Pomeranian, and this is his website. I built it as something I could reuse: a small multi-page site with translations, colour themes and a blog already wired up, so the next site of this kind starts from a working base.
+Taco is my brother's Pomeranian, and [takitwo.vercel.app](https://takitwo.vercel.app) is his website. I built it as a base for the next small site of this kind. The colours live in theme classes and every interface string in one JSON file per language, so the next site means new content and new values in those files while the components stay as they are.
 
 <Safari
   url="takitwo.vercel.app"
-  src="/projects/taco/home-desktop.webp"
-  alt="The Taco home page: the headline Meet Taco with two buttons on the left, and a round photo of a cream Pomeranian holding a dandelion on the right"
-  caption="The home page in the default theme."
+  src="/projects/taco/themes.webp"
+  video="/projects/taco/themes.mp4"
+  alt="The Taco home page switching themes from the palette menu in the header: from Green to Cherry, Sky, Gotham and finally Night"
+  caption="Switching themes from the header."
 />
 
-## Languages, detected on arrival
+## Colour themes
 
-The site speaks English, Spanish and Japanese. On a first visit it reads the browser's language and uses it if the site has it; otherwise it falls back to English:
+The palette button in the header opens the theme menu. Picking a theme recolours every page at once, from the links and buttons to the soft circles behind the photo, and the site remembers the choice for the next visit. Gotham is black and white, Night is navy with a blue accent, and every new visitor starts in Green.
+
+<ProjectImage
+  src="/projects/taco/about-gotham.webp"
+  alt="The about page in the Gotham theme: a large photo of Taco holding a dandelion on the left, and on the right a short description with cards for age, breed, personality and favourite food, all white on black"
+  caption="The about page in Gotham."
+  size="full"
+/>
+
+## Languages
+
+The site is written in English, Spanish and Japanese. On a first visit it picks the language that matches the browser and falls back to English, and the language button in the header switches it at any time. A choice made there is saved and wins on every later visit.
+
+<ProjectImage
+  src="/projects/taco/language.webp"
+  video="/projects/taco/language.mp4"
+  alt="The language menu opens on the home page, 日本語 is picked, the navigation, headline and buttons switch to Japanese, and the page scrolls down to the about section, also in Japanese"
+  caption="Switching the site to Japanese."
+  size="full"
+/>
+
+## Moving between pages
+
+The header stays in place from page to page, and the line under the active link slides across to the new one while the next page fades in. The about page gathers Taco's details: his age, breed, personality and favourite food.
+
+<ProjectImage
+  src="/projects/taco/nav.webp"
+  video="/projects/taco/nav.mp4"
+  alt="The site in the Sky theme: clicking About slides the underline from Home to About as the about page fades in, then clicking Home slides it back"
+  caption="The underline follows the active page."
+  size="full"
+/>
+
+## The blog
+
+Every post has its own page with a title, the date and author, a cover photo and the story below it. The text styles follow the theme, so in Gotham and Night a post reads as light text on a dark page.
+
+<ProjectImage
+  src="/projects/taco/post-night.webp"
+  alt="A blog post titled Taco's Beach Day in the Night theme: a back link, the date and author, a wide photo of Taco, and the first paragraphs in light text on navy"
+  caption="A post in the Night theme."
+  size="full"
+/>
+
+## On a phone
+
+On a phone the links move into a menu that slides in from the side. The language and theme buttons sit at the bottom of it and work the same way as on a computer.
+
+<IPhone
+  src="/projects/taco/menu.webp"
+  video="/projects/taco/menu.mp4"
+  alt="On a phone, the menu slides in from the right; the theme button switches the site to Cherry, then the language button switches it to Japanese"
+  caption="The phone menu, with language and theme at the bottom."
+/>
+
+## How it's built
+
+Taco is a Next.js app on the App Router, written in TypeScript. The components come from shadcn/ui, which builds on Radix, and are styled with Tailwind CSS. Framer Motion runs the page and navigation animation, and the site is deployed on Vercel.
+
+### Themes are sets of CSS variables
+
+shadcn/ui colours everything through tokens: classes like `bg-primary` and `border-border`. The Tailwind config maps each token to a CSS variable, so `primary` becomes `hsl(var(--primary))`, and a theme is a class that gives those variables different HSL values. Green sits on `:root`, and the other themes follow the same pattern as Sky, shown here abridged:
 
 <CodeBlock
-  code={`export function detectUserLanguage(): string {
+  code={`.theme-sky {
+    --background: 210 50% 98%;
+    --foreground: 210 50% 16%;
+    --primary: 210 80% 50%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 210 33% 96%;
+    --muted-foreground: 210 5% 45%;
+    --border: 210 20% 90%;
+    --ring: 210 80% 50%;
+  }`}
+  fileName="app/globals.css"
+  lang="css"
+/>
+
+Because the pages colour themselves through the tokens, a new theme is one more class and an entry in the theme menu. Night is the class `dark`, the one Tailwind's `dark:` variant looks for. Gotham is dark as well but has a class of its own, so the prose styles for blog posts name both `.dark` and `.theme-gotham`.
+
+### No flash of the wrong theme
+
+[next-themes](https://github.com/pacocoursey/next-themes) puts the chosen theme's class on `<html>` and keeps it in `localStorage`. The class has to be in place before the first paint, or a returning visitor who picked Night would see the page flash green first. The library handles this with a small inline script that reads the stored theme and sets the class before React hydrates.
+
+That is why `<html>` carries `suppressHydrationWarning`: its class in the browser differs from the server's HTML on purpose. The theme button has the same problem on a smaller scale. It shows the current theme's icon, a flower for Cherry and a moon for Night, and since the server can't know the theme, it renders the default palette icon until it has mounted.
+
+### The English file is the type
+
+The interface text lives in `lib/i18n/en.json`, `es.json` and `ja.json` as nested objects, and components look strings up by dot path: `t('home.aboutSection.title')` walks down whichever tree is active. The map that holds the language files is typed as `typeof en`, so a Spanish or Japanese file that is missing a key shows up as a type error in the editor.
+
+On a visit, the provider first checks `localStorage` for a language picked earlier. If there is none, it asks the browser:
+
+<CodeBlock
+  code={`import { defaultLanguage, languages } from './languages';
+  import en from './en.json';
+  import es from './es.json';
+  import ja from './ja.json';
+  export type TranslationJSON = typeof en;
+  type TranslationsType = { [key: string]: TranslationJSON };
+  const translations: TranslationsType = { en, es, ja };
+  const fallbackLanguageCode = 'en';
+  export function detectUserLanguage(): string {
     if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
       const browserLang = navigator.language || navigator.languages[0];
       const langCode = browserLang.split('-')[0];
@@ -28,41 +127,31 @@ The site speaks English, Spanish and Japanese. On a first visit it reads the bro
   lang="ts"
 />
 
-A choice made in the language menu is saved in `localStorage` and wins over detection on the next visit. The strings live in one JSON file per language, and a provider hands every page the current language and a `t` function, so adding a language is one more file and one more entry in the list.
+`navigator.language` returns a tag like `es-MX`. The function keeps the part before the hyphen and uses it if the site has that language, English otherwise. All of this runs in the browser after the page has loaded, which keeps every page static: the HTML is prerendered once and the URLs are the same in every language.
+
+Adding a language takes a JSON file, an import that puts it in the map, and an entry in `languages.ts` with a code, a display name and a flag. The language menu is built from that list, so it needs no change of its own.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/taco/language-switcher-desktop.webp",
-      alt: "The home page with the language menu open, showing English, Español and 日本語",
-      caption: "The language menu.",
+      src: "/projects/taco/home-cherry.webp",
+      frame: "safari",
+      url: "takitwo.vercel.app",
+      alt: "The Taco home page in the Cherry theme: the headline Meet Taco in pink beside a round photo of Taco holding a dandelion",
+      caption: "The home page in Cherry.",
     },
     {
-      src: "/projects/taco/blog-desktop.webp",
-      alt: "The blog page: the heading Taco's Adventures Blog above a grid of post cards, each with a photo, a date and an author",
-      caption: "The blog.",
-    },
-  ]}
-  columns={2}
-/>
-
-## Named themes instead of light and dark
-
-The site does not follow the system's light or dark setting. The visitor picks a named theme from a menu: Green is the default, and Night is the dark one.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/taco/home-dark-desktop.webp",
-      alt: "The same home page in the Night theme: a navy background with a blue accent",
-      caption: "The Night theme.",
-    },
-    {
-      src: "/projects/taco/home-mobile.webp",
+      src: "/projects/taco/home-cherry-mobile.webp",
       frame: "iphone",
-      alt: "The home page on a phone: the hero stacked in one column, with a menu button in place of the navigation",
-      caption: "On a phone.",
+      alt: "The home page on a phone in the Cherry theme: the headline, two buttons and the round photo stacked in one column",
+      caption: "Home on a phone.",
+    },
+    {
+      src: "/projects/taco/post-night-mobile.webp",
+      frame: "iphone",
+      alt: "The blog post Taco's Beach Day on a phone in the Night theme, with its photo and the first paragraphs",
+      caption: "A post on a phone.",
     },
   ]}
-  columns={2}
+  columns={3}
 />

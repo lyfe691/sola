@@ -1,123 +1,194 @@
-# A Cleaner Way to Watch
+# Free films and series, and a place to watch them together
 
-Free streaming sites usually look like they were built in a rush — Kinoa doesn't. The UI is minimal and well-structured: clean grids, consistent spacing, dark mode, and a detail page that keeps everything from the poster to the player in one view.
+[Kinoa](https://kinoa.to) is a free site for watching films and series, with a social side built around the player: profiles, a feed, comments, messages and rooms for watching together. Around 10,000 people use it each month, and about a thousand of them have an account.
+
+It started in November 2025 as a search box and a player. Everything below was added since, one release at a time.
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/hero.webp"
+  video="/projects/kinoa/hero.mp4"
+  alt="Kinoa's home page in the dark theme: the headline What do you want to watch? rises in, then typing spirited into the search box brings up Spirited Away and four other results, and the arrow keys move through them"
+  caption="Search answers as you type."
+/>
+
+## Finding something to watch
+
+Everything starts from one search box. Results arrive while you type, each with its poster, year and rating, the rest of the most likely title is completed in grey, and the arrow keys move through the list. Below the search, the home page shows what you were watching and what everyone else is watching this week.
+
+Every card opens in place when you hover it: the poster widens into the title's artwork, with the synopsis and a button to start watching.
+
+<ProjectImage
+  src="/projects/kinoa/cards.webp"
+  video="/projects/kinoa/cards.mp4"
+  alt="The home page's trending grid: as the pointer moves along the first row, each poster widens into a card with the title's backdrop, year, rating, synopsis, a Watch Now button and quick actions"
+  caption="Cards open into the title's artwork on hover."
+  size="full"
+/>
+
+A title's page carries its artwork, rating, genres and cast, and the player sits right below. Catalogue data comes from TMDB, The Movie Database.
+
+<ProjectImage
+  src="/projects/kinoa/title-your-name.webp"
+  alt="The title page for Your Name: the film's artwork across the top, its poster, rating, year, runtime, genres and synopsis, and a Watch Together button"
+  caption="A title page."
+  size="full"
+/>
+
+## Playing it
+
+Films and series play in players embedded from other sites, and not every one of them has every title. The row under the player names the current server and tags each with what it's good at, such as best quality or most reliable. When the default doesn't load, a hint offers the next one in a tap. On a phone, playback can switch straight into the device's own fullscreen player.
+
+A series gets an episode picker by season, with the episode you're on highlighted.
+
+<ProjectImage
+  src="/projects/kinoa/episodes.webp"
+  alt="Below the player: the server row reading VidFast with a Best quality chip and a Try VidSrc hint, then the Episodes section with a season picker and stills for six episodes, the third highlighted"
+  caption="The server row and the episode picker."
+  size="full"
+/>
+
+Kinoa remembers where you stopped. Continue Watching brings you back to the same minute of a film, or the same episode of a series, and it works without an account too. Signing in moves that history onto the account, next to a watchlist, so both follow you to other devices.
+
+<ProjectImage
+  src="/projects/kinoa/continue-watching.webp"
+  alt="The home page scrolled down: Continue Watching with Spirited Away, Slow Horses season 1 episode 3, Dune: Part Two and Arcane season 2 episode 1, each with a progress bar and the time left, above the week's trending titles"
+  caption="Continue Watching, above the week's trending titles."
+  size="full"
+/>
+
+## Watching together
+
+A room is a link. The host picks a title and shares the room, and everyone who joins watches the same moment, with a chat beside the player. When the host pauses, skips ahead or switches episode, the room follows. Hosts can hand hosting to someone else, remove people and ban them, and each room can be listed in the public directory or kept to the people who have the link.
+
+<ProjectImage
+  src="/projects/kinoa/watch-together.webp"
+  video="/projects/kinoa/watch-together.mp4"
+  alt="The Watch Together page: the headline Movie night, across the internet beside a dotted globe turning under orbiting arcs"
+  caption="Movie night, across the internet."
+  size="full"
+/>
+
+## Profiles, the feed and messages
+
+Every account gets a handle and a public page at kinoa.to/@name, with favorites, a watchlist and what was watched recently. One switch makes the whole profile private. People follow each other, like titles and comment on them, and the feed shows comments, favorites and follows from everyone on Kinoa, newest first.
+
+Direct messages have reactions, editing and deleting, and blocking and reporting. A notification bell collects replies, mentions, likes and follows as they happen, and says when a title you follow comes out.
+
+<ProjectImage
+  src="/projects/kinoa/profile.webp"
+  alt="My profile at kinoa.to/@rei: a cover image, avatar and handle, follower counts and a short bio, and the Favorites tab open on Mr. Robot, Neon Genesis Evangelion, Death Note and Breaking Bad"
+  caption="My own profile, on the Favorites tab."
+  size="full"
+/>
+
+## Sports
+
+The sports hub leads with what's live now and what starts next, across football, basketball, motor sports and more. Every match has its own page with the schedule and standings around it and one way to watch.
+
+<ProjectImage
+  src="/projects/kinoa/sports.webp"
+  alt="The Sports hub: category chips from football to cricket, then Live now with match cards for basketball and football fixtures, each marked Live"
+  caption="Sports, led by what's live."
+  size="full"
+/>
+
+## In your language
+
+Kinoa picks the visitor's language from the browser, and every part of the interface is translated. Arabic and Hebrew get the whole layout mirrored right to left. Titles, overviews and genres arrive in the visitor's language wherever TMDB has them, and so do the posters: the Arabic page for Your Name shows the Japanese original.
+
+<ProjectImage
+  src="/projects/kinoa/ar-title.webp"
+  alt="The Your Name page in Arabic: the layout mirrored right to left, the title and synopsis in Arabic, and the Japanese poster on the right"
+  caption="Your Name in Arabic, with its Japanese poster."
+  size="full"
+/>
+
+## Design and motion
+
+Kinoa uses a warm palette of cream and espresso with a caramel accent, in a light and a dark theme that follow the system unless you pick one. It moves in small ways that confirm what happened. Pages stream in and reveal each part where its placeholder stood, the sidebar glides open and closed, a rejected form shakes the field that's wrong, and dialogs change size smoothly instead of jumping. All of it steps back for visitors who ask their system for reduced motion. Kinoa also installs as an app, from the browser on a computer or Android, or with a short guide on an iPhone.
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/theme.webp"
+  video="/projects/kinoa/theme.mp4"
+  alt="The home page switching from the dark theme to the light theme and back from the controls at the bottom of the sidebar"
+  caption="The light and dark themes."
+/>
+
+## How it's built
+
+Kinoa is a Next.js app, mostly server components, on Supabase for accounts, the database and the realtime channels that rooms run on. It's deployed on Vercel and translated with next-intl.
+
+### Keeping a room on one clock
+
+The embedded players are the hard constraint: they can't be told to pause or jump to a time. So a guest who drifts away from the host reloads their player at the host's position, projected forward by how long a reload takes. Each reload measures where it actually landed and corrects the next one, and it aims a fraction of a second behind the host, since being early spoils a scene and being late doesn't.
+
+<CodeBlock
+  code={`/** Aim a touch behind the host — being early spoils, being late doesn't. */
+  export const TARGET_DRIFT_SECONDS = -0.75
+  /** Share of each landing error folded into the next lead estimate. */
+  export const LEAD_LEARNING_RATE = 0.6
+  export function anchorTargetFor(
+    host: HostAnchor,
+    now: number,
+    leadSeconds: number
+  ): AnchorTarget {
+    if (!host.isPlaying) {
+      return { time: Math.max(0, host.currentTime), play: false }
+    }
+    return {
+      time: Math.max(0, projectPlayhead(host, host.at, now) + leadSeconds),
+      play: true,
+    }
+  }
+  export function nextLoadLead(lead: number, driftAtSettle: number): number {
+    const error = driftAtSettle - TARGET_DRIFT_SECONDS
+    const next = lead - error * LEAD_LEARNING_RATE
+    return Math.min(
+      MAX_LOAD_LEAD_SECONDS,
+      Math.max(MIN_LOAD_LEAD_SECONDS, Number.isFinite(next) ? next : lead)
+    )
+  }`}
+  fileName="lib/watch-together-playhead-sync.ts"
+  lang="ts"
+/>
+
+Reloads cost a buffer, so a guest only reloads after drifting several seconds for two checks in a row, and after a few tries it hands the decision to a Catch up button.
+
+### Rules the database enforces
+
+Only the host can steer a room. That rule is a row-level security policy on the room's control channel rather than a check in the app, so it holds for any client, and an integration test signs in as a guest, sends every control command and checks that the host receives none of them. Handles work the same way: they're claimed through one database function that owns every rule, from length and reserved names to moderation, and a unique index settles two people claiming the same name at once.
+
+### Fewer round trips
+
+Checking who is signed in goes over the network to Supabase Auth, and a movie page used to do it three times in one render, the feed page four. The session helpers now share one cached result per render, so it happens once. A watchlist row now carries the title, poster and backdrop it's drawn with, so a long list renders from one query instead of fetching every title from TMDB. And the version check every open tab makes every five minutes is answered from Vercel's edge cache instead of running a function each time.
+
+### Keeping the translations complete
+
+English is the source for every string. A check in CI compares every other language file against it and fails when a key is missing or left over, so a new feature can't ship half translated.
 
 <ProjectGallery
   images={[
     {
       src: "/projects/kinoa/home-desktop.webp",
-      alt: "Kinoa home page — desktop",
-      caption: "Home — desktop",
+      frame: "safari",
+      url: "kinoa.to",
+      alt: "Kinoa's home page in the light theme: the headline What do you want to watch? above the search box",
+      caption: "The home page in the light theme.",
     },
     {
-      src: "/projects/kinoa/detail-lain-dark.webp",
-      alt: "Serial Experiments Lain detail page — dark mode",
-      caption: "Detail page with inline player — dark mode",
+      src: "/projects/kinoa/title-mobile.webp",
+      frame: "iphone",
+      alt: "The Slow Horses page on a phone: the poster over a dark backdrop, the title, rating, genres, synopsis and a Watch Together button",
+      caption: "A series on a phone.",
     },
-  ]}
-  columns={2}
-/>
-
-## What You Get
-
-The home page opens with a search bar front and center, a trending section with filter tabs (All / Movies / TV Shows), and rows for latest releases. Everything is filterable and loads live from TMDB.
-
-Every title has its own detail page — poster, backdrop, rating, runtime, genres, episode list for TV. The player embeds inline so you never leave. If playback fails, just pick a different server.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/kinoa/watchlist-desktop.webp",
-      alt: "My Watchlist — desktop",
-      caption: "Watchlist — desktop",
-    },
-    {
-      src: "/projects/kinoa/search-desktop.webp",
-      alt: "Search page — desktop",
-      caption: "Search — desktop",
-    },
-    {
-      src: "/projects/kinoa/search-results-dark.webp",
-      alt: "Search results for Breaking Bad — dark mode",
-      caption: "Search results — dark mode",
-    },
-  ]}
-  columns={3}
-/>
-
-Accounts are optional but unlock watchlist sync and history across devices. Sign up with Google or email/password — the register page doubles as a mosaic of random posters, which I'm proud of.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/kinoa/register-dark.webp",
-      alt: "Create account page — dark mode",
-      caption: "Register — dark mode",
-    },
-    {
-      src: "/projects/kinoa/settings-dark.webp",
-      alt: "Settings — dark mode",
-      caption: "Settings — dark mode",
-    },
-  ]}
-  columns={2}
-/>
-
-## Route Structure
-
-<CodeBlock
-  code={`app/
-  ├── (auth)/              ← register, sign in
-  ├── (legal)/[slug]/      ← privacy policy, terms
-  ├── (main)/
-  │   ├── page.tsx         ← home: search, trending, rows
-  │   ├── movie/[id]/      ← movie detail + inline player
-  │   ├── tv/[id]/         ← TV detail + episode navigator
-  │   ├── search/          ← full search with genre + sort filters
-  │   ├── watchlist/       ← saved titles with backup/restore
-  │   ├── settings/        ← profile, security, data management
-  │   └── contact/
-  └── api/                 ← internal endpoints`}
-  fileName="app/"
-  lang="text"
-/>
-
-## Under the Hood
-
-Data fetching is all server-side via typed helpers in `lib/tmdb.ts`. TMDB responses are cached through the App Router's fetch layer. The player is a single `player.tsx` component that takes a discriminated union — `kind: "movie"` or `kind: "tv"` — and builds a VidFast iframe URL accordingly.
-
-Auth and persistence run through **Supabase**: watchlist entries and watch history are stored per-user, with a backup/restore feature on the watchlist page (you can see it in the screenshot above).
-
-Ads are served via three components in `components/ads/`: a native banner that appears between content rows on the home page, a popunder, and a social bar.
-
-## Mobile
-
-The layout is fully responsive. Navigation collapses to a hamburger, the grid drops to two columns, and search/watchlist work the same on any screen size.
-
-<ProjectGallery
-  images={[
     {
       src: "/projects/kinoa/home-mobile.webp",
       frame: "iphone",
-      alt: "Kinoa home page — mobile",
-      caption: "Home — mobile",
-    },
-    {
-      src: "/projects/kinoa/watchlist-mobile.webp",
-      frame: "iphone",
-      alt: "Watchlist — mobile",
-      caption: "Watchlist — mobile",
-    },
-    {
-      src: "/projects/kinoa/search-mobile.webp",
-      frame: "iphone",
-      alt: "Search — mobile",
-      caption: "Search — mobile",
+      alt: "The home page on a phone: Continue Watching with Spirited Away and Slow Horses, then the Trending row",
+      caption: "Home on a phone.",
     },
   ]}
   columns={3}
 />
-
----
-
-_Built for anyone who just wants to watch something without the noise._

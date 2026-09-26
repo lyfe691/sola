@@ -1,66 +1,132 @@
-# A notebook, not a portfolio
+# A writing site with a guestbook
 
-Thoughts is where I write the things that do not fit a project page: reflections, fragments and notes. It sits apart from this portfolio on purpose. A portfolio shows finished work, and a notebook is allowed to be unfinished.
+[Thoughts](https://thoughts.ysz.life) is where I write the things that don't fit a project page. It's a few quiet pages of text: an about page, the list of posts and a guestbook where anyone can leave a note. It's based on [Shu Ding's site](https://shud.in).
 
 <Safari
   url="thoughts.ysz.life"
-  src="/projects/thoughts/home-desktop.webp"
-  alt="The Thoughts home page: a thin navigation with about, thoughts and guestbook in italic serif on the left, and a short introduction in a single column of text"
-  caption="The whole site is one column of text and three links."
+  src="/projects/thoughts/hero.webp"
+  video="/projects/thoughts/hero.mp4"
+  alt="The about page, then a click on guestbook in the italic links on the left: the guestbook fades in with its dated entries, and a message is typed into the form without being sent. Every visitor's name and message is blurred"
+  caption="From the about page to the guestbook, names blurred."
 />
 
-## Text first
+## Pages and posts
 
-The design is a single column, careful type and a lot of white space, and the navigation is three words.
+The links sit to the left of the text in lowercase italic serif, and on a wide screen they stay in place while you scroll. Moving between pages crossfades. On a phone, the links move into a row above the text.
 
-Even the dead ends are written. The 404 page is a short verse, and one of its lines sets the tone: “You were never supposed to be here.”
+Each post is an MDX file in the repository that exports its title, date and description. The list shows the posts newest first, each title joined to its date by a row of dots. Code in a post is highlighted by Shiki on the server, so the colours arrive as finished HTML, and an image's title becomes a note in the margin beside it on a wide screen.
+
+An address that doesn't exist gets a short verse.
+
+<Safari
+  url="thoughts.ysz.life/nope"
+  src="/projects/thoughts/not-found.webp"
+  alt="The not found page: the italic links about, thoughts and guestbook on the left, and beside them the heading not found above two lines, the page does not exist, and you were never supposed to be here"
+  caption="A page that doesn't exist."
+/>
+
+## The guestbook
+
+Anyone can sign the guestbook with an optional name and a message of up to 280 characters, without an account. Entries show newest first with their date and time, ten at a time, and one you wrote yourself gets a Delete link when you hover it.
+
+<Safari
+  url="thoughts.ysz.life/guestbook"
+  src="/projects/thoughts/guestbook-desktop.webp"
+  alt="The guestbook: a one-line form for a name and a message above a list of dated entries, with every name and message blurred"
+  caption="The guestbook, with names and messages blurred here."
+/>
+
+## How it's built
+
+Thoughts is a Next.js app on Vercel. The posts are compiled from MDX and rendered as static pages at build time. The guestbook is one Postgres table, read and written through `@vercel/postgres` by a single route handler.
+
+### Signing the guestbook
+
+A `POST` to `/api/guestbook` runs its checks in order and writes only if all of them pass. The form has a hidden `website` field that a person never sees and a form-filling bot usually does: any value in it gets the request rejected. The message is trimmed and has to be between 1 and 280 characters, and the name is cut to 50. Then the route looks up the latest entry from the same sender and answers 429 if it is less than 30 seconds old.
+
+A sender is identified by a SHA-256 hash of the client's address, taken from the first entry in `x-forwarded-for`, and the hash is all the table keeps. It is enough to recognise the same sender twice, which is what the rate limit and the delete check below need.
+
+<CodeBlock
+  code={`export async function POST(req: NextRequest) {
+    await ensureTable()
+    const ipHash = getClientIpHash(req)
+    let body: { name?: string; message?: string; hp?: string } = {}
+    try {
+      body = await req.json()
+    } catch {
+      // ignore
+    }
+    const { name = null, message = '', hp = '' } = body
+    if (hp && hp.trim().length > 0) {
+      return NextResponse.json({ error: 'rejected' }, { status: 400 })
+    }
+    const trimmed = (message || '').trim()
+    if (trimmed.length === 0 || trimmed.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: 'invalid_message' }, { status: 400 })
+    }
+    const safeName = name ? String(name).slice(0, 50).trim() : null
+    if (isRateLimitEnabled()) {
+      const recent = await sql<{ created_at: string }>\`
+        SELECT created_at FROM guestbook
+        WHERE ip_hash = \${ipHash}
+        ORDER BY created_at DESC
+        LIMIT 1
+      \`
+      if (recent.rows.length > 0) {
+        const last = new Date(recent.rows[0].created_at).getTime()
+        const now = Date.now()
+        if (now - last < RATE_LIMIT_WINDOW_MS) {
+          return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
+        }
+      }
+    }
+    const id = crypto.randomUUID()
+    const approved = isAutoApprove()
+    const rejected = false
+    const inserted = await sql<GuestbookRow>\`
+      INSERT INTO guestbook (id, name, message, ip_hash, approved, rejected)
+      VALUES (\${id}, \${safeName}, \${trimmed}, \${ipHash}, \${approved}, \${rejected})
+      RETURNING id, name, message, created_at, updated_at, edited
+    \`
+    return NextResponse.json({ item: inserted.rows[0], approved }, { status: 201 })
+  }`}
+  fileName="app/api/guestbook/route.ts"
+  lang="ts"
+/>
+
+This is abridged: the real handler has a second branch that keeps entries in an in-memory array when no database is configured, so the page works in local development without one.
+
+### Moderation
+
+Every row carries two flags, `approved` and `rejected`, and the public list returns only rows that are approved and not rejected. Whether a new entry is approved on arrival comes from one environment variable, which defaults to yes. With it off, new entries wait in a queue, and the visitor sees a note that theirs is pending instead of seeing it at the top of the list.
+
+The queue is a token-protected admin page. It lists pending entries oldest first, each with an approve and a reject button, and a second view lists the approved ones with a delete button. Rejecting an entry sets its flag and keeps the row. The rate limit reads every row from a sender, so a rejected entry still counts toward that sender's 30 seconds.
+
+### Deleting your own entry
+
+Visitors don't have accounts, so the site needs another way to know who wrote an entry. When the browser posts one, it saves the returned id in `localStorage`, and entries with a saved id get the Delete link. The server doesn't rely on that list. Its query is `DELETE FROM guestbook WHERE id = … AND ip_hash = …`, so a row goes only when the request comes from the same hashed address that wrote it. The tradeoff is that ownership follows the network: on another connection the link still shows, and the server refuses it.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/thoughts/posts-desktop.webp",
-      alt: "The list of posts: each title on the left, a dotted line, and its date on the right",
-      caption: "The posts, newest first.",
+      src: "/projects/thoughts/about-desktop.webp",
+      frame: "safari",
+      url: "thoughts.ysz.life",
+      alt: "The about page: the italic links about, thoughts and guestbook on the left, and a short introduction in a single column of text",
+      caption: "The about page.",
     },
     {
-      src: "/projects/thoughts/guestbook-desktop.webp",
-      alt: "The guestbook: a one-line form for a name and a message, above a list of dated notes from visitors, with the names blurred",
-      caption: "The guestbook. Visitor names are blurred here.",
+      src: "/projects/thoughts/about-mobile.webp",
+      frame: "iphone",
+      alt: "The about page on a phone: the three links in a row at the top and the introduction in one column below",
+      caption: "About on a phone.",
+    },
+    {
+      src: "/projects/thoughts/guestbook-mobile.webp",
+      frame: "iphone",
+      alt: "The guestbook on a phone: the name and message fields above dated entries, with every name and message blurred",
+      caption: "The guestbook.",
     },
   ]}
-  columns={2}
+  columns={3}
 />
-
-## A post is a file
-
-The site is a Next.js app, and every post is an MDX file with a little metadata: a title, a date and a description. Publishing means adding a file to one folder. The page that renders a post imports it by its slug:
-
-<CodeBlock
-  code={`// thoughts/[slug]/page.tsx
-  const { default: MDXContent, metadata } = await import(
-    '../_articles/' + \`\${params.slug}.mdx\`
-  )
-  return (
-    <div lang={metadata.chinese ? "zh-Hans" : "en"}>
-      <MDXContent />
-    </div>
-  )`}
-  fileName="page.tsx"
-  lang="typescript"
-/>
-
-The `lang` attribute follows the post, so a note written in Chinese is announced as Chinese to browsers and screen readers.
-
-## The guestbook
-
-Personal sites used to have guestbooks, and I wanted one. Visitors leave a name, which is optional, and a message of up to 280 characters. Entries are stored in Postgres on Vercel.
-
-<IPhone
-  src="/projects/thoughts/home-mobile.webp"
-  alt="The Thoughts home page on a phone: the three navigation links in a row at the top, and the same single column of text below"
-  caption="On a phone the navigation moves to the top."
-/>
-
-## Where the idea came from
-
-The site is directly inspired by [Shu Ding](https://shud.in)’s personal website: simple, text-first and quietly expressive. I wanted a place like that for myself, less polished than a portfolio and more open-ended.

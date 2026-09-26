@@ -1,70 +1,155 @@
-# Style a QR code, then check that it still scans
+# A QR code generator with a scan test
 
-qr.ysz.life makes QR codes in the browser. There is no backend and no upload step: the generator is a client component that pulls in `qr-code-styling` after mount and renders everything locally.
+[qr.ysz.life](https://qr.ysz.life) makes QR codes in the browser. You type a link or any text, style the code and download it. Styling is also what stops a code from scanning, so the header has a Scan Test that reads an exported image back with a real decoder.
 
 <Safari
   url="qr.ysz.life"
-  src="/projects/qr/home-desktop.webp"
-  alt="The QR generator with a link in the input, a navy-on-white preview, export buttons and the Style tab open"
-  caption="A link in, a live preview, and the Style tab open on the right."
+  src="/projects/qr/hero.webp"
+  video="/projects/qr/hero.mp4"
+  alt="The generator in its light theme: typing https://ysz.life into the empty field turns the faded placeholder code solid, and the code redraws with every keystroke"
+  caption="The code redraws with every keystroke."
 />
 
-## Three tabs instead of a wall of controls
+## Shapes and dot styles
 
-Everything sits in one panel with three tabs. Style holds the code's shape (square or circle), the dot style, and the corner square and corner dot styles as separate dropdowns, plus a drop zone for a center logo. Colors holds the foreground and background, an optional independent color for the three corner eyes, a transparent background, and linear or radial gradients on foreground and background with an angle control. Settings is the short one: size, margin, and error-correction level.
+The Style tab decides how the code is drawn. Its modules, the small squares a QR code is made of, can stay square or become dots, rounded runs or angled shapes, and the three corner squares and the dots inside them take styles of their own. The circle shape sets the code in a round field and fills the space around it with dots copied from the code's own pattern. A reset button next to the tabs puts every setting back and keeps the text.
 
-The defaults are 300 px, a 12 px margin, and error correction Q — the level that lets a quarter of the code be destroyed and still decode.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/qr/colors-desktop.webp",
-      alt: "Colors tab showing foreground and background hex fields with swatches, and toggles for custom corner color, transparent background and gradients",
-      caption: "Colors: hex fields, corner eyes, gradients.",
-    },
-    {
-      src: "/projects/qr/settings-dark-desktop.webp",
-      alt: "Dark theme with the Settings tab open: size and margin sliders, error correction set to Quartile 25 percent",
-      caption: "Settings in the dark theme, toggled with the d key.",
-    },
-  ]}
-  columns={2}
+<ProjectImage
+  src="/projects/qr/styles.webp"
+  video="/projects/qr/styles.mp4"
+  alt="The Style tab: the shape switches from Square to Circle, then the Dot Style menu opens and Dots is picked, then the Corner Square Style menu opens and Dot is picked, and the code redraws after each choice"
+  caption="Circle, then dots, then round corner squares."
+  size="full"
 />
 
-## Decoration is what breaks a QR code
+## Colours and gradients
 
-Every style choice spends part of that error-correction budget. A logo across the center, a gradient that flattens the contrast, a foreground too close to the background: each one is allowed, and each one moves the code toward unreadable. A generator that renders the result for you will not tell you which side of the line you landed on.
+Foreground and background take any colour, and the corner squares can have one of their own. The background can also be transparent, for a code that sits on a photo or a coloured page. Both layers take a gradient, linear at any angle or radial from the centre.
 
-So the header carries a Scan Test. You drop in the file you just downloaded, `qr-scanner` decodes the image, and the dialog reports the string it read back and whether that string is a URL. When nothing decodes it says so, in one line: "No QR code found in this image."
+<ProjectImage
+  src="/projects/qr/colors.webp"
+  video="/projects/qr/colors.mp4"
+  alt="The Colors tab: the Gradient switch turns on and the code shades from navy to violet, the gradient end becomes orange, and dragging the angle slider from 45 to 255 degrees turns the gradient around the code"
+  caption="A gradient, turned by its angle slider."
+  size="full"
+/>
 
-## Rebuilding the code on every change
+## A logo in the middle
 
-`qr-code-styling` instances expose an `update()` that takes a partial options object and merges it into the existing one. That merge gave me wrong output, so the preview does the blunt thing instead:
+A logo can be dropped onto the Style tab or picked from disk, and a slider sets its size. Dropping one raises the error correction to H, the level that can rebuild the most missing data, because the modules under the logo are gone and the scanner has to restore them. Lower it again and the Settings tab warns that a logo wants the high level.
+
+<ProjectImage
+  src="/projects/qr/logo.webp"
+  video="/projects/qr/logo.mp4"
+  alt="The Settings tab shows error correction at Quartile (25%); on the Style tab an image is dropped onto the dashed logo field, the leaf logo appears in the middle of the code, and back on Settings the level now reads High (30%)"
+  caption="Dropping a logo raises the level from Q to H."
+  size="full"
+/>
+
+## Exporting and recent codes
+
+A code downloads as PNG, SVG, JPEG or WebP, or goes to the clipboard as a PNG. The Settings tab sets the export size, from 128 to 512 pixels, and the margin around the code. Every download or copy also lands in a Recent list under the buttons, with a thumbnail. It keeps the last ten codes in the browser, and clicking one restores its text and every setting.
+
+<ProjectImage
+  src="/projects/qr/recent.webp"
+  alt="The generator with a leaf logo in a navy code for https://ysz.life, and below the export buttons the Recent list open with two entries, https://ysz.life and https://kinoa.to, each with a thumbnail and the date"
+  caption="The Recent list after two downloads."
+  size="full"
+/>
+
+## Checking that a code scans
+
+The Scan Test in the header takes an exported image and decodes it. A pass shows the text it read, with the link ready to open, and a fail says no code was found. In the clip the default navy code passes, then the same code in a mid grey fails, although on screen it looks like any other QR code.
+
+<ProjectImage
+  src="/projects/qr/scan-test.webp"
+  video="/projects/qr/scan-test.mp4"
+  alt="The Scan Test dialog decodes a dropped navy code and shows https://ysz.life; after the foreground is changed to #999999 the grey code is dropped in and the dialog reports that no QR code was found"
+  caption="Navy passes, #999999 grey fails."
+  size="full"
+/>
+
+## Light and dark
+
+The site follows the system theme, and the d key switches between light and dark. The preview keeps the code's own background colour in both, so it shows what the exported file will look like.
+
+<Safari
+  url="qr.ysz.life"
+  src="/projects/qr/theme.webp"
+  video="/projects/qr/theme.mp4"
+  alt="A circular code with an orange gradient and a leaf logo; pressing d switches the page to the dark theme and back, while the code keeps its white background"
+  caption="The d key switches the theme."
+/>
+
+## How it's built
+
+The site is a Next.js app with shadcn/ui on Radix and Tailwind. [qr-code-styling](https://github.com/kozakdenys/qr-code-styling) draws the code as an SVG, and [qr-scanner](https://github.com/nimiq/qr-scanner) decodes images for the Scan Test. Codes are made and decoded in the browser, so the text never leaves the page.
+
+### How big the logo can be
+
+A QR code stores its data together with Reed–Solomon error-correction codewords, at one of four levels: L can restore about 7% of the codewords, M 15%, Q 25% and H 30%. A logo spends that allowance. qr-code-styling multiplies the size setting by the level's percentage and by the number of modules in the code, and treats the result as the most modules the logo may cover. It then clears the largest block under that number, an odd count across so it sits in the middle, and fits the logo into it.
+
+The level also changes the code itself. `https://ysz.life` is 16 bytes. At H it needs a version 3 symbol of 29 × 29 modules, and at the default size setting of 0.35 the logo gets 9 × 9 of them. Q and M fit in version 2 (25 × 25) with 7 × 7 and 5 × 5, and L drops to version 1 (21 × 21) with 3 × 3. All four decoded in the Scan Test, because a lower level shrinks the logo to fit the smaller budget.
+
+<ProjectImage
+  src="/projects/qr/error-correction-levels.webp"
+  alt="Four codes for https://ysz.life with the same leaf logo at levels H, Q, M and L; the logo covers 9 × 9, 7 × 7, 5 × 5 and 3 × 3 modules as the code shrinks from version 3 to version 1"
+  caption="One logo and one size setting at H, Q, M and L."
+  size="full"
+/>
+
+A logo that small defeats the purpose of adding one, so loading an image raises the level to H:
 
 <CodeBlock
-  code={`// Recreate instance on every config change (avoids deep-merge bugs in .update())
-  useEffect(() => {
-    const Lib = qrLibRef.current
-    if (!Lib || !qrRef.current) return
-    const instance = new Lib(buildOptions(config))
-    qrRef.current.innerHTML = ""
-    instance.append(qrRef.current)
-    qrCodeRef.current = instance
-  }, [config, libReady])`}
+  code={`const loadLogoFile = useCallback((file: File) => {
+    if (!file.type.startsWith("image/")) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      setConfig((prev) => ({
+        ...prev,
+        logo: reader.result as string,
+        errorLevel: prev.errorLevel !== "H" ? "H" : prev.errorLevel,
+      }))
+    }
+    reader.readAsDataURL(file)
+  }, [])`}
   fileName="components/qr-generator.tsx"
   lang="tsx"
 />
 
-Every keystroke and every slider tick builds a new instance and replaces the container's contents. At 300 px that costs little enough to be invisible. On a much larger code, or a grid of them, it would not be.
+### Which colours still scan
 
-## History
+Colour gets no such budget. qr-code-styling draws whatever it is given, and a scanner needs contrast between the modules and the background. I exported variations of the default code and ran each through the Scan Test. Navy on white passed, and so did a transparent background and white on navy. A grey foreground on white passed down to `#888888` and failed from `#999999` on. Yellow `#ffd400` failed, and so did a gradient from navy to a pale lavender, `#e0e0ff`, although the corner squares stayed navy.
 
-The last ten codes you download or copy are kept in localStorage with a thumbnail, so a code you exported yesterday is one click away.
+The decoder is qr-scanner, which is built on jsQR, a JavaScript port of Google's ZXing library. It runs in a Web Worker, or uses the browser's own `BarcodeDetector` where one exists, and the dialog imports it on the first scan, so it adds nothing to the page until someone uses it. A pass is still one decoder's result, and phone cameras differ, so a code that fails here needs more contrast before it goes to print.
 
-<IPhone
-  src="/projects/qr/home-mobile.webp"
-  alt="Phone-width layout with the input, preview and export buttons stacked above the tabbed style panel"
-  caption="At phone width the panel moves below the preview."
+### One render per change
+
+The generator is loaded with `next/dynamic` and `ssr: false`, and qr-code-styling is imported after mount. Every change to the settings then builds a new instance and swaps its SVG into the preview. The library's `update()` merges new options into an existing instance, but its deep merge produced wrong output, so the effect rebuilds instead. That costs one fresh render per keystroke or slider step, for a code of at most 512 pixels.
+
+Restoring a recent code spreads the saved settings over the current defaults, so a code saved before a newer option existed still restores, with the defaults filling in the fields it doesn't have.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/qr/styled-dark-desktop.webp",
+      frame: "safari",
+      url: "qr.ysz.life",
+      alt: "The generator in its dark theme with the Colors tab open: a circular code with a navy-to-orange gradient and a leaf logo on a white card",
+      caption: "The dark theme.",
+    },
+    {
+      src: "/projects/qr/styled-light-mobile.webp",
+      frame: "iphone",
+      alt: "The generator on a phone in the light theme: the title, the link field and the circular gradient code with its leaf logo",
+      caption: "On a phone.",
+    },
+    {
+      src: "/projects/qr/styled-dark-mobile.webp",
+      frame: "iphone",
+      alt: "The generator on a phone in the dark theme, scrolled to the export buttons and the Colors tab with the gradient settings",
+      caption: "The controls on a phone.",
+    },
+  ]}
+  columns={3}
 />
-
-A tool that can quietly produce broken output should ship the check beside it, not in the documentation.

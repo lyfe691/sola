@@ -292,7 +292,7 @@ export const ja = {
         title: "ウェブサイトコード抽出ツール",
         tagline: "どんなサイトのコードも ZIP ひとつに",
         description:
-          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) は、Web サイトの HTML、CSS、JavaScript、画像をフォルダ構成を保ったまま 1 つの ZIP ファイルとしてダウンロードする Chrome / Edge 拡張機能です。ワンクリックで、設定は不要です。Chrome ウェブストアで 6000 人のユーザーがいて、静的なサイトでもっともよく動作します。",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) は、Web サイトの HTML、CSS、JavaScript、画像をフォルダ構成を保ったまま 1 つの ZIP ファイルとしてダウンロードする Chrome / Edge 拡張機能です。ワンクリックで、設定は不要です。Chrome ウェブストアで約 6000 人のユーザーがいて、静的なサイトでもっともよく動作します。",
       },
       applicare: {
         title: "AppliCare",
@@ -352,7 +352,7 @@ export const ja = {
         title: "Kinoa",
         tagline: "無料でストリーミング、ノイズなし",
         description:
-          "[Kinoa](https://kinoa.to) は映画とドラマの無料ストリーミングサイトです。トレンドを眺めて作品を開き、同じページでそのまま再生できます。アカウントは不要で、ログインすればウォッチリストと視聴履歴が端末間で同期されます。Next.js、Supabase、TMDB のデータで構築しました。",
+          "[Kinoa](https://kinoa.to) は映画とドラマの無料ストリーミングサイトです。作品を開けば同じページでそのまま再生でき、アカウントは不要です。アカウントを作ると、公開 @ハンドルのプロフィール、ウォッチリスト、フィード、メッセージ、そしてホストの再生に全員が合わせて観る Watch Together ルームが使えます。作品情報は TMDB から取得し、動画は外部ホスターの埋め込みプレーヤーで再生されます。",
       },
       self: {
         title: "Self",
@@ -392,9 +392,9 @@ export const ja = {
       },
       ura: {
         title: "Ura",
-        tagline: "オフラインで許可も分かるスノーモービル・ナビ",
+        tagline: "オフラインでも使えるラップランドのスノーモービル・ナビ",
         description:
-          "Ura はフィンランド・ラップランド向けのスノーモービル用ナビで、iOS と Android に対応しています。2595 本のルートと、給油所・カフェ・山小屋など 3388 か所を端末に保存するので、電波の届かない場所でも使えます。いまルート上にいるかどうか、そのルートが自由に走れるのか、先に許可が必要なのかを教えてくれます。",
+          "Ura はフィンランド・ラップランド向けのスノーモービル用ナビで、iOS と Android に対応しています。約 2900 本のルートと、給油所・カフェ・山小屋など約 3500 か所を端末に保存するので、電波の届かない場所でも使えます。いまルート上にいるかどうか、外れているときは最寄りのルートまでの距離を教えてくれます。",
       },
       montu: {
         title: "Montu",

@@ -301,7 +301,7 @@ export const es = {
         title: "Extractor de Código Web",
         tagline: "El código de cualquier web en un ZIP",
         description:
-          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) es una extensión para Chrome y Edge que descarga el HTML, CSS, JavaScript y las imágenes de un sitio web en un solo archivo ZIP, conservando la estructura de carpetas. Un clic, sin configuración. Tiene 6000 usuarios en la Chrome Web Store y funciona mejor con sitios estáticos.",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) es una extensión para Chrome y Edge que descarga el HTML, CSS, JavaScript y las imágenes de un sitio web en un solo archivo ZIP, conservando la estructura de carpetas. Un clic, sin configuración. Tiene unos 6000 usuarios en la Chrome Web Store y funciona mejor con sitios estáticos.",
       },
       applicare: {
         title: "AppliCare",
@@ -361,7 +361,7 @@ export const es = {
         title: "Kinoa",
         tagline: "Streaming gratis, sin ruido",
         description:
-          "[Kinoa](https://kinoa.to) es un sitio gratuito de streaming de películas y series. Explora las tendencias, abre un título y dale a reproducir en la misma página, sin necesidad de cuenta; al iniciar sesión tienes una lista y un historial que se sincronizan entre dispositivos. Hecho con Next.js, Supabase y datos de TMDB.",
+          "[Kinoa](https://kinoa.to) es un sitio gratuito de streaming de películas y series. Abre un título y dale a reproducir en la misma página, sin necesidad de cuenta; con una cuenta tienes un @usuario público, una lista, un feed, mensajes y salas de Watch Together donde tus amigos siguen la reproducción de un anfitrión. Los títulos vienen de TMDB y el vídeo se reproduce en reproductores integrados de proveedores externos.",
       },
       self: {
         title: "Self",
@@ -401,9 +401,9 @@ export const es = {
       },
       ura: {
         title: "Ura",
-        tagline: "Motonieve en Laponia: sin conexión y con permisos",
+        tagline: "Navegación en motonieve por Laponia, también sin conexión",
         description:
-          "Ura es navegación para motonieve en la Laponia finlandesa, para iOS y Android. Lleva 2595 rutas y 3388 lugares como gasolineras, cafés y refugios en el teléfono, así que funciona donde no hay señal. Te dice si estás en una ruta y si esa ruta es libre o si primero hace falta un permiso.",
+          "Ura es navegación para motonieve en la Laponia finlandesa, para iOS y Android. Lleva unas 2900 rutas y 3500 lugares como gasolineras, cafés y refugios en el teléfono, así que funciona donde no hay señal. Te dice si estás en una ruta y, si no lo estás, a qué distancia queda la más cercana.",
       },
       montu: {
         title: "Montu",

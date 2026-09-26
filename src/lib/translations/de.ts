@@ -298,7 +298,7 @@ export const de = {
         title: "Website Code Extractor",
         tagline: "Der Code jeder Website als ein ZIP",
         description:
-          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) ist eine Erweiterung für Chrome und Edge, die HTML, CSS, JavaScript und Bilder einer Website als eine ZIP-Datei herunterlädt, samt Ordnerstruktur. Ein Klick, keine Einrichtung. Sie hat 6000 Nutzer im Chrome Web Store und funktioniert am besten mit statischen Seiten.",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) ist eine Erweiterung für Chrome und Edge, die HTML, CSS, JavaScript und Bilder einer Website als eine ZIP-Datei herunterlädt, samt Ordnerstruktur. Ein Klick, keine Einrichtung. Sie hat rund 6000 Nutzer im Chrome Web Store und funktioniert am besten mit statischen Seiten.",
       },
       applicare: {
         title: "AppliCare",
@@ -358,7 +358,7 @@ export const de = {
         title: "Kinoa",
         tagline: "Kostenlos streamen, ohne Lärm",
         description:
-          "[Kinoa](https://kinoa.to) ist eine kostenlose Streaming-Seite für Filme und Serien. Trends durchstöbern, einen Titel öffnen und direkt auf derselben Seite abspielen, ganz ohne Konto; wer sich anmeldet, bekommt eine Watchlist und einen Verlauf, die über alle Geräte synchron bleiben. Gebaut mit Next.js, Supabase und Daten von TMDB.",
+          "[Kinoa](https://kinoa.to) ist eine kostenlose Streaming-Seite für Filme und Serien. Einen Titel öffnen und direkt auf derselben Seite abspielen, ganz ohne Konto; mit einem Konto kommen ein öffentliches @Handle, eine Watchlist, ein Feed, Nachrichten und Watch-Together-Räume dazu, in denen Freunde der Wiedergabe eines Hosts folgen. Die Titel stammen von TMDB, abgespielt wird in eingebetteten Playern externer Hoster.",
       },
       self: {
         title: "Self",
@@ -398,10 +398,9 @@ export const de = {
       },
       ura: {
         title: "Ura",
-        tagline:
-          "Schneemobilrouten für Lappland: offline, mit Genehmigungsstatus",
+        tagline: "Schneemobil-Navigation für Lappland, auch offline",
         description:
-          "Ura ist Schneemobil-Navigation für Finnisch-Lappland, für iOS und Android. Die App hat 2595 Routen und 3388 Orte wie Tankstellen, Cafés und Hütten auf dem Gerät und funktioniert darum auch ohne Empfang. Sie zeigt, ob man auf einer Route ist und ob diese frei befahrbar ist oder zuerst eine Genehmigung braucht.",
+          "Ura ist Schneemobil-Navigation für Finnisch-Lappland, für iOS und Android. Die App hat rund 2900 Routen und 3500 Orte wie Tankstellen, Cafés und Hütten auf dem Gerät und funktioniert darum auch ohne Empfang. Sie zeigt, ob man auf einer Route ist, und wenn nicht, wie weit die nächste entfernt ist.",
       },
       montu: {
         title: "Montu",

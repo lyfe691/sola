@@ -294,7 +294,7 @@ export const ko = {
         title: "웹사이트 코드 추출기",
         tagline: "어떤 웹사이트의 코드든 ZIP 하나로",
         description:
-          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm)는 웹사이트의 HTML, CSS, JavaScript, 이미지를 폴더 구조 그대로 ZIP 파일 하나로 내려받는 Chrome·Edge 확장 프로그램입니다. 클릭 한 번이면 되고 설정은 필요 없습니다. Chrome 웹 스토어 사용자 6,000명이 쓰고 있으며, 정적 사이트에서 가장 잘 동작합니다.",
+          "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm)는 웹사이트의 HTML, CSS, JavaScript, 이미지를 폴더 구조 그대로 ZIP 파일 하나로 내려받는 Chrome·Edge 확장 프로그램입니다. 클릭 한 번이면 되고 설정은 필요 없습니다. Chrome 웹 스토어 사용자 약 6,000명이 쓰고 있으며, 정적 사이트에서 가장 잘 동작합니다.",
       },
       applicare: {
         title: "AppliCare",
@@ -354,7 +354,7 @@ export const ko = {
         title: "Kinoa",
         tagline: "무료 스트리밍, 군더더기 없이",
         description:
-          "[Kinoa](https://kinoa.to)는 영화와 시리즈를 위한 무료 스트리밍 사이트입니다. 인기작을 둘러보고 작품을 열어 같은 페이지에서 바로 재생할 수 있으며 계정도 필요 없습니다. 로그인하면 관심 목록과 시청 기록이 기기 간에 동기화됩니다. Next.js, Supabase, TMDB 데이터로 만들었습니다.",
+          "[Kinoa](https://kinoa.to)는 영화와 시리즈를 위한 무료 스트리밍 사이트입니다. 작품을 열면 같은 페이지에서 바로 재생할 수 있고 계정도 필요 없습니다. 계정을 만들면 공개 @핸들 프로필, 관심 목록, 피드, 메시지, 그리고 호스트의 재생에 맞춰 함께 보는 Watch Together 방을 쓸 수 있습니다. 작품 정보는 TMDB에서 가져오고, 영상은 외부 호스터의 임베드 플레이어에서 재생됩니다.",
       },
       self: {
         title: "Self",
@@ -394,9 +394,9 @@ export const ko = {
       },
       ura: {
         title: "Ura",
-        tagline: "허가 여부까지 알려주는 오프라인 스노모빌 내비",
+        tagline: "오프라인에서도 쓰는 라플란드 스노모빌 내비",
         description:
-          "Ura는 핀란드 라플란드를 위한 스노모빌 내비게이션으로, iOS와 Android를 지원합니다. 2,595개의 경로와 주유소, 카페, 산장 등 3,388곳을 휴대폰에 담아 두기 때문에 신호가 없는 곳에서도 작동합니다. 지금 경로 위에 있는지, 그 경로가 자유롭게 달릴 수 있는지 아니면 먼저 허가가 필요한지 알려 줍니다.",
+          "Ura는 핀란드 라플란드를 위한 스노모빌 내비게이션으로, iOS와 Android를 지원합니다. 약 2,900개의 경로와 주유소, 카페, 산장 등 약 3,500곳을 휴대폰에 담아 두기 때문에 신호가 없는 곳에서도 작동합니다. 지금 경로 위에 있는지, 벗어났다면 가장 가까운 경로가 얼마나 떨어져 있는지 알려 줍니다.",
       },
       montu: {
         title: "Montu",

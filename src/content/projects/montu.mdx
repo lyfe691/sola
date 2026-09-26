@@ -1,111 +1,122 @@
-# Building a journal someone else can keep writing
+# Montu, a journal of Swiss mountain tours
 
-Montu (montu.ch) is a mountain-tour journal in Swiss German. I built the site; the person it was built for writes the tours, takes the photos and publishes them himself. The tour page was not the part that took the thinking. Making every piece of the site editable without a deploy was.
+[montu.ch](https://montu.ch) collects a friend's mountain tours in Switzerland, summer and winter, each written up in German with his own photographs. I built the site for him, and he publishes new tours on his own, from a content editor in his browser.
+
+<Safari
+  url="montu.ch"
+  src="/projects/montu/home-desktop.webp"
+  video="/projects/montu/home-desktop.mp4"
+  alt="The Montu home page: the serif headline Faszination Bergtouren blurs in letter by letter over a misty forest photograph, then the slideshow crossfades to a hut terrace above a turquoise reservoir and on to ski tourers on a snowy slope"
+  caption="The home page opens on a slideshow of his photographs."
+/>
+
+## What he wanted
+
+He wanted a place to keep his tours the way he remembers them. The site says it in its own words: the technical details are only «sanfte Wegweiser» (gentle signposts), and the whole thing is «mehr Tagebuch als Führer», more diary than guidebook. So every page leads with a photograph and his writing, and the figures follow for anyone who wants to go.
 
 <ProjectImage
-  src="/projects/montu/home-desktop.webp"
-  alt="Montu home page: a misty forest photograph filling the screen, with the serif headline Faszination Bergtouren and a glass pill nav"
-  caption="The hero runs five photographs from Sanity, crossfading every 8 seconds."
-  size="large"
+  src="/projects/montu/about-desktop.webp"
+  alt="Willkommen bei Montu.: a photograph of a boulder in a misty valley beside the site's introduction, which ends with the line mehr Tagebuch als Führer, and a button reading Touren ansehen"
+  caption="The introduction, in his words."
+  size="full"
 />
 
-## A diary, not a tour portal
+On the home page each tour is a large photo card with its region, its title, a short teaser he writes for it and a row of three figures: metres climbed, distance and grade.
 
-The site says it itself, in the section about the project: "mehr Tagebuch als Führer", more diary than guidebook. Technical data is there as a signpost, not as the point.
+<ProjectImage
+  src="/projects/montu/home-tours-desktop.webp"
+  alt="Die Touren im Überblick: rounded photo cards of a mountain reservoir and of ski tourers on a snowy slope, each with a region label, a serif title, a short excerpt and a row of figures"
+  caption="The tours on the home page: photograph first, figures last."
+  size="full"
+/>
 
-The obvious build for tour content is a portal: filters, a searchable route database, sortable tables, ratings. Two published tours need none of that, and empty filters would have been the first thing on the page to look broken. So the order everywhere is photograph, then prose, then numbers. The home page lists tours as two large photo cards with a stat row underneath: elevation gain, distance, grade.
+## A tour page
+
+A tour opens on its title photograph with the kind of tour, its grade, the region, the height range and the date. His introduction comes next, then the key facts, the profile and the map, and then the stages, one after another down the page.
+
+<ProjectImage
+  src="/projects/montu/tour-hero-desktop.webp"
+  video="/projects/montu/tour-hero-desktop.mp4"
+  alt="Scrolling the tour Linthal - Muttsee - Kistenpass - Brigels: from the title photograph of a hut terrace above a reservoir, past the introduction, the key facts, the elevation profile and the map, down to the first two stages"
+  caption="A tour, from its title photograph down to the stages."
+  size="full"
+/>
+
+## The stages
+
+Each stage has its own photos to page through, each with a caption, next to its own figures and text. Where part of a route can be skipped, for example by taking a cable car, the stage ends with the alternative in an orange note. A tour can end with links to the huts, lifts and other places along the route.
+
+<ProjectImage
+  src="/projects/montu/tour-stage-desktop.webp"
+  video="/projects/montu/tour-stage-desktop.mp4"
+  alt="The first stage, Linthal bis Bergstation Chalchtrittli: the arrows beside its photo page from a chain-secured rock path to a valley view and a signpost, next to the stage's figures and text, which end in an orange note describing the alternative by taxi and cable car"
+  caption="Paging through a stage's photographs."
+  size="full"
+/>
+
+## Map and elevation profile from one GPS file
+
+A GPS watch or a phone app records a tour as a GPX file: the route as a list of points, each with its altitude. He uploads that one file to the tour. The page draws the route on a terrain map, with a green pin at the start and an orange one at the end, and plots the elevation profile from the same points. The profile picks its own scale, so a short ski tour and a long crossing both read cleanly, and pointing along it reads out the height.
+
+Grades follow the Swiss Alpine Club's scales for hiking, ski and snowshoe tours. Hovering over or tapping the grade spells it out, names the scale and links to a description of it.
+
+<ProjectImage
+  src="/projects/montu/tour-elevation-desktop.webp"
+  video="/projects/montu/tour-elevation-desktop.mp4"
+  alt="Eckdaten der Tour: hovering the grade T3 opens a popover that spells it out as Anspruchsvolle Bergwanderung and links to the SAC scale, then the pointer runs along the elevation profile while a tooltip reads out the height"
+  caption="The grade explained, and the profile read out."
+  size="full"
+/>
+
+The map is a live terrain map, so a visitor can zoom into any part of the route. Beside it he adds how to get there and back, and the minimum equipment to bring.
+
+<ProjectImage
+  src="/projects/montu/tour-map-desktop.webp"
+  video="/projects/montu/tour-map-desktop.mp4"
+  alt="The terrain map below the profile, with the orange route from a green pin at Linthal to an orange pin at Brigels: it zooms in twice and is dragged along the route past the reservoirs, beside notes on the journey there, the journey back and the equipment"
+  caption="Zooming in along the route."
+  size="full"
+/>
+
+## Design
+
+The headings are set in a serif, the text in a quiet sans, and the photographs run large with rounded corners. The menu is a small glass panel in the corner that names the section you're in, and it holds the switch between light, dark and the system's setting.
+
+<ProjectImage
+  src="/projects/montu/theme.webp"
+  video="/projects/montu/theme.mp4"
+  alt="The tours section of the home page: the menu in the top-right corner opens with Home, Über Montu, Touren, Info Eckdaten and Info Planung, the page switches to the dark mode from its Modus control and back to light, and the menu closes"
+  caption="The menu, and the switch to dark."
+  size="full"
+/>
+
+## What he edits himself
+
+The site is built with Next.js, and everything a visitor reads lives in Sanity, a content editor built into the site. A tour is one form, split into tabs from the general details to the route and the logistics. The grade is picked from a list rather than typed, so the label on the page always matches the scale, and a stage only asks for an alternative once he marks it as skippable.
+
+The home page is edited the same way, from the slideshow photographs to the text about the project. When he publishes, the site picks up the change on its own, without a developer.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/montu/home-tours-desktop.webp",
-      alt: "Die Touren im Überblick: two rounded photo cards, one of a glacial reservoir and one of ski tourers, each with a location chip and a stat row",
-      caption: "The tour list: two cards, no filters.",
+      src: "/projects/montu/titschal-desktop.webp",
+      frame: "safari",
+      url: "montu.ch/tour/piz-titschal-2550m",
+      alt: "The tour Piz Titschal (2550m): ski tourers climbing a snowy ridge under a blue sky, with Splitboardtour and L – Leicht labels, the title and a line reading Surselva, Graubünden, 1344m – 2550m, 15. Februar 2026",
+      caption: "A winter tour on a desktop.",
     },
     {
-      src: "/projects/montu/home-features-desktop.webp",
-      alt: "Die Eckdaten der Touren: a list of tabs beside a photo of ski tourers with a floating Tourenkarte info card",
-      caption: "The home page explains what a tour page contains.",
+      src: "/projects/montu/home-mobile.webp",
+      frame: "iphone",
+      alt: "The home page on a phone: Faszination Bergtouren over a misty forest photograph, with the button Eintauchen & Entdecken and the slideshow's dots",
+      caption: "Home on a phone.",
+    },
+    {
+      src: "/projects/montu/tour-stats-mobile.webp",
+      frame: "iphone",
+      alt: "Eckdaten der Tour at phone width: four figures in a two-by-two grid, the elevation profile and the terrain map with the route between a green and an orange pin",
+      caption: "Profile and map on a phone.",
     },
   ]}
-  columns={2}
+  columns={3}
 />
-
-## The CMS is the whole surface
-
-A tour is one Sanity document split into five tabs: Allgemein, Inhalt, Strecke & Karte, Logistik, Extras. The editor fills in a form, not a page.
-
-Difficulty is a dropdown carrying the Swiss scales in full: T1 to T6 for hiking, L through EX for ski and alpine tours, WT1 to WT6 for snowshoe tours. Grades are picked, never typed, and the label the page prints comes from the same table. Each section of a route (an Etappe) carries its own photos, elevation, distance and a `skippable` flag, and the field explaining the alternative appears only once that flag is on:
-
-<CodeBlock
-  code={`defineField({
-    name: "skippable",
-    title: "Überspringbar",
-    description: "Kann dieser Abschnitt ausgelassen werden (z.B. via Seilbahn)?",
-    type: "boolean",
-    initialValue: false,
-  }),
-  defineField({
-    name: "skipAlternative",
-    title: "Alternative",
-    description: "Wie kann dieser Abschnitt umgangen werden?",
-    type: "string",
-    hidden: ({ parent }) => !parent?.skippable,
-  }),`}
-  fileName="sanity/schemas/section.ts"
-  lang="ts"
-/>
-
-The same rule holds outside tour pages. The hero images, the navigation labels, the Impressum and the Datenschutz page are Sanity fields as well. Publishing fires a webhook at an internal revalidate route, which calls `revalidatePath` for the affected page; every page also revalidates on its own hourly timer as a fallback.
-
-## One GPX file feeds both the map and the chart
-
-A GPX file is what a watch or phone records on the way up: a list of points with latitude, longitude and altitude. The writer uploads one per tour. The page parses it on the server with togeojson, walks the points with a haversine distance to build a cumulative distance-and-elevation series, then hands the coordinates to Mapbox and the series to a Recharts area chart through shadcn's Chart wrapper.
-
-The chart derives its own axes: the vertical step is 50, 100, 250 or 500 m depending on the range, and the horizontal axis takes at most eight round-kilometre ticks. That is what lets a 5.5 km splitboard tour and a 28.2 km crossing from Linthal to Brigels share one component and both stay readable.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/montu/tour-map-desktop.webp",
-      alt: "A Mapbox terrain map with an orange GPX track between a green start pin and an orange summit pin, beside Anfahrt and Minimalausrüstung blocks",
-      caption:
-        "The track, the two pins, and the logistics fields next to them.",
-    },
-    {
-      src: "/projects/montu/tour-elevation-desktop.webp",
-      alt: "Eckdaten der Tour: four stat tiles reading 2360m, 1723m, 28.2 km and T3, above a full elevation profile chart",
-      caption: "The 28.2 km crossing: stat tiles above the computed profile.",
-    },
-  ]}
-  columns={2}
-/>
-
-## The tour page
-
-A tour opens on a full-bleed photograph with its type and grade as badges. The dark theme changes the chrome, not the photographs, and the page holds at phone width.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/montu/tour-hero-desktop.webp",
-      alt: "Piz Titschal tour hero: ski tourers on a snowy ridge, with Splitboardtour and L – Leicht badges and a region, elevation and date line",
-      caption: "Tour hero, with type and grade as badges.",
-    },
-    {
-      src: "/projects/montu/home-dark-desktop.webp",
-      alt: "The same hero photograph with the dark theme active, the pill nav rendered near-black with light text",
-      caption: "Dark theme: the chrome changes, the photographs don't.",
-    },
-    {
-      src: "/projects/montu/tour-mobile.webp",
-      alt: "The Piz Titschal tour page at phone width, hero photo above the start of the German description",
-      caption: "The same tour page at 390 px.",
-    },
-  ]}
-  columns={2}
-/>
-
-## Where it stands
-
-Two tours are published, and the site has needed no deploy from me since they went up. For a site this small the rendering was never the hard part. The hard part is the form on the other side, and whether the person filling it in can publish the third tour without asking me anything.

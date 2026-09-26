@@ -1,93 +1,78 @@
-# A delivery fleet, live on an office TV
+# A live map of a delivery fleet, made for the office TV
 
-fleetmap tracks a delivery fleet in real time. Each van's phone posts its GPS position to an API; a screen in the office moves that van's marker, draws its route, and shows how far behind schedule it is. Orders are never typed in. Below: the two data flows the whole system reduces to, and why the order sync is a diff instead of a rewrite.
+fleetmap is the screen a delivery company in Switzerland keeps on a TV in its office. Every van is on the map and moves as it drives, so anyone in the room can see where each one is, where it's going next and whether it's running late. I built it for the company.
+
+The console itself is internal, so everything on this page comes from a copy running on demo data: three vans driving made-up rounds through Basel, Bern and Zürich.
 
 <ProjectImage
-  src="/projects/fleetmap/fleetmap-map.webp"
-  alt="The fleetmap console: sidebar navigation, a fleet rail listing three vans, and a MapLibre map of northern Switzerland with van markers in Basel, Bern and Zurich"
-  caption="The live map: sidebar, fleet rail and map, built for a wall-mounted touchscreen."
-  size="large"
+  src="/projects/fleetmap/live.webp"
+  video="/projects/fleetmap/live.mp4"
+  alt="The fleetmap console: a sidebar, a list of three vans and a map of northern Switzerland; tapping Van Zürich in the list flies the map into Zürich, where the van's route for the day is drawn with numbered stops and the van moves along it"
+  caption="Picking a van on the live map."
+  size="full"
 />
 
-## What the console shows
+## The whole fleet on one screen
 
-Three views share one layout:
+Each van on the map points the way it's driving and glides from one reported position to the next. Its colour says how it's doing: green on its round, amber when it's waiting for its next job, red when it's behind schedule, and grey when its phone has stopped reporting. A van only turns red once it's on course to reach its next stop more than five minutes late, so a little traffic doesn't set the map off.
 
-- **Live Map**: every van as a marker, colored by whether it is on route, waiting, behind schedule or stale.
-- **Live Tracking**: one van in detail, with distance driven today, current speed, stops left, and the day's itinerary as a numbered timeline of planned pickups and dropoffs.
-- **History**: a chosen day replayed from the recorded GPS track, scrubbable and playable at 10x to 120x.
+The list beside the map has a card for every van, with the time to its next stop and how many stops are left. Nobody has to type anything to keep it current: the drivers' phones send their positions, and each van's stops for the day come in automatically.
 
-The interface runs in English and Swiss German, in a light or a dark theme.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/fleetmap/fleetmap-map-focus.webp",
-      alt: "Van Zürich selected: the map has flown to central Zurich, numbered stop badges scattered across the city, and a popover card showing speed, ETA and load",
-      caption: "Selecting a van flies the map to its stops.",
-    },
-    {
-      src: "/projects/fleetmap/fleetmap-tracking.webp",
-      alt: "Live Tracking detail for one van: load and route progress cards, four stat tiles, and a numbered itinerary of scheduled pickups and dropoffs",
-      caption: "Live Tracking: load, progress, and the day's itinerary.",
-    },
-    {
-      src: "/projects/fleetmap/fleetmap-history.webp",
-      alt: "Route Replay: a map of central Zurich with the van's recorded GPS track drawn as a cyan polyline, a playback scrubber at 60x, and distance, duration and GPS point counts",
-      caption: "Route Replay, drawn from 41 recorded GPS points.",
-    },
-  ]}
-  columns={3}
+<ProjectImage
+  src="/projects/fleetmap/map.webp"
+  alt="The live map of northern Switzerland with vans in Basel, Bern and Zürich, each pointing the way it drives; in the list, Van Bern carries a red Late tag next to On Route, and the legend along the bottom reads On Route, Waiting, Behind schedule and Stale"
+  caption="Three vans, one of them running late."
+  size="full"
 />
 
-## Two data flows, one thin API
+## One van at a time
 
-GPS is a push. The phone posts its position to a small API, authenticated as that driver and scoped by row-level security, so a van can only be written by its own driver. The handler puts the latest position on the vehicle row and appends to history; Supabase Realtime broadcasts the row change and the dashboard moves the marker.
+Tap a van and the map flies to it and its route for the day. The stops are numbered in order, the next one shows when the van will get there, the stretch it has already driven turns grey, and the other vans fade back. A card on the map gives the van's speed, its arrival time at the next stop and how many orders it has on board.
 
-Orders are a pull. A worker reads the route planning the fleet already uses, every 60 seconds, and mirrors each driver's routes into orders and stops. Route lines and ETAs come from OSRM (an open-source routing engine), which I self-host on a Switzerland extract rather than pay a hosted routing API per request for a screen that recomputes all day.
-
-## Why the order sync is a diff, not a rewrite
-
-The obvious 60-second poll deletes the vehicle's stops and re-inserts them. It works, and it is unusable: every tick emits a Realtime event for every row, the dashboard's route cache (keyed on stop id, sequence and status) misses on all of them, and the map redraws a route that did not change. It is re-printing the whole delivery sheet every minute because one box got ticked.
-
-So the mirror is a single Postgres function that diff-applies the picture for one vehicle. Matched stops are updated only where a column actually differs:
-
-<CodeBlock
-  code={`update stops set
-    seq    = (s->>'seq')::int,
-    status = s->>'status',
-    eta_at = nullif(s->>'eta_at', '')::timestamptz
-  where id = v_stop_id
-    and (
-      seq    is distinct from (s->>'seq')::int or
-      status is distinct from s->>'status' or
-      eta_at is distinct from nullif(s->>'eta_at', '')::timestamptz
-    );`}
-  lang="sql"
+<ProjectImage
+  src="/projects/fleetmap/focus.webp"
+  alt="Van Zürich selected: the map zoomed into Zürich with the van's route drawn in teal through eighteen numbered stops, the part already driven in grey, the next stop marked with its arrival time, and a card showing the van's speed, arrival time and load"
+  caption="Van Zürich and its round."
+  size="full"
 />
 
-Abridged: the real guard covers seven columns. Unchanged rows are never written, so they emit nothing, and stop ids survive across ticks. Stops that vanished from the optimizer's picture are deleted, which makes an empty payload a valid instruction: clear this vehicle.
+The detail view has the rest of the day: the distance driven, the orders collected and delivered, and the itinerary with a scheduled time for every stop. For the stops already done, it shows when the van actually got there and whether that was on time.
 
-## Made for a screen that stays on
-
-A TV pairs with a short display code instead of a password, and the console has a dark theme for a screen that runs overnight. Nothing reads as late until it is five minutes late, so a minute of traffic doesn't flap the map red.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/fleetmap/fleetmap-gate.webp",
-      alt: "The entry screen: a Display code heading with a code input and Connect button on the left, and a field of scattered cyan squares on the right",
-      caption: "A TV is paired with a display code, not a password.",
-    },
-    {
-      src: "/projects/fleetmap/fleetmap-map-dark.webp",
-      alt: "The same live map console in dark theme: near-black sidebar and fleet rail with cyan accents, over a dark map style",
-      caption: "Dark theme, for a screen that runs overnight.",
-    },
-  ]}
-  columns={2}
+<ProjectImage
+  src="/projects/fleetmap/tracking.webp"
+  alt="The detail view for Van Zürich: cards for the load with orders collected and delivered, route progress, distance today, current speed, arrival time and stops left, above an itinerary of pickups and dropoffs where the finished stops show their scheduled and actual times with an On time tag"
+  caption="The detail view, with the day's itinerary."
+  size="full"
 />
 
-Production is Docker Compose on a single server: the Next.js app, the sync worker and OSRM beside a self-hosted Supabase stack.
+## Replaying a day
 
-The rule that decided most of this build: push the work into something that already exists — the database, the optimizer, the routing engine — and keep the API thin enough that there is nothing in the middle to debug.
+Pick a van and a day in the history, and its recorded track is drawn on the map. It plays back at up to 120 times real speed with the map following the van, or you can drag the slider to any moment. The distance, the time on the road and the number of GPS points sit below the map.
+
+<ProjectImage
+  src="/projects/fleetmap/replay.webp"
+  video="/projects/fleetmap/replay.mp4"
+  alt="Route Replay for Van Zürich: pressing play at 120x sends the van along its recorded track through Zürich while the clock under the map runs forward, above cards for distance, duration and GPS points"
+  caption="Van Zürich's day so far, at 120 times speed."
+  size="full"
+/>
+
+## Built for the TV
+
+The console is laid out for a touchscreen, and both side panels fold away so the map can fill the screen. It has a light and a dark theme, and follows the system unless someone picks one in the settings. When a van falls behind, the rest of its route turns red.
+
+<ProjectImage
+  src="/projects/fleetmap/dark-full.webp"
+  alt="The console in the dark theme with both panels folded to thin rails: Van Bern selected on a dark map of Bern, its route drawn in red because it is behind schedule, and its card showing On Route and Late"
+  caption="Van Bern behind schedule, with the map to itself."
+  size="full"
+/>
+
+The console starts in Swiss German and can be switched to English, with dates and times written the local way in each. The settings also offer high contrast, and a reduced-motion mode that stops the vans gliding.
+
+<ProjectImage
+  src="/projects/fleetmap/de-tracking.webp"
+  alt="The detail view for Van Basel in Swiss German, with the list of stops headed Halte and finished stops marked Pünktlich"
+  caption="The detail view in Swiss German."
+  size="full"
+/>

@@ -1,155 +1,172 @@
-# One Interface, Every Model
+# A multi-provider AI chat that runs on your own API keys
 
-Most AI apps lock you into a single provider. Luma doesn't — bring your own API keys and switch between Claude, GPT, Gemini, Grok, Mistral, DeepSeek, and more without leaving the conversation. The interface stays minimal: a sidebar for your chats, a model picker, and a clean input area. No clutter, no upsells.
+[Luma](https://luma.ysz.life) is a chat app for people who already pay for API access with one or more model providers. You add your keys once, pick a model for each chat, and every request goes to that provider on your key.
 
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/luma/chat-desktop.webp",
-      alt: "Luma chat view — desktop",
-      caption: "Chat — desktop",
-    },
-    {
-      src: "/projects/luma/welcome-desktop.webp",
-      alt: "Luma welcome screen — desktop | Dark mode",
-      caption: "Welcome screen — desktop | Dark mode",
-    },
-  ]}
-  columns={2}
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/start.webp"
+  video="/projects/luma/start.mp4"
+  alt="Luma's start screen in the light theme: grey streaks fly outward behind the word Luma, and a question about how a B-tree splits a full node is typed into the input below it"
+  caption="The start screen."
 />
 
-## What You Get
+## Picking a model
 
-The home screen opens with a clean prompt input and a model selector. Pick any model from 14+ providers — the selector groups them by provider and shows capabilities (reasoning, vision, tools, fast) at a glance.
+The model button in the input opens a picker with every model Luma offers, grouped by provider. A rail of provider logos jumps between the groups, the search box filters as you type, and small icons mark what each model handles, such as reasoning, images as input, tool use and PDFs. A star adds a model to a favourites list on the rail.
 
-Every conversation is a full tree, not a flat list. Edit a previous message and Luma branches the conversation, keeping both paths. Navigate between branches with the branch control, or switch back to the original thread anytime.
+Each chat keeps its own model, so one conversation can run on Claude and the next on GPT-5 Mini. Models whose provider has no key yet carry a lock, and picking one puts a note above the input that names the missing key, with a button that opens settings.
 
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/luma/model-selector.webp",
-      alt: "Model selector showing available providers and models",
-      caption: "Model selector — 14+ providers",
-    },
-    {
-      src: "/projects/luma/settings-desktop.webp",
-      alt: "Settings dialog — API key management",
-      caption: "Settings — encrypted key management",
-    },
-  ]}
-  columns={2}
+<ProjectImage
+  src="/projects/luma/model-picker.webp"
+  video="/projects/luma/model-picker.mp4"
+  alt="The model picker opening above the input, with provider logos down the left and models grouped under OpenAI and xAI; typing claude narrows the list to three Anthropic models, the first one gets a star, and the favourites entry on the rail then lists only that model"
+  caption="Searching the picker and starring a model."
+  size="full"
 />
 
-Messages render with full rich content: syntax-highlighted code blocks (Shiki), LaTeX math (KaTeX), Mermaid diagrams, reasoning traces for thinking models, inline citations from web search, and generated images — all streamed in real time.
+## Asking
 
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/luma/code-block.webp",
-      alt: "Code block with syntax highlighting",
-      caption: "Syntax highlighting via Shiki",
-    },
-    {
-      src: "/projects/luma/search-results.webp",
-      alt: "Web search results inline in chat",
-      caption: "Web search — Tavily integration",
-    },
-  ]}
-  columns={2}
+The input takes text, images and files such as PDFs, CSVs and Markdown, pasted, dropped onto it or picked from the plus menu. The same menu sets a mode for the next message. Create image asks the model to answer with a picture, Web search has it look things up and cite its sources, and Study and learn asks for structured teaching with worked examples.
+
+<ProjectImage
+  src="/projects/luma/modes.webp"
+  video="/projects/luma/modes.mp4"
+  alt="The plus menu opening under the input with Add photos & files, Create image, Study and learn and Web search; Create image is chosen, an Image chip appears in the input, and a prompt about a sunset over a field of flowers is typed"
+  caption="The plus menu, and the image mode."
+  size="full"
 />
 
-## Architecture
+A generated image appears in the chat with the name of the image model under it. Which image model draws it is a setting of its own, separate from the chat model.
+
+<ProjectImage
+  src="/projects/luma/image-generation.webp"
+  alt="A chat where the request Generate an image of a cute sunset is answered with an illustration of a smiling sun setting over a field of flowers, captioned Generated with Grok Imagine"
+  caption="A generated image, with the image model's name under it."
+  size="full"
+/>
+
+## Answers
+
+Replies stream in as Markdown. Code blocks are highlighted and carry copy and download buttons, and maths and diagrams render in place. When a model reasons before it answers, the reasoning folds into a "Thought for N seconds" row above the reply, and Claude models get extended thinking without anything to switch on. Answers from a web search carry their sources as small chips next to the sentences that use them.
+
+<ProjectImage
+  src="/projects/luma/code-block.webp"
+  alt="A chat with Claude Opus 4.6: two folded reasoning rows, then a highlighted Rust program with line numbers and download and copy buttons, and a short explanation under it"
+  caption="Claude's reasoning, folded above a code answer."
+  size="full"
+/>
+
+## Editing, retrying and finding chats
+
+Nothing in a conversation is overwritten. Editing a message you sent adds a new version next to the old one, with a fresh reply under it, and arrows under the message flip between the versions. Retrying an answer does the same on the reply side, and the retry menu can send the question to another model, so two models' answers to the same message sit one arrow apart.
+
+New chats are titled by a small, cheap model on one of your keys. The sidebar lists them with the pinned ones first, and each can be pinned, renamed or deleted from there. Ctrl+K searches every chat, grouped by date, and the other common actions have shortcuts too: a new chat, the file picker, the model picker, the sidebar. Settings can export all your chats as a download, or delete them.
+
+## Your API keys
+
+Settings has a row for every provider, each with a link to the page where you get a key. Luma tries a new key against the provider before it saves it, so a key the provider rejects is refused on the spot. Keys are encrypted before they're stored, and the browser only ever learns which providers have one.
+
+<ProjectImage
+  src="/projects/luma/api-keys.webp"
+  alt="The settings dialog over the start screen, open on API Keys: a note that keys are encrypted at rest and never leave the server, and rows for OpenAI, Anthropic, Google, xAI and Mistral, each with a Get API key link and an Add key button"
+  caption="Adding keys in settings."
+  size="full"
+/>
+
+## Light and dark
+
+Luma comes in a light and a dark theme with an olive green accent, and it follows the system unless you pick one. The streaks behind the start screen follow the theme, grey on light and white on dark. On a phone the sidebar becomes a drawer, and the model picker and settings open as sheets from the bottom of the screen.
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/theme.webp"
+  video="/projects/luma/theme.mp4"
+  alt="The start screen switching from the light theme to the dark theme and back from the theme control at the bottom of the sidebar; the streaks turn from grey to white"
+  caption="The light and dark themes."
+/>
+
+## How it's built
+
+Luma is a Next.js 16 app on React 19. The Vercel AI SDK streams the replies and reaches each provider through that provider's own package, Supabase holds the accounts, the chats and the uploaded files, and the streaks on the start screen are a Three.js shader.
+
+### Conversations are trees
+
+Every message is a row with a `parent_id`, and a chat stores one more pointer, `active_leaf_id`, to the last message of the thread on screen. The thread is derived: start at the active leaf, follow parent pointers up to the root, reverse. An edit or a retry adds a sibling under the same parent, and the walk marks each message that has siblings of its own role with its place among them, which is all the arrows under a message read.
 
 <CodeBlock
-  code={`app/
-  ├── api/
-  │   ├── chat/route.ts          ← main streaming endpoint
-  │   ├── chat/branch/route.ts   ← branch switching
-  │   ├── keys/route.ts          ← API key CRUD (encrypted)
-  │   ├── title/route.ts         ← auto title generation
-  │   └── export/route.ts        ← chat export
-  ├── auth/callback/route.ts     ← Supabase OAuth callback
-  ├── c/[chatId]/page.tsx        ← individual chat view
-  ├── page.tsx                   ← home / new chat
-  └── layout.tsx                 ← root layout (providers)
-  components/
-  ├── ai-elements/               ← rich content renderers
-  ├── chat/                      ← chat UI components
-  ├── streamdown/                ← streaming markdown config
-  └── ui/                        ← shadcn/ui primitives
-  lib/
-  ├── chat-tree.ts               ← tree data structure & branching
-  ├── chat-storage.ts            ← Supabase client + message cache
-  ├── encryption.ts              ← AES-256-GCM for API keys
-  ├── providers.ts               ← provider & model catalogue
-  └── prompt-mode.ts             ← search / image / study modes`}
-  fileName="project structure"
-  lang="text"
+  code={`export function buildTimelineMessages(
+    graph: ChatGraph,
+    activeLeafId: string
+  ): UIMessage[] {
+    const path = getPathToLeaf(graph, activeLeafId)
+    if (path.length === 0) return []
+    return path.map((node) => {
+      const siblings = (graph.childrenByParentId.get(node.parentId) ?? []).filter(
+        (candidate) => candidate.role === node.role
+      )
+      const branchCount = siblings.length
+      const branchIndex = Math.max(
+        0,
+        siblings.findIndex((candidate) => candidate.id === node.id)
+      )
+      return {
+        id: node.id,
+        role: node.role,
+        parts: node.parts,
+        metadata: {
+          createdAt: node.createdAt,
+          ...(branchCount > 1
+            ? ({
+                branchCount,
+                branchIndex,
+                isActiveBranch: true,
+              } satisfies ChatBranchMetadata)
+            : {}),
+        },
+      } satisfies UIMessage
+    })
+  }`}
+  fileName="lib/chat-tree.ts"
+  lang="ts"
 />
 
-## The Chat Tree
+Switching versions is a server call that takes the next sibling, follows the newest child down to a leaf and saves that leaf as the active one. The cost of the design is that opening a chat reads every message in it, including the branches you aren't looking at. In exchange they arrive in one query on an index over chat and creation time, and the tree code is plain TypeScript that the browser and the server both import.
 
-Conversations are stored as a tree of message nodes, not a flat array. Each node has a `parent_id`, enabling full branching — edit a message and a new branch is created. The active path is tracked via `active_leaf_id` on each chat session.
+### From a model id to a provider client
 
-`chat-tree.ts` handles the core logic: `buildGraph()` creates an in-memory adjacency map from the flat node list, and `buildTimelineMessages()` walks from root to the active leaf to produce the linear message array for rendering.
+Model ids carry their provider, as in `anthropic:claude-opus-4-6`. The chat route checks the id against the catalogue and falls back to the default when it isn't there, so the browser can't ask for a model Luma doesn't list. The prefix selects the user's key, which is decrypted for that one request, and the provider's AI SDK package, which is loaded with a dynamic `import()` so a request only pulls in the SDK it needs. Providers with an OpenAI-compatible API reuse the OpenAI package with their own base URL, so adding one is a catalogue entry.
 
-## Providers & Models
+### Keys at rest
 
-Luma supports 14 providers out of the box. Each uses the appropriate Vercel AI SDK adapter — native SDKs for OpenAI, Anthropic, Google, xAI, Mistral, Cohere, and Alibaba, plus an OpenAI-compatible adapter for DeepSeek, Kimi, GLM, StepFun, Inception, and MiniMax.
+A key is encrypted with AES-256-GCM under a fresh random IV and stored as IV, ciphertext and authentication tag. Because GCM authenticates the ciphertext, a value changed in the database fails to decrypt instead of turning into a different key. This protects the keys in a leaked database dump. The server has to call providers with the plaintext key, so it can decrypt every key it stores, and so can anyone who holds both the database and the master key.
 
-Adding a new model is a single entry in `providers.ts`. The model ID format is `"provider:model-name"` (e.g., `"anthropic:claude-opus-4-6"`), and the chat route dynamically creates the right SDK client based on the provider type.
+### What goes back to the model
 
-## Security
+A stored reply keeps everything the screen shows: reasoning, text, tool calls and their results. The history sent with the next request is rebuilt from the tree on the server, and three things are stripped from it first. A generated image is swapped for the text `[image was generated]`, because the base64 would otherwise ride along with every later request. Reasoning stays on screen but is never replayed, since OpenAI's Responses API can reject reasoning items from history. Provider metadata is deleted, which also keeps a thread usable when the next turn goes to a different provider.
 
-API keys are encrypted with AES-256-GCM before hitting the database. The encryption key lives server-side only — keys are decrypted per-request in the chat API route, never exposed to the client. All database access goes through Supabase RLS policies scoped to `auth.uid()`.
-
-## Tools
-
-The model has access to two built-in tools:
-
-- **Web search** via Tavily — up to 2 calls per response, 5 results each, rendered as inline citations
-- **Image generation** via Grok Imagine, DALL-E 3, or Google Imagen 3 — generated images appear inline in the conversation
-
-Prompt modes (`search`, `image`, `study`) adjust the system prompt and tool priority based on what you're trying to do.
+Attachments stay in a private bucket, and each request signs fresh links to them that expire after ten minutes.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/luma/image-generation.webp",
-      alt: "Image generation within a chat",
-      caption: "Image generation — inline results",
+      src: "/projects/luma/start-dark.webp",
+      frame: "safari",
+      url: "luma.ysz.life",
+      alt: "Luma's start screen in the dark theme: the sidebar on the left and the input in the middle over white streaks on a near-black field",
+      caption: "The start screen in the dark theme.",
     },
     {
-      src: "/projects/luma/command-palette.webp",
-      alt: "Command palette for quick actions",
-      caption: "Command palette — Cmd+K",
+      src: "/projects/luma/start-mobile.webp",
+      frame: "iphone",
+      alt: "The start screen on a phone in the light theme: the word Luma over grey streaks, and the input at the bottom",
+      caption: "Start, on a phone.",
+    },
+    {
+      src: "/projects/luma/model-picker-mobile.webp",
+      frame: "iphone",
+      alt: "The model picker as a bottom sheet on a phone: the provider rail on the left and the OpenAI and xAI models with capability icons and stars",
+      caption: "The picker, as a sheet.",
     },
   ]}
-  columns={2}
+  columns={3}
 />
-
-## Mobile
-
-The layout is fully responsive. The sidebar collapses into a drawer, the chat input adapts to smaller screens, and all features — branching, model switching, settings — work the same on mobile.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/luma/chat-mobile.webp",
-      frame: "iphone",
-      alt: "Luma chat view — mobile",
-      caption: "Chat — mobile",
-    },
-    {
-      src: "/projects/luma/sidebar-mobile.webp",
-      frame: "iphone",
-      alt: "Sidebar drawer — mobile",
-      caption: "Sidebar — mobile",
-    },
-  ]}
-  columns={2}
-/>
-
----
-
-_Your keys, your models, one interface._

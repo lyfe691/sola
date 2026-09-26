@@ -1,32 +1,102 @@
-# An identity stack you can tear down and rebuild
+# A local OpenID Connect sandbox
 
-Vault is a local OIDC sandbox. OIDC — OpenID Connect, the identity layer sitting on top of OAuth 2.0 — is easy to read about and hard to hold onto until you have stood one up yourself, so I built one: Keycloak 26 as the provider, PostgreSQL behind it, a FastAPI service that verifies the tokens, and a Next.js frontend with a sign-in page and two role-gated dashboards.
+Vault is an identity setup that runs on one machine: Keycloak as the OpenID Connect provider, a FastAPI backend that verifies its tokens and checks roles, and a Next.js frontend with a sign-in page and role-gated dashboards. OpenID Connect (OIDC) is the identity layer on top of OAuth 2.0. I built Vault in May 2025 to follow a token from the moment Keycloak issues it to the moment an API accepts or refuses it.
 
-<ProjectImage
-  src="/projects/vault/vault-login.webp"
-  alt="Vault sign-in page: a centered white card titled Welcome back with username and password fields and a black Sign in button"
-  caption="The sign-in page. The demo account's credentials are printed under the form, because the whole realm is disposable."
-  size="large"
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/hero.webp"
+  video="/projects/vault/hero.mp4"
+  alt="Vault's sign-in page: the username demo and a password are typed into the card, Sign in brings a Login successful toast and the Admin Dashboard, and Back to Home opens the portal greeting demo with Admin and User badges above an Admin Dashboard and a User Dashboard button"
+  caption="Signing in as the demo user."
 />
 
-## Why the realm is a Terraform file
+## Signing in
 
-Keycloak's admin console will let you click together a realm, a client, two roles and a user in about ten minutes. The problem starts on the second run: something is configured differently, there is no diff to read, and the console holds no record of how you got there. A sandbox you can't reset is not a sandbox.
+The sign-in form stays inside the app. The frontend posts the username and password to the backend's `/login`, and the backend exchanges them at Keycloak's token endpoint in one request, with the resource owner password grant that Terraform enables on the client. The backend puts the access token it gets back in an `HttpOnly` cookie that expires with the token, after Keycloak's default five minutes. A refused sign-in shows Keycloak's own error message.
 
-So the identity configuration lives in `terraform/main.tf` and nowhere else. The realm, both realm roles, the demo user, the role assignment and the confidential client are declared resources.
+With this grant the app sees the user's password, which is why an app with real users sends the browser to the provider's own login page instead. For a sandbox with one demo user, having the whole exchange in one readable place was the point.
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/sign-in-refused.webp"
+  alt="The sign-in card with the username demo and a wrong password, a red Invalid user credentials alert above the Sign in button, and a Login failed toast in the corner"
+  caption="A wrong password comes back with Keycloak's message."
+/>
+
+## A portal built from the token's roles
+
+After signing in, the frontend calls the backend's `/me`. The cookie is `HttpOnly`, so the page's own JavaScript can't read the token: the backend verifies it and returns its claims, and the portal renders from those, with the user name, a badge for each realm role and a button for each dashboard the roles open. The demo user holds both roles and lands on the admin dashboard. Take `admin` away, and the next sign-in shows one badge and one button, and opening `/admin` leads to the user dashboard instead.
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/portal-user-only.webp"
+  alt="The portal card greeting demo with a single User badge, a User Dashboard button and Sign Out"
+  caption="The portal after admin is taken away from the demo user."
+/>
+
+## The API decides
+
+The buttons only mirror the roles. Every protected route in the API depends on `verify_token`, which reads the token from an `Authorization: Bearer` header or, when there is none, from the cookie. A missing, expired or forged token gets a 401. A valid token without the right role gets a 403 from a second dependency, `require_roles`, which looks for the role in the token's `realm_access.roles` claim. `/admin` and `/user` each require their role, and `/me` needs only a valid token.
+
+<ProjectImage
+  src="/projects/vault/api.webp"
+  video="/projects/vault/api.mp4"
+  alt="A full-screen PowerShell window: curl signs in as demo, then GET /user answers HTTP 200 with User access granted and the roles list holding only user, and GET /admin answers HTTP 403 Forbidden with Access denied. Required roles: admin"
+  caption="Without admin, /user answers and /admin refuses."
+  size="full"
+/>
+
+## Keycloak, configured by Terraform
+
+Docker Compose runs Keycloak 26.2 in development mode, with a PostgreSQL 16 database for its state. Keycloak's admin console can click together a realm, a client, two roles and a user in a few minutes, but it keeps no record of how it got there. In Vault that configuration lives in `terraform/main.tf`: the `vault-core` realm, the `admin` and `user` realm roles, a `demo` user holding both, and the `vault-app` client. A changed setting shows up in a diff, and `terraform apply` brings the realm back to exactly what the file describes.
+
+<ProjectImage
+  src="/projects/vault/terraform-apply.webp"
+  video="/projects/vault/terraform-apply.mp4"
+  alt="A full-screen PowerShell window: terraform apply -auto-approve prints its plan, then creates the realm, the two roles, the client scope, the demo user, the client and the role assignment, and ends with Apply complete! Resources: 8 added"
+  caption="terraform apply building the realm from nothing."
+  size="full"
+/>
+
+The admin console then lists what the file asked for, with the descriptions it gave.
+
+<Safari
+  url="localhost:8080/admin"
+  src="/projects/vault/keycloak-roles.webp"
+  alt="Keycloak's admin console on the Vault Core Realm: the Realm roles page lists admin, described as Administrator role, and user, described as Regular user role, next to Keycloak's default roles"
+  caption="The realm's roles in Keycloak's admin console."
+/>
+
+## How it's built
+
+The backend is FastAPI, with python-jose for the token checks and httpx for the calls to Keycloak. The frontend is Next.js with shadcn/ui components. Both run on the host, next to the two containers.
+
+### Verifying a token
+
+`verify_token` never asks Keycloak about a token. It reads the realm's discovery document at `/.well-known/openid-configuration`, follows its `jwks_uri` to the realm's public keys, and lets python-jose's `jwt.decode` check the signature, the expiry and the issuer, which must equal `http://localhost:8080/realms/vault-core` character for character. Keycloak signs access tokens with the realm's private RSA key (RS256), so verifying needs only the public half. Both documents are fetched on every request rather than cached: two local round trips, and a key rotated in the admin console applies from the next request on.
+
+The bearer scheme is created with `auto_error=False`, so a request without the header reaches the cookie check instead of being refused on the spot. Roles are a second dependency layered on top:
 
 <CodeBlock
-  code={`resource "keycloak_realm" "vault" {
-    realm        = "vault-core"
-    enabled      = true
-    display_name = "Vault Core Realm"
-  }
-  resource "keycloak_role" "admin_role" {
-    realm_id    = keycloak_realm.vault.id
-    name        = "admin"
-    description = "Administrator role"
-  }
-  resource "keycloak_user_roles" "demo_user_roles" {
+  code={`def require_roles(roles: List[str]):
+      async def role_checker(payload: dict = Depends(verify_token)):
+          if not has_role(payload, roles):
+              raise HTTPException(
+                  status_code=403,
+                  detail=f"Access denied. Required roles: {', '.join(roles)}"
+              )
+          return payload
+      return role_checker`}
+  fileName="app/backend/main.py"
+  lang="python"
+/>
+
+### Roles are fixed when the token is issued
+
+Terraform owns the demo user's whole role list. `keycloak_user_roles` is exhaustive, so the user holds exactly the roles in `role_ids`, and the token's `realm_access.roles` lists nothing else:
+
+<CodeBlock
+  code={`resource "keycloak_user_roles" "demo_user_roles" {
     realm_id = keycloak_realm.vault.id
     user_id  = keycloak_user.example_user.id
     role_ids = [
@@ -38,36 +108,4 @@ So the identity configuration lives in `terraform/main.tf` and nowhere else. The
   lang="hcl"
 />
 
-## What the backend actually checks
-
-`app/backend/main.py` fetches the realm's discovery document at `/.well-known/openid-configuration`, reads `jwks_uri` out of it, and verifies every incoming RS256 token against that key set with both the issuer and the audience pinned. The token may arrive as an `Authorization: Bearer` header or as an `access_token` cookie; either path lands in the same verifier.
-
-Authorization is a second, separate step. A `require_roles` dependency reads `realm_access.roles` from the decoded payload and answers 403 naming the roles it wanted. `/admin` requires `admin`, `/user` requires `user`, and `/me` requires only a valid token.
-
-<ProjectImage
-  src="/projects/vault/vault-portal.webp"
-  alt="Authenticated portal card reading Hello, demo with Admin and User badges above Admin Dashboard and User Dashboard buttons"
-  caption="After sign-in, the frontend decodes the cookie and renders one badge per realm role."
-/>
-
-The demo user holds both roles, so both dashboards open. Drop `user` from the Terraform role assignment and the user dashboard starts answering 403 without a line of frontend code changing.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/vault/vault-user.webp",
-      alt: "User Dashboard card with Admin Access and User badges and links back to Home and to the Admin Dashboard",
-      caption: "User dashboard",
-    },
-    {
-      src: "/projects/vault/vault-admin.webp",
-      alt: "Admin Dashboard card with a single Admin badge and links back to Home and to the User Dashboard",
-      caption: "Admin dashboard, gated on the realm admin role",
-    },
-  ]}
-  columns={2}
-/>
-
-## What it was for
-
-Three days in May 2025 bought one durable idea: identity configuration belongs in a file, not in the state of an admin console.
+Take `admin` out of `role_ids` and apply, and a token issued before the change still carries the role until it expires, because the backend trusts what the signed token says and never asks Keycloak again. The next sign-in gets a token without it, and that is the token the terminal clip above uses.

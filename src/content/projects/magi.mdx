@@ -1,53 +1,20 @@
-# A port scanner built to be correct
+# A TCP and UDP port scanner in Rust
 
-**magi** is a fast, asynchronous TCP and UDP port scanner written in Rust. It does _connect_ scanning — a normal handshake on each port, the same thing any client does — so it needs no root, no raw sockets, and no special capabilities. It runs anywhere `tokio` does.
+magi is a command-line port scanner I wrote in Rust. It does connect scanning: every probe is an ordinary TCP connection or UDP datagram made through the operating system's sockets, so it runs as a normal user on Linux, macOS and Windows. It reports a port only in a state it actually observed, and says so when it couldn't test one.
 
-> The premise is simple but unusual: a scanner should never claim something it didn't observe. magi only ever reports a port state it actually established.
-
-<Safari
-  url="magi.ysz.life"
-  src="/projects/magi/hero.webp"
-  alt="magi — a fast, async TCP/UDP port scanner"
-  caption="magi at magi.ysz.life"
+<ProjectImage
+  src="/projects/magi/scan.webp"
+  video="/projects/magi/scan.mp4"
+  alt="A terminal: magi 45.33.32.156 --banner is typed and run, a counter climbs through 1024 probed ports, and the result lists 22/tcp ssh with the banner SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13 and 80/tcp http"
+  caption="A real scan of scanme.nmap.org's first 1,024 ports."
+  size="full"
 />
 
-## Why "correct"?
+## Scanning a host
 
-Most scanners optimize for speed and breadth. magi optimizes for _trust_. The worst thing a scanner can do is call a port `closed` when it was never actually tested — a silent false negative that hides exactly what you were looking for.
+You give magi a target and it probes the ports you ask for, 1 to 1024 unless you say otherwise. The target can be a hostname, an IP address or a whole subnet in CIDR notation, and ports can be single numbers, ranges or a mix. Open ports are listed under their host with the usual service name, and `--banner` adds the first line each service sends back, such as an SSH server's version. While a longer scan runs, a counter shows how many ports have been probed and how many are open.
 
-So magi draws a hard line between "I tested this and it's closed" and "I couldn't test this." When a probe can't run — the process is out of file descriptors, or the host is unreachable — magi reports that port as **untestable** on stderr instead of folding it into the closed count. The results mean what they say.
-
-## Installation
-
-One line installs the latest release and puts `magi` on your `PATH`:
-
-<CodeBlock
-  code={`# Linux / macOS
-  curl --proto '=https' --tlsv1.2 -LsSf https://github.com/lyfe691/magi/releases/latest/download/magi-installer.sh | sh
-  # Windows (PowerShell)
-  powershell -ExecutionPolicy Bypass -c "irm https://github.com/lyfe691/magi/releases/latest/download/magi-installer.ps1 | iex"`}
-  fileName="install.sh"
-  lang="bash"
-/>
-
-Prebuilt binaries cover Linux and macOS on x86-64 and arm64, and Windows on x86-64. There are no system libraries to install — with the stable Rust toolchain, `cargo install --path .` builds it the same on every platform.
-
-## Usage
-
-The target is a hostname, an IP address, or a CIDR block:
-
-```console
-$ magi 45.33.32.156 --ports 22,80,443 --banner
-scanning 45.33.32.156 — 3 port(s), up to 512 at a time
-
-2 open port(s):
-
-45.33.32.156
-     22/tcp  ssh         SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13
-     80/tcp  http
-```
-
-A few more shapes — subnets group by host, and `--json` keeps stdout clean for piping:
+The run above is against 45.33.32.156, scanme.nmap.org, a host the Nmap project keeps up for testing scanners, and it took about a second. Flags set how many probes run at once (512 by default), how long each one waits for an answer, and an optional cap on how many start per second. A subnet larger than a /16 is refused, so a mistyped prefix can't turn into millions of probes.
 
 <CodeBlock
   code={`magi 192.168.1.0/24 --ports 22,80,443      # a whole subnet, grouped by host
@@ -58,55 +25,141 @@ A few more shapes — subnets group by host, and `--json` keeps stdout clean for
   lang="bash"
 />
 
-## Fast, and flat under load
+## Output for scripts
 
-magi holds at most `--concurrency` probes in flight by taking a semaphore permit before spawning each one, and reaps finished probes as it goes. Memory stays flat whether you scan a single host or a whole `/16` — the in-flight set is bounded, not the total work. Hundreds of connections run concurrently over `tokio`, and a `--rate` cap can throttle how many probes start per second when you need to tread lightly.
+Everything meant for a person goes to stderr: the line that opens the scan, the counter and any warning. The counter only appears when stderr is a terminal. With `--json`, stdout carries a JSON array of the open ports with their address, protocol, state and banner, so the results pipe straight into jq or another program.
 
-A CIDR block expands to its host addresses, but anything larger than a `/16` is refused, so a mistyped prefix can't quietly turn into millions of probes.
+<ProjectImage
+  src="/projects/magi/json.webp"
+  video="/projects/magi/json.mp4"
+  alt="A terminal: magi 45.33.32.156 -p 22,80,443 --banner --json piped into jq prints the scan line, then a coloured JSON array with two objects, port 22 with its SSH banner and port 80 with a null banner"
+  caption="JSON on stdout, piped into jq."
+  size="full"
+/>
 
-## UDP is honest about uncertainty
+## UDP
 
-UDP has no handshake, so there's no clean "connected" signal. magi derives the verdict from how the host reacts:
+`--udp` probes UDP instead. UDP has no handshake, so magi reads the verdict from how the host reacts to an empty datagram: a reply means open, an ICMP port-unreachable means closed, and silence until the timeout means `open|filtered`. An open service that ignores an empty datagram and a firewall that drops it look the same from outside, and magi says so instead of picking one. In this run 53 and 161 came back closed and are left out, while 123 stayed silent for the whole second.
 
-- a reply is **open**
-- an ICMP port-unreachable is **closed**
-- silence is **open|filtered** — an open-but-quiet service and a dropped probe look identical from outside
+<ProjectImage
+  src="/projects/magi/udp.webp"
+  video="/projects/magi/udp.mp4"
+  alt="A terminal: magi 45.33.32.156 -p 53,123,161 --udp runs, and after a second the result lists one port, 123/udp, marked open|filtered"
+  caption="A UDP scan of three ports."
+  size="full"
+/>
 
-That last distinction relies on the OS delivering ICMP errors on a connected socket, which is reliable on Linux. macOS and Windows rate-limit ICMP, so some closed ports there read as `open|filtered`. magi surfaces that caveat instead of pretending the result is definitive.
+## Ports it couldn't test
 
-## Architecture
+When a probe can't run at all, magi doesn't count the port as closed. It counts it as untested and ends the scan with a warning that says how many there were and why. scanme.nmap.org has an IPv4 and an IPv6 address, and magi scans every address a name resolves to. On a network without IPv6 routing, the connections to the IPv6 address fail with "network unreachable" before anything is sent, so the three ports there are reported as untested. When the cause is running out of file descriptors, the warning says to lower `--concurrency` or raise the open-file limit.
 
-magi is a thin binary over a small library, so the core is testable on its own:
+<ProjectImage
+  src="/projects/magi/untestable.webp"
+  video="/projects/magi/untestable.mp4"
+  alt="A terminal: magi scanme.nmap.org -p 22,80,443 reports two hosts, lists 22/tcp ssh and 80/tcp http on 45.33.32.156, and ends with warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete."
+  caption="The IPv6 half of the scan, reported as untested."
+  size="full"
+/>
 
-- `src/main.rs` — the CLI: parse args, expand the target, print results.
-- `src/scanner.rs` — the core: port parsing, the scan, banner grabbing, UDP, service hints.
-- `src/lib.rs` — the library root, exposing `scanner`.
-- `tests/scan.rs` — integration tests that bind real loopback sockets.
+## Installing it
 
-Keeping the engine in a library means the interesting logic — the concurrency bound, banner reads, the untestable accounting — is exercised by tests that talk to real sockets rather than mocks.
+Release builds cover Linux and macOS on x86-64 and arm64, and Windows on x86-64, and each installs with one command that puts `magi` on your `PATH`. [magi.ysz.life](https://magi.ysz.life) leads with that command for the visitor's platform, PowerShell on Windows and a shell script everywhere else, with a menu to switch. With a stable Rust toolchain it also builds from a checkout, with `cargo install --path .`
+
+<Safari
+  url="magi.ysz.life"
+  src="/projects/magi/site.webp"
+  video="/projects/magi/site.mp4"
+  alt="magi.ysz.life loading: the headline A port scanner built to be correct comes into focus over dotted waves, the waves bend as the pointer passes, and the install command switches from PowerShell to the curl installer when Linux / macOS is picked from its menu"
+  caption="The site switching the install command to Linux and macOS."
+/>
 
 ## The site
 
-magi has its own home at [magi.ysz.life](https://magi.ysz.life): a localized landing page in five languages with a live install block, a frosted-glass terminal demo, and the same burlywood accent the CLI wears — built with Next.js and next-intl.
+The site is a single page with the install command, a terminal window with a scan in it, the features and a FAQ. The dots behind the headline bend around the pointer, and each feature card draws its figure in ASCII characters that fill in row by row as the card scrolls into view and keep changing after. It comes in a light and a dark theme.
+
+<ProjectImage
+  src="/projects/magi/site-features.webp"
+  video="/projects/magi/site-features.mp4"
+  alt="The magi site in the dark theme gliding down from the hero to the feature grid, where a lightning bolt and an eye drawn in orange ASCII characters fill in row by row above the cards Fast and async and TCP and UDP"
+  caption="The feature cards in the dark theme."
+  size="full"
+/>
+
+## How it's built
+
+magi is a small library under a thin binary. `main.rs` parses the arguments, expands the target and prints the results, and `scanner.rs` holds the scan itself, banner grabbing, UDP and the service names. It runs on tokio, with clap for the flags and serde for the JSON. GitHub Actions runs rustfmt, clippy and the tests on every push, and cargo-dist builds the release archives and the install scripts. The site is Next.js, translated with next-intl.
+
+### A fixed number of probes in flight
+
+A /24 across ports 1 to 1024 is about 260,000 probes, and spawning a task for each up front would hold all of them in memory at once. The scan loop takes a semaphore permit before it spawns each probe instead, so once `--concurrency` probes are in flight it waits for one to finish. The permit moves into the task and is released when the probe ends, and the loop collects finished probes as it goes, so the number of live tasks stays bounded however large the scan is. Abridged from `scan()`:
+
+<CodeBlock
+  code={`let permits = config.concurrency.clamp(1, MAX_CONCURRENCY);
+  let limiter = Arc::new(Semaphore::new(permits));
+  let mut tasks = JoinSet::new();
+  let mut summary = ScanSummary::default();
+  for &target in targets {
+      for &port in ports {
+          let permit = Arc::clone(&limiter)
+              .acquire_owned()
+              .await
+              .expect("semaphore stays open for the duration of the scan");
+          tasks.spawn(async move {
+              let _permit = permit;
+              probe(target, port, timeout_dur, grab_banner, protocol).await
+          });
+          while let Some(joined) = tasks.try_join_next() {
+              collect(&mut summary, &mut progress, joined);
+          }
+      }
+  }`}
+  fileName="src/scanner.rs"
+  lang="rust"
+/>
+
+The optional rate cap is a tokio interval ticked before each spawn. The semaphore limits how many probes run at once and the interval limits how many start per second, and missed ticks are delayed, so a slow stretch never releases a burst of probes to catch up.
+
+### Telling closed from untested
+
+A TCP connect settles the question in two cases: it completes and the port is open, or the host refuses it and the port is closed. A connect that times out also counts as not open, since no reply came back. Every other error says nothing about the port, and it's sorted into one of two untested kinds:
+
+<CodeBlock
+  code={`fn classify_connect_error(e: &io::Error) -> ProbeOutcome {
+      match e.kind() {
+          ErrorKind::ConnectionRefused | ErrorKind::TimedOut => ProbeOutcome::NotOpen,
+          _ if is_fd_exhaustion(e) => ProbeOutcome::Untestable(Untestable::OutOfDescriptors),
+          _ => ProbeOutcome::Untestable(Untestable::Other),
+      }
+  }`}
+  fileName="src/scanner.rs"
+  lang="rust"
+/>
+
+Because the scanner is a library, the integration tests call the real `scan()` against sockets on loopback. One of them lowers the process's open-file limit to 128, scans 400 local ports with 300 probes in flight over TCP and then UDP, and checks that both results count untested ports and name the descriptor limit as the cause.
+
+### UDP without raw sockets
+
+Seeing an ICMP port-unreachable normally takes a raw socket, and with it root. magi connects its UDP socket to the target before sending, which filters replies to that one peer and makes the operating system report the ICMP message as a `ConnectionRefused` error on the next receive. The closed verdict then depends on the OS passing those errors back, which Linux does reliably. macOS and Windows rate-limit ICMP, so on them some closed ports read as `open|filtered`.
+
+### Banners from untrusted hosts
+
+With `--banner`, magi reads up to 512 bytes from each open port and keeps the first line. That text comes from a host you don't control and ends up in your terminal, so every control character is removed before it's printed. A raw escape sequence in a banner could otherwise clear the screen, retitle the window or overwrite earlier output, and a unit test passes an ANSI clear-screen sequence through to check that only printable text comes out.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/magi/landing-desktop.webp",
-      alt: "The magi landing page: the headline A port scanner built to be correct, the install command with a copy button, and a terminal window showing a scan of scanme.nmap.org with two open ports",
-      caption:
-        "The landing page: headline, install command, and a scan in the terminal.",
+      src: "/projects/magi/site-dark.webp",
+      frame: "safari",
+      url: "magi.ysz.life",
+      alt: "The magi site in the dark theme: the headline A port scanner built to be correct over orange dotted waves, the PowerShell install command with a copy button, and a terminal window with a scan of scanme.nmap.org",
+      caption: "The site in the dark theme.",
     },
     {
-      src: "/projects/magi/landing-mobile.webp",
+      src: "/projects/magi/site-dark-mobile.webp",
       frame: "iphone",
-      alt: "The same landing page on a phone, with the install command and the terminal demo stacked under the headline",
-      caption: "On a phone.",
+      alt: "The magi site on a phone in the dark theme: the headline, the install command and the terminal window with the scan",
+      caption: "The site on a phone.",
     },
   ]}
   columns={2}
 />
-
-## Scanning responsibly
-
-Only scan hosts you own or have written permission to scan. [`scanme.nmap.org`](http://scanme.nmap.org) is a sanctioned target for testing. Unsolicited scanning is illegal in many places — in Switzerland it falls under Art. 143bis of the Criminal Code.

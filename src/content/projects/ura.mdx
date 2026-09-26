@@ -1,131 +1,135 @@
-# A navigation app that refuses to flicker
+# Snowmobile navigation for Lapland
 
-Ura ("track" in Finnish) is snowmobile route navigation for Lapland, built as a client project. It ships as two things: a Capacitor app for iOS and Android that carries the whole Finnish route network offline, and a web console where routes are imported, corrected and published to it. The app answers one question on every position fix — are you on a route, and is that route free to ride.
+Ura is an app for snowmobile riders in Finland, on iPhone and Android. It puts every official snowmobile route in the country on one map and tells you, while you ride, whether you're on one. I designed and built it for a client, along with its website, [ura-app.com](https://ura-app.com).
+
+A rider looks at the phone for a second at a time, at a junction, often in the dark and wearing gloves. So Ura is one map screen with one line of text at the top, and everything else opens in a sheet from the bottom.
 
 <Safari
   url="ura-app.com"
-  src="/projects/ura/home-desktop.webp"
-  alt="Ura landing page: the headline 'Know you're on the trail' beside an iPhone showing the route map around Kittilä"
-  caption="The landing page at ura-app.com"
+  src="/projects/ura/site-story.webp"
+  video="/projects/ura/site-story.mp4"
+  alt="The ura-app.com home page in the dark theme: from the headline Know you're on the trail, the page scrolls through the app one step at a time while the phone beside the text changes with it, from the On route line to the map settings for fuel, food and rest stops, and then the map at Inari under the headline Works where the signal doesn't"
+  caption="The website walks through the app as you scroll."
 />
 
-## The problem
+## One answer at the top of the screen
 
-The Finnish snowmobile network is public data, and it is not one network. LIPAS (the sports facility registry run by the University of Jyväskylä) records official routes under type code 4421 and tracks under 4422. Official routes are free to ride. Most of the 4422 tracks belong to Metsähallitus, the state forest agency, and need a track permit bought from Eräluvat first. The difference is legal, not cosmetic, and it is invisible under snow.
-
-The second constraint is signal. Coverage in the fells drops out for stretches of a ride, so an app that asks a server whether you are on a route stops answering exactly where the answer matters. Everything a rider needs has to be on the phone before the ride starts.
+The line at the top answers the question a rider has at a junction. On a route, it shows a green dot and the route's name. Off a route, it turns amber and shows how far away the nearest one is, with an arrow pointing back to it. Far from any route, or outside Finland, it says that instead. The screen stays on while Ura follows you, so a quick look doesn't mean unlocking the phone with gloves on.
 
 <ProjectGallery
   images={[
     {
-      src: "/projects/ura/app-ride.webp",
+      src: "/projects/ura/on-route.webp",
       frame: "iphone",
-      alt: "The Ura app on a dark map around Kittilä: official routes drawn in green, permit tracks in yellow, the rider as a blue dot, and a pill at the top reading On route with the route's name",
-      caption: "On a route near Kittilä",
+      alt: "Ura on the map near Levi in the light theme: the rider's blue dot on a green route, restaurant and fuel markers around it, and the line at the top reading On route, Levi keskus/center",
+      caption: "On a route near Levi.",
     },
     {
-      src: "/projects/ura/app-route.webp",
+      src: "/projects/ura/off-route.webp",
       frame: "iphone",
-      alt: "A route's detail sheet over the map: the name Levi-Kumputunturi-Pokka, badges reading Official route and Free to ride, the maintainer and the route's LIPAS id",
-      caption: "Route detail: official, free to ride",
+      alt: "The rider's dot on open ground between the routes, and the line at the top reading Off route, 320 m, with an arrow pointing back toward the nearest route",
+      caption: "Off route by 320 m.",
+    },
+  ]}
+  columns={2}
+/>
+
+## A verdict that holds still
+
+A phone's GPS position drifts, more so under trees, and a plain distance check would flip between on and off route every few seconds near a junction. Ura only calls you off a route once you've been clearly away from it for ten seconds. Coming back counts straight away: the moment you're on the route again, the line turns green and names it. Where two routes run side by side, it keeps the name of the one you're on instead of swapping between them.
+
+<IPhone
+  src="/projects/ura/ride-back.webp"
+  video="/projects/ura/ride-back.mp4"
+  alt="Ura in the dark theme near Levi: the line at the top reads Off route, 150 m, with an arrow pointing left; the distance counts down as the rider's dot moves toward the green route, and when it reaches the route the line turns to On route, Levi keskus/center"
+  caption="Riding back to a route."
+/>
+
+## Every route on one map
+
+Zoom out and the whole network is there, from the south of Finland to the far north of Lapland. Fuel stations, restaurants and cafés, huts, shelters and fire sites near the routes are on the map as well. Tap one and a sheet shows its name, how far away it is and which way to go. Fuel, food and rest stops can each be hidden in the settings.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/network.webp",
+      frame: "iphone",
+      alt: "The map zoomed out over all of Finland, covered by the snowmobile network in green and yellow from Helsinki to the far north, with the rider's dot in Lapland",
+      caption: "Every route in Finland.",
     },
     {
-      src: "/projects/ura/app-network.webp",
+      src: "/projects/ura/place-sheet.webp",
       frame: "iphone",
-      alt: "The map zoomed out over Finnish Lapland, from Rovaniemi north to Inari, covered by the green and yellow route network",
-      caption: "The network across Lapland",
+      alt: "A sheet over the map at Inari for the fuel station Neste Inari Juutuantörmä, with a Fuel station tag and a distance of 720 m beside an arrow pointing the way",
+      caption: "A fuel station in Inari.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Without signal
+
+Coverage in the fells comes and goes, so Ura doesn't depend on it while you ride. The routes and places are stored in the app, and the map keeps the areas you've already looked at, so a valley you rode into with signal is still drawn after the signal is gone. When the routes change, the app fetches the new set the next time it's online.
+
+<IPhone
+  src="/projects/ura/inari.webp"
+  alt="The map around Inari in the light theme: routes in green along the lake shore and across the ice, restaurant and fuel markers in the village, and the line at the top reading On route with the name of the village route"
+  caption="Inari, in the far north."
+/>
+
+## Theme and language
+
+Ura has a light and a dark theme, and it follows the phone's setting unless you pick one. The dark theme darkens the map too, for riding through the long nights of a Lapland winter. The app is in English, Finnish and German, again following the phone unless you choose. The store images use the same screens, here in the dark theme, set on a photograph of snow-covered forest.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/store-dark-off-route.webp",
+      alt: "Store image headed Off route? See the distance.: a phone over a photograph of snowy spruce forest, showing the dark map with the Off route line, 320 m and an arrow back to the route",
+      caption: "Off a route.",
+    },
+    {
+      src: "/projects/ura/store-dark-network.webp",
+      alt: "Store image headed Finland's trails. One clear map.: the dark map zoomed out over the whole network across Finland",
+      caption: "The whole network.",
+    },
+  ]}
+  columns={2}
+/>
+
+## The website
+
+[ura-app.com](https://ura-app.com) introduces the app to riders before they install it. Its main section is the scroll story at the top of this page: one phone stays beside the text and changes to show each part of the app. The site follows the visitor's light or dark setting, a button in the corner switches it by hand, and an aurora drifts behind the headline. On a computer, a QR code at the end of the page opens the download on your phone.
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-theme.webp"
+  video="/projects/ura/site-theme.mp4"
+  alt="The ura-app.com hero in the dark theme, with a green aurora moving behind the headline Know you're on the trail; the button in the bottom-right corner switches the page to the light theme and back"
+  caption="The hero, switched from dark to light and back."
+/>
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/site-desktop.webp",
+      frame: "safari",
+      url: "ura-app.com",
+      alt: "The ura-app.com home page in the light theme: the headline Know you're on the trail, App Store and Google Play badges, and a phone showing the route network around Kittilä",
+      caption: "ura-app.com in the light theme.",
+    },
+    {
+      src: "/projects/ura/site-mobile.webp",
+      frame: "iphone",
+      alt: "The ura-app.com home page on a phone in the dark theme: the headline, the store badges and the top of the app's map below them",
+      caption: "The site on a phone.",
+    },
+    {
+      src: "/projects/ura/app-dark.webp",
+      frame: "iphone",
+      alt: "Ura in the dark theme near Levi: green routes on a dark map and the line at the top reading On route, Levi keskus/center",
+      caption: "The app after dark.",
     },
   ]}
   columns={3}
 />
-
-## Holding the verdict
-
-Matching a fix to the network is a nearest-segment lookup: the route geometry goes into a flatbush spatial index at load, and each fix queries it. That part is cheap. The hard part is that a single distance threshold makes the status flicker. Near a junction, or under a tree line where accuracy degrades, "on route" and "off route" trade places every second and the pill becomes noise.
-
-So the engine uses hysteresis, the way a thermostat does not switch the heating on and off at exactly one temperature. You are on route inside 40 m and only lose it past 60 m, and even then the excursion has to last 10 seconds before the status changes. Route identity gets the same treatment: the matched route is held unless a rival is closer by more than 15 m, so two parallel tracks 30 m apart stop swapping the name in the HUD.
-
-<CodeBlock
-  code={`export const ENGINE_CONFIG: EngineConfig = {
-    onRouteMeters: 40,
-    offRouteMeters: 60,
-    /** a fix with no prior state splits the 40-60 m band here instead of stalling */
-    coldStartMeters: 50,
-    /** the matched route is held unless a rival is closer by more than this */
-    routeSwitchMarginMeters: 15,
-    offRouteHoldMs: 10_000,
-    maxAccuracyMeters: 100,
-    staleFixMs: 30_000,
-  };`}
-  fileName="apps/mobile/src/engine/config.ts"
-  lang="ts"
-/>
-
-`evaluate()` is a pure function: state in, state out, no timers and no device APIs. That is what makes it testable: 66 tests in `packages/core` cover it, some of them replaying recorded field traces in an NDJSON format the app itself can write. A phone that loses power mid-write leaves a half-finished last line, so the reader drops it rather than throwing.
-
-## Everything on the device
-
-A published bundle carries 2,595 routes and 3,388 nearby places: fuel stations, cafés, lean-tos, huts and fire sites within 5 km of the network. Its shape is a zod schema in `packages/schema`, the single contract the console and the app share, so a bundle the compiler produced is a bundle the app can read.
-
-Map tiles are the part that cannot ship in advance. Instead every tile the rider looks at stays on the phone up to a 250 MB ceiling, and eviction runs down to 90% of the budget rather than clearing the cache, so one overshoot does not cost a season of cached fells.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/ura/offline-desktop.webp",
-      alt: "Scroll-story slide 'Works where the signal doesn't' with the map centred on Inari and Ivalo",
-      caption: "Offline: tiles stay on the phone, up to 250 MB",
-    },
-    {
-      src: "/projects/ura/walkthrough-desktop.webp",
-      alt: "Scroll-story slide 'Fuel, food, shelter' with the app's bottom sheet toggling fuel, restaurants and rest stops",
-      caption: "3,388 places within 5 km of the network",
-    },
-  ]}
-  columns={2}
-/>
-
-## Data you are allowed to publish
-
-Every feature in a bundle carries its source, and the manifest carries the attribution the app renders: LIPAS under CC BY 4.0, OpenStreetMap points via Overpass under ODbL, basemap tiles from the National Land Survey of Finland. The compiler enforces this rather than documenting it. A source whose license is unresolved cannot reach a bundle: the build throws instead of publishing.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/ura/permits-desktop.webp",
-      alt: "Scroll-story slide 'Free to ride. Or permit first.' with a route detail card for Levi-Kumputunturi-Pokka",
-      caption: "Route detail: official or permit, maintainer, LIPAS id",
-    },
-    {
-      src: "/projects/ura/faq-desktop.webp",
-      alt: "FAQ section 'Before you ride' with seven collapsed questions",
-      caption: "FAQ: before you ride",
-    },
-  ]}
-  columns={2}
-/>
-
-## The landing page
-
-The site is its own Next.js repo: next-intl in English, Finnish and German, Cabinet Grotesk for headings, and a pinned scroll story whose five slides drive one phone mockup. It follows the system colour scheme with no stored preference, which is why the same hero renders as a green aurora at night and a pale wash by day.
-
-<ProjectGallery
-  images={[
-    {
-      src: "/projects/ura/home-dark-desktop.webp",
-      alt: "The same hero in dark theme, with a deep green aurora gradient and a dark basemap in the phone mockup",
-      caption: "Dark theme, desktop",
-    },
-    {
-      src: "/projects/ura/home-mobile.webp",
-      frame: "iphone",
-      alt: "The dark hero at phone width: headline, store badges and the top of the map mockup stacked",
-      caption: "Phone width",
-    },
-  ]}
-  columns={2}
-/>
-
-## What carried over
-
-The engine work generalized better than I expected. When a reading is noisy, the fix is usually not a better sensor but a rule about when you are allowed to change your mind.
