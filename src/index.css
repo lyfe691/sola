@@ -103,8 +103,7 @@
   /* micro-interaction pop: slight overshoot for press-release (name-morpher
      active scale). Reserve for tiny deltas (2-3%) — bigger ones turn cartoonish. */
   --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
-  /* scroll reveals — easeOutQuart: fast attack, long visible settle.
-     Mirrors EASE_OUT_QUART in src/utils/transitions.ts. */
+  /* easeOutQuart: fast attack, long visible settle */
   --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
   /* defaults for transition-* utilities that don't state an ease/duration —
      without these, Tailwind's built-in curve and 150ms sneak past the
@@ -623,8 +622,7 @@
 /* <Reveal> (src/components/Reveal.tsx): a block waits hidden a short way
    down until the queue in src/lib/reveal.ts lets it in, then fades and
    rises into place on the glide curve, after the delay the queue handed
-   it. Mirrors REVEAL_RISE / REVEAL_DURATION in transitions.ts (the project
-   grid plays the same reveal through motion). transform rather than
+   it. transform rather than
    translate, so a block's own translate and scale utilities compose with
    it instead of being overridden. */
 :root {
@@ -650,6 +648,14 @@
   [data-reveal]:not([data-revealed]) {
     transform: none;
   }
+}
+
+/* a re-sorted grid (/projects) shows every card outright: a swap's
+   snapshot must never catch a card still waiting to reveal */
+[data-reveal-settled] > [data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 /* a printed page never scrolls, so nothing on it may wait to be revealed */
@@ -793,6 +799,68 @@
 @keyframes resume-arrive {
   from {
     opacity: 0;
+  }
+}
+
+/* ---------- grid swap (view transitions api) ---------- */
+/* A re-sort or filter on /projects (use-grid-swap.ts): each slot on screen
+   is named for the swap and crossfades in place from the card it held to
+   the one it holds now, a beat apart in reading order. The root steps out,
+   so the page and the toolbar's own motion stay live. Additive blending
+   keeps the slot at full strength through the crossfade. */
+:root[data-grid-swap] {
+  view-transition-name: none;
+}
+
+::view-transition-group(*.grid-slot) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-out-quart);
+}
+
+::view-transition-image-pair(*.grid-slot) {
+  isolation: isolate;
+}
+
+::view-transition-old(*.grid-slot) {
+  mix-blend-mode: plus-lighter;
+  animation: grid-slot-leave 240ms var(--ease-out) both;
+}
+
+::view-transition-new(*.grid-slot) {
+  mix-blend-mode: plus-lighter;
+  animation: grid-slot-arrive 420ms var(--ease-out-quart) both;
+}
+
+::view-transition-group(*.grid-beat-1),
+::view-transition-old(*.grid-beat-1),
+::view-transition-new(*.grid-beat-1) {
+  animation-delay: 40ms;
+}
+
+::view-transition-group(*.grid-beat-2),
+::view-transition-old(*.grid-beat-2),
+::view-transition-new(*.grid-beat-2) {
+  animation-delay: 80ms;
+}
+
+::view-transition-group(*.grid-beat-3),
+::view-transition-old(*.grid-beat-3),
+::view-transition-new(*.grid-beat-3) {
+  animation-delay: 120ms;
+}
+
+@keyframes grid-slot-leave {
+  to {
+    opacity: 0;
+    filter: blur(6px);
+  }
+}
+
+@keyframes grid-slot-arrive {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(8px);
   }
 }
 

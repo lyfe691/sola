@@ -5,84 +5,83 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Drives a grid through a re-order in two beats. The order on screen lags
- * the requested order by the exit clock: first the cards whose slot changes
- * dissolve where they are, then the DOM is re-ordered underneath — every
- * changed card is invisible at that instant — and the same cards enter in
- * their new slots. Cards that keep their slot never move, and because the
- * grid keys cards by id, moved cards are moved, not re-mounted: painted
- * covers keep their canvases.
- *
- * A new order arriving mid-swap retargets: cards still exiting stay in the
- * changed set, so nothing is left half-faded.
+ * Runs a grid re-order as a view transition (CSS in index.css, "grid
+ * swap"). Every slot on screen is named for the swap in reading order, so
+ * the browser crossfades each one from the card it held to the card it
+ * holds after the update. The root steps out of the transition, so
+ * everything else stays live, and slots off screen change unphotographed.
  */
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { changedSlots, enterRanks } from "@/lib/grid-swap";
-import { SWAP_EXIT, SWAP_SETTLE_MS } from "@/utils/transitions";
+import { useCallback, useRef, type RefObject } from "react";
+import { flushSync } from "react-dom";
+import { useReducedMotion } from "motion/react";
 
-export interface GridSwap {
-  phase: "out" | "in";
-  /** ids taking part: they exit in `out`, enter in `in` */
-  changed: ReadonlySet<string>;
-  /** enter order among the changed, for the stagger */
-  rank: ReadonlyMap<string, number>;
-}
+/** slots past this many on screen share the last beat of the stagger */
+const BEATS = 4;
 
-export interface GridSwapView {
-  /** the order to render — equals the requested order once the exit beat has run */
-  shownIds: readonly string[];
-  swap: GridSwap | null;
-  /** ids that have ever entered through a swap: shown outright, never waiting on a scroll reveal */
-  arrived: ReadonlySet<string>;
-}
+const slotsOf = (grid: HTMLElement) =>
+  Array.from(grid.children as HTMLCollectionOf<HTMLElement>);
 
-const EMPTY: ReadonlySet<string> = new Set();
-const SEP = "\n";
+const onScreen = (slots: HTMLElement[]) =>
+  slots.flatMap((slot, index) => {
+    const { top, bottom } = slot.getBoundingClientRect();
+    return bottom > 0 && top < window.innerHeight ? [index] : [];
+  });
 
-export function useGridSwap(order: readonly string[]): GridSwapView {
-  // one identity per sequence, so a fresh array in the same order is a no-op
-  const key = order.join(SEP);
-  const ids = useMemo(() => (key ? key.split(SEP) : []), [key]);
+const unname = (el: HTMLElement) => {
+  el.style.viewTransitionName = "";
+  el.style.viewTransitionClass = "";
+};
 
-  const [view, setView] = useState<GridSwapView>(() => ({
-    shownIds: ids,
-    swap: null,
-    arrived: EMPTY,
-  }));
-  const shownRef = useRef(ids);
-  const exitingRef = useRef(EMPTY);
-  const arrivedRef = useRef(new Set<string>());
+/** names slots by index, so both photographs agree; the beat counts from the first slot on screen */
+const name = (slots: HTMLElement[], indices: number[], first: number) => {
+  slots.forEach(unname);
+  for (const index of indices) {
+    const slot = slots[index];
+    if (!slot) continue;
+    const beat = Math.min(Math.max(index - first, 0), BEATS - 1);
+    slot.style.viewTransitionName = `grid-slot-${index}`;
+    slot.style.viewTransitionClass = `grid-slot grid-beat-${beat}`;
+  }
+};
 
-  useEffect(() => {
-    const changed = new Set([
-      ...changedSlots(shownRef.current, ids),
-      ...exitingRef.current,
-    ]);
-    if (changed.size === 0) return;
-    const rank = enterRanks(ids, changed);
-    exitingRef.current = changed;
-    setView((v) => ({ ...v, swap: { phase: "out", changed, rank } }));
+export function useGridSwap(gridRef: RefObject<HTMLElement | null>) {
+  const reducedMotion = useReducedMotion();
+  const running = useRef<ViewTransition | null>(null);
 
-    const switchAt = window.setTimeout(() => {
-      shownRef.current = ids;
-      exitingRef.current = EMPTY;
-      for (const id of changed) arrivedRef.current.add(id);
-      setView({
-        shownIds: ids,
-        swap: { phase: "in", changed, rank },
-        arrived: new Set(arrivedRef.current),
+  return useCallback(
+    (update: () => void) => {
+      const grid = gridRef.current;
+      if (!grid || reducedMotion || !document.startViewTransition) {
+        update();
+        return;
+      }
+      const before = onScreen(slotsOf(grid));
+      const first = before[0] ?? 0;
+      name(slotsOf(grid), before, first);
+
+      const root = document.documentElement;
+      root.dataset.gridSwap = "";
+      const transition = document.startViewTransition(() => {
+        // one synchronous commit, so the new order is in place before the
+        // browser photographs it. Cards move between slots, so the names go
+        // to whichever card now sits in each one, and a slot the new layout
+        // brings on screen joins in, or it would pop in unanimated
+        flushSync(update);
+        const slots = slotsOf(grid);
+        const after = onScreen(slots);
+        name(slots, [...new Set([...before, ...after])], first);
       });
-    }, SWAP_EXIT * 1000);
-    const settleAt = window.setTimeout(
-      () => setView((v) => ({ ...v, swap: null })),
-      SWAP_EXIT * 1000 + SWAP_SETTLE_MS,
-    );
-    return () => {
-      window.clearTimeout(switchAt);
-      window.clearTimeout(settleAt);
-    };
-  }, [ids]);
-
-  return view;
+      running.current = transition;
+      const landed = () => {
+        // a newer swap that cut this one short owns the names now
+        if (running.current !== transition) return;
+        running.current = null;
+        delete root.dataset.gridSwap;
+        slotsOf(grid).forEach(unname);
+      };
+      transition.finished.then(landed, landed);
+    },
+    [gridRef, reducedMotion],
+  );
 }

@@ -10,7 +10,6 @@ import {
   createGeneratorEasing,
   generateLinearEasing,
   spring,
-  type Variants,
 } from "motion/react";
 
 /**
@@ -19,7 +18,7 @@ import {
  * Three registers, deliberately different:
  *   - UI controls (dropdowns, tooltips, hover) want to feel RESPONSIVE -> short + EASE_OUT.
  *   - Scroll reveals: one shape for every block (<Reveal>, src/lib/reveal.ts),
- *     a fade and a short rise settling on EASE_OUT_QUART. Blocks never pick
+ *     a fade and a short rise on the glide curve. Blocks never pick
  *     their own delays; one queue starts them in reading order, a beat
  *     apart, so order holds at any scroll speed.
  *   - The page transition (and the hero's load-in) keeps the longer glide ->
@@ -35,9 +34,6 @@ import {
 // EASE_OUT is a gentle easeOutCubic (not a front-loaded quint) so short hover/UI
 // transitions glide instead of snapping. Mirrors --ease-out in index.css.
 export const EASE_OUT = [0.33, 1, 0.68, 1] as const; // responsive-but-smooth UI (dropdowns/hover)
-// easeOutQuart — a fast attack you can see, then a long visible settle (a
-// grid cell re-entering after a swap). Mirrors --ease-out-quart in index.css.
-export const EASE_OUT_QUART = [0.165, 0.84, 0.44, 1] as const;
 export const EASE_EXPO = [0.16, 1, 0.3, 1] as const; // lush hero entrances
 
 // Page transition: a punchy expo. The blur masks its front-loading, so it's fine here.
@@ -141,81 +137,10 @@ export const pageTransitionVariants = {
 };
 
 // ---- Scroll reveals ----
-// The one reveal every block plays (CSS in index.css, "scroll reveals";
-// Projects' grid cells play it through motion, gridCellVariants below): a
-// fade and a short rise on the glide curve. Short, so no block reads as a
-// slab lurching; the same for every block, so everything triggers at the
-// same line. Mirrored by --reveal-rise / --reveal-duration in index.css.
-export const REVEAL_RISE = 32; // px
-export const REVEAL_DURATION = 0.7; // s
+// The one reveal every block plays is CSS (index.css, "scroll reveals").
 // The queue's clock (src/lib/reveal.ts, ms): blocks let in together start
 // a beat apart in reading order, and the queue never runs further behind
 // than the lag cap — a whole first screen or a fling past many rows closes
 // its beats up rather than making the last block wait.
 export const REVEAL_STAGGER = 90;
 export const REVEAL_MAX_LAG = 360;
-
-// ---- Grid swap: a re-sort or filter changes which card sits in which slot ----
-// Nothing slides — on tall cards any travel reads as scatter. Only a slot
-// whose occupant changes animates, on a short glide between the UI and
-// reveal clocks: the leaver dissolves where it is, then, once the grid has
-// been re-ordered underneath, the arrival settles in from 12px below on the
-// reveal curve, staggered in reading order. Exit is faster than enter and
-// both are long enough to be seen as a crossfade rather than a cut;
-// transform and opacity only, which the compositor runs without repainting
-// a card.
-export const SWAP_EXIT = 0.2;
-export const SWAP_ENTER = 0.32;
-export const SWAP_STAGGER = 0.04;
-const SWAP_STAGGER_CAP = 0.24;
-/** enter delay (s) by rank among the changed slots, capped so late slots never wait */
-export const swapDelay = (rank: number) =>
-  Math.min(rank * SWAP_STAGGER, SWAP_STAGGER_CAP);
-/** the whole enter beat, last stagger included (ms) — the driver's clock */
-export const SWAP_SETTLE_MS = Math.round(
-  (SWAP_ENTER + SWAP_STAGGER_CAP) * 1000,
-);
-
-/** per-cell inputs the grid variants resolve against */
-export interface GridCellCustom {
-  /** the delay (ms) the reveal queue handed this cell */
-  delay?: number;
-  /** enter order among the changed slots of a swap */
-  rank?: number;
-}
-
-/**
- * The four states of a grid cell. hidden → visible is the scroll reveal
- * (the same rise and clock as <Reveal>); swapOut → swapIn is the
- * swap. swapIn starts from its own first keyframe, so a cell can go there
- * straight from swapOut with no intermediate render.
- */
-export const gridCellVariants = {
-  hidden: { opacity: HIDDEN_OPACITY, y: REVEAL_RISE, scale: 1 },
-  visible: ({ delay = 0 }: GridCellCustom = {}) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: REVEAL_DURATION,
-      ease: REVEAL,
-      delay: delay / 1000,
-    },
-  }),
-  swapOut: {
-    opacity: 0,
-    y: 0,
-    scale: 0.98,
-    transition: { duration: SWAP_EXIT, ease: EASE_OUT },
-  },
-  swapIn: ({ rank = 0 }: GridCellCustom = {}) => ({
-    opacity: [0, 1],
-    y: [12, 0],
-    scale: [0.98, 1],
-    transition: {
-      duration: SWAP_ENTER,
-      ease: EASE_OUT_QUART,
-      delay: swapDelay(rank),
-    },
-  }),
-} satisfies Variants;

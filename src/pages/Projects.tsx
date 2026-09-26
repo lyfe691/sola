@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useMemo, useRef, useState, type ReactNode } from "react";
-import { motion } from "motion/react";
+import { memo, useMemo, useRef, useState, type ReactNode } from "react";
 import {
   ArrowUpRight01Icon,
   Calendar03Icon,
@@ -43,10 +42,8 @@ import {
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Reveal } from "@/components/Reveal";
-import { useReveal } from "@/hooks/use-reveal";
 import { PrivateLinkButton } from "@/components/private-link-button";
-import { useGridSwap, type GridSwap } from "@/hooks/use-grid-swap";
-import { gridCellVariants, type GridCellCustom } from "@/utils/transitions";
+import { useGridSwap } from "@/hooks/use-grid-swap";
 import { RichText } from "@/components/i18n/RichText";
 import { Card } from "@/components/ui/card";
 import {
@@ -258,89 +255,49 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
   </div>
 );
 
-const ProjectCard = ({ project, t }: { project: Project; t: Translation }) => (
-  <Card variant="translucent" lift className={cardClassName}>
-    <div className="p-1.5 pb-0">
-      <PaintedCover
-        art={project.art}
-        size="card"
-        live={false}
-        className={coverClassName}
-        // the date is part of the painting: set into a notch in its corner,
-        // on the card's surface, left-aligned with the caption below. Set
-        // like a readout — bold mono caps, tracked — so it holds its own
-        // against the art instead of whispering beside it
-        notch={
-          <time
-            dateTime={project.date.start}
-            className="block px-5 py-2 font-mono text-2xs leading-4 font-bold tracking-label text-foreground uppercase sm:px-6"
-          >
-            {project.dateLabel}
-          </time>
-        }
-      >
-        <CoverCaption
-          as="h2"
-          title={project.title}
-          subtitle={project.tagline}
-        />
-      </PaintedCover>
-    </div>
-    <ProjectBody project={project} t={t} />
-  </Card>
+// memo: a re-sort re-renders the page with the same project objects, and the
+// cards only need to move
+const ProjectCard = memo(
+  ({ project, t }: { project: Project; t: Translation }) => (
+    <Card variant="translucent" lift className={cardClassName}>
+      <div className="p-1.5 pb-0">
+        <PaintedCover
+          art={project.art}
+          size="card"
+          live={false}
+          className={coverClassName}
+          // the date is part of the painting: set into a notch in its corner,
+          // on the card's surface, left-aligned with the caption below. Set
+          // like a readout — bold mono caps, tracked — so it holds its own
+          // against the art instead of whispering beside it
+          notch={
+            <time
+              dateTime={project.date.start}
+              className="block px-5 py-2 font-mono text-2xs leading-4 font-bold tracking-label text-foreground uppercase sm:px-6"
+            >
+              {project.dateLabel}
+            </time>
+          }
+        >
+          <CoverCaption
+            as="h2"
+            title={project.title}
+            subtitle={project.tagline}
+          />
+        </PaintedCover>
+      </div>
+      <ProjectBody project={project} t={t} />
+    </Card>
+  ),
 );
-
-/**
- * One slot of the grid. At rest a cell reveals on scroll like every block on
- * the site, when the reveal queue lets it in. While a swap runs, a cell whose occupant changed dissolves where
- * it is and re-enters in its new slot instead; a card that has arrived
- * through a swap is simply shown from then on — it never waits on a scroll
- * reveal again, so one that landed just under the fold can't fade back out.
- */
-const ProjectCell = ({
-  project,
-  t,
-  swap,
-  arrived,
-}: {
-  project: Project;
-  t: Translation;
-  swap: GridSwap | null;
-  arrived: boolean;
-}) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const delay = useReveal(ref);
-  const phase = swap?.changed.has(project.id) ? swap.phase : null;
-  const state =
-    phase === "out"
-      ? "swapOut"
-      : phase === "in" || arrived
-        ? "swapIn"
-        : delay !== null
-          ? "visible"
-          : "hidden";
-  const custom: GridCellCustom = {
-    delay: delay ?? 0,
-    rank: swap?.rank.get(project.id) ?? 0,
-  };
-
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={state}
-      variants={gridCellVariants}
-      custom={custom}
-      className="h-full"
-    >
-      <ProjectCard project={project} t={t} />
-    </motion.div>
-  );
-};
+ProjectCard.displayName = "ProjectCard";
 
 const Projects = () => {
   const [sortBy, setSortBy] = useState<ProjectSortOption>("featured");
   const [kind, setKind] = useState<KindFilter>("all");
+  // set by the first re-sort or filter: from then on every card is shown
+  // outright, so a swap never lands a card that is still waiting to reveal
+  const [settled, setSettled] = useState(false);
   const { language } = useLanguage();
   const t = useTranslation();
 
@@ -355,21 +312,23 @@ const Projects = () => {
     [t],
   );
 
-  // every project, localized: the universe the grid's ids resolve against,
-  // so a card leaving through the filter keeps its data while it exits
   const all = useMemo(() => localizeProjects(t, language), [t, language]);
-  const byId = useMemo(() => new Map(all.map((p) => [p.id, p])), [all]);
-  const order = useMemo(
+  const projects = useMemo(
     () =>
       sortProjects(
         all.filter((p) => kind === "all" || p.kind === kind),
         sortBy,
         INTL_LOCALE[language],
-      ).map((p) => p.id),
+      ),
     [all, kind, sortBy, language],
   );
-  const { shownIds, swap, arrived } = useGridSwap(order);
-  const shown = shownIds.flatMap((id) => byId.get(id) ?? []);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridSwap = useGridSwap(gridRef);
+  const swap = (update: () => void) =>
+    gridSwap(() => {
+      setSettled(true);
+      update();
+    });
 
   return (
     <div className="flex flex-col w-full">
@@ -379,7 +338,10 @@ const Projects = () => {
         {t.projects.title}
       </Reveal>
       <Reveal className="mb-8 flex flex-col gap-3 sm:mb-12 sm:flex-row sm:items-center sm:justify-between">
-        <Tabs value={kind} onValueChange={setKind}>
+        <Tabs
+          value={kind}
+          onValueChange={(value: KindFilter) => swap(() => setKind(value))}
+        >
           {/* spans the row on phones with equal tabs, like the sort
                 select under it; content-sized from sm up */}
           <TabsList
@@ -395,7 +357,9 @@ const Projects = () => {
         </Tabs>
         <Select
           value={sortBy}
-          onValueChange={(value) => setSortBy(value as ProjectSortOption)}
+          onValueChange={(value) =>
+            swap(() => setSortBy(value as ProjectSortOption))
+          }
         >
           <SelectTrigger
             aria-label={t.projects.sortBy}
@@ -423,16 +387,15 @@ const Projects = () => {
         </Select>
       </Reveal>
 
-      {/* keyed by project, so a re-order moves cards instead of re-mounting
-          them; the swap driver decides which cells animate */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-        {shown.length === 0 && (
-          <motion.div
-            variants={gridCellVariants}
-            initial="swapOut"
-            animate="swapIn"
-            className="col-span-full"
-          >
+      {/* keyed by project, so a re-sort moves cards instead of re-mounting
+          them */}
+      <div
+        ref={gridRef}
+        data-reveal-settled={settled ? "" : undefined}
+        className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8"
+      >
+        {projects.length === 0 && (
+          <Reveal className="col-span-full">
             <Empty className="border border-dashed">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
@@ -444,16 +407,12 @@ const Projects = () => {
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
-          </motion.div>
+          </Reveal>
         )}
-        {shown.map((project) => (
-          <ProjectCell
-            key={project.id}
-            project={project}
-            t={t}
-            swap={swap}
-            arrived={arrived.has(project.id)}
-          />
+        {projects.map((project) => (
+          <Reveal key={project.id} className="h-full">
+            <ProjectCard project={project} t={t} />
+          </Reveal>
         ))}
       </div>
     </div>

@@ -80,8 +80,7 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 - Scroll reveals: wrap each block that should arrive on its own in
   `<Reveal>` (`as="li"` etc.). Never pass delays or nest reveals — one
   queue (`src/lib/reveal.ts`) starts blocks in reading order, and one CSS
-  rule (index.css, "scroll reveals") animates them. A motion component with
-  its own states takes the queue's delay through `useReveal`.
+  rule (index.css, "scroll reveals") animates them.
 - Content entrances start from `HIDDEN_OPACITY` (0.001), never 0: Chrome's
   LCP skips a paint at opacity 0, so a fade from 0 adds its whole glide to
   LCP. Invisible either way; exits may still end at 0.
