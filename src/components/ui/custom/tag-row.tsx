@@ -101,7 +101,9 @@ export const TagRow = ({ tags, className }: TagRowProps) => {
           key={tag}
           name={tag}
           data-measure="tag"
-          className={cn(i >= visibleCount && "invisible absolute")}
+          className={cn(
+            i >= visibleCount && "invisible absolute transition-none",
+          )}
         />
       ))}
       <span
