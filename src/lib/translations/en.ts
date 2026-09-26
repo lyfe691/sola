@@ -113,6 +113,7 @@ export const en = {
     copyFailed: "Couldn't copy code.",
     command: {
       placeholder: "Search the site or run a command…",
+      scopedPlaceholder: "Search…",
       noResultsFor: "No results for “{query}”",
       noResultsHint: "Try a project, a technology or a page.",
       groups: {

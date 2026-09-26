@@ -56,7 +56,7 @@ export function PaletteInput({
             if (event.key === "Backspace" && !value && scope) clear();
           }}
           className={cn(
-            "w-full outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+            "min-w-0 flex-1 truncate pr-3 outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
             large ? "text-base" : "text-sm",
           )}
         />
@@ -67,19 +67,21 @@ export function PaletteInput({
             className="size-4 shrink-0 opacity-50"
           />
           {scope && (
-            <button
-              type="button"
-              onClick={clear}
-              aria-label={clearScopeLabel}
-              className="flex h-6 cursor-pointer items-center gap-1 rounded-full bg-muted-foreground/10 pr-1.5 pl-2.5 text-xs font-medium text-foreground transition-colors hover:bg-muted-foreground/20"
-            >
+            <span className="flex h-6 shrink-0 items-center gap-1 rounded-full bg-background pr-0.5 pl-2.5 text-xs font-medium text-foreground shadow-xs ring-1 ring-foreground/5">
               {scope}
-              <HugeiconsIcon
-                icon={Cancel01Icon}
-                strokeWidth={2}
-                className="size-3 opacity-60"
-              />
-            </button>
+              <button
+                type="button"
+                onClick={clear}
+                aria-label={clearScopeLabel}
+                className="relative grid size-5 cursor-pointer place-items-center rounded-full bg-muted-foreground/15 text-muted-foreground transition-colors after:absolute after:-inset-2 hover:bg-muted-foreground/25 hover:text-foreground"
+              >
+                <HugeiconsIcon
+                  icon={Cancel01Icon}
+                  strokeWidth={2.5}
+                  className="size-2.5"
+                />
+              </button>
+            </span>
           )}
         </InputGroupAddon>
       </InputGroup>

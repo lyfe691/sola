@@ -116,6 +116,7 @@ export const es = {
     copyFailed: "No se pudo copiar.",
     command: {
       placeholder: "Busca en el sitio o ejecuta un comando…",
+      scopedPlaceholder: "Buscar…",
       noResultsFor: "Sin resultados para «{query}»",
       noResultsHint: "Prueba con un proyecto, una tecnología o una página.",
       groups: {

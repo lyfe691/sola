@@ -114,6 +114,7 @@ export const de = {
     copyFailed: "Kopieren fehlgeschlagen.",
     command: {
       placeholder: "Website durchsuchen oder Befehl ausführen…",
+      scopedPlaceholder: "Suchen…",
       noResultsFor: "Keine Ergebnisse für „{query}“",
       noResultsHint: "Probier ein Projekt, eine Technologie oder eine Seite.",
       groups: {

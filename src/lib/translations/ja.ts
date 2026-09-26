@@ -111,6 +111,7 @@ export const ja = {
     copyFailed: "コピーできませんでした。",
     command: {
       placeholder: "サイトを検索、またはコマンドを実行…",
+      scopedPlaceholder: "検索…",
       noResultsFor: "「{query}」に一致する結果はありません",
       noResultsHint: "プロジェクト、技術、ページの名前で探してみてください。",
       groups: {

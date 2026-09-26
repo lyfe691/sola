@@ -107,6 +107,7 @@ export const zh = {
     copyFailed: "复制失败。",
     command: {
       placeholder: "搜索网站或运行命令…",
+      scopedPlaceholder: "搜索…",
       noResultsFor: "没有找到“{query}”的结果",
       noResultsHint: "试试搜索项目、技术或页面。",
       groups: {

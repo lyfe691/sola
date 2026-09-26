@@ -289,8 +289,10 @@ function Palette({ mobile }: { mobile: boolean }) {
         onValueChange={setQuery}
         placeholder={
           scope === "projects"
-            ? t.common.searchProjects
-            : t.common.command.placeholder
+            ? t.common.command.scopedPlaceholder
+            : mobile
+              ? t.common.searchSite
+              : t.common.command.placeholder
         }
         scope={scope === "projects" ? t.nav.projects : undefined}
         clearScopeLabel={t.common.searchSite}

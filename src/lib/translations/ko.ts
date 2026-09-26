@@ -113,6 +113,7 @@ export const ko = {
     copyFailed: "코드를 복사할 수 없습니다.",
     command: {
       placeholder: "사이트 검색 또는 명령 실행…",
+      scopedPlaceholder: "검색…",
       noResultsFor: "“{query}”에 대한 결과가 없습니다",
       noResultsHint: "프로젝트, 기술 또는 페이지 이름으로 찾아보세요.",
       groups: {
