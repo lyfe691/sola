@@ -538,19 +538,6 @@
     overflow-x: clip; /* a lazy fix to a big problem */
   }
 
-  /* smooth theme transitions */
-  html,
-  body,
-  #root,
-  .app-theme-surface {
-    transition:
-      background-color 250ms var(--ease-out),
-      color 250ms var(--ease-out),
-      border-color 250ms var(--ease-out),
-      fill 250ms var(--ease-out),
-      stroke 250ms var(--ease-out);
-  }
-
   h1,
   h2,
   h3,
@@ -688,6 +675,14 @@
 
 ::view-transition-new(root) {
   animation: theme-dissolve 450ms var(--ease-out) both;
+}
+
+/* held for the one style pass that switches the theme (theme-provider) */
+:root[data-theme-switch],
+:root[data-theme-switch] *,
+:root[data-theme-switch] *::before,
+:root[data-theme-switch] *::after {
+  transition: none !important;
 }
 
 @keyframes theme-dissolve {

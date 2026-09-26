@@ -85,6 +85,23 @@ const landPressesDuring = (transition: ViewTransition) => {
   transition.finished.then(done, done);
 };
 
+/** puts a theme on <html>: its class, and the scheme the dark: variant reads */
+const stampTheme = (theme: Theme) => {
+  const root = document.documentElement;
+  root.classList.remove(...ALL_THEME_VALUES.filter((t) => t !== "system"));
+  root.classList.add(resolveTheme(theme));
+  // the dark: variant matches this attr too — custom dark themes
+  // (cyber, forest, …) never carry the literal `dark` class
+  root.dataset.scheme = getThemeType(theme);
+  // persisted for the pre-paint stamp in index.html — custom themes
+  // (cyber, forest, …) carry a type the inline script can't derive
+  try {
+    localStorage.setItem(SCHEME_STORAGE_KEY, root.dataset.scheme);
+  } catch {
+    /* storage unavailable — fail silently */
+  }
+};
+
 const readInitialTheme = (storageKey: string, defaultTheme: Theme): Theme => {
   try {
     // an explicit choice (any surface: menu, palette) beats the first-visit
@@ -127,28 +144,14 @@ export function ThemeProvider({
   }, [storageKey]);
 
   useEffect(() => {
-    const root = document.documentElement;
-    const apply = () => {
-      root.classList.remove(...ALL_THEME_VALUES.filter((t) => t !== "system"));
-      root.classList.add(resolveTheme(theme));
-      // the dark: variant matches this attr too — custom dark themes
-      // (cyber, forest, …) never carry the literal `dark` class
-      root.dataset.scheme = getThemeType(theme);
-      // persisted for the pre-paint stamp in index.html — custom themes
-      // (cyber, forest, …) carry a type the inline script can't derive
-      try {
-        localStorage.setItem(SCHEME_STORAGE_KEY, root.dataset.scheme);
-      } catch {
-        /* storage unavailable — fail silently */
-      }
-    };
-    apply();
+    const stamp = () => stampTheme(theme);
+    stamp();
     if (theme !== "system") return;
     // "system" tracks the OS live — resolveTheme/getThemeType re-read the
     // media query, so re-stamping on change is the whole update
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    mql.addEventListener("change", apply);
-    return () => mql.removeEventListener("change", apply);
+    mql.addEventListener("change", stamp);
+    return () => mql.removeEventListener("change", stamp);
   }, [theme]);
 
   const handleSetTheme = useCallback(
@@ -159,7 +162,15 @@ export function ThemeProvider({
         } catch {
           /* storage unavailable — the choice still applies this session */
         }
-        setTheme(newTheme);
+        // every colour lands in one style pass with CSS transitions held
+        // off: an element easing on its own trails the rest, and inside the
+        // dissolve that showed the new theme's text on the old background
+        const root = document.documentElement;
+        root.dataset.themeSwitch = "";
+        stampTheme(newTheme);
+        flushSync(() => setTheme(newTheme));
+        void root.offsetWidth;
+        delete root.dataset.themeSwitch;
       };
 
       const animate =
@@ -172,9 +183,7 @@ export function ThemeProvider({
         return;
       }
 
-      // one synchronous commit, so the new theme's classes are on <html>
-      // before the browser photographs it
-      landPressesDuring(document.startViewTransition(() => flushSync(apply)));
+      landPressesDuring(document.startViewTransition(apply));
     },
     [storageKey, theme],
   );
