@@ -108,13 +108,15 @@ export const ja = {
     copyCode: "コードをコピー",
     copyFailed: "コピーできませんでした。",
     command: {
-      placeholder: "コマンドまたは検索を入力...",
-      noResults: "該当なし",
+      placeholder: "サイトを検索、またはコマンドを実行…",
+      noResultsFor: "「{query}」に一致する結果はありません",
+      noResultsHint: "プロジェクト、技術、ページの名前で探してみてください。",
       groups: {
         navigation: "ナビゲーション",
         theme: "テーマ",
         language: "言語",
         background: "背景",
+        sections: "プロジェクトの詳細",
       },
       footer: {
         navigate: "移動",

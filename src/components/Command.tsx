@@ -6,26 +6,19 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import { useMemo, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router";
 import { SearchRemoveIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Command,
   CommandDialog,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
-  CommandShortcut,
 } from "@/components/ui/command";
-import {
-  Empty,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -39,203 +32,26 @@ import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTheme } from "./theme-provider";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { THEMES, type Theme as ConfiguredTheme } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
-import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { MenuHint } from "@/components/menu-hint";
-import { LANGUAGES, type Language } from "@/config/languages";
+import { PROJECTS } from "@/config/projects";
+import { EVERY_PROJECT, SKILL_GROUPS, projectsUsing } from "@/config/skills";
+import type { SiteDoc } from "@/lib/search/sources";
+import type { Translation } from "@/lib/translations";
+import { cn } from "@/lib/utils";
+import { ResultRow } from "./command-palette/results";
+import { ResultPreview } from "./command-palette/preview";
 import {
-  MAIN_NAVIGATION,
-  FOOTER_NAVIGATION,
-  type NavigationItem,
-} from "@/config/navigation";
+  useSiteSearch,
+  type GroupKind,
+} from "./command-palette/use-site-search";
 
 export function CommandMenu() {
-  const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
-  const { language, setLanguage } = useLanguage();
   const t = useTranslation();
   const { isOpen, closeCommandMenu } = useCommandMenu();
   useWindowScrollLock(isOpen);
-  const { active: codeView, setActive: setCodeView } = useCodeView();
   const isMobile = useIsMobile();
-  const { active: activeBackground, setActive: setBackground } =
-    useBackground();
 
-  const backgroundOptions = buildBackgroundOptions(t.common.none);
-  const backgroundHint = t.common.backgroundHints.section;
-
-  const handleBackgroundChange = (id: string) => {
-    setBackground(id);
-    closeCommandMenu();
-  };
-
-  // handle navigation
-  const handleNavigation = (path: string) => {
-    navigate(path);
-    closeCommandMenu();
-  };
-
-  // handle theme change
-  const handleThemeChange = (newTheme: ConfiguredTheme) => {
-    setTheme(newTheme);
-    closeCommandMenu();
-  };
-
-  // handle language change
-  const handleLanguageChange = (newLanguage: Language) => {
-    setLanguage(newLanguage);
-    closeCommandMenu();
-  };
-
-  // helper to get translated label
-  const getNavLabel = (item: NavigationItem) => {
-    if (item.translationKey === "home") return t.common.home;
-    if (item.isFooter) {
-      return t.footer[item.translationKey as keyof typeof t.footer];
-    }
-    return t.nav[item.translationKey as keyof typeof t.nav];
-  };
-
-  const renderThemeItem = (option: (typeof THEMES)[number]) => {
-    const Icon = option.icon;
-    return (
-      <CommandItem
-        key={option.value}
-        value={option.label}
-        data-checked={theme === option.value ? "true" : undefined}
-        onSelect={() => handleThemeChange(option.value as ConfiguredTheme)}
-      >
-        <Icon aria-hidden="true" />
-        <span>{option.label}</span>
-      </CommandItem>
-    );
-  };
-
-  // command content shared between mobile and desktop
-  const commandContent = (
-    <>
-      <CommandInput
-        placeholder={t.common.command.placeholder}
-        // eslint-disable-next-line shadcn/no-restyle -- 16px on phones, or iOS zooms into the field
-        className={isMobile ? "text-base" : undefined}
-      />
-      {/* scroll-fade masks the list's own edges (scroll-aware: crisp at the
-          ends, faded mid-scroll) — replaces the old gradient overlays, which
-          were popover-colored and so slightly off inside the drawer */}
-      <CommandList className="scroll-fade">
-        <CommandEmpty className="py-0">
-          <Empty className="p-8">
-            <EmptyHeader>
-              <EmptyMedia variant="icon">
-                <HugeiconsIcon icon={SearchRemoveIcon} strokeWidth={2} />
-              </EmptyMedia>
-              <EmptyTitle>{t.common.command.noResults}</EmptyTitle>
-            </EmptyHeader>
-          </Empty>
-        </CommandEmpty>
-
-        <CommandGroup heading={t.common.command.groups.navigation}>
-          {[...MAIN_NAVIGATION, ...FOOTER_NAVIGATION].map((item) => (
-            <CommandItem
-              key={item.key}
-              value={getNavLabel(item)}
-              onSelect={() => handleNavigation(item.path)}
-            >
-              <span>{getNavLabel(item)}</span>
-              <CommandShortcut>↵</CommandShortcut>
-            </CommandItem>
-          ))}
-          {/* the diff mode rides with navigation — flipping it swaps the
-                page like a route does. Label follows the mode's state; the
-                chip names its global key. */}
-          <CommandItem
-            value={codeView ? t.common.diff.exit : t.common.diff.showDiff}
-            onSelect={() => {
-              closeCommandMenu();
-              setCodeView(!codeView);
-            }}
-          >
-            <span>
-              {codeView ? t.common.diff.exit : t.common.diff.showDiff}
-            </span>
-            <CommandShortcut>D</CommandShortcut>
-          </CommandItem>
-        </CommandGroup>
-
-        <CommandSeparator />
-
-        <CommandGroup heading={t.common.command.groups.theme}>
-          {THEMES.filter((o) => !o.isCustom).map(renderThemeItem)}
-        </CommandGroup>
-
-        <CommandSeparator />
-
-        <CommandGroup heading={t.common.menu.customThemes}>
-          {THEMES.filter((o) => o.isCustom).map(renderThemeItem)}
-        </CommandGroup>
-
-        <CommandSeparator />
-
-        <CommandGroup heading={t.common.command.groups.language}>
-          {LANGUAGES.map(({ code, label }) => (
-            <CommandItem
-              key={code}
-              value={label}
-              data-checked={language === code ? "true" : undefined}
-              onSelect={() => handleLanguageChange(code)}
-            >
-              <span>{label}</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-
-        <CommandSeparator />
-
-        <CommandGroup
-          heading={
-            <span className="inline-flex items-center gap-1.5">
-              <span>{t.common.command.groups.background}</span>
-              <MenuHint text={backgroundHint} />
-            </span>
-          }
-        >
-          {backgroundOptions.map((option) => (
-            <CommandItem
-              key={option.id}
-              value={option.label}
-              data-checked={activeBackground === option.id ? "true" : undefined}
-              onSelect={() => handleBackgroundChange(option.id)}
-            >
-              <span>{option.label}</span>
-            </CommandItem>
-          ))}
-        </CommandGroup>
-      </CommandList>
-    </>
-  );
-
-  const commandFooter = (
-    <div className="-mx-1 -mb-1 mt-1 flex items-center gap-4 border-t border-border/50 px-4 py-2.5 text-xs text-muted-foreground">
-      <div className="flex items-center gap-1.5">
-        <KbdGroup>
-          <Kbd>↑</Kbd>
-          <Kbd>↓</Kbd>
-        </KbdGroup>
-        <span>{t.common.command.footer.navigate}</span>
-      </div>
-      <div className="flex items-center gap-1.5">
-        <Kbd>↵</Kbd>
-        <span>{t.common.command.footer.select}</span>
-      </div>
-      <div className="ml-auto flex items-center gap-1.5">
-        <Kbd>esc</Kbd>
-        <span>{t.common.command.footer.close}</span>
-      </div>
-    </div>
-  );
-
-  // render drawer for mobile, dialog for desktop
   if (isMobile) {
     return (
       <Drawer
@@ -249,10 +65,7 @@ export function CommandMenu() {
           <DrawerHeader className="sr-only">
             <DrawerTitle>{t.common.command.placeholder}</DrawerTitle>
           </DrawerHeader>
-          {/* eslint-disable-next-line shadcn/no-restyle -- the drawer is the surface; the palette sits flush in it */}
-          <Command className="h-auto min-h-0 rounded-none bg-transparent p-3 pb-4">
-            {commandContent}
-          </Command>
+          <Palette mobile />
         </DrawerContent>
       </Drawer>
     );
@@ -265,11 +78,234 @@ export function CommandMenu() {
       // sr-only dialog name — the defaults in ui/command.tsx are English-only
       title={t.common.a11y.commandPalette}
       description={t.common.a11y.commandPaletteHint}
+      className="sm:max-w-2xl lg:max-w-4xl"
     >
-      <Command>
-        {commandContent}
-        {commandFooter}
-      </Command>
+      <Palette mobile={false} />
     </CommandDialog>
+  );
+}
+
+const groupLabels = (t: Translation): Record<GroupKind, string> => ({
+  page: t.common.command.groups.navigation,
+  project: t.nav.projects,
+  section: t.common.command.groups.sections,
+  skill: t.nav.skills,
+  experience: t.nav.experience,
+  certification: t.certifications.title,
+  service: t.nav.services,
+  theme: t.common.command.groups.theme,
+  language: t.common.command.groups.language,
+  background: t.common.command.groups.background,
+});
+
+/** a few things worth typing: two projects and the skill used most */
+const suggestionsFor = (t: Translation): string[] => {
+  const skills = SKILL_GROUPS.flatMap((group) => group.skills)
+    .filter((skill) => !EVERY_PROJECT.has(skill.name))
+    .sort(
+      (a, b) => projectsUsing(b.name).length - projectsUsing(a.name).length,
+    );
+  return [
+    ...PROJECTS.slice(0, 2).map(
+      (project) => t.projects.list[project.i18nKey].title,
+    ),
+    ...skills.slice(0, 1).map((skill) => skill.name),
+  ];
+};
+
+/**
+ * The search and its results. It lives inside the dialog, so it unmounts
+ * when the dialog closes and every open starts from an empty field.
+ */
+function Palette({ mobile }: { mobile: boolean }) {
+  const navigate = useNavigate();
+  const { theme, setTheme } = useTheme();
+  const { language, setLanguage } = useLanguage();
+  const t = useTranslation();
+  const { closeCommandMenu } = useCommandMenu();
+  const { active: codeView, setActive: setCodeView } = useCodeView();
+  const { active: activeBackground, setActive: setBackground } =
+    useBackground();
+
+  const [query, setQuery] = useState("");
+  const [activeId, setActiveId] = useState("");
+
+  const diffLabel = codeView ? t.common.diff.exit : t.common.diff.showDiff;
+  const actions = useMemo<SiteDoc[]>(
+    () => [
+      {
+        kind: "action",
+        action: "diff",
+        id: "action:diff",
+        title: diffLabel,
+        keywords: ["diff", "git", "code"],
+      },
+    ],
+    [diffLabel],
+  );
+  const { groups, searching } = useSiteSearch(query, actions);
+  const labels = groupLabels(t);
+  const headings: Record<GroupKind, ReactNode> = {
+    ...labels,
+    background: (
+      <span className="inline-flex items-center gap-1.5">
+        <span>{labels.background}</span>
+        <MenuHint text={t.common.backgroundHints.section} />
+      </span>
+    ),
+  };
+
+  const isCurrent = (doc: SiteDoc) =>
+    (doc.kind === "theme" && doc.value === theme) ||
+    (doc.kind === "language" && doc.value === language) ||
+    (doc.kind === "background" && doc.value === activeBackground);
+
+  // settings apply in place so they can be tried one after another; only
+  // what takes you somewhere closes the palette
+  const run = (doc: SiteDoc) => {
+    switch (doc.kind) {
+      case "theme":
+        setTheme(doc.value);
+        return;
+      case "language":
+        setLanguage(doc.value);
+        return;
+      case "background":
+        setBackground(doc.value);
+        return;
+      case "action":
+        closeCommandMenu();
+        setCodeView(!codeView);
+        return;
+      default:
+        closeCommandMenu();
+        navigate(doc.to);
+    }
+  };
+
+  const active =
+    groups
+      .flatMap((group) => group.hits.map((hit) => ({ hit, kind: group.kind })))
+      .find(({ hit }) => hit.doc.id === activeId) ??
+    (groups[0] && { hit: groups[0].hits[0], kind: groups[0].kind });
+  const empty = searching && groups.length === 0;
+  // one height whatever the results; on a short window it gives way, so the
+  // dialog (a third of the way down) still ends above the fold
+  const height = mobile ? "h-[55dvh]" : "h-[min(26rem,calc(66dvh-8rem))]";
+
+  const list = (
+    <CommandList
+      className={cn(
+        "scroll-fade max-h-none",
+        mobile ? height : "h-full",
+        !mobile && "w-full lg:w-[22rem] lg:shrink-0",
+      )}
+    >
+      {groups.map((group) => (
+        <CommandGroup key={group.kind} heading={headings[group.kind]}>
+          {group.hits.map((hit) => (
+            <CommandItem
+              key={hit.doc.id}
+              value={hit.doc.id}
+              data-checked={isCurrent(hit.doc) ? "true" : undefined}
+              onSelect={() => run(hit.doc)}
+            >
+              <ResultRow hit={hit} quoteBesidePreview={!mobile} />
+            </CommandItem>
+          ))}
+        </CommandGroup>
+      ))}
+    </CommandList>
+  );
+
+  const nothingFound = (
+    <div className={cn("grid place-items-center px-6", height)}>
+      <div className="flex max-w-sm flex-col items-center gap-4 text-center">
+        <span className="grid size-12 place-items-center rounded-2xl bg-muted text-muted-foreground ring-1 ring-foreground/10">
+          <HugeiconsIcon
+            icon={SearchRemoveIcon}
+            strokeWidth={1.8}
+            className="size-5"
+          />
+        </span>
+        <div className="flex flex-col gap-1">
+          <p className="text-sm font-medium text-foreground">
+            {t.common.command.noResultsFor.replace("{query}", query.trim())}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {t.common.command.noResultsHint}
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-1.5">
+          {suggestionsFor(t).map((suggestion) => (
+            <Button
+              key={suggestion}
+              variant="secondary"
+              size="xs"
+              onClick={() => setQuery(suggestion)}
+            >
+              {suggestion}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <Command
+      shouldFilter={false}
+      loop
+      value={active?.hit.doc.id ?? ""}
+      onValueChange={setActiveId}
+      className={
+        mobile
+          ? // eslint-disable-next-line shadcn/no-restyle -- the drawer is the surface; the palette sits flush in it
+            "h-auto min-h-0 rounded-none bg-transparent p-3 pb-4"
+          : undefined
+      }
+    >
+      <CommandInput
+        value={query}
+        onValueChange={setQuery}
+        placeholder={t.common.command.placeholder}
+        // eslint-disable-next-line shadcn/no-restyle -- 16px on phones, or iOS zooms into the field
+        className={mobile ? "text-base" : undefined}
+      />
+      {empty ? (
+        nothingFound
+      ) : mobile ? (
+        list
+      ) : (
+        <div className={cn("flex min-h-0", height)}>
+          {list}
+          <div className="hidden min-h-0 min-w-0 flex-1 overflow-hidden border-l border-border/50 lg:block">
+            <ResultPreview
+              hit={active?.hit}
+              heading={active ? labels[active.kind] : ""}
+            />
+          </div>
+        </div>
+      )}
+      {!mobile && (
+        <div className="-mx-1 -mb-1 mt-1 flex items-center gap-4 border-t border-border/50 px-4 py-2.5 text-xs text-muted-foreground">
+          <div className="flex items-center gap-1.5">
+            <KbdGroup>
+              <Kbd>↑</Kbd>
+              <Kbd>↓</Kbd>
+            </KbdGroup>
+            <span>{t.common.command.footer.navigate}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Kbd>↵</Kbd>
+            <span>{t.common.command.footer.select}</span>
+          </div>
+          <div className="ml-auto flex items-center gap-1.5">
+            <Kbd>esc</Kbd>
+            <span>{t.common.command.footer.close}</span>
+          </div>
+        </div>
+      )}
+    </Command>
   );
 }

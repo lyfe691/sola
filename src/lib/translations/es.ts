@@ -113,13 +113,15 @@ export const es = {
     copyCode: "Copiar código",
     copyFailed: "No se pudo copiar.",
     command: {
-      placeholder: "Escribe un comando o busca...",
-      noResults: "Sin resultados.",
+      placeholder: "Busca en el sitio o ejecuta un comando…",
+      noResultsFor: "Sin resultados para «{query}»",
+      noResultsHint: "Prueba con un proyecto, una tecnología o una página.",
       groups: {
         navigation: "Navegación",
         theme: "Tema",
         language: "Idioma",
         background: "Fondo",
+        sections: "Detalles de proyectos",
       },
       footer: {
         navigate: "Navegar",

@@ -104,13 +104,15 @@ export const zh = {
     copyCode: "复制代码",
     copyFailed: "复制失败。",
     command: {
-      placeholder: "输入命令或搜索...",
-      noResults: "没有结果",
+      placeholder: "搜索网站或运行命令…",
+      noResultsFor: "没有找到“{query}”的结果",
+      noResultsHint: "试试搜索项目、技术或页面。",
       groups: {
         navigation: "导航",
         theme: "主题",
         language: "语言",
         background: "背景",
+        sections: "项目详情",
       },
       footer: {
         navigate: "导航",

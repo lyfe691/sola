@@ -111,13 +111,15 @@ export const de = {
     copyCode: "Code kopieren",
     copyFailed: "Kopieren fehlgeschlagen.",
     command: {
-      placeholder: "Befehl eingeben oder suchen...",
-      noResults: "Keine Ergebnisse gefunden.",
+      placeholder: "Website durchsuchen oder Befehl ausführen…",
+      noResultsFor: "Keine Ergebnisse für „{query}“",
+      noResultsHint: "Probier ein Projekt, eine Technologie oder eine Seite.",
       groups: {
         navigation: "Navigation",
         theme: "Design",
         language: "Sprache",
         background: "Hintergrund",
+        sections: "Projektdetails",
       },
       footer: {
         navigate: "Navigieren",

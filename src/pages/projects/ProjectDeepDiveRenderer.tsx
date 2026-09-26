@@ -18,7 +18,8 @@ import {
   type ComponentType,
   type LazyExoticComponent,
 } from "react";
-import { Link, Navigate, useParams } from "react-router";
+import { Link, Navigate, useLocation, useParams } from "react-router";
+import { useReducedMotion } from "motion/react";
 import {
   Github01Icon,
   Globe02Icon,
@@ -46,6 +47,7 @@ import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { plainText } from "@/lib/plain-text";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
+import { scrollToTarget } from "@/utils/scroll";
 import type { Translation } from "@/lib/translations";
 
 // lazy modules created once at load; first render only looks them up
@@ -187,6 +189,21 @@ const ProjectDeepDiveRenderer = () => {
     `${slug}:${language}:${mdxReady}`,
   );
   const activeId = useActiveSection(sections);
+
+  // a link to a section (a search result, a shared permalink) lands on it
+  // once the article is there: at once when the page has just opened,
+  // gliding when the reader is already on it
+  const { hash } = useLocation();
+  const reducedMotion = useReducedMotion();
+  const landedOn = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!mdxReady || !hash) return;
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (!target) return;
+    const opening = landedOn.current !== slug;
+    landedOn.current = slug;
+    scrollToTarget(target, { immediate: opening || !!reducedMotion });
+  }, [mdxReady, hash, slug, reducedMotion]);
 
   const config = slug ? getProjectConfig(slug) : undefined;
   const MDXComponent = config ? (mdxByPath[config.mdxPath] ?? null) : null;

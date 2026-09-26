@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import path from "path";
 import { apiDevPlugin } from "./vite/api-dev.ts";
 import { changelogSnapshotPlugin } from "./vite/changelog-snapshot.ts";
+import { deepDiveIndexPlugin } from "./vite/deep-dive-index.ts";
 import { hugeiconsPerIcon } from "./vite/hugeicons.ts";
 import { routePreload } from "./vite/route-preload.ts";
 import { fontPreload } from "./vite/font-preload.ts";
@@ -24,6 +25,7 @@ export default defineConfig({
   plugins: [
     apiDevPlugin(),
     changelogSnapshotPlugin(),
+    deepDiveIndexPlugin(),
     hugeiconsPerIcon(),
     routePreload(),
     fontPreload("geist-latin-wght-normal"),

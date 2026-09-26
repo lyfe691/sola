@@ -110,13 +110,15 @@ export const en = {
     copyCode: "Copy code",
     copyFailed: "Couldn't copy code.",
     command: {
-      placeholder: "Type a command or search...",
-      noResults: "No results found.",
+      placeholder: "Search the site or run a command…",
+      noResultsFor: "No results for “{query}”",
+      noResultsHint: "Try a project, a technology or a page.",
       groups: {
         navigation: "Navigation",
         theme: "Theme",
         language: "Language",
         background: "Background",
+        sections: "Project details",
       },
       footer: {
         navigate: "Navigate",

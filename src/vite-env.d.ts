@@ -14,6 +14,13 @@ declare module "virtual:changelog-snapshot" {
   export default snapshot;
 }
 
+declare module "virtual:deep-dive-index" {
+  import type { DeepDiveSection } from "@/lib/search/types";
+  /** sections of every deep dive, keyed by its MDX file name */
+  const index: Record<string, DeepDiveSection[]>;
+  export default index;
+}
+
 declare module "*.mdx" {
   interface MDXProps {
     components?: Record<string, React.ComponentType<Record<string, unknown>>>;

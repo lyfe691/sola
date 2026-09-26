@@ -18,18 +18,14 @@ import {
 import { Link01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useTranslation } from "@/lib/language-provider";
+import { slugify } from "@/lib/slug";
 import { cn } from "@/lib/utils";
 
 type HeadingLevel = "h1" | "h2" | "h3";
 
 /** Render-time slug — the MDX pipeline has no rehype-slug. */
 export function slugifyHeading(children: ReactNode): string | undefined {
-  const text = flattenText(children)
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s-]/gu, "")
-    .trim()
-    .replace(/\s+/g, "-");
-  return text || undefined;
+  return slugify(flattenText(children));
 }
 
 function flattenText(node: ReactNode): string {

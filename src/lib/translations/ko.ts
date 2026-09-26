@@ -110,13 +110,15 @@ export const ko = {
     copyCode: "코드 복사",
     copyFailed: "코드를 복사할 수 없습니다.",
     command: {
-      placeholder: "명령을 입력하거나 검색하세요...",
-      noResults: "검색된 결과가 없습니다.",
+      placeholder: "사이트 검색 또는 명령 실행…",
+      noResultsFor: "“{query}”에 대한 결과가 없습니다",
+      noResultsHint: "프로젝트, 기술 또는 페이지 이름으로 찾아보세요.",
       groups: {
         navigation: "탐색",
         theme: "테마",
         language: "언어",
         background: "배경",
+        sections: "프로젝트 세부정보",
       },
       footer: {
         navigate: "탐색",
