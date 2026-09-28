@@ -10,12 +10,7 @@ import { SearchIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Button } from "./ui/button";
 import { loadCommandMenu, useCommandMenu } from "@/hooks/use-command-menu";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Kbd } from "@/components/ui/kbd";
+import { WarmTooltip } from "@/components/ui/custom/warm-tooltip";
 import { useTranslation } from "@/lib/language-provider";
 
 export function SearchToggle() {
@@ -23,25 +18,17 @@ export function SearchToggle() {
   const t = useTranslation();
 
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleCommandMenu}
-            onPointerEnter={() => void loadCommandMenu()}
-            onFocus={() => void loadCommandMenu()}
-            aria-label={t.common.search}
-          />
-        }
+    <WarmTooltip content={t.common.search} shortcut="⌘ + K" side="bottom">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={toggleCommandMenu}
+        onPointerEnter={() => void loadCommandMenu()}
+        onFocus={() => void loadCommandMenu()}
+        aria-label={t.common.search}
       >
         <HugeiconsIcon icon={SearchIcon} strokeWidth={2} />
-      </TooltipTrigger>
-      <TooltipContent>
-        {t.common.search}
-        <Kbd>⌘ + K</Kbd>
-      </TooltipContent>
-    </Tooltip>
+      </Button>
+    </WarmTooltip>
   );
 }

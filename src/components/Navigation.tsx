@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { SearchToggle } from "./search-toggle";
 import { AppearanceMenu } from "./appearance-menu";
+import { WarmTooltipGroup } from "@/components/ui/custom/warm-tooltip";
 import { useCodeView } from "./deploy-diff/code-view-provider";
 import { EASE_OUT } from "@/utils/transitions";
 
@@ -59,8 +60,10 @@ const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
         className,
       )}
     >
-      <SearchToggle />
-      <AppearanceMenu />
+      <WarmTooltipGroup>
+        <SearchToggle />
+        <AppearanceMenu />
+      </WarmTooltipGroup>
     </div>
   );
 });

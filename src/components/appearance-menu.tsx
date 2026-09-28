@@ -22,11 +22,7 @@ import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { WarmTooltip } from "@/components/ui/custom/warm-tooltip";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTranslation } from "@/lib/language-provider";
 import { ThemeMenuContent, ThemeTriggerIcon } from "./theme-toggle";
@@ -185,27 +181,22 @@ export function AppearanceMenu() {
     tooltip: string,
     isCallout = false,
   ) => (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button
-            ref={(el: HTMLButtonElement | null) => {
-              buttons.current[id] = el;
-            }}
-            variant="ghost"
-            size="icon"
-            onClick={() => toggle(id)}
-            aria-haspopup="menu"
-            aria-expanded={openId === id}
-            data-callout={isCallout ? "theme" : undefined}
-          />
-        }
+    <WarmTooltip content={tooltip} side="bottom">
+      <Button
+        ref={(el: HTMLButtonElement | null) => {
+          buttons.current[id] = el;
+        }}
+        variant="ghost"
+        size="icon"
+        onClick={() => toggle(id)}
+        aria-haspopup="menu"
+        aria-expanded={openId === id}
+        data-callout={isCallout ? "theme" : undefined}
       >
         {icon}
         <span className="sr-only">{srLabel}</span>
-      </TooltipTrigger>
-      <TooltipContent>{tooltip}</TooltipContent>
-    </Tooltip>
+      </Button>
+    </WarmTooltip>
   );
 
   return (

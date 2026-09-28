@@ -41,10 +41,9 @@ import {
 } from "@/components/ui/drawer";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  WarmTooltip,
+  WarmTooltipGroup,
+} from "@/components/ui/custom/warm-tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
@@ -133,21 +132,16 @@ function IconAction({
   onClick: () => void;
 }) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            aria-label={label}
-            onClick={onClick}
-          />
-        }
+    <WarmTooltip content={label} side="bottom">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        aria-label={label}
+        onClick={onClick}
       >
         <HugeiconsIcon icon={icon} strokeWidth={2} />
-      </TooltipTrigger>
-      <TooltipContent>{label}</TooltipContent>
-    </Tooltip>
+      </Button>
+    </WarmTooltip>
   );
 }
 
@@ -241,16 +235,18 @@ function Sheet({
                 label={copy.languageLabel}
                 compact
               />
-              <IconAction
-                icon={Download04Icon}
-                label={copy.download}
-                onClick={() => downloadResume(language)}
-              />
-              <IconAction
-                icon={LinkSquare02Icon}
-                label={copy.open}
-                onClick={() => openResume(language)}
-              />
+              <WarmTooltipGroup>
+                <IconAction
+                  icon={Download04Icon}
+                  label={copy.download}
+                  onClick={() => downloadResume(language)}
+                />
+                <IconAction
+                  icon={LinkSquare02Icon}
+                  label={copy.open}
+                  onClick={() => openResume(language)}
+                />
+              </WarmTooltipGroup>
             </div>
           </div>
           <Pages
