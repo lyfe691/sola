@@ -169,7 +169,7 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
       onPointerLeave={() => setPointed(null)}
       className="fixed top-1/2 left-0 z-30 hidden -translate-y-1/2 lg:can-hover:block"
     >
-      <WarmTooltipGroup>
+      <WarmTooltipGroup delay={0}>
         <ul className="m-0 list-none p-0">
           {sections.map(({ id, label }, index) => {
             const active = id === activeId;

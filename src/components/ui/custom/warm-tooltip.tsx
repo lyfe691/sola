@@ -8,9 +8,8 @@
  * React Bits' WarmTooltip in the site's tooltip design. A group shares one
  * surface: the first hover waits out the delay and pops it in; from there it
  * springs from trigger to trigger, leaning into the travel and resizing as it
- * goes, while the label
- * cross-fades in the direction of travel. Reopening within the warm window
- * skips both the delay and the pop.
+ * goes, while the label cross-fades in the direction of travel. Reopening
+ * within the warm window skips both the delay and the pop.
  */
 
 import {
