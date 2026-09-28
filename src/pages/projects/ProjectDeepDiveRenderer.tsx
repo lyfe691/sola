@@ -250,7 +250,7 @@ const ProjectDeepDiveRenderer = () => {
           data-toc-label={t.common.techStack}
           className="scroll-mt-24"
         >
-          <SectionHeading sectionId="tech-stack">
+          <SectionHeading sectionId="tech-stack" className="mb-6">
             {t.common.techStack}
           </SectionHeading>
           <TechStack technologies={config.technologies} />

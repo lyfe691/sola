@@ -124,7 +124,9 @@ import VscodeOriginal from "devicons-react/icons/VscodeOriginal";
 
 export type TechIcon = ComponentType<{
   className?: string;
-  size?: number;
+  /** devicons write it inline, over any size class: a mark sized by its
+   *  text (in em) has to arrive here */
+  size?: number | string;
   "aria-hidden"?: boolean | "true" | "false";
 }>;
 

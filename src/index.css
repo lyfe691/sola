@@ -899,6 +899,61 @@
   text-decoration-color: var(--prose-strong);
 }
 
+/* ---------- type band (deep-dive tech stack) ---------- */
+/* Geist is variable, so letters like t and L are overlapping shapes and a
+   plain stroke outlines every overlap. The stroke is painted under a fill
+   in the page colour instead (deep dives sit on --background), which keeps
+   only its outer half, so it is drawn twice as wide (in em: an outline
+   that suits the desktop size is heavy on a phone). Opaque, so two letters
+   that touch don't darken where their outlines cross. */
+.type-band-word {
+  position: relative;
+  color: var(--background);
+  -webkit-text-stroke: 0.055em
+    color-mix(in oklab, var(--foreground) 35%, var(--background));
+  paint-order: stroke fill;
+  transition: -webkit-text-stroke-color 200ms var(--ease-out);
+}
+
+/* the solid copy over it: a text-clipped background, so it can wipe in
+   from the left and out to the right */
+.type-band-fill {
+  position: absolute;
+  inset: 0;
+  color: transparent;
+  -webkit-text-stroke: 0;
+  background: linear-gradient(var(--foreground), var(--foreground)) right / 0%
+    100% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: background-size 500ms var(--ease-out);
+}
+
+/* a filled name is plain text: the outline leaves once the wipe has landed
+   (it would ring the fill), and is back at once when the wipe leaves */
+.type-band-item:hover .type-band-word {
+  -webkit-text-stroke-color: transparent;
+  transition-delay: 300ms;
+}
+
+.type-band-item:hover .type-band-fill {
+  background-position: left;
+  background-size: 100% 100%;
+}
+
+.type-band-mark {
+  opacity: 0.55;
+  filter: grayscale(1);
+  transition:
+    opacity 500ms var(--ease-out),
+    filter 500ms var(--ease-out);
+}
+
+.type-band-item:hover .type-band-mark {
+  opacity: 1;
+  filter: grayscale(0);
+}
+
 /* ---------- code block (shiki) ---------- */
 /* Styles target Shiki's generated `pre.shiki > code > span.line` markup and the
    plain-text fallback, which mirrors it. Unlayered so it wins over utilities. */
