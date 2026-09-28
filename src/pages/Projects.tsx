@@ -30,15 +30,7 @@ import {
 } from "@/lib/project-sort";
 import type { Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { GlideSelect } from "@/components/ui/custom/glide-select";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Reveal } from "@/components/Reveal";
@@ -355,36 +347,21 @@ const Projects = () => {
             ))}
           </TabsList>
         </Tabs>
-        <Select
-          value={sortBy}
-          onValueChange={(value) =>
-            swap(() => setSortBy(value as ProjectSortOption))
-          }
-        >
-          <SelectTrigger
-            aria-label={t.projects.sortBy}
-            className="w-full sm:w-44"
-          >
+        <GlideSelect
+          label={t.projects.sortBy}
+          icon={
             <HugeiconsIcon
               icon={SortByDown01Icon}
               strokeWidth={2}
               className="size-4"
               aria-hidden="true"
             />
-            <SelectValue>{() => t.projects.sortOptions[sortBy]}</SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>{t.projects.sortBy}</SelectLabel>
-              {sortOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.icon}
-                  <span>{option.label}</span>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          }
+          options={sortOptions}
+          value={sortBy}
+          onValueChange={(value) => swap(() => setSortBy(value))}
+          className="w-full sm:w-44"
+        />
       </Reveal>
 
       {/* keyed by project, so a re-sort moves cards instead of re-mounting
