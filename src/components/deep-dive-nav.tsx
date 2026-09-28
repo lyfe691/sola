@@ -9,9 +9,10 @@
  * reads the [data-toc] landmarks out of the rendered page — config sections
  * and MDX headings alike — and a scroll scan keeps the active item current.
  * With a real pointer on a desktop-sized screen the sections are a rail of
- * hairline ticks on the left edge of the viewport, with one label that
- * glides from tick to tick; everywhere else, a slim row under the sticky bar
- * names the current section and expands the same list down over the content.
+ * hairline ticks on the left edge of the viewport, named by one tooltip
+ * that glides from tick to tick; everywhere else, a slim row under the
+ * sticky bar names the current section and expands the same list down over
+ * the content.
  */
 
 import { useEffect, useState, type CSSProperties, type RefObject } from "react";
@@ -19,6 +20,10 @@ import { createPortal } from "react-dom";
 import { motion, useIsPresent } from "motion/react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  WarmTooltip,
+  WarmTooltipGroup,
+} from "@/components/ui/custom/warm-tooltip";
 import { useDeepDiveBarPinned } from "@/hooks/use-deep-dive-bar-pinned";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
@@ -117,8 +122,6 @@ interface SectionNavProps {
   activeId: string | null;
 }
 
-/** Row height of a tick, which is also the distance the label glides. */
-const TICK_PITCH = 20;
 /** The longest a tick gets (under the pointer). Every tick is this wide and
  *  scaled down from its left end, so only a transform ever animates. */
 const TICK_MAX = 28;
@@ -127,8 +130,6 @@ const TICK_ACTIVE = 20;
 /** Length by distance from the pointed tick: the neighbours lift a little,
  *  so the rail answers the pointer as one object rather than tick by tick. */
 const TICK_NEAR = [TICK_MAX, 20, 15];
-/** The label is 28px tall (text-xs + py-1.5); this centers it on a row. */
-const LABEL_OFFSET = (TICK_PITCH - 28) / 2;
 
 /**
  * The desktop register: hairline ticks flush to the left edge of the
@@ -136,10 +137,8 @@ const LABEL_OFFSET = (TICK_PITCH - 28) / 2;
  * hero: it fades in when the sticky bar pins, once the reader is in the
  * article, stays to the end of the page, and fades out again on the way
  * back up. The current section's tick is longer and full contrast; the pointed
- * one is longest. A single label sits beside the rail and glides between
- * ticks, so scrubbing down the rail reads as one motion instead of a
- * tooltip re-opening per tick. It enters on a row without gliding (the jump
- * happens while it is still transparent) and glides only between rows.
+ * one is longest. The ticks share one warm tooltip, so scrubbing down the
+ * rail reads as one motion instead of a tooltip re-opening per tick.
  *
  * Portaled to <body>: the page-transition ancestor's transform demotes
  * `fixed`. useIsPresent still sees that ancestor, so the rail leaves with
@@ -152,15 +151,8 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
   const pinned = useDeepDiveBarPinned();
   const shown = isPresent && pinned;
   const [pointed, setPointed] = useState<number | null>(null);
-  // survives the pointer leaving, so the label fades out where it was
-  const [label, setLabel] = useState({ index: 0, glide: false });
 
   if (sections.length < 2 || typeof document === "undefined") return null;
-
-  const point = (index: number) => {
-    setLabel({ index, glide: pointed !== null });
-    setPointed(index);
-  };
 
   return createPortal(
     <motion.nav
@@ -177,69 +169,53 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
       onPointerLeave={() => setPointed(null)}
       className="fixed top-1/2 left-0 z-30 hidden -translate-y-1/2 lg:can-hover:block"
     >
-      <ul className="m-0 list-none p-0">
-        {sections.map(({ id, label: text }, index) => {
-          const active = id === activeId;
-          const distance = pointed === null ? null : Math.abs(index - pointed);
-          const length = Math.max(
-            distance !== null ? (TICK_NEAR[distance] ?? TICK_REST) : TICK_REST,
-            active ? TICK_ACTIVE : TICK_REST,
-          );
-          return (
-            <li key={id}>
-              <button
-                type="button"
-                aria-label={text}
-                aria-current={active ? "true" : undefined}
-                onPointerEnter={() => point(index)}
-                onFocus={() => point(index)}
-                onBlur={() => setPointed(null)}
-                onClick={() => scrollToSection(id)}
-                className="flex h-5 w-10 cursor-pointer items-center rounded-r-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
-              >
-                <span
-                  aria-hidden="true"
-                  style={
-                    {
-                      "--tick-w": `${TICK_MAX}px`,
-                      "--tick-scale": length / TICK_MAX,
-                    } as CSSProperties
-                  }
-                  className={cn(
-                    "block h-px w-(--tick-w) origin-left scale-x-(--tick-scale) transition-[scale,background-color] duration-250 ease-out",
-                    active || distance === 0
-                      ? "bg-foreground"
-                      : "bg-foreground/30",
-                  )}
-                />
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      <div
-        aria-hidden="true"
-        style={
-          {
-            "--label-y": `${label.index * TICK_PITCH + LABEL_OFFSET}px`,
-          } as CSSProperties
-        }
-        className={cn(
-          "pointer-events-none absolute top-0 left-10 translate-y-(--label-y)",
-          label.glide && "transition-transform duration-200 ease-out",
-        )}
-      >
-        <div
-          className={cn(
-            "max-w-88 origin-left truncate rounded-full border border-background/10 bg-foreground px-3 py-1.5 text-xs font-medium whitespace-nowrap text-background shadow-lg transition-[opacity,translate,scale] duration-150 ease-out",
-            pointed === null
-              ? "-translate-x-1 scale-[0.97] opacity-0"
-              : "translate-x-0 scale-100 opacity-100",
-          )}
-        >
-          {sections[label.index]?.label}
-        </div>
-      </div>
+      <WarmTooltipGroup>
+        <ul className="m-0 list-none p-0">
+          {sections.map(({ id, label }, index) => {
+            const active = id === activeId;
+            const distance =
+              pointed === null ? null : Math.abs(index - pointed);
+            const length = Math.max(
+              distance !== null
+                ? (TICK_NEAR[distance] ?? TICK_REST)
+                : TICK_REST,
+              active ? TICK_ACTIVE : TICK_REST,
+            );
+            return (
+              <li key={id}>
+                <WarmTooltip content={label} side="right">
+                  <button
+                    type="button"
+                    aria-label={label}
+                    aria-current={active ? "true" : undefined}
+                    onPointerEnter={() => setPointed(index)}
+                    onFocus={() => setPointed(index)}
+                    onBlur={() => setPointed(null)}
+                    onClick={() => scrollToSection(id)}
+                    className="flex h-5 w-10 cursor-pointer items-center rounded-r-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                  >
+                    <span
+                      aria-hidden="true"
+                      style={
+                        {
+                          "--tick-w": `${TICK_MAX}px`,
+                          "--tick-scale": length / TICK_MAX,
+                        } as CSSProperties
+                      }
+                      className={cn(
+                        "block h-px w-(--tick-w) origin-left scale-x-(--tick-scale) transition-[scale,background-color] duration-250 ease-out",
+                        active || distance === 0
+                          ? "bg-foreground"
+                          : "bg-foreground/30",
+                      )}
+                    />
+                  </button>
+                </WarmTooltip>
+              </li>
+            );
+          })}
+        </ul>
+      </WarmTooltipGroup>
     </motion.nav>,
     document.body,
   );
