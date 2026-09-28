@@ -30,11 +30,12 @@ export function LanguageMenuContent({ onClose }: { onClose: () => void }) {
           <button
             key={code}
             type="button"
+            data-glide-row
             onClick={() => {
               setLanguage(code);
               onClose();
             }}
-            className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
+            className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
           >
             <span
               className={cn(

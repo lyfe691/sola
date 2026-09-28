@@ -65,9 +65,10 @@ function TreeBranch({
         <button
           {...props}
           type="button"
+          data-glide-row
           aria-expanded={isOpen}
           onClick={onToggle}
-          className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
+          className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
         >
           <HugeiconsIcon
             icon={ArrowRight01Icon}
@@ -120,8 +121,9 @@ function TreeLeaf({
     <button
       {...props}
       type="button"
+      data-glide-row
       onClick={onClick}
-      className="flex w-full items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground"
+      className="flex w-full items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
     >
       <span
         className={cn(
@@ -390,7 +392,10 @@ export function ThemeMenuContent({
         <HoverCardTrigger
           delay={250}
           render={
-            <label className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground" />
+            <label
+              data-glide-row
+              className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground"
+            />
           }
         >
           <HugeiconsIcon

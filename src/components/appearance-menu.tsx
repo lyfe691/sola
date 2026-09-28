@@ -16,13 +16,14 @@
  * animated trigger icon and the `data-callout` hook are all preserved.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
 import { Button } from "@/components/ui/button";
 import { WarmTooltip } from "@/components/ui/custom/warm-tooltip";
+import { useGlidePill } from "@/components/ui/custom/glide-pill";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTranslation } from "@/lib/language-provider";
 import { ThemeMenuContent, ThemeTriggerIcon } from "./theme-toggle";
@@ -30,6 +31,37 @@ import { LanguageMenuContent } from "./language-toggle";
 import { EASE_OUT } from "@/utils/transitions";
 
 type MenuId = "language" | "theme";
+
+const rowOf = (target: EventTarget | null) =>
+  target instanceof Element
+    ? target.closest<HTMLElement>("[data-glide-row]")
+    : null;
+
+/** Hover and keyboard focus light one pill that glides between the rows. */
+function MenuRows({ children }: { children: ReactNode }) {
+  const glide = useGlidePill();
+
+  return (
+    <div
+      className="relative isolate"
+      onPointerOver={(e) => {
+        const row = rowOf(e.target);
+        if (row && e.pointerType !== "touch") glide.moveTo(row);
+      }}
+      onPointerLeave={glide.hide}
+      onFocus={(e) => {
+        const row = rowOf(e.target);
+        if (row && e.target.matches(":focus-visible")) glide.moveTo(row);
+      }}
+      onBlur={(e) => {
+        if (!rowOf(e.relatedTarget)) glide.hide();
+      }}
+    >
+      {glide.pill}
+      {children}
+    </div>
+  );
+}
 
 export function AppearanceMenu() {
   const t = useTranslation();
@@ -256,11 +288,13 @@ export function AppearanceMenu() {
                 transition={{ duration: 0.16, ease: EASE_OUT }}
                 className="max-h-[calc(100dvh-5rem)] origin-top-right overflow-x-hidden overflow-y-auto overscroll-contain"
               >
-                {openId === "theme" ? (
-                  <ThemeMenuContent onClose={close} />
-                ) : (
-                  <LanguageMenuContent onClose={close} />
-                )}
+                <MenuRows key={openId}>
+                  {openId === "theme" ? (
+                    <ThemeMenuContent onClose={close} />
+                  ) : (
+                    <LanguageMenuContent onClose={close} />
+                  )}
+                </MenuRows>
               </motion.div>
             </motion.div>
           )}
