@@ -99,9 +99,9 @@ export const de = {
     },
     callout: {
       background: {
-        title: "Mach es zu deinem",
+        title: "Machen Sie es zu Ihrem",
         content:
-          "Ich habe {background} mit dem {theme}-Theme ausgewählt — in diesem Menü kannst du jederzeit wechseln.",
+          "Ich habe {background} mit dem {theme}-Theme ausgewählt — in diesem Menü können Sie jederzeit wechseln.",
       },
       done: "Alles klar",
     },
@@ -116,7 +116,7 @@ export const de = {
       placeholder: "Website durchsuchen oder Befehl ausführen…",
       scopedPlaceholder: "Suchen…",
       noResultsFor: "Keine Ergebnisse für „{query}“",
-      noResultsHint: "Probier ein Projekt, eine Technologie oder eine Seite.",
+      noResultsHint: "Versuchen Sie es mit einem Projekt, einer Technologie oder einer Seite.",
       groups: {
         navigation: "Navigation",
         theme: "Design",
@@ -127,7 +127,7 @@ export const de = {
       footer: {
         navigate: "Navigieren",
         select: "Auswählen",
-        close: "Schließen",
+        close: "Schliessen",
       },
     },
     techStack: "Technologie-Stack",
@@ -146,10 +146,10 @@ export const de = {
     onThisPage: "Auf dieser Seite",
     onlyInEnglish: "Dieser Artikel ist vorerst nur auf Englisch verfügbar.",
     linkToSection: "Link zu Abschnitt: {title}",
-    close: "Schließen",
-    expandImage: "Bild vergrößern",
-    expandImageNamed: "Bild vergrößern: {alt}",
-    expandedImage: "Vergrößertes Bild",
+    close: "Schliessen",
+    expandImage: "Bild vergrössern",
+    expandImageNamed: "Bild vergrössern: {alt}",
+    expandedImage: "Vergrössertes Bild",
     previousImage: "Vorheriges Bild",
     nextImage: "Nächstes Bild",
     imageOf: "Bild {current} von {total}",
@@ -157,10 +157,10 @@ export const de = {
     view: "Ansehen",
     update: {
       title: "Kleines Update",
-      description: "Seite neu laden – dann siehst du, was neu ist.",
+      description: "Seite neu laden – dann sehen Sie, was neu ist.",
       later: "Später",
       refresh: "Aktualisieren",
-      dismiss: "Schließen",
+      dismiss: "Schliessen",
     },
   },
   feed: {
@@ -310,13 +310,13 @@ export const de = {
         title: "AppliCare",
         tagline: "Alle Bewerbungen an einem Ort",
         description:
-          "[AppliCare](https://applicare.app) behält deine Bewerbungen im Blick. Jede Bewerbung mit ihrem Status erfassen, von beworben bis Angebot, Aufgaben mit Fristen anhängen und den Fortschritt auf einem Dashboard mit Erfolgsquote und Zeitverlauf verfolgen. Gebaut mit React, Ant Design, Spring Boot und MongoDB.",
+          "[AppliCare](https://applicare.app) behält Ihre Bewerbungen im Blick. Jede Bewerbung mit ihrem Status erfassen, von beworben bis Angebot, Aufgaben mit Fristen anhängen und den Fortschritt auf einem Dashboard mit Erfolgsquote und Zeitverlauf verfolgen. Gebaut mit React, Ant Design, Spring Boot und MongoDB.",
         overview:
           "AppliCare is a job-application tracker I built end to end, from the React interface to the Java API and the database behind it. The API ties every request to its user through a signed token, so each account only ever sees its own applications and tasks.",
       },
       osint: {
         title: "OSINT Website",
-        tagline: "Schärfe deinen Ermittlerblick",
+        tagline: "Schärfen Sie Ihren Ermittlerblick",
         description:
           "[OSINT Exercises](https://osint.ysz.life) ist eine Seite zum Üben von Open Source Intelligence: Informationen aus öffentlichen Quellen finden. Jede Übung liefert einen Hintergrund und eine Reihe von Aufgaben, von leicht bis Experte, und jeder kann über die Seite eine neue Übung einreichen.",
       },
@@ -328,7 +328,7 @@ export const de = {
       },
       vmDetector: {
         title: "Virtual Machine Detector",
-        tagline: "Erkennt, ob du in einer VM läufst",
+        tagline: "Erkennt, ob Ihr System in einer VM läuft",
         description:
           "Ein kleines Java-Tool, das erkennt, ob es in einer virtuellen Maschine läuft. Es prüft BIOS, CPU, die MAC-Adresse der Netzwerkkarte und die Windows-Registry auf die Spuren, die ein Hypervisor hinterlässt.",
       },
@@ -376,7 +376,7 @@ export const de = {
         title: "Self",
         tagline: "Neofetch, neu gedacht für Windows",
         description:
-          "Self zeigt deine Systeminformationen im Terminal neben einem Bild oder ASCII-Art, so wie Neofetch unter Linux, nur für Windows. Es wird mit einem PowerShell-Befehl installiert, rendert Bilder als farbige Blöcke oder Braille und hat konfigurierbare Themes. Geschrieben in Python.",
+          "Self zeigt Ihre Systeminformationen im Terminal neben einem Bild oder ASCII-Art, so wie Neofetch unter Linux, nur für Windows. Es wird mit einem PowerShell-Befehl installiert, rendert Bilder als farbige Blöcke oder Braille und hat konfigurierbare Themes. Geschrieben in Python.",
         overview:
           "Self brings Neofetch's picture-and-facts screen to Windows PowerShell. I wrote it in Python in May 2025; it installs per user with one PowerShell command and is configured with a short setup wizard.",
       },
@@ -511,7 +511,7 @@ export const de = {
     viewOnGitHub: "Auf GitHub ansehen",
     thisDeploy: "dieses Deploy",
     truncated: "Diff gekürzt. Vollständiger Commit auf GitHub.",
-    unavailable: "Patch ausgelassen (binär oder zu groß).",
+    unavailable: "Patch ausgelassen (binär oder zu gross).",
     files: "{count} Dateien",
     expand: "Commit anzeigen",
     collapse: "Commit ausblenden",
@@ -535,7 +535,7 @@ export const de = {
     intro:
       "Ich bin Yanis Sebastian Zürcher, 18, Softwareentwickler aus Zürich. Zwei Jahre Informatik an der [WISS](https://www.wiss.ch). Das dazugehörige Praktikum mache ich bei [nadlo](https://nadlo.ch), bis Juli 2027.",
     hobbies:
-      "Ich arbeite full-stack, aber UI und Design sind das, woran ich Spaß habe. Ich mag es, rauszufinden, wie etwas aussehen und sich anfühlen soll — das ist der Teil der Arbeit, mit dem ich wirklich Zeit verbringen will.",
+      "Ich arbeite full-stack, aber UI und Design sind das, woran ich Spass habe. Ich mag es, rauszufinden, wie etwas aussehen und sich anfühlen soll — das ist der Teil der Arbeit, mit dem ich wirklich Zeit verbringen will.",
     philosophy: {
       title: "So arbeite ich",
       clean:
@@ -581,12 +581,12 @@ export const de = {
       items: {
         koenitzer: {
           quote:
-            "Mit Yanis in jedem Fach der Softwareentwicklung (IT) zusammenzuarbeiten war ein echtes Highlight. Seine technischen Fähigkeiten, seine Zuverlässigkeit und sein Problemlösungsvermögen waren auf einem anderen Niveau. Ein wirklich außergewöhnlicher Entwickler und Teamkollege.",
+            "Mit Yanis in jedem Fach der Softwareentwicklung (IT) zusammenzuarbeiten war ein echtes Highlight. Seine technischen Fähigkeiten, seine Zuverlässigkeit und sein Problemlösungsvermögen waren auf einem anderen Niveau. Ein wirklich aussergewöhnlicher Entwickler und Teamkollege.",
           role: "Arbeitsloser Nichtstuer",
         },
         bichsel: {
           quote:
-            "Die Zusammenarbeit mit Yanis war eine fantastische Erfahrung. Er hat mich durch jedes Fach getragen, immer wieder kreative Lösungen für komplexe Probleme gefunden und alles pünktlich geliefert. Ein wirklich außergewöhnlicher Entwickler.",
+            "Die Zusammenarbeit mit Yanis war eine fantastische Erfahrung. Er hat mich durch jedes Fach getragen, immer wieder kreative Lösungen für komplexe Probleme gefunden und alles pünktlich geliefert. Ein wirklich aussergewöhnlicher Entwickler.",
           role: "Praktikant",
         },
         venzin: {
@@ -635,10 +635,10 @@ export const de = {
     formTitle: "Nachricht senden",
     reachOut: "Oder erreiche mich direkt",
     expectations: {
-      title: "Was dich erwartet",
+      title: "Was Sie erwartet",
       items: [
         "Eine Antwort innerhalb von ein, zwei Tagen",
-        "Ein klares, unverbindliches Gespräch über deine Idee",
+        "Ein klares, unverbindliches Gespräch über Ihre Idee",
         "Ehrliche Einschätzung zu Umfang, Zeitplan und Passung",
         "Deine Daten bleiben privat – einfach eine direkte Antwort",
       ],
