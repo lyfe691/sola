@@ -2,19 +2,20 @@
 
 > Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications, and modern technologies.
 
-Currently studying software engineering at WISS, working a software engineering internship at Nadlo (React, Next.js, NestJS, Supabase), and taking on freelance/contract web development (React, Next.js, Spring Boot) on the side. Has a background in identity & access management and cybersecurity from a prior IAM internship. Personal projects mostly run on React/Next.js/TypeScript on the frontend with Supabase/PostgreSQL for data, Spring Boot or Rust where a project calls for it, and a long-running interest in offensive security (OSINT, Kali Linux, Burp Suite). Content is available in English, German, Spanish, Japanese, and Chinese via a language switcher; the URLs below serve the English version.
+Currently studying software engineering at WISS, working a software engineering internship at Nadlo (React, Next.js, NestJS, Supabase), and taking on freelance/contract web development (React, Next.js, Spring Boot) on the side. Has a background in identity & access management and cybersecurity from a prior IAM internship. Personal projects mostly run on React/Next.js/TypeScript on the frontend with Supabase/PostgreSQL for data, Spring Boot or Rust where a project calls for it, and a long-running interest in offensive security (OSINT, Kali Linux, Burp Suite). Content is available in English, German, Spanish, Japanese, Korean, and Chinese via a language switcher; the URLs below serve the English version.
 
 ## Pages
 
 - [Home](https://sola.ysz.life/): Introduction and quick links to socials and contact.
 - [About](https://sola.ysz.life/about): Background, interests, and personal story.
-- [Experience](https://sola.ysz.life/experience): Work history and professional roles.
+- [Experience](https://sola.ysz.life/experience): Education and work history.
 - [Projects](https://sola.ysz.life/projects): Full list of software projects, including smaller/archived ones not listed below.
 - [Skills](https://sola.ysz.life/skills): Technical skills and proficiency levels.
 - [Certifications](https://sola.ysz.life/certifications): Certificates and credentials earned.
 - [Services](https://sola.ysz.life/services): Freelance and contract services offered.
 - [Contact](https://sola.ysz.life/contact): Contact form and direct contact links.
 - [Changelog](https://sola.ysz.life/changelog): Git history of this site — commits, file trees, and patches.
+- [Privacy](https://sola.ysz.life/privacy): Privacy policy covering hosting, analytics, processors, and visitors' rights.
 
 ## Projects
 
@@ -22,13 +23,19 @@ Ordered by current relevance. Each has its own deep-dive page.
 
 - [Kinoa](https://sola.ysz.life/projects/kinoa): Free streaming site for films and series, no subscription — Next.js App Router, Supabase, PostgreSQL.
 - [Sola](https://sola.ysz.life/projects/sola): This portfolio site — React (Vite), TypeScript, Tailwind CSS, shadcn/ui, Three.js.
+- [fleetmap](https://sola.ysz.life/projects/fleetmap): Live map of a delivery fleet for an office screen, showing each van's stops, ETA and delay, with any past day replayable from its recorded track. Client work, not publicly accessible — Next.js, Supabase, MapLibre, OSRM.
+- [Ura](https://sola.ysz.life/projects/ura): Snowmobile navigation app for Finnish Lapland on iOS and Android. It works without signal and shows whether you are on a route or how far the nearest one is. Client work — React, Capacitor, MapLibre.
+- [perspectas.ch](https://sola.ysz.life/projects/perspectas): Website of perspectas gmbh, a consulting and recruiting firm near Zürich, whose two partners edit every text and image themselves in a CMS. Client work — Next.js, Sanity, Tailwind CSS.
+- [Montu](https://sola.ysz.life/projects/montu): Journal of Swiss mountain tours in German, built for the client who writes and photographs them. A GPX upload draws each route on a terrain map with its elevation profile — Next.js, Sanity, Mapbox.
 - [magi](https://sola.ysz.life/projects/magi): Fast, asynchronous TCP/UDP port scanner written in Rust with tokio.
 - [Luma](https://sola.ysz.life/projects/luma): Multi-model, bring-your-own-key AI chat platform — Next.js 16, Vercel AI SDK, Supabase.
 - [AppliCare](https://sola.ysz.life/projects/applicare): Job application tracking system — React (Vite), Spring Boot, MongoDB.
 - [Self](https://sola.ysz.life/projects/self): Customizable Windows system-info display tool inspired by Neofetch, built with Python.
-- [Website Code Extractor](https://sola.ysz.life/projects/code-extractor): Chrome extension for extracting and downloading a website's source code.
+- [QR](https://sola.ysz.life/projects/qr): QR code generator that runs in the browser, with styled dots, corners, gradients and logos, export to PNG, SVG, JPEG or WebP, and a built-in scan test that reads the finished code back — Next.js, qr-code-styling, qr-scanner.
+- [Website Code Extractor](https://sola.ysz.life/projects/code-extractor): Chrome and Edge extension for extracting and downloading a website's source code.
 - [Thoughts](https://sola.ysz.life/projects/thoughts): Minimal personal site for reflections and notes, with a custom guestbook.
-- [Taco](https://sola.ysz.life/projects/taco): Production-ready Next.js template site with localization and a blog, centered on my brother's dog.
+- [Taco](https://sola.ysz.life/projects/taco): Website about my brother's dog, built as a reusable Next.js template with English, Spanish and Japanese pages and a blog.
+- [Vault](https://sola.ysz.life/projects/vault): Local sandbox for learning OpenID Connect, where Keycloak issues the tokens, a FastAPI service verifies them and the identity setup is declared in Terraform — Keycloak, FastAPI, Terraform, Next.js.
 
 ## Optional
 
