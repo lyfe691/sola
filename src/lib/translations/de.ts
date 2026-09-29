@@ -144,6 +144,7 @@ export const de = {
     demo: "Demo",
     moreProjects: "Weitere Projekte",
     onThisPage: "Auf dieser Seite",
+    onlyInEnglish: "Dieser Artikel ist vorerst nur auf Englisch verfügbar.",
     linkToSection: "Link zu Abschnitt: {title}",
     close: "Schließen",
     expandImage: "Bild vergrößern",
@@ -302,12 +303,16 @@ export const de = {
         tagline: "Der Code jeder Website als ein ZIP",
         description:
           "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) ist eine Erweiterung für Chrome und Edge, die HTML, CSS, JavaScript und Bilder einer Website als eine ZIP-Datei herunterlädt, samt Ordnerstruktur. Ein Klick, keine Einrichtung. Sie hat rund 6000 Nutzer im Chrome Web Store und funktioniert am besten mit statischen Seiten.",
+        overview:
+          "Website Code Extractor is a one-button Chrome and Edge extension for saving a page to study how it's built. The ZIP it downloads opens straight from the folder, because the stylesheets, scripts and images its HTML references are saved next to it and linked by their new paths.",
       },
       applicare: {
         title: "AppliCare",
         tagline: "Alle Bewerbungen an einem Ort",
         description:
           "[AppliCare](https://applicare.app) behält deine Bewerbungen im Blick. Jede Bewerbung mit ihrem Status erfassen, von beworben bis Angebot, Aufgaben mit Fristen anhängen und den Fortschritt auf einem Dashboard mit Erfolgsquote und Zeitverlauf verfolgen. Gebaut mit React, Ant Design, Spring Boot und MongoDB.",
+        overview:
+          "AppliCare is a job-application tracker I built end to end, from the React interface to the Java API and the database behind it. The API ties every request to its user through a signed token, so each account only ever sees its own applications and tasks.",
       },
       osint: {
         title: "OSINT Website",
@@ -356,54 +361,72 @@ export const de = {
         tagline: "Modernes Portfolio in React und TypeScript",
         description:
           "Sola ist meine persönliche Website. Entwickelt mit React, TypeScript und Tailwind CSS, präsentiert sie meine Projekte, Fähigkeiten und Erfahrungen in einem klaren, modernen Design.",
+        overview:
+          "Sola is the website you are currently on. It represents a modern approach to portfolio design, combining cutting-edge web technologies with thoughtful user experience. Built from the ground up with React and TypeScript, it showcases projects and skills through smooth animations, multiple themes, and a responsive design that works seamlessly across all devices. Its built to be fast and efficient, with a focus on user experience and performance.",
       },
       kinoa: {
         title: "Kinoa",
         tagline: "Kostenlos streamen, ohne Lärm",
         description:
           "[Kinoa](https://kinoa.to) ist eine kostenlose Streaming-Seite für Filme und Serien. Einen Titel öffnen und direkt auf derselben Seite abspielen, ganz ohne Konto; mit einem Konto kommen ein öffentliches @Handle, eine Watchlist, ein Feed, Nachrichten und Watch-Together-Räume dazu, in denen Freunde der Wiedergabe eines Hosts folgen. Die Titel stammen von TMDB, abgespielt wird in eingebetteten Playern externer Hoster.",
+        overview:
+          "Kinoa is a free site for films and series with a social layer around the player: profiles, a feed, comments, messages and Watch Together rooms. I've built it since November 2025 as a Next.js app on Supabase, and around 10,000 people use it each month.",
       },
       self: {
         title: "Self",
         tagline: "Neofetch, neu gedacht für Windows",
         description:
           "Self zeigt deine Systeminformationen im Terminal neben einem Bild oder ASCII-Art, so wie Neofetch unter Linux, nur für Windows. Es wird mit einem PowerShell-Befehl installiert, rendert Bilder als farbige Blöcke oder Braille und hat konfigurierbare Themes. Geschrieben in Python.",
+        overview:
+          "Self brings Neofetch's picture-and-facts screen to Windows PowerShell. I wrote it in Python in May 2025; it installs per user with one PowerShell command and is configured with a short setup wizard.",
       },
       taco: {
         title: "Taco",
         tagline: "Die Website eines Hundes, als wiederverwendbare Vorlage",
         description:
           "[Taco](https://takitwo.vercel.app) ist eine Website über den Hund meines Bruders, gebaut als Vorlage, die ich wiederverwenden kann: Seiten auf Englisch, Spanisch und Japanisch mit automatischer Spracherkennung, ein Blog, eine Galerie und eine Kontaktseite. Gebaut mit Next.js, TypeScript und Tailwind CSS.",
+        overview:
+          "Taco is my brother's Pomeranian, and this is his website. I set it up so the next small site of its kind can start from the same code and only swap in new colours and new text.",
       },
       thoughts: {
         title: "Thoughts",
         tagline: "Gedanken, Fragmente und Notizen",
         description:
           "[Thoughts](https://thoughts.ysz.life) ist eine kleine Seite, auf der ich Gedanken, Fragmente und Notizen aufschreibe, getrennt von diesem Portfolio. Beiträge sind MDX-Dateien, und in einem Gästebuch können Besucher eine eigene Notiz hinterlassen. Inspiriert von der persönlichen Seite von [Shu Ding](https://shud.in).",
+        overview:
+          "Thoughts is my writing site, kept apart from this portfolio: a few pages of plain text and a guestbook that anyone can sign. I built it in August 2025 as a Next.js app on Vercel, with the posts as MDX files and the guestbook in Postgres.",
       },
       magi: {
         title: "magi",
         tagline: "Asynchrones Port-Scanning, korrekt gebaut",
         description:
           "[magi](https://magi.ysz.life) ist ein schneller TCP- und UDP-Portscanner, geschrieben in Rust. Er scannt mit ganz normalen Verbindungen, braucht also kein Root, und meldet nur, was er wirklich beobachtet hat: Ein Port, den er nicht testen konnte, gilt als untestable statt als closed. Ein Befehl installiert ihn unter Linux, macOS oder Windows.",
+        overview:
+          "magi is a command-line port scanner for TCP and UDP, written in Rust on tokio, with prebuilt releases for Linux, macOS and Windows and a small site at magi.ysz.life. The scanning core is a library with its own integration tests, and the command-line tool is a thin layer over it.",
       },
       luma: {
         title: "Luma",
         tagline: "Eigene Keys, jedes Modell",
         description:
           "[Luma](https://luma.ysz.life) ist eine Chat-App für alle grossen KI-Modelle: eigene API-Keys mitbringen und innerhalb eines Gesprächs zwischen Claude, GPT, Gemini, Grok und weiteren wechseln. Wer eine frühere Nachricht bearbeitet, verzweigt den Chat, und beide Pfade bleiben erhalten. Die Keys werden verschlüsselt, bevor sie gespeichert werden.",
+        overview:
+          "Luma is a web chat app for many model providers that runs on the user's own API keys, built with Next.js, the Vercel AI SDK and Supabase. Conversations are stored as a tree of messages, and keys are encrypted with AES-256-GCM and decrypted on the server only for the request that uses them.",
       },
       perspectas: {
         title: "perspectas.ch",
         tagline: "Beratungs-Website rund um einen gelben Punkt",
         description:
           "Die Website der [perspectas gmbh](https://www.perspectas.ch), einer Beratungs- und Recruiting-Firma bei Zürich, neu gebaut mit Next.js und Sanity. Jeder Text und jedes Bild liegt im CMS, die beiden Partner publizieren Änderungen also selbst. Das Design hat genau einen Akzent: den gelben Punkt aus dem Logo, der zugleich der Schlusspunkt der Headline ist.",
+        overview:
+          "perspectas gmbh is a consulting and recruiting firm in Wetzikon, near Zürich, run by two partners. Its website is in German and speaks to two audiences at once: companies that need help with staffing, and people looking for their next role.",
       },
       ura: {
         title: "Ura",
         tagline: "Schneemobil-Navigation für Lappland, auch offline",
         description:
           "Ura ist Schneemobil-Navigation für Finnisch-Lappland, für iOS und Android. Die App hat rund 2900 Routen und 3500 Orte wie Tankstellen, Cafés und Hütten auf dem Gerät und funktioniert darum auch ohne Empfang. Sie zeigt, ob man auf einer Route ist, und wenn nicht, wie weit die nächste entfernt ist.",
+        overview:
+          "I designed and built Ura for a client: the rider app for iPhone and Android, and ura-app.com, the website that introduces it. The app is written in React and TypeScript and runs on both phones through Capacitor, with its map drawn by MapLibre.",
       },
       montu: {
         title: "Montu",
@@ -411,24 +434,32 @@ export const de = {
           "Schweizer Bergtourenjournal, kartiert aus eigenen GPX-Dateien",
         description:
           "[Montu](https://montu.ch) ist ein Bergtourenjournal auf Deutsch, gebaut für einen Kunden, der die Touren selbst schreibt und fotografiert. Er lädt eine GPX-Datei hoch, und die Seite zeichnet die Route auf einer Geländekarte samt Höhenprofil. Touren, Fotos und alle übrigen Texte pflegt er im CMS, eine neue Tour braucht also keinen Entwickler.",
+        overview:
+          "Montu is a journal of Swiss mountain tours in German, from summer crossings to ski and splitboard tours, written and photographed by the friend I built it for. Each tour page is his account of the day, with the route, the figures and the way there and back alongside for anyone who wants to follow it.",
       },
       qr: {
         title: "QR",
         tagline: "QR-Codes gestalten und gleich gegenprüfen",
         description:
           "[qr.ysz.life](https://qr.ysz.life) ist ein QR-Code-Generator, der komplett im Browser läuft. Punkte und Ecken gestalten, Verläufe und ein Logo ergänzen, dann als PNG, SVG, JPEG oder WebP exportieren. Ein eingebauter Scan-Test liest den fertigen Code zurück, damit klar ist, dass er sich noch scannen lässt, bevor er gedruckt wird.",
+        overview:
+          "qr.ysz.life is a QR code generator for styled codes: dot shapes, colours and gradients, and a logo in the middle. Because styling is what breaks a code, it also decodes exported images to check that they still scan.",
       },
       vault: {
         title: "Vault",
         tagline: "Keycloak, FastAPI und ein Realm aus Terraform",
         description:
           "Vault ist eine lokale Sandbox, um OpenID Connect zu lernen. Keycloak stellt die Tokens aus, ein FastAPI-Dienst prüft sie, und ein Next.js-Frontend zeigt Dashboards, die nach Rolle freigegeben sind. Die Identitätskonfiguration ist in Terraform deklariert, das Ganze lässt sich also mit einem Befehl abreissen und neu aufbauen.",
+        overview:
+          "Vault is an OpenID Connect sandbox that runs on one machine, with Keycloak and its database in Docker. Everything Keycloak needs, from the realm to the demo user, is written in Terraform, so one terraform apply rebuilds the whole identity setup from nothing.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "Vom Handy im Lieferwagen auf den Büro-Bildschirm",
         description:
           "fleetmap ist eine Live-Karte einer Lieferflotte. Das Handy jedes Lieferwagens meldet seine Position, und ein Bildschirm im Büro zeigt jeden Wagen in Bewegung, mit Stopps, ETA und Verspätung. Jeder vergangene Tag lässt sich aus der aufgezeichneten Strecke wieder abspielen. Gebaut mit Next.js, Supabase und MapLibre.",
+        overview:
+          "Ich habe fleetmap für ein Lieferunternehmen in der Schweiz gebaut, als Bildschirm, den das Büro an der Wand hängen hat. Es ist eine Next.js-App auf Supabase; die Karte zeichnet MapLibre, die Strassenrouten und Ankunftszeiten berechnet OSRM.",
       },
     },
   },

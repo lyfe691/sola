@@ -7,11 +7,11 @@
  *
  * Everything the site search can find, as documents in the active language:
  * the pages, projects and every deep-dive section, skills, roles,
- * certifications and services, and the palette's commands. Deep dives are
- * written in English, so their sections are English in every language.
+ * certifications and services, and the palette's commands. A deep dive's
+ * sections are in the reader's language where it has a current translation,
+ * English otherwise (./deep-dive-sections.ts).
  */
 
-import deepDives from "virtual:deep-dive-index";
 import type { Language } from "@/config/languages";
 import { LANGUAGES } from "@/config/languages";
 import { MAIN_NAVIGATION, FOOTER_NAVIGATION } from "@/config/navigation";
@@ -34,6 +34,7 @@ import {
 } from "@/lib/dates";
 import { plainText } from "@/lib/plain-text";
 import type { Translation } from "@/lib/translations";
+import type { SectionIndex } from "./deep-dive-sections";
 import type { SearchDoc } from "./engine";
 
 export type SiteDoc = SearchDoc &
@@ -118,7 +119,11 @@ const monogramOf = (company: string) =>
     .slice(0, 2)
     .toUpperCase();
 
-export function buildSiteDocs(t: Translation, language: Language): SiteDoc[] {
+export function buildSiteDocs(
+  t: Translation,
+  language: Language,
+  deepDives: SectionIndex,
+): SiteDoc[] {
   const docs: SiteDoc[] = [];
   const locale = INTL_LOCALE[language];
   const languageName = new Intl.DisplayNames([locale], { type: "language" });

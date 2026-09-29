@@ -18,6 +18,8 @@ import {
   Globe02Icon,
   LinkSquare02Icon,
 } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
 import { hugeIcon } from "@/lib/huge-icon";
 import {
   DeepDiveSectionMenu,
@@ -42,7 +44,7 @@ import { plainText } from "@/lib/plain-text";
 import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { scrollToTarget } from "@/utils/scroll";
 import type { Translation } from "@/lib/translations";
-import { articleFor } from "./articles";
+import { articleFor, isTranslated } from "./articles";
 
 function MountSignal({ onMount }: { onMount: () => void }) {
   useEffect(() => {
@@ -190,7 +192,7 @@ const ProjectDeepDiveRenderer = () => {
   }, [mdxReady, hash, slug, reducedMotion]);
 
   const config = slug ? getProjectConfig(slug) : undefined;
-  const MDXComponent = articleFor(slug)?.Component ?? null;
+  const MDXComponent = articleFor(slug, language)?.Component ?? null;
 
   if (!slug) {
     return <Navigate to="/projects" replace />;
@@ -240,7 +242,7 @@ const ProjectDeepDiveRenderer = () => {
             {t.common.overview}
           </SectionHeading>
           <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">
-            {config.overview}
+            {"overview" in projectCopy && projectCopy.overview}
           </p>
         </section>
 
@@ -297,10 +299,23 @@ const ProjectDeepDiveRenderer = () => {
           </div>
         </section>
 
-        <Mdx>
-          <MDXComponent />
-          <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
-        </Mdx>
+        <div>
+          {!isTranslated(slug, language) && (
+            <p className="mb-8 flex items-center gap-2 text-xs text-muted-foreground">
+              <HugeiconsIcon
+                icon={AiTranslateIcon}
+                strokeWidth={2}
+                className="size-4 shrink-0"
+                aria-hidden
+              />
+              {t.common.onlyInEnglish}
+            </p>
+          )}
+          <Mdx>
+            <MDXComponent />
+            <MountSignal key={slug} onMount={() => setReadySlug(slug)} />
+          </Mdx>
+        </div>
 
         <section
           id="more-projects"

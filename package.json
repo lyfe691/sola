@@ -22,6 +22,7 @@
     "test": "vitest run",
     "typecheck": "node_modules/@typescript/native/bin/tsc -b",
     "images:sizes": "bun scripts/image-sizes.mjs",
+    "i18n:deep-dives": "bun scripts/deep-dive-i18n.ts",
     "preview": "vite preview"
   },
   "dependencies": {

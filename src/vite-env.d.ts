@@ -21,6 +21,19 @@ declare module "virtual:deep-dive-index" {
   export default index;
 }
 
+declare module "virtual:deep-dive-translations" {
+  /** the translated deep dives the site may serve, by language */
+  const current: Partial<Record<string, string[]>>;
+  export default current;
+}
+
+declare module "virtual:deep-dive-index/*" {
+  import type { DeepDiveSection } from "@/lib/search/types";
+  /** sections of a language's translated deep dives, by MDX file name */
+  const index: Record<string, DeepDiveSection[]>;
+  export default index;
+}
+
 declare module "*.mdx" {
   interface MDXProps {
     components?: Record<string, React.ComponentType<Record<string, unknown>>>;

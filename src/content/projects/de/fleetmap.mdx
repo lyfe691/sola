@@ -1,0 +1,93 @@
+export const source = "8629e3ed8b3b";
+
+# Eine Live-Karte einer Lieferflotte, gemacht für den Fernseher im Büro
+
+fleetmap ist der Bildschirm, den ein Lieferunternehmen in der Schweiz auf einem Fernseher in seinem Büro laufen lässt. Jeder Lieferwagen ist auf der Karte und bewegt sich, während er fährt. So sieht jede Person im Raum, wo er gerade ist, wohin er als Nächstes fährt und ob er in Verzug ist. Ich habe fleetmap für das Unternehmen gebaut.
+
+Die Konsole selbst ist intern, deshalb stammt alles auf dieser Seite aus einer Kopie mit Demodaten: drei Lieferwagen auf erfundenen Touren durch Basel, Bern und Zürich.
+
+<ProjectImage
+  src="/projects/fleetmap/live.webp"
+  video="/projects/fleetmap/live.mp4"
+  alt="Die fleetmap-Konsole: eine Seitenleiste, eine Liste mit drei Lieferwagen und eine Karte der Nordschweiz; ein Tippen auf Van Zürich in der Liste lässt die Karte nach Zürich fliegen, wo die Route des Lieferwagens für den Tag mit nummerierten Halten eingezeichnet ist und der Lieferwagen ihr folgt"
+  caption="Einen Lieferwagen auf der Live-Karte auswählen."
+  size="full"
+/>
+
+## Die ganze Flotte auf einem Bildschirm
+
+Jeder Lieferwagen auf der Karte zeigt in seine Fahrtrichtung und gleitet von einer gemeldeten Position zur nächsten. Seine Farbe sagt, wie es um ihn steht:
+
+| Farbe | Der Lieferwagen …                                                           |
+| ----- | --------------------------------------------------------------------------- |
+| Grün  | ist auf seiner Tour                                                         |
+| Gelb  | wartet auf seinen nächsten Auftrag                                          |
+| Rot   | erreicht seinen nächsten Halt voraussichtlich mehr als fünf Minuten zu spät |
+| Grau  | ist verstummt: Sein Telefon meldet keine Position mehr                      |
+
+Die fünf Minuten Spielraum sorgen dafür, dass ein bisschen Verkehr auf der Karte noch keinen Alarm auslöst.
+
+Die Liste neben der Karte hat für jeden Lieferwagen eine Kachel mit der Zeit bis zum nächsten Halt und der Zahl der verbleibenden Halte. Niemand muss etwas eintippen, damit sie aktuell bleibt: Die Telefone der Fahrer senden ihre Positionen, und die Halte jedes Lieferwagens für den Tag kommen automatisch herein.
+
+<ProjectImage
+  src="/projects/fleetmap/map.webp"
+  alt="Die Live-Karte der Nordschweiz mit Lieferwagen in Basel, Bern und Zürich, jeder in seine Fahrtrichtung zeigend; in der Liste trägt Van Bern neben On Route ein rotes Late-Etikett, und die Legende unten lautet On Route, Waiting, Behind schedule und Stale"
+  caption="Drei Lieferwagen, einer davon in Verzug."
+  size="full"
+/>
+
+## Ein Lieferwagen im Fokus
+
+Tippen Sie auf einen Lieferwagen, und die Karte fliegt zu ihm und seiner Route für den Tag. Die Halte sind der Reihe nach nummeriert, beim nächsten steht, wann der Lieferwagen dort ankommt, die schon gefahrene Strecke wird grau, und die anderen Lieferwagen treten in den Hintergrund. Eine Kachel auf der Karte zeigt die Geschwindigkeit des Lieferwagens, seine Ankunftszeit am nächsten Halt und wie viele Aufträge er geladen hat.
+
+<ProjectImage
+  src="/projects/fleetmap/focus.webp"
+  alt="Van Zürich ausgewählt: die Karte auf Zürich gezoomt, die Route des Lieferwagens in Petrol durch achtzehn nummerierte Halte eingezeichnet, der schon gefahrene Teil grau, der nächste Halt mit seiner Ankunftszeit markiert, und eine Kachel mit Geschwindigkeit, Ankunftszeit und Ladung"
+  caption="Van Zürich und seine Tour."
+  size="full"
+/>
+
+Die Detailansicht zeigt den Rest des Tages: die gefahrene Strecke, die abgeholten und zugestellten Aufträge und den Tourplan mit einer geplanten Zeit für jeden Halt. Bei den erledigten Halten steht, wann der Lieferwagen tatsächlich dort war und ob das pünktlich war.
+
+<ProjectImage
+  src="/projects/fleetmap/tracking.webp"
+  alt="Die Detailansicht für Van Zürich: Kacheln für die Ladung mit abgeholten und zugestellten Aufträgen, den Fortschritt der Route, die Strecke heute, die aktuelle Geschwindigkeit, die Ankunftszeit und die verbleibenden Halte, darunter ein Tourplan mit Abholungen und Zustellungen, in dem die erledigten Halte ihre geplante und tatsächliche Zeit mit einem On-time-Etikett zeigen"
+  caption="Die Detailansicht mit dem Tourplan des Tages."
+  size="full"
+/>
+
+## Einen Tag noch einmal abspielen
+
+Wählen Sie einen Lieferwagen und einen Tag im Verlauf, und seine aufgezeichnete Spur erscheint auf der Karte. Sie läuft mit bis zu 120-facher Geschwindigkeit ab, während die Karte dem Lieferwagen folgt, oder Sie ziehen den Regler zu einem beliebigen Moment. Strecke, Fahrzeit und Zahl der GPS-Punkte stehen unter der Karte.
+
+<ProjectImage
+  src="/projects/fleetmap/replay.webp"
+  video="/projects/fleetmap/replay.mp4"
+  alt="Route Replay für Van Zürich: Ein Druck auf Play bei 120x schickt den Lieferwagen seine aufgezeichnete Spur entlang durch Zürich, während die Uhr unter der Karte vorwärtsläuft, über Kacheln für Strecke, Dauer und GPS-Punkte"
+  caption="Der bisherige Tag von Van Zürich, in 120-facher Geschwindigkeit."
+  size="full"
+/>
+
+## Gebaut für den Fernseher
+
+Die Konsole ist für einen Touchscreen ausgelegt, und beide Seitenleisten lassen sich einklappen, damit die Karte den ganzen Bildschirm füllt. Es gibt ein helles und ein dunkles Design; die Konsole folgt dem System, solange niemand in den Einstellungen eines wählt. Gerät ein Lieferwagen in Verzug, färbt sich der Rest seiner Route rot.
+
+<ProjectImage
+  src="/projects/fleetmap/dark-full.webp"
+  alt="Die Konsole im dunklen Design mit beiden Leisten zu schmalen Schienen eingeklappt: Van Bern auf einer dunklen Karte von Bern ausgewählt, seine Route rot eingezeichnet, weil er in Verzug ist, und seine Kachel mit On Route und Late"
+  caption="Van Bern in Verzug, und die Karte hat den Bildschirm für sich."
+  size="full"
+/>
+
+Die Einstellungen richten sich nach den Leuten, die auf den Bildschirm schauen:
+
+- **Sprache.** Die Konsole startet auf Schweizerdeutsch und lässt sich auf Englisch umstellen, mit Datum und Uhrzeit jeweils so geschrieben, wie es dort üblich ist.
+- **Kontrast.** Ein Modus mit hohem Kontrast für einen Bildschirm am anderen Ende des Raums.
+- **Bewegung.** Ein Modus mit reduzierter Bewegung, in dem die Lieferwagen nicht mehr gleiten.
+
+<ProjectImage
+  src="/projects/fleetmap/de-tracking.webp"
+  alt="Die Detailansicht für Van Basel auf Schweizerdeutsch, mit der Liste der Halte unter der Überschrift Halte und den erledigten Halten als Pünktlich markiert"
+  caption="Die Detailansicht auf Schweizerdeutsch."
+  size="full"
+/>

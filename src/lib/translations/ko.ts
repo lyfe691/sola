@@ -143,6 +143,7 @@ export const ko = {
     demo: "Demo",
     moreProjects: "더 많은 프로젝트",
     onThisPage: "목차",
+    onlyInEnglish: "이 글은 현재 영어로만 제공됩니다.",
     linkToSection: "섹션 링크: {title}",
     close: "닫기",
     expandImage: "이미지 확대",
@@ -298,12 +299,16 @@ export const ko = {
         tagline: "어떤 웹사이트의 코드든 ZIP 하나로",
         description:
           "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm)는 웹사이트의 HTML, CSS, JavaScript, 이미지를 폴더 구조 그대로 ZIP 파일 하나로 내려받는 Chrome·Edge 확장 프로그램입니다. 클릭 한 번이면 되고 설정은 필요 없습니다. Chrome 웹 스토어 사용자 약 6,000명이 쓰고 있으며, 정적 사이트에서 가장 잘 동작합니다.",
+        overview:
+          "Website Code Extractor is a one-button Chrome and Edge extension for saving a page to study how it's built. The ZIP it downloads opens straight from the folder, because the stylesheets, scripts and images its HTML references are saved next to it and linked by their new paths.",
       },
       applicare: {
         title: "AppliCare",
         tagline: "모든 지원 현황을 한곳에서",
         description:
           "[AppliCare](https://applicare.app)는 입사 지원 현황을 관리해 줍니다. 지원 건마다 '지원함'부터 '오퍼'까지의 상태를 기록하고, 기한이 있는 할 일을 연결하고, 성공률과 추이 그래프가 있는 대시보드에서 진행 상황을 확인할 수 있습니다. React, Ant Design, Spring Boot, MongoDB로 만들었습니다.",
+        overview:
+          "AppliCare is a job-application tracker I built end to end, from the React interface to the Java API and the database behind it. The API ties every request to its user through a signed token, so each account only ever sees its own applications and tasks.",
       },
       osint: {
         title: "OSINT 웹사이트",
@@ -352,78 +357,104 @@ export const ko = {
         tagline: "React와 TypeScript로 만든 모던 포트폴리오",
         description:
           "Sola는 여러분이 지금 접속하고 있는 제 개인 웹사이트입니다. React, TypeScript 및 Tailwind CSS로 제작되었으며 내 프로젝트, 기술 및 경험을 깔끔하고 현대적인 방식으로 선보이도록 설계되었습니다.",
+        overview:
+          "Sola is the website you are currently on. It represents a modern approach to portfolio design, combining cutting-edge web technologies with thoughtful user experience. Built from the ground up with React and TypeScript, it showcases projects and skills through smooth animations, multiple themes, and a responsive design that works seamlessly across all devices. Its built to be fast and efficient, with a focus on user experience and performance.",
       },
       kinoa: {
         title: "Kinoa",
         tagline: "무료 스트리밍, 군더더기 없이",
         description:
           "[Kinoa](https://kinoa.to)는 영화와 시리즈를 위한 무료 스트리밍 사이트입니다. 작품을 열면 같은 페이지에서 바로 재생할 수 있고 계정도 필요 없습니다. 계정을 만들면 공개 @핸들 프로필, 관심 목록, 피드, 메시지, 그리고 호스트의 재생에 맞춰 함께 보는 Watch Together 방을 쓸 수 있습니다. 작품 정보는 TMDB에서 가져오고, 영상은 외부 호스터의 임베드 플레이어에서 재생됩니다.",
+        overview:
+          "Kinoa is a free site for films and series with a social layer around the player: profiles, a feed, comments, messages and Watch Together rooms. I've built it since November 2025 as a Next.js app on Supabase, and around 10,000 people use it each month.",
       },
       self: {
         title: "Self",
         tagline: "Windows를 위해 다시 만든 Neofetch",
         description:
           "Self는 Linux의 Neofetch처럼 시스템 정보를 이미지나 ASCII 아트와 나란히 터미널에 보여 주는 Windows용 도구입니다. PowerShell 명령 하나로 설치되고, 이미지를 컬러 블록이나 점자로 렌더링하며, 테마도 설정할 수 있습니다. Python으로 작성했습니다.",
+        overview:
+          "Self brings Neofetch's picture-and-facts screen to Windows PowerShell. I wrote it in Python in May 2025; it installs per user with one PowerShell command and is configured with a short setup wizard.",
       },
       taco: {
         title: "Taco",
         tagline: "재사용할 수 있는 템플릿으로 만든 강아지 웹사이트",
         description:
           "[Taco](https://takitwo.vercel.app)는 형의 강아지를 소개하는 웹사이트로, 다시 쓸 수 있는 템플릿으로 만들었습니다. 영어, 스페인어, 일본어 페이지와 자동 언어 감지, 블로그, 갤러리, 연락처 페이지가 있습니다. Next.js, TypeScript, Tailwind CSS로 만들었습니다.",
+        overview:
+          "Taco is my brother's Pomeranian, and this is his website. I set it up so the next small site of its kind can start from the same code and only swap in new colours and new text.",
       },
       thoughts: {
         title: "Thoughts",
         tagline: "생각, 조각, 그리고 메모",
         description:
           "[Thoughts](https://thoughts.ysz.life)는 이 포트폴리오와 별개로 생각과 단상, 메모를 적어 두는 작은 사이트입니다. 글은 MDX 파일이고, 방명록에는 방문자가 자신의 글을 남길 수 있습니다. [Shu Ding](https://shud.in)의 개인 사이트에서 영감을 받았습니다.",
+        overview:
+          "Thoughts is my writing site, kept apart from this portfolio: a few pages of plain text and a guestbook that anyone can sign. I built it in August 2025 as a Next.js app on Vercel, with the posts as MDX files and the guestbook in Postgres.",
       },
       magi: {
         title: "magi",
         tagline: "정확함을 우선한 비동기 포트 스캐너",
         description:
           "[magi](https://magi.ysz.life)는 Rust로 작성된 빠른 TCP·UDP 포트 스캐너입니다. 일반적인 연결로 스캔하기 때문에 루트 권한이 필요 없고, 실제로 관찰한 것만 보고합니다. 테스트하지 못한 포트는 closed가 아니라 untestable로 표시됩니다. Linux, macOS, Windows에 명령 하나로 설치할 수 있습니다.",
+        overview:
+          "magi is a command-line port scanner for TCP and UDP, written in Rust on tokio, with prebuilt releases for Linux, macOS and Windows and a small site at magi.ysz.life. The scanning core is a library with its own integration tests, and the command-line tool is a thin layer over it.",
       },
       luma: {
         title: "Luma",
         tagline: "내 키로 어떤 모델과도 대화",
         description:
           "[Luma](https://luma.ysz.life)는 주요 AI 모델을 모두 쓸 수 있는 채팅 앱입니다. 본인의 API 키를 등록하면 하나의 대화 안에서 Claude, GPT, Gemini, Grok 등을 오갈 수 있습니다. 이전 메시지를 수정하면 대화가 갈라지고 두 흐름이 모두 유지됩니다. 키는 저장 전에 암호화됩니다.",
+        overview:
+          "Luma is a web chat app for many model providers that runs on the user's own API keys, built with Next.js, the Vercel AI SDK and Supabase. Conversations are stored as a tree of messages, and keys are encrypted with AES-256-GCM and decrypted on the server only for the request that uses them.",
       },
       perspectas: {
         title: "perspectas.ch",
         tagline: "노란 점 하나를 중심으로 만든 컨설팅 사이트",
         description:
           "취리히 근교의 컨설팅·채용 회사 [perspectas gmbh](https://www.perspectas.ch)의 웹사이트를 Next.js와 Sanity로 다시 만들었습니다. 모든 문구와 이미지가 CMS에 있어서 두 파트너가 직접 변경 사항을 게시합니다. 디자인의 포인트는 하나뿐입니다. 로고의 노란 점이 헤드라인의 마침표 역할도 합니다.",
+        overview:
+          "perspectas gmbh is a consulting and recruiting firm in Wetzikon, near Zürich, run by two partners. Its website is in German and speaks to two audiences at once: companies that need help with staffing, and people looking for their next role.",
       },
       ura: {
         title: "Ura",
         tagline: "오프라인에서도 쓰는 라플란드 스노모빌 내비",
         description:
           "Ura는 핀란드 라플란드를 위한 스노모빌 내비게이션으로, iOS와 Android를 지원합니다. 약 2,900개의 경로와 주유소, 카페, 산장 등 약 3,500곳을 휴대폰에 담아 두기 때문에 신호가 없는 곳에서도 작동합니다. 지금 경로 위에 있는지, 벗어났다면 가장 가까운 경로가 얼마나 떨어져 있는지 알려 줍니다.",
+        overview:
+          "I designed and built Ura for a client: the rider app for iPhone and Android, and ura-app.com, the website that introduces it. The app is written in React and TypeScript and runs on both phones through Capacitor, with its map drawn by MapLibre.",
       },
       montu: {
         title: "Montu",
         tagline: "GPX로 지도와 고도를 그리는 산행 기록",
         description:
           "[Montu](https://montu.ch)는 독일어로 쓰인 산행 기록 사이트로, 직접 투어를 쓰고 사진을 찍는 클라이언트를 위해 만들었습니다. GPX 파일을 올리면 페이지가 지형도 위에 경로와 고도 프로필을 그려 줍니다. 투어와 사진, 그 밖의 모든 문구를 CMS에서 편집하므로 새 투어를 올릴 때 개발자가 필요 없습니다.",
+        overview:
+          "Montu is a journal of Swiss mountain tours in German, from summer crossings to ski and splitboard tours, written and photographed by the friend I built it for. Each tour page is his account of the day, with the route, the figures and the way there and back alongside for anyone who wants to follow it.",
       },
       qr: {
         title: "QR",
         tagline: "꾸민 QR 코드를 그 자리에서 스캔 검증",
         description:
           "[qr.ysz.life](https://qr.ysz.life)는 브라우저 안에서만 동작하는 QR 코드 생성기입니다. 점과 모서리 스타일을 고르고 그라데이션과 로고를 더한 뒤 PNG, SVG, JPEG, WebP로 내보낼 수 있습니다. 내장된 스캔 테스트가 완성된 코드를 다시 읽어 주기 때문에 인쇄하기 전에 제대로 스캔되는지 확인할 수 있습니다.",
+        overview:
+          "qr.ysz.life is a QR code generator for styled codes: dot shapes, colours and gradients, and a logo in the middle. Because styling is what breaks a code, it also decodes exported images to check that they still scan.",
       },
       vault: {
         title: "Vault",
         tagline: "Keycloak과 FastAPI, realm은 Terraform으로 정의",
         description:
           "Vault는 OpenID Connect를 익히기 위한 로컬 샌드박스입니다. Keycloak이 토큰을 발급하고, FastAPI 서비스가 이를 검증하며, Next.js 프런트엔드가 역할별로 제한된 대시보드를 보여 줍니다. ID 설정이 Terraform으로 선언되어 있어 명령 하나로 전체를 지우고 다시 세울 수 있습니다.",
+        overview:
+          "Vault is an OpenID Connect sandbox that runs on one machine, with Keycloak and its database in Docker. Everything Keycloak needs, from the realm to the demo user, is written in Terraform, so one terraform apply rebuilds the whole identity setup from nothing.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "차량 GPS를 사무실 화면으로 실시간 전송",
         description:
           "fleetmap은 배송 차량의 실시간 지도입니다. 각 차량의 휴대폰이 위치를 보내면 사무실 화면에 모든 차량의 움직임이 정류지, ETA, 지연과 함께 표시됩니다. 지난 날의 운행도 기록된 경로로 다시 재생할 수 있습니다. Next.js, Supabase, MapLibre로 만들었습니다.",
+        overview:
+          "I built fleetmap for a delivery company in Switzerland, as the screen its office keeps on the wall. It is a Next.js app on Supabase, with the map drawn by MapLibre and the road routes and arrival times worked out by OSRM.",
       },
     },
   },

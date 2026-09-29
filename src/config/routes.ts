@@ -19,6 +19,7 @@ import type { ComponentType } from "react";
 import { matchRoutes } from "react-router";
 import type { Translation } from "@/lib/translations";
 import { getProjectConfig } from "@/config/project-deep-dive";
+import { readLanguage } from "@/lib/language-provider";
 import { preloadable } from "@/lib/preloadable";
 import { articleFor } from "@/pages/projects/articles";
 
@@ -123,7 +124,7 @@ export const APP_ROUTES: AppRoute[] = [
     path: "/projects/:slug",
     layout: "blank",
     ...page(() => import("@/pages/projects/ProjectDeepDiveRenderer")),
-    preload: (params) => void articleFor(params.slug)?.load(),
+    preload: (params) => void articleFor(params.slug, readLanguage())?.load(),
     title: (t, params) => {
       const config = params.slug ? getProjectConfig(params.slug) : null;
       return config ? t.projects.list[config.i18nKey].title : "404";

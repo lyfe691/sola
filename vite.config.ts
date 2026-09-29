@@ -7,6 +7,10 @@ import path from "path";
 import { apiDevPlugin } from "./vite/api-dev.ts";
 import { changelogSnapshotPlugin } from "./vite/changelog-snapshot.ts";
 import { deepDiveIndexPlugin } from "./vite/deep-dive-index.ts";
+import {
+  deepDiveTranslations,
+  remarkSourceHeadingIds,
+} from "./vite/deep-dive-i18n.ts";
 import { hugeiconsPerIcon } from "./vite/hugeicons.ts";
 import { routePreload } from "./vite/route-preload.ts";
 import { fontPreload } from "./vite/font-preload.ts";
@@ -27,6 +31,7 @@ export default defineConfig({
     apiDevPlugin(),
     changelogSnapshotPlugin(),
     deepDiveIndexPlugin(),
+    deepDiveTranslations(),
     hugeiconsPerIcon(),
     routePreload(),
     fontPreload("geist-latin-wght-normal"),
@@ -34,7 +39,7 @@ export default defineConfig({
     {
       enforce: "pre",
       ...mdx({
-        remarkPlugins: [remarkGfm],
+        remarkPlugins: [remarkGfm, remarkSourceHeadingIds],
         providerImportSource: "@mdx-js/react",
       }),
     },

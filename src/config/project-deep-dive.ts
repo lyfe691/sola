@@ -18,7 +18,6 @@ export interface ProjectPageConfig {
   slug: string;
   i18nKey: ProjectI18nKey;
   mdxPath: string;
-  overview: string;
   technologies: string[];
   date: ProjectMeta["date"];
   links: {
@@ -50,7 +49,6 @@ function toPageConfig(project: ProjectWithDeepDive): ProjectPageConfig {
     slug: project.slug,
     i18nKey: project.i18nKey,
     mdxPath: project.deepDive.mdxPath ?? project.slug,
-    overview: project.deepDive.overview,
     technologies: project.technologies,
     date: project.date,
     links: {

@@ -6,6 +6,9 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
+import type { ComponentType } from "react";
+import current from "virtual:deep-dive-translations";
+import type { Language } from "@/config/languages";
 import {
   getProjectConfig,
   projectPagesConfig,
@@ -19,8 +22,35 @@ const byPath = Object.fromEntries(
   ]),
 );
 
-/** a deep dive's MDX article, one chunk per project */
-export function articleFor(slug: string | undefined) {
+// src/content/projects/<language>/<name>.mdx, each its own chunk
+const translations = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<{ default: ComponentType }>(
+      "/src/content/projects/*/*.mdx",
+    ),
+  ).map(([file, load]) => [
+    file.replace(/^\/src\/content\/projects\/|\.mdx$/g, ""),
+    preloadable(load),
+  ]),
+);
+
+/**
+ * Whether a deep dive reads in this language: English always does, and a
+ * translation only while the build finds it current (vite/deep-dive-i18n.ts).
+ */
+export function isTranslated(slug: string, language: Language): boolean {
+  const config = getProjectConfig(slug);
+  if (!config) return false;
+  return (
+    language === "en" || Boolean(current[language]?.includes(config.mdxPath))
+  );
+}
+
+/** a deep dive's MDX article in a language, English where it has none */
+export function articleFor(slug: string | undefined, language: Language) {
   const config = slug ? getProjectConfig(slug) : undefined;
-  return config ? byPath[config.mdxPath] : undefined;
+  if (!config) return undefined;
+  return isTranslated(config.slug, language) && language !== "en"
+    ? translations[`${language}/${config.mdxPath}`]
+    : byPath[config.mdxPath];
 }

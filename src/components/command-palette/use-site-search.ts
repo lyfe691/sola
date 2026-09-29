@@ -6,9 +6,16 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useDeferredValue, useMemo } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import type { Language } from "@/config/languages";
 import type { CommandMenuScope } from "@/hooks/use-command-menu";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
+import {
+  englishSections,
+  loadSections,
+  sectionsIn,
+  type SectionIndex,
+} from "@/lib/search/deep-dive-sections";
 import { createSearch, type SearchHit } from "@/lib/search/engine";
 import {
   buildSiteDocs,
@@ -71,12 +78,30 @@ export function useSiteSearch(
 ) {
   const t = useTranslation();
   const { language } = useLanguage();
+  // English sections answer until the reader's language has loaded
+  const [loaded, setLoaded] = useState<{
+    language: Language;
+    sections: SectionIndex;
+  } | null>(null);
+  const sections =
+    sectionsIn(language) ??
+    (loaded?.language === language ? loaded.sections : englishSections);
+  useEffect(() => {
+    if (sectionsIn(language)) return;
+    let live = true;
+    void loadSections(language).then((index) => {
+      if (live) setLoaded({ language, sections: index });
+    });
+    return () => {
+      live = false;
+    };
+  }, [language]);
   const docs = useMemo(() => {
-    const all = [...buildSiteDocs(t, language), ...actions];
+    const all = [...buildSiteDocs(t, language, sections), ...actions];
     return scope === "projects"
       ? all.filter((doc) => PROJECT_KINDS.has(doc.kind))
       : all;
-  }, [t, language, actions, scope]);
+  }, [t, language, sections, actions, scope]);
   const search = useMemo(() => createSearch(docs), [docs]);
   const deferred = useDeferredValue(query);
 

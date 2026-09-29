@@ -61,6 +61,10 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   (`main.tsx` loads the visitor's before the first render).
   No user-facing string literals in components — add a key. zh is
   Simplified (except the /a page title, which is deliberately Traditional).
+  Deep dives translate as whole files, `src/content/projects/<lang>/<slug>.mdx`
+  (the `deep-dive-translation` skill): served only while stamped from the
+  current English and structurally identical, else English with a note, so
+  editing an English deep dive outdates its translations on purpose.
 - **Content** is config-driven: `src/config/{projects,certifications,...}.ts`
   plus MDX deep dives in `src/content/projects/`.
 - **MDX code blocks**: inside `<CodeBlock code={`…`}>` write every line after

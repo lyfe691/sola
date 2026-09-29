@@ -73,12 +73,33 @@ export const jsxEnd = (lines: string[], start: number): number => {
 
 const CAPTION = /\bcaption\s*[=:]\s*(["'])((?:\\.|(?!\1).)*)\1/g;
 
-/** A deep dive's MDX as one section per heading. */
-export function extractSections(source: string): DeepDiveSection[] {
+const HEADING = /^(#{1,3})\s+(.+?)\s*#*\s*$/;
+
+/**
+ * Each h1–h3's anchor in the order the page renders them: the slug of its
+ * words, as the page's Heading computes it. A translation takes these by
+ * position, so a section has one link in every language.
+ */
+export function headingSlugs(source: string): (string | undefined)[] {
+  return extractSections(source, undefined, true).map(
+    (section) => section.id || undefined,
+  );
+}
+
+/**
+ * A deep dive's MDX as one section per heading. `ids` replaces each
+ * heading's own slug by position (a translation's, with the English ones).
+ */
+export function extractSections(
+  source: string,
+  ids?: readonly (string | undefined)[],
+  keepEmpty = false,
+): DeepDiveSection[] {
   const lines = source.split(/\r?\n/);
   const sections: DeepDiveSection[] = [];
   let current: (DeepDiveSection & { parts: string[] }) | null = null;
   let parent: string | undefined;
+  let headings = 0;
 
   const close = () => {
     if (!current) return;
@@ -103,16 +124,17 @@ export function extractSections(source: string): DeepDiveSection[] {
       i = end;
       continue;
     }
-    const heading = /^(#{1,3})\s+(.+?)\s*#*\s*$/.exec(line);
+    const heading = HEADING.exec(line);
     if (heading) {
       const text = inlineText(heading[2]);
-      const id = slugify(text);
-      if (!id) continue;
+      const id = ids ? ids[headings] : slugify(text);
+      headings++;
+      if (!id && !keepEmpty) continue;
       close();
       const level = heading[1].length;
       if (level < 3) parent = text;
       current = {
-        id,
+        id: id ?? "",
         heading: text,
         parent: level === 3 ? parent : undefined,
         text: "",

@@ -170,7 +170,7 @@ function deepDive(slug: string, project: ProjectPageConfig): string {
       ...whereToSee(project),
       `Stack: ${project.technologies.join(", ")}`,
     ]),
-    project.overview,
+    "overview" in copy && copy.overview,
     mdxToMarkdown(mdx),
   );
 }

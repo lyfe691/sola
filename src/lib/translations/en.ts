@@ -142,6 +142,7 @@ export const en = {
     demo: "Demo",
     moreProjects: "More Projects",
     onThisPage: "On this page",
+    onlyInEnglish: "This article is only available in English for now.",
     linkToSection: "Link to section: {title}",
     close: "Close",
     expandImage: "Expand image",
@@ -298,12 +299,16 @@ export const en = {
         tagline: "Any website's code as one ZIP",
         description:
           "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) is a Chrome and Edge extension that downloads a website's HTML, CSS, JavaScript and images as one ZIP file, with the folder structure kept. One click, no setup. It has about 6,000 users on the Chrome Web Store and works best on static sites.",
+        overview:
+          "Website Code Extractor is a one-button Chrome and Edge extension for saving a page to study how it's built. The ZIP it downloads opens straight from the folder, because the stylesheets, scripts and images its HTML references are saved next to it and linked by their new paths.",
       },
       applicare: {
         title: "AppliCare",
         tagline: "Every job application in one place",
         description:
           "[AppliCare](https://applicare.app) keeps track of your job applications. Add each one with its status, from applied to offer, attach tasks with deadlines, and follow your progress on a dashboard with a success rate and a timeline. Built with React, Ant Design, Spring Boot and MongoDB.",
+        overview:
+          "AppliCare is a job-application tracker I built end to end, from the React interface to the Java API and the database behind it. The API ties every request to its user through a signed token, so each account only ever sees its own applications and tasks.",
       },
       osint: {
         title: "OSINT Website",
@@ -352,78 +357,104 @@ export const en = {
         tagline: "Modern portfolio in React and TypeScript",
         description:
           "Sola is my personal website, the one you're on right now. It's built with React, TypeScript, and Tailwind CSS, and is designed to showcase my projects, skills, and experience in a clean and modern way.",
+        overview:
+          "Sola is the website you are currently on. It represents a modern approach to portfolio design, combining cutting-edge web technologies with thoughtful user experience. Built from the ground up with React and TypeScript, it showcases projects and skills through smooth animations, multiple themes, and a responsive design that works seamlessly across all devices. Its built to be fast and efficient, with a focus on user experience and performance.",
       },
       kinoa: {
         title: "Kinoa",
         tagline: "Free streaming, no noise",
         description:
           "[Kinoa](https://kinoa.to) is a free streaming site for films and series. Open a title and press play on the same page, no account needed; with an account you get a public @handle, a watchlist, a feed and messages, and Watch Together rooms where friends follow one host's playback. Titles come from TMDB, and the video plays in embedded players from third-party hosters.",
+        overview:
+          "Kinoa is a free site for films and series with a social layer around the player: profiles, a feed, comments, messages and Watch Together rooms. I've built it since November 2025 as a Next.js app on Supabase, and around 10,000 people use it each month.",
       },
       self: {
         title: "Self",
         tagline: "Neofetch, reimagined for Windows",
         description:
           "Self shows your system information in the terminal next to an image or ASCII art, the way Neofetch does on Linux, but for Windows. It installs with one PowerShell command, renders images as coloured blocks or braille, and has themes you can configure. Written in Python.",
+        overview:
+          "Self brings Neofetch's picture-and-facts screen to Windows PowerShell. I wrote it in Python in May 2025; it installs per user with one PowerShell command and is configured with a short setup wizard.",
       },
       taco: {
         title: "Taco",
         tagline: "A dog's website, built as a reusable template",
         description:
           "[Taco](https://takitwo.vercel.app) is a website about my brother's dog, built as a template I can reuse: pages in English, Spanish and Japanese with automatic language detection, a blog, a gallery and a contact page. Built with Next.js, TypeScript and Tailwind CSS.",
+        overview:
+          "Taco is my brother's Pomeranian, and this is his website. I set it up so the next small site of its kind can start from the same code and only swap in new colours and new text.",
       },
       thoughts: {
         title: "Thoughts",
         tagline: "Reflections, fragments, and notes",
         description:
           "[Thoughts](https://thoughts.ysz.life) is a small site where I write reflections, fragments and notes, separate from this portfolio. Posts are MDX files, and a guestbook lets visitors leave a note of their own. Inspired by [Shu Ding](https://shud.in)’s personal site.",
+        overview:
+          "Thoughts is my writing site, kept apart from this portfolio: a few pages of plain text and a guestbook that anyone can sign. I built it in August 2025 as a Next.js app on Vercel, with the posts as MDX files and the guestbook in Postgres.",
       },
       magi: {
         title: "magi",
         tagline: "Async port scanning, built to be correct",
         description:
           "[magi](https://magi.ysz.life) is a fast TCP and UDP port scanner written in Rust. It scans with ordinary connections, so it needs no root, and it only reports what it actually observed: a port it could not test is marked untestable instead of closed. One command installs it on Linux, macOS or Windows.",
+        overview:
+          "magi is a command-line port scanner for TCP and UDP, written in Rust on tokio, with prebuilt releases for Linux, macOS and Windows and a small site at magi.ysz.life. The scanning core is a library with its own integration tests, and the command-line tool is a thin layer over it.",
       },
       luma: {
         title: "Luma",
         tagline: "Bring your own keys, talk to any model",
         description:
           "[Luma](https://luma.ysz.life) is a chat app for every major AI model: bring your own API keys and switch between Claude, GPT, Gemini, Grok and more within one conversation. Edit any earlier message and the chat branches, keeping both paths. Your keys are encrypted before they are stored.",
+        overview:
+          "Luma is a web chat app for many model providers that runs on the user's own API keys, built with Next.js, the Vercel AI SDK and Supabase. Conversations are stored as a tree of messages, and keys are encrypted with AES-256-GCM and decrypted on the server only for the request that uses them.",
       },
       perspectas: {
         title: "perspectas.ch",
         tagline: "A consulting site built around one yellow dot",
         description:
           "The website of [perspectas gmbh](https://www.perspectas.ch), a consulting and recruiting firm near Zürich, rebuilt on Next.js and Sanity. Every text and image lives in the CMS, so the two partners publish changes themselves. The design has one accent: the yellow dot from their logo, which doubles as the headline's full stop.",
+        overview:
+          "perspectas gmbh is a consulting and recruiting firm in Wetzikon, near Zürich, run by two partners. Its website is in German and speaks to two audiences at once: companies that need help with staffing, and people looking for their next role.",
       },
       ura: {
         title: "Ura",
         tagline: "Snowmobile navigation for Lapland, even offline",
         description:
           "Ura is snowmobile navigation for Finnish Lapland, on iOS and Android. It carries around 2,900 routes and 3,500 places like fuel stations, cafés and huts on the phone, so it works where there is no signal. It tells you whether you are on a route, and when you aren't, how far away the nearest one is.",
+        overview:
+          "I designed and built Ura for a client: the rider app for iPhone and Android, and ura-app.com, the website that introduces it. The app is written in React and TypeScript and runs on both phones through Capacitor, with its map drawn by MapLibre.",
       },
       montu: {
         title: "Montu",
         tagline: "Swiss mountain journal, mapped from its GPX files",
         description:
           "[Montu](https://montu.ch) is a mountain-tour journal in German, built for a client who writes the tours and takes the photos himself. He uploads a GPX file, and the page draws the route on a terrain map with its elevation profile. Tours, photos and every other text are edited in a CMS, so publishing a new tour needs no developer.",
+        overview:
+          "Montu is a journal of Swiss mountain tours in German, from summer crossings to ski and splitboard tours, written and photographed by the friend I built it for. Each tour page is his account of the day, with the route, the figures and the way there and back alongside for anyone who wants to follow it.",
       },
       qr: {
         title: "QR",
         tagline: "Styled QR codes, with a decoder attached",
         description:
           "[qr.ysz.life](https://qr.ysz.life) is a QR code generator that runs entirely in your browser. Style the dots and corners, add gradients and a logo, then export as PNG, SVG, JPEG or WebP. A built-in scan test reads the finished code back, so you know it still scans before you print it.",
+        overview:
+          "qr.ysz.life is a QR code generator for styled codes: dot shapes, colours and gradients, and a logo in the middle. Because styling is what breaks a code, it also decodes exported images to check that they still scan.",
       },
       vault: {
         title: "Vault",
         tagline: "Keycloak, FastAPI and a realm defined in Terraform",
         description:
           "Vault is a local sandbox for learning OpenID Connect. Keycloak issues the tokens, a FastAPI service verifies them, and a Next.js frontend shows dashboards gated by role. The identity setup is declared in Terraform, so the whole thing can be torn down and rebuilt with one command.",
+        overview:
+          "Vault is an OpenID Connect sandbox that runs on one machine, with Keycloak and its database in Docker. Everything Keycloak needs, from the realm to the demo user, is written in Terraform, so one terraform apply rebuilds the whole identity setup from nothing.",
       },
       fleetmap: {
         title: "fleetmap",
         tagline: "Van phones stream GPS to an office TV",
         description:
           "fleetmap is a live map of a delivery fleet. Each van's phone reports its position, and a screen in the office shows every van moving, with its stops, ETA and how late it is running. Any past day can be replayed from the recorded track. Built with Next.js, Supabase and MapLibre.",
+        overview:
+          "I built fleetmap for a delivery company in Switzerland, as the screen its office keeps on the wall. It is a Next.js app on Supabase, with the map drawn by MapLibre and the road routes and arrival times worked out by OSRM.",
       },
     },
   },
