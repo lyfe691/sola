@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 import { OG_CARDS, ogCard, ogHash } from "../src/config/og-cards.ts";
 import { projectPagesConfig } from "../src/config/project-deep-dive.ts";
 import { en } from "../src/lib/translations/en.ts";
+import { hasMarkdown, markdownUrl } from "./page-markdown.ts";
 import { readRoutes } from "./route-preload.ts";
 import {
   HOME_TITLE,
@@ -228,7 +229,7 @@ describe("renderPage", () => {
         .replace(TAGS, "")
         .replace(/<title\b[\s\S]*?<\/title>/, "")
         .replace(
-          /<script type="application\/ld\+json">\{"@context".*<\/script>\n/,
+          /<script type="application\/ld\+json">\{"@context".*<\/script>\n/g,
           "",
         )
         .replace(/\s+/g, "");
@@ -303,6 +304,85 @@ describe("renderPage", () => {
         breadcrumbJsonLd(byPath("/projects/kinoa"))!,
       ).itemListElement.map((crumb: { name: string }) => crumb.name),
     ).toEqual(["Home", "Projects", "Kinoa"]);
+  });
+
+  it("links a page's Markdown from its head exactly when it has one", () => {
+    for (const page of ALL) {
+      const html = renderPage(INDEX, page);
+      const links = (html.match(TAGS) ?? []).filter((tag) =>
+        /\stype="text\/markdown"/.test(tag),
+      );
+      const has = page.path !== null && hasMarkdown(page.path);
+      expect(links, page.path ?? "404").toHaveLength(has ? 1 : 0);
+      if (has) {
+        expect(links[0]).toContain('rel="alternate"');
+        expect(links[0]).toContain(`href="${markdownUrl(page.path!)}"`);
+      }
+    }
+    for (const path of ["/contact", "/privacy", "/changelog", "/a"])
+      expect(hasMarkdown(path), path).toBe(false);
+  });
+
+  it("says what About, Projects and each deep dive are", () => {
+    const jsonLd = (page: SeoPage) =>
+      [
+        ...renderPage(INDEX, page).matchAll(
+          /<script type="application\/ld\+json">(\{"@context".*?)<\/script>/g,
+        ),
+      ].map(([, json]) => JSON.parse(json) as Record<string, unknown>);
+    const typed = (page: SeoPage, type: string) =>
+      jsonLd(page).find((item) => item["@type"] === type);
+    const person = { "@id": `${SITE_URL}/#person` };
+    const website = { "@id": `${SITE_URL}/#website` };
+
+    expect(typed(byPath("/about"), "ProfilePage")).toMatchObject({
+      url: `${SITE_URL}/about`,
+      mainEntity: person,
+      isPartOf: website,
+    });
+
+    const list = typed(byPath("/projects"), "CollectionPage") as {
+      mainEntity: { itemListElement: { url: string; position: number }[] };
+    };
+    const slugs = Object.keys(projectPagesConfig);
+    expect(
+      list.mainEntity.itemListElement.map((item) => item.url).sort(),
+    ).toEqual(slugs.map((slug) => `${SITE_URL}/projects/${slug}`).sort());
+
+    for (const slug of slugs) {
+      const page = byPath(`/projects/${slug}`);
+      const work = typed(page, "CreativeWork") as {
+        creator: unknown;
+        image: string;
+        dateCreated: string;
+        sameAs?: string[];
+      };
+      const project = projectPagesConfig[slug];
+      expect(work, slug).toMatchObject({
+        url: pageUrl(page),
+        creator: person,
+        image: imageUrl(page),
+        dateCreated: project.date.start,
+      });
+      // exactly the public links: never one the site itself keeps private
+      const allowed = [
+        !project.linkPrivate && project.links.live,
+        !project.sourcePrivate && project.links.github,
+      ].filter(Boolean);
+      expect(work.sameAs ?? [], slug).toEqual(allowed);
+    }
+
+    const described = ["ProfilePage", "CollectionPage", "CreativeWork"];
+    for (const path of ["/", "/skills", "/contact"])
+      expect(
+        jsonLd(byPath(path)).filter((item) =>
+          described.includes(String(item["@type"])),
+        ),
+        path,
+      ).toEqual([]);
+    // the ids pages point at are declared once, in index.html
+    expect(INDEX).toContain(`"@id": "${SITE_URL}/#person"`);
+    expect(INDEX).toContain(`"@id": "${SITE_URL}/#website"`);
   });
 
   it("escapes what it writes into attributes and script tags", () => {
@@ -385,6 +465,23 @@ describe("vercel.json", () => {
       { source: "/og/:key.png", destination: "/api/og?key=:key" },
     ]);
     expect(ALL.map(pageFile)).toContain("404.html");
+  });
+
+  it("serves the Markdown pages as UTF-8 Markdown that stays out of the index", () => {
+    const rule = (
+      config as {
+        headers?: {
+          source: string;
+          headers: { key: string; value: string }[];
+        }[];
+      }
+    ).headers?.find((entry) => entry.source === "/(.*)\\.md");
+    expect(rule?.headers).toEqual(
+      expect.arrayContaining([
+        { key: "Content-Type", value: "text/markdown; charset=utf-8" },
+        { key: "X-Robots-Tag", value: "noindex" },
+      ]),
+    );
   });
 });
 

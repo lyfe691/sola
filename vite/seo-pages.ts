@@ -23,9 +23,17 @@ import path from "node:path";
 import type { Plugin } from "vite";
 import { ogImageUrl } from "../src/config/og-cards.ts";
 import { projectPagesConfig } from "../src/config/project-deep-dive.ts";
+import { PROJECTS } from "../src/config/projects.ts";
 import { OWNER, ROLE, SITE_URL } from "../src/config/site.ts";
 import { en, type Translation } from "../src/lib/translations/en.ts";
 import { inlineText } from "./deep-dive-index.ts";
+import {
+  hasMarkdown,
+  llmsFull,
+  markdownFile,
+  markdownUrl,
+  pageMarkdown,
+} from "./page-markdown.ts";
 import { readRoutes } from "./route-preload.ts";
 
 export { SITE_URL };
@@ -254,6 +262,66 @@ export function breadcrumbJsonLd(page: SeoPage): string | null {
   }).replace(/</g, "\\u003c");
 }
 
+/** index.html's WebSite and Person, which every page carries */
+const WEBSITE = { "@id": `${SITE_URL}/#website` };
+const PERSON = { "@id": `${SITE_URL}/#person` };
+
+/**
+ * What a page is, for search engines and agents, beyond its breadcrumbs:
+ * About is the profile of the Person, Projects is the list of deep dives,
+ * and a deep dive is a work of the Person's. null for every other page.
+ */
+export function pageJsonLd(page: SeoPage): string | null {
+  const base = {
+    "@context": "https://schema.org",
+    url: pageUrl(page),
+    name: page.title,
+    isPartOf: WEBSITE,
+  };
+  let json: object | null = null;
+  if (page.path === "/about")
+    json = { ...base, "@type": "ProfilePage", mainEntity: PERSON };
+  else if (page.path === "/projects")
+    json = {
+      ...base,
+      "@type": "CollectionPage",
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: PROJECTS.filter((p) => p.slug && p.deepDive)
+          .sort((a, b) => a.priority - b.priority)
+          .map((project, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            url: `${SITE_URL}/projects/${project.slug}`,
+            name: en.projects.list[project.i18nKey].title,
+          })),
+      },
+    };
+  else if (page.path === `/projects/${page.key}`) {
+    const project = projectPagesConfig[page.key];
+    const copy = en.projects.list[project.i18nKey];
+    const sameAs = [
+      !project.linkPrivate && project.links.live,
+      !project.sourcePrivate && project.links.github,
+    ].filter(Boolean);
+    json = {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      url: pageUrl(page),
+      name: copy.title,
+      headline: copy.tagline,
+      description: page.description,
+      image: imageUrl(page),
+      dateCreated: project.date.start,
+      creator: PERSON,
+      keywords: project.technologies.join(", "),
+      isPartOf: WEBSITE,
+      ...(sameAs.length ? { sameAs } : {}),
+    };
+  }
+  return json && JSON.stringify(json).replace(/</g, "\\u003c");
+}
+
 const escapeText = (text: string) =>
   text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const escapeAttr = (text: string) => escapeText(text).replace(/"/g, "&quot;");
@@ -357,13 +425,20 @@ export function renderPage(html: string, page: SeoPage): string {
     setMeta("name", "bingbot", "noindex, nofollow");
   }
 
-  const crumbs = breadcrumbJsonLd(page);
-  if (crumbs) {
+  const extra = [breadcrumbJsonLd(page), pageJsonLd(page)]
+    .filter((json): json is string => json !== null)
+    .map((json) => `<script type="application/ld+json">${json}</script>`);
+  if (page.path !== null && hasMarkdown(page.path))
+    extra.unshift(
+      `<link rel="alternate" type="text/markdown" href="${escapeAttr(markdownUrl(page.path))}" />`,
+    );
+  if (extra.length) {
     const close = html.lastIndexOf("</head>");
     if (close < 0) throw new Error("seo-pages: index.html has no </head>");
     const at = html.lastIndexOf("\n", close) + 1;
     html =
-      `${html.slice(0, at)}    <script type="application/ld+json">${crumbs}</script>\n` +
+      html.slice(0, at) +
+      extra.map((tag) => `    ${tag}\n`).join("") +
       html.slice(at);
   }
   return html;
@@ -383,12 +458,18 @@ export function seoPages(): Plugin {
         const shell = String(index.source);
         const pages = sitePages();
 
-        for (const page of [...pages, notFoundPage(en)]) {
-          const file = path.join(dir, pageFile(page));
+        const write = (name: string, text: string) => {
+          const file = path.join(dir, name);
           fs.mkdirSync(path.dirname(file), { recursive: true });
-          fs.writeFileSync(file, renderPage(shell, page));
+          fs.writeFileSync(file, text);
+        };
+        for (const page of [...pages, notFoundPage(en)]) {
+          write(pageFile(page), renderPage(shell, page));
+          const markdown = page.path && pageMarkdown(page.path);
+          if (page.path && markdown) write(markdownFile(page.path), markdown);
         }
-        fs.writeFileSync(path.join(dir, "sitemap.xml"), sitemapXml(pages));
+        write("sitemap.xml", sitemapXml(pages));
+        write("llms-full.txt", llmsFull());
       },
     },
   };

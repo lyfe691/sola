@@ -6,7 +6,9 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { formatDateRange, INTL_LOCALE, type YearMonth } from "@/lib/dates";
+// the build reads this in plain Node (vite/page-markdown.ts): relative, with
+// its extension
+import { formatDateRange, INTL_LOCALE, type YearMonth } from "./dates.ts";
 import type { Language } from "@/config/languages";
 import type { Translation } from "@/lib/translations";
 

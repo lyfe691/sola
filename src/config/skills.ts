@@ -2,7 +2,9 @@
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  */
 
-import { PROJECTS, type ProjectMeta } from "@/config/projects";
+// the build reads this in plain Node (vite/page-markdown.ts): relative, with
+// its extension
+import { PROJECTS, type ProjectMeta } from "./projects.ts";
 
 // 1-5 scale: 1=learning, 2=familiar, 3=comfortable, 4=proficient, 5=advanced
 export type Proficiency = 1 | 2 | 3 | 4 | 5;

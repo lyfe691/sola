@@ -4,15 +4,17 @@
 
 Studied computer science at WISS and still attends for the general-education part (Allgemeinbildung) of the program, working an internship at Nadlo (React, Next.js, NestJS, Supabase), and taking on freelance/contract web development (React, Next.js, Spring Boot) on the side. Has a background in identity & access management and cybersecurity from a prior IAM internship. Personal projects mostly run on React/Next.js/TypeScript on the frontend with Supabase/PostgreSQL for data, Spring Boot or Rust where a project calls for it, and a long-running interest in offensive security (OSINT, Kali Linux, Burp Suite). Content is available in English, German, Spanish, Japanese, Korean, and Chinese via a language switcher; the URLs below serve the English version.
 
+The pages run as a JavaScript app, so their HTML carries no text until it boots. The links below point to each page's Markdown version (the same URL with `.md`; home is `index.html.md`), and [llms-full.txt](https://sola.ysz.life/llms-full.txt) holds all of them in one file.
+
 ## Pages
 
-- [Home](https://sola.ysz.life/): Introduction and quick links to socials and contact.
-- [About](https://sola.ysz.life/about): Background, interests, and personal story.
-- [Experience](https://sola.ysz.life/experience): Education and work history.
-- [Projects](https://sola.ysz.life/projects): Full list of software projects, including smaller/archived ones not listed below.
-- [Skills](https://sola.ysz.life/skills): Technical skills and proficiency levels.
-- [Certifications](https://sola.ysz.life/certifications): Certificates and credentials earned.
-- [Services](https://sola.ysz.life/services): Freelance and contract services offered.
+- [Home](https://sola.ysz.life/index.html.md): Introduction and quick links to socials and contact.
+- [About](https://sola.ysz.life/about.md): Background, interests, and personal story.
+- [Experience](https://sola.ysz.life/experience.md): Education and work history.
+- [Projects](https://sola.ysz.life/projects.md): Full list of software projects, including smaller/archived ones not listed below.
+- [Skills](https://sola.ysz.life/skills.md): Technical skills and proficiency levels.
+- [Certifications](https://sola.ysz.life/certifications.md): Certificates and credentials earned.
+- [Services](https://sola.ysz.life/services.md): Freelance and contract services offered.
 - [Contact](https://sola.ysz.life/contact): Contact form and direct contact links.
 - [Changelog](https://sola.ysz.life/changelog): Git history of this site — commits, file trees, and patches.
 - [Privacy](https://sola.ysz.life/privacy): Privacy policy covering hosting, analytics, processors, and visitors' rights.
@@ -21,21 +23,21 @@ Studied computer science at WISS and still attends for the general-education par
 
 Ordered by current relevance. Each has its own deep-dive page.
 
-- [Kinoa](https://sola.ysz.life/projects/kinoa): Free streaming site for films and series, no subscription — Next.js App Router, Supabase, PostgreSQL.
-- [Sola](https://sola.ysz.life/projects/sola): This portfolio site — React (Vite), TypeScript, Tailwind CSS, shadcn/ui, Three.js.
-- [fleetmap](https://sola.ysz.life/projects/fleetmap): Live map of a delivery fleet for an office screen, showing each van's stops, ETA and delay, with any past day replayable from its recorded track. Client work, not publicly accessible — Next.js, Supabase, MapLibre, OSRM.
-- [Ura](https://sola.ysz.life/projects/ura): Snowmobile navigation app for Finnish Lapland on iOS and Android. It works without signal and shows whether you are on a route or how far the nearest one is. Client work — React, Capacitor, MapLibre.
-- [perspectas.ch](https://sola.ysz.life/projects/perspectas): Website of perspectas gmbh, a consulting and recruiting firm near Zürich, whose two partners edit every text and image themselves in a CMS. Client work — Next.js, Sanity, Tailwind CSS.
-- [Montu](https://sola.ysz.life/projects/montu): Journal of Swiss mountain tours in German, built for the client who writes and photographs them. A GPX upload draws each route on a terrain map with its elevation profile — Next.js, Sanity, Mapbox.
-- [magi](https://sola.ysz.life/projects/magi): Fast, asynchronous TCP/UDP port scanner written in Rust with tokio.
-- [Luma](https://sola.ysz.life/projects/luma): Multi-model, bring-your-own-key AI chat platform — Next.js 16, Vercel AI SDK, Supabase.
-- [AppliCare](https://sola.ysz.life/projects/applicare): Job application tracking system — React (Vite), Spring Boot, MongoDB.
-- [Self](https://sola.ysz.life/projects/self): Customizable Windows system-info display tool inspired by Neofetch, built with Python.
-- [QR](https://sola.ysz.life/projects/qr): QR code generator that runs in the browser, with styled dots, corners, gradients and logos, export to PNG, SVG, JPEG or WebP, and a built-in scan test that reads the finished code back — Next.js, qr-code-styling, qr-scanner.
-- [Website Code Extractor](https://sola.ysz.life/projects/code-extractor): Chrome and Edge extension for extracting and downloading a website's source code.
-- [Thoughts](https://sola.ysz.life/projects/thoughts): Minimal personal site for reflections and notes, with a custom guestbook.
-- [Taco](https://sola.ysz.life/projects/taco): Website about my brother's dog, built as a reusable Next.js template with English, Spanish and Japanese pages and a blog.
-- [Vault](https://sola.ysz.life/projects/vault): Local sandbox for learning OpenID Connect, where Keycloak issues the tokens, a FastAPI service verifies them and the identity setup is declared in Terraform — Keycloak, FastAPI, Terraform, Next.js.
+- [Kinoa](https://sola.ysz.life/projects/kinoa.md): Free streaming site for films and series, no subscription — Next.js App Router, Supabase, PostgreSQL.
+- [Sola](https://sola.ysz.life/projects/sola.md): This portfolio site — React (Vite), TypeScript, Tailwind CSS, shadcn/ui, Three.js.
+- [fleetmap](https://sola.ysz.life/projects/fleetmap.md): Live map of a delivery fleet for an office screen, showing each van's stops, ETA and delay, with any past day replayable from its recorded track. Client work, not publicly accessible — Next.js, Supabase, MapLibre, OSRM.
+- [Ura](https://sola.ysz.life/projects/ura.md): Snowmobile navigation app for Finnish Lapland on iOS and Android. It works without signal and shows whether you are on a route or how far the nearest one is. Client work — React, Capacitor, MapLibre.
+- [perspectas.ch](https://sola.ysz.life/projects/perspectas.md): Website of perspectas gmbh, a consulting and recruiting firm near Zürich, whose two partners edit every text and image themselves in a CMS. Client work — Next.js, Sanity, Tailwind CSS.
+- [Montu](https://sola.ysz.life/projects/montu.md): Journal of Swiss mountain tours in German, built for the client who writes and photographs them. A GPX upload draws each route on a terrain map with its elevation profile — Next.js, Sanity, Mapbox.
+- [magi](https://sola.ysz.life/projects/magi.md): Fast, asynchronous TCP/UDP port scanner written in Rust with tokio.
+- [Luma](https://sola.ysz.life/projects/luma.md): Multi-model, bring-your-own-key AI chat platform — Next.js 16, Vercel AI SDK, Supabase.
+- [AppliCare](https://sola.ysz.life/projects/applicare.md): Job application tracking system — React (Vite), Spring Boot, MongoDB.
+- [Self](https://sola.ysz.life/projects/self.md): Customizable Windows system-info display tool inspired by Neofetch, built with Python.
+- [QR](https://sola.ysz.life/projects/qr.md): QR code generator that runs in the browser, with styled dots, corners, gradients and logos, export to PNG, SVG, JPEG or WebP, and a built-in scan test that reads the finished code back — Next.js, qr-code-styling, qr-scanner.
+- [Website Code Extractor](https://sola.ysz.life/projects/code-extractor.md): Chrome and Edge extension for extracting and downloading a website's source code.
+- [Thoughts](https://sola.ysz.life/projects/thoughts.md): Minimal personal site for reflections and notes, with a custom guestbook.
+- [Taco](https://sola.ysz.life/projects/taco.md): Website about my brother's dog, built as a reusable Next.js template with English, Spanish and Japanese pages and a blog.
+- [Vault](https://sola.ysz.life/projects/vault.md): Local sandbox for learning OpenID Connect, where Keycloak issues the tokens, a FastAPI service verifies them and the identity setup is declared in Terraform — Keycloak, FastAPI, Terraform, Next.js.
 
 ## Optional
 

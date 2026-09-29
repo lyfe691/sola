@@ -52,7 +52,7 @@ export const inlineText = (line: string): string =>
  * past quoted and template-literal attributes (a CodeBlock's code can hold
  * `/>` of its own).
  */
-const jsxEnd = (lines: string[], start: number): number => {
+export const jsxEnd = (lines: string[], start: number): number => {
   let quote: string | null = null;
   let depth = 0;
   for (let i = start; i < lines.length; i++) {

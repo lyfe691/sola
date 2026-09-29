@@ -8,7 +8,9 @@ import { LANGUAGES } from "./languages";
 import { PROJECTS } from "./projects";
 
 const listedSlugs = [
-  ...llms.matchAll(/\]\(https:\/\/sola\.ysz\.life\/projects\/([^)\s]+)\)/g),
+  ...llms.matchAll(
+    /\]\(https:\/\/sola\.ysz\.life\/projects\/([^)\s.]+)(?:\.md)?\)/g,
+  ),
 ].map((match) => match[1]);
 
 const deepDiveSlugs = PROJECTS.flatMap((project) =>

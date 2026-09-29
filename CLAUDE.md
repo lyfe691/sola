@@ -46,6 +46,14 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   tagline gets a new URL by itself (a new look bumps `OG_VERSION`). A new
   page needs a card entry there (deep dives get theirs from `projects.ts`);
   the build and a test fail without one.
+- **Agent-readable pages**: the HTML has no body text until the app boots,
+  so the build also writes each page as Markdown (`vite/page-markdown.ts`:
+  `about.md`, `projects/<slug>.md` from its MDX, home `index.html.md`), links
+  it from the head, joins them into `llms-full.txt`, and `public/llms.txt`
+  links them (a test keeps it in step). Everything the build reads runs in
+  plain Node: no runtime `@/` imports in `en.ts`, the configs it uses, or
+  `src/lib/{dates,experience}.ts`. A new MDX component needs a case in
+  `mdxToMarkdown`, or it is dropped from the Markdown.
 - **i18n**: hand-rolled. `src/lib/translations/{en,de,es,ja,ko,zh}.ts`; `en.ts`
   defines the `Translation` type, so every locale must mirror new keys.
   Components read the active dictionary with `useTranslation()`; never
