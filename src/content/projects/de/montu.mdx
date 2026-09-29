@@ -1,0 +1,138 @@
+export const source = "8b1ee814cb0a";
+
+# Montu, ein Journal über Schweizer Bergtouren
+
+[montu.ch](https://montu.ch) sammelt die Bergtouren eines Freundes in der Schweiz, Sommer wie Winter, jede auf Deutsch aufgeschrieben und mit seinen eigenen Fotografien. Ich habe die Seite für ihn gebaut, und neue Touren veröffentlicht er selbst, über einen Content-Editor in seinem Browser.
+
+<Safari
+  url="montu.ch"
+  src="/projects/montu/home-desktop.webp"
+  video="/projects/montu/home-desktop.mp4"
+  alt="Die Startseite von Montu: Die Überschrift in Serifenschrift, Faszination Bergtouren, wird Buchstabe für Buchstabe aus der Unschärfe scharf, über einem Foto eines nebligen Waldes, dann wechselt die Diashow mit einer Überblendung zu einer Hüttenterrasse über einem türkisfarbenen Stausee und weiter zu Skitourengehern an einem verschneiten Hang"
+  caption="Die Startseite beginnt mit einer Diashow seiner Fotografien."
+/>
+
+## Was er wollte
+
+Er wollte einen Ort, an dem er seine Touren so aufbewahrt, wie er sie in Erinnerung hat. Die Seite sagt es mit ihren eigenen Worten: Die technischen Angaben sind nur «sanfte Wegweiser», und das Ganze ist «mehr Tagebuch als Führer». So beginnt jede Seite mit einer Fotografie und seinem Text, und die Zahlen folgen für alle, die losziehen wollen.
+
+<ProjectImage
+  src="/projects/montu/about-desktop.webp"
+  alt="Willkommen bei Montu.: eine Fotografie eines Felsblocks in einem nebligen Tal neben der Einführung der Seite, die mit der Zeile mehr Tagebuch als Führer endet, und eine Schaltfläche mit der Aufschrift Touren ansehen"
+  caption="Die Einführung, in seinen Worten."
+  size="full"
+/>
+
+Auf der Startseite ist jede Tour eine grosse Fotokachel mit ihrer Region, ihrem Titel, einem kurzen Teaser, den er dafür schreibt, und einer Reihe aus drei Kennzahlen: Höhenmeter, Strecke und Schwierigkeitsgrad.
+
+<ProjectImage
+  src="/projects/montu/home-tours-desktop.webp"
+  alt="Die Touren im Überblick: Fotokacheln mit abgerundeten Ecken, eine mit einem Bergstausee, eine mit Skitourengehern an einem verschneiten Hang, jede mit einer Regionsangabe, einem Titel in Serifenschrift, einem kurzen Auszug und einer Reihe von Kennzahlen"
+  caption="Die Touren auf der Startseite: zuerst die Fotografie, am Schluss die Zahlen."
+  size="full"
+/>
+
+## Eine Tourenseite
+
+Eine Tour liest sich von oben nach unten:
+
+1. Das Titelfoto, mit der Art der Tour, ihrem Schwierigkeitsgrad, der Region, dem Höhenbereich und dem Datum.
+2. Seine Einführung.
+3. Die Eckdaten, das Höhenprofil und die Karte.
+4. Die Etappen, eine nach der anderen.
+5. Links zu den Hütten, Bergbahnen und anderen Orten entlang der Route, wo er sie ergänzt.
+
+<ProjectImage
+  src="/projects/montu/tour-hero-desktop.webp"
+  video="/projects/montu/tour-hero-desktop.mp4"
+  alt="Scrollen durch die Tour Linthal - Muttsee - Kistenpass - Brigels: vom Titelfoto einer Hüttenterrasse über einem Stausee, vorbei an der Einführung, den Eckdaten, dem Höhenprofil und der Karte, bis zu den ersten zwei Etappen"
+  caption="Eine Tour, vom Titelfoto bis zu den Etappen."
+  size="full"
+/>
+
+## Die Etappen
+
+Jede Etappe hat eigene Fotos zum Durchblättern, jedes mit einer Bildunterschrift, neben eigenen Zahlen und einem eigenen Text. Lässt sich ein Teil der Route überspringen, etwa mit einer Seilbahn, endet die Etappe mit der Alternative in einem orangen Hinweis.
+
+<ProjectImage
+  src="/projects/montu/tour-stage-desktop.webp"
+  video="/projects/montu/tour-stage-desktop.mp4"
+  alt="Die erste Etappe, Linthal bis Bergstation Chalchtrittli: Die Pfeile neben ihrem Foto blättern von einem kettengesicherten Felsweg zu einer Talansicht und einem Wegweiser, daneben die Zahlen und der Text der Etappe, der in einem orangen Hinweis zur Alternative mit Taxi und Seilbahn endet"
+  caption="Durch die Fotografien einer Etappe blättern."
+  size="full"
+/>
+
+## Karte und Höhenprofil aus einer GPS-Datei
+
+Eine GPS-Uhr oder eine Handy-App zeichnet eine Tour als GPX-Datei auf: die Route als Liste von Punkten, jeder mit seiner Höhe. Diese eine Datei lädt er zur Tour hoch. Die Seite zeichnet die Route auf einer Geländekarte, mit einem grünen Pin am Start und einem orangen am Ende, und trägt das Höhenprofil aus denselben Punkten auf. Das Profil wählt seinen Massstab selbst, sodass eine kurze Skitour und eine lange Überschreitung beide sauber lesbar sind, und wer mit dem Zeiger daran entlangfährt, sieht die Höhe.
+
+Die Schwierigkeitsgrade folgen den Skalen des Schweizer Alpen-Clubs:
+
+| Tour          | Skala                                                                 |
+| ------------- | --------------------------------------------------------------------- |
+| Wandern       | T1, ein leichter Spaziergang, bis T6, schwieriges Alpinwandern        |
+| Ski und Alpin | L, leicht, bis EX, extrem schwierig                                   |
+| Schneeschuh   | WT1, ein leichter Spaziergang, bis WT6, eine anspruchsvolle Alpintour |
+
+Wer mit dem Zeiger über den Schwierigkeitsgrad einer Tour fährt oder ihn antippt, sieht ihn ausgeschrieben, dazu den Namen der Skala und einen Link zu deren Beschreibung.
+
+<ProjectImage
+  src="/projects/montu/tour-elevation-desktop.webp"
+  video="/projects/montu/tour-elevation-desktop.mp4"
+  alt="Eckdaten der Tour: Der Zeiger über dem Schwierigkeitsgrad T3 öffnet ein Popover, das ihn als Anspruchsvolle Bergwanderung ausschreibt und auf die SAC-Skala verlinkt, dann läuft der Zeiger am Höhenprofil entlang, während ein Tooltip die Höhe anzeigt"
+  caption="Der Schwierigkeitsgrad erklärt und das Profil abgelesen."
+  size="full"
+/>
+
+Die Karte ist eine dynamische Geländekarte, sodass jeder Besucher in jeden Teil der Route hineinzoomen kann. Daneben schreibt er, wie man hin- und zurückkommt und welche Mindestausrüstung mitzunehmen ist.
+
+<ProjectImage
+  src="/projects/montu/tour-map-desktop.webp"
+  video="/projects/montu/tour-map-desktop.mp4"
+  alt="Die Geländekarte unter dem Profil mit der orangen Route von einem grünen Pin in Linthal zu einem orangen Pin in Brigels: Sie zoomt zweimal hinein und wird an der Route entlang an den Stauseen vorbeigezogen, daneben Hinweise zur Hinreise, zur Rückreise und zur Ausrüstung"
+  caption="Entlang der Route hineinzoomen."
+  size="full"
+/>
+
+## Design
+
+Die Überschriften sind in einer Serifenschrift gesetzt, der Text in einer ruhigen Grotesk, und die Fotografien laufen gross mit abgerundeten Ecken. Das Menü ist ein kleines Glaspanel in der Ecke, das den Abschnitt nennt, in dem man sich befindet, und es enthält den Schalter zwischen hell, dunkel und der Einstellung des Systems.
+
+<ProjectImage
+  src="/projects/montu/theme.webp"
+  video="/projects/montu/theme.mp4"
+  alt="Der Abschnitt Touren der Startseite: Das Menü in der oberen rechten Ecke öffnet sich mit Home, Über Montu, Touren, Info Eckdaten und Info Planung, die Seite wechselt über sein Steuerelement Modus in den dunklen Modus und zurück ins Helle, und das Menü schliesst sich"
+  caption="Das Menü und der Wechsel ins Dunkle."
+  size="full"
+/>
+
+## Was er selbst bearbeitet
+
+Die Seite ist mit Next.js gebaut, und alles, was ein Besucher liest, liegt in Sanity, einem in die Seite eingebauten Content-Editor. Eine Tour ist ein einziges Formular, in Tabs unterteilt, von den allgemeinen Angaben bis zu Route und Logistik. Der Schwierigkeitsgrad wird aus einer Liste gewählt statt getippt, sodass die Beschriftung auf der Seite immer zur Skala passt, und eine Etappe fragt erst dann nach einer Alternative, wenn er sie als überspringbar markiert.
+
+Die Startseite wird auf dieselbe Weise bearbeitet, von den Fotos der Diashow bis zum Text über das Projekt. Veröffentlicht er, übernimmt die Seite die Änderung von selbst, ohne Entwickler.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/montu/titschal-desktop.webp",
+      frame: "safari",
+      url: "montu.ch/tour/piz-titschal-2550m",
+      alt: "Die Tour Piz Titschal (2550m): Skitourengeher steigen unter blauem Himmel einen verschneiten Grat hinauf, mit den Etiketten Splitboardtour und L – Leicht, dem Titel und einer Zeile mit Surselva, Graubünden, 1344m – 2550m, 15. Februar 2026",
+      caption: "Eine Wintertour auf dem Desktop.",
+    },
+    {
+      src: "/projects/montu/home-mobile.webp",
+      frame: "iphone",
+      alt: "Die Startseite auf einem Handy: Faszination Bergtouren über einem Foto eines nebligen Waldes, mit der Schaltfläche Eintauchen & Entdecken und den Punkten der Diashow",
+      caption: "Startseite auf dem Handy.",
+    },
+    {
+      src: "/projects/montu/tour-stats-mobile.webp",
+      frame: "iphone",
+      alt: "Eckdaten der Tour in Handybreite: vier Zahlen in einem Raster aus zwei mal zwei, das Höhenprofil und die Geländekarte mit der Route zwischen einem grünen und einem orangen Pin",
+      caption: "Profil und Karte auf dem Handy.",
+    },
+  ]}
+  columns={3}
+/>

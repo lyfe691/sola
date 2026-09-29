@@ -1,0 +1,124 @@
+export const source = "7e0e9fa94834";
+
+# Systeminfos im Neofetch-Stil für Windows PowerShell
+
+Self gibt in Windows PowerShell ein Bild und eine Spalte mit Systemangaben nebeneinander aus, so wie [Neofetch](https://github.com/dylanaraps/neofetch) es unter Linux tut. Das Bild kann eine beliebige Bilddatei sein, im Terminal mit farbigen Textzeichen nachgezeichnet, und die Angaben reichen von der Windows-Edition bis zu den Laufwerken.
+
+<ProjectImage
+  src="/projects/self/hero.webp"
+  video="/projects/self/hero.mp4"
+  alt="Ein PowerShell-Fenster im Vollbild: An der Eingabeaufforderung wird self getippt, der Bildschirm wird geleert, und links erscheint ein verpixeltes Porträt aus farbigen Blöcken, rechts eine Spalte mit Systemangaben von OS bis Disk, am Ende mit der Laufzeit und einer Reihe von Farbfeldern"
+  caption="self in PowerShell eintippen."
+  size="full"
+/>
+
+## Was ausgegeben wird
+
+Links steht ein Bild aus dem Ordner `images` oder eine beliebige Datei, die mit `--image` übergeben wird, skaliert auf eine Höhe und Breite, die in Zeichen angegeben werden. Jede Zeichenzelle enthält zwei Pixel, und jedes Pixel behält seine eigene Farbe durch 24-Bit-Escape-Codes, sodass ein Foto oder eine Zeichnung schon bei ein paar Dutzend Zeichen Breite erkennbar bleibt. Ein Braille-Modus zeichnet stattdessen feinere Punkte, mit einer Farbe pro Zelle.
+
+Rechts folgen unter `user@host` die Windows-Edition, die Uptime, die Paketzahlen von Chocolatey, Scoop und winget, die Shell, Bildschirmauflösung und Theme, der Prozessor, die Grafikkarte, der Arbeitsspeicher und die Laufwerke. Die Konfiguration bestimmt, welche Zeilen erscheinen, und ein Farb-Theme legt die Farben der Bezeichnungen fest. Die Spalte endet damit, wie lange das Einholen der Angaben gedauert hat, und einer Reihe der sechzehn klassischen Konsolenfarben.
+
+<ProjectImage
+  src="/projects/self/block-mode.webp"
+  alt="Die Ausgabe von Self mit einem anderen Bild: eine Anime-Figur mit cyanfarbenem Haar vor einem hellen, sandfarbenen Hintergrund, in farbigen Blöcken gezeichnet, neben derselben Spalte mit Systemangaben"
+  caption="Ein anderes Bild, in derselben Grösse gezeichnet."
+  size="full"
+/>
+
+## ASCII-Art
+
+`--ascii` ersetzt das Bild durch eine Zeichnung aus dem Ordner `ascii`: eine reine Textdatei, die Self genau so ausgibt, wie sie geschrieben ist. Alles, was aus Zeichen besteht, funktioniert, auch Zeichnungen aus Braille-Punkten wie diese hier.
+
+<ProjectImage
+  src="/projects/self/ascii-art.webp"
+  alt="Die Ausgabe von Self mit einer Textzeichnung von Totoro mit einem Regenschirm, aus Braille-Punkten gemacht, neben der Spalte mit Systemangaben, deren Bezeichnungen grün sind"
+  caption="Totoro aus dem Ordner ascii, mit dem grünen Theme."
+  size="full"
+/>
+
+## Installation und Einrichtung
+
+Self wird mit einer Zeile in PowerShell installiert:
+
+```powershell
+iwr -Uri "https://raw.githubusercontent.com/lyfe691/self/main/install.ps1" -UseBasicParsing | iex
+```
+
+Das Skript lädt Self in einen Ordner `self` im Benutzerprofil, legt einen Starter `self.bat` an, nimmt den Ordner in den `PATH` des Benutzers auf und installiert die Python-Pakete mit pip. Es braucht Python, aber keine Administratorrechte. Danach ist `self` ein Befehl wie jeder andere:
+
+| Befehl                | Bewirkt                                                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `self`                | Gibt das Bild und die Angaben aus                                                                                   |
+| `self --setup`        | Fragt nach der Anzeigeart, dem Bild oder der Zeichnung, dem Theme und der Grösse und speichert sie in `config.json` |
+| `self --image <file>` | Verwendet ein anderes Bild, aus dem Ordner `images` oder von einem beliebigen Pfad                                  |
+| `self --ascii <name>` | Verwendet statt eines Bildes eine Zeichnung aus dem Ordner `ascii`                                                  |
+| `self --no-cache`     | Holt die Angaben neu ein, statt aus dem Fünf-Minuten-Cache                                                          |
+| `self --update`       | Holt die neueste Version und lässt die Konfiguration, den Cache und Ihre eigenen Bilder unberührt                   |
+
+<ProjectImage
+  src="/projects/self/setup.webp"
+  video="/projects/self/setup.mp4"
+  alt="Ein PowerShell-Fenster im Vollbild, in dem self --setup läuft: Der Assistent listet die Anzeigearten auf, dann die Zeichnungen im Ordner ascii, dann die Farb-Themes, und die Antworten 3, 7 und 5 wählen ASCII-Art, die Totoro-Zeichnung und das grüne Theme, bevor er meldet, wo die Konfiguration gespeichert wurde"
+  caption="self --setup, mit der Totoro-Zeichnung und dem grünen Theme."
+  size="full"
+/>
+
+## So ist es gebaut
+
+Self ist ein kleines Python-Programm aus vier Modulen: der Anzeige, dem Bild, den Angaben und den Farb-Themes. Pillow liest die Bilder ein und ändert ihre Grösse, psutil liefert Arbeitsspeicher, Laufwerke und Uptime, und colorama stellt die Theme-Farben bereit.
+
+### Zwei Pixel pro Zeichen
+
+Eine Terminalzelle ist etwa doppelt so hoch wie breit. Das Halbblock-Zeichen `▀` füllt die obere Hälfte einer Zelle mit der Vordergrundfarbe und überlässt die untere Hälfte der Hintergrundfarbe, sodass eine Zelle, bei der beide gesetzt sind, zwei annähernd quadratische Pixel enthält. `rgb_to_ansi` erzeugt die beiden Escape-Codes, `\033[38;2;r;g;bm` für den Vordergrund und `\033[48;2;r;g;bm` für den Hintergrund, und der Block-Modus geht das Bild zwei Zeilen auf einmal durch:
+
+<CodeBlock
+  code={`for y in range(0, img_height, 2):
+      line = ""
+      for x in range(img_width):
+          r_upper, g_upper, b_upper = pixels[x, y]
+          if y + 1 < img_height:
+              r_lower, g_lower, b_lower = pixels[x, y + 1]
+          else:
+              r_lower, g_lower, b_lower = r_upper, g_upper, b_upper
+          # '▀' character (upper half block)
+          line += f"{rgb_to_ansi(r_upper, g_upper, b_upper)}{rgb_to_ansi(r_lower, g_lower, b_lower, bg=True)}▀{RESET}"
+      lines.append(line)`}
+  fileName="image_handler.py"
+  lang="python"
+/>
+
+Sind Höhe und Breite gleich, verdoppelt der Block-Modus die Breite, weil ein quadratisches Bild doppelt so viele Spalten wie Zeilen braucht. Die Einstellung 26 mal 26 im Clip oben wird zu einem Bild von 52 × 52 Pixeln, das Pillow mit Nearest-Neighbour-Abtastung skaliert und das als 26 Zeilen zu 52 Zeichen ausgegeben wird.
+
+### Auffüllen nach sichtbarer Breite
+
+Diese Zeilen sind lang. Jede Zelle trägt einen Vordergrundcode, einen Hintergrundcode, das Zeichen und einen Reset-Code, sodass eine Zeile dieses Bildes bei 52 sichtbaren Spalten auf rund 1900 Zeichen kommt und `len()` sie alle mitzählt. Damit die Angaben neben dem Bild ausgerichtet stehen, misst Self jede Zeile, nachdem ein regulärer Ausdruck die Escape-Codes entfernt hat, und füllt dann die kürzeren Zeilen mit Leerzeichen auf die Breite der breitesten auf.
+
+### Acht Punkte pro Braille-Zeichen
+
+Der Braille-Modus tauscht Farbe gegen Auflösung. Der Braille-Block von Unicode beginnt bei U+2800 und codiert die acht Punkte einer Zelle als Bits des Offsets, sodass jedes Muster auf einem Raster von 2 × 4 Punkten ein einzelnes Zeichen ist. Die Nummerierung ist historisch gewachsen: Die Punkte 1 bis 3 laufen die linke Spalte hinunter und 4 bis 6 die rechte, und die Punkte 7 und 8 kamen später für den Achtpunkt-Braille dazu, sodass die unterste Zeile die Bits 6 und 7 sind. Die Zuordnung von Pixelposition zu Bit lautet:
+
+<CodeBlock
+  code={`bit_position_map = {
+      (0, 0): 0, (1, 0): 3,
+      (0, 1): 1, (1, 1): 4,
+      (0, 2): 2, (1, 2): 5,
+      (0, 3): 6, (1, 3): 7
+  }`}
+  fileName="image_handler.py"
+  lang="python"
+/>
+
+Das Bild wird in Graustufen umgewandelt, ein Punkt wird gesetzt, wo ein Pixel dunkler ist als 127, und die ganze Zelle nimmt die Durchschnittsfarbe ihrer acht Pixel an. Im direkten Vergleich wägen die beiden Modi dieselben Dinge unterschiedlich ab:
+
+| Modus   | Pixel pro Zeichen                        | Farbe                                         |
+| ------- | ---------------------------------------- | --------------------------------------------- |
+| Block   | 2, übereinander                          | Jedes Pixel behält seine eigene Farbe         |
+| Braille | 8, als Punkte auf einem Raster von 2 × 4 | Eine Farbe pro Zelle, jeder Punkt an oder aus |
+
+Auf einem dunklen Terminal zeichnen die Braille-Punkte die dunklen Teile eines Bildes nach, und der grösste Teil seiner Farbe geht verloren, weshalb das README den Block-Modus empfiehlt.
+
+### Ein Fünf-Minuten-Cache für die Angaben
+
+Die Bibliothek psutil beantwortet Uptime, Arbeitsspeicher und Laufwerke direkt. Die meisten übrigen Zeilen stammen aus kurzen PowerShell-Befehlen: die Windows-Edition, das Theme aus der Registry, die Paketzahlen. Jede Abfrage startet ihr eigenes `powershell.exe` mit einem Timeout von zwei Sekunden, damit eine langsame Antwort die übrigen nicht aufhalten kann, und mit `-NoProfile`, damit das Profilskript des Benutzers nicht jedes Mal läuft. Die zehn langsameren Abfragen laufen parallel in einem Thread-Pool.
+
+Das Ergebnis wird fünf Minuten lang in `cache/sysinfo.json` aufbewahrt, und `--no-cache` überspringt es. Die Zeile «Executed in» misst diesen Schritt: Auf meinem Rechner dauert ein frischer Lauf etwa eine Sekunde, ein zwischengespeicherter 0.00 Sekunden. Gerenderte Bilder werden ebenfalls zwischengespeichert, einen Tag lang, mit dem Pfad und der Änderungszeit der Datei, der Grösse und dem Modus als Schlüssel.

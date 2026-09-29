@@ -1,0 +1,176 @@
+export const source = "7af9c8d1b6ea";
+
+# Ein QR-Code-Generator mit Scan-Test
+
+[qr.ysz.life](https://qr.ysz.life) erzeugt QR-Codes im Browser. Sie tippen einen Link oder einen beliebigen Text ein, gestalten den Code und laden ihn herunter. Das Gestalten kann aber auch dafür sorgen, dass sich ein Code nicht mehr scannen lässt, deshalb sitzt in der Kopfzeile ein Scan-Test, der ein exportiertes Bild mit einem echten Decoder wieder einliest.
+
+<Safari
+  url="qr.ysz.life"
+  src="/projects/qr/hero.webp"
+  video="/projects/qr/hero.mp4"
+  alt="Der Generator im hellen Design: Sobald https://ysz.life in das leere Feld getippt wird, wird der verblasste Platzhaltercode deckend, und der Code wird mit jedem Tastendruck neu gezeichnet"
+  caption="Der Code wird mit jedem Tastendruck neu gezeichnet."
+/>
+
+## Formen und Punktstile
+
+Der Reiter Style bestimmt, wie der Code gezeichnet wird. Seine Module, die kleinen Quadrate, aus denen ein QR-Code besteht, können quadratisch bleiben oder zu Punkten, abgerundeten Reihen oder angeschrägten Formen werden, und die drei Eckquadrate und die Punkte in ihrem Inneren erhalten eigene Stile. Die Kreisform setzt den Code in ein rundes Feld und füllt den Raum darum mit Punkten, die dem Muster des Codes selbst nachgebildet sind. Ein Reset-Knopf neben den Reitern setzt alle Einstellungen zurück und behält den Text.
+
+<ProjectImage
+  src="/projects/qr/styles.webp"
+  video="/projects/qr/styles.mp4"
+  alt="Der Reiter Style: Die Form wechselt von Square zu Circle, dann öffnet sich das Menü Dot Style und Dots wird gewählt, dann öffnet sich das Menü Corner Square Style und Dot wird gewählt, und der Code wird nach jeder Wahl neu gezeichnet"
+  caption="Erst die Kreisform, dann Punkte, dann runde Eckquadrate."
+  size="full"
+/>
+
+## Farben und Verläufe
+
+Vorder- und Hintergrund nehmen jede Farbe an, und die Eckquadrate können eine eigene haben. Der Hintergrund kann auch transparent sein, für einen Code, der auf einem Foto oder einer farbigen Seite sitzt. Beide Ebenen nehmen einen Verlauf an, linear in einem beliebigen Winkel oder radial vom Mittelpunkt aus.
+
+<ProjectImage
+  src="/projects/qr/colors.webp"
+  video="/projects/qr/colors.mp4"
+  alt="Der Reiter Colors: Der Schalter Gradient wird eingeschaltet, und der Code verläuft von Marineblau zu Violett, das Ende des Verlaufs wird orange, und wenn der Winkelregler von 45 auf 255 Grad gezogen wird, dreht sich der Verlauf um den Code"
+  caption="Ein Verlauf, gedreht mit dem Winkelregler."
+  size="full"
+/>
+
+## Ein Logo in der Mitte
+
+Ein Logo lässt sich auf den Reiter Style ziehen oder als Datei auswählen, und ein Regler bestimmt seine Grösse. Mit dem Ablegen steigt die Fehlerkorrektur auf H, die Stufe, die am meisten fehlende Daten wiederherstellen kann, denn die Module unter dem Logo fehlen, und der Scanner muss sie rekonstruieren. Stellt man die Stufe wieder tiefer, warnt der Reiter Settings, dass ein Logo die hohe Stufe braucht.
+
+<ProjectImage
+  src="/projects/qr/logo.webp"
+  video="/projects/qr/logo.mp4"
+  alt="Der Reiter Settings zeigt die Fehlerkorrektur auf Quartile (25%); auf dem Reiter Style wird ein Bild auf das gestrichelte Logofeld gezogen, das Blatt-Logo erscheint in der Mitte des Codes, und zurück auf Settings steht die Stufe nun auf High (30%)"
+  caption="Ein abgelegtes Logo hebt die Stufe von Q auf H."
+  size="full"
+/>
+
+## Export und letzte Codes
+
+Ein Code lässt sich als PNG, SVG, JPEG oder WebP herunterladen oder als PNG in die Zwischenablage kopieren. Der Reiter Settings legt die Exportgrösse fest, von 128 bis 512 Pixel, und den Rand um den Code. Jeder Download und jede Kopie landet ausserdem mit einem Vorschaubild in einer Liste Recent unter den Knöpfen. Sie behält die letzten zehn Codes im Browser, und ein Klick auf einen stellt seinen Text und alle Einstellungen wieder her.
+
+<ProjectImage
+  src="/projects/qr/recent.webp"
+  alt="Der Generator mit einem Blatt-Logo in einem marineblauen Code für https://ysz.life, und unter den Export-Knöpfen die geöffnete Liste Recent mit zwei Einträgen, https://ysz.life und https://kinoa.to, jeweils mit Vorschaubild und Datum"
+  caption="Die Liste Recent nach zwei Downloads."
+  size="full"
+/>
+
+## Prüfen, ob sich ein Code scannen lässt
+
+Der Scan-Test in der Kopfzeile nimmt ein exportiertes Bild und decodiert es. Besteht ein Code, zeigt der Test den gelesenen Text, mit dem Link zum Öffnen; besteht er nicht, meldet er, dass kein Code gefunden wurde. Im Clip besteht der marineblaue Standardcode, dann fällt derselbe Code in mittlerem Grau durch, obwohl er auf dem Bildschirm aussieht wie jeder andere QR-Code.
+
+<ProjectImage
+  src="/projects/qr/scan-test.webp"
+  video="/projects/qr/scan-test.mp4"
+  alt="Der Scan-Test-Dialog decodiert einen abgelegten marineblauen Code und zeigt https://ysz.life; nachdem der Vordergrund auf #999999 gestellt wurde, wird der graue Code abgelegt, und der Dialog meldet, dass kein QR-Code gefunden wurde"
+  caption="Marineblau besteht, Grau #999999 fällt durch."
+  size="full"
+/>
+
+## Hell und dunkel
+
+Die Seite folgt dem Design des Systems, und die Taste d wechselt zwischen hell und dunkel. Die Vorschau behält in beiden Designs die eigene Hintergrundfarbe des Codes, sodass sie zeigt, wie die exportierte Datei aussehen wird.
+
+<Safari
+  url="qr.ysz.life"
+  src="/projects/qr/theme.webp"
+  video="/projects/qr/theme.mp4"
+  alt="Ein runder Code mit orangem Verlauf und einem Blatt-Logo; ein Druck auf d schaltet die Seite in das dunkle Design und wieder zurück, während der Code seinen weissen Hintergrund behält"
+  caption="Die Taste d wechselt das Design."
+/>
+
+## So ist es gebaut
+
+Die Seite ist eine Next.js-App mit shadcn/ui auf Radix und Tailwind. [qr-code-styling](https://github.com/kozakdenys/qr-code-styling) zeichnet den Code als SVG, und [qr-scanner](https://github.com/nimiq/qr-scanner) decodiert die Bilder für den Scan-Test. Codes werden im Browser erzeugt und decodiert, der Text verlässt die Seite also nie.
+
+### Wie gross das Logo sein darf
+
+Ein QR-Code speichert seine Daten zusammen mit Reed-Solomon-Codewörtern zur Fehlerkorrektur, in einer von vier Stufen: L kann rund 7% der Codewörter wiederherstellen, M 15%, Q 25% und H 30%. Ein Logo verbraucht diesen Spielraum. qr-code-styling multipliziert die Grösseneinstellung mit dem Prozentsatz der Stufe und mit der Zahl der Module im Code und nimmt das Ergebnis als die grösste Zahl von Modulen, die das Logo verdecken darf. Dann räumt es den grössten Block unter dieser Zahl frei, mit einer ungeraden Anzahl Module in der Breite, damit er in der Mitte sitzt, und passt das Logo hinein.
+
+Die Stufe verändert auch den Code selbst. Für `https://ysz.life`, 16 Bytes, bei der Standardeinstellung 0.35 für die Grösse:
+
+| Stufe | Stellt wieder her | Symbol             | Platz für das Logo |
+| ----- | ----------------- | ------------------ | ------------------ |
+| L     | Rund 7%           | Version 1, 21 × 21 | 3 × 3 Module       |
+| M     | Rund 15%          | Version 2, 25 × 25 | 5 × 5 Module       |
+| Q     | Rund 25%          | Version 2, 25 × 25 | 7 × 7 Module       |
+| H     | Rund 30%          | Version 3, 29 × 29 | 9 × 9 Module       |
+
+Alle vier liessen sich im Scan-Test decodieren, weil eine tiefere Stufe das Logo verkleinert, damit es ins kleinere Budget passt.
+
+<ProjectImage
+  src="/projects/qr/error-correction-levels.webp"
+  alt="Vier Codes für https://ysz.life mit demselben Blatt-Logo auf den Stufen H, Q, M und L; das Logo deckt 9 × 9, 7 × 7, 5 × 5 und 3 × 3 Module ab, während der Code von Version 3 auf Version 1 schrumpft"
+  caption="Ein Logo und eine Grösseneinstellung auf H, Q, M und L."
+  size="full"
+/>
+
+Ein so kleines Logo verfehlt den Zweck, überhaupt eines einzusetzen, deshalb hebt das Laden eines Bildes die Stufe auf H:
+
+<CodeBlock
+  code={`const loadLogoFile = useCallback((file: File) => {
+    if (!file.type.startsWith("image/")) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      setConfig((prev) => ({
+        ...prev,
+        logo: reader.result as string,
+        errorLevel: prev.errorLevel !== "H" ? "H" : prev.errorLevel,
+      }))
+    }
+    reader.readAsDataURL(file)
+  }, [])`}
+  fileName="components/qr-generator.tsx"
+  lang="tsx"
+/>
+
+### Welche Farben sich noch scannen lassen
+
+Für Farben gibt es kein solches Budget. qr-code-styling zeichnet, was man ihm gibt, und ein Scanner braucht Kontrast zwischen den Modulen und dem Hintergrund. Ich habe Varianten des Standardcodes exportiert und jede durch den Scan-Test laufen lassen:
+
+| Code                                                                                     | Scan-Test   |
+| ---------------------------------------------------------------------------------------- | ----------- |
+| Marineblau auf Weiss, der Standard                                                       | Besteht     |
+| Marineblau auf transparentem Hintergrund                                                 | Besteht     |
+| Weiss auf Marineblau                                                                     | Besteht     |
+| Grau `#888888` auf Weiss                                                                 | Besteht     |
+| Grau `#999999` auf Weiss und alles Hellere                                               | Fällt durch |
+| Gelb `#ffd400` auf Weiss                                                                 | Fällt durch |
+| Ein Verlauf von Marineblau zu blassem Lavendel `#e0e0ff`, die Ecken weiterhin marineblau | Fällt durch |
+
+Der Decoder ist qr-scanner, das auf jsQR aufbaut, einer JavaScript-Portierung von Googles Bibliothek ZXing. Er läuft in einem Web Worker oder nutzt den eigenen `BarcodeDetector` des Browsers, wo es einen gibt, und der Dialog importiert ihn erst beim ersten Scan, sodass er der Seite nichts hinzufügt, bis ihn jemand braucht. Ein bestandener Test ist trotzdem nur das Ergebnis eines einzigen Decoders, und Handykameras unterscheiden sich; ein Code, der hier durchfällt, braucht darum mehr Kontrast, bevor er in den Druck geht.
+
+### Ein Rendering pro Änderung
+
+Der Generator wird mit `next/dynamic` und `ssr: false` geladen, und qr-code-styling wird erst nach dem Mount importiert. Jede Änderung an den Einstellungen baut dann eine neue Instanz und tauscht deren SVG in die Vorschau. Die Funktion `update()` der Bibliothek übernimmt neue Optionen in eine bestehende Instanz, aber ihr Deep Merge lieferte eine falsche Ausgabe, deshalb baut der Effekt stattdessen neu auf. Das kostet ein frisches Rendering pro Tastendruck oder Reglerschritt, bei einem Code von höchstens 512 Pixeln.
+
+Beim Wiederherstellen eines zuletzt erstellten Codes werden die gespeicherten Einstellungen über die aktuellen Standardwerte gelegt, sodass sich auch ein Code wiederherstellen lässt, der vor einer neueren Option gespeichert wurde; die Standardwerte füllen die Felder, die ihm fehlen.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/qr/styled-dark-desktop.webp",
+      frame: "safari",
+      url: "qr.ysz.life",
+      alt: "Der Generator im dunklen Design mit geöffnetem Reiter Colors: ein runder Code mit einem Verlauf von Marineblau zu Orange und einem Blatt-Logo auf einer weissen Kachel",
+      caption: "Das dunkle Design.",
+    },
+    {
+      src: "/projects/qr/styled-light-mobile.webp",
+      frame: "iphone",
+      alt: "Der Generator auf dem Handy im hellen Design: der Titel, das Linkfeld und der runde Code mit Verlauf und seinem Blatt-Logo",
+      caption: "Auf dem Handy.",
+    },
+    {
+      src: "/projects/qr/styled-dark-mobile.webp",
+      frame: "iphone",
+      alt: "Der Generator auf dem Handy im dunklen Design, bis zu den Export-Knöpfen und dem Reiter Colors mit den Verlaufseinstellungen gescrollt",
+      caption: "Die Bedienelemente auf dem Handy.",
+    },
+  ]}
+  columns={3}
+/>

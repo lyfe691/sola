@@ -1,0 +1,149 @@
+export const source = "0fda8583dac1";
+
+# Schneemobil-Navigation für Lappland
+
+Ura ist eine App für alle, die in Finnland Schneemobil fahren, für iPhone und Android. Sie legt jede offizielle Schneemobilroute des Landes auf eine einzige Karte und sagt Ihnen während der Fahrt, ob Sie auf einer sind. Ich habe sie für einen Kunden entworfen und gebaut, zusammen mit ihrer Website, [ura-app.com](https://ura-app.com).
+
+Ein Fahrer schaut jeweils nur für eine Sekunde aufs Handy, an einer Kreuzung, oft im Dunkeln und mit Handschuhen. Deshalb ist Ura ein einziger Kartenbildschirm mit einer Textzeile oben, und alles andere öffnet sich in einem Sheet von unten.
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-story.webp"
+  video="/projects/ura/site-story.mp4"
+  alt="Die Startseite von ura-app.com im dunklen Design: Ab der Überschrift Know you're on the trail scrollt die Seite Schritt für Schritt durch die App, während sich das Handy neben dem Text mitverändert, von der Zeile On route über die Karteneinstellungen für Tanken, Essen und Rastplätze bis zur Karte bei Inari unter der Überschrift Works where the signal doesn't"
+  caption="Die Website führt beim Scrollen durch die App."
+/>
+
+## Eine Antwort oben auf dem Bildschirm
+
+Die Zeile oben beantwortet die Frage, die sich ein Fahrer an einer Kreuzung stellt:
+
+| Wo Sie sind                                             | Die Zeile zeigt                                                                   |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Auf einer Route                                         | Einen grünen Punkt und den Namen der Route                                        |
+| Abseits einer Route                                     | Bernstein, wie weit die nächste Route entfernt ist, und einen Pfeil zurück zu ihr |
+| Weit von jeder Route entfernt oder ausserhalb Finnlands | Einen Hinweis, der das sagt                                                       |
+
+Der Bildschirm bleibt an, solange Ura Ihnen folgt, sodass ein kurzer Blick nicht heisst, das Handy mit Handschuhen zu entsperren.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/on-route.webp",
+      frame: "iphone",
+      alt: "Ura auf der Karte bei Levi im hellen Design: der blaue Punkt des Fahrers auf einer grünen Route, Markierungen für Restaurants und Tankstellen ringsum, und die Zeile oben mit dem Text On route, Levi keskus/center",
+      caption: "Auf einer Route bei Levi.",
+    },
+    {
+      src: "/projects/ura/off-route.webp",
+      frame: "iphone",
+      alt: "Der Punkt des Fahrers auf freiem Gelände zwischen den Routen, und die Zeile oben mit dem Text Off route, 320 m und einem Pfeil, der zurück zur nächsten Route zeigt",
+      caption: "320 m abseits der Route.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Ein Urteil, das nicht hin und her springt
+
+Die GPS-Position eines Handys driftet, unter Bäumen noch stärker, und eine einfache Abstandsprüfung würde in der Nähe einer Kreuzung alle paar Sekunden zwischen «auf der Route» und «abseits der Route» wechseln. Deshalb behandelt Ura die beiden Richtungen unterschiedlich:
+
+- **Das Verlassen dauert zehn Sekunden.** Ura stuft Sie erst dann als abseits der Route ein, wenn Sie so lange deutlich von ihr entfernt waren.
+- **Die Rückkehr gilt sofort.** In dem Moment, in dem Sie wieder auf der Route sind, wird die Zeile grün und nennt ihren Namen.
+- **Parallele Routen behalten ihren Namen.** Wo zwei Routen nebeneinander verlaufen, bleibt die Zeile bei der, auf der Sie sind, statt zwischen beiden zu wechseln.
+
+<IPhone
+  src="/projects/ura/ride-back.webp"
+  video="/projects/ura/ride-back.mp4"
+  alt="Ura im dunklen Design bei Levi: Die Zeile oben lautet Off route, 150 m, mit einem Pfeil nach links; die Distanz zählt herunter, während der Punkt des Fahrers auf die grüne Route zufährt, und sobald er die Route erreicht, wechselt die Zeile zu On route, Levi keskus/center"
+  caption="Zurück zu einer Route fahren."
+/>
+
+## Jede Route auf einer Karte
+
+Zoomen Sie heraus, und das ganze Netz ist da, vom Süden Finnlands bis ganz in den Norden Lapplands. Tankstellen, Restaurants und Cafés, Hütten, Unterstände und Feuerstellen in der Nähe der Routen sind ebenfalls auf der Karte. Tippen Sie auf eine, und ein Sheet zeigt ihren Namen, wie weit sie entfernt ist und in welche Richtung es geht. Tanken, Essen und Rastplätze lassen sich in den Einstellungen einzeln ausblenden.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/network.webp",
+      frame: "iphone",
+      alt: "Die Karte, herausgezoomt über ganz Finnland, überzogen vom Schneemobilnetz in Grün und Gelb von Helsinki bis in den hohen Norden, mit dem Punkt des Fahrers in Lappland",
+      caption: "Jede Route in Finnland.",
+    },
+    {
+      src: "/projects/ura/place-sheet.webp",
+      frame: "iphone",
+      alt: "Ein Sheet über der Karte bei Inari für die Tankstelle Neste Inari Juutuantörmä, mit einem Etikett Fuel station und einer Distanz von 720 m neben einem Pfeil, der die Richtung zeigt",
+      caption: "Eine Tankstelle in Inari.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Ohne Empfang
+
+Der Empfang in den Bergen kommt und geht, deshalb ist Ura beim Fahren nicht darauf angewiesen. Die Routen und Orte sind in der App gespeichert, und die Karte behält die Gebiete, die Sie sich schon angesehen haben, sodass ein Tal, in das Sie mit Empfang hineingefahren sind, gezeichnet bleibt, auch wenn der Empfang weg ist. Ändern sich die Routen, holt die App den neuen Datensatz, sobald sie das nächste Mal online ist.
+
+<IPhone
+  src="/projects/ura/inari.webp"
+  alt="Die Karte rund um Inari im hellen Design: Routen in Grün am Seeufer entlang und über das Eis, Markierungen für Restaurants und Tankstellen im Dorf, und die Zeile oben mit On route und dem Namen der Dorfroute"
+  caption="Inari, ganz im Norden."
+/>
+
+## Design und Sprache
+
+Ura hat ein helles und ein dunkles Design und folgt der Einstellung des Handys, solange Sie keines wählen. Das dunkle Design dunkelt auch die Karte ab, für die Fahrt durch die langen Nächte eines Winters in Lappland. Die App gibt es auf Englisch, Finnisch und Deutsch, auch hier folgt sie dem Handy, solange Sie nichts wählen. Die Store-Bilder verwenden dieselben Bildschirme, hier im dunklen Design, vor dem Foto eines verschneiten Waldes.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/store-dark-off-route.webp",
+      alt: "Store-Bild mit der Überschrift «Off route? See the distance.»: ein Handy vor dem Foto eines verschneiten Fichtenwalds, das die dunkle Karte mit der Zeile Off route, 320 m und einem Pfeil zurück zur Route zeigt",
+      caption: "Abseits einer Route.",
+    },
+    {
+      src: "/projects/ura/store-dark-network.webp",
+      alt: "Store-Bild mit der Überschrift «Finland's trails. One clear map.»: die dunkle Karte, herausgezoomt über das ganze Netz in Finnland",
+      caption: "Das ganze Netz.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Die Website
+
+[ura-app.com](https://ura-app.com) stellt die App den Fahrern vor, bevor sie sie installieren. Ihr wichtigster Abschnitt ist die Scroll-Story oben auf dieser Seite: Ein Handy bleibt neben dem Text stehen und wechselt, um jeden Teil der App zu zeigen. Die Website folgt der Einstellung des Besuchers für Hell oder Dunkel, eine Schaltfläche in der Ecke schaltet sie von Hand um, und hinter der Überschrift zieht ein Polarlicht. Am Computer öffnet ein QR-Code am Ende der Seite den Download auf Ihrem Handy.
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-theme.webp"
+  video="/projects/ura/site-theme.mp4"
+  alt="Der Hero-Bereich von ura-app.com im dunklen Design, mit einem grünen Polarlicht, das sich hinter der Überschrift Know you're on the trail bewegt; die Schaltfläche in der Ecke unten rechts schaltet die Seite auf das helle Design um und wieder zurück"
+  caption="Der Hero-Bereich, von dunkel auf hell und zurück umgeschaltet."
+/>
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/site-desktop.webp",
+      frame: "safari",
+      url: "ura-app.com",
+      alt: "Die Startseite von ura-app.com im hellen Design: die Überschrift Know you're on the trail, Badges für App Store und Google Play und ein Handy, das das Routennetz rund um Kittilä zeigt",
+      caption: "ura-app.com im hellen Design.",
+    },
+    {
+      src: "/projects/ura/site-mobile.webp",
+      frame: "iphone",
+      alt: "Die Startseite von ura-app.com auf dem Handy im dunklen Design: die Überschrift, die Store-Badges und darunter der obere Teil der Karte der App",
+      caption: "Die Website auf dem Handy.",
+    },
+    {
+      src: "/projects/ura/app-dark.webp",
+      frame: "iphone",
+      alt: "Ura im dunklen Design bei Levi: grüne Routen auf einer dunklen Karte und die Zeile oben mit On route, Levi keskus/center",
+      caption: "Die App nach Einbruch der Dunkelheit.",
+    },
+  ]}
+  columns={3}
+/>

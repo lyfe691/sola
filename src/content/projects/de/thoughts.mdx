@@ -1,0 +1,146 @@
+export const source = "0125002b525c";
+
+# Eine Schreibseite mit Gästebuch
+
+Auf [Thoughts](https://thoughts.ysz.life) schreibe ich das auf, was auf keine Projektseite passt. Es sind ein paar ruhige Textseiten: eine About-Seite, die Liste der Beiträge und ein Gästebuch, in dem jede Person eine Notiz hinterlassen kann. Die Seite basiert auf [Shu Dings Seite](https://shud.in).
+
+<Safari
+  url="thoughts.ysz.life"
+  src="/projects/thoughts/hero.webp"
+  video="/projects/thoughts/hero.mp4"
+  alt="Die About-Seite, dann ein Klick auf guestbook in den kursiven Links auf der linken Seite: Das Gästebuch blendet sich mit seinen datierten Einträgen ein, und in das Formular wird eine Nachricht getippt, ohne abgeschickt zu werden. Name und Nachricht jedes Besuchers sind verwischt"
+  caption="Von der About-Seite zum Gästebuch, Namen verwischt."
+/>
+
+## Seiten und Beiträge
+
+Die Links stehen links vom Text in kleingeschriebener, kursiver Serifenschrift, und auf einem breiten Bildschirm bleiben sie beim Scrollen an ihrem Platz. Beim Wechsel zwischen den Seiten wird übergeblendet. Auf dem Handy rücken die Links in eine Reihe über dem Text.
+
+Jeder Beitrag ist eine MDX-Datei im Repository, die ihren Titel, ihr Datum und ihre Beschreibung exportiert. Die Liste zeigt die Beiträge mit dem neuesten zuerst, wobei jeder Titel durch eine Punktreihe mit seinem Datum verbunden ist. Code in einem Beitrag wird auf dem Server von Shiki hervorgehoben, die Farben kommen also als fertiges HTML an, und der Titel eines Bildes wird auf einem breiten Bildschirm zu einer Randnotiz neben ihm.
+
+Eine Adresse, die es nicht gibt, bekommt einen kurzen Vers.
+
+<Safari
+  url="thoughts.ysz.life/nope"
+  src="/projects/thoughts/not-found.webp"
+  alt="Die Fehlerseite für unbekannte Adressen: links die kursiven Links about, thoughts und guestbook, daneben die Überschrift «not found» über den zwei Zeilen «the page does not exist» und «you were never supposed to be here»"
+  caption="Eine Seite, die es nicht gibt."
+/>
+
+## Das Gästebuch
+
+Jede Person kann sich ohne Konto ins Gästebuch eintragen, mit einem optionalen Namen und einer Nachricht von höchstens 280 Zeichen. Die Einträge erscheinen mit dem neuesten zuerst, mit Datum und Uhrzeit, jeweils zehn auf einmal, und ein selbst geschriebener bekommt einen Link Delete, wenn Sie mit der Maus darüberfahren.
+
+<Safari
+  url="thoughts.ysz.life/guestbook"
+  src="/projects/thoughts/guestbook-desktop.webp"
+  alt="Das Gästebuch: ein einzeiliges Formular für einen Namen und eine Nachricht über einer Liste datierter Einträge, wobei alle Namen und Nachrichten verwischt sind"
+  caption="Das Gästebuch, hier mit verwischten Namen und Nachrichten."
+/>
+
+## So ist es gebaut
+
+Thoughts ist eine Next.js-App auf Vercel. Die Beiträge werden aus MDX kompiliert und beim Build als statische Seiten gerendert. Das Gästebuch ist eine einzige Postgres-Tabelle, die ein einziger Route-Handler über `@vercel/postgres` liest und schreibt.
+
+### Ins Gästebuch eintragen
+
+Ein `POST` an `/api/guestbook` durchläuft drei Prüfungen der Reihe nach und schreibt nur, wenn alle bestanden sind:
+
+1. **Das versteckte Feld ist leer.** Das Formular hat ein Feld `website`, das eine Person nie sieht und ein Bot, der Formulare ausfüllt, in der Regel schon, und jeder Wert darin führt zur Ablehnung der Anfrage.
+2. **Die Nachricht passt.** Sie wird getrimmt und muss zwischen 1 und 280 Zeichen lang sein, und der Name wird auf 50 gekürzt.
+3. **Der Absender schreibt nicht zu schnell.** Die Route sucht den neuesten Eintrag desselben Absenders und antwortet mit 429, wenn er weniger als 30 Sekunden alt ist.
+
+Ein Absender wird an einem SHA-256-Hash der Adresse des Clients erkannt, die aus dem ersten Eintrag in `x-forwarded-for` stammt, und der Hash ist alles, was die Tabelle speichert. Er genügt, um denselben Absender ein zweites Mal wiederzuerkennen, und das brauchen die Ratenbegrenzung und die Löschprüfung weiter unten.
+
+<CodeBlock
+  code={`export async function POST(req: NextRequest) {
+    await ensureTable()
+    const ipHash = getClientIpHash(req)
+    let body: { name?: string; message?: string; hp?: string } = {}
+    try {
+      body = await req.json()
+    } catch {
+      // ignore
+    }
+    const { name = null, message = '', hp = '' } = body
+    if (hp && hp.trim().length > 0) {
+      return NextResponse.json({ error: 'rejected' }, { status: 400 })
+    }
+    const trimmed = (message || '').trim()
+    if (trimmed.length === 0 || trimmed.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: 'invalid_message' }, { status: 400 })
+    }
+    const safeName = name ? String(name).slice(0, 50).trim() : null
+    if (isRateLimitEnabled()) {
+      const recent = await sql<{ created_at: string }>\`
+        SELECT created_at FROM guestbook
+        WHERE ip_hash = \${ipHash}
+        ORDER BY created_at DESC
+        LIMIT 1
+      \`
+      if (recent.rows.length > 0) {
+        const last = new Date(recent.rows[0].created_at).getTime()
+        const now = Date.now()
+        if (now - last < RATE_LIMIT_WINDOW_MS) {
+          return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
+        }
+      }
+    }
+    const id = crypto.randomUUID()
+    const approved = isAutoApprove()
+    const rejected = false
+    const inserted = await sql<GuestbookRow>\`
+      INSERT INTO guestbook (id, name, message, ip_hash, approved, rejected)
+      VALUES (\${id}, \${safeName}, \${trimmed}, \${ipHash}, \${approved}, \${rejected})
+      RETURNING id, name, message, created_at, updated_at, edited
+    \`
+    return NextResponse.json({ item: inserted.rows[0], approved }, { status: 201 })
+  }`}
+  fileName="app/api/guestbook/route.ts"
+  lang="ts"
+/>
+
+Das ist gekürzt: Der echte Handler hat einen zweiten Zweig, der die Einträge in einem Array im Arbeitsspeicher hält, wenn keine Datenbank konfiguriert ist, sodass die Seite in der lokalen Entwicklung auch ohne eine läuft.
+
+### Moderation
+
+Jede Zeile trägt zwei Flags, und zusammen entscheiden sie, wo sich ein Eintrag befindet:
+
+| `approved` | `rejected` | Der Eintrag                                  |
+| ---------- | ---------- | -------------------------------------------- |
+| Ja         | Nein       | Erscheint in der öffentlichen Liste          |
+| Nein       | Nein       | Wartet in der Admin-Warteschlange            |
+| Beliebig   | Ja         | Ist verborgen, und die Zeile bleibt erhalten |
+
+Ob ein neuer Eintrag beim Eingang genehmigt wird, bestimmt eine einzige Umgebungsvariable, die standardmässig auf Ja steht. Ist sie ausgeschaltet, warten neue Einträge in der Warteschlange, und wer einen Eintrag schreibt, sieht stattdessen einen Hinweis, dass er noch aussteht, und findet ihn nicht oben in der Liste.
+
+Die Warteschlange ist eine durch ein Token geschützte Admin-Seite. Sie listet die ausstehenden Einträge mit dem ältesten zuerst auf, jeden mit einem Knopf zum Genehmigen und einem zum Ablehnen, und eine zweite Ansicht listet die genehmigten mit einem Löschen-Knopf auf. Das Ablehnen eines Eintrags setzt sein Flag und behält die Zeile. Die Ratenbegrenzung liest jede Zeile eines Absenders, deshalb zählt auch ein abgelehnter Eintrag zu den 30 Sekunden dieses Absenders.
+
+### Den eigenen Eintrag löschen
+
+Besucher haben keine Konten, deshalb braucht die Seite einen anderen Weg, um zu wissen, wer einen Eintrag geschrieben hat. Wenn der Browser einen Eintrag abschickt, speichert er die zurückgegebene ID in `localStorage`, und Einträge mit einer gespeicherten ID erhalten den Link Delete. Auf diese Liste verlässt sich der Server nicht. Seine Abfrage lautet `DELETE FROM guestbook WHERE id = … AND ip_hash = …`, sodass eine Zeile nur verschwindet, wenn die Anfrage von derselben gehashten Adresse kommt, die sie geschrieben hat. Der Kompromiss: Wer als Besitzer gilt, hängt vom Netzwerk ab. Über eine andere Verbindung wird der Link weiterhin angezeigt, und der Server verweigert das Löschen.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/thoughts/about-desktop.webp",
+      frame: "safari",
+      url: "thoughts.ysz.life",
+      alt: "Die About-Seite: links die kursiven Links about, thoughts und guestbook und daneben eine kurze Vorstellung in einer einzigen Textspalte",
+      caption: "Die About-Seite.",
+    },
+    {
+      src: "/projects/thoughts/about-mobile.webp",
+      frame: "iphone",
+      alt: "Die About-Seite auf dem Handy: die drei Links in einer Reihe oben und darunter die Vorstellung in einer Spalte",
+      caption: "About auf dem Handy.",
+    },
+    {
+      src: "/projects/thoughts/guestbook-mobile.webp",
+      frame: "iphone",
+      alt: "Das Gästebuch auf dem Handy: die Felder für Name und Nachricht über datierten Einträgen, wobei alle Namen und Nachrichten verwischt sind",
+      caption: "Das Gästebuch.",
+    },
+  ]}
+  columns={3}
+/>

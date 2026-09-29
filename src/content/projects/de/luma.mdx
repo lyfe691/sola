@@ -1,0 +1,194 @@
+export const source = "bedd8d1e47e6";
+
+# Ein KI-Chat für mehrere Anbieter, der mit eigenen API-Keys läuft
+
+[Luma](https://luma.ysz.life) ist eine Chat-App für Leute, die bei einem oder mehreren Modellanbietern bereits für den API-Zugang bezahlen. Sie hinterlegen Ihre Keys einmal, wählen für jeden Chat ein Modell, und jede Anfrage geht mit Ihrem Key an diesen Anbieter.
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/start.webp"
+  video="/projects/luma/start.mp4"
+  alt="Der Startbildschirm von Luma im hellen Design: Graue Streifen fliegen hinter dem Wort Luma nach aussen, und in das Eingabefeld darunter wird die Frage getippt, wie ein B-Baum einen vollen Knoten teilt"
+  caption="Der Startbildschirm."
+/>
+
+## Ein Modell wählen
+
+Der Modell-Button im Eingabefeld öffnet eine Auswahl mit allen Modellen, die Luma anbietet, nach Anbieter gruppiert. Eine Leiste mit Anbieter-Logos springt zwischen den Gruppen, das Suchfeld filtert schon beim Tippen, und kleine Symbole zeigen, was ein Modell kann, etwa Reasoning, Bilder als Eingabe, Tool-Nutzung und PDFs. Mit einem Stern kommt ein Modell in eine Favoritenliste auf der Leiste.
+
+Jeder Chat behält sein eigenes Modell, ein Gespräch kann also auf Claude laufen und das nächste auf GPT-5 Mini. Modelle, deren Anbieter noch keinen Key hat, tragen ein Schloss. Wählt man eines, erscheint über dem Eingabefeld ein Hinweis, der den fehlenden Key nennt, samt einer Schaltfläche, die die Einstellungen öffnet.
+
+<ProjectImage
+  src="/projects/luma/model-picker.webp"
+  video="/projects/luma/model-picker.mp4"
+  alt="Die Modellauswahl öffnet sich über dem Eingabefeld, links die Anbieter-Logos und die Modelle gruppiert unter OpenAI und xAI; die Eingabe von claude grenzt die Liste auf drei Anthropic-Modelle ein, das erste erhält einen Stern, und der Favoriten-Eintrag auf der Leiste listet danach nur dieses Modell"
+  caption="Die Auswahl durchsuchen und ein Modell mit einem Stern versehen."
+  size="full"
+/>
+
+## Fragen stellen
+
+Das Eingabefeld nimmt Text, Bilder und Dateien wie PDFs, CSVs und Markdown entgegen, eingefügt, hineingezogen oder über das Plus-Menü ausgewählt. Dasselbe Menü legt einen Modus für die nächste Nachricht fest:
+
+- **Create image** bittet das Modell, mit einem Bild zu antworten.
+- **Web search** lässt es im Web nachschlagen und seine Quellen nennen.
+- **Study and learn** bittet um strukturierten Unterricht mit ausgearbeiteten Beispielen.
+
+<ProjectImage
+  src="/projects/luma/modes.webp"
+  video="/projects/luma/modes.mp4"
+  alt="Das Plus-Menü öffnet sich unter dem Eingabefeld mit Add photos & files, Create image, Study and learn und Web search; Create image wird gewählt, im Eingabefeld erscheint ein Image-Chip, und ein Prompt über einen Sonnenuntergang über einem Blumenfeld wird getippt"
+  caption="Das Plus-Menü und der Bildmodus."
+  size="full"
+/>
+
+Ein erzeugtes Bild erscheint im Chat, darunter der Name des Bildmodells. Welches Bildmodell es zeichnet, wird in einer eigenen Einstellung festgelegt, getrennt vom Chatmodell.
+
+<ProjectImage
+  src="/projects/luma/image-generation.webp"
+  alt="Ein Chat, in dem die Anfrage Generate an image of a cute sunset mit der Illustration einer lächelnden Sonne beantwortet wird, die über einem Blumenfeld untergeht, mit der Bildunterschrift Generated with Grok Imagine"
+  caption="Ein erzeugtes Bild, mit dem Namen des Bildmodells darunter."
+  size="full"
+/>
+
+## Antworten
+
+Antworten erscheinen Stück für Stück als Markdown. Codeblöcke sind hervorgehoben und haben Schaltflächen zum Kopieren und Herunterladen, Formeln und Diagramme werden direkt im Text dargestellt. Wenn ein Modell vor der Antwort nachdenkt, klappt sich sein Gedankengang zu einer Zeile «Thought for N seconds» über der Antwort zusammen, und bei Claude-Modellen ist Extended Thinking aktiv, ohne dass man etwas einschalten muss. Antworten aus einer Websuche tragen ihre Quellen als kleine Chips neben den Sätzen, die sie verwenden.
+
+<ProjectImage
+  src="/projects/luma/code-block.webp"
+  alt="Ein Chat mit Claude Opus 4.6: zwei eingeklappte Zeilen mit dem Gedankengang, dann ein hervorgehobenes Rust-Programm mit Zeilennummern sowie Schaltflächen zum Herunterladen und Kopieren, darunter eine kurze Erklärung"
+  caption="Claudes Gedankengang, eingeklappt über einer Code-Antwort."
+  size="full"
+/>
+
+## Bearbeiten, wiederholen und Chats finden
+
+In einem Gespräch wird nichts überschrieben. Wenn Sie eine gesendete Nachricht bearbeiten, entsteht neben der alten eine neue Version mit einer frischen Antwort darunter, und Pfeile unter der Nachricht blättern zwischen den Versionen. Eine Antwort neu erzeugen zu lassen, macht auf der Seite der Antwort dasselbe, und über das Menü dafür lässt sich die Frage an ein anderes Modell schicken, sodass die Antworten zweier Modelle auf dieselbe Nachricht nur einen Pfeil auseinanderliegen.
+
+Neue Chats bekommen ihren Titel von einem kleinen, günstigen Modell auf einem Ihrer Keys. Die Seitenleiste listet sie auf, die angehefteten zuerst, und jeder Chat lässt sich dort anheften, umbenennen oder löschen. In den Einstellungen lassen sich alle Ihre Chats als Download exportieren oder löschen. Für die häufigen Aktionen gibt es Tastenkürzel, mit Ctrl unter Windows und ⌘ auf einem Mac:
+
+| Tastenkürzel         | Aktion                                       |
+| -------------------- | -------------------------------------------- |
+| Ctrl K               | Alle Chats durchsuchen, nach Datum gruppiert |
+| Ctrl Shift O         | Einen neuen Chat beginnen                    |
+| Ctrl M               | Die Modellauswahl öffnen                     |
+| Ctrl U               | Eine Datei anhängen                          |
+| Ctrl Shift S         | Die Seitenleiste ein- oder ausblenden        |
+| Shift Esc            | Zum Nachrichtenfeld springen                 |
+| Ctrl Shift Backspace | Den geöffneten Chat löschen                  |
+
+## Ihre API-Keys
+
+In den Einstellungen gibt es für jeden Anbieter eine Zeile, jeweils mit einem Link zur Seite, auf der man einen Key bekommt. Luma probiert einen neuen Key beim Anbieter aus, bevor es ihn speichert, ein vom Anbieter abgelehnter Key wird also sofort zurückgewiesen. Keys werden verschlüsselt, bevor sie gespeichert werden, und der Browser erfährt immer nur, bei welchen Anbietern einer hinterlegt ist.
+
+<ProjectImage
+  src="/projects/luma/api-keys.webp"
+  alt="Der Einstellungsdialog über dem Startbildschirm, geöffnet auf API Keys: ein Hinweis, dass Keys verschlüsselt gespeichert werden und den Server nie verlassen, und Zeilen für OpenAI, Anthropic, Google, xAI und Mistral, jeweils mit einem Link Get API key und einer Schaltfläche Add key"
+  caption="Keys in den Einstellungen hinzufügen."
+  size="full"
+/>
+
+## Hell und dunkel
+
+Luma gibt es in einem hellen und einem dunklen Design mit olivgrünem Akzent, und es folgt dem System, solange Sie keines wählen. Die Streifen hinter dem Startbildschirm folgen dem Design, grau im hellen und weiss im dunklen. Auf dem Handy wird die Seitenleiste zu einem ausfahrbaren Menü, und die Modellauswahl und die Einstellungen öffnen sich vom unteren Bildschirmrand aus als Sheets.
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/theme.webp"
+  video="/projects/luma/theme.mp4"
+  alt="Der Startbildschirm wechselt über das Design-Steuerelement am unteren Rand der Seitenleiste vom hellen ins dunkle Design und wieder zurück; die Streifen werden von grau zu weiss"
+  caption="Das helle und das dunkle Design."
+/>
+
+## So ist es gebaut
+
+Luma ist eine App mit Next.js 16 und React 19. Das Vercel AI SDK streamt die Antworten und erreicht jeden Anbieter über dessen eigenes Paket, Supabase hält die Konten, die Chats und die hochgeladenen Dateien, und die Streifen auf dem Startbildschirm sind ein Three.js-Shader.
+
+### Gespräche sind Bäume
+
+Jede Nachricht ist eine Zeile mit einer `parent_id`, und ein Chat speichert einen weiteren Zeiger, `active_leaf_id`, auf die letzte Nachricht des Strangs auf dem Bildschirm. Der Strang wird abgeleitet: beim aktiven Blatt beginnen, den Elternzeigern bis zur Wurzel folgen, die Reihenfolge umkehren. Eine Bearbeitung oder ein erneuter Versuch fügt unter demselben Elternknoten ein Geschwister hinzu, und der Durchlauf versieht jede Nachricht, die Geschwister derselben Rolle hat, mit ihrer Position unter ihnen. Mehr brauchen die Pfeile unter einer Nachricht nicht.
+
+<CodeBlock
+  code={`export function buildTimelineMessages(
+    graph: ChatGraph,
+    activeLeafId: string
+  ): UIMessage[] {
+    const path = getPathToLeaf(graph, activeLeafId)
+    if (path.length === 0) return []
+    return path.map((node) => {
+      const siblings = (graph.childrenByParentId.get(node.parentId) ?? []).filter(
+        (candidate) => candidate.role === node.role
+      )
+      const branchCount = siblings.length
+      const branchIndex = Math.max(
+        0,
+        siblings.findIndex((candidate) => candidate.id === node.id)
+      )
+      return {
+        id: node.id,
+        role: node.role,
+        parts: node.parts,
+        metadata: {
+          createdAt: node.createdAt,
+          ...(branchCount > 1
+            ? ({
+                branchCount,
+                branchIndex,
+                isActiveBranch: true,
+              } satisfies ChatBranchMetadata)
+            : {}),
+        },
+      } satisfies UIMessage
+    })
+  }`}
+  fileName="lib/chat-tree.ts"
+  lang="ts"
+/>
+
+Das Wechseln der Version ist ein Serveraufruf, der das nächste Geschwister nimmt, dem jüngsten Kind bis zu einem Blatt folgt und dieses Blatt als aktives speichert. Der Preis dieses Entwurfs: Beim Öffnen eines Chats werden alle seine Nachrichten gelesen, auch die Zweige, die Sie gerade nicht ansehen. Dafür kommen sie in einer einzigen Abfrage über einen Index auf Chat und Erstellungszeit, und der Baumcode ist schlichtes TypeScript, das Browser und Server beide importieren.
+
+### Von der Modell-ID zum Anbieter-Client
+
+Modell-IDs enthalten ihren Anbieter, etwa `anthropic:claude-opus-4-6`. Die Chat-Route prüft die ID gegen den Katalog und fällt auf das Standardmodell zurück, wenn sie dort fehlt, der Browser kann also kein Modell anfordern, das Luma nicht führt. Das Präfix wählt den Key des jeweiligen Nutzers, der für diese eine Anfrage entschlüsselt wird, und das AI-SDK-Paket des Anbieters, das mit einem dynamischen `import()` geladen wird, sodass eine Anfrage nur das SDK einliest, das sie braucht. Anbieter mit einer OpenAI-kompatiblen API verwenden das OpenAI-Paket mit ihrer eigenen Basis-URL, ein neuer Anbieter ist also ein Katalogeintrag.
+
+### Gespeicherte Keys
+
+Ein Key wird mit AES-256-GCM unter einem frischen, zufälligen IV verschlüsselt und als IV, Chiffretext und Authentifizierungs-Tag gespeichert. Weil GCM den Chiffretext authentifiziert, lässt sich ein in der Datenbank veränderter Wert nicht mehr entschlüsseln, statt zu einem anderen Key zu werden. Das schützt die Keys in einem geleakten Datenbank-Dump. Der Server muss die Anbieter mit dem Key im Klartext aufrufen, also kann er jeden Key entschlüsseln, den er speichert, und das kann auch jeder, der sowohl die Datenbank als auch den Master-Key besitzt.
+
+### Was ans Modell zurückgeht
+
+Eine gespeicherte Antwort behält alles, was der Bildschirm zeigt: Gedankengang, Text, Tool-Aufrufe und deren Ergebnisse. Der Verlauf, der mit der nächsten Anfrage mitgeschickt wird, wird auf dem Server aus dem Baum neu aufgebaut, und drei Dinge werden vorher aus ihm entfernt:
+
+| Teil der Antwort   | Zurückgeschickt als                      | Warum                                                                                                                  |
+| ------------------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Ein erzeugtes Bild | Der Text `[image was generated]`         | Das Base64 würde sonst bei jeder späteren Anfrage mitreisen                                                            |
+| Gedankengang       | Nichts, er bleibt nur auf dem Bildschirm | Die Responses API von OpenAI kann Reasoning-Elemente ablehnen, die aus dem Verlauf erneut gesendet werden              |
+| Anbieter-Metadaten | Nichts                                   | Sie verweisen auf frühere Antworten eines einzelnen Anbieters, und so kann ein Strang mittendrin den Anbieter wechseln |
+
+Anhänge bleiben in einem privaten Bucket, und jede Anfrage signiert frische Links darauf, die nach zehn Minuten ablaufen.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/start-dark.webp",
+      frame: "safari",
+      url: "luma.ysz.life",
+      alt: "Der Startbildschirm von Luma im dunklen Design: links die Seitenleiste, in der Mitte das Eingabefeld über weissen Streifen auf fast schwarzem Grund",
+      caption: "Der Startbildschirm im dunklen Design.",
+    },
+    {
+      src: "/projects/luma/start-mobile.webp",
+      frame: "iphone",
+      alt: "Der Startbildschirm auf einem Handy im hellen Design: das Wort Luma über grauen Streifen und unten das Eingabefeld",
+      caption: "Start, auf dem Handy.",
+    },
+    {
+      src: "/projects/luma/model-picker-mobile.webp",
+      frame: "iphone",
+      alt: "Die Modellauswahl als Sheet am unteren Rand eines Handys: links die Anbieter-Leiste, daneben die Modelle von OpenAI und xAI mit Symbolen für ihre Fähigkeiten und mit Sternen",
+      caption: "Die Auswahl als Sheet.",
+    },
+  ]}
+  columns={3}
+/>

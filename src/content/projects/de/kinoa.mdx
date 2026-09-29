@@ -1,0 +1,223 @@
+export const source = "c7927048722c";
+
+# Kostenlose Filme und Serien und ein Ort, um sie gemeinsam zu schauen
+
+[Kinoa](https://kinoa.to) ist eine kostenlose Seite zum Schauen von Filmen und Serien, mit einer sozialen Ebene rund um den Player: Profile, ein Feed, Kommentare, Nachrichten und Räume zum gemeinsamen Schauen. Angefangen hat es mit einem Suchfeld und einem Player, alles Weitere kam Release für Release dazu.
+
+| Personen pro Monat | Konten    | Online seit   |
+| ------------------ | --------- | ------------- |
+| Rund 10'000        | Rund 1000 | November 2025 |
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/hero.webp"
+  video="/projects/kinoa/hero.mp4"
+  alt="Die Startseite von Kinoa im dunklen Design: Die Überschrift What do you want to watch? steigt ins Bild, dann bringt die Eingabe von spirited ins Suchfeld Spirited Away und vier weitere Ergebnisse hervor, und die Pfeiltasten bewegen sich durch sie"
+  caption="Die Suche antwortet schon beim Tippen."
+/>
+
+## Etwas zum Schauen finden
+
+Alles beginnt bei einem einzigen Suchfeld. Die Ergebnisse erscheinen schon beim Tippen, jedes mit Poster, Jahr und Bewertung, der Rest des wahrscheinlichsten Titels wird grau ergänzt, und die Pfeiltasten führen durch die Liste. Unter der Suche zeigt die Startseite, was Sie gerade geschaut haben und was alle anderen diese Woche schauen.
+
+Jede Kachel öffnet sich an Ort und Stelle, wenn Sie mit der Maus darüberfahren: Das Poster weitet sich zum Artwork des Titels, mit der Inhaltsangabe und einer Schaltfläche zum Losschauen.
+
+<ProjectImage
+  src="/projects/kinoa/cards.webp"
+  video="/projects/kinoa/cards.mp4"
+  alt="Das Trending-Raster der Startseite: Während der Mauszeiger an der ersten Reihe entlangfährt, weitet sich jedes Poster zu einer Kachel mit dem Hintergrundbild des Titels, Jahr, Bewertung, Inhaltsangabe, einer Watch-Now-Schaltfläche und Schnellaktionen"
+  caption="Kacheln öffnen sich beim Darüberfahren zum Artwork des Titels."
+  size="full"
+/>
+
+Die Seite eines Titels zeigt sein Artwork, die Bewertung, die Genres und die Besetzung, und direkt darunter sitzt der Player. Die Katalogdaten stammen von TMDB, The Movie Database.
+
+<ProjectImage
+  src="/projects/kinoa/title-your-name.webp"
+  alt="Die Titelseite von Your Name: das Artwork des Films über die ganze Breite oben, sein Poster, Bewertung, Jahr, Laufzeit, Genres und Inhaltsangabe sowie eine Schaltfläche Watch Together"
+  caption="Eine Titelseite."
+  size="full"
+/>
+
+## Abspielen
+
+Filme und Serien laufen in Playern, die von anderen Seiten eingebettet sind, und nicht jeder von ihnen hat jeden Titel. Die Zeile unter dem Player nennt den aktuellen Server und kennzeichnet jeden mit dem, was er am besten kann, etwa beste Qualität oder grösste Zuverlässigkeit. Lädt der Standard nicht, bietet ein Hinweis mit einem Tipp den nächsten an. Auf dem Handy kann die Wiedergabe direkt in den Vollbild-Player des Geräts wechseln.
+
+Eine Serie bekommt eine Folgenauswahl nach Staffel, in der die Folge, bei der Sie gerade sind, hervorgehoben ist.
+
+<ProjectImage
+  src="/projects/kinoa/episodes.webp"
+  alt="Unter dem Player: die Serverzeile mit VidFast, einem Best-quality-Chip und einem Try-VidSrc-Hinweis, dann der Abschnitt Episodes mit einer Staffelauswahl und Standbildern von sechs Folgen, die dritte hervorgehoben"
+  caption="Die Serverzeile und die Folgenauswahl."
+  size="full"
+/>
+
+Kinoa merkt sich, wo Sie aufgehört haben. Continue Watching bringt Sie zurück zur selben Minute eines Films oder zur selben Folge einer Serie, und das geht auch ohne Konto. Mit der Anmeldung wandert dieser Verlauf auf das Konto, neben eine Watchlist, sodass beide Ihnen auf andere Geräte folgen.
+
+<ProjectImage
+  src="/projects/kinoa/continue-watching.webp"
+  alt="Die nach unten gescrollte Startseite: Continue Watching mit Spirited Away, Slow Horses Staffel 1 Folge 3, Dune: Part Two und Arcane Staffel 2 Folge 1, jeweils mit Fortschrittsbalken und verbleibender Zeit, über den angesagten Titeln der Woche"
+  caption="Continue Watching, über den angesagten Titeln der Woche."
+  size="full"
+/>
+
+## Gemeinsam schauen
+
+Ein Raum ist ein Link. Der Host wählt einen Titel und teilt den Raum, und alle, die beitreten, sehen denselben Moment, mit einem Chat neben dem Player. Pausiert der Host, springt er vor oder wechselt er die Folge, folgt der Raum. Ausserdem führt der Host den Raum:
+
+- **Übergabe.** Das Hosten kann an jede andere Person im Raum übergehen, und schliesst sich der Tab des Hosts, gibt der Raum es an jemanden weiter, der noch da ist.
+- **Moderation.** Der Host kann Leute entfernen und sie sperren, sodass sie nicht zurückkommen können.
+- **Sichtbarkeit.** Ein Raum kann im öffentlichen Verzeichnis aufgeführt werden oder denen vorbehalten bleiben, die den Link haben.
+
+<ProjectImage
+  src="/projects/kinoa/watch-together.webp"
+  video="/projects/kinoa/watch-together.mp4"
+  alt="Die Seite Watch Together: die Überschrift Movie night, across the internet neben einem gepunkteten Globus, der sich unter kreisenden Bögen dreht"
+  caption="Movie night, across the internet."
+  size="full"
+/>
+
+## Profile, Feed und Nachrichten
+
+Rund um den Player sitzt ein kleines soziales Netzwerk:
+
+- **Profile.** Jedes Konto bekommt ein Handle und eine öffentliche Seite unter kinoa.to/@name, mit Favoriten, einer Watchlist und dem, was zuletzt geschaut wurde. Ein Schalter macht das ganze Profil privat.
+- **Der Feed.** Die Leute folgen einander, liken Titel und kommentieren sie, und der Feed zeigt Kommentare, Favoriten und wer wem folgt, von allen auf Kinoa, das Neueste zuerst.
+- **Nachrichten.** Direktnachrichten bieten Reaktionen, Bearbeiten und Löschen sowie Blockieren und Melden.
+- **Benachrichtigungen.** Eine Glocke sammelt Antworten, Erwähnungen, Likes und neue Follower, sobald sie passieren, und sagt Bescheid, wenn ein Titel erscheint, dem Sie folgen.
+
+<ProjectImage
+  src="/projects/kinoa/profile.webp"
+  alt="Mein Profil unter kinoa.to/@rei: ein Titelbild, Avatar und Handle, Follower-Zahlen und eine kurze Bio, dazu der geöffnete Tab Favorites mit Mr. Robot, Neon Genesis Evangelion, Death Note und Breaking Bad"
+  caption="Mein eigenes Profil, auf dem Tab Favorites."
+  size="full"
+/>
+
+## Sport
+
+Der Sport-Hub beginnt mit dem, was gerade live läuft und was als Nächstes startet, quer durch Fussball, Basketball, Motorsport und mehr. Jedes Spiel hat eine eigene Seite, um die herum Spielplan und Tabelle stehen, und einen Weg, es zu schauen.
+
+<ProjectImage
+  src="/projects/kinoa/sports.webp"
+  alt="Der Sport-Hub: Kategorie-Chips von Fussball bis Cricket, dann Live now mit Kacheln für Basketball- und Fussballpartien, jede als Live markiert"
+  caption="Sport, angeführt von dem, was live läuft."
+  size="full"
+/>
+
+## In Ihrer Sprache
+
+Kinoa übernimmt die Sprache des Besuchers aus dem Browser, und die gesamte Oberfläche ist übersetzt. Bei Arabisch und Hebräisch wird das ganze Layout gespiegelt, von rechts nach links. Titel, Inhaltsangaben und Genres kommen in der Sprache des Besuchers, wo immer TMDB sie hat, und die Poster ebenso: Die arabische Seite zu Your Name zeigt das japanische Original.
+
+<ProjectImage
+  src="/projects/kinoa/ar-title.webp"
+  alt="Die Seite zu Your Name auf Arabisch: das Layout von rechts nach links gespiegelt, Titel und Inhaltsangabe auf Arabisch und das japanische Poster rechts"
+  caption="Your Name auf Arabisch, mit seinem japanischen Poster."
+  size="full"
+/>
+
+## Design und Bewegung
+
+Kinoa verwendet eine warme Palette aus Creme und Espresso mit einem Karamellakzent, in einem hellen und einem dunklen Design, die dem System folgen, solange Sie keines wählen. Kleine Bewegungen bestätigen, was passiert ist:
+
+- Seiten werden gestreamt, und jeder Teil erscheint an der Stelle seines Platzhalters.
+- Die Seitenleiste gleitet auf und zu.
+- Bei einem abgelehnten Formular wackelt das Feld, das nicht stimmt.
+- Dialoge ändern ihre Grösse fliessend, statt zu springen.
+
+All das tritt zurück, wenn Besucher bei ihrem System reduzierte Bewegung eingestellt haben. Kinoa lässt sich ausserdem als App installieren, aus dem Browser auf einem Computer oder Android, oder auf dem iPhone mit einer kurzen Anleitung.
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/theme.webp"
+  video="/projects/kinoa/theme.mp4"
+  alt="Die Startseite wechselt über die Bedienelemente am unteren Rand der Seitenleiste vom dunklen ins helle Design und wieder zurück"
+  caption="Das helle und das dunkle Design."
+/>
+
+## So ist es gebaut
+
+Kinoa ist eine Next.js-App, überwiegend mit Server Components, auf Supabase für Konten, die Datenbank und die Realtime-Kanäle, auf denen die Räume laufen. Bereitgestellt wird es auf Vercel, und übersetzt wird es mit next-intl.
+
+### Einen Raum im Gleichtakt halten
+
+Die eingebetteten Player sind die harte Einschränkung: Man kann ihnen nicht sagen, dass sie pausieren oder zu einer Zeit springen sollen. Deshalb lädt ein Gast, der vom Host wegdriftet, seinen Player an der Position des Hosts neu, um die Dauer eines Neuladens nach vorn gerechnet. Jedes Neuladen misst, wo es tatsächlich gelandet ist, und korrigiert damit das nächste, und es zielt einen Sekundenbruchteil hinter den Host, denn zu früh verdirbt eine Szene, zu spät nicht.
+
+<CodeBlock
+  code={`/** Aim a touch behind the host — being early spoils, being late doesn't. */
+  export const TARGET_DRIFT_SECONDS = -0.75
+  /** Share of each landing error folded into the next lead estimate. */
+  export const LEAD_LEARNING_RATE = 0.6
+  export function anchorTargetFor(
+    host: HostAnchor,
+    now: number,
+    leadSeconds: number
+  ): AnchorTarget {
+    if (!host.isPlaying) {
+      return { time: Math.max(0, host.currentTime), play: false }
+    }
+    return {
+      time: Math.max(0, projectPlayhead(host, host.at, now) + leadSeconds),
+      play: true,
+    }
+  }
+  export function nextLoadLead(lead: number, driftAtSettle: number): number {
+    const error = driftAtSettle - TARGET_DRIFT_SECONDS
+    const next = lead - error * LEAD_LEARNING_RATE
+    return Math.min(
+      MAX_LOAD_LEAD_SECONDS,
+      Math.max(MIN_LOAD_LEAD_SECONDS, Number.isFinite(next) ? next : lead)
+    )
+  }`}
+  fileName="lib/watch-together-playhead-sync.ts"
+  lang="ts"
+/>
+
+Ein Neuladen kostet den Puffer, deshalb lädt ein Gast erst neu, wenn er bei zwei Prüfungen hintereinander mehrere Sekunden abgedriftet ist, und nach ein paar Versuchen überlässt er die Entscheidung einer Schaltfläche Catch up.
+
+### Regeln, die die Datenbank durchsetzt
+
+Zwei Regeln liegen in der Datenbank statt in der App, sie gelten also für jeden Client:
+
+- **Nur der Host steuert einen Raum.** Das ist eine Row-Level-Security-Policy auf dem Steuerkanal des Raums. Ein Integrationstest meldet sich als Gast an, sendet jeden Steuerbefehl und prüft, dass der Host keinen davon erhält.
+- **Handles werden an einer einzigen Stelle vergeben.** Eine Datenbankfunktion verantwortet alle Regeln, von der Länge über reservierte Namen bis zur Moderation, und ein Unique-Index entscheidet, wenn zwei Personen gleichzeitig denselben Namen beanspruchen.
+
+### Weniger Roundtrips
+
+Drei Aufgaben liefen weit öfter, als sie mussten:
+
+| Aufgabe                                                        | Vorher                                                         | Nachher                                                |
+| -------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
+| Prüfen, wer angemeldet ist                                     | 3 Aufrufe an Supabase Auth auf einer Filmseite, 4 auf dem Feed | 1 pro Rendervorgang, geteilt von allen Hilfsfunktionen |
+| Eine Watchlist darstellen                                      | Eine TMDB-Anfrage für jeden Titel darauf                       | Eine Datenbankabfrage: Jede Zeile trägt ihre Kachel    |
+| Die Versionsprüfung, die jeder offene Tab alle 5 Minuten macht | Jedes Mal eine Serverless-Funktion                             | Der Edge-Cache von Vercel                              |
+
+Eine Sitzung zu prüfen ist keine lokale Dekodierung: Es geht übers Netzwerk, deshalb fiel es ins Gewicht, sie nur einmal pro Rendervorgang zu prüfen.
+
+### Die Übersetzungen vollständig halten
+
+Englisch ist die Quelle für jeden Text. Eine Prüfung in der CI vergleicht jede andere Sprachdatei damit und schlägt fehl, wenn ein Schlüssel fehlt oder übrig ist, sodass keine neue Funktion halb übersetzt ausgeliefert werden kann.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/kinoa/home-desktop.webp",
+      frame: "safari",
+      url: "kinoa.to",
+      alt: "Die Startseite von Kinoa im hellen Design: die Überschrift What do you want to watch? über dem Suchfeld",
+      caption: "Die Startseite im hellen Design.",
+    },
+    {
+      src: "/projects/kinoa/title-mobile.webp",
+      frame: "iphone",
+      alt: "Die Seite zu Slow Horses auf einem Handy: das Poster über einem dunklen Hintergrundbild, Titel, Bewertung, Genres, Inhaltsangabe und eine Schaltfläche Watch Together",
+      caption: "Eine Serie auf dem Handy.",
+    },
+    {
+      src: "/projects/kinoa/home-mobile.webp",
+      frame: "iphone",
+      alt: "Die Startseite auf einem Handy: Continue Watching mit Spirited Away und Slow Horses, darunter die Reihe Trending",
+      caption: "Startseite auf dem Handy.",
+    },
+  ]}
+  columns={3}
+/>

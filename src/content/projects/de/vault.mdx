@@ -1,0 +1,126 @@
+export const source = "7594425b3b8e";
+
+# Eine lokale Sandbox für OpenID Connect
+
+Vault ist ein Identitäts-Setup, das auf einem einzigen Rechner läuft: Keycloak als OpenID-Connect-Provider, ein FastAPI-Backend, das dessen Tokens prüft und Rollen kontrolliert, und ein Next.js-Frontend mit Anmeldeseite und Dashboards, die nach Rolle freigegeben sind. OpenID Connect (OIDC) ist die Identitätsschicht auf OAuth 2.0. Ich habe Vault im Mai 2025 gebaut, um einem Token zu folgen, vom Moment, in dem Keycloak es ausstellt, bis zu dem, in dem eine API es annimmt oder abweist.
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/hero.webp"
+  video="/projects/vault/hero.mp4"
+  alt="Die Anmeldeseite von Vault: In die Kachel werden der Benutzername demo und ein Passwort getippt, Sign in bringt eine Toast-Meldung Login successful und das Admin Dashboard, und Back to Home öffnet das Portal, das demo begrüsst, mit den Badges Admin und User über den Schaltflächen Admin Dashboard und User Dashboard"
+  caption="Anmelden als Demo-Benutzer."
+/>
+
+## Die Anmeldung
+
+Das Anmeldeformular bleibt in der App. Das Frontend schickt Benutzername und Passwort per POST an das `/login` des Backends, und das Backend tauscht sie in einer einzigen Anfrage am Token-Endpunkt von Keycloak ein, mit dem Resource-Owner-Password-Grant, den Terraform am Client aktiviert. Das Access-Token, das es zurückbekommt, legt das Backend in einem `HttpOnly`-Cookie ab, das mit dem Token abläuft, nach den fünf Minuten, die Keycloak standardmässig vorgibt. Eine abgelehnte Anmeldung zeigt die eigene Fehlermeldung von Keycloak.
+
+Bei diesem Grant sieht die App das Passwort des Benutzers, weshalb eine App mit echten Benutzern den Browser stattdessen auf die eigene Anmeldeseite des Providers schickt. Für eine Sandbox mit einem einzigen Demo-Benutzer ging es genau darum, den ganzen Austausch an einer lesbaren Stelle zu haben.
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/sign-in-refused.webp"
+  alt="Die Anmelde-Kachel mit dem Benutzernamen demo und einem falschen Passwort, einer roten Warnung Invalid user credentials über der Schaltfläche Sign in und einer Toast-Meldung Login failed in der Ecke"
+  caption="Ein falsches Passwort kommt mit der Meldung von Keycloak zurück."
+/>
+
+## Ein Portal, aufgebaut aus den Rollen des Tokens
+
+Nach der Anmeldung ruft das Frontend das `/me` des Backends auf. Das Cookie ist `HttpOnly`, das JavaScript der Seite kann das Token also nicht lesen: Das Backend prüft es und liefert dessen Claims zurück, und das Portal wird daraus aufgebaut, mit dem Benutzernamen, einem Badge für jede Realm-Rolle und einer Schaltfläche für jedes Dashboard, das die Rollen freischalten. Der Demo-Benutzer hat beide Rollen und landet im Admin-Dashboard. Entzieht man ihm `admin`, zeigt die nächste Anmeldung ein Badge und eine Schaltfläche, und ein Aufruf von `/admin` führt stattdessen zum User-Dashboard.
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/portal-user-only.webp"
+  alt="Die Portal-Kachel, die demo begrüsst, mit einem einzigen Badge User, einer Schaltfläche User Dashboard und Sign Out"
+  caption="Das Portal, nachdem dem Demo-Benutzer admin entzogen wurde."
+/>
+
+## Die API entscheidet
+
+Die Schaltflächen spiegeln die Rollen nur. Jede geschützte Route der API hängt von `verify_token` ab, das das Token aus einem `Authorization: Bearer`-Header liest oder, wenn es keinen gibt, aus dem Cookie. Ein fehlendes, abgelaufenes oder gefälschtes Token wird mit einem 401 abgewiesen. Ein gültiges Token ohne die passende Rolle bekommt von einer zweiten Abhängigkeit, `require_roles`, ein 403; sie sucht die Rolle im Claim `realm_access.roles` des Tokens:
+
+| Route    | Braucht                       | Ohne das |
+| -------- | ----------------------------- | -------- |
+| `/me`    | Ein beliebiges gültiges Token | 401      |
+| `/user`  | Die Rolle `user`              | 403      |
+| `/admin` | Die Rolle `admin`             | 403      |
+
+<ProjectImage
+  src="/projects/vault/api.webp"
+  video="/projects/vault/api.mp4"
+  alt="Ein PowerShell-Fenster im Vollbild: curl meldet sich als demo an, dann antwortet GET /user mit HTTP 200 und User access granted, wobei die Rollenliste nur user enthält, und GET /admin antwortet mit HTTP 403 Forbidden und Access denied. Required roles: admin"
+  caption="Ohne admin antwortet /user, und /admin lehnt ab."
+  size="full"
+/>
+
+## Keycloak, konfiguriert mit Terraform
+
+Docker Compose betreibt Keycloak 26.2 im Entwicklungsmodus, mit einer PostgreSQL-16-Datenbank für seinen Zustand. In der Admin-Konsole von Keycloak lassen sich ein Realm, ein Client, zwei Rollen und ein Benutzer in wenigen Minuten zusammenklicken, aber sie hält nicht fest, wie es dazu kam. In Vault steht diese Konfiguration in `terraform/main.tf`:
+
+- **Der Realm**, `vault-core`, in dem alles andere liegt.
+- **Zwei Realm-Rollen**, `admin` und `user`.
+- **Ein Demo-Benutzer**, `demo`, der beide hat.
+- **Der Client**, `vault-app`, über den sich die App anmeldet.
+
+Eine geänderte Einstellung zeigt sich in einem Diff, und `terraform apply` bringt den Realm zurück auf genau das, was die Datei beschreibt.
+
+<ProjectImage
+  src="/projects/vault/terraform-apply.webp"
+  video="/projects/vault/terraform-apply.mp4"
+  alt="Ein PowerShell-Fenster im Vollbild: terraform apply -auto-approve gibt seinen Plan aus, erstellt dann den Realm, die beiden Rollen, den Client-Scope, den Demo-Benutzer, den Client und die Rollenzuweisung und endet mit Apply complete! Resources: 8 added"
+  caption="terraform apply baut den Realm aus dem Nichts auf."
+  size="full"
+/>
+
+Die Admin-Konsole listet dann auf, was die Datei verlangt hat, mit den Beschreibungen, die sie mitgegeben hat.
+
+<Safari
+  url="localhost:8080/admin"
+  src="/projects/vault/keycloak-roles.webp"
+  alt="Die Admin-Konsole von Keycloak im Vault Core Realm: Die Seite Realm roles listet admin, beschrieben als Administrator role, und user, beschrieben als Regular user role, neben den Standardrollen von Keycloak"
+  caption="Die Rollen des Realms in der Admin-Konsole von Keycloak."
+/>
+
+## Wie es gebaut ist
+
+Das Backend ist FastAPI, mit python-jose für die Token-Prüfung und httpx für die Aufrufe an Keycloak. Das Frontend ist Next.js mit Komponenten von shadcn/ui. Beide laufen auf dem Host, neben den beiden Containern.
+
+### Ein Token prüfen
+
+`verify_token` fragt Keycloak nie nach einem Token. Es liest das Discovery-Dokument des Realms unter `/.well-known/openid-configuration`, folgt dessen `jwks_uri` zu den öffentlichen Schlüsseln des Realms und lässt `jwt.decode` von python-jose die Signatur, das Ablaufdatum und den Aussteller prüfen, der Zeichen für Zeichen `http://localhost:8080/realms/vault-core` entsprechen muss. Keycloak signiert Access-Tokens mit dem privaten RSA-Schlüssel des Realms (RS256), zum Prüfen genügt also die öffentliche Hälfte. Beide Dokumente werden bei jeder Anfrage geholt statt zwischengespeichert: zwei lokale Roundtrips, und ein in der Admin-Konsole rotierter Schlüssel gilt ab der nächsten Anfrage.
+
+Das Bearer-Schema wird mit `auto_error=False` erzeugt, sodass eine Anfrage ohne den Header bis zur Cookie-Prüfung kommt, statt auf der Stelle abgewiesen zu werden. Die Rollen sind eine zweite Abhängigkeit, die darübergelegt ist:
+
+<CodeBlock
+  code={`def require_roles(roles: List[str]):
+      async def role_checker(payload: dict = Depends(verify_token)):
+          if not has_role(payload, roles):
+              raise HTTPException(
+                  status_code=403,
+                  detail=f"Access denied. Required roles: {', '.join(roles)}"
+              )
+          return payload
+      return role_checker`}
+  fileName="app/backend/main.py"
+  lang="python"
+/>
+
+### Die Rollen stehen fest, wenn das Token ausgestellt wird
+
+Terraform verwaltet die ganze Rollenliste des Demo-Benutzers. `keycloak_user_roles` ist abschliessend, der Benutzer hat also genau die Rollen in `role_ids`, und `realm_access.roles` im Token nennt nichts anderes:
+
+<CodeBlock
+  code={`resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.admin_role.id,
+      keycloak_role.user_role.id,
+    ]
+  }`}
+  fileName="terraform/main.tf"
+  lang="hcl"
+/>
+
+Streicht man `admin` aus `role_ids` und wendet die Änderung an, trägt ein vor der Änderung ausgestelltes Token die Rolle noch, bis es abläuft, weil das Backend dem vertraut, was das signierte Token sagt, und Keycloak nie wieder fragt. Die nächste Anmeldung bekommt ein Token ohne die Rolle, und dieses Token verwendet der Terminal-Clip weiter oben.

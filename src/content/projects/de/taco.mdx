@@ -1,0 +1,165 @@
+export const source = "7a33cd507aed";
+
+# Eine Website für den Hund meines Bruders, gebaut zur Wiederverwendung
+
+Taco ist der Zwergspitz meines Bruders, und [takitwo.vercel.app](https://takitwo.vercel.app) ist seine Website. Ich habe sie als Grundlage für die nächste kleine Website dieser Art gebaut. Die Farben liegen in Design-Klassen und jeder Text der Oberfläche in einer JSON-Datei pro Sprache. Für die nächste Website braucht es also neue Inhalte und neue Werte in diesen Dateien, die Komponenten bleiben, wie sie sind.
+
+<Safari
+  url="takitwo.vercel.app"
+  src="/projects/taco/themes.webp"
+  video="/projects/taco/themes.mp4"
+  alt="Die Taco-Startseite wechselt über das Palettenmenü in der Kopfzeile die Designs: von Green zu Cherry, Sky, Gotham und schliesslich Night"
+  caption="Die Designs über die Kopfzeile wechseln."
+/>
+
+## Farbdesigns
+
+Die Schaltfläche mit der Palette in der Kopfzeile öffnet das Design-Menü. Ein ausgewähltes Design färbt jede Seite auf einmal um, von den Links und Schaltflächen bis zu den weichen Kreisen hinter dem Foto, und die Website merkt sich die Wahl für den nächsten Besuch. Gotham ist schwarz-weiss, Night ist marineblau mit blauem Akzent, und wer neu auf die Website kommt, startet mit Green.
+
+<ProjectImage
+  src="/projects/taco/about-gotham.webp"
+  alt="Die About-Seite im Gotham-Design: links ein grosses Foto von Taco mit einer Pusteblume, rechts eine kurze Beschreibung mit Kacheln für Alter, Rasse, Charakter und Lieblingsessen, alles weiss auf schwarz"
+  caption="Die About-Seite in Gotham."
+  size="full"
+/>
+
+## Sprachen
+
+Die Website gibt es auf Englisch, Spanisch und Japanisch. Beim ersten Besuch wählt sie die Sprache, die zum Browser passt, und fällt sonst auf Englisch zurück; mit der Sprach-Schaltfläche in der Kopfzeile lässt sie sich jederzeit umstellen. Eine dort getroffene Wahl wird gespeichert und hat bei jedem späteren Besuch Vorrang.
+
+<ProjectImage
+  src="/projects/taco/language.webp"
+  video="/projects/taco/language.mp4"
+  alt="Auf der Startseite öffnet sich das Sprachmenü, 日本語 wird gewählt, Navigation, Überschrift und Schaltflächen wechseln auf Japanisch, und die Seite scrollt hinunter zum About-Abschnitt, ebenfalls auf Japanisch"
+  caption="Die Website auf Japanisch umstellen."
+  size="full"
+/>
+
+## Von Seite zu Seite
+
+Die Kopfzeile bleibt von Seite zu Seite an ihrem Platz, und die Linie unter dem aktiven Link gleitet zum neuen hinüber, während die nächste Seite eingeblendet wird. Die About-Seite bündelt Tacos Eckdaten: Alter, Rasse, Charakter und Lieblingsessen.
+
+<ProjectImage
+  src="/projects/taco/nav.webp"
+  video="/projects/taco/nav.mp4"
+  alt="Die Website im Sky-Design: Ein Klick auf About schiebt die Unterstreichung von Home nach About, während die About-Seite eingeblendet wird, ein Klick auf Home schiebt sie zurück"
+  caption="Die Unterstreichung folgt der aktiven Seite."
+  size="full"
+/>
+
+## Der Blog
+
+Jeder Beitrag hat eine eigene Seite mit Titel, Datum und Autor, einem Titelfoto und darunter der Geschichte. Die Textstile folgen dem Design, in Gotham und Night steht ein Beitrag deshalb in hellem Text auf dunkler Seite.
+
+<ProjectImage
+  src="/projects/taco/post-night.webp"
+  alt="Ein Blogbeitrag mit dem Titel Taco's Beach Day im Night-Design: ein Zurück-Link, Datum und Autor, ein breites Foto von Taco und die ersten Absätze in hellem Text auf Marineblau"
+  caption="Ein Beitrag im Night-Design."
+  size="full"
+/>
+
+## Auf dem Handy
+
+Auf dem Handy wandern die Links in ein Menü, das seitlich hereingleitet. Die Schaltflächen für Sprache und Design sitzen unten darin und funktionieren wie am Computer.
+
+<IPhone
+  src="/projects/taco/menu.webp"
+  video="/projects/taco/menu.mp4"
+  alt="Auf dem Handy gleitet das Menü von rechts herein; die Design-Schaltfläche stellt die Website auf Cherry um, dann die Sprach-Schaltfläche auf Japanisch"
+  caption="Das Menü auf dem Handy, unten mit Sprache und Design."
+/>
+
+## Wie es gebaut ist
+
+Taco ist eine Next.js-App auf dem App Router, geschrieben in TypeScript. Die Komponenten stammen von shadcn/ui, das auf Radix aufbaut, und sind mit Tailwind CSS gestaltet. Framer Motion treibt die Animationen der Seiten und der Navigation an, und die Website läuft auf Vercel.
+
+### Designs sind Sets aus CSS-Variablen
+
+shadcn/ui färbt alles über Tokens ein: Klassen wie `bg-primary` und `border-border`. Die Tailwind-Konfiguration bildet jedes Token auf eine CSS-Variable ab, aus `primary` wird also `hsl(var(--primary))`, und ein Design ist eine Klasse, die diesen Variablen andere HSL-Werte gibt. Green liegt auf `:root`, und die übrigen Designs folgen demselben Muster wie Sky, hier gekürzt gezeigt:
+
+<CodeBlock
+  code={`.theme-sky {
+    --background: 210 50% 98%;
+    --foreground: 210 50% 16%;
+    --primary: 210 80% 50%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 210 33% 96%;
+    --muted-foreground: 210 5% 45%;
+    --border: 210 20% 90%;
+    --ring: 210 80% 50%;
+  }`}
+  fileName="app/globals.css"
+  lang="css"
+/>
+
+Weil sich die Seiten über die Tokens einfärben, ist ein neues Design eine weitere Klasse und ein Eintrag im Design-Menü. Night ist die Klasse `dark`, nach der die `dark:`-Variante von Tailwind sucht. Gotham ist ebenfalls dunkel, hat aber eine eigene Klasse, deshalb nennen die Prose-Stile für Blogbeiträge sowohl `.dark` als auch `.theme-gotham`.
+
+### Kein Aufblitzen des falschen Designs
+
+[next-themes](https://github.com/pacocoursey/next-themes) setzt die Klasse des gewählten Designs auf `<html>` und hält sie in `localStorage` fest. Die Klasse muss gesetzt sein, bevor der Browser zum ersten Mal zeichnet, sonst würde die Seite für jemanden, der schon einmal da war und Night gewählt hat, zuerst grün aufblitzen. Die Bibliothek löst das mit einem kleinen Inline-Skript, das das gespeicherte Design liest und die Klasse setzt, bevor React hydriert.
+
+Deshalb ist `<html>` mit `suppressHydrationWarning` versehen: Seine Klasse im Browser weicht absichtlich vom HTML des Servers ab. Die Design-Schaltfläche hat dasselbe Problem im Kleinen. Sie zeigt das Symbol des aktuellen Designs, eine Blume für Cherry und einen Mond für Night, und da der Server das Design nicht kennen kann, zeichnet sie das Standard-Palettensymbol, bis sie gemountet ist.
+
+### Die englische Datei ist der Typ
+
+Die Texte der Oberfläche liegen in `lib/i18n/en.json`, `es.json` und `ja.json` als verschachtelte Objekte, und Komponenten schlagen Texte über einen Punktpfad nach: `t('home.aboutSection.title')` läuft durch den jeweils aktiven Baum nach unten. Das Objekt, das die Sprachdateien enthält, ist als `typeof en` typisiert, eine spanische oder japanische Datei, der ein Schlüssel fehlt, erscheint deshalb als Typfehler im Editor.
+
+Bei einem Besuch prüft der Provider zuerst in `localStorage`, ob früher eine Sprache gewählt wurde. Ist keine da, fragt er den Browser:
+
+<CodeBlock
+  code={`import { defaultLanguage, languages } from './languages';
+  import en from './en.json';
+  import es from './es.json';
+  import ja from './ja.json';
+  export type TranslationJSON = typeof en;
+  type TranslationsType = { [key: string]: TranslationJSON };
+  const translations: TranslationsType = { en, es, ja };
+  const fallbackLanguageCode = 'en';
+  export function detectUserLanguage(): string {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      const browserLang = navigator.language || navigator.languages[0];
+      const langCode = browserLang.split('-')[0];
+      return languages.some(lang => lang.code === langCode)
+        ? langCode
+        : fallbackLanguageCode;
+    }
+    return fallbackLanguageCode;
+  }`}
+  fileName="lib/i18n/index.ts"
+  lang="ts"
+/>
+
+`navigator.language` liefert einen Sprachcode wie `es-MX`. Die Funktion behält den Teil vor dem Bindestrich und verwendet ihn, wenn die Website diese Sprache hat, sonst Englisch. All das läuft im Browser, nachdem die Seite geladen ist, wodurch jede Seite statisch bleibt: Das HTML wird einmal vorgerendert, und die URLs sind in jeder Sprache dieselben.
+
+Um eine Sprache hinzuzufügen, sind drei Schritte nötig:
+
+1. Eine JSON-Datei mit allen Texten, in derselben Form wie `en.json`.
+2. Ein Import, der sie in das Objekt aufnimmt, wo der Typ sie gegen das Englische prüft.
+3. Ein Eintrag in `languages.ts` mit Code, Anzeigenamen und Flagge.
+
+Das Sprachmenü wird aus dieser Liste gebaut, braucht also keine eigene Änderung.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/taco/home-cherry.webp",
+      frame: "safari",
+      url: "takitwo.vercel.app",
+      alt: "Die Taco-Startseite im Cherry-Design: die Überschrift Meet Taco in Pink neben einem runden Foto von Taco mit einer Pusteblume",
+      caption: "Die Startseite in Cherry.",
+    },
+    {
+      src: "/projects/taco/home-cherry-mobile.webp",
+      frame: "iphone",
+      alt: "Die Startseite auf dem Handy im Cherry-Design: Überschrift, zwei Schaltflächen und das runde Foto in einer Spalte untereinander",
+      caption: "Die Startseite auf dem Handy.",
+    },
+    {
+      src: "/projects/taco/post-night-mobile.webp",
+      frame: "iphone",
+      alt: "Der Blogbeitrag Taco's Beach Day auf dem Handy im Night-Design, mit seinem Foto und den ersten Absätzen",
+      caption: "Ein Beitrag auf dem Handy.",
+    },
+  ]}
+  columns={3}
+/>

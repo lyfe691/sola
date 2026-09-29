@@ -1,0 +1,210 @@
+export const source = "45a160716b8d";
+
+# Ein TCP- und UDP-Portscanner in Rust
+
+magi ist ein Portscanner für die Kommandozeile, den ich in Rust geschrieben habe. Er scannt per Connect-Scan: Jede Probe ist eine gewöhnliche TCP-Verbindung oder ein UDP-Datagramm über die Sockets des Betriebssystems, deshalb läuft er unter Linux, macOS und Windows als normaler Benutzer. Er meldet einen Port nur in einem Zustand, den er tatsächlich beobachtet hat, und sagt es, wenn er einen nicht testen konnte.
+
+<ProjectImage
+  src="/projects/magi/scan.webp"
+  video="/projects/magi/scan.mp4"
+  alt="Ein Terminal: magi 45.33.32.156 --banner wird eingetippt und ausgeführt, ein Zähler klettert durch 1024 geprüfte Ports, und das Ergebnis listet 22/tcp ssh mit dem Banner SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13 und 80/tcp http auf"
+  caption="Ein echter Scan der ersten 1024 Ports von scanme.nmap.org."
+  size="full"
+/>
+
+## Einen Host scannen
+
+Sie geben magi ein Ziel und die Ports, die geprüft werden sollen. Offene Ports werden unter ihrem Host mit dem üblichen Dienstnamen aufgelistet, und während ein längerer Scan läuft, zeigt ein Zähler, wie viele Ports schon geprüft wurden und wie viele davon offen sind. Der Lauf oben richtet sich gegen 45.33.32.156, scanme.nmap.org, einen Host, den das Nmap-Projekt zum Testen von Scannern bereithält, und er dauerte etwa eine Sekunde.
+
+Das Ziel kann drei Formen haben:
+
+| Ziel                | Beispiel          | Was magi tut                                                |
+| ------------------- | ----------------- | ----------------------------------------------------------- |
+| Ein Hostname        | `scanme.nmap.org` | Löst ihn auf und scannt jede Adresse, die dabei herauskommt |
+| Eine IP-Adresse     | `45.33.32.156`    | Scannt diese Adresse, ohne DNS-Abfrage                      |
+| Ein Subnetz in CIDR | `192.168.1.0/24`  | Scannt jeden Host darin, bis zu einem /16                   |
+
+Die Grenze von /16 gibt es, damit ein falsch getipptes Präfix nicht zu Millionen von Proben wird. Alles Übrige ist ein Flag:
+
+| Flag                  | Was es festlegt                                              | Standard     |
+| --------------------- | ------------------------------------------------------------ | ------------ |
+| `-p`, `--ports`       | Die zu prüfenden Ports, als Liste, als Bereich oder gemischt | `1-1024`     |
+| `-c`, `--concurrency` | Gleichzeitig laufende Proben                                 | 512          |
+| `-t`, `--timeout`     | Wie lange jede Probe auf eine Antwort wartet, in ms          | 1000         |
+| `-r`, `--rate`        | Höchstzahl der Proben, die pro Sekunde starten               | Keine Grenze |
+| `-b`, `--banner`      | Liest die erste Zeile, die jeder offene Dienst sendet        | Aus          |
+| `-u`, `--udp`         | Prüft UDP statt TCP                                          | TCP          |
+| `-j`, `--json`        | Gibt die Ergebnisse als JSON aus                             | Eine Tabelle |
+
+<CodeBlock
+  code={`magi 192.168.1.0/24 --ports 22,80,443      # a whole subnet, grouped by host
+  magi 10.0.0.5 --ports 1-65535 -c 1024      # every port, 1024 probes in flight
+  magi 192.168.1.1 --ports 53,123,161 --udp  # UDP instead of TCP
+  magi scanme.nmap.org -p 22,80 --json | jq  # JSON on stdout, progress on stderr`}
+  fileName="examples.sh"
+  lang="bash"
+/>
+
+## Ausgabe für Skripte
+
+Alles, was eine Person lesen soll, geht an stderr: die Zeile, die den Scan eröffnet, der Zähler und jede Warnung. Der Zähler erscheint nur, wenn stderr ein Terminal ist. Mit `--json` liefert stdout ein JSON-Array der offenen Ports mit Adresse, Protokoll, Zustand und Banner, sodass sich die Ergebnisse direkt per Pipe an jq oder ein anderes Programm übergeben lassen.
+
+<ProjectImage
+  src="/projects/magi/json.webp"
+  video="/projects/magi/json.mp4"
+  alt="Ein Terminal: magi 45.33.32.156 -p 22,80,443 --banner --json, an jq weitergeleitet, gibt die Scan-Zeile aus, dann ein farbiges JSON-Array mit zwei Objekten, Port 22 mit seinem SSH-Banner und Port 80 mit einem Banner von null"
+  caption="JSON auf stdout, an jq weitergeleitet."
+  size="full"
+/>
+
+## UDP
+
+`--udp` prüft stattdessen UDP. UDP kennt keinen Handshake, deshalb schickt magi ein leeres Datagramm und liest das Urteil daraus ab, wie der Host reagiert:
+
+| Der Host …                                | magi meldet                         |
+| ----------------------------------------- | ----------------------------------- |
+| Antwortet                                 | `open`                              |
+| Antwortet mit einem ICMP Port Unreachable | Geschlossen, und lässt den Port weg |
+| Schweigt bis zum Timeout                  | `open\|filtered`                    |
+
+Schweigen ist mehrdeutig: Ein offener Dienst, der ein leeres Datagramm ignoriert, und eine Firewall, die es verwirft, sehen von aussen gleich aus, deshalb entscheidet sich magi für keines von beiden. In diesem Lauf kamen 53 und 161 als geschlossen zurück und werden weggelassen, während 123 die ganze Sekunde lang schwieg.
+
+<ProjectImage
+  src="/projects/magi/udp.webp"
+  video="/projects/magi/udp.mp4"
+  alt="Ein Terminal: magi 45.33.32.156 -p 53,123,161 --udp läuft, und nach einer Sekunde listet das Ergebnis einen Port auf, 123/udp, als open|filtered markiert"
+  caption="Ein UDP-Scan von drei Ports."
+  size="full"
+/>
+
+## Ports, die er nicht testen konnte
+
+Eine TCP-Probe kann auf vier Arten enden, und nur zwei davon sagen etwas über den Port aus:
+
+| Die Verbindung …                                                   | magi zählt den Port als | Warum                                                     |
+| ------------------------------------------------------------------ | ----------------------- | --------------------------------------------------------- |
+| Kommt zustande                                                     | Offen                   | Etwas lauscht                                             |
+| Wird abgelehnt oder läuft in ein Timeout                           | Nicht offen             | Der Host hat Nein gesagt, oder es hat niemand geantwortet |
+| Scheitert, weil dem Prozess die Dateideskriptoren ausgegangen sind | Nicht getestet          | Die Probe lief nie                                        |
+| Scheitert aus einem anderen Grund                                  | Nicht getestet          | Nichts hat den Port erreicht                              |
+
+Nicht getestete Ports werden nicht in die Zahl der geschlossenen eingerechnet. Der Scan endet mit einer Warnung, die sagt, wie viele es waren und warum, und wenn die Ursache fehlende Dateideskriptoren sind, rät sie, `--concurrency` zu senken oder das Limit für offene Dateien zu erhöhen. Im Clip unten löst scanme.nmap.org zu einer IPv4- und einer IPv6-Adresse auf. In einem Netz ohne IPv6-Routing scheitern die Verbindungen zur IPv6-Adresse mit «network unreachable», bevor etwas gesendet wird, sodass ihre drei Ports als nicht getestet gemeldet werden.
+
+<ProjectImage
+  src="/projects/magi/untestable.webp"
+  video="/projects/magi/untestable.mp4"
+  alt="Ein Terminal: magi scanme.nmap.org -p 22,80,443 meldet zwei Hosts, listet 22/tcp ssh und 80/tcp http auf 45.33.32.156 auf und endet mit der Zeile warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete."
+  caption="Die IPv6-Hälfte des Scans, als nicht getestet gemeldet."
+  size="full"
+/>
+
+## Installation
+
+Jede Version lässt sich mit einem Befehl installieren, der `magi` in Ihren `PATH` legt:
+
+| Plattform | Builds        | Installer         |
+| --------- | ------------- | ----------------- |
+| Linux     | x86-64, arm64 | Shell-Skript      |
+| macOS     | x86-64, arm64 | Shell-Skript      |
+| Windows   | x86-64        | PowerShell-Skript |
+
+[magi.ysz.life](https://magi.ysz.life) zeigt an erster Stelle den Befehl für die Plattform des Besuchers, mit einem Menü zum Wechseln. Mit einer stabilen Rust-Toolchain lässt sich magi auch aus einem Checkout bauen, mit `cargo install --path .`
+
+<Safari
+  url="magi.ysz.life"
+  src="/projects/magi/site.webp"
+  video="/projects/magi/site.mp4"
+  alt="magi.ysz.life lädt: Die Überschrift A port scanner built to be correct wird über gepunkteten Wellen scharf, die Wellen biegen sich, wenn der Mauszeiger vorbeifährt, und der Installationsbefehl wechselt von PowerShell zum curl-Installer, wenn im Menü Linux / macOS gewählt wird"
+  caption="Die Website wechselt den Installationsbefehl zu Linux und macOS."
+/>
+
+## Die Website
+
+Die Website ist eine einzelne Seite mit dem Installationsbefehl, einem Terminalfenster mit einem Scan darin, den Funktionen und einer FAQ. Die Punkte hinter der Überschrift biegen sich um den Mauszeiger, und jede Feature-Kachel zeichnet ihre Figur aus ASCII-Zeichen, die sich Zeile für Zeile füllen, sobald die Kachel ins Bild scrollt, und sich danach weiter verändern. Dazu gibt es ein helles und ein dunkles Design.
+
+<ProjectImage
+  src="/projects/magi/site-features.webp"
+  video="/projects/magi/site-features.mp4"
+  alt="Die magi-Website im dunklen Design gleitet vom Kopfbereich hinunter zum Feature-Raster, wo sich ein Blitz und ein Auge aus orangefarbenen ASCII-Zeichen Zeile für Zeile über den Kacheln Fast and async und TCP and UDP füllen"
+  caption="Die Feature-Kacheln im dunklen Design."
+  size="full"
+/>
+
+## So ist magi gebaut
+
+magi ist eine kleine Bibliothek mit einem schlanken Binary darüber. `main.rs` liest die Argumente, expandiert das Ziel und gibt die Ergebnisse aus, und `scanner.rs` enthält den Scan selbst, das Auslesen der Banner, UDP und die Dienstnamen. magi läuft auf tokio, mit clap für die Flags und serde für das JSON. GitHub Actions führt bei jedem Push rustfmt, clippy und die Tests aus, und cargo-dist baut die Release-Archive und die Installationsskripte. Die Website ist mit Next.js gebaut und mit next-intl übersetzt.
+
+### Eine feste Zahl von Proben gleichzeitig
+
+Ein /24 über die Ports 1 bis 1024 sind rund 260'000 Proben, und für jede vorab einen Task zu starten, würde alle zugleich im Speicher halten. Die Scan-Schleife holt sich stattdessen ein Permit vom Semaphor, bevor sie jede Probe startet, und wartet deshalb, sobald `--concurrency` Proben laufen, auf das Ende einer. Das Permit wandert in den Task und wird freigegeben, wenn die Probe endet, und die Schleife sammelt fertige Proben laufend ein, sodass die Zahl der lebenden Tasks unabhängig von der Grösse des Scans begrenzt bleibt. Gekürzt aus `scan()`:
+
+<CodeBlock
+  code={`let permits = config.concurrency.clamp(1, MAX_CONCURRENCY);
+  let limiter = Arc::new(Semaphore::new(permits));
+  let mut tasks = JoinSet::new();
+  let mut summary = ScanSummary::default();
+  for &target in targets {
+      for &port in ports {
+          let permit = Arc::clone(&limiter)
+              .acquire_owned()
+              .await
+              .expect("semaphore stays open for the duration of the scan");
+          tasks.spawn(async move {
+              let _permit = permit;
+              probe(target, port, timeout_dur, grab_banner, protocol).await
+          });
+          while let Some(joined) = tasks.try_join_next() {
+              collect(&mut summary, &mut progress, joined);
+          }
+      }
+  }`}
+  fileName="src/scanner.rs"
+  lang="rust"
+/>
+
+Die optionale Ratenbegrenzung ist ein tokio-Intervall, das vor jedem Spawn getaktet wird. Der Semaphor begrenzt, wie viele Proben gleichzeitig laufen, und das Intervall, wie viele pro Sekunde starten, und verpasste Takte werden verzögert, sodass ein langsamer Abschnitt nie einen Schwall Proben zum Aufholen freigibt.
+
+### Geschlossen von nicht getestet unterscheiden
+
+Die Tabelle unter «Ports, die er nicht testen konnte» ist eine einzige Funktion. Diese Funktion sortiert den Fehler eines gescheiterten Verbindungsaufbaus, und alles, was keine Ablehnung und kein Timeout ist, wird zu einer von zwei nicht getesteten Arten:
+
+<CodeBlock
+  code={`fn classify_connect_error(e: &io::Error) -> ProbeOutcome {
+      match e.kind() {
+          ErrorKind::ConnectionRefused | ErrorKind::TimedOut => ProbeOutcome::NotOpen,
+          _ if is_fd_exhaustion(e) => ProbeOutcome::Untestable(Untestable::OutOfDescriptors),
+          _ => ProbeOutcome::Untestable(Untestable::Other),
+      }
+  }`}
+  fileName="src/scanner.rs"
+  lang="rust"
+/>
+
+Weil der Scanner eine Bibliothek ist, rufen die Integrationstests das echte `scan()` gegen Sockets auf Loopback auf. Einer davon senkt das Limit für offene Dateien des Prozesses auf 128, scannt 400 lokale Ports mit 300 gleichzeitigen Proben über TCP und dann über UDP und prüft, dass beide Ergebnisse nicht getestete Ports zählen und das Deskriptor-Limit als Ursache nennen.
+
+### UDP ohne Raw Sockets
+
+Um ein ICMP Port Unreachable zu sehen, braucht es normalerweise einen Raw Socket und damit Root. magi verbindet seinen UDP-Socket vor dem Senden mit dem Ziel, was die Antworten auf diese eine Gegenstelle filtert und das Betriebssystem dazu bringt, die ICMP-Meldung beim nächsten Empfang als `ConnectionRefused`-Fehler zu melden. Das Urteil «geschlossen» hängt dann davon ab, dass das Betriebssystem diese Fehler weitergibt, was Linux zuverlässig tut. macOS und Windows begrenzen die Rate von ICMP, weshalb dort manche geschlossenen Ports als `open|filtered` erscheinen.
+
+### Banner von nicht vertrauenswürdigen Hosts
+
+Mit `--banner` liest magi bis zu 512 Bytes von jedem offenen Port und behält die erste Zeile. Dieser Text stammt von einem Host, den Sie nicht kontrollieren, und landet in Ihrem Terminal, deshalb wird jedes Steuerzeichen entfernt, bevor er ausgegeben wird. Eine rohe Escape-Sequenz in einem Banner könnte sonst den Bildschirm löschen, das Fenster umbenennen oder frühere Ausgaben überschreiben, und ein Unit-Test schickt eine ANSI-Sequenz zum Löschen des Bildschirms durch, um zu prüfen, dass nur druckbarer Text herauskommt.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/magi/site-dark.webp",
+      frame: "safari",
+      url: "magi.ysz.life",
+      alt: "Die magi-Website im dunklen Design: die Überschrift A port scanner built to be correct über orangefarbenen gepunkteten Wellen, der PowerShell-Installationsbefehl mit einem Button zum Kopieren und ein Terminalfenster mit einem Scan von scanme.nmap.org",
+      caption: "Die Website im dunklen Design.",
+    },
+    {
+      src: "/projects/magi/site-dark-mobile.webp",
+      frame: "iphone",
+      alt: "Die magi-Website auf einem Telefon im dunklen Design: die Überschrift, der Installationsbefehl und das Terminalfenster mit dem Scan",
+      caption: "Die Website auf dem Telefon.",
+    },
+  ]}
+  columns={2}
+/>

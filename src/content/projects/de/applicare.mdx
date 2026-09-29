@@ -1,0 +1,156 @@
+export const source = "b128c94d0c07";
+
+# Ein Tracker für Bewerbungen mit einer Spring-Boot-API
+
+[AppliCare](https://applicare.app) behält Bewerbungen im Blick: wo jede einzelne steht, welche Aufgaben dazugehören und wie die Stellensuche insgesamt läuft. Beide Hälften habe ich zwischen Dezember 2024 und Februar 2025 gebaut, einen React-Client auf Ant Design und eine Spring-Boot-API, die ihre Daten in MongoDB speichert.
+
+<Safari
+  url="applicare.app/manage"
+  src="/projects/applicare/add.webp"
+  video="/projects/applicare/add.mp4"
+  alt="Die Seite Manage: New Application öffnet ein Formular, Lakeside Systems, Frontend Developer, Zürich und ein Gehalt werden eingetippt, Create fügt die Zeile hinzu, und die Tabelle scrollt zu ihr hinunter"
+  caption="Eine Bewerbung hinzufügen, auf einem Demokonto."
+/>
+
+## Bewerbungen
+
+Jede Bewerbung steht in einer Tabelle auf der Seite Manage, mit Unternehmen, Position, Status und dem Datum, an dem sie abgeschickt wurde. Zum Hinzufügen braucht es das Unternehmen, den Jobtitel und einen Status; das Gehalt, eine Kontaktperson, den Link zur Ausschreibung und Notizen lassen sich eintragen, wenn Sie sie haben. Das Suchfeld filtert schon beim Tippen, und die Spalten lassen sich sortieren und filtern.
+
+Eine Bewerbung durchläuft die Phasen von beworben über Vorstellungsgespräche bis zum Angebot und endet als angenommen oder abgelehnt. Die Statusspalte ist ein Dropdown, und eine Auswahl wird sofort gespeichert, wobei ihre Farbe der Phase folgt.
+
+<ProjectImage
+  src="/projects/applicare/status.webp"
+  video="/projects/applicare/status.mp4"
+  alt="Die Tabelle auf Manage: Der Status von Clearwater Labs wechselt von Pending auf Interviewing und der von Evergreen Energy von Offer auf Accepted, jeweils bestätigt durch eine Meldung oben"
+  caption="Jeder Status wird gespeichert, sobald er sich ändert."
+  size="full"
+/>
+
+## Das Dashboard
+
+Das Dashboard fasst die Stellensuche in vier Zahlen zusammen:
+
+| Zahl         | Zählt                                                       |
+| ------------ | ----------------------------------------------------------- |
+| Applications | Jede abgeschickte Bewerbung                                 |
+| In progress  | Die Bewerbungen im Screening oder in Vorstellungsgesprächen |
+| Success rate | Angenommene Bewerbungen, als Anteil aller Bewerbungen       |
+| Open         | Alles, was noch nicht angenommen oder abgelehnt ist         |
+
+Darunter zählt ein Diagramm die Bewerbungen im Zeitverlauf, und eine Aufschlüsselung zeigt den Anteil jedes Status. Der Reiter Tasks steht neben der Übersicht.
+
+<ProjectImage
+  src="/projects/applicare/dashboard.webp"
+  video="/projects/applicare/dashboard.mp4"
+  alt="Das Dashboard: Der Wechsel auf den Reiter Tasks und zurück auf Overview, wo sich das Diagramm der Bewerbungen im Zeitverlauf neben der Aufschlüsselung nach Status aufbaut und ein Tooltip dem Mauszeiger entlang des Diagramms folgt"
+  caption="Die Übersicht und der Reiter Tasks."
+  size="full"
+/>
+
+## Aufgaben
+
+Eine Aufgabe hat einen Titel, eine kurze Beschreibung, eine Frist und eine Priorität von hoch, mittel oder niedrig, und sie lässt sich mit einer der Bewerbungen verknüpfen, deren Unternehmen dann als Etikett erscheint. Die Liste ist nach Frist sortiert, sodass die Aufgabe, die als Nächstes fällig ist, immer oben steht. Wird eine Aufgabe abgehakt, wird sie durchgestrichen.
+
+<ProjectImage
+  src="/projects/applicare/tasks.webp"
+  alt="Der Reiter Tasks: Aufgaben wie Send references und Prepare system design answers, jede mit einem Fälligkeitsdatum, einem Etikett für das zugehörige Unternehmen, einem Prioritäts-Badge und Knöpfen zum Bearbeiten und Löschen"
+  caption="Aufgaben, die nächste Frist zuerst."
+  size="full"
+/>
+
+## So ist es gebaut
+
+Der Client ist React auf Vite mit Ant-Design-Komponenten und spricht über eine einzige Axios-Instanz mit der API. Die API ist Spring Boot mit Spring Security und Spring Data MongoDB, als Docker-Image gebaut. Konten, Bewerbungen und Aufgaben sind drei MongoDB-Collections, und jede Bewerbung und jede Aufgabe trägt die ID des Benutzers, dem sie gehört.
+
+### Ein Status hat seinen eigenen Endpunkt
+
+Auf dem Server ist der Status ein einfacher String im Dokument `JobApplication`, und die Liste der Phasen liegt im Client, sodass eine neue Phase nur eine Änderung im Frontend braucht. Einen Status zu ändern läuft über einen eigenen Endpunkt, getrennt vom Bearbeiten der Bewerbung:
+
+| Anfrage                                            | Gesendet von             | Ändert                                     |
+| -------------------------------------------------- | ------------------------ | ------------------------------------------ |
+| `PATCH /api/applications/{id}/status?status=OFFER` | Das Status-Dropdown      | Den Status und `lastUpdated`, sonst nichts |
+| `PUT /api/applications/{id}`                       | Das Bearbeitungsformular | Die ganze Bewerbung                        |
+
+Das Dashboard liest dasselbe Feld in Gruppen. Accepted und Rejected sind endgültig, deshalb zählt jede andere Phase als offen. Screening und Interviewing zählen als laufend, und die Erfolgsquote ist der Anteil der angenommenen an allen Bewerbungen. Der Browser rechnet das alles in einem `useMemo` über die Liste aus, die die API zurückgibt, und ein zweites macht aus den Daten, an denen die Bewerbungen abgeschickt wurden, die laufende Summe hinter dem Diagramm.
+
+### Anmelden mit einem Token
+
+Die Anmeldung prüft das Passwort gegen seinen BCrypt-Hash und gibt ein JSON Web Token zurück, eine signierte Zeichenkette, die der Client bei jeder Anfrage mitschickt. Das Token von AppliCare ist mit HS256 signiert, trägt den Benutzernamen als Subject und die ID des Benutzers als Claim `userId` und läuft nach einer konfigurierten Zeit ab. Der Client bewahrt es in `localStorage` auf, und ein Axios-Interceptor hängt es als `Authorization: Bearer …` an jede Anfrage.
+
+Die Sicherheitskonfiguration ist zustandslos: `/api/auth/**` ist offen, und jede andere Route braucht eine authentifizierte Anfrage. Ein Filter, der einmal pro Anfrage läuft, und zwar vor dem eigenen Benutzername-und-Passwort-Filter von Spring, macht eine Anfrage zu einer authentifizierten:
+
+<CodeBlock
+  code={`public class JwtAuthenticationFilter extends OncePerRequestFilter {
+      private final JwtUtil jwtUtil;
+      public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+          this.jwtUtil = jwtUtil;
+      }
+      @Override
+      protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+              throws ServletException, IOException {
+          String authHeader = request.getHeader("Authorization");
+          if (authHeader != null && authHeader.startsWith("Bearer ")) {
+              String token = authHeader.substring(7);
+              if (jwtUtil.validateToken(token)) {
+                  String username = jwtUtil.getUsernameFromToken(token);
+                  UsernamePasswordAuthenticationToken authentication =
+                      new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                  SecurityContextHolder.getContext().setAuthentication(authentication);
+              }
+          }
+          filterChain.doFilter(request, response);
+      }
+  }`}
+  fileName="filter/JwtAuthenticationFilter.java"
+  lang="java"
+/>
+
+Der Filter lehnt nie selbst eine Anfrage ab. Fehlt das Token oder ist es ungültig, bleibt der Security-Kontext leer, und Spring Security weist die Anfrage weiter unten in der Kette ab. `validateToken` parst das Token mit dem Signaturschlüssel, was in einem Aufruf die Signatur und das Ablaufdatum prüft, sodass ein gefälschtes und ein abgelaufenes Token auf dieselbe Weise scheitern. Auf dem Client behandelt der Response-Interceptor von Axios eine 401- oder 403-Antwort als abgelaufene Sitzung: Er löscht den gespeicherten Benutzer und schickt den Browser auf die Anmeldeseite, sodass der Ablauf einer Sitzung für jede Seite an einer einzigen Stelle behandelt wird.
+
+### Jeder Lese- und Schreibzugriff ist an seinen Besitzer gebunden
+
+Das Token sagt, wer anfragt, und die Services entscheiden, was dieser Aufrufer anfassen darf. Die Controller lesen den Claim `userId` aus demselben Header und reichen ihn weiter, und kein Service übernimmt einen Besitzer aus dem Request-Body. Beim Anlegen einer Bewerbung wird sie mit der ID des Aufrufers versehen. Lesen, Ändern, Löschen und der Statuswechsel einer Bewerbung laden alle zuerst das gespeicherte Dokument und vergleichen dessen Besitzer mit dem Aufrufer:
+
+<CodeBlock
+  code={`public JobApplication updateApplication(String id, JobApplication application, String userId) {
+      JobApplication existingApp = jobApplicationRepository.findById(id)
+          .orElseThrow(() -> new RuntimeException("Application not found"));
+      if (!existingApp.getUserId().equals(userId)) {
+          throw new RuntimeException("Not authorized to update this application");
+      }
+      application.setId(existingApp.getId());
+      application.setUserId(userId);
+      application.setAppliedDate(existingApp.getAppliedDate());
+      application.setLastUpdated(LocalDateTime.now());
+      return jobApplicationRepository.save(application);
+  }`}
+  fileName="service/JobApplicationService.java"
+  lang="java"
+/>
+
+Eine Aktualisierung übernimmt ausserdem die ID und das ursprüngliche Bewerbungsdatum aus dem gespeicherten Dokument, sodass ein Request-Body eine Bewerbung weder einem anderen Benutzer zuschieben noch ändern kann, wann sie abgeschickt wurde. Listen werden nach der ID des Aufrufers abgefragt, und das Bearbeiten, Erledigen und Löschen einer Aufgabe wird auf dieselbe Weise geprüft. Das Löschen eines Kontos entfernt zuerst die Aufgaben und Bewerbungen des Benutzers und dann den Benutzereintrag selbst.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/applicare/login.webp",
+      frame: "safari",
+      url: "applicare.app/login",
+      alt: "Der Anmeldebildschirm von AppliCare: eine Kachel mit Feldern für einen Benutzernamen oder eine E-Mail-Adresse und ein Passwort sowie Links zum Registrieren oder zum Zurücksetzen des Passworts",
+      caption: "Die Anmeldung.",
+    },
+    {
+      src: "/projects/applicare/dashboard-mobile.webp",
+      frame: "iphone",
+      alt: "Das Dashboard auf dem Handy: die vier Zahlen in einem Zwei-mal-zwei-Raster über dem Diagramm der Bewerbungen im Zeitverlauf",
+      caption: "Das Dashboard.",
+    },
+    {
+      src: "/projects/applicare/manage-mobile.webp",
+      frame: "iphone",
+      alt: "Die Seite Manage auf dem Handy: das Suchfeld, der Knopf New Application und die Tabelle mit Unternehmen und Positionen",
+      caption: "Die Seite Manage.",
+    },
+  ]}
+  columns={3}
+/>

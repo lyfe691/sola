@@ -1,0 +1,130 @@
+export const source = "aa290d683b48";
+
+# Eine Browser-Erweiterung, die eine Seite samt ihren Dateien als ZIP speichert
+
+[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) ist eine Erweiterung für Chrome und Edge, die die Seite im aktuellen Tab als eine ZIP-Datei herunterlädt. Das Archiv enthält das HTML und jedes Stylesheet, jedes Skript und jedes Bild, auf die das HTML verweist, in Ordnern, die die Server spiegeln, von denen sie stammen, und die Links im HTML sind so umgeschrieben, dass sie auf die gespeicherten Kopien zeigen. Ich habe die Erweiterung im August 2024 gebaut, um zu studieren, wie andere Websites aufgebaut sind, und laut Chrome Web Store wird sie heute von rund 6000 Personen genutzt.
+
+<Safari
+  url="htmx.org"
+  src="/projects/code-extractor/hero.webp"
+  video="/projects/code-extractor/hero.mp4"
+  alt="Die Startseite von htmx.org mit dem dunklen Popup der Erweiterung oben rechts; die Schaltfläche Extract & Download wird gedrückt, zeigt einen Moment lang Extracting… und springt wieder zurück"
+  caption="htmx.org speichern."
+/>
+
+## Eine Seite speichern
+
+Das Popup hat eine einzige Schaltfläche. Ein Klick darauf liest die Seite im aktiven Tab, holt jede Datei, auf die die Seite verweist, und packt alles in eine ZIP-Datei, die nach der Website benannt ist, hier `htmx.org.zip`; danach fragt Chrome, wo sie gespeichert werden soll. Bei htmx.org dauerte es weniger als eine Sekunde, das Archiv zu bauen.
+
+Seiten, auf denen sich kein Skript ausführen lässt, etwa `chrome://`-Seiten und `edge://`-Seiten, `about:`-Seiten und die Seiten anderer Erweiterungen, zeigen stattdessen im Popup einen Fehler.
+
+## Was das Archiv enthält
+
+Die ZIP-Datei öffnet sich zu einem Ordner, der nach der Website benannt ist, mit `index.html` zuoberst. Jede andere Datei liegt unter einem Ordner, der nach ihrem Server benannt ist, gefolgt vom eigenen Pfad dieses Servers. Stylesheet, Skripte und Bilder von htmx.org landen unter `htmx.org/htmx.org/`, das Skript für den GitHub-Star-Button unter `buttons.github.io/`, sodass die Dateien zweier Server mit gleichem Namen nicht kollidieren können. Die Kopie von htmx.org umfasste 53 Dateien und 2.4 MB, und der Atom-Feed der Website war eine davon: Die Seite verlinkt ihn über ein `<link>`-Tag, das die Erweiterung wie ein Stylesheet einsammelt.
+
+<ProjectImage
+  src="/projects/code-extractor/zip-contents.webp"
+  alt="Der Inhalt von htmx.org.zip, 53 Dateien und 2.4 MB: ein Ordner htmx.org mit index.html, ein Ordner buttons.github.io mit buttons.js und ein zweiter Ordner htmx.org mit atom.xml, favicon.svg, css/site.css, 44 Bildern und vier Skripten"
+  caption="Was die ZIP-Datei für htmx.org enthält."
+  size="full"
+/>
+
+## Die Kopie öffnen
+
+Jeder Verweis auf ein Stylesheet, ein Skript oder ein Bild im gespeicherten `index.html` zeigt auf die gespeicherte Datei, sodass sich die Seite direkt aus dem Ordner öffnen lässt, mit ihren Stilen und Bildern. Links auf andere Seiten bleiben, wie sie waren, denn die Erweiterung speichert jeweils eine Seite.
+
+<ProjectImage
+  src="/projects/code-extractor/saved-copy.webp"
+  alt="Das gespeicherte htmx.org, aus dem entpackten Ordner geöffnet, bis zum Quick-Start-Codeblock und zum Buchabschnitt mit dem Cover von Hypermedia Systems gescrollt"
+  caption="Das gespeicherte htmx.org, aus dem Ordner geöffnet."
+  size="full"
+/>
+
+## Wie es gebaut ist
+
+Die Erweiterung ist reines JavaScript auf Manifest V3. Eine Popup-Seite mit einem einzigen Skript erledigt die ganze Arbeit, und JSZip baut das Archiv.
+
+### Die Seite so lesen, wie sie gerade ist
+
+Der Klick führt über `chrome.scripting.executeScript` eine kleine Funktion im Tab aus. Chrome serialisiert die Funktion und führt sie in der Seite aus, sie kommt also an nichts im Popup heran, und sie gibt schlichte Strings zurück: das `outerHTML` des Wurzelelements und den Doctype. `outerHTML` lässt den Doctype weg, und eine ohne Doctype gespeicherte Seite öffnet sich im Quirks-Modus, dem alten Darstellungsmodus, den Browser für Seiten aus der Zeit vor den Standards beibehalten. Deshalb wird der Doctype für sich serialisiert und vorne wieder davorgesetzt.
+
+Das gespeicherte HTML ist also die Seite, wie sie im Tab steht, nachdem ihre Skripte gelaufen sind. Eine Seite, die ihr Markup in JavaScript aufbaut, wird mit dem Markup gespeichert, das sie aufgebaut hat.
+
+### Die Links umschreiben
+
+Zurück im Popup macht `DOMParser` aus dem HTML ein Dokument, das inaktiv bleibt: Seine Skripte laufen nicht, und seine Bilder werden nicht geladen. Das Popup geht dann jedes `<link href>`, `<script src>` und `<img src>` durch:
+
+<CodeBlock
+  code={`function resolveResourceLinks(doc, baseUrl) {
+      const resources = [];
+      const elements = doc.querySelectorAll('link[href], script[src], img[src]');
+      elements.forEach(element => {
+          let attr;
+          if (element.tagName === 'LINK') {
+              attr = 'href';
+          } else if (element.tagName === 'IMG' || element.tagName === 'SCRIPT') {
+              attr = 'src';
+          } else {
+              attr = element.hasAttribute('src') ? 'src' : 'href';
+          }
+          let url = element.getAttribute(attr);
+          if (url) {
+              if (!url.startsWith('http')) {
+                  url = new URL(url, baseUrl).href;
+              }
+              const urlObject = new URL(url);
+              let path = urlObject.hostname + urlObject.pathname;
+              path = path.startsWith('/') ? path.slice(1) : path;
+              path = path.replace(/\\/\\//g, '/');
+              resources.push({ url, path });
+              element.setAttribute(attr, path);
+          }
+      });
+      return resources;
+  }`}
+  fileName="popup.js"
+  lang="js"
+/>
+
+Jeder Verweis wird zuerst gegen die Adresse des Tabs aufgelöst, sodass jede Schreibweise zu einer vollständigen URL wird. Hostname und Pfad dieser URL erfüllen dann zwei Aufgaben: Sie sind der Pfad der Datei im Archiv, und sie ersetzen den Wert des Attributs im HTML. Für eine Seite unter `https://example.com/blog/post.html`:
+
+| Auf der Seite geschrieben  | Aufgelöst zu                       | Gespeichert und verlinkt als |
+| -------------------------- | ---------------------------------- | ---------------------------- |
+| `/css/site.css`            | `https://example.com/css/site.css` | `example.com/css/site.css`   |
+| `../img/logo.png`          | `https://example.com/img/logo.png` | `example.com/img/logo.png`   |
+| `//cdn.example.com/lib.js` | `https://cdn.example.com/lib.js`   | `cdn.example.com/lib.js`     |
+| `/app.js?v=3`              | `https://example.com/app.js?v=3`   | `example.com/app.js`         |
+
+Das gespeicherte `index.html` liegt zuoberst im Ordner der Website, sodass der neue relative Pfad zur gespeicherten Datei führt. Query-Strings fallen dabei weg, denn ein `?v=3` zum Umgehen des Caches gehört nicht zu einem Dateinamen.
+
+Zwei Tags von htmx.org, zuerst so, wie der Server sie geschickt hat, dann so, wie sie im gespeicherten `index.html` stehen, wo `XMLSerializer` sie im XHTML-Stil zurückschreibt:
+
+```text
+<link rel="stylesheet" href="/css/site.css">
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<link rel="stylesheet" href="htmx.org/css/site.css" />
+<script async="" defer="" src="buttons.github.io/buttons.js"></script>
+```
+
+### Dateien von anderen Servern holen
+
+Ein Stylesheet von einem anderen Server zu holen, ist genau das, was CORS einer gewöhnlichen Webseite verwehrt. Erweiterungsseiten sind für die Hosts, die in den `host_permissions` des Manifests stehen, davon ausgenommen, und das Manifest verlangt vier Berechtigungen:
+
+| Berechtigung                   | Wofür                                                          |
+| ------------------------------ | -------------------------------------------------------------- |
+| `activeTab`                    | Zugriff auf den offenen Tab, und erst nach dem Klick           |
+| `scripting`                    | Die Funktion ausführen, die das HTML der Seite liest           |
+| `downloads`                    | Die ZIP-Datei speichern                                        |
+| `http://*/*` und `https://*/*` | Die Dateien der Seite von dem Server holen, der sie bereithält |
+
+Chrome zeigt die letzte Berechtigung bei der Installation als Erlaubnis an, Daten auf jeder Website zu lesen und zu ändern, und das ist weitreichend. Die Erweiterung nutzt sie für eine einzige Sache: Sie holt, aus dem Popup und erst nach einem Klick, die Dateien, auf die die geöffnete Seite bereits verweist.
+
+Das Popup holt sie alle gleichzeitig mit `Promise.all`. Ein fehlgeschlagener Abruf wird protokolliert und übersprungen, sodass ein einzelnes fehlendes Bild nicht das ganze Archiv kostet. Danach baut JSZip die Datei, und `chrome.downloads.download` speichert sie, nachdem es gefragt hat, wohin.
+
+<Safari
+  url="chromewebstore.google.com"
+  src="/projects/code-extractor/store-listing-desktop.webp"
+  alt="Die Seite der Erweiterung im Chrome Web Store: das Ordnersymbol, eine Bewertung von 5.0 aus 5 Bewertungen, 6,000 users und das Popup als erster Screenshot"
+  caption="Der Eintrag im Chrome Web Store."
+/>
