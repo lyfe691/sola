@@ -30,27 +30,37 @@ window.addEventListener("vite:preloadError", (event) => {
   window.location.reload();
 });
 
-// index.html ships a static <title>/<meta name="description"> for the pre-boot
-// window and raw-HTML crawlers. The title stays — DocumentTitle writes
-// document.title imperatively, which mutates the static element in place, so
-// no duplicate is ever created. Descriptions are different: pages hoist their
-// own <meta> via React 19 native metadata, which doesn't dedupe against
-// static tags, so the static one is removed the moment the first page-owned
-// description lands. The observer fires as a microtask, before paint, so
-// there is never a visible gap or duplicate.
-const staticDescription = document.querySelector(
-  'head > meta[name="description"][data-react-managed]',
-);
-if (staticDescription) {
+// Every page's HTML ships its own <title>, description, canonical and url
+// tags (baked at build by vite/seo-pages.ts) for the pre-boot window and
+// raw-HTML crawlers. The title stays — DocumentTitle writes document.title
+// imperatively, which mutates the static element in place, so no duplicate is
+// ever created. The rest are different: the app hoists its own twin of each
+// via React 19 native metadata, which doesn't dedupe against static tags, so
+// a static tag marked data-react-managed is removed the moment its twin
+// lands. The observer fires as a microtask, before paint, so there is never a
+// visible gap or duplicate.
+const staticTags = [
+  ...document.head.querySelectorAll("[data-react-managed]:not(title)"),
+].flatMap((tag) => {
+  const key = ["name", "property", "rel"].find((k) => tag.hasAttribute(k));
+  return key
+    ? [
+        {
+          tag,
+          twin: `${tag.localName}[${key}="${tag.getAttribute(key)}"]:not([data-react-managed])`,
+        },
+      ]
+    : [];
+});
+if (staticTags.length) {
   const headObserver = new MutationObserver(() => {
-    if (
-      document.querySelector(
-        'head > meta[name="description"]:not([data-react-managed])',
-      )
-    ) {
-      staticDescription.remove();
-      headObserver.disconnect();
+    for (const entry of staticTags) {
+      if (!entry.tag.isConnected || !document.head.querySelector(entry.twin))
+        continue;
+      entry.tag.remove();
     }
+    if (staticTags.every(({ tag }) => !tag.isConnected))
+      headObserver.disconnect();
   });
   headObserver.observe(document.head, { childList: true });
 }

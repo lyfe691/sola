@@ -9,6 +9,7 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "paths": { "@/*": ["./src/*"] },
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,

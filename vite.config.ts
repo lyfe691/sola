@@ -10,6 +10,7 @@ import { deepDiveIndexPlugin } from "./vite/deep-dive-index.ts";
 import { hugeiconsPerIcon } from "./vite/hugeicons.ts";
 import { routePreload } from "./vite/route-preload.ts";
 import { fontPreload } from "./vite/font-preload.ts";
+import { seoPages } from "./vite/seo-pages.ts";
 
 const appVersion = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
 
@@ -29,6 +30,7 @@ export default defineConfig({
     hugeiconsPerIcon(),
     routePreload(),
     fontPreload("geist-latin-wght-normal"),
+    seoPages(),
     {
       enforce: "pre",
       ...mdx({

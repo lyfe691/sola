@@ -12,7 +12,7 @@ import {
   type ProjectDeepDiveMeta,
   type ProjectI18nKey,
   type ProjectMeta,
-} from "./projects";
+} from "./projects.ts";
 
 export interface ProjectPageConfig {
   slug: string;

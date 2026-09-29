@@ -42,11 +42,16 @@
 
     <!-- =====================================
          PRIMARY META TAGS
+         This file is the home page's head. On build, vite/seo-pages.ts writes
+         a copy per page with its own title, description, canonical, Open
+         Graph and Twitter tags, because link scrapers never run the app.
+         Every tag it rewrites must stay here.
          data-react-managed marks tags owned by the boot sequence. The title
          is mutated in place by DocumentTitle (imperative document.title).
-         The meta description covers the pre-boot window and raw-HTML
-         crawlers; main.tsx removes it as soon as a page hoists its own via
-         React 19 native metadata, which does not dedupe against static tags.
+         The description, canonical and url tags cover the pre-boot window and
+         raw-HTML crawlers; main.tsx removes each as soon as a page hoists its
+         own twin via React 19 native metadata, which does not dedupe against
+         static tags.
     ====================================== -->
     <title data-react-managed>
       Yanis Sebastian Zürcher • Software Developer in Zürich
@@ -54,7 +59,7 @@
     <meta
       data-react-managed
       name="description"
-      content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies."
+      content="Software developer based in Zürich, focusing on scalable, fast, and thoughtfully designed systems across infrastructure, identity, and interfaces."
     />
     <meta name="author" content="Yanis Sebastian Zürcher" />
 
@@ -83,9 +88,21 @@
     />
     <meta
       property="og:description"
-      content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies."
+      content="Software developer based in Zürich, focusing on scalable, fast, and thoughtfully designed systems across infrastructure, identity, and interfaces."
     />
-    <meta property="og:image" content="https://sola.ysz.life/og-image.png" />
+    <meta
+      data-react-managed
+      property="og:url"
+      content="https://sola.ysz.life/"
+    />
+    <meta property="og:image" content="https://sola.ysz.life/og/home.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta
+      property="og:image:alt"
+      content="Yanis Sebastian Zürcher • Software Developer in Zürich"
+    />
     <meta property="og:site_name" content="Yanis Sebastian Zürcher" />
     <meta property="og:locale" content="en_US" />
 
@@ -99,13 +116,23 @@
     />
     <meta
       name="twitter:description"
-      content="Yanis Sebastian Zürcher is a software developer based in Zürich, Switzerland, specializing in full-stack development, web applications and modern technologies."
+      content="Software developer based in Zürich, focusing on scalable, fast, and thoughtfully designed systems across infrastructure, identity, and interfaces."
     />
-    <meta name="twitter:image" content="https://sola.ysz.life/og-image.png" />
+    <meta
+      data-react-managed
+      name="twitter:url"
+      content="https://sola.ysz.life/"
+    />
+    <meta name="twitter:image" content="https://sola.ysz.life/og/home.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Yanis Sebastian Zürcher • Software Developer in Zürich"
+    />
 
     <!-- =====================================
          LINKS & FAVICON
     ====================================== -->
+    <link data-react-managed rel="canonical" href="https://sola.ysz.life/" />
     <link
       rel="sitemap"
       type="application/xml"
@@ -113,6 +140,7 @@
       href="/sitemap.xml"
     />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
     <!-- =====================================

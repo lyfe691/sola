@@ -6,7 +6,7 @@ const ROUTES = path.resolve("src/config/routes.ts");
 const ROUTE = /path:\s*"([^"]+)"[^}]*?import\("@\/pages\/([^"]+)"\)/g;
 
 /** every route with a real path, paired with the page module it loads */
-function readRoutes() {
+export function readRoutes() {
   const source = fs.readFileSync(ROUTES, "utf8");
   const routes = [...source.matchAll(ROUTE)]
     .map(([, route, page]) => ({ route, page }))

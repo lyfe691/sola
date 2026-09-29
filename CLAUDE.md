@@ -3,9 +3,10 @@
 Vite 8 + React 19 + TypeScript strict + Tailwind v4, deployed on Vercel.
 `api/` holds Vercel serverless functions (GitHub activity proxy, version).
 `vite/` holds the build plugins: dev API proxy, changelog snapshot, per-icon
-Hugeicons imports, and the route + font preloads written into index.html
+Hugeicons imports, the route + font preloads written into index.html
 (route-preload reads `src/config/routes.ts`: keep each route's `path` before
-its page `import`, or the build fails and says so).
+its page `import`, or the build fails and says so), and seo-pages (one baked
+HTML file per page, the sitemap and 404.html; see Structure rules).
 Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 
 ## Verify
@@ -28,7 +29,18 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 
 - **Routes** live only in `src/config/routes.ts` — one manifest drives the
   router, layouts, and localized tab titles. Adding a page there is the
-  whole job. Layouts: `app` (nav + footer) and `blank` (nothing).
+  whole job, plus one `STATIC_PAGES` entry in `vite/seo-pages.ts` (label and
+  description; the build fails and says so). Project deep dives need nothing.
+  Layouts: `app` (nav + footer) and `blank` (nothing).
+- **Page heads**: link scrapers never run the app, so the build writes one
+  HTML file per page (`vite/seo-pages.ts`) from index.html with that page's
+  title, description, canonical, Open Graph and Twitter tags, taken from
+  `en.ts` and `projects.ts`. index.html is the home head, and every tag the
+  plugin rewrites must stay in it. A baked tag marked `data-react-managed` has
+  a React-hoisted twin: `main.tsx` removes it when the twin lands (React does
+  not dedupe), so a tag the app starts hoisting gets that attribute in
+  index.html and nothing else. Cards are `public/og/<key>.jpg`, 1200x630;
+  `/a` is noindex and uses the home card.
 - **i18n**: hand-rolled. `src/lib/translations/{en,de,es,ja,ko,zh}.ts`; `en.ts`
   defines the `Translation` type, so every locale must mirror new keys.
   Components read the active dictionary with `useTranslation()`; never
@@ -104,10 +116,14 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 
 ## Deploy
 
-- Vercel; `vercel.json` rewrites SPA routes but deliberately excludes
-  `/assets/` (missing chunks must 404, or the immutable cache header pins
-  HTML under a JS URL) and `/.well-known/` (machine probes such as
-  Lighthouse's `ai-catalog.json` must 404, not parse our HTML as their
-  format). `main.tsx` reloads once on `vite:preloadError`.
+- Vercel; `vercel.json` has `cleanUrls` and `trailingSlash: false`, so
+  `/projects/kinoa` is `dist/projects/kinoa.html` and `/about/` redirects to
+  `/about`. There is deliberately no catch-all rewrite: an unknown URL gets a
+  real 404 with `dist/404.html` (the shell, noindex) as its body, which the
+  app renders as its NotFound page. That covers a missing `/assets/` chunk
+  (must 404, or the immutable cache header pins HTML under a JS URL) and
+  `/.well-known/` probes such as Lighthouse's `ai-catalog.json` (must 404,
+  not parse our HTML as their format). `main.tsx` reloads once on
+  `vite:preloadError`.
 - The GitHub token is `GITHUB_TOKEN` (not `VITE_`-prefixed) — see
   `.env.example`.
