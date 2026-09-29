@@ -94,6 +94,12 @@ describe("stamp", () => {
     expect(restamped.match(/export const source/g)).toHaveLength(1);
   });
 
+  it("keeps the blank line MDX needs after it, however often it is redone", () => {
+    const twice = stamp(stamp(GERMAN, `${ENGLISH} `), ENGLISH);
+    expect(twice).toBe(GERMAN);
+    expect(twice).toMatch(/^export const source = "[0-9a-f]{12}";\n\n# /);
+  });
+
   it("reads line endings the same on every machine", () => {
     expect(sourceHash(ENGLISH.replace(/\n/g, "\r\n"))).toBe(
       sourceHash(ENGLISH),
@@ -111,6 +117,7 @@ describe("compareTranslation", () => {
 
   it.each([
     ["code changed", "let a = 1;", "let a = 2;"],
+    ["code re-indented", "code={`let a = 1;`}", "code={`let  a = 1;`}"],
     ["an image swapped", "/projects/x/a.webp", "/projects/x/b.webp"],
     ["a fenced block translated", "magi 10.0.0.5", "magi 10.0.0.6"],
     ["a heading level changed", "### Ein Detail", "## Ein Detail"],
@@ -119,6 +126,12 @@ describe("compareTranslation", () => {
     ["inline code translated", "`magi --udp`", "`magi --udp-modus`"],
   ])("rejects %s", (_, from, to) => {
     expect(broken(from, to)).not.toEqual([]);
+  });
+
+  it("rejects a stamp the heading runs into", () => {
+    expect(
+      compareTranslation(ENGLISH, GERMAN.replace(/";\n\n#/, '";\n#')),
+    ).toEqual([expect.stringMatching(/blank line after it/)]);
   });
 
   it("rejects a file without its stamp", () => {

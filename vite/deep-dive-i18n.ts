@@ -32,7 +32,9 @@ export const TRANSLATED = LANGUAGES.map(({ code }) => code).filter(
   (code) => code !== "en",
 );
 
-const STAMP = /^export const source = "([0-9a-f]{12})";?\s*$/m;
+// [ \t], not \s: the blank line after the stamp must survive a restamp, or
+// MDX reads the heading below as part of the export
+const STAMP = /^export const source = "([0-9a-f]{12})";?[ \t]*$/m;
 
 /** The English file's hash, which a translation made from it records. */
 export const sourceHash = (english: string): string =>
@@ -102,12 +104,19 @@ export function skeleton(source: string): Skeleton {
     if (/^(import|export)\s/.test(line)) continue;
     if (/^\s*<[A-Z]/.test(line)) {
       const end = jsxEnd(lines, i);
+      let block = lines.slice(i, end + 1).join("\n");
+      // a CodeBlock's code counts byte for byte, whitespace included; the
+      // rest of a component only by its tokens
+      const open = block.indexOf("code={`");
+      if (open >= 0) {
+        let close = open + 7;
+        while (close < block.length && block[close] !== "`")
+          close += block[close] === "\\" ? 2 : 1;
+        parts.fences.push(block.slice(open, close + 1));
+        block = `${block.slice(0, open)}code${block.slice(close + 1)}`;
+      }
       parts.components.push(
-        lines
-          .slice(i, end + 1)
-          .join("\n")
-          .replace(TRANSLATABLE_PROP, "$1")
-          .replace(/\s+/g, " "),
+        block.replace(TRANSLATABLE_PROP, "$1").replace(/\s+/g, " "),
       );
       i = end;
       continue;
@@ -156,6 +165,14 @@ export function compareTranslation(english: string, translation: string) {
   if (!same(a.inlineCode, b.inlineCode))
     problems.push("its inline code is not the English file's");
   if (!stampOf(translation)) problems.push("no `export const source` stamp");
+  else if (
+    !/^export const source = "[0-9a-f]{12}";?[ \t]*\r?\n[ \t]*\r?\n/.test(
+      translation,
+    )
+  )
+    problems.push(
+      "the stamp must be the first line, with a blank line after it (MDX reads the next line as part of the export)",
+    );
   return problems;
 }
 
