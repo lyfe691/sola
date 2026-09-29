@@ -412,7 +412,7 @@ export const es = {
         title: "Montu",
         tagline: "Diario de montaña suizo, trazado desde sus archivos GPX",
         description:
-          "[Montu](https://montu.ch) es un diario de rutas de montaña en alemán suizo, hecho para un cliente que escribe las rutas y toma las fotos él mismo. Sube un archivo GPX y la página dibuja la ruta sobre un mapa de relieve con su perfil de altitud. Rutas, fotos y todos los demás textos se editan en un CMS, así que publicar una ruta nueva no requiere a ningún desarrollador.",
+          "[Montu](https://montu.ch) es un diario de rutas de montaña en alemán, hecho para un cliente que escribe las rutas y toma las fotos él mismo. Sube un archivo GPX y la página dibuja la ruta sobre un mapa de relieve con su perfil de altitud. Rutas, fotos y todos los demás textos se editan en un CMS, así que publicar una ruta nueva no requiere a ningún desarrollador.",
       },
       qr: {
         title: "QR",

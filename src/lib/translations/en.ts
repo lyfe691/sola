@@ -405,7 +405,7 @@ export const en = {
         title: "Montu",
         tagline: "Swiss mountain journal, mapped from its GPX files",
         description:
-          "[Montu](https://montu.ch) is a mountain-tour journal in Swiss German, built for a client who writes the tours and takes the photos himself. He uploads a GPX file, and the page draws the route on a terrain map with its elevation profile. Tours, photos and every other text are edited in a CMS, so publishing a new tour needs no developer.",
+          "[Montu](https://montu.ch) is a mountain-tour journal in German, built for a client who writes the tours and takes the photos himself. He uploads a GPX file, and the page draws the route on a terrain map with its elevation profile. Tours, photos and every other text are edited in a CMS, so publishing a new tour needs no developer.",
       },
       qr: {
         title: "QR",

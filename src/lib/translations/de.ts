@@ -410,7 +410,7 @@ export const de = {
         tagline:
           "Schweizer Bergtourenjournal, kartiert aus eigenen GPX-Dateien",
         description:
-          "[Montu](https://montu.ch) ist ein Bergtourenjournal auf Schweizer Hochdeutsch, gebaut für einen Kunden, der die Touren selbst schreibt und fotografiert. Er lädt eine GPX-Datei hoch, und die Seite zeichnet die Route auf einer Geländekarte samt Höhenprofil. Touren, Fotos und alle übrigen Texte pflegt er im CMS, eine neue Tour braucht also keinen Entwickler.",
+          "[Montu](https://montu.ch) ist ein Bergtourenjournal auf Deutsch, gebaut für einen Kunden, der die Touren selbst schreibt und fotografiert. Er lädt eine GPX-Datei hoch, und die Seite zeichnet die Route auf einer Geländekarte samt Höhenprofil. Touren, Fotos und alle übrigen Texte pflegt er im CMS, eine neue Tour braucht also keinen Entwickler.",
       },
       qr: {
         title: "QR",
