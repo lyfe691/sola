@@ -7,6 +7,10 @@ Allow: /
 Sitemap: https://sola.ysz.life/sitemap.xml
 
 # Common crawl directories
+# the link-preview cards (/og/<key>.png) are drawn by /api/og: a social
+# scraper that asks for it directly must still get the image, so it is
+# allowed ahead of the rest of /api/
+Allow: /api/og
 Disallow: /api/
 Disallow: /admin/
 Disallow: /private/

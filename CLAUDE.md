@@ -39,8 +39,13 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   plugin rewrites must stay in it. A baked tag marked `data-react-managed` has
   a React-hoisted twin: `main.tsx` removes it when the twin lands (React does
   not dedupe), so a tag the app starts hoisting gets that attribute in
-  index.html and nothing else. Cards are `public/og/<key>.jpg`, 1200x630;
-  `/a` is noindex and uses the home card.
+  index.html and nothing else. Link-preview cards are drawn on request by
+  `api/og.tsx` (@vercel/og) at `/og/<key>.png`, from what
+  `src/config/og-cards.ts` says; `/a` is noindex and uses the home card. A
+  page links its card with a hash of that copy, so a changed title or
+  tagline gets a new URL by itself (a new look bumps `OG_VERSION`). A new
+  page needs a card entry there (deep dives get theirs from `projects.ts`);
+  the build and a test fail without one.
 - **i18n**: hand-rolled. `src/lib/translations/{en,de,es,ja,ko,zh}.ts`; `en.ts`
   defines the `Translation` type, so every locale must mirror new keys.
   Components read the active dictionary with `useTranslation()`; never

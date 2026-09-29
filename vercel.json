@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "rewrites": [{ "source": "/og/:key.png", "destination": "/api/og?key=:key" }],
   "headers": [
     {
       "source": "/(.*)",

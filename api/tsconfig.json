@@ -1,0 +1,33 @@
+{
+  // Vercel compiles the functions against the tsconfig.json nearest to them,
+  // this one, so it is what the deployed code is built with as well as
+  // checked with: JSX for og.tsx, and `.ts` imports rewritten to `.js`, or
+  // the compiled function cannot find its own files.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "rewriteRelativeImportExtensions": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "types": ["node"],
+    // og.tsx reads the card copy from src/, whose types import through `@/`
+    "paths": {
+      "@/*": ["../src/*"]
+    }
+  },
+  "include": ["."]
+}

@@ -21,23 +21,25 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Plugin } from "vite";
+import { ogImageUrl } from "../src/config/og-cards.ts";
 import { projectPagesConfig } from "../src/config/project-deep-dive.ts";
+import { OWNER, ROLE, SITE_URL } from "../src/config/site.ts";
 import { en, type Translation } from "../src/lib/translations/en.ts";
 import { inlineText } from "./deep-dive-index.ts";
 import { readRoutes } from "./route-preload.ts";
 
-export const SITE_URL = "https://sola.ysz.life";
-const NAME = "Yanis Sebastian Zürcher";
+export { SITE_URL };
+const NAME = OWNER;
 /** index.html's own title: the home tab stays the name plus what I do */
-export const HOME_TITLE = `${NAME} • Software Developer in Zürich`;
-const IMAGE = { width: 1200, height: 630, type: "image/jpeg" } as const;
+export const HOME_TITLE = `${NAME} • ${ROLE}`;
+const IMAGE = { width: 1200, height: 630, type: "image/png" } as const;
 /** a meta description past this is cut by every search engine anyway */
 const DESCRIPTION_MAX = 155;
 
 export interface SeoPage {
   /** URL path (`/` for home). null is the 404 shell, which has no URL of its own */
   path: string | null;
-  /** names the card image: public/og/<key>.jpg */
+  /** names the page's link-preview card in src/config/og-cards.ts */
   key: string;
   /** `<title>` and og:title */
   title: string;
@@ -211,8 +213,8 @@ export function sitePages(): SeoPage[] {
 export const pageUrl = (page: SeoPage): string =>
   `${SITE_URL}${page.path ?? "/"}`;
 
-export const imageUrl = (page: SeoPage): string =>
-  `${SITE_URL}/og/${page.key}.jpg`;
+/** api/og.tsx draws the card; a page without one fails the build here. */
+export const imageUrl = (page: SeoPage): string => ogImageUrl(page.key);
 
 /**
  * Where a page's file goes in the output: extensionless URLs are the .html

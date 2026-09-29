@@ -8,6 +8,7 @@
 
 import fs from "node:fs";
 import { describe, expect, it } from "vitest";
+import { OG_CARDS, ogCard, ogHash } from "../src/config/og-cards.ts";
 import { projectPagesConfig } from "../src/config/project-deep-dive.ts";
 import { en } from "../src/lib/translations/en.ts";
 import { readRoutes } from "./route-preload.ts";
@@ -16,6 +17,7 @@ import {
   SITE_URL,
   breadcrumbJsonLd,
   buildPages,
+  imageUrl,
   notFoundPage,
   pageFile,
   pageUrl,
@@ -136,13 +138,42 @@ describe("pages", () => {
     const title = INDEX.match(/<title\b[^>]*>([\s\S]*?)<\/title>/)?.[1];
     expect(title?.trim()).toBe(HOME_TITLE);
   });
+});
 
-  it("names an image for every page (public/og/<key>.jpg)", () => {
-    const files = [
-      ...new Set(PAGES.map((page) => `public/og/${page.key}.jpg`)),
-    ];
-    const missing = files.filter((file) => !fs.existsSync(file));
-    expect(missing).toEqual([]);
+describe("link-preview cards", () => {
+  it("give every page a card that says what the page says", () => {
+    for (const page of ALL) {
+      const card = ogCard(page.key);
+      expect(
+        card,
+        `${page.path}: no card in src/config/og-cards.ts`,
+      ).toBeDefined();
+      if (!page.indexable) {
+        expect(page.key, `${page.path}`).toBe("home");
+        continue;
+      }
+      // home's tab is "name • role"; its card leads with the role, under
+      // the name that every card's top band carries
+      const [name, role] = page.title.split(" • ");
+      expect(card?.title, page.path ?? "404").toBe(
+        page.path === "/" ? role : name,
+      );
+    }
+  });
+
+  it("have no card without a page", () => {
+    const keys = new Set(ALL.map((page) => page.key));
+    expect(Object.keys(OG_CARDS).filter((key) => !keys.has(key))).toEqual([]);
+  });
+
+  it("are linked by a URL the function answers, keyed by what they say", () => {
+    for (const page of ALL) {
+      const url = new URL(imageUrl(page));
+      expect(url.origin).toBe(SITE_URL);
+      const key = url.pathname.match(/^\/og\/([a-z0-9-]+)\.png$/)?.[1];
+      expect(key, url.href).toBe(page.key);
+      expect(url.searchParams.get("v")).toBe(ogHash(ogCard(page.key)!));
+    }
   });
 });
 
@@ -210,15 +241,12 @@ describe("renderPage", () => {
     expect(content(html, "rel", "canonical")).toBe(url);
     expect(content(html, "property", "og:url")).toBe(url);
     expect(content(html, "name", "twitter:url")).toBe(url);
-    expect(content(html, "property", "og:image")).toBe(
-      `${SITE_URL}/og/kinoa.jpg`,
-    );
-    expect(content(html, "name", "twitter:image")).toBe(
-      `${SITE_URL}/og/kinoa.jpg`,
-    );
+    const card = `${SITE_URL}/og/kinoa.png?v=${ogHash(ogCard("kinoa")!)}`;
+    expect(content(html, "property", "og:image")).toBe(card);
+    expect(content(html, "name", "twitter:image")).toBe(card);
     expect(content(html, "property", "og:image:width")).toBe("1200");
     expect(content(html, "property", "og:image:height")).toBe("630");
-    expect(content(html, "property", "og:image:type")).toBe("image/jpeg");
+    expect(content(html, "property", "og:image:type")).toBe("image/png");
     expect(content(html, "property", "og:image:alt")).toContain("Kinoa");
     expect(content(html, "property", "og:title")).toBe(
       "Kinoa • Yanis Sebastian Zürcher",
@@ -352,7 +380,22 @@ describe("vercel.json", () => {
   });
 
   it("has no catch-all, so an unknown URL is a real 404 (dist/404.html)", () => {
-    expect(config.rewrites ?? []).toEqual([]);
+    // the one rewrite is the card function's, for /og/<key>.png only
+    expect(config.rewrites ?? []).toEqual([
+      { source: "/og/:key.png", destination: "/api/og?key=:key" },
+    ]);
     expect(ALL.map(pageFile)).toContain("404.html");
+  });
+});
+
+describe("robots.txt", () => {
+  const lines = fs.readFileSync("public/robots.txt", "utf8").split(/\r?\n/);
+
+  it("lets scrapers reach the card function but keeps the rest of /api/ out", () => {
+    const allow = lines.indexOf("Allow: /api/og");
+    const disallow = lines.indexOf("Disallow: /api/");
+    expect(allow).toBeGreaterThan(-1);
+    expect(disallow).toBeGreaterThan(allow);
+    expect(lines.some((line) => /^Disallow: \/og\b/.test(line))).toBe(false);
   });
 });

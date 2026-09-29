@@ -122,4 +122,13 @@ export default tseslint.config(
       "shadcn/require-static-classes": "off",
     },
   },
+  {
+    // the link-preview card is JSX for Satori, which draws inline styles
+    // only, into an image: no stylesheet, no tokens, no hot reload
+    files: ["api/**/*.tsx"],
+    rules: {
+      "shadcn/no-inline-styles": "off",
+      "react-refresh/only-export-components": "off",
+    },
+  },
 );

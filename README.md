@@ -1,4 +1,4 @@
-<img src="https://sola.ysz.life/og-image.png" />
+<img src="https://sola.ysz.life/og/home.png" />
 
 ---
 

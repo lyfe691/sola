@@ -3,6 +3,8 @@ import type { IncomingMessage, ServerResponse } from "http";
 import { getGitHubActivity } from "../api/github-activity.ts";
 import githubCommits from "../api/github-commits.ts";
 
+const OG_CARD = /^\/og\/([^/]+)\.png$/;
+
 function applyLocalEnv(mode: string) {
   const env = loadEnv(mode, process.cwd(), "");
   if (env.GITHUB_TOKEN) {
@@ -27,7 +29,27 @@ export function apiDevPlugin(): Plugin {
         res: ServerResponse,
         next: Connect.NextFunction,
       ) => {
-        const pathname = req.url?.split("?")[0];
+        const pathname = req.url?.split("?")[0] ?? "";
+
+        // link-preview cards, rewritten as vercel.json does; loaded on first
+        // use, so a build never starts the renderer
+        const card = OG_CARD.exec(pathname);
+        if ((card || pathname === "/api/og") && req.method === "GET") {
+          const url = new URL(req.url ?? "/", "http://localhost");
+          if (card) url.searchParams.set("key", card[1]);
+          try {
+            const og = await server.ssrLoadModule("/api/og.tsx");
+            const response: Response = await og.GET(new Request(url));
+            res.statusCode = response.status;
+            response.headers.forEach((value, key) => res.setHeader(key, value));
+            res.end(Buffer.from(await response.arrayBuffer()));
+          } catch (error) {
+            console.error("[og dev]", error);
+            res.statusCode = 500;
+            res.end();
+          }
+          return;
+        }
 
         if (pathname === "/api/version" && req.method === "GET") {
           res.setHeader("Content-Type", "application/json");
