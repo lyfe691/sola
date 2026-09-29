@@ -28,13 +28,27 @@ import {
 import { useTranslation } from "@/lib/language-provider";
 
 const APPEAR_DELAY = 1200;
-const GAP = 10;
-const ARROW_W = 20;
-const ARROW_H = 9;
-const CORNER_INSET = 16;
+// the arrow's tip stops 3px short of whatever it points out of
+const GAP = 13;
+const ARROW_W = 24;
+const ARROW_H = 10;
+// rounded-2xl is 1.8 × --radius (10px): the arrow's feet keep off its curve
+const CARD_RADIUS = 18;
 const EDGE_PADDING = 16;
 
-type Position = { top: number; right: number; arrowRight: number };
+// the arrow's outline: feet that leave the card's edge flat and a round tip.
+// Its stroke rides the ring's pixel row (y = ARROW_H - 0.5); the fill runs
+// 1px past the edge to swallow the ring line under it
+const ARROW_EDGE = `M0 ${ARROW_H - 0.5} C7 ${ARROW_H - 0.5} 9.5 0.5 12 0.5 C14.5 0.5 17 ${ARROW_H - 0.5} ${ARROW_W} ${ARROW_H - 0.5}`;
+const ARROW_FILL = `${ARROW_EDGE} L${ARROW_W} ${ARROW_H + 1} L0 ${ARROW_H + 1} Z`;
+
+type Position = {
+  top: number;
+  right: number;
+  arrowRight: number;
+  /** the card's corner beside the arrow */
+  corner: number;
+};
 
 // while any of these is open the callout yields (fades out, returns after);
 // tooltips are excluded on purpose — they stack above it instead (z-50 > z-40)
@@ -57,19 +71,32 @@ const measure = (): Position | null => {
   const el = visibleToggle();
   if (!el) return null;
   const r = el.getBoundingClientRect();
-  // clientWidth excludes the scrollbar, matching how fixed `right` resolves
-  const vw = document.documentElement.clientWidth;
+  // a docked nav is a capsule whose edge sits below the toggle: point out of
+  // the capsule, not into it
+  const bar = el.closest<HTMLElement>("[data-nav-bar]");
+  const from =
+    bar?.dataset.docked === undefined
+      ? r.bottom
+      : bar.getBoundingClientRect().bottom;
+  // the fixed header spans exactly the box a fixed `right` resolves against;
+  // documentElement.clientWidth still counts the page's scrollbar gutter
+  const vw =
+    el.closest("header")?.getBoundingClientRect().right ??
+    document.documentElement.clientWidth;
   const center = r.left + r.width / 2;
-  // flush with the toggle's right edge, nudged left if the arrow would
-  // otherwise land on the card's rounded corner
+  // flush with the toggle's right edge, nudged right until the arrow clears
+  // the card's rounded corner; where the screen edge stops that (phones),
+  // the corner beside the arrow tightens instead
   const right = Math.max(
     EDGE_PADDING,
-    Math.min(vw - r.right, vw - center - CORNER_INSET - ARROW_W / 2),
+    Math.min(vw - r.right, vw - center - CARD_RADIUS - ARROW_W / 2),
   );
+  const arrowRight = vw - right - center - ARROW_W / 2;
   return {
-    top: r.bottom + GAP,
+    top: from + GAP,
     right,
-    arrowRight: vw - right - center - ARROW_W / 2,
+    arrowRight,
+    corner: Math.max(0, Math.min(CARD_RADIUS, arrowRight)),
   };
 };
 
@@ -146,7 +173,9 @@ export function ThemeCallout() {
     const remeasure = () => {
       if (!settled) return; // let the nav entrance settle first
       const next = document.querySelector(OVERLAY_SELECTOR) ? null : measure();
-      const key = next ? `${next.top},${next.right},${next.arrowRight}` : "";
+      const key = next
+        ? `${next.top},${next.right},${next.arrowRight},${next.corner}`
+        : "";
       if (key !== last) {
         last = key;
         setPos(next);
@@ -171,8 +200,11 @@ export function ThemeCallout() {
     const observeToggle = () => {
       const el = visibleToggle();
       if (el && el !== observed) {
-        if (observed) ro.unobserve(observed);
+        ro.disconnect();
         ro.observe(el);
+        // the bar resizes through its dock morph, which the toggle doesn't
+        const bar = el.closest<HTMLElement>("[data-nav-bar]");
+        if (bar) ro.observe(bar);
         observed = el;
       }
     };
@@ -228,35 +260,32 @@ export function ThemeCallout() {
             reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.97 }
           }
           transition={{ type: "spring", stiffness: 380, damping: 28 }}
-          className="fixed top-(--top) right-(--right) z-40 w-64 max-w-[calc(100vw-2rem)] origin-(--origin) rounded-2xl bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
+          className="fixed top-(--top) right-(--right) z-40 w-64 max-w-[calc(100vw-2rem)] origin-(--origin) rounded-2xl rounded-tr-(--corner) bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
           style={
             {
               "--top": `${pos.top}px`,
               "--right": `${pos.right}px`,
+              "--corner": `${pos.corner}px`,
               "--origin": `calc(100% - ${pos.arrowRight + ARROW_W / 2}px) -${ARROW_H}px`,
             } as MotionStyle
           }
         >
           <svg
             width={ARROW_W}
-            height={ARROW_H}
-            viewBox={`0 0 ${ARROW_W} ${ARROW_H}`}
+            height={ARROW_H + 1}
+            viewBox={`0 0 ${ARROW_W} ${ARROW_H + 1}`}
             aria-hidden
             className="absolute top-(--arrow-top) right-(--arrow-right) overflow-visible"
-            // 1px overlap so the fill swallows the card's ring line at the seam
             style={
               {
                 "--arrow-right": `${pos.arrowRight}px`,
-                "--arrow-top": `${-(ARROW_H - 1)}px`,
+                "--arrow-top": `${-ARROW_H}px`,
               } as CSSProperties
             }
           >
+            <path d={ARROW_FILL} className="fill-popover" />
             <path
-              d="M0 9 L7.8 1.7 Q10 -0.3 12.2 1.7 L20 9 Z"
-              className="fill-popover"
-            />
-            <path
-              d="M0 9 L7.8 1.7 Q10 -0.3 12.2 1.7 L20 9"
+              d={ARROW_EDGE}
               fill="none"
               strokeWidth="1"
               className="stroke-foreground/5 dark:stroke-foreground/10"

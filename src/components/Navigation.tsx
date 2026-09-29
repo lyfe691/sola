@@ -176,6 +176,8 @@ const DesktopNav = () => {
     <header className="pointer-events-none fixed inset-x-0 top-0 z-40 hidden lg:block">
       <div className="px-5 sm:px-6 md:px-8 lg:px-12">
         <motion.div
+          data-nav-bar
+          data-docked={scrolled || undefined}
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: EASE_OUT }}
@@ -342,6 +344,8 @@ const MobileNav = () => {
         <div className="px-3 sm:px-5">
           <motion.div
             ref={barRef}
+            data-nav-bar
+            data-docked={(scrolled && !menuOpen) || undefined}
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: EASE_OUT }}
