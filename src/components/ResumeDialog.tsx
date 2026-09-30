@@ -41,9 +41,10 @@ import {
 } from "@/components/ui/drawer";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  WarmTooltip,
-  WarmTooltipGroup,
-} from "@/components/ui/custom/warm-tooltip";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
@@ -132,16 +133,21 @@ function IconAction({
   onClick: () => void;
 }) {
   return (
-    <WarmTooltip content={label} side="bottom">
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        aria-label={label}
-        onClick={onClick}
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            aria-label={label}
+            onClick={onClick}
+          />
+        }
       >
         <HugeiconsIcon icon={icon} strokeWidth={2} />
-      </Button>
-    </WarmTooltip>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">{label}</TooltipContent>
+    </Tooltip>
   );
 }
 
@@ -235,18 +241,16 @@ function Sheet({
                 label={copy.languageLabel}
                 compact
               />
-              <WarmTooltipGroup>
-                <IconAction
-                  icon={Download04Icon}
-                  label={copy.download}
-                  onClick={() => downloadResume(language)}
-                />
-                <IconAction
-                  icon={LinkSquare02Icon}
-                  label={copy.open}
-                  onClick={() => openResume(language)}
-                />
-              </WarmTooltipGroup>
+              <IconAction
+                icon={Download04Icon}
+                label={copy.download}
+                onClick={() => downloadResume(language)}
+              />
+              <IconAction
+                icon={LinkSquare02Icon}
+                label={copy.open}
+                onClick={() => openResume(language)}
+              />
             </div>
           </div>
           <Pages

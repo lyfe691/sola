@@ -225,8 +225,8 @@ const GitHubContributionCalendar = ({
             {t.about.github.loadError}
           </div>
         ) : showCalendar ? (
-          // one grouped provider: the first square lingers 300ms, then
-          // sweeping across neighbours re-anchors the tooltip instantly
+          // one grouped provider: the first square lingers 300ms, then the
+          // tooltip glides from square to square
           <TooltipProvider delay={300}>
             <ActivityCalendar
               data={data?.contributions ?? []}

@@ -22,7 +22,11 @@ import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
 import { Button } from "@/components/ui/button";
-import { WarmTooltip } from "@/components/ui/custom/warm-tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useGlidePill } from "@/components/ui/custom/glide-pill";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTranslation } from "@/lib/language-provider";
@@ -144,11 +148,11 @@ export function AppearanceMenu() {
       if (popoverRef.current?.contains(target)) return;
       if (buttons.current.language?.contains(target)) return;
       if (buttons.current.theme?.contains(target)) return;
-      // tooltips portal to <body>, outside popoverRef — a press inside one
+      // hover cards portal to <body>, outside popoverRef — a press inside one
       // (e.g. the git-diff hint card) isn't an outside click
       if (
         target instanceof Element &&
-        target.closest('[data-slot="tooltip-content"]')
+        target.closest('[data-slot="hover-card-content"]')
       )
         return;
       setOpenId(null);
@@ -213,22 +217,27 @@ export function AppearanceMenu() {
     tooltip: string,
     isCallout = false,
   ) => (
-    <WarmTooltip content={tooltip} side="bottom">
-      <Button
-        ref={(el: HTMLButtonElement | null) => {
-          buttons.current[id] = el;
-        }}
-        variant="ghost"
-        size="icon"
-        onClick={() => toggle(id)}
-        aria-haspopup="menu"
-        aria-expanded={openId === id}
-        data-callout={isCallout ? "theme" : undefined}
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button
+            ref={(el: HTMLButtonElement | null) => {
+              buttons.current[id] = el;
+            }}
+            variant="ghost"
+            size="icon"
+            onClick={() => toggle(id)}
+            aria-haspopup="menu"
+            aria-expanded={openId === id}
+            data-callout={isCallout ? "theme" : undefined}
+          />
+        }
       >
         {icon}
         <span className="sr-only">{srLabel}</span>
-      </Button>
-    </WarmTooltip>
+      </TooltipTrigger>
+      <TooltipContent side="bottom">{tooltip}</TooltipContent>
+    </Tooltip>
   );
 
   return (

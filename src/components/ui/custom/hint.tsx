@@ -31,7 +31,6 @@ type HintProps = {
   /** Must take a ref and be focusable — both primitives render into it. */
   trigger: ReactElement;
   side?: Side;
-  align?: Align;
   popoverAlign?: Align;
   /** `className` lands on the tooltip, `popoverClassName` on the popover. */
   className?: string;
@@ -42,8 +41,7 @@ export function Hint({
   children,
   trigger,
   side = "top",
-  align = "center",
-  popoverAlign,
+  popoverAlign = "center",
   className,
   popoverClassName,
 }: HintProps) {
@@ -55,7 +53,7 @@ export function Hint({
         <PopoverTrigger render={trigger} />
         <PopoverContent
           side={side}
-          align={popoverAlign ?? align}
+          align={popoverAlign}
           className={cn("p-3 text-xs leading-relaxed", popoverClassName)}
         >
           {children}
@@ -67,7 +65,7 @@ export function Hint({
   return (
     <Tooltip>
       <TooltipTrigger render={trigger} />
-      <TooltipContent side={side} align={align} className={className}>
+      <TooltipContent side={side} className={className}>
         {children}
       </TooltipContent>
     </Tooltip>

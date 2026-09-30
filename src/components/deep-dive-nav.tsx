@@ -21,9 +21,11 @@ import { motion, useIsPresent } from "motion/react";
 import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  WarmTooltip,
-  WarmTooltipGroup,
-} from "@/components/ui/custom/warm-tooltip";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useDeepDiveBarPinned } from "@/hooks/use-deep-dive-bar-pinned";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
@@ -169,7 +171,7 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
       onPointerLeave={() => setPointed(null)}
       className="fixed top-1/2 left-0 z-30 hidden -translate-y-1/2 lg:can-hover:block"
     >
-      <WarmTooltipGroup delay={0}>
+      <TooltipProvider delay={0}>
         <ul className="m-0 list-none p-0">
           {sections.map(({ id, label }, index) => {
             const active = id === activeId;
@@ -183,16 +185,20 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
             );
             return (
               <li key={id}>
-                <WarmTooltip content={label} side="right">
-                  <button
-                    type="button"
-                    aria-label={label}
-                    aria-current={active ? "true" : undefined}
-                    onPointerEnter={() => setPointed(index)}
-                    onFocus={() => setPointed(index)}
-                    onBlur={() => setPointed(null)}
-                    onClick={() => scrollToSection(id)}
-                    className="flex h-5 w-10 cursor-pointer items-center rounded-r-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <button
+                        type="button"
+                        aria-label={label}
+                        aria-current={active ? "true" : undefined}
+                        onPointerEnter={() => setPointed(index)}
+                        onFocus={() => setPointed(index)}
+                        onBlur={() => setPointed(null)}
+                        onClick={() => scrollToSection(id)}
+                        className="flex h-5 w-10 cursor-pointer items-center rounded-r-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
+                      />
+                    }
                   >
                     <span
                       aria-hidden="true"
@@ -209,13 +215,14 @@ export function DeepDiveSectionRail({ sections, activeId }: SectionNavProps) {
                           : "bg-foreground/30",
                       )}
                     />
-                  </button>
-                </WarmTooltip>
+                  </TooltipTrigger>
+                  <TooltipContent side="right">{label}</TooltipContent>
+                </Tooltip>
               </li>
             );
           })}
         </ul>
-      </WarmTooltipGroup>
+      </TooltipProvider>
     </motion.nav>,
     document.body,
   );

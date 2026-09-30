@@ -45,15 +45,13 @@ export function DeployChip() {
     : "";
 
   return (
-    <Tooltip
-      onOpenChange={(open) => {
-        if (open) setWanted(true);
-      }}
-    >
+    <Tooltip>
       <TooltipTrigger
         render={
           <button
             type="button"
+            onPointerEnter={() => setWanted(true)}
+            onFocus={() => setWanted(true)}
             onClick={() => setCodeView(true)}
             className="group inline-flex items-center gap-1.5 font-mono text-xs text-foreground/40 transition-[color,transform] duration-200 ease-out hover:text-foreground/80 active:scale-[0.97]"
           />

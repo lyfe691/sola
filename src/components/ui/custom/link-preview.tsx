@@ -99,8 +99,12 @@ function usePreviewPreload(
     };
   }, [enabled, screenshotUrl]);
 
-  if (!enabled || !screenshotUrl) return "idle";
-  return result?.url === screenshotUrl ? result.status : "loading";
+  if (!screenshotUrl) return "idle";
+  const settled = result?.url === screenshotUrl ? result.status : null;
+  // a loaded image stays loaded, so a closing preview keeps it to the end
+  if (settled === "ready") return settled;
+  if (!enabled) return "idle";
+  return settled ?? "loading";
 }
 
 export function LinkPreview({
@@ -125,12 +129,6 @@ export function LinkPreview({
   const previewSettled =
     previewStatus === "ready" || previewStatus === "failed" || !wantsMedia;
 
-  const open = active && (compact || previewSettled);
-
-  const handleOpenChange = React.useCallback((next: boolean) => {
-    if (!next) setActive(false);
-  }, []);
-
   const handleActivate = React.useCallback(() => {
     setActive(true);
   }, []);
@@ -140,7 +138,7 @@ export function LinkPreview({
   }, []);
 
   return (
-    <Tooltip open={open} onOpenChange={handleOpenChange}>
+    <Tooltip disabled={!previewSettled}>
       <TooltipTrigger
         render={
           <a
@@ -165,7 +163,7 @@ export function LinkPreview({
           // the screenshot rides the same inverted bubble as every tooltip —
           // one link-preview family, the deep-dive one just adds the image
           !compact &&
-            "max-w-none flex-col items-stretch gap-0 overflow-hidden p-0",
+            "max-w-none flex-col items-stretch gap-0 overflow-hidden rounded-[inherit] p-0",
         )}
       >
         {!compact && previewStatus === "ready" && screenshotUrl ? (

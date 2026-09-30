@@ -26,6 +26,7 @@ import {
   getWelcomePresetLabels,
 } from "@/config/welcome-preset";
 import { useTranslation } from "@/lib/language-provider";
+import { tailEdge, tailFill } from "@/lib/tail-path";
 
 const APPEAR_DELAY = 1200;
 // the arrow's tip stops 3px short of whatever it points out of
@@ -36,11 +37,10 @@ const ARROW_H = 10;
 const CARD_RADIUS = 18;
 const EDGE_PADDING = 16;
 
-// the arrow's outline: feet that leave the card's edge flat and a round tip.
-// Its stroke rides the ring's pixel row (y = ARROW_H - 0.5); the fill runs
-// 1px past the edge to swallow the ring line under it
-const ARROW_EDGE = `M0 ${ARROW_H - 0.5} C7 ${ARROW_H - 0.5} 9.5 0.5 12 0.5 C14.5 0.5 17 ${ARROW_H - 0.5} ${ARROW_W} ${ARROW_H - 0.5}`;
-const ARROW_FILL = `${ARROW_EDGE} L${ARROW_W} ${ARROW_H + 1} L0 ${ARROW_H + 1} Z`;
+// the arrow's stroke rides the ring's pixel row (y = ARROW_H - 0.5); its
+// fill swallows the ring line under it
+const ARROW_EDGE = tailEdge(ARROW_W, ARROW_H, 0.5);
+const ARROW_FILL = tailFill(ARROW_W, ARROW_H, 0.5);
 
 type Position = {
   top: number;
