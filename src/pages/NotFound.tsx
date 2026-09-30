@@ -18,13 +18,14 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import { motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Caret } from "@/components/deploy-diff/caret";
 import { useTranslation } from "@/lib/language-provider";
 import { APP_ROUTES } from "@/config/routes";
 import { REVEAL } from "@/utils/transitions";
+import { Link, useNavigate } from "@/lib/locale-router";
 
 const TYPING_SPEED = 50;
 const RESPONSE_DELAY = 450;

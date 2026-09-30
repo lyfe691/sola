@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Link } from "react-router";
 import { motion } from "motion/react";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
@@ -21,6 +20,7 @@ import {
 } from "@/config/social";
 import { cn } from "@/lib/utils";
 import { HIDDEN_OPACITY, REVEAL } from "@/utils/transitions";
+import { Link } from "@/lib/locale-router";
 
 const homeAnimations = {
   container: {

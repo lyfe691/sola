@@ -16,7 +16,6 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { hugeIcon } from "@/lib/huge-icon";
-import { Link } from "react-router";
 import { useTranslation } from "@/lib/language-provider";
 import type { Translation } from "@/lib/translations";
 import { IconButton } from "@/components/ui/custom/icon-button";
@@ -24,6 +23,7 @@ import { Reveal } from "@/components/Reveal";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { HugeGlyph } from "@/lib/huge-icon";
+import { Link } from "@/lib/locale-router";
 
 type ServiceKey = keyof Translation["services"]["services"];
 

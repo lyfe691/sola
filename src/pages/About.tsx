@@ -10,7 +10,6 @@ import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { useReducedMotion } from "motion/react";
-import { Link } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -30,6 +29,7 @@ import { userActivityQuery } from "@/lib/github-activity";
 import { GITHUB_USER } from "@/lib/github";
 import { whenIdle } from "@/lib/idle";
 import { cn } from "@/lib/utils";
+import { Link } from "@/lib/locale-router";
 
 const ParticleImage = lazy(() =>
   import("@/components/particle-image").then((m) => ({

@@ -20,7 +20,6 @@ import {
   type Ref,
 } from "react";
 import { createPortal } from "react-dom";
-import { Link } from "react-router";
 import {
   AnimatePresence,
   animate,
@@ -45,6 +44,7 @@ import { useTranslation } from "@/lib/language-provider";
 import { countLabel } from "@/lib/plural";
 import { cn } from "@/lib/utils";
 import { EASE_OUT } from "@/utils/transitions";
+import { Link } from "@/lib/locale-router";
 
 const STACK_MAX = 7;
 

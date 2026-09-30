@@ -25,7 +25,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Link } from "react-router";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import {
@@ -37,6 +36,7 @@ import {
 } from "./figures";
 import { MDXHeading } from "./Heading";
 import { TechStack } from "./TechStack";
+import { Link } from "@/lib/locale-router";
 
 /** Props MDX actually passes — avoid full HTML* bags. */
 type MdxProps = {

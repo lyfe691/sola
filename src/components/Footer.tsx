@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Link } from "react-router";
 import { useTranslation } from "@/lib/language-provider";
 import {
   ArrowRight01Icon,
@@ -25,6 +24,7 @@ import { toast } from "@/components/ui/toast";
 import { DeployChip } from "@/components/deploy-diff/deploy-chip";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { Link } from "@/lib/locale-router";
 
 /** One hover for every link down here: muted, stepping to foreground. */
 const FOOTER_LINK =

@@ -11,7 +11,7 @@
  */
 
 import { useEffect, useRef, useState, type ComponentType } from "react";
-import { Link, Navigate, useLocation, useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import { useReducedMotion } from "motion/react";
 import {
   Github01Icon,
@@ -45,6 +45,7 @@ import { getRelatedProjectSlugs } from "@/lib/related-projects";
 import { scrollToTarget } from "@/utils/scroll";
 import type { Translation } from "@/lib/translations";
 import { articleFor, isTranslated } from "./articles";
+import { Link, Navigate } from "@/lib/locale-router";
 
 function MountSignal({ onMount }: { onMount: () => void }) {
   useEffect(() => {

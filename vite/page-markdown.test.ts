@@ -21,7 +21,7 @@ import {
 } from "./page-markdown.ts";
 import { sitePages } from "./seo-pages.ts";
 
-const PAGES = sitePages();
+const PAGES = sitePages().filter((page) => page.language === "en");
 const WITH_MARKDOWN = PAGES.map((page) => page.path!).filter(hasMarkdown);
 
 describe("mdxToMarkdown", () => {

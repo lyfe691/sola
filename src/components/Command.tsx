@@ -7,7 +7,6 @@
  */
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { useLocation, useNavigate } from "react-router";
 import { SearchRemoveIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -45,6 +44,7 @@ import {
   useSiteSearch,
   type GroupKind,
 } from "./command-palette/use-site-search";
+import { useLocalePath, useNavigate } from "@/lib/locale-router";
 
 export function CommandMenu() {
   const t = useTranslation();
@@ -131,7 +131,8 @@ function Palette({ mobile }: { mobile: boolean }) {
   const { closeCommandMenu, scope: openedWith } = useCommandMenu();
   // the scope it opened with; clearing it widens this open to the whole site
   const [scope, setScope] = useState(openedWith);
-  const { pathname } = useLocation();
+  // the palette sits outside the routes: the URL still carries its language
+  const { path: pathname } = useLocalePath();
   const currentProjectId = PROJECTS.find(
     (project) =>
       project.slug && pathname.startsWith(`/projects/${project.slug}`),

@@ -41,21 +41,21 @@ const App = () => (
   <ThemeProvider defaultTheme={WELCOME_PRESET.theme}>
     <MotionConfig reducedMotion="user">
       <LenisProvider>
-        <LanguageProvider>
-          <BackgroundProvider defaultBackground={WELCOME_PRESET.background}>
-            <QueryClientProvider client={queryClient}>
-              <TooltipProvider>
-                <BackgroundLayer />
-                <ClickSpark
-                  sparkColor="var(--primary)"
-                  sparkSize={4}
-                  sparkCount={7}
-                  duration={450}
-                >
-                  <div className="min-h-screen flex flex-col relative">
-                    <Toaster>
-                      <UpdateNotification />
-                      <BrowserRouter>
+        <BrowserRouter>
+          <LanguageProvider>
+            <BackgroundProvider defaultBackground={WELCOME_PRESET.background}>
+              <QueryClientProvider client={queryClient}>
+                <TooltipProvider>
+                  <BackgroundLayer />
+                  <ClickSpark
+                    sparkColor="var(--primary)"
+                    sparkSize={4}
+                    sparkCount={7}
+                    duration={450}
+                  >
+                    <div className="min-h-screen flex flex-col relative">
+                      <Toaster>
+                        <UpdateNotification />
                         <CodeViewProvider>
                           <DocumentTitle />
                           <CanonicalUrl />
@@ -64,14 +64,14 @@ const App = () => (
                           <AnimatedRoutes />
                           <ScrollToTop />
                         </CodeViewProvider>
-                      </BrowserRouter>
-                    </Toaster>
-                  </div>
-                </ClickSpark>
-              </TooltipProvider>
-            </QueryClientProvider>
-          </BackgroundProvider>
-        </LanguageProvider>
+                      </Toaster>
+                    </div>
+                  </ClickSpark>
+                </TooltipProvider>
+              </QueryClientProvider>
+            </BackgroundProvider>
+          </LanguageProvider>
+        </BrowserRouter>
       </LenisProvider>
     </MotionConfig>
   </ThemeProvider>

@@ -12,9 +12,9 @@
 import "@fontsource/shippori-mincho-b1/400.css";
 
 import { use } from "react";
-import { useNavigate } from "react-router";
 import { RichText } from "@/components/i18n/RichText";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
+import { useNavigate } from "@/lib/locale-router";
 
 const INK =
   "rounded-sm text-foreground underline decoration-foreground/30 underline-offset-4 transition-colors hover:decoration-foreground/70 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/50";

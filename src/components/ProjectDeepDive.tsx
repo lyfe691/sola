@@ -32,7 +32,6 @@ import {
   SearchIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Link } from "react-router";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -58,6 +57,7 @@ import { cn } from "@/lib/utils";
 import { snapScrollTo } from "@/utils/scroll";
 import type { ProjectArt } from "@/config/projects";
 import { PaintedCover } from "@/components/painted-cover/PaintedCover";
+import { Link } from "@/lib/locale-router";
 
 /**
  * Where you came from and where you are. `hero` is the row over the artwork,

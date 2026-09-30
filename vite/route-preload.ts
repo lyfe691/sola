@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Plugin, Rollup } from "vite";
+import { PREFIXED } from "../src/lib/locale.ts";
 
 const ROUTES = path.resolve("src/config/routes.ts");
 const ROUTE = /path:\s*"([^"]+)"[^}]*?import\("@\/pages\/([^"]+)"\)/g;
@@ -20,8 +21,10 @@ export function readRoutes() {
   return routes;
 }
 
+// a page in any language: /about, /de/about (src/lib/locale.ts)
+const LOCALE = `(?:/(?:${PREFIXED.join("|")}))?`;
 const pattern = (route: string) =>
-  `^${route.replace(/:[^/]+/g, "[^/]+").replace(/\/$/, "")}/?$`;
+  `^${LOCALE}${route.replace(/:[^/]+/g, "[^/]+").replace(/\/$/, "")}/?$`;
 
 /**
  * A page's chunk is requested by main.tsx, so it waits for the whole entry

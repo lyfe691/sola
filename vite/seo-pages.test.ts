@@ -8,7 +8,10 @@
 
 import fs from "node:fs";
 import { describe, expect, it } from "vitest";
+import { LANGUAGES, type Language } from "../src/config/languages.ts";
 import { OG_CARDS, ogCard, ogHash } from "../src/config/og-cards.ts";
+import { OWNER } from "../src/config/site.ts";
+import { localize } from "../src/lib/locale.ts";
 import { projectPagesConfig } from "../src/config/project-deep-dive.ts";
 import { en } from "../src/lib/translations/en.ts";
 import { hasMarkdown, markdownUrl } from "./page-markdown.ts";
@@ -18,6 +21,7 @@ import {
   SITE_URL,
   breadcrumbJsonLd,
   buildPages,
+  DICTIONARIES,
   imageUrl,
   notFoundPage,
   pageFile,
@@ -30,7 +34,9 @@ import {
 } from "./seo-pages.ts";
 
 const INDEX = fs.readFileSync("index.html", "utf8");
-const PAGES = sitePages();
+const EVERY = sitePages();
+// the English site; the other languages have tests of their own below
+const PAGES = EVERY.filter((page) => page.language === "en");
 const ALL = [...PAGES, notFoundPage(en)];
 const byPath = (path: string) => PAGES.find((page) => page.path === path)!;
 
@@ -404,13 +410,20 @@ describe("renderPage", () => {
   });
 
   it("fails loudly when index.html lacks a tag it rewrites", () => {
-    const bare = "<html><head><title>x</title></head><body></body></html>";
+    const bare =
+      '<html lang="en"><head><title>x</title></head><body></body></html>';
     expect(() => renderPage(bare, byPath("/about"))).toThrow(
       /no <meta name="description">/,
     );
     expect(() => renderPage("<head></head>", byPath("/about"))).toThrow(
       /no <title>/,
     );
+    expect(() =>
+      renderPage(
+        "<html><head><title>x</title></head></html>",
+        byPath("/about"),
+      ),
+    ).toThrow(/no <html lang="en">/);
   });
 
   it("leaves tags inside comments and scripts alone", () => {
@@ -423,6 +436,105 @@ describe("renderPage", () => {
       '<!-- <meta name="description" content="not this"> -->',
     );
     expect(out).toContain("var x = '<meta name=\"description\">';");
+  });
+});
+
+describe("languages", () => {
+  const LANGS = LANGUAGES.map(({ code }) => code);
+  const routes = PAGES.map((page) => page.route!);
+
+  it("write every page in every language, at its own URL and file", () => {
+    for (const code of LANGS) {
+      const mine = EVERY.filter((page) => page.language === code);
+      expect(
+        mine.map((page) => page.route),
+        code,
+      ).toEqual(routes);
+      for (const page of mine)
+        expect(page.path, `${code} ${page.route}`).toBe(
+          localize(page.route!, code),
+        );
+    }
+    const files = EVERY.map(pageFile);
+    expect(new Set(files).size).toBe(files.length);
+    expect(files).toEqual(
+      expect.arrayContaining([
+        "index.html",
+        "de.html",
+        "de/about.html",
+        "zh/projects/kinoa.html",
+      ]),
+    );
+  });
+
+  it("say each page in its own language", () => {
+    const at = (code: Language, route: string) =>
+      EVERY.find((page) => page.language === code && page.route === route)!;
+    for (const code of LANGS) {
+      const t = DICTIONARIES[code];
+      expect(at(code, "/about").title).toBe(`${t.about.title} • ${OWNER}`);
+      expect(at(code, "/about").description).toBe(t.seo.about.description);
+      expect(at(code, "/projects/kinoa").title).toBe(
+        `${t.projects.list.kinoa.title} • ${OWNER}`,
+      );
+      expect(
+        at(code, "/projects/kinoa").breadcrumbs.map((c) => c.path),
+      ).toEqual([
+        localize("/", code),
+        localize("/projects", code),
+        localize("/projects/kinoa", code),
+      ]);
+    }
+  });
+
+  it("link every language version of a page to all the others", () => {
+    for (const route of routes) {
+      const versions = EVERY.filter((page) => page.route === route);
+      if (!versions[0].indexable) continue;
+      const sets = versions.map((page) =>
+        (
+          renderPage(INDEX, page).match(
+            /<link rel="alternate" hreflang="[^"]+" href="[^"]+" \/>/g,
+          ) ?? []
+        ).join("\n"),
+      );
+      // every version carries the same set: one per language and x-default
+      expect(new Set(sets).size, route).toBe(1);
+      for (const code of LANGS)
+        expect(sets[0], route).toContain(
+          `hreflang="${code}" href="${SITE_URL}${localize(route, code)}"`,
+        );
+      expect(sets[0], route).toContain(
+        `hreflang="x-default" href="${SITE_URL}${localize(route, "en")}"`,
+      );
+    }
+  });
+
+  it("mark a page's language and point its canonical at itself", () => {
+    const page = EVERY.find(
+      (p) => p.language === "de" && p.route === "/projects/kinoa",
+    )!;
+    const html = renderPage(INDEX, page);
+    expect(html).toContain('<html lang="de">');
+    expect(content(html, "rel", "canonical")).toBe(
+      `${SITE_URL}/de/projects/kinoa`,
+    );
+    expect(content(html, "property", "og:locale")).toBe("de_CH");
+    // the Markdown twins are English: only the English page points to one
+    expect(html).not.toContain('type="text/markdown"');
+    expect(renderPage(INDEX, byPath("/projects/kinoa"))).toContain(
+      'type="text/markdown"',
+    );
+  });
+
+  it("list every language version in the sitemap, and nothing kept out", () => {
+    const xml = sitemapXml(EVERY);
+    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+    const indexable = EVERY.filter((page) => page.indexable);
+    expect(locs.sort()).toEqual(indexable.map(pageUrl).sort());
+    expect(locs).toHaveLength(
+      routes.filter((r) => r !== "/a").length * LANGS.length,
+    );
   });
 });
 

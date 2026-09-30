@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Link, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useEffect, useState, useCallback, useRef, memo } from "react";
 import { useLenis } from "lenis/react";
@@ -20,6 +20,7 @@ import { AppearanceMenu } from "./appearance-menu";
 import { WarmTooltipGroup } from "@/components/ui/custom/warm-tooltip";
 import { useCodeView } from "./deploy-diff/code-view-provider";
 import { EASE_OUT } from "@/utils/transitions";
+import { Link } from "@/lib/locale-router";
 
 const overlayVariants = {
   hidden: { opacity: 0, transition: { duration: 0.25, ease: EASE_OUT } },

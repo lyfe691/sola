@@ -7,7 +7,6 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useLocation } from "react-router";
 import { ArrowUpIcon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
@@ -22,6 +21,7 @@ import { EASE_OUT } from "@/utils/transitions";
 import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { useTranslation } from "@/lib/language-provider";
+import { useLocalePath } from "@/lib/locale-router";
 
 const SCROLL_THRESHOLD = 120;
 const TILE = 44;
@@ -83,7 +83,8 @@ function WaterFill() {
 }
 
 export default function ScrollToTop() {
-  const { pathname } = useLocation();
+  // the page, not its URL: a language switch keeps the reader where they are
+  const { path: pathname } = useLocalePath();
   const [visible, setVisible] = useState(false);
   const t = useTranslation();
 

@@ -8,16 +8,16 @@
 
 import {
   createContext,
-  startTransition,
   use,
   useContext,
   useMemo,
-  useState,
   useCallback,
   useEffect,
 } from "react";
 import type { ReactNode } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { type Language, SUPPORTED_LANGUAGE_CODES } from "@/config/languages";
+import { localize, splitLocale } from "@/lib/locale";
 import {
   loadTranslation,
   loadedTranslation,
@@ -67,12 +67,11 @@ function getAuto(defaultLanguage: Language) {
 export const LANGUAGE_STORAGE_KEY = "app-language";
 
 /**
- * The language a visit starts in: the stored choice, else the browser's.
- * Needs no provider, so main.tsx can load its dictionary before the first
- * render, and ErrorBoundary can read it when the provider tree is the thing
- * that crashed.
+ * The language a visitor would rather read: their stored choice, else the
+ * browser's. main.tsx sends a visit that lands on an English URL to this
+ * language's URL before the first render.
  */
-export function readLanguage(
+export function preferredLanguage(
   storageKey = LANGUAGE_STORAGE_KEY,
   defaultLanguage: Language = "en",
 ): Language {
@@ -86,25 +85,35 @@ export function readLanguage(
   return getAuto(defaultLanguage).matched;
 }
 
+/**
+ * The language the page is in: its URL's (src/lib/locale.ts). Needs no
+ * provider, so main.tsx can load its dictionary before the first render,
+ * and ErrorBoundary can read it when the provider tree is what crashed.
+ */
+export function readLanguage(): Language {
+  return typeof window === "undefined"
+    ? "en"
+    : splitLocale(window.location.pathname).language;
+}
+
+/** Inside the router: the language is the current URL's. */
 export function LanguageProvider({
   children,
   defaultLanguage = "en",
   storageKey = LANGUAGE_STORAGE_KEY,
 }: LanguageProviderProps) {
   const auto = useMemo(() => getAuto(defaultLanguage), [defaultLanguage]);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { language } = splitLocale(pathname);
 
-  const [language, setLanguageState] = useState<Language>(() =>
-    readLanguage(storageKey, defaultLanguage),
-  );
-
-  // The first dictionary is loaded before the first render (main.tsx). A
-  // switch runs as a transition: while the next dictionary loads, the page
-  // keeps its current words instead of suspending to nothing.
+  // The first dictionary is loaded before the first render (main.tsx), and
+  // a switch loads the next one before it moves to the new URL, so the page
+  // never suspends to nothing. Back and forward across languages are router
+  // transitions: the page keeps its words while the dictionary loads.
   const t = loadedTranslation(language) ?? use(loadTranslation(language));
-  const switchLanguage = useCallback((next: Language) => {
-    startTransition(() => setLanguageState(next));
-  }, []);
 
+  // the same page at the other language's URL, in place of this one
   const setLanguage = useCallback(
     (next: Language) => {
       try {
@@ -112,42 +121,20 @@ export function LanguageProvider({
       } catch {
         /* ignore */
       }
-      switchLanguage(next);
+      void loadTranslation(next).then(() => {
+        const { pathname: current, search, hash } = window.location;
+        navigate(`${localize(current, next)}${search}${hash}`, {
+          replace: true,
+        });
+      });
     },
-    [storageKey, switchLanguage],
+    [navigate, storageKey],
   );
 
   // keep <html lang> in sync for screen readers, browser translation, SEO
   useEffect(() => {
     document.documentElement.lang = language;
   }, [language]);
-
-  // cross-tab sync
-  useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === storageKey && isSupported(e.newValue)) {
-        switchLanguage(e.newValue);
-      }
-    };
-    window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
-  }, [storageKey, switchLanguage]);
-
-  // react to browser language change (optional)
-  useEffect(() => {
-    const handler = () => {
-      const { matched } = getAuto(defaultLanguage);
-      // only auto-adjust if user hasn’t chosen explicitly (no stored value)
-      try {
-        const stored = localStorage.getItem(storageKey);
-        if (!stored) switchLanguage(matched);
-      } catch {
-        /* ignore */
-      }
-    };
-    window.addEventListener("languagechange", handler);
-    return () => window.removeEventListener("languagechange", handler);
-  }, [defaultLanguage, storageKey, switchLanguage]);
 
   const value = useMemo<LanguageProviderState>(
     () => ({

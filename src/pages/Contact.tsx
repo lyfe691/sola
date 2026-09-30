@@ -16,11 +16,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
-import { useNavigate, useLocation } from "react-router";
+import { useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
 import { Reveal } from "@/components/Reveal";
 import { SOCIAL_LINKS } from "@/config/social";
 import { EASE_OUT } from "@/utils/transitions";
+import { useNavigate } from "@/lib/locale-router";
 
 type FieldName = "name" | "email" | "subject" | "message";
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];

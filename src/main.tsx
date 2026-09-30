@@ -13,7 +13,8 @@ import "./index.css";
 import { Analytics } from "@vercel/analytics/react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { preloadRoute } from "@/config/routes";
-import { readLanguage } from "@/lib/language-provider";
+import { preferredLanguage, readLanguage } from "@/lib/language-provider";
+import { localize, splitLocale } from "@/lib/locale";
 import { loadTranslation } from "@/lib/translations";
 
 // After a redeploy, an already-open tab may request old chunk hashes that no
@@ -71,6 +72,21 @@ const rootElement = document.getElementById("root");
 // small safety check
 if (!rootElement) {
   throw new Error("Failed to find the root element");
+}
+
+// A visit that lands on an English URL goes to the page in the visitor's
+// own language (their stored choice, else the browser's) before anything
+// renders. Only English URLs move: a /de/… link stays in German, and a
+// crawler (en-US, nothing stored) stays where it landed.
+{
+  const { pathname, search, hash } = window.location;
+  const preferred = preferredLanguage();
+  if (splitLocale(pathname).language === "en" && preferred !== "en")
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${localize(pathname, preferred)}${search}${hash}`,
+    );
 }
 
 // The visitor's dictionary is a chunk of its own unless it is English, so

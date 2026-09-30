@@ -32,10 +32,22 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   whole job, plus one `STATIC_PAGES` entry in `vite/seo-pages.ts` (label and
   description; the build fails and says so). Project deep dives need nothing.
   Layouts: `app` (nav + footer) and `blank` (nothing).
+- **Locale URLs**: the language lives in the URL and nowhere else. English
+  sits at the site's paths (`/about`), every other language under its code
+  (`/de/about`, `/de` for home; `src/lib/locale.ts`). The router matches the
+  unprefixed path, so routes, `useLocalePath()` and page code never see the
+  prefix. Import `Link`, `Navigate` and `useNavigate` from
+  `@/lib/locale-router`, never from react-router: they keep a site path in
+  the current language. A saved or browser language only redirects a visitor
+  who lands on an English URL (`main.tsx`, before the first render).
 - **Page heads**: link scrapers never run the app, so the build writes one
-  HTML file per page (`vite/seo-pages.ts`) from index.html with that page's
-  title, description, canonical, Open Graph and Twitter tags, taken from
-  `en.ts` and `projects.ts`. index.html is the home head, and every tag the
+  HTML file per page and language (`vite/seo-pages.ts`: `about.html`,
+  `de/about.html`) from index.html with that page's `<html lang>`, title,
+  description, canonical, hreflang, Open Graph and Twitter tags, taken from
+  that language's dictionary and `projects.ts`; the sitemap lists every
+  language. The cards and Markdown twins stay English. Everything the build
+  reads runs in plain Node, every locale file included: no runtime `@/`
+  imports there. index.html is the home head, and every tag the
   plugin rewrites must stay in it. A baked tag marked `data-react-managed` has
   a React-hoisted twin: `main.tsx` removes it when the twin lands (React does
   not dedupe), so a tag the app starts hoisting gets that attribute in
@@ -58,7 +70,7 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   defines the `Translation` type, so every locale must mirror new keys.
   Components read the active dictionary with `useTranslation()`; never
   import a locale file — only English is bundled, the rest are lazy chunks
-  (`main.tsx` loads the visitor's before the first render).
+  (`main.tsx` loads the URL's language before the first render).
   No user-facing string literals in components — add a key. zh is
   Simplified (except the /a page title, which is deliberately Traditional).
   Deep dives translate as whole files, `src/content/projects/<lang>/<slug>.mdx`

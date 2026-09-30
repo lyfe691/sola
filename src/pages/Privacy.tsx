@@ -9,8 +9,6 @@
  */
 
 import { Reveal } from "@/components/Reveal";
-import { Link } from "react-router";
-import { useNavigate } from "react-router";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -26,6 +24,7 @@ import { IconButton } from "@/components/ui/custom/icon-button";
 import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Card } from "@/components/ui/card";
+import { Link, useNavigate } from "@/lib/locale-router";
 
 const Privacy = () => {
   const n = useNavigate();

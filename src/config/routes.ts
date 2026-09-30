@@ -20,6 +20,7 @@ import { matchRoutes } from "react-router";
 import type { Translation } from "@/lib/translations";
 import { getProjectConfig } from "@/config/project-deep-dive";
 import { readLanguage } from "@/lib/language-provider";
+import { splitLocale } from "@/lib/locale";
 import { preloadable } from "@/lib/preloadable";
 import { articleFor } from "@/pages/projects/articles";
 
@@ -140,7 +141,8 @@ const MATCHABLE = APP_ROUTES.map((route) => ({
 }));
 
 function matchRoute(pathname: string) {
-  const match = matchRoutes(MATCHABLE, pathname)?.at(-1);
+  // /de/about is /about in German (src/lib/locale.ts)
+  const match = matchRoutes(MATCHABLE, splitLocale(pathname).path)?.at(-1);
   return (
     match && { route: match.route.handle as AppRoute, params: match.params }
   );

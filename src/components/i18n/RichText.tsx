@@ -8,8 +8,8 @@
 
 import type { ReactNode } from "react";
 import React from "react";
-import { Link } from "react-router";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
+import { Link } from "@/lib/locale-router";
 
 type InterpolationValues = Record<string, string | number>;
 

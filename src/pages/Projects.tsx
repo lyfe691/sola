@@ -19,7 +19,6 @@ import {
   StarIcon,
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import { Link } from "react-router";
 import type { Language } from "@/config/languages";
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
@@ -55,6 +54,7 @@ import {
   type ProjectKind,
   type ProjectMeta,
 } from "@/config/projects";
+import { Link } from "@/lib/locale-router";
 
 interface Project extends ProjectMeta {
   title: string;
