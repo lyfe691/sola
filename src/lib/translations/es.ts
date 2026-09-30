@@ -365,7 +365,7 @@ export const es = {
         description:
           "Sola es mi sitio web personal, el que estás viendo ahora mismo. Está construido con React, TypeScript y Tailwind CSS, y está diseñado para mostrar mis proyectos, habilidades y experiencia de una manera limpia y moderna.",
         overview:
-          "Sola es el sitio web en el que estás ahora mismo. Representa un enfoque moderno del diseño de portafolios, y combina tecnologías web de vanguardia con una experiencia de usuario cuidada. Construido desde cero con React y TypeScript, muestra proyectos y habilidades mediante animaciones fluidas, varios temas y un diseño responsivo que funciona sin problemas en todos los dispositivos. Está pensado para ser rápido y eficiente, con atención a la experiencia de usuario y al rendimiento.",
+          "Sola es mi portafolio, construido con React, TypeScript y Tailwind CSS. Sus temas son conjuntos de tokens de color que cada componente lee en lugar de colores fijos, así que cambiar de tema cambia los colores de todo el sitio a la vez, hasta el fondo animado detrás de la página.",
       },
       kinoa: {
         title: "Kinoa",

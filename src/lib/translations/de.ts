@@ -363,7 +363,7 @@ export const de = {
         description:
           "Sola ist meine persönliche Website. Entwickelt mit React, TypeScript und Tailwind CSS, präsentiert sie meine Projekte, Fähigkeiten und Erfahrungen in einem klaren, modernen Design.",
         overview:
-          "Sola ist die Website, auf der Sie sich gerade befinden. Sola steht für einen modernen Ansatz beim Portfoliodesign und verbindet modernste Webtechnologien mit einer durchdachten Benutzererfahrung. Von Grund auf mit React und TypeScript gebaut, zeigt Sola Projekte und Fähigkeiten durch sanfte Animationen, mehrere Designs und ein responsives Layout, das auf allen Geräten nahtlos funktioniert. Sola ist darauf ausgelegt, schnell und effizient zu sein, mit Fokus auf Benutzererfahrung und Performance.",
+          "Sola ist meine Portfolio-Website, gebaut mit React, TypeScript und Tailwind CSS. Ihre Designs sind Sätze von Farb-Tokens, die jede Komponente statt fester Farben liest. Ein Wechsel färbt deshalb die ganze Website auf einmal um, bis hin zum animierten Hintergrund hinter der Seite.",
       },
       kinoa: {
         title: "Kinoa",

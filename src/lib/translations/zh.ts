@@ -349,7 +349,7 @@ export const zh = {
         description:
           "Sola 是我的个人网站。基于 React、TypeScript 与 Tailwind CSS 构建，用以以干净、现代的方式展示我的项目、技能与经验。",
         overview:
-          "Sola 就是你现在所在的这个网站。它代表了一种现代的作品集设计思路，把前沿的 Web 技术和周到的用户体验结合在一起。它用 React 和 TypeScript 从零构建，通过流畅的动画、多套主题和在所有设备上都能无缝运行的响应式设计来展示项目与技能。它被构建得快速而高效，重点放在用户体验和性能上。",
+          "Sola 是我的作品集网站，用 React、TypeScript 和 Tailwind CSS 构建。它的主题是一组颜色变量，每个组件读取的都是这些变量，而不是固定的颜色，所以切换主题时，整个网站会一次换色，连页面背后的动态背景也一样。",
       },
       kinoa: {
         title: "Kinoa",
