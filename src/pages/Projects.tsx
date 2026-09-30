@@ -29,8 +29,16 @@ import {
 } from "@/lib/project-sort";
 import type { Translation } from "@/lib/translations";
 import { Button } from "@/components/ui/button";
-import { GlideSelect } from "@/components/ui/custom/glide-select";
 import { IconButton } from "@/components/ui/custom/icon-button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Reveal } from "@/components/Reveal";
 import { PrivateLinkButton } from "@/components/private-link-button";
@@ -84,13 +92,7 @@ const buildSortOptions = (t: Translation): SortOptionItem[] =>
   PROJECT_SORT_OPTIONS.map((value) => ({
     value,
     label: t.projects.sortOptions[value],
-    icon: (
-      <HugeiconsIcon
-        icon={SORT_ICONS[value]}
-        strokeWidth={2}
-        className="size-4"
-      />
-    ),
+    icon: <HugeiconsIcon icon={SORT_ICONS[value]} strokeWidth={2} />,
   }));
 
 const localizeProjects = (t: Translation, language: Language): Project[] => {
@@ -347,21 +349,36 @@ const Projects = () => {
             ))}
           </TabsList>
         </Tabs>
-        <GlideSelect
-          label={t.projects.sortBy}
-          icon={
+        <Select
+          items={sortOptions}
+          value={sortBy}
+          onValueChange={(value) => {
+            if (value) swap(() => setSortBy(value));
+          }}
+        >
+          <SelectTrigger
+            aria-label={t.projects.sortBy}
+            className="w-full sm:w-44"
+          >
             <HugeiconsIcon
               icon={SortByDown01Icon}
               strokeWidth={2}
-              className="size-4"
               aria-hidden="true"
             />
-          }
-          options={sortOptions}
-          value={sortBy}
-          onValueChange={(value) => swap(() => setSortBy(value))}
-          className="w-full sm:w-44"
-        />
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>{t.projects.sortBy}</SelectLabel>
+              {sortOptions.map(({ value, label, icon }) => (
+                <SelectItem key={value} value={value} label={label}>
+                  {icon}
+                  <span>{label}</span>
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </Reveal>
 
       {/* keyed by project, so a re-sort moves cards instead of re-mounting

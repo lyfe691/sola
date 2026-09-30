@@ -4,10 +4,52 @@ import * as React from "react"
 import { Select as SelectPrimitive } from "@base-ui/react/select"
 
 import { cn } from "@/lib/utils"
+import { useGlidePill } from "@/components/ui/custom/glide-pill"
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowDown01Icon, Tick02Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons";
 
-const Select = SelectPrimitive.Root
+// React Bits' GlideSelect: one pill glides between the rows instead of each
+// row lighting its own background, and a value picked from the menu blurs
+// into the trigger
+const SelectContext = React.createContext<{
+  glide: ReturnType<typeof useGlidePill>
+  picked: unknown
+} | null>(null)
+
+function useSelect() {
+  const select = React.useContext(SelectContext)
+  if (!select) throw new Error("Select parts must sit inside a Select")
+  return select
+}
+
+const isRow = (node: EventTarget | null): node is HTMLElement =>
+  node instanceof HTMLElement && node.getAttribute("role") === "option"
+
+function Select<Value, Multiple extends boolean | undefined = false>({
+  onValueChange,
+  onOpenChange,
+  ...props
+}: SelectPrimitive.Root.Props<Value, Multiple>) {
+  const glide = useGlidePill()
+  const [picked, setPicked] = React.useState<unknown>(null)
+
+  return (
+    <SelectContext.Provider value={{ glide, picked }}>
+      <SelectPrimitive.Root
+        onValueChange={(value, details) => {
+          setPicked(details.reason === "item-press" ? value : null)
+          onValueChange?.(value, details)
+        }}
+        // the popup stays mounted between opens, and so does the pill
+        onOpenChange={(open, details) => {
+          if (open) glide.hide()
+          onOpenChange?.(open, details)
+        }}
+        {...props}
+      />
+    </SelectContext.Provider>
+  )
+}
 
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
   return (
@@ -20,10 +62,26 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
 }
 
 function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
+  const { picked } = useSelect()
+
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
       className={cn("flex flex-1 text-left", className)}
+      render={(valueProps, { value }) => (
+        <span {...valueProps}>
+          <span
+            key={String(value)}
+            className={cn(
+              picked !== null &&
+                value === picked &&
+                "animate-in blur-in-2 fade-in-60 duration-160 ease-out"
+            )}
+          >
+            {valueProps.children}
+          </span>
+        </span>
+      )}
       {...props}
     />
   )
@@ -50,7 +108,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon
         render={
-          <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} className="pointer-events-none size-4 text-muted-foreground" />
+          <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} className="pointer-events-none size-4 text-muted-foreground transition-transform duration-200 ease-out data-popup-open:rotate-180 motion-reduce:transition-none" />
         }
       />
     </SelectPrimitive.Trigger>
@@ -61,16 +119,18 @@ function SelectContent({
   className,
   children,
   side = "bottom",
-  sideOffset = 4,
+  sideOffset = 6,
   align = "center",
   alignOffset = 0,
-  alignItemWithTrigger = true,
+  alignItemWithTrigger = false,
   ...props
 }: SelectPrimitive.Popup.Props &
   Pick<
     SelectPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset" | "alignItemWithTrigger"
   >) {
+  const { glide } = useSelect()
+
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Positioner
@@ -84,11 +144,24 @@ function SelectContent({
         <SelectPrimitive.Popup
           data-slot="select-content"
           data-align-trigger={alignItemWithTrigger}
-          className={cn("relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-3xl bg-popover text-popover-foreground shadow-lg ring-1 ring-foreground/5 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95", className )}
+          className={cn("relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-3xl bg-popover text-popover-foreground shadow-lg ring-1 ring-foreground/5 outline-hidden transition-[opacity,scale] duration-200 ease-out data-ending-style:opacity-0 data-ending-style:duration-130 data-starting-style:opacity-0 motion-safe:data-ending-style:scale-95 motion-safe:data-starting-style:scale-95 dark:ring-foreground/10", className )}
           {...props}
         >
           <SelectScrollUpButton />
-          <SelectPrimitive.List>{children}</SelectPrimitive.List>
+          {/* base-ui moves real focus to the highlighted row, so focus is the highlight */}
+          <SelectPrimitive.List
+            onFocus={({ target }) => {
+              if (isRow(target)) glide.moveTo(target)
+            }}
+            onBlur={({ relatedTarget }) => {
+              if (!isRow(relatedTarget)) glide.hide()
+            }}
+            data-highlighting={glide.shown || undefined}
+            className="relative isolate"
+          >
+            {glide.pill}
+            {children}
+          </SelectPrimitive.List>
           <SelectScrollDownButton />
         </SelectPrimitive.Popup>
       </SelectPrimitive.Positioner>
@@ -118,12 +191,12 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-2.5 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden select-none data-[selected]:pr-8 focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        "relative flex w-full cursor-default items-center gap-2.5 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors duration-150 ease-out select-none data-[selected]:pr-8 data-highlighted:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground aria-selected:not-in-data-highlighting:bg-accent/50 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
         className
       )}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex min-w-0 flex-1 gap-2 whitespace-nowrap">
+      <SelectPrimitive.ItemText className="flex min-w-0 flex-1 items-center gap-2 whitespace-nowrap">
         {children}
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
