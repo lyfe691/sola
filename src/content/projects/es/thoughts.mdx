@@ -1,0 +1,146 @@
+export const source = "0125002b525c";
+
+# Un sitio de escritura con libro de visitas
+
+[Thoughts](https://thoughts.ysz.life) es donde escribo las cosas que no caben en una página de proyecto. Son unas pocas páginas tranquilas de texto: una página sobre mí, la lista de entradas y un libro de visitas donde cualquiera puede dejar una nota. Está basado en [el sitio de Shu Ding](https://shud.in).
+
+<Safari
+  url="thoughts.ysz.life"
+  src="/projects/thoughts/hero.webp"
+  video="/projects/thoughts/hero.mp4"
+  alt="La página sobre mí y luego un clic en «guestbook» en los enlaces en cursiva de la izquierda: el libro de visitas aparece con sus entradas fechadas, y se escribe un mensaje en el formulario sin enviarlo. El nombre y el mensaje de cada visitante están difuminados"
+  caption="De la página sobre mí al libro de visitas, con los nombres difuminados."
+/>
+
+## Páginas y entradas
+
+Los enlaces están a la izquierda del texto, en cursiva con serifa y en minúsculas, y en una pantalla ancha se quedan en su sitio mientras te desplazas. Al pasar de una página a otra hay un fundido cruzado. En un teléfono, los enlaces pasan a una fila sobre el texto.
+
+Cada entrada es un archivo MDX del repositorio que exporta su título, fecha y descripción. La lista muestra las entradas de la más reciente a la más antigua, con cada título unido a su fecha por una fila de puntos. El código de una entrada lo resalta Shiki en el servidor, así que los colores llegan como HTML ya terminado, y el título de una imagen se convierte en una nota al margen a su lado en una pantalla ancha.
+
+Una dirección que no existe recibe un verso corto.
+
+<Safari
+  url="thoughts.ysz.life/nope"
+  src="/projects/thoughts/not-found.webp"
+  alt="La página «not found»: los enlaces en cursiva «about», «thoughts» y «guestbook» a la izquierda, y a su lado el encabezado «not found» sobre dos líneas, «the page does not exist» y «you were never supposed to be here»"
+  caption="Una página que no existe."
+/>
+
+## El libro de visitas
+
+Cualquiera puede firmar el libro de visitas con un nombre opcional y un mensaje de hasta 280 caracteres, sin cuenta. Las entradas aparecen de la más reciente a la más antigua con su fecha y hora, de diez en diez, y una que hayas escrito tú recibe un enlace «Delete» al pasar el puntero por encima.
+
+<Safari
+  url="thoughts.ysz.life/guestbook"
+  src="/projects/thoughts/guestbook-desktop.webp"
+  alt="El libro de visitas: un formulario de una línea para un nombre y un mensaje sobre una lista de entradas fechadas, con cada nombre y mensaje difuminados"
+  caption="El libro de visitas, con los nombres y mensajes difuminados aquí."
+/>
+
+## Cómo está hecho
+
+Thoughts es una aplicación de Next.js en Vercel. Las entradas se compilan desde MDX y se renderizan como páginas estáticas en el momento de la compilación. El libro de visitas es una sola tabla de Postgres, que un único route handler lee y escribe mediante `@vercel/postgres`.
+
+### Firmar el libro de visitas
+
+Un `POST` a `/api/guestbook` ejecuta tres comprobaciones en orden y escribe solo si pasan todas:
+
+1. **El campo oculto está vacío.** El formulario tiene un campo `website` que una persona nunca ve y que un bot que rellena formularios suele ver, y cualquier valor en él hace que se rechace la petición.
+2. **El mensaje cabe.** Se le quitan los espacios sobrantes y tiene que tener entre 1 y 280 caracteres, y el nombre se corta a 50.
+3. **El remitente no va con prisa.** La ruta busca la última entrada del mismo remitente y responde 429 si tiene menos de 30 segundos.
+
+Un remitente se identifica por un hash SHA-256 de la dirección del cliente, tomada de la primera entrada de `x-forwarded-for`, y el hash es lo único que guarda la tabla. Basta para reconocer al mismo remitente dos veces, que es lo que necesitan el límite de frecuencia y la comprobación de borrado que se describen más abajo.
+
+<CodeBlock
+  code={`export async function POST(req: NextRequest) {
+    await ensureTable()
+    const ipHash = getClientIpHash(req)
+    let body: { name?: string; message?: string; hp?: string } = {}
+    try {
+      body = await req.json()
+    } catch {
+      // ignore
+    }
+    const { name = null, message = '', hp = '' } = body
+    if (hp && hp.trim().length > 0) {
+      return NextResponse.json({ error: 'rejected' }, { status: 400 })
+    }
+    const trimmed = (message || '').trim()
+    if (trimmed.length === 0 || trimmed.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: 'invalid_message' }, { status: 400 })
+    }
+    const safeName = name ? String(name).slice(0, 50).trim() : null
+    if (isRateLimitEnabled()) {
+      const recent = await sql<{ created_at: string }>\`
+        SELECT created_at FROM guestbook
+        WHERE ip_hash = \${ipHash}
+        ORDER BY created_at DESC
+        LIMIT 1
+      \`
+      if (recent.rows.length > 0) {
+        const last = new Date(recent.rows[0].created_at).getTime()
+        const now = Date.now()
+        if (now - last < RATE_LIMIT_WINDOW_MS) {
+          return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
+        }
+      }
+    }
+    const id = crypto.randomUUID()
+    const approved = isAutoApprove()
+    const rejected = false
+    const inserted = await sql<GuestbookRow>\`
+      INSERT INTO guestbook (id, name, message, ip_hash, approved, rejected)
+      VALUES (\${id}, \${safeName}, \${trimmed}, \${ipHash}, \${approved}, \${rejected})
+      RETURNING id, name, message, created_at, updated_at, edited
+    \`
+    return NextResponse.json({ item: inserted.rows[0], approved }, { status: 201 })
+  }`}
+  fileName="app/api/guestbook/route.ts"
+  lang="ts"
+/>
+
+Esto está abreviado: el handler real tiene una segunda rama que guarda las entradas en un array en memoria cuando no hay ninguna base de datos configurada, de modo que la página funciona en desarrollo local sin una.
+
+### Moderación
+
+Cada fila lleva dos indicadores, y juntos deciden dónde está una entrada:
+
+| `approved` | `rejected` | La entrada                          |
+| ---------- | ---------- | ----------------------------------- |
+| Sí         | No         | Aparece en la lista pública         |
+| No         | No         | Espera en la cola de administración |
+| Cualquiera | Sí         | Se oculta, y la fila se conserva    |
+
+Que una entrada nueva se apruebe al llegar depende de una variable de entorno, que por defecto vale sí. Con ella desactivada, las entradas nuevas esperan en la cola, y el visitante ve una nota de que la suya está pendiente en lugar de verla al principio de la lista.
+
+La cola es una página de administración protegida con un token. Lista las entradas pendientes de la más antigua a la más reciente, cada una con un botón de aprobar y otro de rechazar, y una segunda vista lista las aprobadas con un botón de borrar. Rechazar una entrada activa su indicador y conserva la fila. El límite de frecuencia lee todas las filas de un remitente, así que una entrada rechazada sigue contando para los 30 segundos de ese remitente.
+
+### Borrar tu propia entrada
+
+Los visitantes no tienen cuentas, así que el sitio necesita otra manera de saber quién escribió una entrada. Cuando el navegador envía una, guarda el id devuelto en `localStorage`, y las entradas con un id guardado reciben el enlace «Delete». El servidor no se fía de esa lista. Su consulta es `DELETE FROM guestbook WHERE id = … AND ip_hash = …`, así que una fila se borra solo cuando la petición viene de la misma dirección con hash que la escribió. La contrapartida es que la propiedad sigue a la red: en otra conexión el enlace se sigue mostrando, y el servidor lo rechaza.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/thoughts/about-desktop.webp",
+      frame: "safari",
+      url: "thoughts.ysz.life",
+      alt: "La página sobre mí: los enlaces en cursiva «about», «thoughts» y «guestbook» a la izquierda, y una breve presentación en una sola columna de texto",
+      caption: "La página sobre mí.",
+    },
+    {
+      src: "/projects/thoughts/about-mobile.webp",
+      frame: "iphone",
+      alt: "La página sobre mí en un teléfono: los tres enlaces en una fila arriba y la presentación en una columna debajo",
+      caption: "Sobre mí en un teléfono.",
+    },
+    {
+      src: "/projects/thoughts/guestbook-mobile.webp",
+      frame: "iphone",
+      alt: "El libro de visitas en un teléfono: los campos de nombre y mensaje sobre entradas fechadas, con cada nombre y mensaje difuminados",
+      caption: "El libro de visitas.",
+    },
+  ]}
+  columns={3}
+/>

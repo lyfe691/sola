@@ -1,0 +1,93 @@
+export const source = "8629e3ed8b3b";
+
+# Un mapa en vivo de una flota de reparto, hecho para el televisor de la oficina
+
+fleetmap es la pantalla que una empresa de reparto en Suiza mantiene en un televisor de su oficina. Cada furgoneta está en el mapa y se mueve mientras conduce, así que cualquiera en la sala puede ver dónde está cada una, adónde va después y si va con retraso. Lo construí para la empresa.
+
+La consola en sí es interna, así que todo lo que hay en esta página viene de una copia que corre con datos de demostración: tres furgonetas que hacen rondas inventadas por Basilea, Berna y Zúrich.
+
+<ProjectImage
+  src="/projects/fleetmap/live.webp"
+  video="/projects/fleetmap/live.mp4"
+  alt="La consola de fleetmap: una barra lateral, una lista de tres furgonetas y un mapa del norte de Suiza; al tocar «Van Zürich» en la lista, el mapa vuela hasta Zúrich, donde se dibuja la ruta de la furgoneta para el día con paradas numeradas y la furgoneta avanza por ella"
+  caption="Eligiendo una furgoneta en el mapa en vivo."
+  size="full"
+/>
+
+## Toda la flota en una pantalla
+
+Cada furgoneta del mapa apunta hacia donde conduce y se desliza de una posición informada a la siguiente. Su color dice cómo le va:
+
+| Color | La furgoneta…                                                                 |
+| ----- | ----------------------------------------------------------------------------- |
+| Verde | Está en su ronda                                                              |
+| Ámbar | Espera su siguiente encargo                                                   |
+| Rojo  | Va camino de llegar a su siguiente parada con más de cinco minutos de retraso |
+| Gris  | Está en silencio: su teléfono ha dejado de informar                           |
+
+El margen de cinco minutos está para que un poco de tráfico no haga saltar la alarma del mapa.
+
+La lista junto al mapa tiene una tarjeta para cada furgoneta, con el tiempo hasta su siguiente parada y cuántas paradas quedan. Nadie tiene que escribir nada para mantenerla al día: los teléfonos de los conductores envían sus posiciones, y las paradas del día de cada furgoneta llegan automáticamente.
+
+<ProjectImage
+  src="/projects/fleetmap/map.webp"
+  alt="El mapa en vivo del norte de Suiza con furgonetas en Basilea, Berna y Zúrich, cada una apuntando hacia donde conduce; en la lista, «Van Bern» lleva una etiqueta roja «Late» junto a «On Route», y la leyenda de la parte inferior dice «On Route», «Waiting», «Behind schedule» y «Stale»"
+  caption="Tres furgonetas, una de ellas con retraso."
+  size="full"
+/>
+
+## Una furgoneta cada vez
+
+Toca una furgoneta y el mapa vuela hasta ella y su ruta del día. Las paradas están numeradas en orden, la siguiente muestra cuándo llegará la furgoneta, el tramo que ya ha recorrido se vuelve gris, y las demás furgonetas pasan a segundo plano. Una tarjeta en el mapa indica la velocidad de la furgoneta, su hora de llegada a la siguiente parada y cuántos pedidos lleva a bordo.
+
+<ProjectImage
+  src="/projects/fleetmap/focus.webp"
+  alt="«Van Zürich» seleccionada: el mapa ampliado sobre Zúrich con la ruta de la furgoneta dibujada en verde azulado por dieciocho paradas numeradas, la parte ya recorrida en gris, la siguiente parada marcada con su hora de llegada, y una tarjeta con la velocidad, la hora de llegada y la carga de la furgoneta"
+  caption="Van Zürich y su ronda."
+  size="full"
+/>
+
+La vista de detalle tiene el resto del día: la distancia recorrida, los pedidos recogidos y entregados, y el itinerario con una hora prevista para cada parada. En las paradas ya hechas, muestra cuándo llegó realmente la furgoneta y si fue a tiempo.
+
+<ProjectImage
+  src="/projects/fleetmap/tracking.webp"
+  alt="La vista de detalle de «Van Zürich»: tarjetas de la carga con los pedidos recogidos y entregados, el progreso de la ruta, la distancia de hoy, la velocidad actual, la hora de llegada y las paradas restantes, sobre un itinerario de recogidas y entregas en el que las paradas terminadas muestran sus horas previstas y reales con una etiqueta «On time»"
+  caption="La vista de detalle, con el itinerario del día."
+  size="full"
+/>
+
+## Reproducir un día
+
+Elige una furgoneta y un día del historial, y su recorrido grabado se dibuja en el mapa. Se reproduce hasta a 120 veces la velocidad real con el mapa siguiendo a la furgoneta, o puedes arrastrar el control deslizante a cualquier momento. La distancia, el tiempo en carretera y el número de puntos GPS quedan debajo del mapa.
+
+<ProjectImage
+  src="/projects/fleetmap/replay.webp"
+  video="/projects/fleetmap/replay.mp4"
+  alt="«Route Replay» de «Van Zürich»: al pulsar play a 120x la furgoneta recorre su trayecto grabado por Zúrich mientras el reloj bajo el mapa avanza, sobre tarjetas de distancia, duración y puntos GPS"
+  caption="El día de Van Zürich hasta ahora, a 120 veces la velocidad."
+  size="full"
+/>
+
+## Hecho para el televisor
+
+La consola está pensada para una pantalla táctil, y los dos paneles laterales se pliegan para que el mapa pueda llenar la pantalla. Tiene un tema claro y uno oscuro, y sigue el del sistema a menos que alguien elija uno en los ajustes. Cuando una furgoneta se retrasa, el resto de su ruta se vuelve roja.
+
+<ProjectImage
+  src="/projects/fleetmap/dark-full.webp"
+  alt="La consola en el tema oscuro con los dos paneles plegados en finas barras: «Van Bern» seleccionada sobre un mapa oscuro de Berna, su ruta dibujada en rojo porque va con retraso, y su tarjeta con «On Route» y «Late»"
+  caption="Van Bern con retraso, con el mapa a pantalla completa."
+  size="full"
+/>
+
+Los ajustes están pensados para las personas que miran la pantalla:
+
+- **Idioma.** La consola arranca en alemán suizo y cambia a inglés, con las fechas y las horas escritas a la manera local en cada uno.
+- **Contraste.** Un modo de alto contraste para una pantalla al otro lado de la sala.
+- **Movimiento.** Un modo de movimiento reducido que hace que las furgonetas dejen de deslizarse.
+
+<ProjectImage
+  src="/projects/fleetmap/de-tracking.webp"
+  alt="La vista de detalle de «Van Basel» en alemán suizo, con la lista de paradas bajo el encabezado «Halte» y las paradas terminadas marcadas como «Pünktlich»"
+  caption="La vista de detalle en alemán suizo."
+  size="full"
+/>

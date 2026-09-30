@@ -1,0 +1,194 @@
+export const source = "bedd8d1e47e6";
+
+# 여러 제공업체의 모델을 내 API 키로 쓰는 AI 채팅
+
+[Luma](https://luma.ysz.life)는 하나 이상의 모델 제공업체에 API 이용료를 이미 내고 있는 사람을 위한 채팅 앱입니다. 키를 한 번 등록하고 채팅마다 모델을 고르면, 모든 요청이 사용자의 키로 해당 제공업체에 전달됩니다.
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/start.webp"
+  video="/projects/luma/start.mp4"
+  alt="라이트 테마의 Luma 시작 화면: 회색 줄무늬가 Luma라는 글자 뒤에서 바깥으로 뻗어 나가고, 그 아래 입력창에 B-tree가 가득 찬 노드를 어떻게 분할하는지 묻는 질문이 입력되어 있습니다"
+  caption="시작 화면."
+/>
+
+## 모델 고르기
+
+입력창의 모델 버튼을 누르면 Luma가 제공하는 모든 모델이 제공업체별로 묶여 있는 선택 창이 열립니다. 제공업체 로고가 늘어선 레일로 그룹 사이를 바로 이동할 수 있고, 검색창은 입력하는 대로 목록을 걸러 줍니다. 작은 아이콘은 각 모델이 다룰 수 있는 것, 곧 추론, 이미지 입력, 도구 사용, PDF를 나타냅니다. 별을 누르면 그 모델이 레일의 즐겨찾기 목록에 추가됩니다.
+
+채팅마다 자기 모델을 따로 유지하므로, 한 대화는 Claude로, 다음 대화는 GPT-5 Mini로 진행할 수 있습니다. 제공업체의 키가 아직 없는 모델에는 자물쇠가 붙고, 그런 모델을 고르면 입력창 위에 없는 키를 알려 주는 안내와 설정을 여는 버튼이 나타납니다.
+
+<ProjectImage
+  src="/projects/luma/model-picker.webp"
+  video="/projects/luma/model-picker.mp4"
+  alt="입력창 위로 열리는 모델 선택 창: 왼쪽에는 제공업체 로고가 세로로 놓여 있고 모델은 OpenAI와 xAI 아래에 묶여 있으며, claude를 입력하면 목록이 Anthropic 모델 세 개로 좁혀지고, 첫 번째 모델에 별이 붙으면 레일의 즐겨찾기 항목에는 그 모델만 나타납니다"
+  caption="선택 창에서 검색하고 모델에 별 표시하기."
+  size="full"
+/>
+
+## 질문하기
+
+입력창에는 텍스트와 이미지, 그리고 PDF, CSV, Markdown 같은 파일을 붙여넣거나 끌어다 놓거나 더하기 메뉴에서 골라 넣을 수 있습니다. 같은 메뉴에서 다음 메시지에 적용할 모드도 정합니다.
+
+- **Create image**는 모델이 그림으로 답하도록 요청합니다.
+- **Web search**는 모델이 정보를 찾아보고 출처를 밝히게 합니다.
+- **Study and learn**은 풀이 예제를 곁들인 체계적인 설명을 요청합니다.
+
+<ProjectImage
+  src="/projects/luma/modes.webp"
+  video="/projects/luma/modes.mp4"
+  alt="입력창 아래로 열린 더하기 메뉴에 Add photos & files, Create image, Study and learn, Web search가 있고, Create image를 고르면 입력창에 Image 칩이 나타나며 꽃밭 위의 석양에 관한 프롬프트가 입력됩니다"
+  caption="더하기 메뉴와 이미지 모드."
+  size="full"
+/>
+
+생성된 이미지는 채팅에 나타나고, 그 아래에 이미지 모델의 이름이 붙습니다. 어떤 이미지 모델로 그릴지는 채팅 모델과 별개인 독립된 설정입니다.
+
+<ProjectImage
+  src="/projects/luma/image-generation.webp"
+  alt="Generate an image of a cute sunset이라는 요청에 꽃밭 위로 지는 웃는 해의 일러스트로 답한 채팅으로, 그 아래에 Generated with Grok Imagine이라는 문구가 붙어 있습니다"
+  caption="생성된 이미지와 그 아래에 붙은 이미지 모델의 이름."
+  size="full"
+/>
+
+## 답변
+
+답변은 Markdown으로 스트리밍되어 들어옵니다. 코드 블록은 구문이 강조되고 복사 버튼과 다운로드 버튼이 붙으며, 수식과 다이어그램은 그 자리에서 렌더링됩니다. 모델이 답하기 전에 추론하면 그 추론은 답변 위의 “Thought for N seconds” 행으로 접히고, Claude 모델은 따로 켤 것 없이 확장된 사고를 씁니다. 웹 검색으로 얻은 답변에는 출처가 그 출처를 쓴 문장 옆에 작은 칩으로 붙습니다.
+
+<ProjectImage
+  src="/projects/luma/code-block.webp"
+  alt="Claude Opus 4.6과의 채팅: 접힌 추론 행 두 개 다음에 줄 번호와 다운로드 버튼, 복사 버튼이 있는 구문 강조된 Rust 프로그램이 나오고, 그 아래에 짧은 설명이 붙어 있습니다"
+  caption="코드 답변 위에 접혀 있는 Claude의 추론."
+  size="full"
+/>
+
+## 수정, 재시도, 채팅 찾기
+
+대화에서는 아무것도 덮어쓰이지 않습니다. 보낸 메시지를 수정하면 기존 메시지 옆에 새 버전이 추가되고 그 아래에 새 답변이 달리며, 메시지 아래의 화살표로 버전 사이를 넘겨 볼 수 있습니다. 답변을 다시 시도하면 답변 쪽에서도 똑같이 처리되고, 다시 시도 메뉴에서 질문을 다른 모델에 보낼 수도 있어서 같은 메시지에 대한 두 모델의 답변이 화살표 한 번 거리에 놓입니다.
+
+새 채팅의 제목은 사용자의 키 중 하나로 작고 저렴한 모델이 붙입니다. 사이드바에는 고정한 채팅이 먼저 나오고, 각 채팅은 거기서 고정하거나 이름을 바꾸거나 삭제할 수 있습니다. 설정에서는 모든 채팅을 다운로드 파일로 내보내거나 삭제할 수 있습니다. 자주 쓰는 동작에는 단축키가 있으며, Windows에서는 Ctrl, Mac에서는 ⌘를 사용합니다.
+
+| 단축키               | 동작                                 |
+| -------------------- | ------------------------------------ |
+| Ctrl K               | 모든 채팅을 날짜별로 묶어 검색합니다 |
+| Ctrl Shift O         | 새 채팅을 시작합니다                 |
+| Ctrl M               | 모델 선택 창을 엽니다                |
+| Ctrl U               | 파일을 첨부합니다                    |
+| Ctrl Shift S         | 사이드바를 표시하거나 숨깁니다       |
+| Shift Esc            | 메시지 입력창으로 이동합니다         |
+| Ctrl Shift Backspace | 열려 있는 채팅을 삭제합니다          |
+
+## API 키
+
+설정에는 제공업체마다 행이 하나씩 있고, 각 행에는 키를 발급받는 페이지로 가는 링크가 있습니다. Luma는 새 키를 저장하기 전에 해당 제공업체에 먼저 시험해 보기 때문에, 제공업체가 거부한 키는 그 자리에서 거절됩니다. 키는 저장되기 전에 암호화되며, 브라우저는 어떤 제공업체에 키가 있는지만 알 수 있습니다.
+
+<ProjectImage
+  src="/projects/luma/api-keys.webp"
+  alt="시작 화면 위에 API Keys 탭이 열린 설정 대화상자: 키는 저장될 때 암호화되며 서버 밖으로 나가지 않는다는 안내와 OpenAI, Anthropic, Google, xAI, Mistral 행이 있고, 각 행에 Get API key 링크와 Add key 버튼이 있습니다"
+  caption="설정에서 키 추가하기."
+  size="full"
+/>
+
+## 라이트와 다크
+
+Luma에는 올리브 그린을 강조 색으로 쓴 라이트 테마와 다크 테마가 있고, 직접 고르지 않으면 시스템 설정을 따릅니다. 시작 화면 뒤의 줄무늬도 테마에 맞춰 라이트에서는 회색, 다크에서는 흰색이 됩니다. 휴대폰에서는 사이드바가 서랍으로 바뀌고, 모델 선택 창과 설정은 화면 아래에서 올라오는 시트로 열립니다.
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/theme.webp"
+  video="/projects/luma/theme.mp4"
+  alt="사이드바 아래쪽의 테마 컨트롤로 시작 화면이 라이트 테마에서 다크 테마로 바뀌었다가 다시 돌아오고, 줄무늬가 회색에서 흰색으로 바뀝니다"
+  caption="라이트 테마와 다크 테마."
+/>
+
+## 구현 방식
+
+Luma는 React 19 기반의 Next.js 16 앱입니다. 답변은 Vercel AI SDK가 스트리밍하고, 각 제공업체에는 그 제공업체 전용 패키지를 통해 접근합니다. 계정과 채팅, 업로드한 파일은 Supabase가 보관하며, 시작 화면의 줄무늬는 Three.js 셰이더입니다.
+
+### 대화는 트리입니다
+
+모든 메시지는 `parent_id`를 가진 행 하나이고, 채팅에는 화면에 보이는 스레드의 마지막 메시지를 가리키는 포인터 `active_leaf_id`가 하나 더 저장됩니다. 스레드는 여기서 유도됩니다. 활성 리프에서 시작해 부모 포인터를 따라 루트까지 올라간 다음, 순서를 뒤집습니다. 수정이나 재시도는 같은 부모 아래에 형제를 하나 추가하고, 이 탐색은 같은 역할의 형제가 있는 각 메시지에 그 안에서의 위치를 표시하는데, 메시지 아래의 화살표가 읽는 정보는 이것이 전부입니다.
+
+<CodeBlock
+  code={`export function buildTimelineMessages(
+    graph: ChatGraph,
+    activeLeafId: string
+  ): UIMessage[] {
+    const path = getPathToLeaf(graph, activeLeafId)
+    if (path.length === 0) return []
+    return path.map((node) => {
+      const siblings = (graph.childrenByParentId.get(node.parentId) ?? []).filter(
+        (candidate) => candidate.role === node.role
+      )
+      const branchCount = siblings.length
+      const branchIndex = Math.max(
+        0,
+        siblings.findIndex((candidate) => candidate.id === node.id)
+      )
+      return {
+        id: node.id,
+        role: node.role,
+        parts: node.parts,
+        metadata: {
+          createdAt: node.createdAt,
+          ...(branchCount > 1
+            ? ({
+                branchCount,
+                branchIndex,
+                isActiveBranch: true,
+              } satisfies ChatBranchMetadata)
+            : {}),
+        },
+      } satisfies UIMessage
+    })
+  }`}
+  fileName="lib/chat-tree.ts"
+  lang="ts"
+/>
+
+버전을 바꾸는 것은 서버 호출입니다. 서버는 다음 형제를 가져와 가장 최근에 생긴 자식을 따라 리프까지 내려간 다음, 그 리프를 활성 리프로 저장합니다. 이 설계의 대가는 채팅을 열 때 보고 있지 않은 분기까지 포함해 그 안의 모든 메시지를 읽는다는 점입니다. 그 대신 메시지는 채팅과 생성 시각에 걸린 인덱스를 통해 쿼리 한 번으로 도착하고, 트리 코드는 브라우저와 서버가 모두 임포트하는 순수한 TypeScript입니다.
+
+### 모델 ID에서 제공업체 클라이언트까지
+
+모델 ID에는 `anthropic:claude-opus-4-6`처럼 제공업체가 포함됩니다. 채팅 라우트는 이 ID를 카탈로그와 대조해, 카탈로그에 없으면 기본 모델로 대체하므로 브라우저가 Luma에 없는 모델을 요청할 수는 없습니다. 접두사는 사용자의 키를 정하는데, 이 키는 그 요청 하나를 위해서만 복호화됩니다. 접두사는 제공업체의 AI SDK 패키지도 정하는데, 이 패키지는 동적 `import()`로 불러오기 때문에 요청은 필요한 SDK만 가져옵니다. OpenAI 호환 API를 쓰는 제공업체는 자체 base URL과 함께 OpenAI 패키지를 재사용하므로, 제공업체를 추가하는 일은 카탈로그에 항목 하나를 넣는 일입니다.
+
+### 저장된 키
+
+키는 매번 새로 만든 무작위 IV와 함께 AES-256-GCM으로 암호화되고, IV, 암호문, 인증 태그의 형태로 저장됩니다. GCM은 암호문을 인증하기 때문에, 데이터베이스에서 값이 바뀌면 다른 키로 바뀌는 대신 복호화에 실패합니다. 이것은 데이터베이스 덤프가 유출되었을 때 그 안의 키를 보호합니다. 서버는 평문 키로 제공업체를 호출해야 하므로 자신이 저장한 모든 키를 복호화할 수 있으며, 데이터베이스와 마스터 키를 모두 가진 사람도 마찬가지입니다.
+
+### 모델로 다시 보내는 것
+
+저장된 답변에는 화면에 보이는 모든 것, 곧 추론, 텍스트, 도구 호출과 그 결과가 남아 있습니다. 다음 요청과 함께 보내는 대화 기록은 서버에서 트리로부터 다시 만들어지며, 그 전에 세 가지를 먼저 걷어 냅니다.
+
+| 답변의 부분         | 다시 보내는 형태               | 이유                                                                                      |
+| ------------------- | ------------------------------ | ----------------------------------------------------------------------------------------- |
+| 생성된 이미지       | 텍스트 `[image was generated]` | 그렇지 않으면 base64 데이터가 이후의 모든 요청에 실려 가기 때문                           |
+| 추론                | 없음, 화면에만 남습니다        | OpenAI의 Responses API는 기록에서 다시 보낸 추론 항목을 거부할 수 있기 때문               |
+| 제공업체 메타데이터 | 없음                           | 특정 제공업체의 이전 응답을 가리키므로, 스레드 중간에 제공업체를 바꿀 수 있어야 하기 때문 |
+
+첨부 파일은 비공개 버킷에 보관되며, 요청마다 10분 뒤에 만료되는 서명된 새 링크를 만듭니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/start-dark.webp",
+      frame: "safari",
+      url: "luma.ysz.life",
+      alt: "다크 테마의 Luma 시작 화면: 왼쪽에 사이드바가 있고, 거의 검은 바탕 위의 흰 줄무늬 한가운데에 입력창이 놓여 있습니다",
+      caption: "다크 테마의 시작 화면.",
+    },
+    {
+      src: "/projects/luma/start-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 라이트 테마의 시작 화면: 회색 줄무늬 위에 Luma라는 글자가 있고, 아래쪽에 입력창이 있습니다",
+      caption: "휴대폰에서 본 시작 화면.",
+    },
+    {
+      src: "/projects/luma/model-picker-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 아래쪽 시트로 열린 모델 선택 창: 왼쪽에 제공업체 레일이 있고, OpenAI와 xAI 모델에 기능 아이콘과 별이 붙어 있습니다",
+      caption: "시트로 열린 선택 창.",
+    },
+  ]}
+  columns={3}
+/>

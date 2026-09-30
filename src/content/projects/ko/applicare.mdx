@@ -1,0 +1,156 @@
+export const source = "b128c94d0c07";
+
+# Spring Boot API로 만든 입사 지원 트래커
+
+[AppliCare](https://applicare.app)는 입사 지원을 추적합니다. 지원마다 어느 단계인지, 거기에 딸린 할 일이 무엇인지, 그리고 구직 활동 전체가 어떻게 흘러가는지를 보여 줍니다. 2024년 12월부터 2025년 2월 사이에 양쪽을 모두 만들었습니다. Ant Design 기반의 React 클라이언트와, 데이터를 MongoDB에 저장하는 Spring Boot API입니다.
+
+<Safari
+  url="applicare.app/manage"
+  src="/projects/applicare/add.webp"
+  video="/projects/applicare/add.mp4"
+  alt="Manage 페이지: New Application을 누르면 폼이 열리고, Lakeside Systems, Frontend Developer, Zürich와 연봉을 입력한 뒤 Create를 누르면 행이 추가되고, 표가 그 행까지 스크롤됩니다"
+  caption="데모 계정에서 지원 추가하기."
+/>
+
+## 지원 내역
+
+모든 지원은 Manage 페이지의 표 하나에 모여 있고, 회사, 직무, 상태, 지원서를 보낸 날짜가 함께 나옵니다. 지원을 추가할 때 필요한 것은 회사, 직무명, 상태이고, 연봉, 담당자 연락처, 공고 링크, 메모는 있을 때 적어 두면 됩니다. 검색창은 입력하는 대로 걸러 내고, 열은 정렬과 필터를 지원합니다.
+
+지원은 지원함에서 면접을 거쳐 오퍼에 이르고, 수락 또는 거절로 끝납니다. 상태 열은 드롭다운이고, 선택하면 바로 저장되며 색이 단계에 따라 바뀝니다.
+
+<ProjectImage
+  src="/projects/applicare/status.webp"
+  video="/projects/applicare/status.mp4"
+  alt="Manage 표: Clearwater Labs의 상태가 Pending에서 Interviewing으로, Evergreen Energy의 상태가 Offer에서 Accepted로 바뀌고, 바뀔 때마다 맨 위에 확인 메시지가 나타납니다"
+  caption="상태는 바뀌는 즉시 저장됩니다."
+  size="full"
+/>
+
+## 대시보드
+
+대시보드는 구직 활동을 숫자 네 개로 요약합니다:
+
+| 수치         | 집계 대상                              |
+| ------------ | -------------------------------------- |
+| Applications | 보낸 모든 지원                         |
+| In progress  | 서류 심사나 면접 중인 지원             |
+| Success rate | 수락된 지원이 전체에서 차지하는 비율   |
+| Open         | 아직 수락도 거절도 되지 않은 모든 지원 |
+
+그 아래에는 시간에 따른 지원 수를 세는 차트와 상태별 비율을 보여 주는 분포 차트가 있습니다. Tasks 탭은 Overview 옆에 있습니다.
+
+<ProjectImage
+  src="/projects/applicare/dashboard.webp"
+  video="/projects/applicare/dashboard.mp4"
+  alt="대시보드: Tasks 탭으로 갔다가 Overview로 돌아오면 시간에 따른 지원 수 차트가 상태별 분포 옆에서 그려지고, 툴팁이 차트를 따라 포인터와 함께 움직입니다"
+  caption="Overview와 Tasks 탭."
+  size="full"
+/>
+
+## 할 일
+
+할 일에는 제목, 짧은 설명, 마감일, 그리고 높음·중간·낮음의 우선순위가 있고, 지원 중 하나에 연결할 수 있으며 연결하면 그 회사가 태그로 표시됩니다. 목록은 마감일순으로 정렬되므로 다음에 마감되는 일이 항상 맨 위에 있습니다. 할 일을 체크하면 취소선이 그어집니다.
+
+<ProjectImage
+  src="/projects/applicare/tasks.webp"
+  alt="Tasks 탭: Send references, Prepare system design answers 같은 할 일이 있고, 각각 마감일, 관련 회사 태그, 우선순위 배지, 수정과 삭제 버튼이 붙어 있습니다"
+  caption="마감이 가장 가까운 할 일부터 나오는 Tasks."
+  size="full"
+/>
+
+## 구현 방식
+
+클라이언트는 Vite 위의 React이고 Ant Design 컴포넌트를 쓰며, Axios 인스턴스 하나로 API와 통신합니다. API는 Spring Security와 Spring Data MongoDB를 쓰는 Spring Boot이고 Docker 이미지로 빌드됩니다. 계정, 지원, 할 일은 MongoDB 컬렉션 세 개이고, 모든 지원과 할 일에는 그것을 소유한 사용자의 id가 들어 있습니다.
+
+### 상태 변경 전용 엔드포인트
+
+서버에서 상태는 `JobApplication` 문서의 평범한 문자열이고, 단계 목록은 클라이언트에 있으므로 단계를 추가하는 일은 프런트엔드만 바꾸면 됩니다. 상태 변경은 지원 수정과는 별개로 자체 엔드포인트를 거칩니다:
+
+| 요청                                               | 보내는 곳     | 바꾸는 것                                     |
+| -------------------------------------------------- | ------------- | --------------------------------------------- |
+| `PATCH /api/applications/{id}/status?status=OFFER` | 상태 드롭다운 | 상태와 `lastUpdated`, 그 외에는 아무것도 없음 |
+| `PUT /api/applications/{id}`                       | 수정 폼       | 지원 전체                                     |
+
+대시보드는 같은 필드를 묶어서 읽습니다. Accepted와 Rejected는 최종 상태이므로 나머지 단계는 모두 Open으로 집계됩니다. Screening과 Interviewing은 In progress로 집계되고, 성공률은 수락된 지원을 전체 지원으로 나눈 값입니다. 브라우저는 이 모든 것을 API가 돌려주는 목록에 대한 `useMemo` 안에서 계산하고, 두 번째 훅은 지원 날짜를 차트 뒤의 누적 합계로 바꿉니다.
+
+### 토큰으로 로그인하기
+
+로그인은 비밀번호를 BCrypt 해시와 대조한 뒤 JSON Web Token을 돌려줍니다. 클라이언트가 요청마다 다시 보내는, 서명된 문자열입니다. AppliCare의 토큰은 HS256으로 서명하고, 사용자 이름을 subject로, 사용자의 id를 `userId` 클레임으로 담으며, 설정된 시간이 지나면 만료됩니다. 클라이언트는 이를 `localStorage`에 보관하고, Axios 인터셉터가 요청마다 `Authorization: Bearer …`로 덧붙입니다.
+
+보안 설정은 스테이트리스입니다. `/api/auth/**`는 열려 있고, 그 밖의 모든 경로는 인증된 요청이 필요합니다. 요청을 인증된 것으로 만드는 것은 요청당 한 번, Spring 자체의 사용자 이름·비밀번호 필터보다 앞서 실행되는 필터입니다:
+
+<CodeBlock
+  code={`public class JwtAuthenticationFilter extends OncePerRequestFilter {
+      private final JwtUtil jwtUtil;
+      public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+          this.jwtUtil = jwtUtil;
+      }
+      @Override
+      protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+              throws ServletException, IOException {
+          String authHeader = request.getHeader("Authorization");
+          if (authHeader != null && authHeader.startsWith("Bearer ")) {
+              String token = authHeader.substring(7);
+              if (jwtUtil.validateToken(token)) {
+                  String username = jwtUtil.getUsernameFromToken(token);
+                  UsernamePasswordAuthenticationToken authentication =
+                      new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                  SecurityContextHolder.getContext().setAuthentication(authentication);
+              }
+          }
+          filterChain.doFilter(request, response);
+      }
+  }`}
+  fileName="filter/JwtAuthenticationFilter.java"
+  lang="java"
+/>
+
+이 필터는 스스로 요청을 거부하는 일이 없습니다. 토큰이 없거나 유효하지 않으면 보안 컨텍스트가 비어 있을 뿐이고, 요청을 돌려보내는 것은 체인 더 뒤쪽의 Spring Security입니다. `validateToken`은 서명 키로 토큰을 파싱하는데, 이 한 번의 호출로 서명과 만료일이 함께 검증되므로 위조된 토큰과 만료된 토큰은 똑같은 방식으로 실패합니다. 클라이언트에서는 Axios 응답 인터셉터가 401이나 403을 세션 만료로 취급합니다. 저장된 사용자를 지우고 브라우저를 로그인 페이지로 보내므로, 세션 만료는 모든 페이지에 대해 한 곳에서 처리됩니다.
+
+### 모든 읽기와 쓰기에는 소유자가 있습니다
+
+토큰은 누가 호출하는지를 알려 주고, 그 호출자가 무엇을 건드릴 수 있는지는 서비스가 정합니다. 컨트롤러는 같은 헤더에서 `userId` 클레임을 읽어 아래로 넘기며, 어떤 서비스도 요청 본문에서 소유자를 받지 않습니다. 지원을 만들 때는 호출자의 id가 찍힙니다. 지원을 읽거나 수정하거나 삭제하거나 상태를 바꿀 때는 모두 저장된 문서를 먼저 불러와 그 소유자를 호출자와 비교합니다:
+
+<CodeBlock
+  code={`public JobApplication updateApplication(String id, JobApplication application, String userId) {
+      JobApplication existingApp = jobApplicationRepository.findById(id)
+          .orElseThrow(() -> new RuntimeException("Application not found"));
+      if (!existingApp.getUserId().equals(userId)) {
+          throw new RuntimeException("Not authorized to update this application");
+      }
+      application.setId(existingApp.getId());
+      application.setUserId(userId);
+      application.setAppliedDate(existingApp.getAppliedDate());
+      application.setLastUpdated(LocalDateTime.now());
+      return jobApplicationRepository.save(application);
+  }`}
+  fileName="service/JobApplicationService.java"
+  lang="java"
+/>
+
+수정할 때는 저장된 문서에서 id와 원래의 지원 날짜도 그대로 가져오므로, 요청 본문으로는 지원을 다른 사용자에게 옮길 수도, 보낸 날짜를 바꿀 수도 없습니다. 목록은 호출자의 id로 조회하고, 할 일의 수정, 완료, 삭제도 같은 방식으로 검사합니다. 계정을 삭제하면 사용자 레코드 자체보다 먼저 그 사용자의 할 일과 지원이 삭제됩니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/applicare/login.webp",
+      frame: "safari",
+      url: "applicare.app/login",
+      alt: "AppliCare 로그인 화면: 사용자 이름 또는 이메일 주소와 비밀번호 입력란이 있는 카드, 그리고 가입과 비밀번호 재설정 링크",
+      caption: "로그인.",
+    },
+    {
+      src: "/projects/applicare/dashboard-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 대시보드: 숫자 네 개가 2×2 그리드로 놓이고 그 아래에 시간에 따른 지원 수 차트가 있습니다",
+      caption: "대시보드.",
+    },
+    {
+      src: "/projects/applicare/manage-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 Manage 페이지: 검색창, New Application 버튼, 회사와 직무가 나열된 표",
+      caption: "Manage 페이지.",
+    },
+  ]}
+  columns={3}
+/>

@@ -1,0 +1,176 @@
+export const source = "7af9c8d1b6ea";
+
+# 一个带扫描测试的 QR 码生成器
+
+[qr.ysz.life](https://qr.ysz.life) 在浏览器里生成 QR 码。你输入一个链接或任意文字，设置好码的样式，然后下载。样式也正是让 QR 码扫不出来的原因，所以页头有一个 Scan Test，用真正的解码器把导出的图片读回来。
+
+<Safari
+  url="qr.ysz.life"
+  src="/projects/qr/hero.webp"
+  video="/projects/qr/hero.mp4"
+  alt="浅色主题下的生成器：在空白输入框里输入 https://ysz.life，淡色的占位 QR 码变成实心，此后每敲一个键，QR 码都会重新绘制"
+  caption="每敲一个键，QR 码都会重新绘制。"
+/>
+
+## 形状与点样式
+
+Style 标签页决定 QR 码怎么绘制。它的模块，也就是构成 QR 码的那些小方块，可以保持方形，也可以变成圆点、圆角连排或带棱角的形状；三个角上的定位方块及其中的圆点也各有自己的样式。圆形样式会把 QR 码放进一个圆形区域里，并用复制自码本身图案的圆点填满四周的空间。标签页旁边有一个重置按钮，能把所有设置恢复原状，但保留文字。
+
+<ProjectImage
+  src="/projects/qr/styles.webp"
+  video="/projects/qr/styles.mp4"
+  alt="Style 标签页：形状从 Square 切换到 Circle，然后打开 Dot Style 菜单并选择 Dots，再打开 Corner Square Style 菜单并选择 Dot，每次选择之后 QR 码都会重新绘制"
+  caption="先是圆形，再是圆点，然后是圆形的角方块。"
+  size="full"
+/>
+
+## 颜色与渐变
+
+前景和背景可以是任何颜色，角方块还可以有自己的一种颜色。背景也可以是透明的，适合放在照片或彩色页面上的 QR 码。两层都可以使用渐变，可以是任意角度的线性渐变，也可以是从中心向外的径向渐变。
+
+<ProjectImage
+  src="/projects/qr/colors.webp"
+  video="/projects/qr/colors.mp4"
+  alt="Colors 标签页：打开 Gradient 开关，QR 码由深蓝色渐变为紫罗兰色，渐变的终点换成橙色，再把角度滑块从 45 度拖到 255 度，渐变便绕着 QR 码转动"
+  caption="一道渐变，由它的角度滑块转动。"
+  size="full"
+/>
+
+## 中间放一个 logo
+
+logo 可以拖放到 Style 标签页上，也可以从磁盘选取，还有一个滑块用来设置它的大小。放入 logo 会把纠错等级提高到 H，也就是能恢复最多缺失数据的那一级，因为 logo 下面的模块没有了，扫描器得把它们还原出来。再把等级调低，Settings 标签页就会警告：有 logo 时需要高等级。
+
+<ProjectImage
+  src="/projects/qr/logo.webp"
+  video="/projects/qr/logo.mp4"
+  alt="Settings 标签页里的纠错等级是 Quartile (25%)；在 Style 标签页上把一张图片拖到虚线框的 logo 区域，叶子形的 logo 出现在 QR 码中央，回到 Settings 后等级变成了 High (30%)"
+  caption="放入 logo，纠错等级从 Q 升到 H。"
+  size="full"
+/>
+
+## 导出与最近的 QR 码
+
+QR 码可以下载为 PNG、SVG、JPEG 或 WebP，也可以作为 PNG 复制到剪贴板。Settings 标签页可以设置导出尺寸（128 到 512 像素）和码周围的边距。每次下载或复制，也都会带着缩略图出现在按钮下方的 Recent 列表里。它在浏览器里保存最近十个 QR 码，点击其中一个就能恢复它的文字和所有设置。
+
+<ProjectImage
+  src="/projects/qr/recent.webp"
+  alt="生成器中，https://ysz.life 的深蓝色 QR 码带着叶子形的 logo，导出按钮下方展开了 Recent 列表，有两条记录，https://ysz.life 和 https://kinoa.to，每条都带着缩略图和日期"
+  caption="下载两次之后的 Recent 列表。"
+  size="full"
+/>
+
+## 检查 QR 码能不能扫出来
+
+页头的 Scan Test 会接收一张导出的图片并对它解码。通过时会显示读出的文字，链接可以直接打开；失败时会提示没有找到 QR 码。视频里，默认的深蓝色 QR 码通过了，而同一个码换成中灰色后就失败了，尽管它在屏幕上看起来和任何其他 QR 码一样。
+
+<ProjectImage
+  src="/projects/qr/scan-test.webp"
+  video="/projects/qr/scan-test.mp4"
+  alt="Scan Test 对话框对拖入的深蓝色 QR 码解码，显示出 https://ysz.life；把前景改成 #999999 后，再拖入这个灰色的 QR 码，对话框提示没有找到 QR 码"
+  caption="深蓝色通过，#999999 的灰色失败。"
+  size="full"
+/>
+
+## 浅色与深色
+
+网站跟随系统主题，按 d 键可以在浅色和深色之间切换。预览在两种主题下都保留 QR 码自己的背景色，所以它显示的就是导出文件的样子。
+
+<Safari
+  url="qr.ysz.life"
+  src="/projects/qr/theme.webp"
+  video="/projects/qr/theme.mp4"
+  alt="一个带橙色渐变和叶子形 logo 的圆形 QR 码；按 d 键页面切换到深色主题，再切换回来，而 QR 码始终保持白色背景"
+  caption="d 键切换主题。"
+/>
+
+## 实现方式
+
+网站是一个 Next.js 应用，用的是基于 Radix 和 Tailwind 的 shadcn/ui。[qr-code-styling](https://github.com/kozakdenys/qr-code-styling) 把 QR 码绘制成 SVG，[qr-scanner](https://github.com/nimiq/qr-scanner) 则为 Scan Test 解码图片。QR 码的生成和解码都在浏览器里完成，所以文字永远不会离开页面。
+
+### logo 最大能有多大
+
+QR 码在存储数据的同时，还存储 Reed–Solomon 纠错码字，共有四个等级：L 可以恢复约 7% 的码字，M 15%，Q 25%，H 30%。logo 会消耗这份额度。qr-code-styling 把大小设置乘以该等级的百分比，再乘以 QR 码的模块数，把结果当作 logo 最多可以覆盖的模块数。然后它清出不超过这个数的最大方块，边长取奇数个模块以便居中，再把 logo 放进这块区域里。
+
+等级也会改变 QR 码本身。以 `https://ysz.life`（16 字节）为例，在默认的大小设置 0.35 下：
+
+| 等级 | 可恢复 | 符号            | logo 的空间  |
+| ---- | ------ | --------------- | ------------ |
+| L    | 约 7%  | 版本 1，21 × 21 | 3 × 3 个模块 |
+| M    | 约 15% | 版本 2，25 × 25 | 5 × 5 个模块 |
+| Q    | 约 25% | 版本 2，25 × 25 | 7 × 7 个模块 |
+| H    | 约 30% | 版本 3，29 × 29 | 9 × 9 个模块 |
+
+四个都在 Scan Test 中解码成功，因为等级较低时，logo 会缩小以适应更小的额度。
+
+<ProjectImage
+  src="/projects/qr/error-correction-levels.webp"
+  alt="四个 https://ysz.life 的 QR 码，用的是同一个叶子形 logo，等级依次为 H、Q、M 和 L；随着 QR 码从版本 3 缩小到版本 1，logo 覆盖的模块依次为 9 × 9、7 × 7、5 × 5 和 3 × 3"
+  caption="同一个 logo、同一个大小设置，在 H、Q、M 和 L 四个等级下。"
+  size="full"
+/>
+
+这么小的 logo，就失去了加 logo 的意义，所以载入图片时会把等级提高到 H：
+
+<CodeBlock
+  code={`const loadLogoFile = useCallback((file: File) => {
+    if (!file.type.startsWith("image/")) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      setConfig((prev) => ({
+        ...prev,
+        logo: reader.result as string,
+        errorLevel: prev.errorLevel !== "H" ? "H" : prev.errorLevel,
+      }))
+    }
+    reader.readAsDataURL(file)
+  }, [])`}
+  fileName="components/qr-generator.tsx"
+  lang="tsx"
+/>
+
+### 哪些颜色仍然能扫出来
+
+颜色没有这样的额度。qr-code-styling 给什么就画什么，而扫描器需要模块和背景之间有对比度。我导出了默认 QR 码的若干变体，让每一个都过了一遍 Scan Test：
+
+| QR 码                                                | Scan Test |
+| ---------------------------------------------------- | --------- |
+| 白底深蓝，默认设置                                   | 通过      |
+| 透明背景上的深蓝色                                   | 通过      |
+| 深蓝底白色                                           | 通过      |
+| 白底灰色 `#888888`                                   | 通过      |
+| 白底灰色 `#999999`，以及任何更浅的颜色               | 失败      |
+| 白底黄色 `#ffd400`                                   | 失败      |
+| 从深蓝色渐变到淡薰衣草色 `#e0e0ff`，角方块仍为深蓝色 | 失败      |
+
+解码器是 qr-scanner，它建立在 jsQR 之上，而 jsQR 是 Google ZXing 库的 JavaScript 移植版。它运行在 Web Worker 里，或者在浏览器有自带的 `BarcodeDetector` 时直接使用它；对话框在第一次扫描时才导入它，所以在有人使用之前，它不会给页面增加任何负担。通过也只是某一个解码器的结果，而各种手机摄像头并不相同，所以在这里失败的 QR 码，在送去印刷之前需要更强的对比度。
+
+### 每次改动只渲染一次
+
+生成器通过 `next/dynamic` 和 `ssr: false` 加载，qr-code-styling 则在挂载之后才导入。此后设置的每一次改动都会新建一个实例，并把它的 SVG 换进预览里。这个库的 `update()` 会把新选项合并进已有的实例，但它的深度合并产生了错误的输出，所以这个 effect 改为重建。代价是每敲一个键或每拖一格滑块就重新渲染一次，对象是一个最大 512 像素的 QR 码。
+
+恢复最近的 QR 码时，会把保存的设置铺在当前的默认值之上，所以在某个较新的选项出现之前保存的 QR 码仍然可以恢复，缺少的字段由默认值补上。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/qr/styled-dark-desktop.webp",
+      frame: "safari",
+      url: "qr.ysz.life",
+      alt: "深色主题下打开了 Colors 标签页的生成器：白色卡片上是一个圆形 QR 码，带深蓝到橙色的渐变和叶子形 logo",
+      caption: "深色主题。",
+    },
+    {
+      src: "/projects/qr/styled-light-mobile.webp",
+      frame: "iphone",
+      alt: "手机上浅色主题的生成器：标题、链接输入框，以及带叶子形 logo 的圆形渐变 QR 码",
+      caption: "在手机上。",
+    },
+    {
+      src: "/projects/qr/styled-dark-mobile.webp",
+      frame: "iphone",
+      alt: "手机上深色主题的生成器，已滚动到导出按钮和带渐变设置的 Colors 标签页",
+      caption: "手机上的控件。",
+    },
+  ]}
+  columns={3}
+/>

@@ -1,0 +1,138 @@
+export const source = "8b1ee814cb0a";
+
+# Montu，一份瑞士登山路线日志
+
+[montu.ch](https://montu.ch) 收集了一位朋友在瑞士的登山路线，夏季和冬季的都有，每一条都用德语写成，配着他自己拍的照片。这个网站是我为他做的，他可以自己发布新路线，用的是浏览器里的内容编辑器。
+
+<Safari
+  url="montu.ch"
+  src="/projects/montu/home-desktop.webp"
+  video="/projects/montu/home-desktop.mp4"
+  alt="Montu 的首页：衬线体标题 Faszination Bergtouren 在一张雾气弥漫的森林照片上逐字由模糊变清晰，随后幻灯片交叉淡入到青绿色水库上方的一处山屋露台，再切换到雪坡上的滑雪登山者"
+  caption="首页一开始是他的照片幻灯片。"
+/>
+
+## 他想要什么
+
+他想要一个地方，按他记忆中的样子保存自己的路线。网站用它自己的话说出了这一点：技术细节只是“sanfte Wegweiser”（温和的路标），整个网站是“mehr Tagebuch als Führer”，也就是日记多于指南。所以每个页面都以一张照片和他的文字开头，数据跟在后面，供想去的人参考。
+
+<ProjectImage
+  src="/projects/montu/about-desktop.webp"
+  alt="Willkommen bei Montu.：一张雾气弥漫的山谷中一块巨石的照片，旁边是网站的介绍，介绍的最后一句是 mehr Tagebuch als Führer，还有一个写着 Touren ansehen 的按钮"
+  caption="介绍，用的是他自己的话。"
+  size="full"
+/>
+
+首页上，每条路线都是一张大幅照片卡片，带有所在地区、标题、他为它写的一段简短预告，以及一行三个数据：爬升高度（米）、距离和难度等级。
+
+<ProjectImage
+  src="/projects/montu/home-tours-desktop.webp"
+  alt="Die Touren im Überblick：圆角照片卡片，分别是一座山间水库和雪坡上的滑雪登山者，每张都带有地区标签、衬线体标题、一段简短摘要和一行数据"
+  caption="首页上的路线：先是照片，最后才是数据。"
+  size="full"
+/>
+
+## 路线页
+
+一条路线从上到下依次是：
+
+1. 题图照片，附有路线类型、难度等级、地区、海拔范围和日期。
+2. 他的介绍。
+3. 关键数据、海拔剖面图和地图。
+4. 各个分段，依次排列。
+5. 指向沿途山屋、缆车和其他地点的链接，由他视情况添加。
+
+<ProjectImage
+  src="/projects/montu/tour-hero-desktop.webp"
+  video="/projects/montu/tour-hero-desktop.mp4"
+  alt="滚动浏览路线 Linthal - Muttsee - Kistenpass - Brigels：从水库上方山屋露台的题图照片开始，依次经过介绍、关键数据、海拔剖面图和地图，一直到前两个分段"
+  caption="一条路线，从题图照片到各个分段。"
+  size="full"
+/>
+
+## 分段
+
+每个分段都有自己的一组照片可以翻看，每张都配有说明，旁边是这个分段自己的数据和文字。如果路线中的某一段可以跳过，比如改乘缆车，这个分段的末尾就会用一条橙色的提示写出替代方案。
+
+<ProjectImage
+  src="/projects/montu/tour-stage-desktop.webp"
+  video="/projects/montu/tour-stage-desktop.mp4"
+  alt="第一个分段 Linthal bis Bergstation Chalchtrittli：点击照片旁的箭头，画面从一条装有铁链的岩石小径翻到山谷的景色，再翻到一块路标，旁边是这个分段的数据和文字，文字的末尾是一条橙色提示，写着乘出租车和缆车的替代方案"
+  caption="翻看一个分段的照片。"
+  size="full"
+/>
+
+## 一个 GPS 文件生成地图和海拔剖面图
+
+GPS 手表或手机应用会把一次登山记录成一个 GPX 文件：线路是一串点，每个点都带着海拔。他把这一个文件上传到这条路线上。页面会在地形图上画出线路，起点是绿色图钉，终点是橙色图钉，并用同样的那些点绘制海拔剖面图。剖面图会自己选择比例尺，所以一次短途滑雪和一次长途穿越都能看得清楚，把指针移到剖面图上还会读出对应的高度。
+
+难度等级遵循瑞士阿尔卑斯俱乐部的分级：
+
+| 路线类型   | 分级                                           |
+| ---------- | ---------------------------------------------- |
+| 徒步       | 从 T1（轻松步行）到 T6（艰难的高山徒步）       |
+| 滑雪与高山 | 从 L（容易）到 EX（极其困难）                  |
+| 雪鞋徒步   | 从 WT1（轻松步行）到 WT6（要求很高的高山路线） |
+
+在路线上悬停或点按难度等级，就会写出它的完整含义、指出所属的分级，并链接到对它的说明。
+
+<ProjectImage
+  src="/projects/montu/tour-elevation-desktop.webp"
+  video="/projects/montu/tour-elevation-desktop.mp4"
+  alt="Eckdaten der Tour：悬停在难度 T3 上会打开一个弹出卡片，把它写成 Anspruchsvolle Bergwanderung，并链接到 SAC 分级；随后指针沿着海拔剖面图移动，提示框读出对应的高度"
+  caption="解释难度等级，读出剖面图上的高度。"
+  size="full"
+/>
+
+地图是一张可交互的地形图，所以访客可以放大到线路的任何一段。地图旁边，他写上去程和返程怎么走，以及最低限度要带的装备。
+
+<ProjectImage
+  src="/projects/montu/tour-map-desktop.webp"
+  video="/projects/montu/tour-map-desktop.mp4"
+  alt="剖面图下方的地形图，橙色线路从 Linthal 的绿色图钉延伸到 Brigels 的橙色图钉：地图放大了两次，并沿着线路拖动，经过几座水库，旁边是去程、返程和装备的说明"
+  caption="沿着线路放大。"
+  size="full"
+/>
+
+## 设计
+
+标题用衬线体，正文用安静的无衬线体，照片铺得很大，带着圆角。菜单是角落里的一块小玻璃面板，会标出你所在的章节，里面有浅色、深色和跟随系统设置之间的切换。
+
+<ProjectImage
+  src="/projects/montu/theme.webp"
+  video="/projects/montu/theme.mp4"
+  alt="首页的路线部分：右上角的菜单展开，列出 Home、Über Montu、Touren、Info Eckdaten 和 Info Planung，页面通过其中的 Modus 控件切换到深色模式，再切换回浅色，随后菜单收起"
+  caption="菜单，以及切换到深色。"
+  size="full"
+/>
+
+## 他自己编辑的部分
+
+网站用 Next.js 构建，访客读到的一切都存放在 Sanity 里，这是一个内置于网站的内容编辑器。一条路线就是一张表单，按标签页划分，从基本信息到线路和交通安排。难度等级是从列表里选的，而不是手动输入，所以页面上的标注总是和分级一致；一个分段只有在他把它标记为可跳过之后，才会要求填写替代方案。
+
+首页也用同样的方式编辑，从幻灯片里的照片到介绍这个项目的文字。他发布之后，网站会自己更新，不需要开发者。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/montu/titschal-desktop.webp",
+      frame: "safari",
+      url: "montu.ch/tour/piz-titschal-2550m",
+      alt: "路线 Piz Titschal (2550m)：滑雪登山者在蓝天下攀登积雪的山脊，带有 Splitboardtour 和 L – Leicht 标签，以及标题和一行文字 Surselva, Graubünden, 1344m – 2550m, 15. Februar 2026",
+      caption: "电脑上的一条冬季路线。",
+    },
+    {
+      src: "/projects/montu/home-mobile.webp",
+      frame: "iphone",
+      alt: "手机上的首页：雾气弥漫的森林照片上是 Faszination Bergtouren，还有 Eintauchen & Entdecken 按钮和幻灯片的圆点",
+      caption: "手机上的首页。",
+    },
+    {
+      src: "/projects/montu/tour-stats-mobile.webp",
+      frame: "iphone",
+      alt: "手机宽度下的 Eckdaten der Tour：四个数据排成两行两列，下面是海拔剖面图和地形图，线路位于绿色和橙色图钉之间",
+      caption: "手机上的剖面图和地图。",
+    },
+  ]}
+  columns={3}
+/>

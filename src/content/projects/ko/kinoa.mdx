@@ -1,0 +1,223 @@
+export const source = "c7927048722c";
+
+# 무료로 보는 영화와 시리즈, 그리고 함께 보는 공간
+
+[Kinoa](https://kinoa.to)는 영화와 시리즈를 무료로 볼 수 있는 사이트로, 플레이어를 중심으로 소셜 기능이 붙어 있습니다. 프로필, 피드, 댓글, 메시지, 그리고 함께 보는 방이 있습니다. 검색창 하나와 플레이어로 시작했고, 나머지는 릴리스를 거듭하며 하나씩 더해졌습니다.
+
+| 월 이용자   | 계정       | 운영 시작   |
+| ----------- | ---------- | ----------- |
+| 약 10,000명 | 약 1,000개 | 2025년 11월 |
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/hero.webp"
+  video="/projects/kinoa/hero.mp4"
+  alt="다크 테마의 Kinoa 홈페이지: 헤드라인 What do you want to watch?가 떠오르고, 검색창에 spirited를 입력하면 Spirited Away와 다른 결과 네 개가 나타나며, 방향키로 결과 사이를 이동합니다"
+  caption="입력하는 동안 바로 나오는 검색 결과."
+/>
+
+## 볼 것 찾기
+
+모든 것은 검색창 하나에서 시작합니다. 결과는 입력하는 동안 나타나며, 각 결과에는 포스터, 연도, 평점이 붙고, 가장 유력한 제목의 나머지 부분은 회색 글자로 자동 완성됩니다. 방향키로 목록을 오르내릴 수 있습니다. 검색창 아래 홈 화면에는 보던 작품과 이번 주에 다른 사람들이 보고 있는 작품이 나옵니다.
+
+카드는 모두 마우스를 올리면 제자리에서 열립니다. 포스터가 작품의 아트워크로 넓어지고, 줄거리와 시청을 시작하는 버튼이 나타납니다.
+
+<ProjectImage
+  src="/projects/kinoa/cards.webp"
+  video="/projects/kinoa/cards.mp4"
+  alt="홈 화면의 인기 작품 그리드: 포인터가 첫 줄을 따라 움직이면 포스터마다 작품의 배경 이미지, 연도, 평점, 줄거리, Watch Now 버튼, 빠른 실행 버튼이 담긴 카드로 넓어집니다"
+  caption="마우스를 올리면 작품의 아트워크로 열리는 카드."
+  size="full"
+/>
+
+작품 페이지에는 아트워크, 평점, 장르, 출연진이 있고 그 바로 아래에 플레이어가 있습니다. 작품 정보는 TMDB(The Movie Database)에서 가져옵니다.
+
+<ProjectImage
+  src="/projects/kinoa/title-your-name.webp"
+  alt="Your Name의 작품 페이지: 맨 위에 걸친 작품 아트워크, 포스터, 평점, 연도, 상영 시간, 장르, 줄거리, 그리고 Watch Together 버튼"
+  caption="작품 페이지."
+  size="full"
+/>
+
+## 재생하기
+
+영화와 시리즈는 다른 사이트에서 임베드한 플레이어로 재생되며, 플레이어마다 모든 작품을 갖고 있지는 않습니다. 플레이어 아래 줄에는 현재 서버의 이름이 나오고, 서버마다 최고 화질이나 가장 안정적 같은 특기가 태그로 붙어 있습니다. 기본 서버가 로드되지 않으면 안내 문구가 한 번의 탭으로 다음 서버를 제안합니다. 휴대폰에서는 재생을 기기 자체의 전체 화면 플레이어로 바로 전환할 수 있습니다.
+
+시리즈에는 시즌별 에피소드 선택기가 있고, 지금 보고 있는 에피소드가 강조됩니다.
+
+<ProjectImage
+  src="/projects/kinoa/episodes.webp"
+  alt="플레이어 아래: VidFast라고 적힌 서버 줄에 Best quality 칩과 Try VidSrc 안내가 있고, 그 아래 Episodes 섹션에 시즌 선택기와 에피소드 여섯 개의 스틸 컷이 있으며 세 번째가 강조되어 있습니다"
+  caption="서버 줄과 에피소드 선택기."
+  size="full"
+/>
+
+Kinoa는 어디까지 봤는지 기억합니다. Continue Watching은 영화라면 같은 분으로, 시리즈라면 같은 에피소드로 돌아가게 해 주며, 계정이 없어도 동작합니다. 로그인하면 그 기록이 관심 목록과 함께 계정으로 옮겨져서, 둘 다 다른 기기에서도 이어집니다.
+
+<ProjectImage
+  src="/projects/kinoa/continue-watching.webp"
+  alt="아래로 스크롤한 홈 화면: Continue Watching에 Spirited Away, Slow Horses 시즌 1 에피소드 3, Dune: Part Two, Arcane 시즌 2 에피소드 1이 있고 각각 진행 막대와 남은 시간이 표시되며, 그 아래에 이번 주 인기 작품이 이어집니다"
+  caption="이번 주 인기 작품 위에 있는 Continue Watching."
+  size="full"
+/>
+
+## 함께 보기
+
+방은 링크 하나입니다. 호스트가 작품을 고르고 방을 공유하면, 들어온 모두가 같은 장면을 보고, 플레이어 옆에는 채팅이 있습니다. 호스트가 일시 정지하거나 앞으로 건너뛰거나 에피소드를 바꾸면 방도 그대로 따라갑니다. 방 운영도 호스트가 맡습니다:
+
+- **호스트 넘기기.** 호스트 자리는 방에 있는 다른 누구에게든 넘길 수 있고, 호스트의 탭이 닫히면 방이 아직 남아 있는 사람에게 호스트를 넘깁니다.
+- **모더레이션.** 호스트는 사람을 내보내고 다시 들어오지 못하게 차단할 수 있습니다.
+- **공개 범위.** 방은 공개 디렉터리에 올릴 수도 있고, 링크를 가진 사람에게만 열어 둘 수도 있습니다.
+
+<ProjectImage
+  src="/projects/kinoa/watch-together.webp"
+  video="/projects/kinoa/watch-together.mp4"
+  alt="Watch Together 페이지: 궤도를 도는 호 아래에서 점으로 이루어진 지구본이 도는 옆에 헤드라인 Movie night, across the internet"
+  caption="인터넷 너머로 즐기는 영화의 밤."
+  size="full"
+/>
+
+## 프로필, 피드, 메시지
+
+플레이어 주위에는 작은 소셜 네트워크가 있습니다:
+
+- **프로필.** 계정마다 핸들과 kinoa.to/@name의 공개 페이지가 생기고, 여기에 즐겨찾기, 관심 목록, 최근에 본 작품이 나옵니다. 스위치 하나로 프로필 전체를 비공개로 바꿀 수 있습니다.
+- **피드.** 사람들은 서로를 팔로우하고, 작품에 좋아요를 누르고 댓글을 달며, 피드에는 Kinoa의 모든 사람이 남긴 댓글, 즐겨찾기, 팔로우가 최신순으로 나옵니다.
+- **메시지.** 다이렉트 메시지에는 리액션, 수정과 삭제, 차단과 신고 기능이 있습니다.
+- **알림.** 종 아이콘에 답글, 멘션, 좋아요, 팔로우가 생기는 대로 모이고, 팔로우한 작품이 공개되면 그 소식도 알려 줍니다.
+
+<ProjectImage
+  src="/projects/kinoa/profile.webp"
+  alt="kinoa.to/@rei의 제 프로필: 커버 이미지, 아바타와 핸들, 팔로워 수, 짧은 소개글이 있고, Favorites 탭이 열려 Mr. Robot, Neon Genesis Evangelion, Death Note, Breaking Bad가 보입니다"
+  caption="제 프로필의 Favorites 탭."
+  size="full"
+/>
+
+## 스포츠
+
+스포츠 허브는 축구, 농구, 모터 스포츠 등에 걸쳐 지금 진행 중인 경기와 곧 시작하는 경기를 맨 앞에 보여 줍니다. 경기마다 전용 페이지가 있고, 일정과 순위가 함께 나오며 시청 방법은 하나입니다.
+
+<ProjectImage
+  src="/projects/kinoa/sports.webp"
+  alt="Sports 허브: 축구부터 크리켓까지 카테고리 칩이 있고, 그 아래 Live now에 농구와 축구 경기 카드가 있으며 각각 Live로 표시되어 있습니다"
+  caption="지금 진행 중인 경기가 먼저 나오는 스포츠 허브."
+  size="full"
+/>
+
+## 사용자의 언어로
+
+Kinoa는 방문자의 언어를 브라우저에서 읽어 오고, 인터페이스는 모든 부분이 번역되어 있습니다. 아랍어와 히브리어에서는 레이아웃 전체가 오른쪽에서 왼쪽으로 뒤집힙니다. 제목, 줄거리, 장르는 TMDB에 있는 한 방문자의 언어로 들어오고 포스터도 마찬가지입니다. Your Name의 아랍어 페이지에는 일본어 원작 포스터가 나옵니다.
+
+<ProjectImage
+  src="/projects/kinoa/ar-title.webp"
+  alt="아랍어로 본 Your Name 페이지: 오른쪽에서 왼쪽으로 뒤집힌 레이아웃, 아랍어 제목과 줄거리, 오른쪽에 일본어 포스터"
+  caption="아랍어로 본 Your Name, 일본어 포스터와 함께."
+  size="full"
+/>
+
+## 디자인과 움직임
+
+Kinoa는 크림과 에스프레소 색을 바탕으로 카라멜색 포인트를 준 따뜻한 팔레트를 쓰며, 라이트 테마와 다크 테마는 직접 고르지 않으면 시스템 설정을 따릅니다. 작은 움직임으로 방금 무슨 일이 있었는지 확인해 줍니다:
+
+- 페이지가 스트리밍으로 들어오고, 각 부분은 자리 표시자가 있던 그 자리에 나타납니다.
+- 사이드바가 부드럽게 열리고 닫힙니다.
+- 거부된 폼은 잘못된 입력란을 흔듭니다.
+- 대화상자는 크기가 툭툭 바뀌지 않고 부드럽게 바뀝니다.
+
+시스템에서 동작 줄이기를 요청한 방문자에게는 이 모든 움직임이 물러납니다. Kinoa는 앱으로도 설치할 수 있습니다. 컴퓨터나 Android에서는 브라우저에서 바로, iPhone에서는 짧은 안내를 따라 설치합니다.
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/theme.webp"
+  video="/projects/kinoa/theme.mp4"
+  alt="홈 화면이 다크 테마에서 라이트 테마로, 다시 원래대로 바뀝니다. 사이드바 아래쪽의 컨트롤로 전환합니다"
+  caption="라이트 테마와 다크 테마."
+/>
+
+## 구현 방식
+
+Kinoa는 대부분 서버 컴포넌트로 이루어진 Next.js 앱이고, 계정, 데이터베이스, 방이 돌아가는 실시간 채널에는 Supabase를 씁니다. Vercel에 배포되어 있고 next-intl로 번역합니다.
+
+### 방을 하나의 시계에 맞추기
+
+가장 어려운 제약은 임베드 플레이어입니다. 일시 정지하라거나 특정 시각으로 이동하라고 시킬 수가 없습니다. 그래서 호스트와 어긋난 게스트는 플레이어를 다시 로드하는데, 호스트의 위치에서 다시 로드에 걸리는 시간만큼 앞을 내다본 지점으로 로드합니다. 로드할 때마다 실제로 어디에 도착했는지를 측정해 다음 로드를 보정하고, 호스트보다 1초가 채 안 되는 만큼 뒤를 겨냥합니다. 장면을 망치는 것은 앞서는 쪽이지 늦는 쪽이 아니기 때문입니다.
+
+<CodeBlock
+  code={`/** Aim a touch behind the host — being early spoils, being late doesn't. */
+  export const TARGET_DRIFT_SECONDS = -0.75
+  /** Share of each landing error folded into the next lead estimate. */
+  export const LEAD_LEARNING_RATE = 0.6
+  export function anchorTargetFor(
+    host: HostAnchor,
+    now: number,
+    leadSeconds: number
+  ): AnchorTarget {
+    if (!host.isPlaying) {
+      return { time: Math.max(0, host.currentTime), play: false }
+    }
+    return {
+      time: Math.max(0, projectPlayhead(host, host.at, now) + leadSeconds),
+      play: true,
+    }
+  }
+  export function nextLoadLead(lead: number, driftAtSettle: number): number {
+    const error = driftAtSettle - TARGET_DRIFT_SECONDS
+    const next = lead - error * LEAD_LEARNING_RATE
+    return Math.min(
+      MAX_LOAD_LEAD_SECONDS,
+      Math.max(MIN_LOAD_LEAD_SECONDS, Number.isFinite(next) ? next : lead)
+    )
+  }`}
+  fileName="lib/watch-together-playhead-sync.ts"
+  lang="ts"
+/>
+
+다시 로드하면 버퍼링이 한 번 생기므로, 게스트는 두 번 연속 검사에서 몇 초씩 어긋나 있을 때만 다시 로드하고, 몇 번 시도한 뒤에는 결정을 Catch up 버튼에 넘깁니다.
+
+### 데이터베이스가 강제하는 규칙
+
+규칙 두 가지는 앱이 아니라 데이터베이스에 있어서 어떤 클라이언트에서도 지켜집니다:
+
+- **방을 조종하는 것은 호스트뿐입니다.** 방의 제어 채널에 걸린 행 수준 보안(row-level security) 정책입니다. 통합 테스트는 게스트로 로그인해 모든 제어 명령을 보내 보고, 호스트에게 그중 어떤 것도 도착하지 않는지 확인합니다.
+- **핸들은 한 곳에서 확정됩니다.** 길이와 예약된 이름부터 모더레이션까지 모든 규칙을 데이터베이스 함수 하나가 맡고, 두 사람이 동시에 같은 이름을 차지하려 할 때는 유니크 인덱스가 결판을 냅니다.
+
+### 서버 왕복 줄이기
+
+필요한 것보다 훨씬 자주 실행되던 비용이 세 가지 있었습니다:
+
+| 작업                             | 이전                                                 | 이후                                                      |
+| -------------------------------- | ---------------------------------------------------- | --------------------------------------------------------- |
+| 누가 로그인했는지 확인           | 영화 페이지에서 Supabase Auth 호출 3번, 피드에서 4번 | 렌더당 1번, 모든 헬퍼가 공유                              |
+| 관심 목록 그리기                 | 목록의 작품마다 TMDB 요청 1번                        | 데이터베이스 쿼리 1번: 각 행이 카드 정보를 함께 담고 있음 |
+| 열린 탭이 5분마다 하는 버전 확인 | 매번 서버리스 함수 실행                              | Vercel의 엣지 캐시                                        |
+
+세션 확인은 로컬에서 디코딩하는 것이 아니라 네트워크를 거치기 때문에, 렌더당 한 번으로 줄인 것이 의미가 컸습니다.
+
+### 번역을 빠짐없이 유지하기
+
+모든 문자열은 영어가 원본입니다. CI의 검사가 다른 모든 언어 파일을 영어와 대조해 키가 빠졌거나 남아 있으면 실패하므로, 새 기능이 절반만 번역된 채 나갈 수 없습니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/kinoa/home-desktop.webp",
+      frame: "safari",
+      url: "kinoa.to",
+      alt: "라이트 테마의 Kinoa 홈페이지: 검색창 위의 헤드라인 What do you want to watch?",
+      caption: "라이트 테마의 홈 화면.",
+    },
+    {
+      src: "/projects/kinoa/title-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 Slow Horses 페이지: 어두운 배경 이미지 위의 포스터, 제목, 평점, 장르, 줄거리, Watch Together 버튼",
+      caption: "휴대폰에서 본 시리즈.",
+    },
+    {
+      src: "/projects/kinoa/home-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 홈 화면: Spirited Away와 Slow Horses가 있는 Continue Watching, 그 아래 Trending 줄",
+      caption: "휴대폰에서 본 홈.",
+    },
+  ]}
+  columns={3}
+/>

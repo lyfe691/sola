@@ -1,0 +1,126 @@
+export const source = "7594425b3b8e";
+
+# 一个本地的 OpenID Connect 沙盒
+
+Vault 是一套在一台机器上运行的身份认证环境：Keycloak 作为 OpenID Connect 提供方，一个 FastAPI 后端负责验证它的令牌并检查角色，一个 Next.js 前端提供登录页和按角色限制的面板。OpenID Connect（OIDC）是建立在 OAuth 2.0 之上的身份层。我在 2025 年 5 月做了 Vault，为的是跟踪一个令牌，从 Keycloak 签发它的那一刻，到某个 API 接受或拒绝它的那一刻。
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/hero.webp"
+  video="/projects/vault/hero.mp4"
+  alt="Vault 的登录页：在卡片里输入用户名 demo 和密码，点击 Sign in 后弹出 Login successful 提示，并进入 Admin Dashboard，点击 Back to Home 则打开门户页，页面向 demo 问好，Admin 和 User 徽章位于 Admin Dashboard 和 User Dashboard 按钮之上"
+  caption="以 demo 用户登录。"
+/>
+
+## 登录
+
+登录表单留在应用内部。前端把用户名和密码 POST 到后端的 `/login`，后端用一次请求，把它们拿到 Keycloak 的令牌端点去交换，用的是 Terraform 在客户端上启用的资源所有者密码授权（resource owner password grant）。后端把拿回来的访问令牌放进一个 `HttpOnly` cookie，这个 cookie 随令牌一起过期，也就是 Keycloak 默认的五分钟之后。登录被拒绝时，会显示 Keycloak 自己的错误信息。
+
+用这种授权方式，应用能看到用户的密码，这正是有真实用户的应用改为把浏览器送到提供方自己的登录页面的原因。对于只有一个演示用户的沙盒，重点就是让整个交换过程集中在一个看得懂的地方。
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/sign-in-refused.webp"
+  alt="登录卡片里填着用户名 demo 和一个错误的密码，Sign in 按钮上方是红色的 Invalid user credentials 提示，角落里弹出 Login failed 提示"
+  caption="密码错误时，会带回 Keycloak 的提示信息。"
+/>
+
+## 根据令牌的角色构建的门户
+
+登录之后，前端会调用后端的 `/me`。这个 cookie 是 `HttpOnly` 的，所以页面自己的 JavaScript 读不到令牌：由后端验证它并返回其中的声明（claims），门户就根据这些声明渲染，包括用户名、每个 realm 角色对应的一个徽章，以及每个角色所开放的面板对应的一个按钮。演示用户同时拥有两个角色，登录后进入管理员面板。把 `admin` 拿掉，下一次登录就只会显示一个徽章和一个按钮，打开 `/admin` 则会转到用户面板。
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/portal-user-only.webp"
+  alt="门户卡片向 demo 问好，只有一个 User 徽章、一个 User Dashboard 按钮和 Sign Out"
+  caption="从演示用户身上拿掉 admin 之后的门户。"
+/>
+
+## 由 API 说了算
+
+按钮只是把角色映照出来。API 里每一个受保护的路由都依赖 `verify_token`，它从 `Authorization: Bearer` 头里读取令牌，没有这个头时则从 cookie 里读。缺失、过期或伪造的令牌会得到 401。令牌有效但没有对应角色时，第二个依赖 `require_roles` 会返回 403，它在令牌的 `realm_access.roles` 声明里查找这个角色：
+
+| 路由     | 需要           | 缺少时 |
+| -------- | -------------- | ------ |
+| `/me`    | 任何有效的令牌 | 401    |
+| `/user`  | `user` 角色    | 403    |
+| `/admin` | `admin` 角色   | 403    |
+
+<ProjectImage
+  src="/projects/vault/api.webp"
+  video="/projects/vault/api.mp4"
+  alt="全屏的 PowerShell 窗口：curl 以 demo 登录，随后 GET /user 返回 HTTP 200 和 User access granted，角色列表里只有 user，而 GET /admin 返回 HTTP 403 Forbidden 和 Access denied. Required roles: admin"
+  caption="没有 admin 时，/user 正常应答，/admin 则被拒绝。"
+  size="full"
+/>
+
+## 由 Terraform 配置的 Keycloak
+
+Docker Compose 以开发模式运行 Keycloak 26.2，并配一个 PostgreSQL 16 数据库保存它的状态。在 Keycloak 的管理控制台里，几分钟就能点出一个 realm、一个客户端、两个角色和一个用户，但它不会留下任何记录，说明是怎么一步步做到这一步的。在 Vault 里，这份配置放在 `terraform/main.tf` 中：
+
+- **realm**，即 `vault-core`，其他一切都在它里面。
+- **两个 realm 角色**，`admin` 和 `user`。
+- **一个演示用户**，`demo`，同时拥有这两个角色。
+- **客户端**，`vault-app`，应用通过它登录。
+
+改动过的设置会体现在 diff 里，而 `terraform apply` 会把 realm 恢复成这个文件描述的样子，分毫不差。
+
+<ProjectImage
+  src="/projects/vault/terraform-apply.webp"
+  video="/projects/vault/terraform-apply.mp4"
+  alt="全屏的 PowerShell 窗口：terraform apply -auto-approve 先打印出它的计划，然后创建 realm、两个角色、客户端作用域、演示用户、客户端和角色分配，最后以 Apply complete! Resources: 8 added 结束"
+  caption="terraform apply 从零开始构建 realm。"
+  size="full"
+/>
+
+随后，管理控制台会列出文件所要求的内容，以及文件给出的说明。
+
+<Safari
+  url="localhost:8080/admin"
+  src="/projects/vault/keycloak-roles.webp"
+  alt="Keycloak 管理控制台里的 Vault Core Realm：Realm roles 页面列出了 admin（说明为 Administrator role）和 user（说明为 Regular user role），旁边是 Keycloak 的默认角色"
+  caption="Keycloak 管理控制台里这个 realm 的角色。"
+/>
+
+## 实现方式
+
+后端是 FastAPI，用 python-jose 检查令牌，用 httpx 调用 Keycloak。前端是 Next.js，搭配 shadcn/ui 组件。两者都运行在宿主机上，和那两个容器并排。
+
+### 验证令牌
+
+`verify_token` 从不向 Keycloak 询问某个令牌。它读取这个 realm 位于 `/.well-known/openid-configuration` 的发现文档，顺着其中的 `jwks_uri` 找到 realm 的公钥，再交给 python-jose 的 `jwt.decode` 检查签名、有效期和签发者，其中签发者必须和 `http://localhost:8080/realms/vault-core` 逐字符完全一致。Keycloak 用 realm 的 RSA 私钥（RS256）签发访问令牌，所以验证只需要公钥这一半。这两份文档在每次请求时都会重新获取，而不是缓存：也就是两次本地往返，而在管理控制台里轮换过的密钥，从下一次请求起就会生效。
+
+bearer 方案是用 `auto_error=False` 创建的，所以没有这个头的请求会走到 cookie 检查，而不是当场被拒绝。角色是叠在上面的第二个依赖：
+
+<CodeBlock
+  code={`def require_roles(roles: List[str]):
+      async def role_checker(payload: dict = Depends(verify_token)):
+          if not has_role(payload, roles):
+              raise HTTPException(
+                  status_code=403,
+                  detail=f"Access denied. Required roles: {', '.join(roles)}"
+              )
+          return payload
+      return role_checker`}
+  fileName="app/backend/main.py"
+  lang="python"
+/>
+
+### 角色在签发令牌时就已固定
+
+演示用户的整个角色列表都由 Terraform 掌管。`keycloak_user_roles` 是穷尽式的，所以该用户拥有的恰好就是 `role_ids` 里的角色，令牌的 `realm_access.roles` 也不会列出别的：
+
+<CodeBlock
+  code={`resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.admin_role.id,
+      keycloak_role.user_role.id,
+    ]
+  }`}
+  fileName="terraform/main.tf"
+  lang="hcl"
+/>
+
+把 `admin` 从 `role_ids` 里拿掉再应用，改动之前签发的令牌在过期之前仍然带着这个角色，因为后端相信签名令牌里写的内容，从不再去询问 Keycloak。下一次登录拿到的令牌就没有它了，上面那段终端视频用的就是这个令牌。

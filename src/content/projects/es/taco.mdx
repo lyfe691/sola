@@ -1,0 +1,165 @@
+export const source = "7a33cd507aed";
+
+# Un sitio web para el perro de mi hermano, hecho para reutilizarlo
+
+Taco es el pomerania de mi hermano, y [takitwo.vercel.app](https://takitwo.vercel.app) es su sitio web. Lo construí como base para el próximo sitio pequeño de este tipo. Los colores viven en clases de tema y todas las cadenas de la interfaz en un archivo JSON por idioma, así que el próximo sitio significa contenido nuevo y valores nuevos en esos archivos, mientras los componentes se quedan como están.
+
+<Safari
+  url="takitwo.vercel.app"
+  src="/projects/taco/themes.webp"
+  video="/projects/taco/themes.mp4"
+  alt="La página de inicio de Taco cambiando de tema desde el menú de la paleta en la cabecera: de Green a Cherry, Sky, Gotham y por último Night"
+  caption="Cambiar de tema desde la cabecera."
+/>
+
+## Temas de color
+
+El botón de la paleta en la cabecera abre el menú de temas. Elegir un tema recolorea todas las páginas a la vez, desde los enlaces y los botones hasta los círculos suaves detrás de la foto, y el sitio recuerda la elección para la próxima visita. Gotham es blanco y negro, Night es azul marino con un acento azul, y todo visitante nuevo empieza en Green.
+
+<ProjectImage
+  src="/projects/taco/about-gotham.webp"
+  alt="La página «Acerca de» en el tema Gotham: una foto grande de Taco con un diente de león a la izquierda y, a la derecha, una breve descripción con tarjetas de edad, raza, personalidad y comida favorita, todo en blanco sobre negro"
+  caption="La página «Acerca de» en Gotham."
+  size="full"
+/>
+
+## Idiomas
+
+El sitio está escrito en inglés, español y japonés. En la primera visita elige el idioma que coincide con el navegador y recurre al inglés si no hay coincidencia, y el botón de idioma de la cabecera lo cambia en cualquier momento. La elección hecha ahí se guarda y prevalece en todas las visitas posteriores.
+
+<ProjectImage
+  src="/projects/taco/language.webp"
+  video="/projects/taco/language.mp4"
+  alt="El menú de idioma se abre en la página de inicio, se elige 日本語, la navegación, el titular y los botones pasan a japonés, y la página se desplaza hasta la sección «Acerca de», también en japonés"
+  caption="Pasar el sitio a japonés."
+  size="full"
+/>
+
+## Moverse entre páginas
+
+La cabecera se queda en su sitio de una página a otra, y la línea bajo el enlace activo se desliza hasta el nuevo mientras la página siguiente aparece con un fundido. La página «Acerca de» reúne los datos de Taco: su edad, raza, personalidad y comida favorita.
+
+<ProjectImage
+  src="/projects/taco/nav.webp"
+  video="/projects/taco/nav.mp4"
+  alt="El sitio en el tema Sky: al hacer clic en About, el subrayado se desliza de Home a About mientras la página «Acerca de» aparece con un fundido, y al hacer clic en Home vuelve a deslizarse"
+  caption="El subrayado sigue a la página activa."
+  size="full"
+/>
+
+## El blog
+
+Cada entrada tiene su propia página, con un título, la fecha y el autor, una foto de portada y la historia debajo. Los estilos de texto siguen el tema, así que en Gotham y Night una entrada se lee como texto claro sobre una página oscura.
+
+<ProjectImage
+  src="/projects/taco/post-night.webp"
+  alt="Una entrada del blog titulada Taco's Beach Day en el tema Night: un enlace para volver, la fecha y el autor, una foto ancha de Taco y los primeros párrafos en texto claro sobre azul marino"
+  caption="Una entrada en el tema Night."
+  size="full"
+/>
+
+## En un teléfono
+
+En un teléfono los enlaces pasan a un menú que se desliza desde el lateral. Los botones de idioma y de tema están en la parte inferior y funcionan igual que en un ordenador.
+
+<IPhone
+  src="/projects/taco/menu.webp"
+  video="/projects/taco/menu.mp4"
+  alt="En un teléfono, el menú se desliza desde la derecha; el botón de tema pasa el sitio a Cherry y luego el botón de idioma lo pasa a japonés"
+  caption="El menú del teléfono, con el idioma y el tema abajo."
+/>
+
+## Cómo está hecho
+
+Taco es una aplicación de Next.js con el App Router, escrita en TypeScript. Los componentes vienen de shadcn/ui, que se apoya en Radix, y tienen estilos de Tailwind CSS. Framer Motion se encarga de la animación de las páginas y de la navegación, y el sitio se despliega en Vercel.
+
+### Los temas son conjuntos de variables CSS
+
+shadcn/ui da color a todo mediante tokens: clases como `bg-primary` y `border-border`. La configuración de Tailwind asigna cada token a una variable CSS, de modo que `primary` pasa a ser `hsl(var(--primary))`, y un tema es una clase que da a esas variables otros valores HSL. Green está en `:root`, y los demás temas siguen el mismo patrón que Sky, que se muestra aquí abreviado:
+
+<CodeBlock
+  code={`.theme-sky {
+    --background: 210 50% 98%;
+    --foreground: 210 50% 16%;
+    --primary: 210 80% 50%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 210 33% 96%;
+    --muted-foreground: 210 5% 45%;
+    --border: 210 20% 90%;
+    --ring: 210 80% 50%;
+  }`}
+  fileName="app/globals.css"
+  lang="css"
+/>
+
+Como las páginas se colorean a través de los tokens, un tema nuevo es una clase más y una entrada en el menú de temas. Night es la clase `dark`, la que busca la variante `dark:` de Tailwind. Gotham también es oscuro, pero tiene una clase propia, así que los estilos de prosa de las entradas del blog nombran tanto `.dark` como `.theme-gotham`.
+
+### Sin destello del tema equivocado
+
+[next-themes](https://github.com/pacocoursey/next-themes) pone la clase del tema elegido en `<html>` y la guarda en `localStorage`. La clase tiene que estar puesta antes del primer pintado, o un visitante que vuelve y eligió Night vería primero la página destellar en verde. La biblioteca lo resuelve con un pequeño script en línea que lee el tema guardado y pone la clase antes de que React hidrate.
+
+Por eso `<html>` lleva `suppressHydrationWarning`: su clase en el navegador difiere a propósito del HTML del servidor. El botón de tema tiene el mismo problema a menor escala. Muestra el icono del tema actual, una flor para Cherry y una luna para Night, y como el servidor no puede conocer el tema, dibuja el icono de paleta por defecto hasta que se ha montado.
+
+### El archivo en inglés es el tipo
+
+El texto de la interfaz vive en `lib/i18n/en.json`, `es.json` y `ja.json` como objetos anidados, y los componentes buscan las cadenas por ruta con puntos: `t('home.aboutSection.title')` recorre el árbol que esté activo. El mapa que contiene los archivos de idioma está tipado como `typeof en`, así que un archivo en español o en japonés al que le falte una clave aparece como un error de tipos en el editor.
+
+En cada visita, el proveedor comprueba primero en `localStorage` si hay un idioma elegido antes. Si no lo hay, se lo pregunta al navegador:
+
+<CodeBlock
+  code={`import { defaultLanguage, languages } from './languages';
+  import en from './en.json';
+  import es from './es.json';
+  import ja from './ja.json';
+  export type TranslationJSON = typeof en;
+  type TranslationsType = { [key: string]: TranslationJSON };
+  const translations: TranslationsType = { en, es, ja };
+  const fallbackLanguageCode = 'en';
+  export function detectUserLanguage(): string {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      const browserLang = navigator.language || navigator.languages[0];
+      const langCode = browserLang.split('-')[0];
+      return languages.some(lang => lang.code === langCode)
+        ? langCode
+        : fallbackLanguageCode;
+    }
+    return fallbackLanguageCode;
+  }`}
+  fileName="lib/i18n/index.ts"
+  lang="ts"
+/>
+
+`navigator.language` devuelve una etiqueta como `es-MX`. La función se queda con la parte anterior al guion y la usa si el sitio tiene ese idioma, y si no, inglés. Todo esto se ejecuta en el navegador después de cargar la página, lo que mantiene estáticas todas las páginas: el HTML se prerrenderiza una vez y las URL son las mismas en todos los idiomas.
+
+Añadir un idioma lleva tres pasos:
+
+1. Un archivo JSON con todas las cadenas, con la misma forma que `en.json`.
+2. Un import que lo mete en el mapa, donde el tipo lo comprueba contra el inglés.
+3. Una entrada en `languages.ts` con un código, un nombre para mostrar y una bandera.
+
+El menú de idiomas se construye a partir de esa lista, así que no necesita ningún cambio propio.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/taco/home-cherry.webp",
+      frame: "safari",
+      url: "takitwo.vercel.app",
+      alt: "La página de inicio de Taco en el tema Cherry: el titular Meet Taco en rosa junto a una foto redonda de Taco con un diente de león",
+      caption: "La página de inicio en Cherry.",
+    },
+    {
+      src: "/projects/taco/home-cherry-mobile.webp",
+      frame: "iphone",
+      alt: "La página de inicio en un teléfono con el tema Cherry: el titular, dos botones y la foto redonda apilados en una columna",
+      caption: "Inicio, en un teléfono.",
+    },
+    {
+      src: "/projects/taco/post-night-mobile.webp",
+      frame: "iphone",
+      alt: "La entrada del blog Taco's Beach Day en un teléfono con el tema Night, con su foto y los primeros párrafos",
+      caption: "Una entrada en un teléfono.",
+    },
+  ]}
+  columns={3}
+/>

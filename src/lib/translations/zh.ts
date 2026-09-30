@@ -291,7 +291,7 @@ export const zh = {
         description:
           "[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) 是一款 Chrome 和 Edge 扩展，可以把网站的 HTML、CSS、JavaScript 和图片连同目录结构一起下载为一个 ZIP 文件。一键完成，无需设置。它在 Chrome 应用商店有约 6000 名用户，对静态网站效果最好。",
         overview:
-          "Website Code Extractor is a one-button Chrome and Edge extension for saving a page to study how it's built. The ZIP it downloads opens straight from the folder, because the stylesheets, scripts and images its HTML references are saved next to it and linked by their new paths.",
+          "Website Code Extractor 是一款只有一个按钮的 Chrome 和 Edge 扩展，用来保存页面，以便研究它是怎么搭起来的。它下载的 ZIP 可以直接从文件夹里打开，因为页面 HTML 引用的样式表、脚本和图片都保存在它旁边，并以新的路径链接。",
       },
       applicare: {
         title: "AppliCare",
@@ -299,7 +299,7 @@ export const zh = {
         description:
           "[AppliCare](https://applicare.app) 帮你管理求职申请。为每一份申请记录状态，从已投递到收到录用；给它关联带截止日期的任务；在带成功率和时间线的仪表盘上查看进展。使用 React、Ant Design、Spring Boot 和 MongoDB 构建。",
         overview:
-          "AppliCare is a job-application tracker I built end to end, from the React interface to the Java API and the database behind it. The API ties every request to its user through a signed token, so each account only ever sees its own applications and tasks.",
+          "AppliCare 是我从头到尾自己做的求职申请追踪器，从 React 界面到 Java API，再到背后的数据库。API 通过签名令牌把每个请求与其所属用户绑定起来，所以每个账号只能看到自己的申请和任务。",
       },
       osint: {
         title: "OSINT网站",
@@ -349,7 +349,7 @@ export const zh = {
         description:
           "Sola 是我的个人网站。基于 React、TypeScript 与 Tailwind CSS 构建，用以以干净、现代的方式展示我的项目、技能与经验。",
         overview:
-          "Sola is the website you are currently on. It represents a modern approach to portfolio design, combining cutting-edge web technologies with thoughtful user experience. Built from the ground up with React and TypeScript, it showcases projects and skills through smooth animations, multiple themes, and a responsive design that works seamlessly across all devices. Its built to be fast and efficient, with a focus on user experience and performance.",
+          "Sola 就是你现在所在的这个网站。它代表了一种现代的作品集设计思路，把前沿的 Web 技术和周到的用户体验结合在一起。它用 React 和 TypeScript 从零构建，通过流畅的动画、多套主题和在所有设备上都能无缝运行的响应式设计来展示项目与技能。它被构建得快速而高效，重点放在用户体验和性能上。",
       },
       kinoa: {
         title: "Kinoa",
@@ -357,7 +357,7 @@ export const zh = {
         description:
           "[Kinoa](https://kinoa.to) 是一个免费的电影和剧集流媒体网站。打开一部作品，在同一页面直接播放，无需账号；注册账号后还有公开的 @用户名主页、片单、动态、私信，以及跟随房主播放进度一起观看的 Watch Together 房间。作品信息来自 TMDB，视频由第三方托管站点的嵌入式播放器播放。",
         overview:
-          "Kinoa is a free site for films and series with a social layer around the player: profiles, a feed, comments, messages and Watch Together rooms. I've built it since November 2025 as a Next.js app on Supabase, and around 10,000 people use it each month.",
+          "Kinoa 是一个免费观看电影和剧集的网站，围绕播放器有一层社交功能：个人主页、动态、评论、私信和 Watch Together 房间。我从 2025 年 11 月开始做它，它是一个建在 Supabase 上的 Next.js 应用，每月约有 10000 人使用。",
       },
       self: {
         title: "Self",
@@ -365,7 +365,7 @@ export const zh = {
         description:
           "Self 会在终端里把系统信息和一张图片或 ASCII 艺术并排显示，就像 Linux 上的 Neofetch，只不过面向 Windows。一条 PowerShell 命令即可安装，图片可以用彩色方块或盲文点阵渲染，主题也可以自行配置。用 Python 编写。",
         overview:
-          "Self brings Neofetch's picture-and-facts screen to Windows PowerShell. I wrote it in Python in May 2025; it installs per user with one PowerShell command and is configured with a short setup wizard.",
+          "Self 把 Neofetch 那种图片加系统信息的画面带到了 Windows PowerShell。我在 2025 年 5 月用 Python 写了它；它只需一条 PowerShell 命令就能按用户安装，并通过一个简短的设置向导来配置。",
       },
       taco: {
         title: "Taco",
@@ -373,7 +373,7 @@ export const zh = {
         description:
           "[Taco](https://takitwo.vercel.app) 是一个介绍我哥哥的狗的网站，同时也是一套我可以复用的模板：提供英语、西班牙语和日语页面并自动识别语言，还有博客、相册和联系页面。使用 Next.js、TypeScript 和 Tailwind CSS 构建。",
         overview:
-          "Taco is my brother's Pomeranian, and this is his website. I set it up so the next small site of its kind can start from the same code and only swap in new colours and new text.",
+          "Taco 是我哥哥的博美犬，这是他的网站。我这样搭建它，是为了让下一个同类小网站可以从同一份代码起步，只需换上新的颜色和新的文字。",
       },
       thoughts: {
         title: "Thoughts",
@@ -381,7 +381,7 @@ export const zh = {
         description:
           "[Thoughts](https://thoughts.ysz.life) 是一个小网站，我在那里写下一些思考、片段和笔记，和这个作品集分开。文章是 MDX 文件，访客还可以在留言簿里留下自己的话。灵感来自 [Shu Ding](https://shud.in) 的个人网站。",
         overview:
-          "Thoughts is my writing site, kept apart from this portfolio: a few pages of plain text and a guestbook that anyone can sign. I built it in August 2025 as a Next.js app on Vercel, with the posts as MDX files and the guestbook in Postgres.",
+          "Thoughts 是我的写作网站，和这个作品集分开：几页纯文字，加上一个任何人都可以留言的留言簿。我在 2025 年 8 月把它做成了部署在 Vercel 上的 Next.js 应用，文章是 MDX 文件，留言簿存在 Postgres 里。",
       },
       magi: {
         title: "magi",
@@ -389,7 +389,7 @@ export const zh = {
         description:
           "[magi](https://magi.ysz.life) 是一款用 Rust 编写的快速 TCP/UDP 端口扫描器。它用普通连接进行扫描，因此不需要 root，而且只报告真正观察到的结果：无法测试的端口会标记为 untestable，而不是 closed。在 Linux、macOS 或 Windows 上一条命令即可安装。",
         overview:
-          "magi is a command-line port scanner for TCP and UDP, written in Rust on tokio, with prebuilt releases for Linux, macOS and Windows and a small site at magi.ysz.life. The scanning core is a library with its own integration tests, and the command-line tool is a thin layer over it.",
+          "magi 是一款面向 TCP 和 UDP 的命令行端口扫描器，用 Rust 在 tokio 上编写，提供适用于 Linux、macOS 和 Windows 的预构建发行版，还有一个位于 magi.ysz.life 的小网站。扫描核心是一个带有自己集成测试的库，命令行工具只是它上面很薄的一层。",
       },
       luma: {
         title: "Luma",
@@ -397,7 +397,7 @@ export const zh = {
         description:
           "[Luma](https://luma.ysz.life) 是一款支持各大 AI 模型的聊天应用：填入自己的 API 密钥，就能在同一段对话里切换 Claude、GPT、Gemini、Grok 等模型。编辑之前的任意一条消息，对话就会分支，两条路径都会保留。密钥在存储前会先加密。",
         overview:
-          "Luma is a web chat app for many model providers that runs on the user's own API keys, built with Next.js, the Vercel AI SDK and Supabase. Conversations are stored as a tree of messages, and keys are encrypted with AES-256-GCM and decrypted on the server only for the request that uses them.",
+          "Luma 是一款面向多家模型服务商的网页聊天应用，使用用户自己的 API 密钥运行，用 Next.js、Vercel AI SDK 和 Supabase 构建。对话以消息树的形式存储，密钥用 AES-256-GCM 加密，只在使用它的那次请求里于服务器上解密。",
       },
       perspectas: {
         title: "perspectas.ch",
@@ -405,7 +405,7 @@ export const zh = {
         description:
           "苏黎世附近的咨询与招聘公司 [perspectas gmbh](https://www.perspectas.ch) 的网站，我用 Next.js 和 Sanity 重新搭建。所有文案和图片都放在 CMS 里，两位合伙人可以自己发布改动。设计只有一个亮点：logo 上的黄点，它同时也是标题的句号。",
         overview:
-          "perspectas gmbh is a consulting and recruiting firm in Wetzikon, near Zürich, run by two partners. Its website is in German and speaks to two audiences at once: companies that need help with staffing, and people looking for their next role.",
+          "perspectas gmbh 是一家位于苏黎世附近 Wetzikon 的咨询与招聘公司，由两位合伙人经营。它的网站是德语的，同时面向两类受众：需要人员配置方面帮助的公司，以及正在寻找下一份工作的人。",
       },
       ura: {
         title: "Ura",
@@ -413,7 +413,7 @@ export const zh = {
         description:
           "Ura 是面向芬兰拉普兰的雪地摩托导航，支持 iOS 和 Android。它把约 2900 条路线和约 3500 个地点（加油站、咖啡馆、小屋等）存在手机里，没有信号也能用。它会告诉你是否在路线上；不在的话，离最近的路线还有多远。",
         overview:
-          "I designed and built Ura for a client: the rider app for iPhone and Android, and ura-app.com, the website that introduces it. The app is written in React and TypeScript and runs on both phones through Capacitor, with its map drawn by MapLibre.",
+          "Ura 是我为一位客户设计并开发的：面向 iPhone 和 Android 的骑手应用，以及介绍它的网站 ura-app.com。应用用 React 和 TypeScript 编写，通过 Capacitor 在两种手机上运行，地图由 MapLibre 绘制。",
       },
       montu: {
         title: "Montu",
@@ -421,7 +421,7 @@ export const zh = {
         description:
           "[Montu](https://montu.ch) 是一个用德语撰写的登山日志网站，为一位自己写路线、自己拍照的客户而做。他上传一个 GPX 文件，页面就会在地形图上画出路线和海拔剖面。路线、照片和其他所有文字都在 CMS 里编辑，发布新路线不需要开发者。",
         overview:
-          "Montu is a journal of Swiss mountain tours in German, from summer crossings to ski and splitboard tours, written and photographed by the friend I built it for. Each tour page is his account of the day, with the route, the figures and the way there and back alongside for anyone who wants to follow it.",
+          "Montu 是一份用德语写成的瑞士登山路线日志，从夏季的山间穿越到滑雪和分板滑雪路线，由我为之开发网站的那位朋友撰写并拍摄。每条路线的页面都是他对那一天的记述，旁边附上线路、数据以及去程和返程的走法，供想跟着走的人参考。",
       },
       qr: {
         title: "QR",
@@ -429,7 +429,7 @@ export const zh = {
         description:
           "[qr.ysz.life](https://qr.ysz.life) 是一个完全在浏览器里运行的 QR 码生成器。可以设置点和角的样式，加上渐变和 logo，然后导出为 PNG、SVG、JPEG 或 WebP。内置的扫码测试会把生成的二维码重新读一遍，让你在打印之前就知道它还能扫。",
         overview:
-          "qr.ysz.life is a QR code generator for styled codes: dot shapes, colours and gradients, and a logo in the middle. Because styling is what breaks a code, it also decodes exported images to check that they still scan.",
+          "qr.ysz.life 是一个用来生成带样式 QR 码的生成器：可以设置点的形状、颜色和渐变，并在中间放一个 logo。样式恰恰是让 QR 码失效的原因，所以它还能对导出的图片解码，检查它们是否仍然能扫出来。",
       },
       vault: {
         title: "Vault",
@@ -437,7 +437,7 @@ export const zh = {
         description:
           "Vault 是一个用来学习 OpenID Connect 的本地沙盒。Keycloak 签发令牌，FastAPI 服务验证令牌，Next.js 前端展示按角色限制的面板。身份配置用 Terraform 声明，所以一条命令就能把整套环境拆掉再重建。",
         overview:
-          "Vault is an OpenID Connect sandbox that runs on one machine, with Keycloak and its database in Docker. Everything Keycloak needs, from the realm to the demo user, is written in Terraform, so one terraform apply rebuilds the whole identity setup from nothing.",
+          "Vault 是一个在一台机器上运行的 OpenID Connect 沙盒，Keycloak 及其数据库跑在 Docker 里。Keycloak 需要的一切，从 realm 到演示用户，都写在 Terraform 里，所以一条 terraform apply 就能从零重建整套身份配置。",
       },
       fleetmap: {
         title: "fleetmap",
@@ -445,7 +445,7 @@ export const zh = {
         description:
           "fleetmap 是一张配送车队的实时地图。每辆货车的手机上报位置，办公室的大屏显示每辆车的移动，以及停靠点、ETA 和延误情况。任何一天的行程都可以根据记录的轨迹回放。使用 Next.js、Supabase 和 MapLibre 构建。",
         overview:
-          "I built fleetmap for a delivery company in Switzerland, as the screen its office keeps on the wall. It is a Next.js app on Supabase, with the map drawn by MapLibre and the road routes and arrival times worked out by OSRM.",
+          "我为瑞士的一家配送公司做了 fleetmap，作为它办公室挂在墙上的那块屏幕。它是一个基于 Supabase 的 Next.js 应用，地图由 MapLibre 绘制，道路路线和到达时间由 OSRM 计算。",
       },
     },
   },

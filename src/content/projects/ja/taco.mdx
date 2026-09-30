@@ -1,0 +1,165 @@
+export const source = "7a33cd507aed";
+
+# 再利用できるように作った、兄の犬のウェブサイト
+
+Taco は兄のポメラニアンで、[takitwo.vercel.app](https://takitwo.vercel.app) がそのウェブサイトです。この種の小さなサイトを次に作るときの土台になるように作りました。色はテーマのクラスに、インターフェースの文字列はすべて言語ごとに JSON ファイル 1 つにまとまっているので、次のサイトで変えるのは、これらのファイルの中身と値だけで、コンポーネントはそのままです。
+
+<Safari
+  url="takitwo.vercel.app"
+  src="/projects/taco/themes.webp"
+  video="/projects/taco/themes.mp4"
+  alt="ヘッダーのパレットメニューでテーマを切り替えていく Taco のホームページ：Green から Cherry、Sky、Gotham、そして最後に Night へ"
+  caption="ヘッダーからのテーマの切り替え。"
+/>
+
+## カラーテーマ
+
+ヘッダーのパレットボタンを押すと、テーマのメニューが開きます。テーマを選ぶと、リンクやボタンから写真の後ろの柔らかな円まで、すべてのページの色が一度に変わり、サイトはその選択を次の訪問のために覚えています。Gotham は白黒、Night はネイビーに青のアクセントで、初めて訪れる人はみな Green から始まります。
+
+<ProjectImage
+  src="/projects/taco/about-gotham.webp"
+  alt="Gotham テーマの About ページ：左にタンポポを持った Taco の大きな写真、右に短い説明と、年齢、犬種、性格、好きな食べ物のカードが並び、すべて黒地に白です"
+  caption="Gotham の About ページ。"
+  size="full"
+/>
+
+## 言語
+
+サイトは英語、スペイン語、日本語で書かれています。初めて訪れたときは、ブラウザに合う言語を選び、合うものがなければ英語にフォールバックします。ヘッダーの言語ボタンを使えば、いつでも切り替えられます。そこで選んだ言語は保存され、以降の訪問ではそれが優先されます。
+
+<ProjectImage
+  src="/projects/taco/language.webp"
+  video="/projects/taco/language.mp4"
+  alt="ホームページで言語メニューが開き、日本語が選ばれると、ナビゲーション、見出し、ボタンが日本語に切り替わり、ページが About セクションまでスクロールされると、そこも日本語です"
+  caption="サイトを日本語に切り替えます。"
+  size="full"
+/>
+
+## ページ間の移動
+
+ヘッダーはページが変わっても同じ場所にとどまり、次のページがフェードインする間に、アクティブなリンクの下の線が新しいリンクの下へ滑っていきます。About ページには、Taco の年齢、犬種、性格、好きな食べ物といった情報がまとまっています。
+
+<ProjectImage
+  src="/projects/taco/nav.webp"
+  video="/projects/taco/nav.mp4"
+  alt="Sky テーマのサイト：About をクリックすると、About ページがフェードインしながら、下線が Home から About へ滑り、Home をクリックすると元に戻ります"
+  caption="下線がアクティブなページについていきます。"
+  size="full"
+/>
+
+## ブログ
+
+どの投稿にも専用のページがあり、タイトル、日付と著者、カバー写真、その下に本文が並びます。文字のスタイルはテーマに従うので、Gotham と Night では、投稿は暗いページの上の明るい文字で読めます。
+
+<ProjectImage
+  src="/projects/taco/post-night.webp"
+  alt="Night テーマのブログ記事「Taco's Beach Day」：戻るリンク、日付と著者、Taco の横長の写真、そしてネイビーの地に明るい文字で書かれた最初の段落"
+  caption="Night テーマの投稿。"
+  size="full"
+/>
+
+## スマートフォンで
+
+スマートフォンでは、リンクは横からスライドして現れるメニューにまとまります。言語ボタンとテーマボタンはその下部にあり、パソコンと同じように使えます。
+
+<IPhone
+  src="/projects/taco/menu.webp"
+  video="/projects/taco/menu.mp4"
+  alt="スマートフォンで、メニューが右からスライドして現れ、テーマボタンでサイトが Cherry に切り替わり、続いて言語ボタンで日本語に切り替わります"
+  caption="下部に言語とテーマがあるスマートフォンのメニュー。"
+/>
+
+## 実装
+
+Taco は、App Router を使った Next.js のアプリで、TypeScript で書かれています。コンポーネントは Radix を土台にした shadcn/ui のものを使い、Tailwind CSS でスタイリングしています。ページとナビゲーションのアニメーションは Framer Motion が動かし、サイトは Vercel にデプロイされています。
+
+### テーマは CSS 変数のセット
+
+shadcn/ui はあらゆる色をトークン経由で指定します。`bg-primary` や `border-border` のようなクラスです。Tailwind の設定は各トークンを CSS 変数に対応させるので、`primary` は `hsl(var(--primary))` になり、テーマとは、それらの変数に別の HSL 値を与えるクラスです。Green は `:root` にあり、ほかのテーマも Sky と同じ形に従っています。Sky の例を、ここでは省略して示します。
+
+<CodeBlock
+  code={`.theme-sky {
+    --background: 210 50% 98%;
+    --foreground: 210 50% 16%;
+    --primary: 210 80% 50%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 210 33% 96%;
+    --muted-foreground: 210 5% 45%;
+    --border: 210 20% 90%;
+    --ring: 210 80% 50%;
+  }`}
+  fileName="app/globals.css"
+  lang="css"
+/>
+
+ページはトークンを通じて自分で色を付けるので、新しいテーマに必要なのは、クラスをもう 1 つと、テーマメニューのエントリだけです。Night はクラス `dark` で、Tailwind の `dark:` バリアントが探すクラスです。Gotham もダークですが、専用のクラスを持っているので、ブログ投稿用の prose のスタイルは `.dark` と `.theme-gotham` の両方を指定しています。
+
+### 違うテーマが一瞬映ることはない
+
+[next-themes](https://github.com/pacocoursey/next-themes) は、選ばれたテーマのクラスを `<html>` に付け、`localStorage` に保存します。クラスは最初の描画の前に付いていなければなりません。そうでないと、Night を選んで再訪した人には、ページがまず緑で一瞬ちらついて見えてしまいます。ライブラリは、保存されたテーマを読み、React がハイドレートする前にクラスを設定する小さなインラインスクリプトで、これを処理しています。
+
+`<html>` に `suppressHydrationWarning` が付いているのは、そのためです。ブラウザ上のクラスは、サーバーの HTML と意図的に違っています。テーマボタンにも、小さな規模で同じ問題があります。ボタンは現在のテーマのアイコン（Cherry なら花、Night なら月）を表示しますが、サーバーはテーマを知りようがないので、マウントされるまではデフォルトのパレットのアイコンを描画します。
+
+### 英語のファイルが型になる
+
+インターフェースの文言は、`lib/i18n/en.json`、`es.json`、`ja.json` にネストしたオブジェクトとして入っていて、コンポーネントはドット区切りのパスで文字列を引きます。`t('home.aboutSection.title')` は、そのとき有効なツリーを下りていきます。言語ファイルを保持するマップは `typeof en` として型付けされているので、キーが欠けたスペイン語や日本語のファイルは、エディタで型エラーとして表示されます。
+
+訪問すると、プロバイダーはまず `localStorage` に、以前選んだ言語がないか確認します。なければ、ブラウザに尋ねます。
+
+<CodeBlock
+  code={`import { defaultLanguage, languages } from './languages';
+  import en from './en.json';
+  import es from './es.json';
+  import ja from './ja.json';
+  export type TranslationJSON = typeof en;
+  type TranslationsType = { [key: string]: TranslationJSON };
+  const translations: TranslationsType = { en, es, ja };
+  const fallbackLanguageCode = 'en';
+  export function detectUserLanguage(): string {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      const browserLang = navigator.language || navigator.languages[0];
+      const langCode = browserLang.split('-')[0];
+      return languages.some(lang => lang.code === langCode)
+        ? langCode
+        : fallbackLanguageCode;
+    }
+    return fallbackLanguageCode;
+  }`}
+  fileName="lib/i18n/index.ts"
+  lang="ts"
+/>
+
+`navigator.language` は `es-MX` のようなタグを返します。関数は、ハイフンより前の部分を取り出し、サイトがその言語を持っていればそれを使い、なければ英語を使います。これはすべて、ページが読み込まれたあとにブラウザ内で動くので、どのページも静的なままです。HTML は一度だけプリレンダリングされ、URL はどの言語でも同じです。
+
+言語を追加する手順は 3 つです。
+
+1. すべての文字列を含む JSON ファイル。形は `en.json` と同じにします。
+2. それをマップに加える import。ここで型が、英語と照らし合わせて検査します。
+3. `languages.ts` のエントリ。コード、表示名、旗を持ちます。
+
+言語メニューはこのリストから作られるので、メニュー自体には変更が要りません。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/taco/home-cherry.webp",
+      frame: "safari",
+      url: "takitwo.vercel.app",
+      alt: "Cherry テーマの Taco のホームページ：ピンクの見出し Meet Taco が、タンポポを持った Taco の丸い写真の横に並んでいます",
+      caption: "Cherry のホームページ。",
+    },
+    {
+      src: "/projects/taco/home-cherry-mobile.webp",
+      frame: "iphone",
+      alt: "スマートフォンでの Cherry テーマのホームページ：見出し、2 つのボタン、丸い写真が 1 列に積み重なっています",
+      caption: "スマートフォンでのホーム。",
+    },
+    {
+      src: "/projects/taco/post-night-mobile.webp",
+      frame: "iphone",
+      alt: "スマートフォンでの Night テーマのブログ記事 Taco's Beach Day：写真と最初の段落が見えています",
+      caption: "スマートフォンでの投稿。",
+    },
+  ]}
+  columns={3}
+/>

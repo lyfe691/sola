@@ -1,0 +1,223 @@
+export const source = "c7927048722c";
+
+# 免费的电影和剧集，还有一起观看的地方
+
+[Kinoa](https://kinoa.to) 是一个免费观看电影和剧集的网站，围绕播放器建有一层社交功能：个人主页、动态、评论、私信，以及可以一起观看的房间。它最初只是一个搜索框加一个播放器，其余的一切都是一次发布一点一点加上去的。
+
+| 每月使用人数 | 账号数     | 上线时间      |
+| ------------ | ---------- | ------------- |
+| 约 10000 人  | 约 1000 个 | 2025 年 11 月 |
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/hero.webp"
+  video="/projects/kinoa/hero.mp4"
+  alt="Kinoa 在深色主题下的首页：标题 What do you want to watch? 升起显现，随后在搜索框里输入 spirited，弹出 Spirited Away 和另外四个结果，方向键可以在其间移动"
+  caption="输入的同时，搜索就已给出答案。"
+/>
+
+## 找到想看的
+
+一切都从一个搜索框开始。结果在你输入时就陆续出现，每条都带有海报、年份和评分，最可能的那个标题的其余部分会以灰色自动补全，方向键可以在列表中移动。搜索框下方，首页展示你正在看的内容，以及本周大家都在看的内容。
+
+鼠标悬停时，每张卡片都会就地展开：海报变宽，变成这部作品的宣传图，并带有简介和一个开始观看的按钮。
+
+<ProjectImage
+  src="/projects/kinoa/cards.webp"
+  video="/projects/kinoa/cards.mp4"
+  alt="首页的热门网格：指针沿第一排移动时，每张海报依次变宽，成为一张卡片，带有作品的背景图、年份、评分、简介、一个 Watch Now 按钮和快捷操作"
+  caption="悬停时，卡片展开为作品的宣传图。"
+  size="full"
+/>
+
+作品页展示它的宣传图、评分、类型和演员阵容，播放器就在正下方。片库数据来自 TMDB，即 The Movie Database。
+
+<ProjectImage
+  src="/projects/kinoa/title-your-name.webp"
+  alt="Your Name 的作品页：影片的宣传图横贯顶部，其下是它的海报、评分、年份、片长、类型和简介，还有一个 Watch Together 按钮"
+  caption="一个作品页。"
+  size="full"
+/>
+
+## 播放
+
+电影和剧集在从其他网站嵌入的播放器里播放，而且并非每个播放器都有每一部作品。播放器下方的一行标出当前使用的服务器，并给每个服务器标上它的长处，比如画质最佳或最稳定。默认服务器加载不出来时，会有一条提示，点一下就能换到下一个。在手机上，播放可以直接切换到设备自带的全屏播放器。
+
+剧集有按季划分的分集选择器，你正在看的那一集会高亮显示。
+
+<ProjectImage
+  src="/projects/kinoa/episodes.webp"
+  alt="播放器下方：服务器行显示 VidFast，带一个 Best quality 标签和一条 Try VidSrc 提示，接着是 Episodes 区域，有季选择器和六集的剧照，第三集高亮"
+  caption="服务器行和分集选择器。"
+  size="full"
+/>
+
+Kinoa 会记住你看到了哪里。Continue Watching 会把你带回电影的同一分钟，或剧集的同一集，没有账号时也能用。登录后，这份历史记录会转到账号名下，和片单放在一起，这样两者都会跟着你到其他设备上。
+
+<ProjectImage
+  src="/projects/kinoa/continue-watching.webp"
+  alt="向下滚动后的首页：Continue Watching 里有 Spirited Away、Slow Horses 第 1 季第 3 集、Dune: Part Two 和 Arcane 第 2 季第 1 集，每项都带进度条和剩余时间，位于本周热门作品的上方"
+  caption="Continue Watching，位于本周热门作品的上方。"
+  size="full"
+/>
+
+## 一起观看
+
+房间就是一个链接。房主选好作品并分享房间，所有加入的人看到的是同一个时刻，播放器旁边有聊天窗口。房主暂停、跳到后面或换集时，房间会跟着变。房主同时还负责管理房间：
+
+- **移交**：房主身份可以交给房间里的任何人；如果房主的标签页关闭，房间会把它交给仍在房间里的某个人。
+- **管理**：房主可以移除某人，并禁止其再次加入。
+- **可见性**：房间可以列入公开目录，也可以只对拿到链接的人开放。
+
+<ProjectImage
+  src="/projects/kinoa/watch-together.webp"
+  video="/projects/kinoa/watch-together.mp4"
+  alt="Watch Together 页面：标题 Movie night, across the internet 旁边是一个点阵地球，在环绕的弧线之下旋转"
+  caption="Movie night, across the internet."
+  size="full"
+/>
+
+## 个人主页、动态与私信
+
+播放器周围有一个小型社交网络：
+
+- **个人主页**：每个账号都有一个用户名，以及位于 kinoa.to/@name 的公开页面，上面有收藏、片单和最近看过的内容。一个开关就能让整个主页变为私密。
+- **动态**：用户可以互相关注，给作品点赞并评论，动态按时间从新到旧，显示 Kinoa 上所有人的评论、收藏和关注。
+- **私信**：私信支持表情回应、编辑和删除，也可以拉黑和举报。
+- **通知**：铃铛会实时汇集回复、提及、点赞和关注，并在你关注的作品上线时提醒你。
+
+<ProjectImage
+  src="/projects/kinoa/profile.webp"
+  alt="我的个人主页 kinoa.to/@rei：封面图、头像和用户名，粉丝数和一段简短的简介，打开的是 Favorites 标签页，里面有 Mr. Robot、Neon Genesis Evangelion、Death Note 和 Breaking Bad"
+  caption="我自己的个人主页，停在 Favorites 标签页。"
+  size="full"
+/>
+
+## 体育
+
+体育专区首先展示正在直播的比赛和接下来开赛的比赛，涵盖足球、篮球、赛车运动等。每场比赛都有自己的页面，周围是赛程和积分榜，并提供一个观看入口。
+
+<ProjectImage
+  src="/projects/kinoa/sports.webp"
+  alt="Sports 专区：从足球到板球的分类标签，其下是 Live now 栏目，里面有篮球和足球赛事的比赛卡片，每张都标着 Live"
+  caption="体育，以正在直播的比赛为先。"
+  size="full"
+/>
+
+## 使用你的语言
+
+Kinoa 会根据浏览器判断访客的语言，界面的每个部分都已翻译。阿拉伯语和希伯来语会让整个布局从右到左镜像。只要 TMDB 有相应的数据，作品的标题、简介和类型就会以访客的语言呈现，海报也是如此：Your Name 的阿拉伯语页面显示的是日语原版海报。
+
+<ProjectImage
+  src="/projects/kinoa/ar-title.webp"
+  alt="阿拉伯语的 Your Name 页面：布局从右到左镜像，标题和简介是阿拉伯语，日语海报位于右侧"
+  caption="阿拉伯语的 Your Name，配着它的日语海报。"
+  size="full"
+/>
+
+## 设计与动效
+
+Kinoa 用的是奶油色和浓缩咖啡色的暖色调，配焦糖色的强调色，有浅色和深色两套主题，除非自己选定，否则跟随系统。它的动效都很细微，用来确认刚刚发生了什么：
+
+- 页面逐步流入，每个部分出现在它的占位符原来所在的位置。
+- 侧边栏平滑地展开和收起。
+- 被拒绝的表单会让出错的输入框抖动。
+- 对话框平滑地改变大小，而不是突然跳变。
+
+对于在系统里要求减少动态效果的访客，这些动效都会退让。Kinoa 也可以作为应用安装：在电脑或 Android 上直接从浏览器安装，在 iPhone 上则跟着一份简短的指引操作。
+
+<Safari
+  url="kinoa.to"
+  src="/projects/kinoa/theme.webp"
+  video="/projects/kinoa/theme.mp4"
+  alt="首页通过侧边栏底部的控件，从深色主题切换到浅色主题，再切换回来"
+  caption="浅色与深色主题。"
+/>
+
+## 实现方式
+
+Kinoa 是一个 Next.js 应用，以服务端组件为主，账号、数据库以及房间所依托的实时频道都建在 Supabase 上。它部署在 Vercel 上，用 next-intl 做翻译。
+
+### 让房间保持在同一个时钟上
+
+嵌入式播放器是最硬的限制：没有办法让它们暂停或跳到某个时间点。所以，与房主进度拉开差距的来宾，会把自己的播放器重新加载到房主所在的位置，并按一次重新加载所需的时间向前推算。每次重新加载都会测出它实际落在哪里，并据此修正下一次，而且目标是落在房主之后零点几秒，因为提前会破坏一个场景，落后则不会。
+
+<CodeBlock
+  code={`/** Aim a touch behind the host — being early spoils, being late doesn't. */
+  export const TARGET_DRIFT_SECONDS = -0.75
+  /** Share of each landing error folded into the next lead estimate. */
+  export const LEAD_LEARNING_RATE = 0.6
+  export function anchorTargetFor(
+    host: HostAnchor,
+    now: number,
+    leadSeconds: number
+  ): AnchorTarget {
+    if (!host.isPlaying) {
+      return { time: Math.max(0, host.currentTime), play: false }
+    }
+    return {
+      time: Math.max(0, projectPlayhead(host, host.at, now) + leadSeconds),
+      play: true,
+    }
+  }
+  export function nextLoadLead(lead: number, driftAtSettle: number): number {
+    const error = driftAtSettle - TARGET_DRIFT_SECONDS
+    const next = lead - error * LEAD_LEARNING_RATE
+    return Math.min(
+      MAX_LOAD_LEAD_SECONDS,
+      Math.max(MIN_LOAD_LEAD_SECONDS, Number.isFinite(next) ? next : lead)
+    )
+  }`}
+  fileName="lib/watch-together-playhead-sync.ts"
+  lang="ts"
+/>
+
+每次重新加载都要重新缓冲，所以来宾只有在连续两次检查都偏离了好几秒之后才会重新加载，而尝试几次之后，就把决定交给一个 Catch up 按钮。
+
+### 由数据库执行的规则
+
+有两条规则放在数据库里，而不是应用里，因此对任何客户端都成立：
+
+- **只有房主能操控房间**：这是加在房间控制频道上的行级安全策略。一个集成测试会以来宾身份登录，发送每一种控制命令，并检查房主一条也没有收到。
+- **用户名只在一处认领**：一个数据库函数掌管所有规则，从长度和保留名称到内容审核，而当两个人同时认领同一个名字时，由唯一索引来裁决。
+
+### 更少的往返
+
+有三项开销的执行次数远远超过了必要：
+
+| 工作                                      | 之前                                                  | 之后                                 |
+| ----------------------------------------- | ----------------------------------------------------- | ------------------------------------ |
+| 检查谁已登录                              | 电影页面上对 Supabase Auth 调用 3 次，动态页面上 4 次 | 每次渲染 1 次，由所有辅助函数共用    |
+| 绘制片单                                  | 片单上的每部作品各发一次 TMDB 请求                    | 一次数据库查询：每一行都自带它的卡片 |
+| 每个打开的标签页每 5 分钟做一次的版本检查 | 每次都调用一个无服务器函数                            | Vercel 的边缘缓存                    |
+
+检查会话并不是本地解码：它要走网络，所以每次渲染只做一次才如此重要。
+
+### 保持翻译完整
+
+每一条字符串都以英语为准。CI 里有一项检查，会把其他每个语言文件与它对照，缺少或多出某个键时就会失败，所以新功能不会带着只翻译了一半的文案上线。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/kinoa/home-desktop.webp",
+      frame: "safari",
+      url: "kinoa.to",
+      alt: "Kinoa 在浅色主题下的首页：搜索框上方是标题 What do you want to watch?",
+      caption: "浅色主题下的首页。",
+    },
+    {
+      src: "/projects/kinoa/title-mobile.webp",
+      frame: "iphone",
+      alt: "手机上的 Slow Horses 页面：深色背景图上的海报、标题、评分、类型、简介和一个 Watch Together 按钮",
+      caption: "手机上的一部剧集。",
+    },
+    {
+      src: "/projects/kinoa/home-mobile.webp",
+      frame: "iphone",
+      alt: "手机上的首页：Continue Watching 里有 Spirited Away 和 Slow Horses，其下是 Trending 一行",
+      caption: "手机上的首页。",
+    },
+  ]}
+  columns={3}
+/>

@@ -1,0 +1,126 @@
+export const source = "7594425b3b8e";
+
+# ローカルで動く OpenID Connect のサンドボックス
+
+Vault は、1 台のマシンで動く ID 管理の構成です。OpenID Connect プロバイダーとしての Keycloak、そのトークンを検証してロールを確認する FastAPI のバックエンド、サインインページとロールで制限されたダッシュボードを持つ Next.js のフロントエンドからなります。OpenID Connect（OIDC）は、OAuth 2.0 の上に載る ID のレイヤーです。Vault は 2025 年 5 月に、Keycloak がトークンを発行した瞬間から、API がそれを受け入れるか拒否するかの瞬間まで、トークンを追いかけるために作りました。
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/hero.webp"
+  video="/projects/vault/hero.mp4"
+  alt="Vault のサインインページ。カードにユーザー名 demo とパスワードが入力され、Sign in を押すと Login successful のトーストと Admin Dashboard が表示されます。Back to Home を押すと、demo に挨拶するポータルが開き、Admin と User のバッジの下に Admin Dashboard と User Dashboard のボタンが並びます"
+  caption="デモユーザーでサインインする。"
+/>
+
+## サインイン
+
+サインインフォームはアプリの中にとどまります。フロントエンドはユーザー名とパスワードをバックエンドの `/login` に POST し、バックエンドはそれを、Keycloak のトークンエンドポイントに 1 回のリクエストで渡します。このときに使うのが、Terraform がクライアントで有効にした、リソースオーナーパスワードグラントです。バックエンドは、返ってきたアクセストークンを `HttpOnly` の Cookie に入れます。この Cookie はトークンとともに、Keycloak のデフォルトである 5 分後に期限が切れます。サインインが拒否されると、Keycloak 自身のエラーメッセージが表示されます。
+
+このグラントでは、アプリがユーザーのパスワードを目にします。実際のユーザーがいるアプリが、代わりにブラウザをプロバイダー自身のログインページへ送るのは、そのためです。デモユーザーが 1 人のサンドボックスでは、やり取りの全体を 1 か所で読めるようにすることが狙いでした。
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/sign-in-refused.webp"
+  alt="ユーザー名 demo と誤ったパスワードが入力されたサインインカード。Sign in ボタンの上に赤い Invalid user credentials の警告が出て、隅に Login failed のトーストが表示されています"
+  caption="間違ったパスワードには、Keycloak のメッセージが返る。"
+/>
+
+## トークンのロールから組み立てるポータル
+
+サインインすると、フロントエンドはバックエンドの `/me` を呼びます。Cookie は `HttpOnly` なので、ページ自身の JavaScript はトークンを読めません。バックエンドがトークンを検証してそのクレームを返し、ポータルはそれをもとに、ユーザー名、レルムロールごとのバッジ、ロールで開くダッシュボードごとのボタンを描画します。デモユーザーは両方のロールを持っているので、admin ダッシュボードに移ります。`admin` を外すと、次のサインインではバッジもボタンも 1 つになり、`/admin` を開いても、代わりにユーザーダッシュボードへ移動します。
+
+<Safari
+  url="localhost:3000"
+  src="/projects/vault/portal-user-only.webp"
+  alt="demo に挨拶するポータルカード。User のバッジが 1 つ、User Dashboard のボタンと Sign Out があります"
+  caption="デモユーザーから admin を外したあとのポータル。"
+/>
+
+## 決めるのは API
+
+ボタンは、ロールを映しているだけです。API の保護されたルートはすべて `verify_token` に依存し、これはトークンを `Authorization: Bearer` ヘッダーから、なければ Cookie から読みます。トークンがない、期限切れ、偽造されている場合は 401 になります。有効なトークンでも、必要なロールがなければ、2 つ目の依存関係である `require_roles` が 403 を返します。これは、トークンの `realm_access.roles` クレームにそのロールがあるかどうかを調べます。
+
+| ルート   | 必要なもの                 | ない場合 |
+| -------- | -------------------------- | -------- |
+| `/me`    | 有効なトークンならどれでも | 401      |
+| `/user`  | `user` ロール              | 403      |
+| `/admin` | `admin` ロール             | 403      |
+
+<ProjectImage
+  src="/projects/vault/api.webp"
+  video="/projects/vault/api.mp4"
+  alt="フルスクリーンの PowerShell ウィンドウ。curl で demo としてサインインし、続けて GET /user が HTTP 200 と User access granted を返し、ロールのリストには user だけが入っています。GET /admin は HTTP 403 Forbidden と Access denied. Required roles: admin を返します"
+  caption="admin がなければ、/user は応答し、/admin は拒否される。"
+  size="full"
+/>
+
+## Terraform で設定する Keycloak
+
+Docker Compose が、開発モードの Keycloak 26.2 を、状態を保存する PostgreSQL 16 のデータベースとともに動かします。Keycloak の管理コンソールなら、レルム、クライアント、2 つのロール、ユーザーを、数分でクリックだけで組み上げられますが、どうやってそこに至ったかの記録は残りません。Vault では、その設定は `terraform/main.tf` にあります。
+
+- **レルム** `vault-core`。ほかのすべてがこの中にあります。
+- **2 つのレルムロール** `admin` と `user`。
+- **デモユーザー** `demo`。両方のロールを持っています。
+- **クライアント** `vault-app`。アプリはこれを通じてサインインします。
+
+設定を変更すると差分に表れ、`terraform apply` を実行すれば、レルムはファイルの記述どおりの状態に戻ります。
+
+<ProjectImage
+  src="/projects/vault/terraform-apply.webp"
+  video="/projects/vault/terraform-apply.mp4"
+  alt="フルスクリーンの PowerShell ウィンドウ。terraform apply -auto-approve が計画を表示し、続いてレルム、2 つのロール、クライアントスコープ、デモユーザー、クライアント、ロールの割り当てを作成して、Apply complete! Resources: 8 added で終わります"
+  caption="terraform apply が、何もないところからレルムを作る。"
+  size="full"
+/>
+
+管理コンソールには、ファイルが求めたものが、ファイルが付けた説明とともに一覧表示されます。
+
+<Safari
+  url="localhost:8080/admin"
+  src="/projects/vault/keycloak-roles.webp"
+  alt="Vault Core Realm の Keycloak の管理コンソール。Realm roles のページに、Administrator role と説明された admin、Regular user role と説明された user が、Keycloak のデフォルトのロールと並んで表示されています"
+  caption="Keycloak の管理コンソールに表示されたレルムのロール。"
+/>
+
+## 実装
+
+バックエンドは FastAPI で、トークンの検証には python-jose、Keycloak への呼び出しには httpx を使っています。フロントエンドは Next.js で、shadcn/ui のコンポーネントを使っています。どちらもホスト上で動き、2 つのコンテナの隣に並びます。
+
+### トークンを検証する
+
+`verify_token` は、トークンについて Keycloak に問い合わせることは一切ありません。`/.well-known/openid-configuration` にあるレルムのディスカバリードキュメントを読み、その `jwks_uri` をたどってレルムの公開鍵を取得し、署名、有効期限、発行者の検査を python-jose の `jwt.decode` に任せます。発行者は `http://localhost:8080/realms/vault-core` と 1 文字違わず一致しなければなりません。Keycloak はアクセストークンをレルムの RSA 秘密鍵（RS256）で署名するので、検証に必要なのは公開鍵の側だけです。2 つのドキュメントは、キャッシュせずにリクエストのたびに取得します。かかるのはローカルの往復 2 回で、管理コンソールで鍵をローテーションすれば、次のリクエストから反映されます。
+
+Bearer スキームは `auto_error=False` で作成されるので、ヘッダーのないリクエストは、その場で拒否されずに Cookie の確認まで進みます。ロールの確認は、その上に重ねた 2 つ目の依存関係です。
+
+<CodeBlock
+  code={`def require_roles(roles: List[str]):
+      async def role_checker(payload: dict = Depends(verify_token)):
+          if not has_role(payload, roles):
+              raise HTTPException(
+                  status_code=403,
+                  detail=f"Access denied. Required roles: {', '.join(roles)}"
+              )
+          return payload
+      return role_checker`}
+  fileName="app/backend/main.py"
+  lang="python"
+/>
+
+### ロールはトークンの発行時に決まる
+
+デモユーザーのロールのリスト全体は、Terraform が管理します。`keycloak_user_roles` は網羅的なので、ユーザーが持つのは `role_ids` にあるロールだけで、トークンの `realm_access.roles` にも、それ以外は載りません。
+
+<CodeBlock
+  code={`resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.admin_role.id,
+      keycloak_role.user_role.id,
+    ]
+  }`}
+  fileName="terraform/main.tf"
+  lang="hcl"
+/>
+
+`role_ids` から `admin` を外して apply しても、変更前に発行されたトークンは、期限が切れるまでそのロールを持ち続けます。バックエンドは署名済みのトークンの内容を信頼し、Keycloak に改めて問い合わせることがないからです。次のサインインでは、そのロールのないトークンが発行され、上のターミナルのクリップが使っているのは、そのトークンです。

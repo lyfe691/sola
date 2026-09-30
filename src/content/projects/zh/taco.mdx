@@ -1,0 +1,165 @@
+export const source = "7a33cd507aed";
+
+# 给我哥哥的狗做的网站，为复用而建
+
+Taco 是我哥哥的博美犬，[takitwo.vercel.app](https://takitwo.vercel.app) 就是他的网站。我把它做成了下一个同类小网站的基础。颜色放在主题类里，每种语言的全部界面字符串放在一个 JSON 文件里，所以做下一个网站，只需要在这些文件里换上新的内容和新的值，组件本身保持不变。
+
+<Safari
+  url="takitwo.vercel.app"
+  src="/projects/taco/themes.webp"
+  video="/projects/taco/themes.mp4"
+  alt="Taco 首页通过页眉里的调色板菜单切换主题：从 Green 到 Cherry、Sky、Gotham，最后是 Night"
+  caption="在页眉里切换主题。"
+/>
+
+## 配色主题
+
+页眉里的调色板按钮会打开主题菜单。选一个主题，所有页面会同时换色，从链接和按钮到照片背后柔和的圆形都是如此，网站还会记住这个选择，供下次访问使用。Gotham 是黑白两色，Night 是藏青色配蓝色强调色，每位新访客一开始看到的都是 Green。
+
+<ProjectImage
+  src="/projects/taco/about-gotham.webp"
+  alt="Gotham 主题下的关于页：左侧是一张 Taco 拿着蒲公英的大照片，右侧是一段简短的介绍，以及年龄、品种、性格和最爱食物的卡片，全部是黑底白字"
+  caption="Gotham 主题下的关于页。"
+  size="full"
+/>
+
+## 语言
+
+网站有英语、西班牙语和日语三个版本。第一次访问时，它会选择与浏览器匹配的语言，匹配不上就回退到英语，页眉里的语言按钮随时可以切换。在那里做出的选择会被保存下来，此后每次访问都以它为准。
+
+<ProjectImage
+  src="/projects/taco/language.webp"
+  video="/projects/taco/language.mp4"
+  alt="首页上语言菜单打开，选中 日本語，导航、标题和按钮都切换成日语，页面向下滚动到关于部分，同样是日语"
+  caption="把网站切换成日语。"
+  size="full"
+/>
+
+## 在页面之间切换
+
+页眉在各页之间保持不动，当前链接下方的那条线会滑向新的链接，同时下一页淡入。关于页汇集了 Taco 的各项信息：年龄、品种、性格和最爱的食物。
+
+<ProjectImage
+  src="/projects/taco/nav.webp"
+  video="/projects/taco/nav.mp4"
+  alt="Sky 主题下的网站：点击 About，下划线从 Home 滑到 About，同时关于页淡入，再点击 Home，下划线又滑了回去"
+  caption="下划线跟随当前页面。"
+  size="full"
+/>
+
+## 博客
+
+每篇文章都有自己的页面，带有标题、日期和作者、一张封面照片，故事正文在其下。文字样式跟随主题，所以在 Gotham 和 Night 主题下，文章显示为深色页面上的浅色文字。
+
+<ProjectImage
+  src="/projects/taco/post-night.webp"
+  alt="Night 主题下题为 Taco's Beach Day 的博客文章：一个返回链接、日期和作者、一张 Taco 的宽幅照片，以及藏青底色上浅色文字的头几段"
+  caption="Night 主题下的一篇文章。"
+  size="full"
+/>
+
+## 在手机上
+
+在手机上，链接会收进一个从侧边滑入的菜单。语言按钮和主题按钮位于菜单底部，用法与在电脑上相同。
+
+<IPhone
+  src="/projects/taco/menu.webp"
+  video="/projects/taco/menu.mp4"
+  alt="手机上，菜单从右侧滑入；主题按钮把网站切换为 Cherry，然后语言按钮把它切换为日语"
+  caption="手机菜单，语言和主题在底部。"
+/>
+
+## 实现方式
+
+Taco 是一个使用 App Router 的 Next.js 应用，用 TypeScript 编写。组件来自建立在 Radix 之上的 shadcn/ui，样式由 Tailwind CSS 负责。页面和导航的动画由 Framer Motion 驱动，网站部署在 Vercel 上。
+
+### 主题就是一组 CSS 变量
+
+shadcn/ui 通过设计令牌给一切上色：也就是 `bg-primary` 和 `border-border` 这样的类。Tailwind 配置把每个令牌映射到一个 CSS 变量，于是 `primary` 变成 `hsl(var(--primary))`，而主题就是一个给这些变量赋以不同 HSL 值的类。Green 放在 `:root` 上，其他主题的写法都和 Sky 一样，这里展示的是节选：
+
+<CodeBlock
+  code={`.theme-sky {
+    --background: 210 50% 98%;
+    --foreground: 210 50% 16%;
+    --primary: 210 80% 50%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 210 33% 96%;
+    --muted-foreground: 210 5% 45%;
+    --border: 210 20% 90%;
+    --ring: 210 80% 50%;
+  }`}
+  fileName="app/globals.css"
+  lang="css"
+/>
+
+因为页面都是通过令牌给自己上色，所以新增一个主题只需再加一个类，并在主题菜单里加一项。Night 就是类 `dark`，也就是 Tailwind 的 `dark:` 变体所查找的那个类。Gotham 同样是深色，但有自己的类，所以博客文章的正文样式同时写了 `.dark` 和 `.theme-gotham`。
+
+### 不会闪现错误的主题
+
+[next-themes](https://github.com/pacocoursey/next-themes) 会把所选主题的类放到 `<html>` 上，并把选择保存在 `localStorage` 里。这个类必须在首次绘制之前就位，否则选过 Night 的回访者会先看到页面闪一下绿色。这个库用一小段内联脚本来处理：在 React 完成注水之前，读出保存的主题并设置好类。
+
+这就是 `<html>` 带有 `suppressHydrationWarning` 的原因：它在浏览器里的类与服务器的 HTML 不同，是有意为之。主题按钮也有同样的问题，只是规模小一些。它显示当前主题的图标，Cherry 是一朵花，Night 是一弯月亮，而服务器无从知道主题，所以在挂载完成之前，它渲染的是默认的调色板图标。
+
+### 英文文件就是类型
+
+界面文字以嵌套对象的形式放在 `lib/i18n/en.json`、`es.json` 和 `ja.json` 里，组件通过点号路径查找字符串：`t('home.aboutSection.title')` 会沿着当前生效的那棵树一路向下走。存放各语言文件的映射类型为 `typeof en`，所以缺了某个键的西班牙语或日语文件，会在编辑器里表现为类型错误。
+
+每次访问时，Provider 会先在 `localStorage` 里查找此前选择的语言。如果没有，就去问浏览器：
+
+<CodeBlock
+  code={`import { defaultLanguage, languages } from './languages';
+  import en from './en.json';
+  import es from './es.json';
+  import ja from './ja.json';
+  export type TranslationJSON = typeof en;
+  type TranslationsType = { [key: string]: TranslationJSON };
+  const translations: TranslationsType = { en, es, ja };
+  const fallbackLanguageCode = 'en';
+  export function detectUserLanguage(): string {
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined') {
+      const browserLang = navigator.language || navigator.languages[0];
+      const langCode = browserLang.split('-')[0];
+      return languages.some(lang => lang.code === langCode)
+        ? langCode
+        : fallbackLanguageCode;
+    }
+    return fallbackLanguageCode;
+  }`}
+  fileName="lib/i18n/index.ts"
+  lang="ts"
+/>
+
+`navigator.language` 返回的是像 `es-MX` 这样的标签。这个函数保留连字符之前的部分，如果网站有这种语言就使用它，否则使用英语。这一切都在页面加载之后于浏览器里运行，因此每个页面都保持静态：HTML 只预渲染一次，各种语言的 URL 也都相同。
+
+新增一种语言需要三步：
+
+1. 一个包含全部字符串的 JSON 文件，结构与 `en.json` 相同。
+2. 一条导入语句，把它放进映射，由类型系统对照英语进行检查。
+3. 在 `languages.ts` 里加一项，包含语言代码、显示名称和一面旗帜。
+
+语言菜单是根据这份列表生成的，所以它本身无需任何改动。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/taco/home-cherry.webp",
+      frame: "safari",
+      url: "takitwo.vercel.app",
+      alt: "Cherry 主题下的 Taco 首页：粉色的标题 Meet Taco，旁边是一张 Taco 拿着蒲公英的圆形照片",
+      caption: "Cherry 主题下的首页。",
+    },
+    {
+      src: "/projects/taco/home-cherry-mobile.webp",
+      frame: "iphone",
+      alt: "手机上 Cherry 主题的首页：标题、两个按钮和圆形照片排成一列",
+      caption: "手机上的首页。",
+    },
+    {
+      src: "/projects/taco/post-night-mobile.webp",
+      frame: "iphone",
+      alt: "手机上 Night 主题下的博客文章 Taco's Beach Day，带着它的照片和头几段",
+      caption: "手机上的一篇文章。",
+    },
+  ]}
+  columns={3}
+/>

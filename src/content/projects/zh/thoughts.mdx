@@ -1,0 +1,146 @@
+export const source = "0125002b525c";
+
+# 一个带留言簿的写作网站
+
+[Thoughts](https://thoughts.ysz.life) 是我写那些放不进项目页的东西的地方。它是几页安静的文字：一个关于页、文章列表，以及一个任何人都可以留言的留言簿。它以 [Shu Ding 的网站](https://shud.in) 为蓝本。
+
+<Safari
+  url="thoughts.ysz.life"
+  src="/projects/thoughts/hero.webp"
+  video="/projects/thoughts/hero.mp4"
+  alt="关于页，然后点击左侧斜体链接里的 guestbook：留言簿带着按日期排列的留言渐渐显现，表单里输入了一条留言，但没有发送。所有访客的名字和留言都做了模糊处理"
+  caption="从关于页到留言簿，名字已做模糊处理。"
+/>
+
+## 页面与文章
+
+链接位于文字左侧，用小写的斜体衬线体，在宽屏上，滚动时它们固定不动。页面之间的切换是交叉淡入淡出。在手机上，链接会移到文字上方，排成一行。
+
+每篇文章都是仓库里的一个 MDX 文件，它导出自己的标题、日期和描述。列表按从新到旧显示文章，每个标题和它的日期之间由一排圆点连接。文章里的代码由 Shiki 在服务器上高亮，所以颜色是以现成的 HTML 送达的；在宽屏上，图片的标题会变成它旁边页边空白处的一条注释。
+
+访问一个不存在的地址，会得到一小段诗句。
+
+<Safari
+  url="thoughts.ysz.life/nope"
+  src="/projects/thoughts/not-found.webp"
+  alt="未找到页面：左侧是斜体链接 about、thoughts 和 guestbook，旁边是标题 not found，标题下面有两行字：“the page does not exist,”和“and you were never supposed to be here”"
+  caption="一个不存在的页面。"
+/>
+
+## 留言簿
+
+任何人都可以在留言簿上留言，姓名可填可不填，留言最多 280 个字符，不需要账号。留言按从新到旧显示，附有日期和时间，每次十条，你自己写的那一条，悬停时会出现一个 Delete 链接。
+
+<Safari
+  url="thoughts.ysz.life/guestbook"
+  src="/projects/thoughts/guestbook-desktop.webp"
+  alt="留言簿：一个单行表单，用来填写姓名和留言，表单下方是带日期的留言列表，所有姓名和留言都做了模糊处理"
+  caption="留言簿，这里的姓名和留言都做了模糊处理。"
+/>
+
+## 实现方式
+
+Thoughts 是部署在 Vercel 上的 Next.js 应用。文章由 MDX 编译而成，在构建时渲染成静态页面。留言簿是一张 Postgres 表，由一个路由处理函数通过 `@vercel/postgres` 读写。
+
+### 在留言簿上留言
+
+向 `/api/guestbook` 发送的 `POST` 请求会依次执行三项检查，只有全部通过才会写入：
+
+1. **隐藏字段是空的**：表单里有一个 `website` 字段，真人看不到它，而自动填表的机器人通常会看到，它里面只要有任何值，请求就会被拒绝。
+2. **留言长度合适**：留言会先去掉首尾空白，长度必须在 1 到 280 个字符之间，姓名则会被截断到 50 个字符。
+3. **发送者没有操之过急**：路由会查找同一个发送者的最新一条留言，如果它还不到 30 秒，就返回 429。
+
+发送者由客户端地址的 SHA-256 哈希来识别，地址取自 `x-forwarded-for` 里的第一项，表里保存的只有这个哈希。它足以在第二次认出同一个发送者，而速率限制和下面的删除检查需要的正是这一点。
+
+<CodeBlock
+  code={`export async function POST(req: NextRequest) {
+    await ensureTable()
+    const ipHash = getClientIpHash(req)
+    let body: { name?: string; message?: string; hp?: string } = {}
+    try {
+      body = await req.json()
+    } catch {
+      // ignore
+    }
+    const { name = null, message = '', hp = '' } = body
+    if (hp && hp.trim().length > 0) {
+      return NextResponse.json({ error: 'rejected' }, { status: 400 })
+    }
+    const trimmed = (message || '').trim()
+    if (trimmed.length === 0 || trimmed.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: 'invalid_message' }, { status: 400 })
+    }
+    const safeName = name ? String(name).slice(0, 50).trim() : null
+    if (isRateLimitEnabled()) {
+      const recent = await sql<{ created_at: string }>\`
+        SELECT created_at FROM guestbook
+        WHERE ip_hash = \${ipHash}
+        ORDER BY created_at DESC
+        LIMIT 1
+      \`
+      if (recent.rows.length > 0) {
+        const last = new Date(recent.rows[0].created_at).getTime()
+        const now = Date.now()
+        if (now - last < RATE_LIMIT_WINDOW_MS) {
+          return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
+        }
+      }
+    }
+    const id = crypto.randomUUID()
+    const approved = isAutoApprove()
+    const rejected = false
+    const inserted = await sql<GuestbookRow>\`
+      INSERT INTO guestbook (id, name, message, ip_hash, approved, rejected)
+      VALUES (\${id}, \${safeName}, \${trimmed}, \${ipHash}, \${approved}, \${rejected})
+      RETURNING id, name, message, created_at, updated_at, edited
+    \`
+    return NextResponse.json({ item: inserted.rows[0], approved }, { status: 201 })
+  }`}
+  fileName="app/api/guestbook/route.ts"
+  lang="ts"
+/>
+
+以上有删节：真实的处理函数还有第二条分支，在没有配置数据库时，会把留言保存在内存数组里，所以页面在本地开发时没有数据库也能工作。
+
+### 审核
+
+每一行都带有两个标志，它们合起来决定一条留言的去向：
+
+| `approved` | `rejected` | 这条留言             |
+| ---------- | ---------- | -------------------- |
+| 是         | 否         | 显示在公开列表里     |
+| 否         | 否         | 在管理队列里等待     |
+| 任意       | 是         | 被隐藏，但保留这一行 |
+
+新留言到达时是否自动通过，由一个环境变量决定，默认为是。把它关掉之后，新留言会在队列里等待，访客会看到一条提示，说他的留言正在等待审核，而不是在列表顶部看到它。
+
+这个队列是一个用令牌保护的管理页面。它按从旧到新列出待审核的留言，每条都有通过和拒绝两个按钮，另一个视图则列出已通过的留言，带有删除按钮。拒绝一条留言只是设置它的标志并保留这一行。速率限制会读取某个发送者的每一行，所以被拒绝的留言仍然计入该发送者的 30 秒。
+
+### 删除你自己的留言
+
+访客没有账号，所以网站需要另一种办法来知道一条留言是谁写的。浏览器提交留言时，会把返回的 id 保存在 `localStorage` 里，带有已保存 id 的留言就会出现 Delete 链接。服务器并不依赖这份列表。它的查询是 `DELETE FROM guestbook WHERE id = … AND ip_hash = …`，所以只有请求来自写下这条留言的同一个哈希地址时，这一行才会被删除。代价是所有权跟着网络走：换一个网络连接，这个链接仍然会显示，而服务器会拒绝它。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/thoughts/about-desktop.webp",
+      frame: "safari",
+      url: "thoughts.ysz.life",
+      alt: "关于页：左侧是斜体链接 about、thoughts 和 guestbook，一小段介绍排成单栏文字",
+      caption: "关于页。",
+    },
+    {
+      src: "/projects/thoughts/about-mobile.webp",
+      frame: "iphone",
+      alt: "手机上的关于页：三个链接在顶部排成一行，下面是单栏的介绍",
+      caption: "手机上的关于页。",
+    },
+    {
+      src: "/projects/thoughts/guestbook-mobile.webp",
+      frame: "iphone",
+      alt: "手机上的留言簿：姓名和留言输入框位于带日期的留言之上，所有姓名和留言都做了模糊处理",
+      caption: "留言簿。",
+    },
+  ]}
+  columns={3}
+/>

@@ -1,0 +1,138 @@
+export const source = "8b1ee814cb0a";
+
+# Montu, un diario de rutas de montaña suizas
+
+[montu.ch](https://montu.ch) reúne las rutas de montaña de un amigo por Suiza, de verano y de invierno, cada una escrita en alemán con sus propias fotografías. Construí el sitio para él, y él publica rutas nuevas por su cuenta, desde un editor de contenido en su navegador.
+
+<Safari
+  url="montu.ch"
+  src="/projects/montu/home-desktop.webp"
+  video="/projects/montu/home-desktop.mp4"
+  alt="La página de inicio de Montu: el titular con serifa «Faszination Bergtouren» se enfoca letra por letra sobre una fotografía de un bosque con niebla, y luego la presentación de fotos se funde con una terraza de refugio sobre un embalse turquesa y sigue con esquiadores de travesía en una pendiente nevada"
+  caption="La página de inicio se abre con una presentación de sus fotografías."
+/>
+
+## Lo que quería
+
+Quería un lugar donde guardar sus rutas tal como las recuerda. El sitio lo dice con sus propias palabras: los datos técnicos son solo «sanfte Wegweiser» (suaves indicadores del camino), y el conjunto es «mehr Tagebuch als Führer», más diario que guía. Así que cada página empieza con una fotografía y con lo que él escribe, y las cifras vienen después, para quien quiera ir.
+
+<ProjectImage
+  src="/projects/montu/about-desktop.webp"
+  alt="«Willkommen bei Montu.»: una fotografía de un gran peñasco en un valle con niebla junto a la introducción del sitio, que termina con la línea «mehr Tagebuch als Führer», y un botón que dice «Touren ansehen»"
+  caption="La introducción, con sus palabras."
+  size="full"
+/>
+
+En la página de inicio, cada ruta es una tarjeta grande con foto que lleva su región, su título, un breve avance que él escribe y una fila de tres cifras: metros de ascenso, distancia y grado.
+
+<ProjectImage
+  src="/projects/montu/home-tours-desktop.webp"
+  alt="«Die Touren im Überblick»: tarjetas de fotos redondeadas de un embalse de montaña y de esquiadores de travesía en una pendiente nevada, cada una con una etiqueta de región, un título con serifa, un breve extracto y una fila de cifras"
+  caption="Las rutas en la página de inicio: primero la fotografía, al final las cifras."
+  size="full"
+/>
+
+## Una página de ruta
+
+Una ruta se lee de arriba abajo:
+
+1. La fotografía del título, con el tipo de ruta, su grado, la región, el rango de altitud y la fecha.
+2. Su introducción.
+3. Los datos clave, el perfil de elevación y el mapa.
+4. Las etapas, una tras otra.
+5. Enlaces a los refugios, remontes y otros lugares a lo largo del recorrido, cuando él los añade.
+
+<ProjectImage
+  src="/projects/montu/tour-hero-desktop.webp"
+  video="/projects/montu/tour-hero-desktop.mp4"
+  alt="Desplazándose por la ruta «Linthal - Muttsee - Kistenpass - Brigels»: desde la fotografía del título, una terraza de refugio sobre un embalse, pasando por la introducción, los datos clave, el perfil de elevación y el mapa, hasta las dos primeras etapas"
+  caption="Una ruta, desde su fotografía del título hasta las etapas."
+  size="full"
+/>
+
+## Las etapas
+
+Cada etapa tiene sus propias fotos para pasar una a una, cada una con un pie de foto, junto a sus propias cifras y su texto. Cuando parte del recorrido se puede saltar, por ejemplo tomando un teleférico, la etapa termina con la alternativa en una nota naranja.
+
+<ProjectImage
+  src="/projects/montu/tour-stage-desktop.webp"
+  video="/projects/montu/tour-stage-desktop.mp4"
+  alt="La primera etapa, «Linthal bis Bergstation Chalchtrittli»: las flechas junto a su foto pasan de un sendero de roca asegurado con cadenas a una vista del valle y a un poste indicador, junto a las cifras y el texto de la etapa, que terminan en una nota naranja que describe la alternativa en taxi y teleférico"
+  caption="Pasando las fotografías de una etapa."
+  size="full"
+/>
+
+## Mapa y perfil de elevación a partir de un archivo GPS
+
+Un reloj GPS o una app del teléfono graba una ruta como un archivo GPX: el recorrido como una lista de puntos, cada uno con su altitud. Él sube ese único archivo a la ruta. La página dibuja el recorrido en un mapa de relieve, con un marcador verde al inicio y uno naranja al final, y traza el perfil de elevación a partir de los mismos puntos. El perfil elige su propia escala, así que tanto una ruta corta de esquí como una travesía larga se leen con claridad, y al señalar a lo largo de él se lee la altura.
+
+Los grados siguen las escalas del Club Alpino Suizo:
+
+| Ruta              | Escala                                                  |
+| ----------------- | ------------------------------------------------------- |
+| Senderismo        | De T1, un paseo fácil, a T6, senderismo alpino difícil  |
+| Esquí y alpinismo | De L, fácil, a EX, extremadamente difícil               |
+| Raquetas de nieve | De WT1, un paseo fácil, a WT6, una ruta alpina exigente |
+
+Al pasar el puntero por el grado de una ruta, o al tocarlo, se explica con palabras, se nombra la escala y se enlaza a una descripción de ella.
+
+<ProjectImage
+  src="/projects/montu/tour-elevation-desktop.webp"
+  video="/projects/montu/tour-elevation-desktop.mp4"
+  alt="«Eckdaten der Tour»: al pasar el puntero por el grado T3 se abre una ventana emergente que lo explica como «Anspruchsvolle Bergwanderung» y enlaza a la escala del SAC, y luego el puntero recorre el perfil de elevación mientras una información emergente indica la altura"
+  caption="El grado explicado y el perfil leído."
+  size="full"
+/>
+
+El mapa es un mapa de relieve interactivo, así que el visitante puede acercarse a cualquier parte del recorrido. A su lado él añade cómo llegar y cómo volver, y el equipo mínimo que llevar.
+
+<ProjectImage
+  src="/projects/montu/tour-map-desktop.webp"
+  video="/projects/montu/tour-map-desktop.mp4"
+  alt="El mapa de relieve bajo el perfil, con el recorrido naranja desde un marcador verde en Linthal hasta un marcador naranja en Brigels: se acerca dos veces y se arrastra a lo largo del recorrido pasando los embalses, junto a notas sobre la ida, la vuelta y el equipo"
+  caption="Acercándose a lo largo del recorrido."
+  size="full"
+/>
+
+## Diseño
+
+Los títulos van en una tipografía con serifa, el texto en una sin serifa discreta, y las fotografías ocupan mucho espacio, con las esquinas redondeadas. El menú es un pequeño panel de cristal en la esquina que nombra la sección en la que estás, y contiene el selector entre claro, oscuro y el ajuste del sistema.
+
+<ProjectImage
+  src="/projects/montu/theme.webp"
+  video="/projects/montu/theme.mp4"
+  alt="La sección de rutas de la página de inicio: el menú de la esquina superior derecha se abre con «Home», «Über Montu», «Touren», «Info Eckdaten» e «Info Planung», la página cambia al modo oscuro desde su control «Modus» y vuelve al claro, y el menú se cierra"
+  caption="El menú y el cambio a oscuro."
+  size="full"
+/>
+
+## Lo que edita él mismo
+
+El sitio está hecho con Next.js, y todo lo que lee un visitante vive en Sanity, un editor de contenido integrado en el sitio. Una ruta es un solo formulario, dividido en pestañas que van de los datos generales al recorrido y la logística. El grado se elige de una lista en lugar de escribirse, así que la etiqueta de la página siempre coincide con la escala, y una etapa solo pide una alternativa cuando él la marca como saltable.
+
+La página de inicio se edita de la misma manera, desde las fotografías de la presentación hasta el texto sobre el proyecto. Cuando publica, el sitio recoge el cambio por sí solo, sin un desarrollador.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/montu/titschal-desktop.webp",
+      frame: "safari",
+      url: "montu.ch/tour/piz-titschal-2550m",
+      alt: "La ruta «Piz Titschal (2550m)»: esquiadores de travesía subiendo una cresta nevada bajo un cielo azul, con las etiquetas «Splitboardtour» y «L – Leicht», el título y una línea que dice «Surselva, Graubünden, 1344m – 2550m, 15. Februar 2026»",
+      caption: "Una ruta de invierno en un ordenador.",
+    },
+    {
+      src: "/projects/montu/home-mobile.webp",
+      frame: "iphone",
+      alt: "La página de inicio en un teléfono: «Faszination Bergtouren» sobre una fotografía de un bosque con niebla, con el botón «Eintauchen & Entdecken» y los puntos de la presentación",
+      caption: "Inicio en un teléfono.",
+    },
+    {
+      src: "/projects/montu/tour-stats-mobile.webp",
+      frame: "iphone",
+      alt: "«Eckdaten der Tour» al ancho de un teléfono: cuatro cifras en una cuadrícula de dos por dos, el perfil de elevación y el mapa de relieve con el recorrido entre un marcador verde y uno naranja",
+      caption: "Perfil y mapa en un teléfono.",
+    },
+  ]}
+  columns={3}
+/>

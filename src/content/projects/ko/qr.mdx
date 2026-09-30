@@ -1,0 +1,176 @@
+export const source = "7af9c8d1b6ea";
+
+# 스캔 테스트가 있는 QR 코드 생성기
+
+[qr.ysz.life](https://qr.ysz.life)는 브라우저에서 QR 코드를 만듭니다. 링크나 아무 텍스트를 입력하고, 코드를 꾸민 다음 내려받으면 됩니다. 그런데 꾸미기는 코드가 스캔되지 않게 만드는 원인이기도 하므로, 헤더에는 내보낸 이미지를 실제 디코더로 다시 읽어 보는 Scan Test가 있습니다.
+
+<Safari
+  url="qr.ysz.life"
+  src="/projects/qr/hero.webp"
+  video="/projects/qr/hero.mp4"
+  alt="라이트 테마의 생성기: 빈 입력란에 https://ysz.life를 입력하면 흐릿하던 자리 표시 코드가 선명해지고, 키를 누를 때마다 코드가 다시 그려집니다"
+  caption="키를 누를 때마다 코드가 다시 그려집니다."
+/>
+
+## 모양과 점 스타일
+
+Style 탭은 코드를 어떻게 그릴지 정합니다. 모듈은 QR 코드를 이루는 작은 정사각형으로, 정사각형 그대로 두거나 점, 둥글게 이어진 모양, 각진 모양으로 바꿀 수 있고, 세 개의 모서리 사각형과 그 안의 점에도 각각 고유한 스타일을 고를 수 있습니다. 원형을 고르면 코드를 둥근 영역에 놓고, 그 둘레의 빈 공간을 코드 자신의 패턴에서 복사한 점으로 채웁니다. 탭 옆의 초기화 버튼은 모든 설정을 원래대로 되돌리고 텍스트는 남겨 둡니다.
+
+<ProjectImage
+  src="/projects/qr/styles.webp"
+  video="/projects/qr/styles.mp4"
+  alt="Style 탭: 모양이 Square에서 Circle로 바뀌고, 이어서 Dot Style 메뉴가 열려 Dots가 선택되고, 다음으로 Corner Square Style 메뉴가 열려 Dot이 선택되며, 선택할 때마다 코드가 다시 그려집니다"
+  caption="원형, 그다음 점, 그다음 둥근 모서리 사각형."
+  size="full"
+/>
+
+## 색과 그라데이션
+
+전경과 배경에는 어떤 색이든 쓸 수 있고, 모서리 사각형은 자기만의 색을 가질 수 있습니다. 사진이나 색이 있는 페이지 위에 놓을 코드를 위해 배경을 투명하게 할 수도 있습니다. 두 레이어 모두 그라데이션을 쓸 수 있습니다. 선형은 각도를 자유롭게 정할 수 있고, 방사형은 중심에서 퍼져 나갑니다.
+
+<ProjectImage
+  src="/projects/qr/colors.webp"
+  video="/projects/qr/colors.mp4"
+  alt="Colors 탭: Gradient 스위치를 켜면 코드가 남색에서 보라색으로 물들고, 그라데이션의 끝 색이 주황색으로 바뀌며, 각도 슬라이더를 45도에서 255도로 끌면 코드 위의 그라데이션이 회전합니다"
+  caption="각도 슬라이더로 돌리는 그라데이션."
+  size="full"
+/>
+
+## 가운데에 놓는 로고
+
+로고는 Style 탭에 끌어다 놓거나 디스크에서 골라 넣을 수 있고, 크기는 슬라이더로 정합니다. 로고를 넣으면 오류 정정 수준이 H로 올라갑니다. H는 사라진 데이터를 가장 많이 복원할 수 있는 수준으로, 로고 아래의 모듈이 없어지므로 스캐너가 이를 복원해야 하기 때문입니다. 수준을 다시 낮추면 Settings 탭이 로고에는 높은 수준이 필요하다고 경고합니다.
+
+<ProjectImage
+  src="/projects/qr/logo.webp"
+  video="/projects/qr/logo.mp4"
+  alt="Settings 탭에 오류 정정이 Quartile (25%)로 표시되어 있고, Style 탭에서 점선으로 된 로고 영역에 이미지를 끌어다 놓으면 코드 가운데에 나뭇잎 로고가 나타나며, 다시 Settings 탭으로 돌아가면 수준이 High (30%)로 바뀌어 있습니다"
+  caption="로고를 넣으면 수준이 Q에서 H로 올라갑니다."
+  size="full"
+/>
+
+## 내보내기와 최근 코드
+
+코드는 PNG, SVG, JPEG, WebP로 내려받거나 PNG로 클립보드에 복사할 수 있습니다. Settings 탭에서 내보내기 크기를 128에서 512픽셀 사이로, 그리고 코드 둘레의 여백을 정합니다. 내려받거나 복사할 때마다 버튼 아래의 Recent 목록에도 썸네일과 함께 기록됩니다. 목록은 최근 코드 열 개를 브라우저에 보관하며, 하나를 클릭하면 그 텍스트와 모든 설정이 복원됩니다.
+
+<ProjectImage
+  src="/projects/qr/recent.webp"
+  alt="https://ysz.life용 남색 코드 가운데에 나뭇잎 로고가 있는 생성기 화면으로, 내보내기 버튼 아래에 Recent 목록이 열려 있고 https://ysz.life와 https://kinoa.to 두 항목이 각각 썸네일과 날짜와 함께 나옵니다"
+  caption="두 번 내려받은 뒤의 Recent 목록."
+  size="full"
+/>
+
+## 코드가 스캔되는지 확인하기
+
+헤더의 Scan Test는 내보낸 이미지를 받아 디코딩합니다. 통과하면 읽어 낸 텍스트가 나타나고 링크는 바로 열 수 있게 표시되며, 실패하면 코드를 찾지 못했다고 알려 줍니다. 클립에서는 기본 남색 코드는 통과하고, 같은 코드를 중간 회색으로 바꾸면 화면에서는 다른 QR 코드와 다를 바 없어 보이는데도 실패합니다.
+
+<ProjectImage
+  src="/projects/qr/scan-test.webp"
+  video="/projects/qr/scan-test.mp4"
+  alt="Scan Test 대화상자가 끌어다 놓은 남색 코드를 디코딩해 https://ysz.life를 보여 주고, 전경색을 #999999로 바꾼 뒤 회색 코드를 놓으면 QR 코드를 찾지 못했다고 알려 줍니다"
+  caption="남색은 통과, #999999 회색은 실패."
+  size="full"
+/>
+
+## 라이트와 다크
+
+사이트는 시스템 테마를 따르고, d 키로 라이트와 다크를 전환할 수 있습니다. 미리보기는 두 테마 모두에서 코드 자체의 배경색을 유지하므로, 내보낸 파일이 어떻게 보일지를 그대로 보여 줍니다.
+
+<Safari
+  url="qr.ysz.life"
+  src="/projects/qr/theme.webp"
+  video="/projects/qr/theme.mp4"
+  alt="주황색 그라데이션과 나뭇잎 로고가 있는 원형 코드: d를 누르면 페이지가 다크 테마로 바뀌었다가 돌아오고, 코드는 흰색 배경을 그대로 유지합니다"
+  caption="d 키로 테마를 전환합니다."
+/>
+
+## 구현 방식
+
+사이트는 Next.js 앱이고, Radix 기반의 shadcn/ui와 Tailwind를 씁니다. [qr-code-styling](https://github.com/kozakdenys/qr-code-styling)이 코드를 SVG로 그리고, [qr-scanner](https://github.com/nimiq/qr-scanner)가 Scan Test를 위해 이미지를 디코딩합니다. 코드의 생성과 디코딩이 모두 브라우저에서 이뤄지므로 텍스트는 페이지 밖으로 나가지 않습니다.
+
+### 로고의 최대 크기
+
+QR 코드는 데이터를 Reed–Solomon 오류 정정 코드워드와 함께 저장하며, 수준은 네 단계입니다. L은 코드워드의 약 7%, M은 15%, Q는 25%, H는 30%를 복원할 수 있습니다. 로고는 이 허용량을 씁니다. qr-code-styling은 크기 설정값에 수준의 백분율과 코드의 모듈 수를 곱해, 그 결과를 로고가 덮을 수 있는 최대 모듈 수로 봅니다. 그런 다음 그 수를 넘지 않는 가장 큰 블록을 비우는데, 가운데에 놓이도록 한 변의 모듈 수가 홀수인 블록이고, 로고는 그 안에 맞춰 넣습니다.
+
+수준은 코드 자체도 바꿉니다. 16바이트인 `https://ysz.life`를 기본 크기 설정 0.35로 만들면 다음과 같습니다:
+
+| 수준 | 복원   | 심볼            | 로고가 들어갈 공간 |
+| ---- | ------ | --------------- | ------------------ |
+| L    | 약 7%  | 버전 1, 21 × 21 | 3 × 3 모듈         |
+| M    | 약 15% | 버전 2, 25 × 25 | 5 × 5 모듈         |
+| Q    | 약 25% | 버전 2, 25 × 25 | 7 × 7 모듈         |
+| H    | 약 30% | 버전 3, 29 × 29 | 9 × 9 모듈         |
+
+네 가지 모두 Scan Test에서 디코딩되었습니다. 낮은 수준은 더 작은 허용량에 맞게 로고를 줄이기 때문입니다.
+
+<ProjectImage
+  src="/projects/qr/error-correction-levels.webp"
+  alt="H, Q, M, L 수준에서 같은 나뭇잎 로고를 넣은 https://ysz.life 코드 네 개: 코드가 버전 3에서 버전 1로 작아짐에 따라 로고가 덮는 면적은 9 × 9, 7 × 7, 5 × 5, 3 × 3 모듈입니다"
+  caption="로고 하나와 크기 설정 하나를 H, Q, M, L 수준으로 만든 코드."
+  size="full"
+/>
+
+그렇게 작은 로고는 넣는 의미가 없으므로, 이미지를 불러오면 수준이 H로 올라갑니다:
+
+<CodeBlock
+  code={`const loadLogoFile = useCallback((file: File) => {
+    if (!file.type.startsWith("image/")) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      setConfig((prev) => ({
+        ...prev,
+        logo: reader.result as string,
+        errorLevel: prev.errorLevel !== "H" ? "H" : prev.errorLevel,
+      }))
+    }
+    reader.readAsDataURL(file)
+  }, [])`}
+  fileName="components/qr-generator.tsx"
+  lang="tsx"
+/>
+
+### 어떤 색까지 스캔되는가
+
+색에는 그런 허용량이 없습니다. qr-code-styling은 주어진 것을 무엇이든 그대로 그리는데, 스캐너에는 모듈과 배경 사이의 대비가 필요합니다. 기본 코드를 변형해 내보낸 뒤 각각을 Scan Test에 넣어 보았습니다:
+
+| 코드                                                                       | Scan Test |
+| -------------------------------------------------------------------------- | --------- |
+| 흰색 바탕의 남색, 기본값                                                   | 통과      |
+| 투명 배경의 남색                                                           | 통과      |
+| 남색 바탕의 흰색                                                           | 통과      |
+| 흰색 바탕의 회색 `#888888`                                                 | 통과      |
+| 흰색 바탕의 회색 `#999999`와 그보다 밝은 모든 색                           | 실패      |
+| 흰색 바탕의 노란색 `#ffd400`                                               | 실패      |
+| 남색에서 옅은 라벤더 `#e0e0ff`로 이어지는 그라데이션, 모서리는 그대로 남색 | 실패      |
+
+디코더는 qr-scanner입니다. Google의 ZXing 라이브러리를 JavaScript로 옮긴 jsQR을 기반으로 하며, Web Worker에서 실행되거나 브라우저에 자체 `BarcodeDetector`가 있으면 그것을 씁니다. 대화상자는 첫 스캔 때 이를 불러오므로, 누군가 쓰기 전까지는 페이지에 아무것도 더하지 않습니다. 통과했다 해도 디코더 하나의 결과일 뿐이고 휴대폰 카메라마다 다르므로, 여기서 실패하는 코드는 인쇄하기 전에 대비를 더 높여야 합니다.
+
+### 변경마다 렌더링 한 번
+
+생성기는 `next/dynamic`과 `ssr: false`로 불러오고, qr-code-styling은 마운트 뒤에 임포트합니다. 그러면 설정을 바꿀 때마다 새 인스턴스를 만들어 그 SVG를 미리보기에 바꿔 끼웁니다. 라이브러리의 `update()`는 새 옵션을 기존 인스턴스에 병합하지만 그 깊은 병합이 잘못된 결과를 냈기 때문에, 이펙트가 대신 인스턴스를 다시 만듭니다. 그 대가로 키 입력이나 슬라이더 한 단계마다 최대 512픽셀 크기의 코드를 새로 한 번 렌더링하게 됩니다.
+
+최근 코드를 복원할 때는 저장된 설정을 현재 기본값 위에 펼쳐 넣으므로, 새 옵션이 생기기 전에 저장한 코드도 복원되며 없는 필드는 기본값이 채웁니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/qr/styled-dark-desktop.webp",
+      frame: "safari",
+      url: "qr.ysz.life",
+      alt: "Colors 탭이 열린 다크 테마의 생성기: 흰색 카드 위에 남색에서 주황색으로 이어지는 그라데이션과 나뭇잎 로고가 있는 원형 코드",
+      caption: "다크 테마.",
+    },
+    {
+      src: "/projects/qr/styled-light-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 라이트 테마의 생성기: 제목, 링크 입력란, 나뭇잎 로고가 들어간 그라데이션 원형 코드",
+      caption: "휴대폰에서.",
+    },
+    {
+      src: "/projects/qr/styled-dark-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 다크 테마의 생성기, 내보내기 버튼과 그라데이션 설정이 있는 Colors 탭까지 스크롤한 모습",
+      caption: "휴대폰의 컨트롤.",
+    },
+  ]}
+  columns={3}
+/>

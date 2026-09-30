@@ -1,0 +1,149 @@
+export const source = "0fda8583dac1";
+
+# 拉普兰的雪地摩托导航
+
+Ura 是面向芬兰雪地摩托骑手的应用，支持 iPhone 和 Android。它把全国所有官方的雪地摩托路线放在一张地图上，并在你骑行时告诉你是否在路线上。我为一位客户设计并开发了它，以及它的网站 [ura-app.com](https://ura-app.com)。
+
+骑手每次看手机只有一秒钟，通常是在岔路口，常常还是在黑暗中，手上戴着手套。所以 Ura 只有一个地图界面，顶部一行文字，其他一切都从底部的面板里展开。
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-story.webp"
+  video="/projects/ura/site-story.mp4"
+  alt="深色主题下 ura-app.com 的首页：从标题 Know you're on the trail 开始，页面一步一步地讲解这款应用，文字旁边的手机画面随之变化，从 On route 那一行，到燃料、餐饮和休息点的地图设置，再到标题 Works where the signal doesn't 之下位于 Inari 的地图"
+  caption="滚动页面时，网站会带你一步步看完这款应用。"
+/>
+
+## 屏幕顶部只给一个答案
+
+顶部的那一行回答的是骑手在岔路口会有的问题：
+
+| 你所在的位置                   | 这一行显示                                       |
+| ------------------------------ | ------------------------------------------------ |
+| 在路线上                       | 一个绿点和路线的名称                             |
+| 偏离路线                       | 琥珀色，最近的路线有多远，以及一个指回路线的箭头 |
+| 离所有路线都很远，或在芬兰境外 | 一条说明这一点的提示                             |
+
+Ura 跟随你的位置时，屏幕会一直亮着，所以瞄一眼不需要戴着手套去解锁手机。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/on-route.webp",
+      frame: "iphone",
+      alt: "浅色主题下 Levi 附近的 Ura 地图：骑手的蓝点位于一条绿色路线上，周围有餐厅和加油站的标记，顶部那一行写着 On route, Levi keskus/center",
+      caption: "在 Levi 附近的一条路线上。",
+    },
+    {
+      src: "/projects/ura/off-route.webp",
+      frame: "iphone",
+      alt: "骑手的圆点在几条路线之间的空旷地带，顶部那一行写着 Off route, 320 m，箭头指回最近的路线",
+      caption: "偏离路线 320 m。",
+    },
+  ]}
+  columns={2}
+/>
+
+## 不来回跳的判定
+
+手机的 GPS 位置会漂移，在树下漂得更厉害，如果只做简单的距离检查，在岔路口附近每隔几秒就会在“在路线上”和“偏离路线”之间来回翻转。所以 Ura 对这两个方向区别对待：
+
+- **离开要等十秒**：只有当你明显离开路线这么久，Ura 才会说你偏离了路线。
+- **回来则立即生效**：你一回到路线上，这一行就变成绿色并显示路线名称。
+- **平行的路线保持各自的名称**：两条路线并排而行的地方，这一行会一直显示你所在的那一条，而不是在两条之间来回切换。
+
+<IPhone
+  src="/projects/ura/ride-back.webp"
+  video="/projects/ura/ride-back.mp4"
+  alt="深色主题下 Levi 附近的 Ura：顶部那一行写着 Off route, 150 m，箭头指向左边；随着骑手的圆点向绿色路线移动，距离不断减小，到达路线时，这一行变成 On route, Levi keskus/center"
+  caption="骑回路线上。"
+/>
+
+## 所有路线在同一张地图上
+
+缩小地图，整个路线网络就出现了，从芬兰南部一直到拉普兰的最北端。路线附近的加油站、餐厅和咖啡馆、小屋、避风棚和营火点也在地图上。点一下其中任何一个，底部面板就会显示它的名称、距离有多远以及该往哪个方向走。加油、餐饮和休息点都可以在设置里分别隐藏。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/network.webp",
+      frame: "iphone",
+      alt: "缩小到覆盖整个芬兰的地图，绿色和黄色的雪地摩托路线网络从赫尔辛基一直铺到最北部，骑手的圆点在拉普兰",
+      caption: "芬兰的每一条路线。",
+    },
+    {
+      src: "/projects/ura/place-sheet.webp",
+      frame: "iphone",
+      alt: "Inari 地图上方的底部面板，显示加油站 Neste Inari Juutuantörmä，带有 Fuel station 标签，以及 720 m 的距离和一个指向方向的箭头",
+      caption: "Inari 的一座加油站。",
+    },
+  ]}
+  columns={2}
+/>
+
+## 没有信号时
+
+山地的信号时有时无，所以 Ura 在你骑行时并不依赖它。路线和地点都存放在应用里，地图也会保留你已经看过的区域，所以一个你在有信号时骑进的山谷，在信号消失之后仍然会被画出来。路线有变化时，应用会在下次联网时获取新的一套。
+
+<IPhone
+  src="/projects/ura/inari.webp"
+  alt="浅色主题下 Inari 周围的地图：绿色的路线沿着湖岸并穿过冰面，村里有餐厅和加油站的标记，顶部那一行写着 On route 和村里那条路线的名称"
+  caption="Inari，在最北部。"
+/>
+
+## 主题与语言
+
+Ura 有浅色和深色两套主题，除非你自己选择，否则跟随手机的设置。深色主题也会把地图调暗，方便在拉普兰冬天漫长的夜里骑行。应用提供英语、芬兰语和德语，同样是除非你自己选择，否则跟随手机。商店图片用的是同样的界面，这里是深色主题，衬在一张被雪覆盖的森林照片上。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/store-dark-off-route.webp",
+      alt: "标题为 Off route? See the distance. 的商店图片：一部手机叠在积雪云杉林的照片上，屏幕显示深色地图，顶部有 Off route 那一行、320 m 和一个指回路线的箭头",
+      caption: "偏离路线。",
+    },
+    {
+      src: "/projects/ura/store-dark-network.webp",
+      alt: "标题为 Finland's trails. One clear map. 的商店图片：深色地图缩小到整个芬兰的路线网络",
+      caption: "整个路线网络。",
+    },
+  ]}
+  columns={2}
+/>
+
+## 网站
+
+[ura-app.com](https://ura-app.com) 在骑手安装应用之前向他们介绍它。它的主体是本页顶部那段随滚动展开的叙事：一部手机始终停在文字旁边，并不断变化，展示应用的每一个部分。网站跟随访客的浅色或深色设置，角落里的按钮可以手动切换，标题背后飘动着一片极光。在电脑上，页面末尾的 QR 码可以在你的手机上打开下载页面。
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-theme.webp"
+  video="/projects/ura/site-theme.mp4"
+  alt="深色主题下 ura-app.com 的首屏，标题 Know you're on the trail 背后有一片绿色极光在流动；右下角的按钮把页面切换到浅色主题，再切换回来"
+  caption="首屏，从深色切换到浅色，再切换回来。"
+/>
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/site-desktop.webp",
+      frame: "safari",
+      url: "ura-app.com",
+      alt: "浅色主题下 ura-app.com 的首页：标题 Know you're on the trail、App Store 和 Google Play 的徽标，以及一部显示 Kittilä 周围路线网络的手机",
+      caption: "浅色主题下的 ura-app.com。",
+    },
+    {
+      src: "/projects/ura/site-mobile.webp",
+      frame: "iphone",
+      alt: "手机上深色主题的 ura-app.com 首页：标题、商店徽标，以及它们下方应用地图的顶部",
+      caption: "手机上的网站。",
+    },
+    {
+      src: "/projects/ura/app-dark.webp",
+      frame: "iphone",
+      alt: "深色主题下 Levi 附近的 Ura：深色地图上的绿色路线，顶部那一行写着 On route, Levi keskus/center",
+      caption: "天黑之后的应用。",
+    },
+  ]}
+  columns={3}
+/>

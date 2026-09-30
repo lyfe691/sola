@@ -1,0 +1,149 @@
+export const source = "0fda8583dac1";
+
+# 라플란드를 위한 스노모빌 내비게이션
+
+Ura는 핀란드의 스노모빌 라이더를 위한 앱으로, iPhone과 Android에서 쓸 수 있습니다. 핀란드의 공식 스노모빌 경로를 모두 지도 하나에 담고, 주행하는 동안 지금 그중 한 경로 위에 있는지 알려 줍니다. 클라이언트를 위해 제가 디자인하고 만들었고, 웹사이트 [ura-app.com](https://ura-app.com)도 함께 만들었습니다.
+
+라이더는 휴대폰을 갈림길에서 한 번에 1초 정도만 봅니다. 대개 어두운 곳에서 장갑을 낀 채로입니다. 그래서 Ura는 지도 화면 하나에 맨 위의 한 줄 텍스트가 전부이고, 그 밖의 모든 것은 아래에서 올라오는 시트로 열립니다.
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-story.webp"
+  video="/projects/ura/site-story.mp4"
+  alt="다크 테마의 ura-app.com 홈페이지: 헤드라인 Know you're on the trail에서 시작해 스크롤하면 앱을 한 단계씩 보여 주고, 글 옆의 휴대폰 화면도 함께 바뀝니다. On route 줄에서 연료, 식사, 휴식 장소를 위한 지도 설정으로 넘어가고, 이어서 헤드라인 Works where the signal doesn't 아래에 Inari의 지도가 나옵니다"
+  caption="스크롤하면 웹사이트가 앱을 차례로 보여 줍니다."
+/>
+
+## 화면 맨 위의 답 하나
+
+맨 위의 줄은 라이더가 갈림길에서 품는 질문에 답합니다:
+
+| 현재 위치                                    | 표시되는 줄                                                   |
+| -------------------------------------------- | ------------------------------------------------------------- |
+| 경로 위                                      | 초록색 점과 경로 이름                                         |
+| 경로를 벗어남                                | 앰버색, 가장 가까운 경로까지의 거리, 그쪽으로 돌아가는 화살표 |
+| 어떤 경로에서도 멀리 떨어져 있거나 핀란드 밖 | 그렇다고 알려 주는 안내 문구                                  |
+
+Ura가 위치를 따라가는 동안 화면이 꺼지지 않으므로, 잠깐 보려고 장갑을 낀 채 휴대폰 잠금을 풀 필요가 없습니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/on-route.webp",
+      frame: "iphone",
+      alt: "라이트 테마에서 Levi 근처를 보여 주는 Ura 지도: 초록색 경로 위의 라이더의 파란 점, 그 주변의 식당과 주유소 마커, 맨 위에 On route, Levi keskus/center라고 적힌 줄",
+      caption: "Levi 근처의 경로 위.",
+    },
+    {
+      src: "/projects/ura/off-route.webp",
+      frame: "iphone",
+      alt: "경로 사이의 트인 지대에 있는 라이더의 점, 맨 위에 Off route, 320 m라고 적힌 줄과 가장 가까운 경로 쪽을 가리키는 화살표",
+      caption: "경로에서 320 m 벗어남.",
+    },
+  ]}
+  columns={2}
+/>
+
+## 흔들리지 않는 판정
+
+휴대폰의 GPS 위치는 흔들리고, 나무 아래에서는 더 심합니다. 단순한 거리 검사만 쓰면 갈림길 근처에서 몇 초마다 경로 위와 경로 밖이 뒤바뀔 것입니다. 그래서 Ura는 두 방향을 다르게 다룹니다:
+
+- **벗어나는 데는 10초가 걸립니다.** Ura는 그만큼 오랫동안 경로에서 확실히 떨어져 있었을 때에만 경로를 벗어났다고 판단합니다.
+- **돌아오는 것은 즉시 반영됩니다.** 다시 경로 위에 서는 순간 줄이 초록색으로 바뀌고 경로 이름이 나옵니다.
+- **나란한 경로도 이름을 유지합니다.** 두 경로가 나란히 달리는 구간에서는 줄이 두 경로 사이를 오가지 않고, 지금 타고 있는 경로에 머무릅니다.
+
+<IPhone
+  src="/projects/ura/ride-back.webp"
+  video="/projects/ura/ride-back.mp4"
+  alt="다크 테마에서 Levi 근처를 보여 주는 Ura: 맨 위 줄에 Off route, 150 m와 왼쪽을 가리키는 화살표가 나오고, 라이더의 점이 초록색 경로 쪽으로 움직이면 거리가 줄어들다가, 경로에 닿으면 줄이 On route, Levi keskus/center로 바뀝니다"
+  caption="경로로 돌아오는 라이딩."
+/>
+
+## 모든 경로를 한 지도에
+
+지도를 축소하면 핀란드 남쪽에서 라플란드 최북단까지 전체 경로망이 보입니다. 경로 근처의 주유소, 식당과 카페, 오두막, 대피소, 모닥불 터도 지도에 표시되어 있습니다. 하나를 탭하면 시트에 이름, 거리, 가는 방향이 나옵니다. 연료, 식사, 휴식 장소는 설정에서 각각 숨길 수 있습니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/network.webp",
+      frame: "iphone",
+      alt: "핀란드 전체가 보이도록 축소한 지도: 헬싱키에서 최북단까지 초록색과 노란색 스노모빌 경로망이 덮고 있고, 라이더의 점이 라플란드에 있습니다",
+      caption: "핀란드의 모든 경로.",
+    },
+    {
+      src: "/projects/ura/place-sheet.webp",
+      frame: "iphone",
+      alt: "Inari 지도 위로 올라온 시트: 주유소 Neste Inari Juutuantörmä에 Fuel station 태그, 거리 720 m, 가는 방향을 가리키는 화살표가 있습니다",
+      caption: "Inari의 주유소.",
+    },
+  ]}
+  columns={2}
+/>
+
+## 신호가 없을 때
+
+산악 지대의 통신 범위는 됐다 안 됐다 하므로, Ura는 주행 중에 그것에 의존하지 않습니다. 경로와 장소는 앱에 저장되어 있고, 지도는 이미 본 지역을 보관하므로, 신호가 있을 때 들어선 골짜기는 신호가 끊긴 뒤에도 그대로 그려집니다. 경로가 바뀌면 앱은 다음에 온라인이 될 때 새 데이터를 가져옵니다.
+
+<IPhone
+  src="/projects/ura/inari.webp"
+  alt="라이트 테마에서 Inari 주변의 지도: 호숫가와 얼음 위를 지나는 초록색 경로, 마을의 식당과 주유소 마커, 맨 위에 On route와 마을 경로의 이름이 적힌 줄"
+  caption="최북단의 Inari."
+/>
+
+## 테마와 언어
+
+Ura에는 라이트 테마와 다크 테마가 있고, 직접 고르지 않으면 휴대폰 설정을 따릅니다. 다크 테마는 지도도 어둡게 바꿔서, 라플란드 겨울의 긴 밤을 달릴 때를 위한 것입니다. 앱은 영어, 핀란드어, 독일어로 제공되며, 이번에도 직접 고르지 않으면 휴대폰 설정을 따릅니다. 스토어 이미지는 같은 화면을 쓰고, 여기서는 다크 테마로, 눈 덮인 숲 사진 위에 놓았습니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/store-dark-off-route.webp",
+      alt: "스토어 이미지(제목 Off route? See the distance.): 눈 덮인 가문비나무 숲 사진 위의 휴대폰에 Off route 줄, 320 m, 경로로 돌아가는 화살표가 있는 다크 지도가 보입니다",
+      caption: "경로를 벗어났을 때.",
+    },
+    {
+      src: "/projects/ura/store-dark-network.webp",
+      alt: "스토어 이미지(제목 Finland's trails. One clear map.): 핀란드 전역의 경로망 전체가 보이도록 축소한 다크 지도",
+      caption: "경로망 전체.",
+    },
+  ]}
+  columns={2}
+/>
+
+## 웹사이트
+
+[ura-app.com](https://ura-app.com)은 라이더가 앱을 설치하기 전에 앱을 소개합니다. 핵심은 이 페이지 맨 위에 있는 스크롤 스토리입니다. 휴대폰 하나가 글 옆에 머물면서 앱의 각 부분을 보여 주도록 바뀝니다. 사이트는 방문자의 라이트·다크 설정을 따르고, 구석의 버튼으로 직접 바꿀 수 있으며, 헤드라인 뒤에서는 오로라가 흐릅니다. 컴퓨터에서는 페이지 끝의 QR 코드로 휴대폰에서 다운로드 페이지를 열 수 있습니다.
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-theme.webp"
+  video="/projects/ura/site-theme.mp4"
+  alt="다크 테마의 ura-app.com 히어로: 헤드라인 Know you're on the trail 뒤에서 초록색 오로라가 움직이고, 오른쪽 아래 구석의 버튼이 페이지를 라이트 테마로 바꿨다가 다시 되돌립니다"
+  caption="다크에서 라이트로, 다시 되돌린 히어로."
+/>
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/site-desktop.webp",
+      frame: "safari",
+      url: "ura-app.com",
+      alt: "라이트 테마의 ura-app.com 홈페이지: 헤드라인 Know you're on the trail, App Store와 Google Play 배지, Kittilä 주변의 경로망을 보여 주는 휴대폰",
+      caption: "라이트 테마의 ura-app.com.",
+    },
+    {
+      src: "/projects/ura/site-mobile.webp",
+      frame: "iphone",
+      alt: "다크 테마의 휴대폰에서 본 ura-app.com 홈페이지: 헤드라인, 스토어 배지, 그 아래에 앱 지도의 윗부분",
+      caption: "휴대폰에서 본 사이트.",
+    },
+    {
+      src: "/projects/ura/app-dark.webp",
+      frame: "iphone",
+      alt: "Levi 근처를 보여 주는 다크 테마의 Ura: 어두운 지도 위의 초록색 경로와 맨 위의 On route, Levi keskus/center 줄",
+      caption: "어두워진 뒤의 앱.",
+    },
+  ]}
+  columns={3}
+/>

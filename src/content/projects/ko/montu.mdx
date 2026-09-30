@@ -1,0 +1,138 @@
+export const source = "8b1ee814cb0a";
+
+# Montu, 스위스 산악 투어 기록
+
+[montu.ch](https://montu.ch)는 한 친구가 스위스에서 다닌 여름과 겨울의 산악 투어를 모은 사이트로, 투어마다 그가 직접 찍은 사진과 함께 독일어로 정리되어 있습니다. 사이트는 제가 그를 위해 만들었고, 그는 브라우저의 콘텐츠 편집기에서 새 투어를 혼자 게시합니다.
+
+<Safari
+  url="montu.ch"
+  src="/projects/montu/home-desktop.webp"
+  video="/projects/montu/home-desktop.mp4"
+  alt="Montu 홈페이지: 세리프체 헤드라인 Faszination Bergtouren이 안개 낀 숲 사진 위로 글자 하나씩 흐릿함에서 선명해지며 나타나고, 이어 슬라이드쇼가 청록색 저수지 위의 산장 테라스로, 다시 눈 덮인 경사면의 스키 투어 참가자들로 크로스페이드됩니다"
+  caption="홈페이지는 그의 사진 슬라이드쇼로 시작합니다."
+/>
+
+## 그가 원한 것
+
+그는 자신이 기억하는 그대로 투어를 간직할 곳을 원했습니다. 사이트는 이를 스스로의 말로 이렇게 표현합니다. 기술적인 세부 정보는 “sanfte Wegweiser”(부드러운 이정표)일 뿐이고, 전체는 “mehr Tagebuch als Führer”, 곧 안내서라기보다 일기에 가깝다는 것입니다. 그래서 모든 페이지는 사진과 그의 글로 시작하고, 가 보려는 사람을 위한 수치는 그 뒤에 나옵니다.
+
+<ProjectImage
+  src="/projects/montu/about-desktop.webp"
+  alt="Willkommen bei Montu.: 안개 낀 계곡의 바위 사진이 사이트 소개 옆에 놓여 있고, 소개는 mehr Tagebuch als Führer라는 문장으로 끝나며, Touren ansehen이라고 적힌 버튼이 있습니다"
+  caption="그의 말로 쓴 소개."
+  size="full"
+/>
+
+홈페이지에서 각 투어는 큰 사진 카드이고, 지역, 제목, 그가 직접 쓴 짧은 소개글, 그리고 상승 고도(미터), 거리, 등급의 세 가지 수치가 한 줄로 놓입니다.
+
+<ProjectImage
+  src="/projects/montu/home-tours-desktop.webp"
+  alt="Die Touren im Überblick: 산악 저수지와 눈 덮인 경사면의 스키 투어 참가자들을 담은 둥근 사진 카드로, 각 카드에 지역 라벨, 세리프체 제목, 짧은 발췌문, 수치 한 줄이 있습니다"
+  caption="홈페이지의 투어 목록: 사진이 먼저, 수치는 마지막."
+  size="full"
+/>
+
+## 투어 페이지
+
+투어 페이지는 위에서 아래로 읽습니다.
+
+1. 대표 사진, 그리고 투어의 종류, 등급, 지역, 고도 범위, 날짜.
+2. 그가 쓴 소개글.
+3. 주요 정보, 고도 프로필, 지도.
+4. 차례로 이어지는 구간들.
+5. 경로를 따라 있는 산장, 리프트 등의 장소로 가는 링크(그가 추가한 경우에만 나옴).
+
+<ProjectImage
+  src="/projects/montu/tour-hero-desktop.webp"
+  video="/projects/montu/tour-hero-desktop.mp4"
+  alt="Linthal - Muttsee - Kistenpass - Brigels 투어를 스크롤하는 화면: 저수지 위 산장 테라스의 대표 사진에서 시작해 소개글, 주요 정보, 고도 프로필, 지도를 지나 첫 두 구간까지 내려갑니다"
+  caption="대표 사진에서 구간까지 이어지는 투어 페이지."
+  size="full"
+/>
+
+## 구간
+
+각 구간에는 넘겨 볼 수 있는 자체 사진이 있고 사진마다 캡션이 붙으며, 그 옆에 구간별 수치와 글이 있습니다. 케이블카를 타는 등 경로의 일부를 건너뛸 수 있는 경우에는, 구간의 끝에 그 대안이 주황색 메모로 나옵니다.
+
+<ProjectImage
+  src="/projects/montu/tour-stage-desktop.webp"
+  video="/projects/montu/tour-stage-desktop.mp4"
+  alt="첫 구간 Linthal bis Bergstation Chalchtrittli: 사진 옆의 화살표로 쇠사슬이 설치된 바위 길, 계곡 전망, 이정표 순으로 사진이 넘어가고, 그 옆의 구간 수치와 글은 택시와 케이블카를 이용하는 대안을 설명하는 주황색 메모로 끝납니다"
+  caption="구간의 사진 넘겨 보기."
+  size="full"
+/>
+
+## GPS 파일 하나로 만드는 지도와 고도 프로필
+
+GPS 시계나 휴대폰 앱은 투어를 GPX 파일로 기록합니다. 경로가 점의 목록으로 저장되고, 각 점에는 고도가 붙습니다. 그는 이 파일 하나를 투어에 올립니다. 그러면 페이지가 지형도 위에 경로를 그리고, 출발점에는 초록색 핀을, 도착점에는 주황색 핀을 꽂으며, 같은 점들로 고도 프로필을 그립니다. 고도 프로필은 스케일을 스스로 정하므로 짧은 스키 투어와 긴 횡단 코스가 모두 깔끔하게 읽히고, 그래프를 따라 포인터를 움직이면 그 지점의 높이가 표시됩니다.
+
+등급은 스위스 알파인 클럽의 등급 체계를 따릅니다.
+
+| 투어          | 등급 체계                                        |
+| ------------- | ------------------------------------------------ |
+| 하이킹        | T1(쉬운 도보)부터 T6(어려운 알파인 하이킹)까지   |
+| 스키와 알파인 | L(쉬움)부터 EX(극히 어려움)까지                  |
+| 스노슈잉      | WT1(쉬운 도보)부터 WT6(까다로운 알파인 투어)까지 |
+
+투어의 등급에 마우스를 올리거나 탭하면 그 등급이 무엇을 뜻하는지 풀어서 보여 주고, 등급 체계의 이름을 알려 주며, 그 체계를 설명하는 페이지로 연결합니다.
+
+<ProjectImage
+  src="/projects/montu/tour-elevation-desktop.webp"
+  video="/projects/montu/tour-elevation-desktop.mp4"
+  alt="Eckdaten der Tour: 등급 T3에 마우스를 올리면 Anspruchsvolle Bergwanderung이라고 풀이하고 SAC 등급 체계로 연결하는 팝오버가 열리고, 이어서 포인터가 고도 프로필을 따라 움직이는 동안 툴팁이 높이를 표시합니다"
+  caption="등급 설명과 고도 프로필 읽기."
+  size="full"
+/>
+
+지도는 직접 조작할 수 있는 지형도라서 방문자는 경로의 어느 부분이든 확대해 볼 수 있습니다. 그 옆에는 그가 가는 방법과 돌아오는 방법, 그리고 챙겨야 할 최소 장비를 적어 둡니다.
+
+<ProjectImage
+  src="/projects/montu/tour-map-desktop.webp"
+  video="/projects/montu/tour-map-desktop.mp4"
+  alt="고도 프로필 아래의 지형도: Linthal의 초록색 핀에서 Brigels의 주황색 핀까지 주황색 경로가 이어지고, 지도가 두 번 확대된 뒤 저수지를 지나 경로를 따라 끌려 움직이며, 그 옆에는 가는 길, 돌아오는 길, 장비에 관한 메모가 있습니다"
+  caption="경로를 따라 확대하기."
+  size="full"
+/>
+
+## 디자인
+
+제목은 세리프체, 본문은 차분한 산세리프체로 짜고, 사진은 모서리를 둥글게 해서 크게 보여 줍니다. 메뉴는 모서리에 놓인 작은 유리 패널로, 지금 있는 섹션의 이름을 알려 주고, 라이트, 다크, 시스템 설정 사이를 전환하는 스위치도 담고 있습니다.
+
+<ProjectImage
+  src="/projects/montu/theme.webp"
+  video="/projects/montu/theme.mp4"
+  alt="홈페이지의 투어 섹션: 오른쪽 위 모서리의 메뉴가 Home, Über Montu, Touren, Info Eckdaten, Info Planung과 함께 열리고, Modus 컨트롤로 페이지가 다크 모드로 바뀌었다가 다시 라이트로 돌아온 뒤 메뉴가 닫힙니다"
+  caption="메뉴와 다크 모드 전환."
+  size="full"
+/>
+
+## 그가 직접 편집하는 것
+
+사이트는 Next.js로 만들었고, 방문자가 읽는 모든 내용은 사이트에 내장된 콘텐츠 편집기인 Sanity에 있습니다. 투어는 양식 하나이고, 일반 정보부터 경로, 이동과 준비 사항까지 탭으로 나뉘어 있습니다. 등급은 직접 입력하지 않고 목록에서 고르므로 페이지의 표기는 항상 등급 체계와 일치하고, 구간은 그가 건너뛸 수 있다고 표시해야만 대안을 입력하도록 요구합니다.
+
+홈페이지도 같은 방식으로 편집하며, 슬라이드쇼 사진부터 프로젝트를 소개하는 글까지 모두 해당됩니다. 그가 게시하면 사이트는 개발자 없이도 스스로 변경 사항을 반영합니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/montu/titschal-desktop.webp",
+      frame: "safari",
+      url: "montu.ch/tour/piz-titschal-2550m",
+      alt: "Piz Titschal (2550m) 투어: 푸른 하늘 아래 눈 덮인 능선을 오르는 스키 투어 참가자들 위로 Splitboardtour와 L – Leicht 라벨, 제목, 그리고 Surselva, Graubünden, 1344m – 2550m, 15. Februar 2026이라고 적힌 줄이 있습니다",
+      caption: "데스크톱에서 본 겨울 투어.",
+    },
+    {
+      src: "/projects/montu/home-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 홈페이지: 안개 낀 숲 사진 위에 Faszination Bergtouren이 있고, Eintauchen & Entdecken 버튼과 슬라이드쇼의 점 표시가 있습니다",
+      caption: "휴대폰에서 본 홈.",
+    },
+    {
+      src: "/projects/montu/tour-stats-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰 너비의 Eckdaten der Tour: 2 × 2 격자에 놓인 네 가지 수치, 고도 프로필, 그리고 초록색 핀과 주황색 핀 사이에 경로가 그려진 지형도가 있습니다",
+      caption: "휴대폰에서 본 고도 프로필과 지도.",
+    },
+  ]}
+  columns={3}
+/>

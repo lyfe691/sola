@@ -1,0 +1,156 @@
+export const source = "b128c94d0c07";
+
+# Un seguimiento de candidaturas de empleo con una API de Spring Boot
+
+[AppliCare](https://applicare.app) lleva el control de las candidaturas de empleo: en qué punto está cada una, las tareas que van con ella y cómo va la búsqueda en conjunto. Construí las dos mitades entre diciembre de 2024 y febrero de 2025: un cliente en React con Ant Design y una API de Spring Boot que guarda sus datos en MongoDB.
+
+<Safari
+  url="applicare.app/manage"
+  src="/projects/applicare/add.webp"
+  video="/projects/applicare/add.mp4"
+  alt="La página Manage: New Application abre un formulario, se escriben Lakeside Systems, Frontend Developer, Zürich y un salario, Create añade la fila y la tabla se desplaza hasta ella"
+  caption="Añadir una candidatura, en una cuenta de demostración."
+/>
+
+## Candidaturas
+
+Cada candidatura vive en una tabla de la página Manage, con su empresa, puesto, estado y la fecha en que se envió. Para añadir una hacen falta la empresa, el título y un estado; el salario, un contacto, el enlace a la oferta y las notas están ahí para cuando los tengas. El cuadro de búsqueda filtra mientras escribes, y las columnas se pueden ordenar y filtrar.
+
+Una candidatura pasa de enviada a entrevistas y a una oferta, y termina aceptada o rechazada. La columna de estado es un desplegable, y al elegir un valor se guarda al instante, con un color que sigue la etapa.
+
+<ProjectImage
+  src="/projects/applicare/status.webp"
+  video="/projects/applicare/status.mp4"
+  alt="La tabla de Manage: el estado de Clearwater Labs pasa de Pending a Interviewing y el de Evergreen Energy de Offer a Accepted, cada cambio confirmado por un mensaje en la parte superior"
+  caption="Cada estado se guarda en cuanto cambia."
+  size="full"
+/>
+
+## El panel
+
+El panel resume la búsqueda en cuatro números:
+
+| Número       | Cuenta                                                |
+| ------------ | ----------------------------------------------------- |
+| Applications | Todas las candidaturas enviadas                       |
+| In progress  | Las que están en preselección o en entrevistas        |
+| Success rate | Las candidaturas aceptadas, como proporción del total |
+| Open         | Todo lo que aún no está aceptado ni rechazado         |
+
+Debajo, un gráfico cuenta las candidaturas a lo largo del tiempo y un desglose muestra la proporción de cada estado. La pestaña Tasks está junto a la vista general.
+
+<ProjectImage
+  src="/projects/applicare/dashboard.webp"
+  video="/projects/applicare/dashboard.mp4"
+  alt="El panel: se pasa a la pestaña Tasks y se vuelve a Overview, donde el gráfico de candidaturas a lo largo del tiempo se dibuja junto al desglose por estado, y una descripción emergente sigue al puntero por el gráfico"
+  caption="La vista general y la pestaña Tasks."
+  size="full"
+/>
+
+## Tareas
+
+Una tarea tiene un título, una descripción breve, una fecha límite y una prioridad alta, media o baja, y se puede vincular a una de las candidaturas, cuya empresa aparece entonces como etiqueta. La lista está ordenada por fecha límite, así que lo próximo que vence siempre está arriba. Marcar una tarea la tacha.
+
+<ProjectImage
+  src="/projects/applicare/tasks.webp"
+  alt="La pestaña Tasks: tareas como Send references y Prepare system design answers, cada una con una fecha de vencimiento, una etiqueta de la empresa relacionada, una insignia de prioridad y botones para editar y eliminar"
+  caption="Tareas, con la próxima fecha límite primero."
+  size="full"
+/>
+
+## Cómo está hecho
+
+El cliente es React sobre Vite con componentes de Ant Design, y habla con la API a través de una única instancia de Axios. La API es Spring Boot con Spring Security y Spring Data MongoDB, empaquetada en una imagen de Docker. Las cuentas, las candidaturas y las tareas son tres colecciones de MongoDB, y cada candidatura y cada tarea lleva el id del usuario al que pertenece.
+
+### Un estado tiene su propio endpoint
+
+En el servidor el estado es una simple cadena en el documento `JobApplication`, y la lista de etapas vive en el cliente, así que añadir una etapa es un cambio solo en el frontend. Cambiar un estado pasa por su propio endpoint, aparte de la edición de la candidatura:
+
+| Solicitud                                          | La envía                 | Cambia                              |
+| -------------------------------------------------- | ------------------------ | ----------------------------------- |
+| `PATCH /api/applications/{id}/status?status=OFFER` | El desplegable de estado | El estado y `lastUpdated`, nada más |
+| `PUT /api/applications/{id}`                       | El formulario de edición | La candidatura entera               |
+
+El panel lee ese mismo campo en grupos. Aceptada y rechazada son etapas finales, así que cualquier otra cuenta como abierta. Preselección y entrevistas cuentan como en curso, y la tasa de éxito son las candidaturas aceptadas sobre el total. El navegador calcula todo esto en un `useMemo` sobre la lista que devuelve la API, y un segundo convierte las fechas de envío en el total acumulado que hay detrás del gráfico.
+
+### Iniciar sesión con un token
+
+El inicio de sesión comprueba la contraseña contra su hash BCrypt y devuelve un JSON Web Token, una cadena firmada que el cliente devuelve con cada solicitud. El token de AppliCare se firma con HS256, lleva el nombre de usuario como sujeto y el id del usuario como un claim `userId`, y caduca pasado un tiempo configurado. El cliente lo guarda en `localStorage`, y un interceptor de Axios lo añade a cada solicitud como `Authorization: Bearer …`.
+
+La configuración de seguridad no guarda estado: `/api/auth/**` es abierta, y cualquier otra ruta necesita una solicitud autenticada. Un filtro que se ejecuta una vez por solicitud, antes del propio filtro de nombre de usuario y contraseña de Spring, es lo que hace que una solicitud quede autenticada:
+
+<CodeBlock
+  code={`public class JwtAuthenticationFilter extends OncePerRequestFilter {
+      private final JwtUtil jwtUtil;
+      public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+          this.jwtUtil = jwtUtil;
+      }
+      @Override
+      protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+              throws ServletException, IOException {
+          String authHeader = request.getHeader("Authorization");
+          if (authHeader != null && authHeader.startsWith("Bearer ")) {
+              String token = authHeader.substring(7);
+              if (jwtUtil.validateToken(token)) {
+                  String username = jwtUtil.getUsernameFromToken(token);
+                  UsernamePasswordAuthenticationToken authentication =
+                      new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                  SecurityContextHolder.getContext().setAuthentication(authentication);
+              }
+          }
+          filterChain.doFilter(request, response);
+      }
+  }`}
+  fileName="filter/JwtAuthenticationFilter.java"
+  lang="java"
+/>
+
+El filtro nunca rechaza una solicitud por sí mismo. Un token ausente o no válido deja vacío el contexto de seguridad, y Spring Security rechaza la solicitud más adelante en la cadena. `validateToken` analiza el token con la clave de firma, lo que comprueba la firma y la fecha de caducidad en una sola llamada, así que un token falsificado y uno caducado fallan igual. En el cliente, el interceptor de respuestas de Axios trata un 401 o un 403 como una sesión caducada: borra el usuario guardado y lleva el navegador a la página de inicio de sesión, de modo que la caducidad de la sesión se gestiona en un solo lugar para todas las páginas.
+
+### Cada lectura y escritura pertenece a su propietario
+
+El token dice quién llama, y los servicios deciden qué puede tocar esa persona. Los controladores leen el claim `userId` de la misma cabecera y lo pasan hacia abajo, y ningún servicio toma un propietario del cuerpo de la solicitud. Al crear una candidatura se le estampa el id de quien llama. Leerla, actualizarla, eliminarla y cambiar su estado cargan primero el documento guardado y comparan su propietario con quien llama:
+
+<CodeBlock
+  code={`public JobApplication updateApplication(String id, JobApplication application, String userId) {
+      JobApplication existingApp = jobApplicationRepository.findById(id)
+          .orElseThrow(() -> new RuntimeException("Application not found"));
+      if (!existingApp.getUserId().equals(userId)) {
+          throw new RuntimeException("Not authorized to update this application");
+      }
+      application.setId(existingApp.getId());
+      application.setUserId(userId);
+      application.setAppliedDate(existingApp.getAppliedDate());
+      application.setLastUpdated(LocalDateTime.now());
+      return jobApplicationRepository.save(application);
+  }`}
+  fileName="service/JobApplicationService.java"
+  lang="java"
+/>
+
+Una actualización también copia el id y la fecha de envío original del documento guardado, así que el cuerpo de una solicitud no puede ni pasar una candidatura a otro usuario ni cambiar cuándo se envió. Las listas se consultan por el id de quien llama, y editar, completar y eliminar una tarea se comprueban del mismo modo. Eliminar una cuenta borra las tareas y las candidaturas del usuario antes que el propio registro del usuario.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/applicare/login.webp",
+      frame: "safari",
+      url: "applicare.app/login",
+      alt: "La pantalla de inicio de sesión de AppliCare: una tarjeta con campos para un nombre de usuario o dirección de correo y una contraseña, y enlaces para registrarse o restablecer la contraseña",
+      caption: "Iniciar sesión.",
+    },
+    {
+      src: "/projects/applicare/dashboard-mobile.webp",
+      frame: "iphone",
+      alt: "El panel en un teléfono: los cuatro números en una cuadrícula de dos por dos encima del gráfico de candidaturas a lo largo del tiempo",
+      caption: "El panel.",
+    },
+    {
+      src: "/projects/applicare/manage-mobile.webp",
+      frame: "iphone",
+      alt: "La página Manage en un teléfono: el cuadro de búsqueda, el botón New Application y la tabla de empresas y puestos",
+      caption: "La página Manage.",
+    },
+  ]}
+  columns={3}
+/>

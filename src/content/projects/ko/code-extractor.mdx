@@ -1,0 +1,130 @@
+export const source = "aa290d683b48";
+
+# 페이지와 그 파일을 ZIP으로 저장하는 브라우저 확장 프로그램
+
+[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm)는 현재 탭의 페이지를 ZIP 파일 하나로 내려받는 Chrome·Edge 확장 프로그램입니다. 압축 파일에는 HTML과 그 HTML이 참조하는 모든 스타일시트, 스크립트, 이미지가 원본 서버를 그대로 반영한 폴더 구조로 담기고, HTML의 링크는 저장된 사본을 가리키도록 다시 쓰입니다. 다른 사이트가 어떻게 만들어졌는지 공부하려고 2024년 8월에 만들었고, Chrome 웹 스토어에 따르면 지금은 약 6,000명이 쓰고 있습니다.
+
+<Safari
+  url="htmx.org"
+  src="/projects/code-extractor/hero.webp"
+  video="/projects/code-extractor/hero.mp4"
+  alt="htmx.org 홈페이지 오른쪽 위에 확장 프로그램의 다크 팝업이 열려 있고, Extract & Download 버튼을 누르면 잠시 Extracting…이라고 표시되었다가 원래대로 돌아옵니다"
+  caption="htmx.org 저장하기."
+/>
+
+## 페이지 저장하기
+
+팝업에는 버튼이 하나 있습니다. 누르면 활성 탭의 페이지를 읽고, 페이지가 링크한 모든 파일을 가져와 사이트 이름을 딴 ZIP으로 묶습니다. 여기서는 `htmx.org.zip`이며, 그러면 Chrome이 저장할 위치를 묻습니다. htmx.org에서는 압축 파일을 만드는 데 1초가 안 걸렸습니다.
+
+`chrome://`, `edge://`, `about:` 페이지나 다른 확장 프로그램의 페이지처럼 스크립트를 실행할 수 없는 페이지에서는 팝업에 오류가 표시됩니다.
+
+## 압축 파일에 담기는 것
+
+ZIP을 열면 사이트 이름을 딴 폴더 하나가 나오고, 그 맨 위에 `index.html`이 있습니다. 나머지 파일은 모두 그 파일을 제공한 서버의 이름을 딴 폴더 아래에, 그 서버 자체의 경로를 이어서 놓입니다. htmx.org의 스타일시트, 스크립트, 이미지는 `htmx.org/htmx.org/` 아래에, GitHub 스타 버튼용 스크립트는 `buttons.github.io/` 아래에 들어가므로, 서로 다른 두 서버의 같은 이름 파일이 충돌하지 않습니다. htmx.org 사본은 파일 53개, 2.4 MB였고, 사이트의 Atom 피드도 그중 하나였습니다. 페이지가 `<link>` 태그로 링크한 것을 확장 프로그램이 스타일시트와 똑같이 수집하기 때문입니다.
+
+<ProjectImage
+  src="/projects/code-extractor/zip-contents.webp"
+  alt="htmx.org.zip의 내용, 파일 53개와 2.4 MB: index.html이 있는 htmx.org 폴더, buttons.js가 있는 buttons.github.io 폴더, 그리고 atom.xml, favicon.svg, css/site.css, 이미지 44개, 스크립트 네 개가 있는 두 번째 htmx.org 폴더"
+  caption="htmx.org의 ZIP에 담긴 것."
+  size="full"
+/>
+
+## 사본 열기
+
+저장된 `index.html`의 스타일시트, 스크립트, 이미지 참조는 모두 저장된 파일을 가리키므로, 페이지는 폴더에서 바로 열어도 스타일과 이미지가 제자리에 있습니다. 다른 페이지로 가는 링크는 그대로 남는데, 확장 프로그램이 한 번에 한 페이지만 저장하기 때문입니다.
+
+<ProjectImage
+  src="/projects/code-extractor/saved-copy.webp"
+  alt="압축을 푼 폴더에서 연 저장된 htmx.org: 퀵 스타트 코드 블록과 Hypermedia Systems 표지 이미지가 있는 책 섹션까지 스크롤한 모습"
+  caption="폴더에서 연 저장된 htmx.org."
+  size="full"
+/>
+
+## 구현 방식
+
+확장 프로그램은 Manifest V3 위의 순수 JavaScript입니다. 스크립트 하나가 달린 팝업 페이지가 모든 일을 하고, 압축 파일은 JSZip이 만듭니다.
+
+### 페이지를 지금 모습 그대로 읽기
+
+클릭하면 `chrome.scripting.executeScript`를 통해 탭 안에서 작은 함수가 실행됩니다. Chrome은 이 함수를 직렬화해 페이지 안에서 실행하므로 함수는 팝업 안의 어떤 것에도 접근할 수 없고, 평범한 문자열 두 개, 곧 루트 요소의 `outerHTML`과 doctype을 돌려줍니다. `outerHTML`에는 doctype이 빠져 있고, doctype 없이 저장된 페이지는 quirks 모드로 열립니다. quirks 모드는 표준이 생기기 전에 쓰인 페이지를 위해 브라우저가 유지하는 예전 렌더링 모드입니다. 그래서 doctype은 따로 직렬화해 맨 앞에 다시 써 넣습니다.
+
+따라서 저장되는 HTML은 스크립트가 실행된 뒤 탭에 있는 그대로의 페이지입니다. 마크업을 JavaScript로 만드는 페이지는 그렇게 만들어진 마크업이 저장됩니다.
+
+### 링크 다시 쓰기
+
+팝업으로 돌아오면 `DOMParser`가 HTML을 비활성 상태로 유지되는 문서로 바꿉니다. 그 안의 스크립트는 실행되지 않고 이미지는 로드되지 않습니다. 팝업은 그런 다음 모든 `<link href>`, `<script src>`, `<img src>`를 훑습니다:
+
+<CodeBlock
+  code={`function resolveResourceLinks(doc, baseUrl) {
+      const resources = [];
+      const elements = doc.querySelectorAll('link[href], script[src], img[src]');
+      elements.forEach(element => {
+          let attr;
+          if (element.tagName === 'LINK') {
+              attr = 'href';
+          } else if (element.tagName === 'IMG' || element.tagName === 'SCRIPT') {
+              attr = 'src';
+          } else {
+              attr = element.hasAttribute('src') ? 'src' : 'href';
+          }
+          let url = element.getAttribute(attr);
+          if (url) {
+              if (!url.startsWith('http')) {
+                  url = new URL(url, baseUrl).href;
+              }
+              const urlObject = new URL(url);
+              let path = urlObject.hostname + urlObject.pathname;
+              path = path.startsWith('/') ? path.slice(1) : path;
+              path = path.replace(/\\/\\//g, '/');
+              resources.push({ url, path });
+              element.setAttribute(attr, path);
+          }
+      });
+      return resources;
+  }`}
+  fileName="popup.js"
+  lang="js"
+/>
+
+모든 참조는 먼저 탭의 주소를 기준으로 해석되므로 어떤 형태든 전체 URL이 됩니다. 그 URL의 호스트 이름과 경로는 두 가지 역할을 합니다. 압축 파일 안에서 그 파일의 경로가 되고, HTML에서 속성의 값을 대체합니다. `https://example.com/blog/post.html`에 있는 페이지라면 다음과 같습니다:
+
+| 페이지에 적힌 것           | 해석된 결과                        | 저장 및 링크되는 경로      |
+| -------------------------- | ---------------------------------- | -------------------------- |
+| `/css/site.css`            | `https://example.com/css/site.css` | `example.com/css/site.css` |
+| `../img/logo.png`          | `https://example.com/img/logo.png` | `example.com/img/logo.png` |
+| `//cdn.example.com/lib.js` | `https://cdn.example.com/lib.js`   | `cdn.example.com/lib.js`   |
+| `/app.js?v=3`              | `https://example.com/app.js?v=3`   | `example.com/app.js`       |
+
+저장된 `index.html`은 사이트 폴더의 맨 위에 있으므로, 새 상대 경로는 저장된 파일로 이어집니다. 그 과정에서 쿼리 문자열은 버려지는데, 캐시를 무효화하는 `?v=3`은 파일 이름의 일부가 아니기 때문입니다.
+
+htmx.org의 태그 두 개입니다. 먼저 서버가 보낸 그대로, 그다음에는 저장된 `index.html`에서 읽히는 모습으로, 이쪽은 `XMLSerializer`가 XHTML 방식으로 다시 쓴 것입니다:
+
+```text
+<link rel="stylesheet" href="/css/site.css">
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<link rel="stylesheet" href="htmx.org/css/site.css" />
+<script async="" defer="" src="buttons.github.io/buttons.js"></script>
+```
+
+### 다른 서버에서 가져오기
+
+다른 서버에서 스타일시트를 가져오는 것은 CORS가 일반 웹 페이지에게 막는 일입니다. 확장 프로그램 페이지는 매니페스트의 `host_permissions`에 적힌 호스트에 대해서는 예외이고, 매니페스트는 네 가지를 요청합니다:
+
+| 권한                          | 용도                                                  |
+| ----------------------------- | ----------------------------------------------------- |
+| `activeTab`                   | 열려 있는 탭에 접근, 클릭한 뒤에만                    |
+| `scripting`                   | 탭의 HTML을 읽는 함수를 실행                          |
+| `downloads`                   | ZIP 저장                                              |
+| `http://*/*` 및 `https://*/*` | 어느 서버에 있든 그 서버에서 페이지의 파일을 가져오기 |
+
+Chrome은 설치할 때 마지막 권한을 모든 웹사이트의 데이터를 읽고 변경할 수 있는 권한으로 보여 주는데, 범위가 넓습니다. 확장 프로그램은 이 권한을 한 가지에만 씁니다. 팝업에서, 그리고 클릭한 뒤에만, 열려 있는 페이지가 이미 참조하는 파일을 가져오는 일입니다.
+
+팝업은 `Promise.all`로 모든 파일을 한꺼번에 가져옵니다. 실패한 요청은 기록만 하고 건너뛰므로, 이미지 하나가 없다고 압축 파일 전체를 잃는 일은 없습니다. 그다음 JSZip이 파일을 만들고, `chrome.downloads.download`가 저장 위치를 먼저 물은 뒤 저장합니다.
+
+<Safari
+  url="chromewebstore.google.com"
+  src="/projects/code-extractor/store-listing-desktop.webp"
+  alt="Chrome 웹 스토어의 확장 프로그램 페이지: 폴더 아이콘, 5.0점(평가 5개), 사용자 6,000명, 그리고 첫 번째 스크린샷으로 팝업"
+  caption="Chrome 웹 스토어 등록 정보."
+/>

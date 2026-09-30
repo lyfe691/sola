@@ -1,0 +1,194 @@
+export const source = "bedd8d1e47e6";
+
+# Un chat de IA multiproveedor que funciona con tus propias claves de API
+
+[Luma](https://luma.ysz.life) es una aplicación de chat para quienes ya pagan por el acceso a la API de uno o varios proveedores de modelos. Añades tus claves una sola vez, eliges un modelo para cada chat y cada solicitud va a ese proveedor con tu clave.
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/start.webp"
+  video="/projects/luma/start.mp4"
+  alt="La pantalla de inicio de Luma en el tema claro: unos trazos grises salen disparados hacia fuera detrás de la palabra Luma, y debajo, en el cuadro de mensaje, se escribe una pregunta sobre cómo divide un árbol B un nodo lleno"
+  caption="La pantalla de inicio."
+/>
+
+## Elegir un modelo
+
+El botón de modelo del cuadro de mensaje abre un selector con todos los modelos que ofrece Luma, agrupados por proveedor. Una columna de logotipos de proveedores salta de un grupo a otro, el cuadro de búsqueda filtra mientras escribes y unos iconos pequeños indican qué admite cada modelo: razonamiento, imágenes como entrada, uso de herramientas y PDF. Una estrella añade un modelo a la lista de favoritos de la columna.
+
+Cada chat conserva su propio modelo, así que una conversación puede funcionar con Claude y la siguiente con GPT-5 Mini. Los modelos cuyo proveedor aún no tiene clave llevan un candado, y al elegir uno aparece encima del cuadro de mensaje un aviso que nombra la clave que falta, con un botón que abre los ajustes.
+
+<ProjectImage
+  src="/projects/luma/model-picker.webp"
+  video="/projects/luma/model-picker.mp4"
+  alt="El selector de modelos abriéndose encima del cuadro de mensaje, con los logotipos de los proveedores a la izquierda y los modelos agrupados bajo OpenAI y xAI; al escribir claude la lista se reduce a tres modelos de Anthropic, el primero recibe una estrella y la entrada de favoritos de la columna muestra entonces solo ese modelo"
+  caption="Buscar en el selector y marcar un modelo con una estrella."
+  size="full"
+/>
+
+## Preguntar
+
+El cuadro de mensaje admite texto, imágenes y archivos como PDF, CSV y Markdown, que puedes pegar, soltar encima o elegir en el menú del signo más. Ese mismo menú fija un modo para el siguiente mensaje:
+
+- **Create image** pide al modelo que responda con una imagen.
+- **Web search** hace que busque información y cite sus fuentes.
+- **Study and learn** pide una enseñanza estructurada con ejemplos resueltos.
+
+<ProjectImage
+  src="/projects/luma/modes.webp"
+  video="/projects/luma/modes.mp4"
+  alt="El menú del signo más abriéndose debajo del cuadro de mensaje con Add photos & files, Create image, Study and learn y Web search; se elige Create image, aparece un chip Image en el cuadro de mensaje y se escribe una petición sobre una puesta de sol sobre un campo de flores"
+  caption="El menú del signo más y el modo de imagen."
+  size="full"
+/>
+
+Una imagen generada aparece en el chat con el nombre del modelo de imagen debajo. Qué modelo de imagen la dibuja es un ajuste aparte, independiente del modelo del chat.
+
+<ProjectImage
+  src="/projects/luma/image-generation.webp"
+  alt="Un chat en el que la petición Generate an image of a cute sunset se responde con la ilustración de un sol sonriente que se pone sobre un campo de flores, con el pie Generated with Grok Imagine"
+  caption="Una imagen generada, con el nombre del modelo de imagen debajo."
+  size="full"
+/>
+
+## Respuestas
+
+Las respuestas se escriben en pantalla a medida que llegan, en Markdown. Los bloques de código aparecen resaltados y llevan botones para copiar y descargar, y las fórmulas matemáticas y los diagramas se muestran en el propio texto. Cuando un modelo razona antes de responder, el razonamiento se pliega en una fila «Thought for N seconds» encima de la respuesta, y los modelos de Claude tienen pensamiento extendido sin que haya que activar nada. Las respuestas de una búsqueda web llevan sus fuentes como pequeños chips junto a las frases que las usan.
+
+<ProjectImage
+  src="/projects/luma/code-block.webp"
+  alt="Un chat con Claude Opus 4.6: dos filas de razonamiento plegadas, después un programa en Rust resaltado con números de línea y botones para descargar y copiar, y una breve explicación debajo"
+  caption="El razonamiento de Claude, plegado encima de una respuesta con código."
+  size="full"
+/>
+
+## Editar, reintentar y encontrar chats
+
+Nada de lo que hay en una conversación se sobrescribe. Al editar un mensaje que enviaste se añade una versión nueva junto a la anterior, con una respuesta nueva debajo, y unas flechas bajo el mensaje permiten pasar de una versión a otra. Reintentar una respuesta hace lo mismo en el lado de la respuesta, y el menú de reintento puede enviar la pregunta a otro modelo, de modo que las respuestas de dos modelos al mismo mensaje quedan a una flecha de distancia.
+
+Los chats nuevos reciben su título de un modelo pequeño y barato, con una de tus claves. La barra lateral los enumera con los fijados primero, y desde allí cada uno se puede fijar, renombrar o eliminar. Los ajustes pueden exportar todos tus chats como descarga o eliminarlos. Las acciones habituales tienen atajos, con Ctrl en Windows y ⌘ en un Mac:
+
+| Atajo                | Hace                                          |
+| -------------------- | --------------------------------------------- |
+| Ctrl K               | Busca en todos los chats, agrupados por fecha |
+| Ctrl Shift O         | Inicia un chat nuevo                          |
+| Ctrl M               | Abre el selector de modelos                   |
+| Ctrl U               | Adjunta un archivo                            |
+| Ctrl Shift S         | Muestra u oculta la barra lateral             |
+| Shift Esc            | Salta al cuadro de mensaje                    |
+| Ctrl Shift Backspace | Elimina el chat abierto                       |
+
+## Tus claves de API
+
+Los ajustes tienen una fila por proveedor, cada una con un enlace a la página donde se obtiene una clave. Luma prueba una clave nueva con el proveedor antes de guardarla, así que una clave que el proveedor rechaza se descarta al instante. Las claves se cifran antes de almacenarse, y el navegador solo llega a saber qué proveedores tienen una.
+
+<ProjectImage
+  src="/projects/luma/api-keys.webp"
+  alt="El diálogo de ajustes sobre la pantalla de inicio, abierto en API Keys: un aviso de que las claves se cifran en reposo y nunca salen del servidor, y filas para OpenAI, Anthropic, Google, xAI y Mistral, cada una con un enlace Get API key y un botón Add key"
+  caption="Añadir claves en los ajustes."
+  size="full"
+/>
+
+## Claro y oscuro
+
+Luma tiene un tema claro y uno oscuro con un acento verde oliva, y sigue el del sistema salvo que elijas uno. Los trazos detrás de la pantalla de inicio siguen el tema: grises en el claro y blancos en el oscuro. En un teléfono la barra lateral pasa a ser un panel deslizable, y el selector de modelos y los ajustes se abren como paneles desde la parte inferior de la pantalla.
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/theme.webp"
+  video="/projects/luma/theme.mp4"
+  alt="La pantalla de inicio pasando del tema claro al oscuro y de nuevo al claro desde el control de tema de la parte inferior de la barra lateral; los trazos pasan de gris a blanco"
+  caption="Los temas claro y oscuro."
+/>
+
+## Cómo está hecho
+
+Luma es una aplicación de Next.js 16 sobre React 19. El Vercel AI SDK transmite las respuestas y llega a cada proveedor a través del paquete propio de ese proveedor, Supabase guarda las cuentas, los chats y los archivos subidos, y los trazos de la pantalla de inicio son un shader de Three.js.
+
+### Las conversaciones son árboles
+
+Cada mensaje es una fila con un `parent_id`, y un chat guarda un puntero más, `active_leaf_id`, al último mensaje del hilo que se ve en pantalla. El hilo se deriva: se parte de la hoja activa, se siguen los punteros al padre hasta la raíz y se invierte el orden. Una edición o un reintento añade un hermano bajo el mismo padre, y el recorrido marca cada mensaje que tiene hermanos de su mismo rol con su lugar entre ellos, que es todo lo que leen las flechas bajo un mensaje.
+
+<CodeBlock
+  code={`export function buildTimelineMessages(
+    graph: ChatGraph,
+    activeLeafId: string
+  ): UIMessage[] {
+    const path = getPathToLeaf(graph, activeLeafId)
+    if (path.length === 0) return []
+    return path.map((node) => {
+      const siblings = (graph.childrenByParentId.get(node.parentId) ?? []).filter(
+        (candidate) => candidate.role === node.role
+      )
+      const branchCount = siblings.length
+      const branchIndex = Math.max(
+        0,
+        siblings.findIndex((candidate) => candidate.id === node.id)
+      )
+      return {
+        id: node.id,
+        role: node.role,
+        parts: node.parts,
+        metadata: {
+          createdAt: node.createdAt,
+          ...(branchCount > 1
+            ? ({
+                branchCount,
+                branchIndex,
+                isActiveBranch: true,
+              } satisfies ChatBranchMetadata)
+            : {}),
+        },
+      } satisfies UIMessage
+    })
+  }`}
+  fileName="lib/chat-tree.ts"
+  lang="ts"
+/>
+
+Cambiar de versión es una llamada al servidor que toma el siguiente hermano, baja por el hijo más reciente hasta una hoja y guarda esa hoja como la activa. El coste de este diseño es que abrir un chat lee todos sus mensajes, incluidas las ramas que no estás mirando. A cambio, llegan en una sola consulta sobre un índice de chat y fecha de creación, y el código del árbol es TypeScript sin más, que importan tanto el navegador como el servidor.
+
+### De un id de modelo a un cliente de proveedor
+
+Los ids de modelo llevan su proveedor, como en `anthropic:claude-opus-4-6`. La ruta del chat comprueba el id con el catálogo y recurre al modelo por defecto cuando no está, así que el navegador no puede pedir un modelo que Luma no lista. El prefijo selecciona la clave del usuario, que se descifra solo para esa solicitud, y el paquete del AI SDK del proveedor, que se carga con un `import()` dinámico para que cada solicitud solo cargue el SDK que necesita. Los proveedores con una API compatible con OpenAI reutilizan el paquete de OpenAI con su propia URL base, así que añadir uno es una entrada del catálogo.
+
+### Claves en reposo
+
+Una clave se cifra con AES-256-GCM bajo un IV aleatorio nuevo y se guarda como IV, texto cifrado y etiqueta de autenticación. Como GCM autentica el texto cifrado, un valor modificado en la base de datos no se puede descifrar en lugar de convertirse en una clave distinta. Esto protege las claves en un volcado filtrado de la base de datos. El servidor tiene que llamar a los proveedores con la clave en texto plano, así que puede descifrar todas las claves que guarda, y también puede hacerlo cualquiera que tenga a la vez la base de datos y la clave maestra.
+
+### Qué vuelve al modelo
+
+Una respuesta guardada conserva todo lo que muestra la pantalla: razonamiento, texto, llamadas a herramientas y sus resultados. El historial que se envía con la siguiente solicitud se reconstruye desde el árbol en el servidor, y antes se le quitan tres cosas:
+
+| Parte de la respuesta   | Se devuelve como                 | Por qué                                                                                                            |
+| ----------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Una imagen generada     | El texto `[image was generated]` | Si no, el base64 viajaría con cada solicitud posterior                                                             |
+| Razonamiento            | Nada, solo se queda en pantalla  | La Responses API de OpenAI puede rechazar elementos de razonamiento reenviados desde el historial                  |
+| Metadatos del proveedor | Nada                             | Apuntan a respuestas anteriores de un solo proveedor, así que un hilo puede cambiar de proveedor a mitad de camino |
+
+Los adjuntos se quedan en un bucket privado, y cada solicitud firma enlaces nuevos hacia ellos que caducan a los diez minutos.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/start-dark.webp",
+      frame: "safari",
+      url: "luma.ysz.life",
+      alt: "La pantalla de inicio de Luma en el tema oscuro: la barra lateral a la izquierda y el cuadro de mensaje en el centro, sobre trazos blancos en un fondo casi negro",
+      caption: "La pantalla de inicio en el tema oscuro.",
+    },
+    {
+      src: "/projects/luma/start-mobile.webp",
+      frame: "iphone",
+      alt: "La pantalla de inicio en un teléfono con el tema claro: la palabra Luma sobre trazos grises y el cuadro de mensaje abajo",
+      caption: "Inicio, en un teléfono.",
+    },
+    {
+      src: "/projects/luma/model-picker-mobile.webp",
+      frame: "iphone",
+      alt: "El selector de modelos como panel inferior en un teléfono: la columna de proveedores a la izquierda y los modelos de OpenAI y xAI con iconos de capacidades y estrellas",
+      caption: "El selector, como panel.",
+    },
+  ]}
+  columns={3}
+/>

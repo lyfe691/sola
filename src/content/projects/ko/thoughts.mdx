@@ -1,0 +1,146 @@
+export const source = "0125002b525c";
+
+# 방명록이 있는 글쓰기 사이트
+
+[Thoughts](https://thoughts.ysz.life)는 프로젝트 페이지에는 맞지 않는 이야기를 적는 곳입니다. 조용한 텍스트 몇 페이지로 이루어져 있고, 소개 페이지, 글 목록, 누구나 메모를 남길 수 있는 방명록이 있습니다. [Shu Ding의 사이트](https://shud.in)를 바탕으로 만들었습니다.
+
+<Safari
+  url="thoughts.ysz.life"
+  src="/projects/thoughts/hero.webp"
+  video="/projects/thoughts/hero.mp4"
+  alt="소개 페이지에서 왼쪽 이탤릭체 링크 중 guestbook을 클릭하면, 날짜가 붙은 방명록 항목과 함께 방명록이 서서히 나타나고, 양식에 메시지가 입력되지만 전송되지는 않습니다. 모든 방문자의 이름과 메시지는 흐리게 처리되어 있습니다"
+  caption="소개 페이지에서 방명록으로. 이름은 흐리게 처리했습니다."
+/>
+
+## 페이지와 글
+
+링크는 글의 왼쪽에 소문자 이탤릭 세리프체로 놓이고, 넓은 화면에서는 스크롤해도 제자리에 머뭅니다. 페이지 사이를 이동할 때는 크로스페이드가 일어납니다. 휴대폰에서는 링크가 글 위의 한 줄로 옮겨 갑니다.
+
+각 글은 저장소에 있는 MDX 파일이며, 제목과 날짜, 설명을 내보냅니다. 목록에는 글이 최신순으로 나오고, 각 제목은 점이 이어진 줄로 날짜와 연결됩니다. 글 안의 코드는 서버에서 Shiki가 구문을 강조하므로 색이 완성된 HTML로 도착하고, 넓은 화면에서는 이미지의 제목이 그 옆 여백의 메모가 됩니다.
+
+존재하지 않는 주소에는 짧은 시구가 나옵니다.
+
+<Safari
+  url="thoughts.ysz.life/nope"
+  src="/projects/thoughts/not-found.webp"
+  alt="not found 페이지: 왼쪽에 이탤릭체 링크 about, thoughts, guestbook이 있고, 그 옆에 not found라는 제목 아래로 “the page does not exist,”와 “and you were never supposed to be here”라는 두 줄이 있습니다"
+  caption="존재하지 않는 페이지."
+/>
+
+## 방명록
+
+누구나 계정 없이 방명록을 남길 수 있으며, 이름은 선택이고 메시지는 최대 280자입니다. 항목은 최신순으로 날짜와 시각과 함께 열 개씩 표시되고, 직접 쓴 항목에는 마우스를 올리면 Delete 링크가 나타납니다.
+
+<Safari
+  url="thoughts.ysz.life/guestbook"
+  src="/projects/thoughts/guestbook-desktop.webp"
+  alt="방명록: 이름과 메시지를 입력하는 한 줄짜리 양식이 날짜가 붙은 항목 목록 위에 있고, 모든 이름과 메시지가 흐리게 처리되어 있습니다"
+  caption="이름과 메시지를 흐리게 처리한 방명록."
+/>
+
+## 구현 방식
+
+Thoughts는 Vercel에서 돌아가는 Next.js 앱입니다. 글은 MDX에서 컴파일되어 빌드 시점에 정적 페이지로 렌더링됩니다. 방명록은 Postgres 테이블 하나이며, 라우트 핸들러 하나가 `@vercel/postgres`를 통해 읽고 씁니다.
+
+### 방명록 남기기
+
+`/api/guestbook`으로 보낸 `POST`는 세 가지 검사를 순서대로 실행하고, 모두 통과해야만 기록합니다.
+
+1. **숨겨진 필드가 비어 있습니다.** 양식에는 사람은 볼 일이 없지만 양식을 채우는 봇은 대개 채워 넣는 `website` 필드가 있으며, 여기에 값이 있으면 요청이 거부됩니다.
+2. **메시지 길이가 맞습니다.** 앞뒤 공백을 제거한 메시지는 1자에서 280자 사이여야 하고, 이름은 50자로 잘립니다.
+3. **보낸 사람이 서두르지 않았습니다.** 라우트는 같은 발신자의 가장 최근 항목을 조회해, 그 항목이 30초가 지나지 않았으면 429로 응답합니다.
+
+발신자는 클라이언트 주소의 SHA-256 해시로 식별되는데, 이 주소는 `x-forwarded-for`의 첫 번째 항목에서 가져오며, 테이블에는 이 해시만 저장됩니다. 같은 발신자를 두 번 알아보기에는 이것으로 충분하며, 아래의 요청 제한과 삭제 확인에 필요한 것도 그 정도입니다.
+
+<CodeBlock
+  code={`export async function POST(req: NextRequest) {
+    await ensureTable()
+    const ipHash = getClientIpHash(req)
+    let body: { name?: string; message?: string; hp?: string } = {}
+    try {
+      body = await req.json()
+    } catch {
+      // ignore
+    }
+    const { name = null, message = '', hp = '' } = body
+    if (hp && hp.trim().length > 0) {
+      return NextResponse.json({ error: 'rejected' }, { status: 400 })
+    }
+    const trimmed = (message || '').trim()
+    if (trimmed.length === 0 || trimmed.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: 'invalid_message' }, { status: 400 })
+    }
+    const safeName = name ? String(name).slice(0, 50).trim() : null
+    if (isRateLimitEnabled()) {
+      const recent = await sql<{ created_at: string }>\`
+        SELECT created_at FROM guestbook
+        WHERE ip_hash = \${ipHash}
+        ORDER BY created_at DESC
+        LIMIT 1
+      \`
+      if (recent.rows.length > 0) {
+        const last = new Date(recent.rows[0].created_at).getTime()
+        const now = Date.now()
+        if (now - last < RATE_LIMIT_WINDOW_MS) {
+          return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
+        }
+      }
+    }
+    const id = crypto.randomUUID()
+    const approved = isAutoApprove()
+    const rejected = false
+    const inserted = await sql<GuestbookRow>\`
+      INSERT INTO guestbook (id, name, message, ip_hash, approved, rejected)
+      VALUES (\${id}, \${safeName}, \${trimmed}, \${ipHash}, \${approved}, \${rejected})
+      RETURNING id, name, message, created_at, updated_at, edited
+    \`
+    return NextResponse.json({ item: inserted.rows[0], approved }, { status: 201 })
+  }`}
+  fileName="app/api/guestbook/route.ts"
+  lang="ts"
+/>
+
+이 코드는 줄인 것입니다. 실제 핸들러에는 데이터베이스가 설정되지 않았을 때 항목을 메모리 안의 배열에 보관하는 두 번째 분기가 있어서, 로컬 개발에서는 데이터베이스 없이도 페이지가 동작합니다.
+
+### 모더레이션
+
+모든 행에는 플래그가 두 개 있고, 이 둘이 함께 항목의 위치를 정합니다.
+
+| `approved` | `rejected` | 항목                           |
+| ---------- | ---------- | ------------------------------ |
+| 예         | 아니요     | 공개 목록에 표시됩니다         |
+| 아니요     | 아니요     | 관리자 대기열에서 기다립니다   |
+| 무관       | 예         | 숨겨지며, 행은 그대로 남습니다 |
+
+새 항목이 도착하자마자 승인되는지는 환경 변수 하나로 정해지며, 기본값은 승인입니다. 이 변수를 끄면 새 항목은 대기열에서 기다리고, 방문자는 자신의 항목이 목록 맨 위에 보이는 대신 보류 중이라는 안내를 봅니다.
+
+대기열은 토큰으로 보호되는 관리자 페이지입니다. 보류 중인 항목을 오래된 순으로 나열하며 항목마다 승인 버튼과 거부 버튼이 있고, 두 번째 보기에서는 승인된 항목을 삭제 버튼과 함께 나열합니다. 항목을 거부하면 플래그가 설정되고 행은 그대로 남습니다. 요청 제한은 발신자의 모든 행을 읽기 때문에, 거부된 항목도 그 발신자의 30초에 포함됩니다.
+
+### 내가 쓴 항목 삭제하기
+
+방문자에게는 계정이 없으므로, 사이트는 누가 항목을 썼는지 알아낼 다른 방법이 필요합니다. 브라우저가 항목을 게시하면 돌려받은 ID를 `localStorage`에 저장하고, 저장된 ID가 있는 항목에는 Delete 링크가 나타납니다. 서버는 그 목록을 믿지 않습니다. 서버의 쿼리는 `DELETE FROM guestbook WHERE id = … AND ip_hash = …`이므로, 그 항목을 쓴 것과 같은 해시된 주소에서 요청이 올 때만 행이 삭제됩니다. 대가는 소유권이 네트워크를 따른다는 점입니다. 다른 연결에서는 링크가 여전히 보이지만 서버가 이를 거부합니다.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/thoughts/about-desktop.webp",
+      frame: "safari",
+      url: "thoughts.ysz.life",
+      alt: "소개 페이지: 왼쪽에 이탤릭체 링크 about, thoughts, guestbook이 있고, 그 옆에 짧은 소개글이 한 단의 텍스트로 놓여 있습니다",
+      caption: "소개 페이지.",
+    },
+    {
+      src: "/projects/thoughts/about-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 소개 페이지: 위쪽에 링크 세 개가 한 줄로 있고, 그 아래에 소개글이 한 단으로 놓여 있습니다",
+      caption: "휴대폰에서 본 소개.",
+    },
+    {
+      src: "/projects/thoughts/guestbook-mobile.webp",
+      frame: "iphone",
+      alt: "휴대폰에서 본 방명록: 이름과 메시지 필드가 날짜가 붙은 항목 위에 있고, 모든 이름과 메시지가 흐리게 처리되어 있습니다",
+      caption: "방명록.",
+    },
+  ]}
+  columns={3}
+/>

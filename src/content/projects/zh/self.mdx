@@ -1,0 +1,124 @@
+export const source = "7e0e9fa94834";
+
+# 适用于 Windows PowerShell 的 Neofetch 风格系统信息工具
+
+Self 会在 Windows PowerShell 里把一张图片和一列系统信息并排打印出来，就像 [Neofetch](https://github.com/dylanaraps/neofetch) 在 Linux 上做的那样。图片可以是任意图像文件，用彩色文本字符在终端里重新绘制；系统信息则从 Windows 版本一直列到磁盘。
+
+<ProjectImage
+  src="/projects/self/hero.webp"
+  video="/projects/self/hero.mp4"
+  alt="全屏的 PowerShell 窗口：在提示符处输入 self，屏幕清空，左侧出现一幅由彩色方块绘成的像素化肖像，右侧是一列系统信息，从 OS 一直到磁盘，最后是运行耗时和一排色块"
+  caption="在 PowerShell 里输入 self。"
+  size="full"
+/>
+
+## 打印的内容
+
+左侧是一张来自 `images` 文件夹的图片，或用 `--image` 传入的任意文件，按以字符数给出的高度和宽度缩放。每个字符单元格容纳两个像素，每个像素都通过 24 位转义码保留自己的颜色，所以一张照片或一幅画，即使只有几十个字符宽，依然认得出来。盲文模式则改用更细的点来绘制，每个单元格一种颜色。
+
+右侧，在 `user@host` 之下，依次是 Windows 版本、运行时间、Chocolatey、Scoop 和 winget 的软件包数量、shell、屏幕分辨率和主题、处理器、显卡、内存和磁盘。显示哪些行由配置决定，标签的颜色由配色主题设定。这一列的末尾是收集这些信息花了多长时间，以及一排十六种经典控制台颜色。
+
+<ProjectImage
+  src="/projects/self/block-mode.webp"
+  alt="Self 换了另一张图片的输出：一个青色头发的动漫角色，背景是浅浅的沙色，用彩色方块绘成，旁边是同样的一列系统信息"
+  caption="另一张图片，以同样的尺寸绘制。"
+  size="full"
+/>
+
+## ASCII 艺术
+
+`--ascii` 会把图片换成 `ascii` 文件夹里的一幅画：一个纯文本文件，Self 会原样把它打印出来。任何由字符构成的东西都可以，包括用盲文点阵拼成的画，就像这一幅。
+
+<ProjectImage
+  src="/projects/self/ascii-art.webp"
+  alt="Self 的输出：一幅由盲文点阵构成的文本画，画的是撑着伞的龙猫，旁边是带绿色标签的一列系统信息"
+  caption="来自 ascii 文件夹的龙猫，配绿色主题。"
+  size="full"
+/>
+
+## 安装与设置
+
+Self 只需在 PowerShell 里执行一行命令即可安装：
+
+```powershell
+iwr -Uri "https://raw.githubusercontent.com/lyfe691/self/main/install.ps1" -UseBasicParsing | iex
+```
+
+这个脚本会把 Self 下载到用户目录下的 `self` 文件夹中，添加一个 `self.bat` 启动器，把该文件夹加入用户的 `PATH`，并用 pip 安装 Python 包。它需要 Python，但不需要管理员权限。此后，`self` 就和其他命令一样，直接可用：
+
+| 命令                  | 作用                                                         |
+| --------------------- | ------------------------------------------------------------ |
+| `self`                | 打印图片和系统信息                                           |
+| `self --setup`        | 询问显示类型、图片或画作、主题和尺寸，并保存到 `config.json` |
+| `self --image <file>` | 使用另一张图片，来自 `images` 文件夹或任意路径               |
+| `self --ascii <name>` | 改用 `ascii` 文件夹里的画，而不是图片                        |
+| `self --no-cache`     | 重新收集系统信息，而不使用五分钟缓存                         |
+| `self --update`       | 获取最新版本，配置、缓存和你自己的图片都不会动               |
+
+<ProjectImage
+  src="/projects/self/setup.webp"
+  video="/projects/self/setup.mp4"
+  alt="全屏的 PowerShell 窗口运行 self --setup：向导先列出显示类型，再列出 ascii 文件夹里的画，然后是配色主题，输入 3、7 和 5，分别选中 ASCII 艺术、龙猫的画和绿色主题，随后它报告配置保存在哪里"
+  caption="self --setup，选择龙猫的画和绿色主题。"
+  size="full"
+/>
+
+## 实现方式
+
+Self 是一个小型 Python 程序，分为四个模块：显示、图片、系统信息和配色主题。Pillow 负责读取和缩放图片，psutil 报告内存、磁盘和运行时间，colorama 提供主题颜色。
+
+### 每个字符两个像素
+
+终端的一个单元格大约是宽度的两倍高。半块字符 `▀` 用前景色填满单元格的上半部分，下半部分留给背景色，所以前景和背景都设置好的单元格就容纳了两个近似正方形的像素。`rgb_to_ansi` 生成这两个转义码，前景用 `\033[38;2;r;g;bm`，背景用 `\033[48;2;r;g;bm`，而方块模式每次走过图像的两行：
+
+<CodeBlock
+  code={`for y in range(0, img_height, 2):
+      line = ""
+      for x in range(img_width):
+          r_upper, g_upper, b_upper = pixels[x, y]
+          if y + 1 < img_height:
+              r_lower, g_lower, b_lower = pixels[x, y + 1]
+          else:
+              r_lower, g_lower, b_lower = r_upper, g_upper, b_upper
+          # '▀' character (upper half block)
+          line += f"{rgb_to_ansi(r_upper, g_upper, b_upper)}{rgb_to_ansi(r_lower, g_lower, b_lower, bg=True)}▀{RESET}"
+      lines.append(line)`}
+  fileName="image_handler.py"
+  lang="python"
+/>
+
+当高度和宽度相等时，方块模式会把宽度加倍，因为一张正方形的图片需要的列数是行数的两倍。开头那段视频里的 26 乘 26 设置，会变成一张 52 × 52 像素的图像，由 Pillow 用最近邻采样缩放，再打印成 26 行、每行 52 个字符。
+
+### 按可见宽度补齐
+
+这些行很长。每个单元格都带着一个前景码、一个背景码、字符本身和一个重置码，所以那张图片的一行有 52 个可见列，却长达约 1900 个字符，而 `len()` 会把它们全部算进去。为了让系统信息与图片并排对齐，Self 先用正则表达式去掉转义码，再测量每一行，然后用空格把较短的行补齐到最宽的那一行。
+
+### 每个盲文字符八个点
+
+盲文模式用颜色换分辨率。Unicode 的盲文区块从 U+2800 开始，把一个单元格的八个点编码为偏移量的各个位，所以 2 × 4 网格上的任何图案都是一个字符。编号沿用了历史习惯：1 到 3 号点沿左列从上往下排，4 到 6 号点沿右列从上往下排，7 号和 8 号点是后来为八点盲文加上的，所以最下面一行是第 6 位和第 7 位。像素位置与位的对应关系如下：
+
+<CodeBlock
+  code={`bit_position_map = {
+      (0, 0): 0, (1, 0): 3,
+      (0, 1): 1, (1, 1): 4,
+      (0, 2): 2, (1, 2): 5,
+      (0, 3): 6, (1, 3): 7
+  }`}
+  fileName="image_handler.py"
+  lang="python"
+/>
+
+图片先转成灰度，像素比 127 更暗的地方就凸起一个点，整个单元格取它八个像素的平均颜色。把两种模式并排放在一起，取舍的是同样几样东西：
+
+| 模式 | 每个字符的像素数            | 颜色                               |
+| ---- | --------------------------- | ---------------------------------- |
+| 方块 | 2 个，上下各一个            | 每个像素保留自己的颜色             |
+| 盲文 | 8 个，排成 2 × 4 网格上的点 | 每个单元格一种颜色，每个点非开即关 |
+
+在深色终端上，盲文点阵描出的是图片的暗部，大部分颜色都丢失了，所以 README 推荐使用方块模式。
+
+### 系统信息的五分钟缓存
+
+psutil 库可以直接回答运行时间、内存和磁盘。其余大多数行来自简短的 PowerShell 命令：Windows 版本、从注册表读取的主题、软件包数量。每次查询都会启动自己的 `powershell.exe`，并设了两秒超时，所以一个慢的结果拖不住其他的；还带上 `-NoProfile`，这样用户的 profile 脚本不会每次都跑一遍。那十个较慢的查询在线程池里并行运行。
+
+结果会在 `cache/sysinfo.json` 里保存五分钟，`--no-cache` 会跳过它。“Executed in”那一行给这一步计时：在我的机器上，全新运行大约要一秒，走缓存的则是 0.00 秒。渲染好的图片同样会缓存，为期一天，缓存键由文件路径、修改时间、尺寸和模式组成。

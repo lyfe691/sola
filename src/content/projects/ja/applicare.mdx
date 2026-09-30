@@ -1,0 +1,156 @@
+export const source = "b128c94d0c07";
+
+# Spring Boot の API を備えた、就職活動の応募管理アプリ
+
+[AppliCare](https://applicare.app) は、就職活動の応募を管理します。応募ごとの進み具合、それに付随するタスク、そして活動全体の様子です。クライアントと API の両方を、2024 年 12 月から 2025 年 2 月にかけて私が作りました。Ant Design を使った React のクライアントと、データを MongoDB に保存する Spring Boot の API です。
+
+<Safari
+  url="applicare.app/manage"
+  src="/projects/applicare/add.webp"
+  video="/projects/applicare/add.mp4"
+  alt="「Manage」ページ：「New Application」でフォームが開き、Lakeside Systems、Frontend Developer、Zürich、給与が入力され、「Create」で行が追加されて、テーブルがその行までスクロールする"
+  caption="デモアカウントで応募を追加しているところ。"
+/>
+
+## 応募
+
+応募はすべて、Manage ページの 1 つのテーブルにまとまり、会社、職種、ステータス、応募した日付が並びます。追加に必要なのは、会社名、職種、ステータスです。給与、連絡先、求人へのリンク、メモは、あれば入力できます。検索ボックスは入力に合わせて絞り込み、列は並べ替えと絞り込みができます。
+
+応募は、応募済みから面接を経て内定へ進み、承諾または不採用で終わります。ステータスの列はドロップダウンで、選ぶとすぐに保存され、色も段階に合わせて変わります。
+
+<ProjectImage
+  src="/projects/applicare/status.webp"
+  video="/projects/applicare/status.mp4"
+  alt="「Manage」のテーブル：Clearwater Labs のステータスが「Pending」から「Interviewing」に、Evergreen Energy のステータスが「Offer」から「Accepted」に変わり、そのつど上部にメッセージが表示されて確認できる"
+  caption="ステータスは、変えるたびにすぐ保存される。"
+  size="full"
+/>
+
+## ダッシュボード
+
+ダッシュボードは、就職活動の状況を 4 つの数字にまとめます。
+
+| 数字         | 集計するもの                                 |
+| ------------ | -------------------------------------------- |
+| Applications | 送ったすべての応募                           |
+| In progress  | 書類選考または面接の段階にあるもの           |
+| Success rate | 承諾された応募の、全応募に対する割合         |
+| Open         | まだ承諾にも不採用にもなっていないものすべて |
+
+その下には、応募数の推移を数えるグラフと、各ステータスの割合を示す内訳があります。「Tasks」タブは、概要の隣にあります。
+
+<ProjectImage
+  src="/projects/applicare/dashboard.webp"
+  video="/projects/applicare/dashboard.mp4"
+  alt="ダッシュボード：「Tasks」タブに切り替えてから「Overview」に戻ると、応募数の推移のグラフが、ステータスの内訳の隣に描き出され、ツールチップがポインターに付いてグラフに沿って動く"
+  caption="概要と「Tasks」タブ。"
+  size="full"
+/>
+
+## タスク
+
+タスクには、タイトル、短い説明、期限、そして高・中・低の優先度があり、応募のどれかに紐づけると、その会社がタグとして表示されます。リストは期限順に並ぶので、次に期限が来るものがいつも先頭にあります。タスクにチェックを入れると、取り消し線が引かれます。
+
+<ProjectImage
+  src="/projects/applicare/tasks.webp"
+  alt="「Tasks」タブ：「Send references」「Prepare system design answers」などのタスクが並び、それぞれに期限、関連する会社のタグ、優先度のバッジ、編集と削除のボタンが付いている"
+  caption="タスク、次の期限が先頭。"
+  size="full"
+/>
+
+## 実装
+
+クライアントは Vite 上の React で、Ant Design のコンポーネントを使い、1 つの Axios インスタンスを通して API と通信します。API は Spring Boot で、Spring Security と Spring Data MongoDB を使い、Docker イメージとしてビルドされます。アカウント、応募、タスクは 3 つの MongoDB コレクションで、応募とタスクにはそれぞれ、持ち主であるユーザーの ID が入っています。
+
+### ステータスは専用のエンドポイントを持つ
+
+サーバー側では、ステータスは `JobApplication` ドキュメントの単なる文字列で、段階の一覧はクライアントにあります。そのため、段階を 1 つ増やすのはフロントエンドだけの変更で済みます。ステータスの変更は、応募の編集とは別の、専用のエンドポイントを通ります。
+
+| リクエスト                                         | 送信元                     | 変更するもの                    |
+| -------------------------------------------------- | -------------------------- | ------------------------------- |
+| `PATCH /api/applications/{id}/status?status=OFFER` | ステータスのドロップダウン | ステータスと `lastUpdated` だけ |
+| `PUT /api/applications/{id}`                       | 編集フォーム               | 応募全体                        |
+
+ダッシュボードは、同じフィールドをグループ分けして読みます。Accepted と Rejected は最終状態なので、それ以外の段階はすべて未決として数えます。Screening と Interviewing は進行中として数え、成功率は、承諾された応募を全応募で割ったものです。これらはすべて、API が返すリストに対する `useMemo` の中で、ブラウザーが計算します。もう 1 つが、応募日を、グラフの元になる累計に変えます。
+
+### トークンでサインインする
+
+ログインでは、パスワードを BCrypt のハッシュと照合し、JSON Web Token を返します。署名された文字列で、クライアントはこれをリクエストのたびに送り返します。AppliCare のトークンは HS256 で署名され、ユーザー名をサブジェクトに、ユーザーの ID を `userId` クレームに持ち、設定された時間が過ぎると失効します。クライアントはこれを `localStorage` に保存し、Axios のインターセプターが、`Authorization: Bearer …` として各リクエストに付けます。
+
+セキュリティの設定はステートレスです。`/api/auth/**` は開放されていて、それ以外のルートはすべて、認証されたリクエストを必要とします。リクエストが認証済みになるのは、Spring 自身のユーザー名・パスワードのフィルターより前で、リクエストごとに 1 回動くフィルターのおかげです：
+
+<CodeBlock
+  code={`public class JwtAuthenticationFilter extends OncePerRequestFilter {
+      private final JwtUtil jwtUtil;
+      public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+          this.jwtUtil = jwtUtil;
+      }
+      @Override
+      protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+              throws ServletException, IOException {
+          String authHeader = request.getHeader("Authorization");
+          if (authHeader != null && authHeader.startsWith("Bearer ")) {
+              String token = authHeader.substring(7);
+              if (jwtUtil.validateToken(token)) {
+                  String username = jwtUtil.getUsernameFromToken(token);
+                  UsernamePasswordAuthenticationToken authentication =
+                      new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                  SecurityContextHolder.getContext().setAuthentication(authentication);
+              }
+          }
+          filterChain.doFilter(request, response);
+      }
+  }`}
+  fileName="filter/JwtAuthenticationFilter.java"
+  lang="java"
+/>
+
+このフィルター自身は、リクエストを拒否することはありません。トークンがない、または無効なときは、セキュリティコンテキストが空のままになり、Spring Security がチェーンのもっと先でそのリクエストを退けます。`validateToken` は署名鍵でトークンをパースし、1 回の呼び出しで署名と有効期限をまとめて検査します。そのため、偽造されたトークンと期限切れのトークンは、同じように失敗します。クライアント側では、Axios のレスポンスインターセプターが 401 と 403 をセッションの期限切れとして扱い、保存してあるユーザーを消してブラウザーをログインページへ送ります。そのため、セッションの期限切れは、すべてのページについて 1 か所で処理されます。
+
+### すべての読み書きは、持ち主のものだけ
+
+トークンは誰が呼び出しているかを伝え、その呼び出し元が何に触れてよいかはサービスが決めます。コントローラーは同じヘッダーから `userId` クレームを読み取って下へ渡し、リクエストボディから持ち主を受け取るサービスはひとつもありません。応募を作成すると、呼び出し元の ID が刻印されます。応募の読み取り、更新、削除、ステータスの変更は、いずれもまず保存済みのドキュメントを読み込み、その持ち主を呼び出し元と比べます：
+
+<CodeBlock
+  code={`public JobApplication updateApplication(String id, JobApplication application, String userId) {
+      JobApplication existingApp = jobApplicationRepository.findById(id)
+          .orElseThrow(() -> new RuntimeException("Application not found"));
+      if (!existingApp.getUserId().equals(userId)) {
+          throw new RuntimeException("Not authorized to update this application");
+      }
+      application.setId(existingApp.getId());
+      application.setUserId(userId);
+      application.setAppliedDate(existingApp.getAppliedDate());
+      application.setLastUpdated(LocalDateTime.now());
+      return jobApplicationRepository.save(application);
+  }`}
+  fileName="service/JobApplicationService.java"
+  lang="java"
+/>
+
+更新では、保存済みのドキュメントから ID と元の応募日もコピーします。そのため、リクエストボディでは、応募を別のユーザーに移すことも、送った日付を変えることもできません。一覧は呼び出し元の ID で問い合わせ、タスクの編集、完了、削除も、同じように検査されます。アカウントを削除すると、ユーザーのタスクと応募が、ユーザーのレコード自体より先に削除されます。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/applicare/login.webp",
+      frame: "safari",
+      url: "applicare.app/login",
+      alt: "AppliCare のログイン画面：ユーザー名またはメールアドレスとパスワードの入力欄があるカードと、登録やパスワード再設定へのリンク",
+      caption: "サインイン。",
+    },
+    {
+      src: "/projects/applicare/dashboard-mobile.webp",
+      frame: "iphone",
+      alt: "スマートフォンで表示したダッシュボード：4 つの数字が 2×2 のグリッドで、応募数の推移のグラフの上に並んでいる",
+      caption: "ダッシュボード。",
+    },
+    {
+      src: "/projects/applicare/manage-mobile.webp",
+      frame: "iphone",
+      alt: "スマートフォンで表示した「Manage」ページ：検索ボックス、「New Application」ボタン、会社と職種のテーブル",
+      caption: "「Manage」ページ。",
+    },
+  ]}
+  columns={3}
+/>

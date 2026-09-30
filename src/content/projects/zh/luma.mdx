@@ -1,0 +1,194 @@
+export const source = "bedd8d1e47e6";
+
+# 用自己的 API 密钥运行的多服务商 AI 聊天应用
+
+[Luma](https://luma.ysz.life) 是一款聊天应用，面向已经在一家或多家模型服务商那里购买了 API 访问权限的人。密钥只需添加一次，每段对话各选一个模型，每个请求都会用你的密钥发往对应的服务商。
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/start.webp"
+  video="/projects/luma/start.mp4"
+  alt="Luma 在浅色主题下的启动页：灰色线条从 Luma 一词后方向外飞散，下方的输入框里正在输入一个问题，问的是 B-tree 如何拆分已满的节点"
+  caption="启动页。"
+/>
+
+## 选择模型
+
+输入框里的模型按钮会打开一个选择器，列出 Luma 提供的全部模型，并按服务商分组。一列服务商标志可以在各组之间跳转，搜索框会随着输入实时筛选，小图标标出每个模型支持的能力，例如推理、图片输入、工具调用和 PDF。点一下星标，就能把模型加入这一列上的收藏列表。
+
+每段对话都有自己的模型，所以这段对话可以用 Claude，下一段可以用 GPT-5 Mini。服务商还没有密钥的模型带一把锁，选中这样的模型时，输入框上方会出现一条提示，指出缺少哪个密钥，旁边有一个按钮可以打开设置。
+
+<ProjectImage
+  src="/projects/luma/model-picker.webp"
+  video="/projects/luma/model-picker.mp4"
+  alt="模型选择器在输入框上方展开，左侧是一列服务商标志，模型按 OpenAI 和 xAI 分组；输入 claude 后，列表缩小为三个 Anthropic 模型，第一个被加上星标，随后这一列上的收藏项里只剩这一个模型"
+  caption="在选择器里搜索，并给一个模型加星标。"
+  size="full"
+/>
+
+## 提问
+
+输入框可以接收文字、图片，以及 PDF、CSV 和 Markdown 之类的文件，可以粘贴、拖放进去，也可以从加号菜单里选择。同一个菜单还能为下一条消息设定模式：
+
+- **Create image**：请模型用一张图片来回答。
+- **Web search**：让模型上网查找资料，并注明来源。
+- **Study and learn**：请模型有条理地讲解，并配上详细解答的例题。
+
+<ProjectImage
+  src="/projects/luma/modes.webp"
+  video="/projects/luma/modes.mp4"
+  alt="加号菜单在输入框下方展开，里面有 Add photos & files、Create image、Study and learn 和 Web search；选中 Create image 后，输入框里出现一个 Image 标签，并输入了一条提示，内容是花田上空的日落"
+  caption="加号菜单，以及图片模式。"
+  size="full"
+/>
+
+生成的图片会出现在对话里，下方标着图像模型的名称。由哪个图像模型来画，是一项单独的设置，与对话所用的模型无关。
+
+<ProjectImage
+  src="/projects/luma/image-generation.webp"
+  alt="一段对话：请求 Generate an image of a cute sunset 得到了一幅插画，画的是一轮微笑的太阳落在花田上方，图注为 Generated with Grok Imagine"
+  caption="生成的图片，下方标着图像模型的名称。"
+  size="full"
+/>
+
+## 回答
+
+回复以 Markdown 的形式逐步流入。代码块带语法高亮，配有复制和下载按钮，数学公式和图示就地渲染。模型在作答前先推理时，推理过程会折叠成回复上方的一行“Thought for N seconds”，而 Claude 模型无需打开任何开关就能使用扩展思考。网络搜索得来的回答，会在用到某条来源的句子旁边，以小标签的形式标出这条来源。
+
+<ProjectImage
+  src="/projects/luma/code-block.webp"
+  alt="与 Claude Opus 4.6 的一段对话：先是两行折叠的推理，然后是一段带行号、下载和复制按钮的高亮 Rust 程序，下方有一小段说明"
+  caption="Claude 的推理，折叠在代码回答的上方。"
+  size="full"
+/>
+
+## 编辑、重试与查找对话
+
+对话里的任何内容都不会被覆盖。编辑自己发出的消息，会在旧版本旁边新增一个版本，下面跟着一条新的回复，消息下方的箭头可以在各个版本之间切换。重试一条回答，在回复这一侧也是同样的做法，而且重试菜单可以把问题交给另一个模型，于是两个模型对同一条消息的回答只隔着一次箭头切换。
+
+新对话的标题由一个小而便宜的模型用你的某把密钥生成。侧边栏列出这些对话，置顶的排在最前，每段对话都可以在那里置顶、重命名或删除。设置里可以把你的全部对话导出为下载文件，也可以将它们删除。常用操作都有快捷键，Windows 上用 Ctrl，Mac 上用 ⌘：
+
+| 快捷键               | 作用                     |
+| -------------------- | ------------------------ |
+| Ctrl K               | 搜索所有对话，按日期分组 |
+| Ctrl Shift O         | 新建对话                 |
+| Ctrl M               | 打开模型选择器           |
+| Ctrl U               | 添加文件                 |
+| Ctrl Shift S         | 显示或隐藏侧边栏         |
+| Shift Esc            | 跳到消息输入框           |
+| Ctrl Shift Backspace | 删除当前打开的对话       |
+
+## 你的 API 密钥
+
+设置里每个服务商各占一行，每行都带一个链接，指向获取密钥的页面。Luma 在保存新密钥之前，会先拿它向服务商试一下，所以服务商拒绝的密钥当场就会被拒绝。密钥先加密再存储，浏览器只会知道哪些服务商有密钥。
+
+<ProjectImage
+  src="/projects/luma/api-keys.webp"
+  alt="启动页上方打开的设置对话框，停在 API Keys 页：一条说明写着密钥加密存储，绝不离开服务器，下面是 OpenAI、Anthropic、Google、xAI 和 Mistral 各一行，每行都有 Get API key 链接和 Add key 按钮"
+  caption="在设置里添加密钥。"
+  size="full"
+/>
+
+## 浅色与深色
+
+Luma 有浅色和深色两套主题，强调色是橄榄绿，除非你自己选定，否则跟随系统。启动页背后的线条也随主题变化：浅色下是灰色，深色下是白色。在手机上，侧边栏变成抽屉，模型选择器和设置则以底部升起的面板形式打开。
+
+<Safari
+  url="luma.ysz.life"
+  src="/projects/luma/theme.webp"
+  video="/projects/luma/theme.mp4"
+  alt="启动页通过侧边栏底部的主题控件，从浅色主题切换到深色主题，再切换回来；线条由灰色变为白色"
+  caption="浅色与深色主题。"
+/>
+
+## 实现方式
+
+Luma 是一个基于 React 19 的 Next.js 16 应用。回复由 Vercel AI SDK 流式输出，它通过各服务商自己的软件包连接到每一家服务商；账号、对话和上传的文件存放在 Supabase 里；启动页上的线条是一段 Three.js 着色器。
+
+### 对话是一棵树
+
+每条消息是一行数据，带有一个 `parent_id`，每段对话再多存一个指针 `active_leaf_id`，指向屏幕上那条消息链的最后一条消息。这条消息链是推导出来的：从当前叶子出发，沿父指针一路向上走到根，再反转顺序。编辑或重试会在同一个父节点下新增一个兄弟节点，遍历时会给每条拥有同角色兄弟的消息标上它在其中的位置，消息下方的箭头读取的就只有这个。
+
+<CodeBlock
+  code={`export function buildTimelineMessages(
+    graph: ChatGraph,
+    activeLeafId: string
+  ): UIMessage[] {
+    const path = getPathToLeaf(graph, activeLeafId)
+    if (path.length === 0) return []
+    return path.map((node) => {
+      const siblings = (graph.childrenByParentId.get(node.parentId) ?? []).filter(
+        (candidate) => candidate.role === node.role
+      )
+      const branchCount = siblings.length
+      const branchIndex = Math.max(
+        0,
+        siblings.findIndex((candidate) => candidate.id === node.id)
+      )
+      return {
+        id: node.id,
+        role: node.role,
+        parts: node.parts,
+        metadata: {
+          createdAt: node.createdAt,
+          ...(branchCount > 1
+            ? ({
+                branchCount,
+                branchIndex,
+                isActiveBranch: true,
+              } satisfies ChatBranchMetadata)
+            : {}),
+        },
+      } satisfies UIMessage
+    })
+  }`}
+  fileName="lib/chat-tree.ts"
+  lang="ts"
+/>
+
+切换版本是一次服务端调用：取下一个兄弟节点，顺着最新的子节点一路走到叶子，再把这片叶子存为当前叶子。这种设计的代价是，打开一段对话就要读取其中的每一条消息，包括你没在看的那些分支。作为交换，这些消息通过一次查询就能全部取回，用的是建立在对话和创建时间上的索引，而这棵树的代码是浏览器和服务器共同导入的纯 TypeScript。
+
+### 从模型 ID 到服务商客户端
+
+模型 ID 自带服务商前缀，例如 `anthropic:claude-opus-4-6`。聊天路由会拿这个 ID 去对照模型目录，目录里没有就回退到默认模型，所以浏览器无法请求 Luma 没有列出的模型。这个前缀决定用哪把用户密钥（只为这一次请求解密），以及用哪个服务商的 AI SDK 软件包；软件包通过动态 `import()` 加载，这样一次请求只会引入它所需要的那个 SDK。提供 OpenAI 兼容 API 的服务商会复用 OpenAI 的软件包，只是换上自己的 base URL，所以新增一家只需在目录里加一条记录。
+
+### 密钥的存储
+
+每把密钥用 AES-256-GCM 加密，每次都使用全新的随机 IV，并以 IV、密文和认证标签三部分存储。GCM 会对密文做认证，所以数据库里被改动过的值会解密失败，而不会变成另一把密钥。这保护的是泄露的数据库转储里的密钥。服务器必须用明文密钥去调用服务商，所以它能解密自己存的每一把密钥，同时握有数据库和主密钥的人也可以。
+
+### 回传给模型的内容
+
+存下来的回复保留屏幕上显示的一切：推理、文字、工具调用及其结果。下一次请求所带的历史记录由服务器根据这棵树重建，并且会先去掉其中三样东西：
+
+| 回复的部分   | 回传的形式                   | 原因                                                           |
+| ------------ | ---------------------------- | -------------------------------------------------------------- |
+| 生成的图片   | 文字 `[image was generated]` | 否则 base64 数据会跟着之后的每一次请求一起发送                 |
+| 推理         | 什么都不回传，只留在屏幕上   | OpenAI 的 Responses API 可能拒绝从历史记录中重放的推理项       |
+| 服务商元数据 | 什么都不回传                 | 它指向某一家服务商之前的响应，所以一条消息链可以中途更换服务商 |
+
+附件保存在私有存储桶里，每次请求都会为它们签发新的链接，十分钟后失效。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/luma/start-dark.webp",
+      frame: "safari",
+      url: "luma.ysz.life",
+      alt: "Luma 在深色主题下的启动页：左侧是侧边栏，中间的输入框位于近乎全黑的底色上的白色线条之上",
+      caption: "深色主题下的启动页。",
+    },
+    {
+      src: "/projects/luma/start-mobile.webp",
+      frame: "iphone",
+      alt: "手机上浅色主题的启动页：灰色线条之上是 Luma 一词，底部是输入框",
+      caption: "手机上的启动页。",
+    },
+    {
+      src: "/projects/luma/model-picker-mobile.webp",
+      frame: "iphone",
+      alt: "手机上以底部面板呈现的模型选择器：左侧是服务商标志栏，其余是 OpenAI 和 xAI 的模型，带有能力图标和星标",
+      caption: "选择器，以面板的形式呈现。",
+    },
+  ]}
+  columns={3}
+/>

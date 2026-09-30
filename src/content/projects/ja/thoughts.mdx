@@ -1,0 +1,146 @@
+export const source = "0125002b525c";
+
+# ゲストブックのある文章のサイト
+
+[Thoughts](https://thoughts.ysz.life) は、プロジェクトのページに収まらないことを書く場所です。静かなテキストのページが数ページあるだけで、自己紹介のページ、記事の一覧、誰でもメモを残せるゲストブックからなります。[Shu Ding](https://shud.in) さんのサイトをもとにしています。
+
+<Safari
+  url="thoughts.ysz.life"
+  src="/projects/thoughts/hero.webp"
+  video="/projects/thoughts/hero.mp4"
+  alt="自己紹介のページ。続いて、左のイタリックのリンクの guestbook をクリックすると、日付の付いた投稿とともにゲストブックがフェードインし、フォームにメッセージが入力されますが、送信はされません。訪問者の名前とメッセージはすべてぼかしてあります"
+  caption="自己紹介のページからゲストブックへ。名前はぼかし済み。"
+/>
+
+## ページと記事
+
+リンクは、小文字のイタリックのセリフ体で、文章の左に並び、広い画面ではスクロールしても位置を保ちます。ページの移動はクロスフェードで行われます。スマートフォンでは、リンクは文章の上の 1 行に移ります。
+
+各記事は、リポジトリにある MDX ファイルで、タイトル、日付、説明をエクスポートします。一覧は新しい記事から順に並び、各タイトルは点の列で日付につながっています。記事の中のコードは、サーバー上で Shiki がハイライトするので、色は完成した HTML として届き、画像のタイトルは、広い画面ではその横の余白に注記として表示されます。
+
+存在しないアドレスには、短い詩が表示されます。
+
+<Safari
+  url="thoughts.ysz.life/nope"
+  src="/projects/thoughts/not-found.webp"
+  alt="not found のページ。左にイタリックのリンク about、thoughts、guestbook があり、その隣に、見出し not found の下に 2 行、「the page does not exist」と「you were never supposed to be here」が並んでいます"
+  caption="存在しないページ。"
+/>
+
+## ゲストブック
+
+ゲストブックには誰でも、アカウントなしで、任意の名前と 280 文字までのメッセージを書き込めます。投稿は新しいものから順に、日付と時刻とともに 10 件ずつ表示され、自分で書いた投稿には、ポインターを重ねると Delete のリンクが現れます。
+
+<Safari
+  url="thoughts.ysz.life/guestbook"
+  src="/projects/thoughts/guestbook-desktop.webp"
+  alt="ゲストブック。名前とメッセージ用の 1 行のフォームが、日付の付いた投稿の一覧の上にあり、名前もメッセージもすべてぼかしてあります"
+  caption="ゲストブック。ここでは名前とメッセージをぼかしています。"
+/>
+
+## 実装
+
+Thoughts は、Vercel 上の Next.js アプリです。記事は MDX からコンパイルされ、ビルド時に静的なページとして生成されます。ゲストブックは Postgres のテーブル 1 つで、1 つのルートハンドラーが `@vercel/postgres` を通じて読み書きします。
+
+### ゲストブックへの書き込み
+
+`/api/guestbook` への `POST` は、3 つの検査を順に実行し、すべて通ったときだけ書き込みます。
+
+1. **隠しフィールドが空である。** フォームには `website` というフィールドがあり、人が目にすることはありませんが、フォームを自動入力するボットはたいてい目にします。ここに何か値があれば、リクエストは拒否されます。
+2. **メッセージが収まっている。** 前後の空白を取り除いたうえで 1 文字から 280 文字の間でなければならず、名前は 50 文字で切り詰められます。
+3. **送信者が急いでいない。** ルートは同じ送信者の最新の投稿を調べ、それが 30 秒未満前のものなら 429 を返します。
+
+送信者は、クライアントのアドレスの SHA-256 ハッシュで識別されます。アドレスは `x-forwarded-for` の最初のエントリから取り、テーブルに残るのはこのハッシュだけです。同じ送信者を 2 度見分けるにはこれで足り、レート制限と、後述の削除の確認に必要なのも、それだけです。
+
+<CodeBlock
+  code={`export async function POST(req: NextRequest) {
+    await ensureTable()
+    const ipHash = getClientIpHash(req)
+    let body: { name?: string; message?: string; hp?: string } = {}
+    try {
+      body = await req.json()
+    } catch {
+      // ignore
+    }
+    const { name = null, message = '', hp = '' } = body
+    if (hp && hp.trim().length > 0) {
+      return NextResponse.json({ error: 'rejected' }, { status: 400 })
+    }
+    const trimmed = (message || '').trim()
+    if (trimmed.length === 0 || trimmed.length > MAX_MESSAGE_LENGTH) {
+      return NextResponse.json({ error: 'invalid_message' }, { status: 400 })
+    }
+    const safeName = name ? String(name).slice(0, 50).trim() : null
+    if (isRateLimitEnabled()) {
+      const recent = await sql<{ created_at: string }>\`
+        SELECT created_at FROM guestbook
+        WHERE ip_hash = \${ipHash}
+        ORDER BY created_at DESC
+        LIMIT 1
+      \`
+      if (recent.rows.length > 0) {
+        const last = new Date(recent.rows[0].created_at).getTime()
+        const now = Date.now()
+        if (now - last < RATE_LIMIT_WINDOW_MS) {
+          return NextResponse.json({ error: 'rate_limited' }, { status: 429 })
+        }
+      }
+    }
+    const id = crypto.randomUUID()
+    const approved = isAutoApprove()
+    const rejected = false
+    const inserted = await sql<GuestbookRow>\`
+      INSERT INTO guestbook (id, name, message, ip_hash, approved, rejected)
+      VALUES (\${id}, \${safeName}, \${trimmed}, \${ipHash}, \${approved}, \${rejected})
+      RETURNING id, name, message, created_at, updated_at, edited
+    \`
+    return NextResponse.json({ item: inserted.rows[0], approved }, { status: 201 })
+  }`}
+  fileName="app/api/guestbook/route.ts"
+  lang="ts"
+/>
+
+これは省略版です。実際のハンドラーには、データベースが設定されていないとき、投稿をメモリ上の配列に保持する 2 つ目の分岐があり、ローカルでの開発では、データベースがなくてもページが動きます。
+
+### モデレーション
+
+すべての行は 2 つのフラグを持ち、その組み合わせで、投稿がどこにあるかが決まります。
+
+| `approved` | `rejected` | 投稿                       |
+| ---------- | ---------- | -------------------------- |
+| はい       | いいえ     | 公開の一覧に表示されます   |
+| いいえ     | いいえ     | 管理者のキューで待ちます   |
+| どちらでも | はい       | 非表示になり、行は残ります |
+
+新しい投稿が届いた時点で承認されるかどうかは、環境変数 1 つで決まり、デフォルトでは承認する設定です。これをオフにすると、新しい投稿はキューで待ち、訪問者には、自分の投稿が一覧の先頭に表示される代わりに、承認待ちであることを知らせる案内が表示されます。
+
+キューは、トークンで保護された管理ページです。承認待ちの投稿を古い順に並べ、それぞれに承認ボタンと却下ボタンが付いています。もう 1 つのビューには、承認済みの投稿が削除ボタンとともに並びます。投稿を却下すると、フラグが立ち、行は残ります。レート制限は、送信者の全行を読むので、却下された投稿も、その送信者の 30 秒に数えられます。
+
+### 自分の投稿を削除する
+
+訪問者にはアカウントがないので、サイトは、誰がその投稿を書いたかを知る別の方法を必要とします。ブラウザは投稿を送ると、返ってきた ID を `localStorage` に保存し、保存された ID のある投稿には Delete のリンクが付きます。サーバーはこのリストを信用しません。クエリは `DELETE FROM guestbook WHERE id = … AND ip_hash = …` で、行が消えるのは、リクエストが、それを書いたのと同じハッシュ化されたアドレスから来たときだけです。引き換えに、所有権はネットワークに従います。別の接続では、リンクは表示されたままで、サーバーがそれを拒否します。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/thoughts/about-desktop.webp",
+      frame: "safari",
+      url: "thoughts.ysz.life",
+      alt: "自己紹介のページ。左にイタリックのリンク about、thoughts、guestbook があり、短い紹介文が 1 段の文章で並んでいます",
+      caption: "自己紹介のページ。",
+    },
+    {
+      src: "/projects/thoughts/about-mobile.webp",
+      frame: "iphone",
+      alt: "スマートフォンの自己紹介のページ。上部に 3 つのリンクが 1 行に並び、その下に紹介文が 1 段で並んでいます",
+      caption: "スマートフォンでの自己紹介。",
+    },
+    {
+      src: "/projects/thoughts/guestbook-mobile.webp",
+      frame: "iphone",
+      alt: "スマートフォンのゲストブック。名前とメッセージのフィールドが、日付の付いた投稿の上にあり、名前もメッセージもすべてぼかしてあります",
+      caption: "ゲストブック。",
+    },
+  ]}
+  columns={3}
+/>

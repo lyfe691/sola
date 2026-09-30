@@ -130,7 +130,7 @@ Die Website ist eine einzelne Seite mit dem Installationsbefehl, einem Terminalf
   size="full"
 />
 
-## So ist magi gebaut
+## So ist es gebaut
 
 magi ist eine kleine Bibliothek mit einem schlanken Binary darüber. `main.rs` liest die Argumente, expandiert das Ziel und gibt die Ergebnisse aus, und `scanner.rs` enthält den Scan selbst, das Auslesen der Banner, UDP und die Dienstnamen. magi läuft auf tokio, mit clap für die Flags und serde für das JSON. GitHub Actions führt bei jedem Push rustfmt, clippy und die Tests aus, und cargo-dist baut die Release-Archive und die Installationsskripte. Die Website ist mit Next.js gebaut und mit next-intl übersetzt.
 

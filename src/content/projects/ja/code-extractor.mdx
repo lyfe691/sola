@@ -1,0 +1,130 @@
+export const source = "aa290d683b48";
+
+# ページとそのファイルを ZIP として保存するブラウザー拡張機能
+
+[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) は、現在のタブのページを 1 つの ZIP ファイルとしてダウンロードする、Chrome と Edge の拡張機能です。アーカイブには、HTML と、それが参照するすべてのスタイルシート、スクリプト、画像が入り、取得元のサーバーを写したフォルダ構成になっていて、HTML のリンクは保存したコピーを指すように書き換えられます。ほかのサイトがどう作られているかを調べるために、2024 年 8 月に作りました。Chrome ウェブストアによると、現在は約 6000 人が使っています。
+
+<Safari
+  url="htmx.org"
+  src="/projects/code-extractor/hero.webp"
+  video="/projects/code-extractor/hero.mp4"
+  alt="htmx.org のホームページの右上に、拡張機能のダークテーマのポップアップが開いている。「Extract & Download」ボタンが押され、しばらくのあいだ「Extracting…」と表示されて、元に戻る"
+  caption="htmx.org を保存しているところ。"
+/>
+
+## ページを保存する
+
+ポップアップにあるボタンは 1 つです。クリックすると、アクティブなタブのページを読み取り、ページがリンクしているすべてのファイルを取得して、サイト名を付けた ZIP（ここでは `htmx.org.zip`）にまとめ、そのあと Chrome が保存先を尋ねます。htmx.org では、アーカイブの作成は 1 秒足らずでした。
+
+スクリプトを実行できないページ、たとえば `chrome://` や `edge://` のページ、`about:` のページ、ほかの拡張機能のページでは、代わりにポップアップにエラーが表示されます。
+
+## アーカイブの中身
+
+ZIP を開くと、サイト名のフォルダが 1 つあり、その最上位に `index.html` があります。それ以外のファイルはすべて、取得元のサーバー名のフォルダの下に、そのサーバー自身のパスに沿って置かれます。htmx.org のスタイルシート、スクリプト、画像は `htmx.org/htmx.org/` の下に、GitHub のスターボタンのスクリプトは `buttons.github.io/` の下に入るので、2 つのサーバーに同じ名前のファイルがあっても衝突しません。保存した htmx.org のコピーは 53 ファイル、2.4 MB で、サイトの Atom フィードもその 1 つでした。ページが `<link>` タグでリンクしているもので、拡張機能はこれをスタイルシートと同じように集めます。
+
+<ProjectImage
+  src="/projects/code-extractor/zip-contents.webp"
+  alt="htmx.org.zip の中身、53 ファイルで 2.4 MB：index.html が入った htmx.org フォルダ、buttons.js が入った buttons.github.io フォルダ、そして、atom.xml、favicon.svg、css/site.css、44 個の画像、4 つのスクリプトが入った 2 つ目の htmx.org フォルダ"
+  caption="htmx.org の ZIP の中身。"
+  size="full"
+/>
+
+## コピーを開く
+
+保存した `index.html` の中のスタイルシート、スクリプト、画像への参照は、すべて保存したファイルを指しているので、ページはフォルダからそのまま開き、スタイルも画像も元どおりに表示されます。ほかのページへのリンクは、元のままです。拡張機能が保存するのは 1 回に 1 ページだけだからです。
+
+<ProjectImage
+  src="/projects/code-extractor/saved-copy.webp"
+  alt="展開したフォルダから開いた、保存済みの htmx.org：クイックスタートのコードブロックと、Hypermedia Systems の表紙画像がある書籍のセクションまでスクロールしている"
+  caption="フォルダから開いた、保存済みの htmx.org。"
+  size="full"
+/>
+
+## 実装
+
+拡張機能は、Manifest V3 上の素の JavaScript です。スクリプト 1 つのポップアップページがすべての処理を行い、アーカイブは JSZip が作ります。
+
+### ページを、いまの姿のまま読み取る
+
+クリックすると、`chrome.scripting.executeScript` を通して、小さな関数がタブの中で実行されます。Chrome は関数をシリアライズしてページの中で実行するので、その関数はポップアップの中のものには一切触れられず、返すのは単純な文字列だけです。ルート要素の `outerHTML` と、doctype です。`outerHTML` には doctype が含まれません。doctype のないまま保存したページは、標準が整う前に書かれたページのためにブラウザーが残している旧来のレンダリングモード、クワークスモードで開かれてしまいます。そのため doctype は別にシリアライズして、先頭に書き戻します。
+
+つまり、保存される HTML は、スクリプトが動いたあとの、タブの中にあるそのままのページです。マークアップを JavaScript で組み立てるページは、組み立て終えたマークアップのまま保存されます。
+
+### リンクを書き換える
+
+ポップアップに戻ると、`DOMParser` が HTML を、動かないままのドキュメントに変えます。スクリプトは実行されず、画像も読み込まれません。ポップアップはそのうえで、すべての `<link href>`、`<script src>`、`<img src>` をたどります：
+
+<CodeBlock
+  code={`function resolveResourceLinks(doc, baseUrl) {
+      const resources = [];
+      const elements = doc.querySelectorAll('link[href], script[src], img[src]');
+      elements.forEach(element => {
+          let attr;
+          if (element.tagName === 'LINK') {
+              attr = 'href';
+          } else if (element.tagName === 'IMG' || element.tagName === 'SCRIPT') {
+              attr = 'src';
+          } else {
+              attr = element.hasAttribute('src') ? 'src' : 'href';
+          }
+          let url = element.getAttribute(attr);
+          if (url) {
+              if (!url.startsWith('http')) {
+                  url = new URL(url, baseUrl).href;
+              }
+              const urlObject = new URL(url);
+              let path = urlObject.hostname + urlObject.pathname;
+              path = path.startsWith('/') ? path.slice(1) : path;
+              path = path.replace(/\\/\\//g, '/');
+              resources.push({ url, path });
+              element.setAttribute(attr, path);
+          }
+      });
+      return resources;
+  }`}
+  fileName="popup.js"
+  lang="js"
+/>
+
+どの参照も、まずタブのアドレスを基準に解決されるので、どんな書き方でも完全な URL になります。その URL のホスト名とパスは、そのあと 2 つの役目を果たします。アーカイブの中でのファイルのパスになり、HTML の中の属性の値に置き換わります。`https://example.com/blog/post.html` にあるページの場合は次のようになります：
+
+| ページでの書き方           | 解決後                             | 保存先とリンク先           |
+| -------------------------- | ---------------------------------- | -------------------------- |
+| `/css/site.css`            | `https://example.com/css/site.css` | `example.com/css/site.css` |
+| `../img/logo.png`          | `https://example.com/img/logo.png` | `example.com/img/logo.png` |
+| `//cdn.example.com/lib.js` | `https://cdn.example.com/lib.js`   | `cdn.example.com/lib.js`   |
+| `/app.js?v=3`              | `https://example.com/app.js?v=3`   | `example.com/app.js`       |
+
+保存した `index.html` はサイトのフォルダの最上位にあるので、新しい相対パスは、保存したファイルにたどり着きます。途中でクエリ文字列は取り除かれます。キャッシュを回避するための `?v=3` は、ファイル名の一部ではないからです。
+
+htmx.org の 2 つのタグを、サーバーが送ってきたままの形と、保存した `index.html` での形で示します。保存後は `XMLSerializer` が XHTML の書式で書き戻しています：
+
+```text
+<link rel="stylesheet" href="/css/site.css">
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<link rel="stylesheet" href="htmx.org/css/site.css" />
+<script async="" defer="" src="buttons.github.io/buttons.js"></script>
+```
+
+### 別のサーバーから取得する
+
+別のサーバーからスタイルシートを取得することは、通常の Web ページに対して CORS が禁じていることです。拡張機能のページは、マニフェストの `host_permissions` に挙げたホストについては対象外で、マニフェストは 4 つの権限を求めています：
+
+| 権限                          | 用途                                                     |
+| ----------------------------- | -------------------------------------------------------- |
+| `activeTab`                   | 開いているタブへのアクセス。クリックのあとだけ           |
+| `scripting`                   | HTML を読み取る関数の実行                                |
+| `downloads`                   | ZIP の保存                                               |
+| `http://*/*` と `https://*/*` | ページのファイルを、それを持っているサーバーから取得する |
+
+Chrome はインストール時に、最後の権限を、すべてのウェブサイトのデータを読み取り、変更する権限として表示します。これは広い権限です。拡張機能がこれを使うのは 1 つの目的だけで、ポップアップから、クリックのあとに限って、開いているページがすでに参照しているファイルを取得することです。
+
+ポップアップは、`Promise.all` ですべてを一度に取得します。取得に失敗したものは、ログに記録してスキップされるので、画像が 1 枚欠けてもアーカイブ全体が失われることはありません。そのあと JSZip がファイルを作り、`chrome.downloads.download` が、先に保存先を尋ねてから保存します。
+
+<Safari
+  url="chromewebstore.google.com"
+  src="/projects/code-extractor/store-listing-desktop.webp"
+  alt="Chrome ウェブストアにある拡張機能のページ：フォルダのアイコン、評価 5.0（5 件の評価）、6000 人のユーザー、そして最初のスクリーンショットとしてポップアップ"
+  caption="Chrome ウェブストアの掲載ページ。"
+/>

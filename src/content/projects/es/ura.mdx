@@ -1,0 +1,149 @@
+export const source = "0fda8583dac1";
+
+# Navegación en motonieve para Laponia
+
+Ura es una app para quienes van en motonieve por Finlandia, para iPhone y Android. Reúne en un solo mapa todas las rutas oficiales de motonieve del país y te dice, mientras conduces, si estás en una. La diseñé y la construí para un cliente, junto con su sitio web, [ura-app.com](https://ura-app.com).
+
+Quien conduce mira el teléfono solo un segundo cada vez, en un cruce, a menudo de noche y con guantes puestos. Por eso Ura es una sola pantalla de mapa con una línea de texto arriba, y todo lo demás se abre en un panel que sube desde abajo.
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-story.webp"
+  video="/projects/ura/site-story.mp4"
+  alt="La página de inicio de ura-app.com en el tema oscuro: desde el titular «Know you're on the trail», la página recorre la app paso a paso mientras el teléfono junto al texto cambia con ella, de la línea «On route» a los ajustes del mapa para gasolineras, comida y paradas de descanso, y luego el mapa en Inari bajo el titular «Works where the signal doesn't»"
+  caption="El sitio web recorre la app a medida que te desplazas."
+/>
+
+## Una respuesta en la parte superior de la pantalla
+
+La línea de arriba responde a la pregunta que se hace un conductor en un cruce:
+
+| Dónde estás                                   | Qué muestra la línea                                                             |
+| --------------------------------------------- | -------------------------------------------------------------------------------- |
+| En una ruta                                   | Un punto verde y el nombre de la ruta                                            |
+| Fuera de una ruta                             | Ámbar, a qué distancia queda la ruta más cercana y una flecha para volver a ella |
+| Lejos de cualquier ruta, o fuera de Finlandia | Una nota que lo indica                                                           |
+
+La pantalla se mantiene encendida mientras Ura te sigue, así que echar un vistazo rápido no obliga a desbloquear el teléfono con los guantes puestos.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/on-route.webp",
+      frame: "iphone",
+      alt: "Ura en el mapa cerca de Levi con el tema claro: el punto azul del conductor sobre una ruta verde, marcadores de restaurante y gasolinera a su alrededor, y la línea de arriba que dice «On route, Levi keskus/center»",
+      caption: "En una ruta cerca de Levi.",
+    },
+    {
+      src: "/projects/ura/off-route.webp",
+      frame: "iphone",
+      alt: "El punto del conductor en terreno abierto entre las rutas, y la línea de arriba que dice «Off route, 320 m», con una flecha que apunta de vuelta hacia la ruta más cercana",
+      caption: "Fuera de la ruta, a 320 m.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Un veredicto estable
+
+La posición GPS de un teléfono se desvía, más aún bajo los árboles, y una simple comprobación de distancia alternaría entre en ruta y fuera de ruta cada pocos segundos cerca de un cruce. Por eso Ura trata las dos direcciones de forma distinta:
+
+- **Salir tarda diez segundos.** Ura solo te da por fuera de una ruta cuando llevas ese tiempo claramente alejado de ella.
+- **Volver es inmediato.** En cuanto estás de nuevo en la ruta, la línea se pone verde y la nombra.
+- **Las rutas paralelas conservan su nombre.** Donde dos rutas discurren lado a lado, la línea se queda con la que estás usando en lugar de alternar entre ellas.
+
+<IPhone
+  src="/projects/ura/ride-back.webp"
+  video="/projects/ura/ride-back.mp4"
+  alt="Ura con el tema oscuro cerca de Levi: la línea de arriba dice «Off route, 150 m», con una flecha que apunta a la izquierda; la distancia va bajando mientras el punto del conductor avanza hacia la ruta verde, y cuando llega a la ruta la línea pasa a «On route, Levi keskus/center»"
+  caption="Volviendo a una ruta."
+/>
+
+## Todas las rutas en un mapa
+
+Al alejar el zoom aparece toda la red, desde el sur de Finlandia hasta el extremo norte de Laponia. Cerca de las rutas, el mapa también muestra gasolineras, restaurantes y cafés, refugios, cobertizos y zonas de fogata. Toca uno y un panel muestra su nombre, a qué distancia está y hacia dónde ir. Las gasolineras, la comida y las paradas de descanso se pueden ocultar cada una en los ajustes.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/network.webp",
+      frame: "iphone",
+      alt: "El mapa alejado sobre toda Finlandia, cubierta por la red de motonieve en verde y amarillo desde Helsinki hasta el extremo norte, con el punto del conductor en Laponia",
+      caption: "Todas las rutas de Finlandia.",
+    },
+    {
+      src: "/projects/ura/place-sheet.webp",
+      frame: "iphone",
+      alt: "Un panel sobre el mapa en Inari para la gasolinera Neste Inari Juutuantörmä, con una etiqueta «Fuel station» y una distancia de 720 m junto a una flecha que indica el camino",
+      caption: "Una gasolinera en Inari.",
+    },
+  ]}
+  columns={2}
+/>
+
+## Sin señal
+
+La cobertura en la montaña va y viene, así que Ura no depende de ella mientras conduces. Las rutas y los lugares están guardados en la app, y el mapa conserva las zonas que ya has mirado, de modo que un valle al que entraste con señal sigue dibujado cuando la señal desaparece. Cuando cambian las rutas, la app descarga el conjunto nuevo la próxima vez que tiene conexión.
+
+<IPhone
+  src="/projects/ura/inari.webp"
+  alt="El mapa alrededor de Inari con el tema claro: rutas en verde a lo largo de la orilla del lago y sobre el hielo, marcadores de restaurante y gasolinera en el pueblo, y la línea de arriba que dice «On route» con el nombre de la ruta del pueblo"
+  caption="Inari, en el extremo norte."
+/>
+
+## Tema e idioma
+
+Ura tiene un tema claro y uno oscuro, y sigue el ajuste del teléfono a menos que elijas uno. El tema oscuro oscurece también el mapa, para conducir durante las largas noches de un invierno en Laponia. La app está en inglés, finés y alemán, de nuevo siguiendo el teléfono a menos que elijas. Las imágenes de las tiendas de apps usan las mismas pantallas, aquí en el tema oscuro, sobre una fotografía de un bosque cubierto de nieve.
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/store-dark-off-route.webp",
+      alt: "Imagen de tienda con el título «Off route? See the distance.»: un teléfono sobre una fotografía de un bosque nevado de abetos, que muestra el mapa oscuro con la línea «Off route», 320 m y una flecha de vuelta a la ruta",
+      caption: "Fuera de una ruta.",
+    },
+    {
+      src: "/projects/ura/store-dark-network.webp",
+      alt: "Imagen de tienda con el título «Finland's trails. One clear map.»: el mapa oscuro alejado sobre toda la red de Finlandia",
+      caption: "Toda la red.",
+    },
+  ]}
+  columns={2}
+/>
+
+## El sitio web
+
+[ura-app.com](https://ura-app.com) presenta la app a los conductores antes de que la instalen. Su sección principal es el relato que avanza con el scroll, al principio de esta página: un teléfono se queda junto al texto y cambia para mostrar cada parte de la app. El sitio sigue el ajuste claro u oscuro del visitante, un botón en la esquina lo cambia a mano, y una aurora se desplaza detrás del titular. En un ordenador, un código QR al final de la página abre la descarga en tu teléfono.
+
+<Safari
+  url="ura-app.com"
+  src="/projects/ura/site-theme.webp"
+  video="/projects/ura/site-theme.mp4"
+  alt="La cabecera de ura-app.com en el tema oscuro, con una aurora verde moviéndose detrás del titular «Know you're on the trail»; el botón de la esquina inferior derecha cambia la página al tema claro y de vuelta"
+  caption="La cabecera, cambiada de oscuro a claro y de vuelta."
+/>
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/ura/site-desktop.webp",
+      frame: "safari",
+      url: "ura-app.com",
+      alt: "La página de inicio de ura-app.com en el tema claro: el titular «Know you're on the trail», las insignias de App Store y Google Play, y un teléfono que muestra la red de rutas alrededor de Kittilä",
+      caption: "ura-app.com en el tema claro.",
+    },
+    {
+      src: "/projects/ura/site-mobile.webp",
+      frame: "iphone",
+      alt: "La página de inicio de ura-app.com en un teléfono con el tema oscuro: el titular, las insignias de las tiendas y la parte superior del mapa de la app debajo de ellas",
+      caption: "El sitio en un teléfono.",
+    },
+    {
+      src: "/projects/ura/app-dark.webp",
+      frame: "iphone",
+      alt: "Ura con el tema oscuro cerca de Levi: rutas verdes sobre un mapa oscuro y la línea de arriba que dice «On route, Levi keskus/center»",
+      caption: "La app de noche.",
+    },
+  ]}
+  columns={3}
+/>

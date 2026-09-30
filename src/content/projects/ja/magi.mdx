@@ -1,0 +1,210 @@
+export const source = "45a160716b8d";
+
+# Rust 製の TCP/UDP ポートスキャナー
+
+magi は、私が Rust で書いたコマンドラインのポートスキャナーです。方式はコネクトスキャンで、すべてのプローブは、オペレーティングシステムのソケットを通した普通の TCP 接続か UDP データグラムです。そのため Linux、macOS、Windows のどれでも一般ユーザーのまま動きます。報告するのは実際に観測した状態のポートだけで、テストできなかったときはそう伝えます。
+
+<ProjectImage
+  src="/projects/magi/scan.webp"
+  video="/projects/magi/scan.mp4"
+  alt="ターミナル：magi 45.33.32.156 --banner を入力して実行すると、カウンターが 1024 個のプローブ済みポートまで増えていき、結果に 22/tcp ssh とそのバナー SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13、そして 80/tcp http が並ぶ"
+  caption="scanme.nmap.org の最初の 1024 ポートを実際にスキャンしたところ。"
+  size="full"
+/>
+
+## ホストをスキャンする
+
+magi には、ターゲットとプローブするポートを渡します。開いているポートは、ホストごとに、ふつうのサービス名とともに一覧表示されます。長めのスキャンでは、プローブしたポートの数と、そのうち開いていた数がカウンターに表示されます。上の実行は 45.33.32.156、つまり scanme.nmap.org に対するものです。Nmap プロジェクトがスキャナーのテスト用に公開しているホストで、所要時間は約 1 秒でした。
+
+ターゲットには 3 つの形式があります。
+
+| ターゲット            | 例                | magi の動作                                          |
+| --------------------- | ----------------- | ---------------------------------------------------- |
+| ホスト名              | `scanme.nmap.org` | 名前解決し、返ってきたすべてのアドレスをスキャンする |
+| IP アドレス           | `45.33.32.156`    | そのアドレスをスキャンする。DNS の問い合わせはしない |
+| CIDR 表記のサブネット | `192.168.1.0/24`  | 含まれるすべてのホストをスキャンする。上限は /16     |
+
+/16 という上限があるのは、プレフィックスを打ち間違えても数百万回のプローブにならないようにするためです。それ以外はすべてフラグで指定します。
+
+| フラグ                | 設定内容                                               | 既定値   |
+| --------------------- | ------------------------------------------------------ | -------- |
+| `-p`, `--ports`       | プローブするポート。リスト、範囲、またはその組み合わせ | `1-1024` |
+| `-c`, `--concurrency` | 同時に実行中のプローブの数                             | 512      |
+| `-t`, `--timeout`     | 各プローブが応答を待つ時間（ミリ秒）                   | 1000     |
+| `-r`, `--rate`        | 1 秒あたりに開始するプローブの上限                     | 上限なし |
+| `-b`, `--banner`      | 開いているサービスが最初に送ってくる 1 行を読む        | オフ     |
+| `-u`, `--udp`         | TCP の代わりに UDP をプローブする                      | TCP      |
+| `-j`, `--json`        | 結果を JSON で出力する                                 | 表       |
+
+<CodeBlock
+  code={`magi 192.168.1.0/24 --ports 22,80,443      # a whole subnet, grouped by host
+  magi 10.0.0.5 --ports 1-65535 -c 1024      # every port, 1024 probes in flight
+  magi 192.168.1.1 --ports 53,123,161 --udp  # UDP instead of TCP
+  magi scanme.nmap.org -p 22,80 --json | jq  # JSON on stdout, progress on stderr`}
+  fileName="examples.sh"
+  lang="bash"
+/>
+
+## スクリプト向けの出力
+
+人が読むためのものはすべて stderr に出ます。スキャンの開始を告げる行、カウンター、警告がそれです。カウンターは、stderr がターミナルのときにだけ表示されます。`--json` を付けると、stdout には開いているポートの JSON 配列が出力され、各要素にアドレス、プロトコル、状態、バナーが入ります。結果はそのまま jq などのプログラムにパイプできます。
+
+<ProjectImage
+  src="/projects/magi/json.webp"
+  video="/projects/magi/json.mp4"
+  alt="ターミナル：magi 45.33.32.156 -p 22,80,443 --banner --json の出力を jq にパイプすると、スキャンの行に続いて、色付きの JSON 配列が表示される。オブジェクトは 2 つで、ポート 22 は SSH のバナー付き、ポート 80 は null のバナー"
+  caption="stdout の JSON を jq にパイプしたところ。"
+  size="full"
+/>
+
+## UDP
+
+`--udp` を付けると、代わりに UDP をプローブします。UDP にはハンドシェイクがないので、magi は空のデータグラムを送り、ホストの反応から判定します。
+
+| ホストが…                       | magi の報告                                |
+| ------------------------------- | ------------------------------------------ |
+| 応答を返す                      | `open`                                     |
+| ICMP の port-unreachable を返す | closed（閉じている）とし、結果には載せない |
+| タイムアウトまで無言のまま      | `open\|filtered`                           |
+
+無言は判断がつきません。空のデータグラムを無視する開いているサービスと、それを破棄するファイアウォールは、外から見ると区別がつかないので、magi はどちらかに決めつけません。この実行では 53 番と 161 番が closed で返ってきて結果から外れ、123 番は 1 秒間ずっと無言のままでした。
+
+<ProjectImage
+  src="/projects/magi/udp.webp"
+  video="/projects/magi/udp.mp4"
+  alt="ターミナル：magi 45.33.32.156 -p 53,123,161 --udp を実行すると、1 秒後に結果として 1 つのポート、open|filtered と表示された 123/udp が並ぶ"
+  caption="3 ポートの UDP スキャン。"
+  size="full"
+/>
+
+## テストできなかったポート
+
+TCP のプローブの結末は 4 通りあり、ポートについて何かを語るのはそのうち 2 つだけです。
+
+| 接続が…                                                | magi がポートを数える区分 | 理由                                         |
+| ------------------------------------------------------ | ------------------------- | -------------------------------------------- |
+| 完了する                                               | 開いている                | 何かが待ち受けている                         |
+| 拒否される、またはタイムアウトする                     | 開いていない              | ホストが「ノー」と答えたか、何も答えなかった |
+| プロセスがファイルディスクリプタを使い果たして失敗する | 未テスト                  | プローブが実行されなかった                   |
+| それ以外の理由で失敗する                               | 未テスト                  | 何もポートに届かなかった                     |
+
+未テストのポートは、closed の数に混ぜ込まれません。スキャンの最後には、未テストのポートがいくつあったか、その理由は何かを伝える警告が出ます。原因がファイルディスクリプタの枯渇のときは、`--concurrency` を下げるか、オープンできるファイル数の上限を上げるよう案内します。下のクリップでは、scanme.nmap.org が IPv4 と IPv6 の 2 つのアドレスに名前解決されます。IPv6 の経路がないネットワークでは、IPv6 アドレスへの接続が何も送られる前に「network unreachable」で失敗するため、そのアドレスの 3 つのポートは未テストとして報告されます。
+
+<ProjectImage
+  src="/projects/magi/untestable.webp"
+  video="/projects/magi/untestable.mp4"
+  alt="ターミナル：magi scanme.nmap.org -p 22,80,443 が 2 つのホストを報告し、45.33.32.156 の 22/tcp ssh と 80/tcp http を一覧表示して、最後に「warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete.」と表示する"
+  caption="スキャンのうち IPv6 側は、未テストとして報告される。"
+  size="full"
+/>
+
+## インストール
+
+どのリリースも、`magi` を `PATH` に置くコマンド 1 つでインストールできます。
+
+| プラットフォーム | ビルド        | インストーラー        |
+| ---------------- | ------------- | --------------------- |
+| Linux            | x86-64, arm64 | シェルスクリプト      |
+| macOS            | x86-64, arm64 | シェルスクリプト      |
+| Windows          | x86-64        | PowerShell スクリプト |
+
+[magi.ysz.life](https://magi.ysz.life) では、訪れた人のプラットフォーム向けのコマンドが最初に表示され、メニューで切り替えられます。安定版の Rust ツールチェーンがあれば、チェックアウトしたソースから `cargo install --path .` でビルドすることもできます。
+
+<Safari
+  url="magi.ysz.life"
+  src="/projects/magi/site.webp"
+  video="/projects/magi/site.mp4"
+  alt="magi.ysz.life が読み込まれる様子：見出し「A port scanner built to be correct」が、点で描かれた波の上でピントが合うように現れ、ポインターが通ると波がたわみ、メニューから「Linux / macOS」を選ぶとインストールコマンドが PowerShell 用から curl のインストーラーに切り替わる"
+  caption="インストールコマンドを Linux と macOS 向けに切り替えるサイト。"
+/>
+
+## サイト
+
+サイトは 1 ページで、インストールコマンド、スキャンの様子を映したターミナルウィンドウ、機能の紹介、FAQ が並びます。見出しの後ろの点はポインターの周りでたわみ、各機能のカードは、図を ASCII 文字で描きます。図は、カードがスクロールで画面に入ると 1 行ずつ埋まっていき、その後も変化し続けます。ライトとダークの 2 つのテーマがあります。
+
+<ProjectImage
+  src="/projects/magi/site-features.webp"
+  video="/projects/magi/site-features.mp4"
+  alt="ダークテーマの magi のサイトが、ヒーローから機能のグリッドまでスクロールしていく。オレンジ色の ASCII 文字で描かれた稲妻と目が、カード「Fast and async」と「TCP and UDP」の上で 1 行ずつ埋まっていく"
+  caption="ダークテーマの機能カード。"
+  size="full"
+/>
+
+## 実装
+
+magi は、薄いバイナリの下に小さなライブラリがある構成です。`main.rs` が引数の解析、ターゲットの展開、結果の出力を受け持ち、`scanner.rs` にはスキャン本体、バナーの取得、UDP、サービス名が入っています。実行基盤は tokio で、フラグには clap、JSON には serde を使っています。GitHub Actions が push のたびに rustfmt、clippy、テストを実行し、リリース用のアーカイブとインストールスクリプトは cargo-dist が作ります。サイトは Next.js で、next-intl で多言語化しています。
+
+### 実行中のプローブを一定数に保つ
+
+/24 のサブネットでポート 1 から 1024 までをスキャンすると、プローブは約 26 万回になります。その一つひとつに最初からタスクを生成すると、すべてが同時にメモリに載ってしまいます。そこでスキャンループは、プローブを生成する前にセマフォの許可（パーミット）を取得します。`--concurrency` 個のプローブが実行中になると、どれかが終わるのを待ちます。パーミットはタスクの中に移されてプローブの終了時に解放され、ループは終わったプローブをその都度回収するので、スキャンがどれだけ大きくても、生きているタスクの数には上限がかかります。`scan()` から抜粋：
+
+<CodeBlock
+  code={`let permits = config.concurrency.clamp(1, MAX_CONCURRENCY);
+  let limiter = Arc::new(Semaphore::new(permits));
+  let mut tasks = JoinSet::new();
+  let mut summary = ScanSummary::default();
+  for &target in targets {
+      for &port in ports {
+          let permit = Arc::clone(&limiter)
+              .acquire_owned()
+              .await
+              .expect("semaphore stays open for the duration of the scan");
+          tasks.spawn(async move {
+              let _permit = permit;
+              probe(target, port, timeout_dur, grab_banner, protocol).await
+          });
+          while let Some(joined) = tasks.try_join_next() {
+              collect(&mut summary, &mut progress, joined);
+          }
+      }
+  }`}
+  fileName="src/scanner.rs"
+  lang="rust"
+/>
+
+任意のレート上限は、プローブを生成する直前ごとに待つ tokio のインターバルです。セマフォは同時に実行するプローブの数を、インターバルは 1 秒あたりに開始する数を制限します。取りこぼしたティックは遅延として扱われるので、処理が遅れた区間のあとに、遅れを取り戻そうとしてプローブが一気に解き放たれることはありません。
+
+### closed と未テストを見分ける
+
+「テストできなかったポート」の節の表は、1 つの関数になっています。接続に失敗したときのエラーを振り分け、拒否でもタイムアウトでもないものは、2 種類の未テストのどちらかになります。
+
+<CodeBlock
+  code={`fn classify_connect_error(e: &io::Error) -> ProbeOutcome {
+      match e.kind() {
+          ErrorKind::ConnectionRefused | ErrorKind::TimedOut => ProbeOutcome::NotOpen,
+          _ if is_fd_exhaustion(e) => ProbeOutcome::Untestable(Untestable::OutOfDescriptors),
+          _ => ProbeOutcome::Untestable(Untestable::Other),
+      }
+  }`}
+  fileName="src/scanner.rs"
+  lang="rust"
+/>
+
+スキャナーはライブラリなので、結合テストでは実物の `scan()` をループバック上のソケットに対して呼び出します。そのうちの 1 つは、プロセスのオープンファイル数の上限を 128 に下げ、ローカルの 400 ポートを、同時 300 プローブで TCP、続けて UDP でスキャンし、どちらの結果にも未テストのポートが数えられ、その原因としてディスクリプタの上限が挙がっていることを確認します。
+
+### raw ソケットなしの UDP
+
+ICMP の port-unreachable を受け取るには、ふつう raw ソケットが必要で、そのためには root 権限が要ります。magi は UDP ソケットを、送信の前にターゲットへ connect します。こうすると返信がその 1 つの相手からのものに絞られ、オペレーティングシステムは ICMP メッセージを、次の受信時に `ConnectionRefused` エラーとして報告します。closed という判定は、OS がそのエラーを返してくれるかどうかに左右されます。Linux は確実に返します。macOS と Windows は ICMP にレート制限をかけるため、そちらでは closed のポートの一部が `open|filtered` と表示されます。
+
+### 信頼できないホストからのバナー
+
+`--banner` を付けると、magi は開いているポートごとに最大 512 バイトを読み、最初の 1 行だけを残します。その文字列は、自分では管理できないホストから届き、最終的にあなたのターミナルに表示されるので、出力の前にすべての制御文字を取り除きます。バナーに生のエスケープシーケンスが入っていると、画面を消されたり、ウィンドウのタイトルを書き換えられたり、それまでの出力を上書きされたりしかねません。そこで単体テストでは、ANSI の画面クリアのシーケンスを通してみて、表示できる文字だけが出てくることを確認しています。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/magi/site-dark.webp",
+      frame: "safari",
+      url: "magi.ysz.life",
+      alt: "ダークテーマの magi のサイト：オレンジ色の点の波の上に見出し「A port scanner built to be correct」、コピーボタン付きの PowerShell のインストールコマンド、scanme.nmap.org をスキャンした様子のターミナルウィンドウ",
+      caption: "ダークテーマのサイト。",
+    },
+    {
+      src: "/projects/magi/site-dark-mobile.webp",
+      frame: "iphone",
+      alt: "スマートフォンで表示したダークテーマの magi のサイト：見出し、インストールコマンド、スキャンを映したターミナルウィンドウ",
+      caption: "スマートフォンでのサイト。",
+    },
+  ]}
+  columns={2}
+/>

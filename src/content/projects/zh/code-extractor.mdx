@@ -1,0 +1,130 @@
+export const source = "aa290d683b48";
+
+# 把页面及其文件保存为 ZIP 的浏览器扩展
+
+[Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) 是一款 Chrome 和 Edge 扩展，可以把当前标签页里的页面下载为一个 ZIP 文件。压缩包里有 HTML，以及它引用的每一个样式表、脚本和图片，文件夹结构对应它们各自来自的服务器，HTML 里的链接也被改写为指向这些保存下来的副本。我在 2024 年 8 月做了它，用来研究其他网站是怎么搭起来的，据 Chrome 应用商店显示，现在约有 6000 人在使用它。
+
+<Safari
+  url="htmx.org"
+  src="/projects/code-extractor/hero.webp"
+  video="/projects/code-extractor/hero.mp4"
+  alt="htmx.org 的首页，右上角打开了扩展的深色弹窗；点击 Extract & Download 按钮，按钮短暂显示 Extracting… 后恢复原样"
+  caption="保存 htmx.org。"
+/>
+
+## 保存页面
+
+弹窗里只有一个按钮。点击它，就会读取当前标签页里的页面，获取页面链接到的每一个文件，把所有内容打包成一个以网站命名的 ZIP，这里是 `htmx.org.zip`，然后 Chrome 会询问保存到哪里。在 htmx.org 上，生成压缩包用了不到一秒。
+
+无法执行脚本的页面，例如 `chrome://` 和 `edge://` 页面、`about:` 页面以及其他扩展的页面，弹窗里会显示错误。
+
+## 压缩包里有什么
+
+打开这个 ZIP，里面是一个以网站命名的文件夹，`index.html` 在最上层。其他每个文件都放在以其来源服务器命名的文件夹下，后面接着该服务器自己的路径。htmx.org 的样式表、脚本和图片落在 `htmx.org/htmx.org/` 下，它的 GitHub 星标按钮的脚本落在 `buttons.github.io/` 下，所以两个服务器上同名的文件不会冲突。htmx.org 的这份副本包含 53 个文件，共 2.4 MB，网站的 Atom 订阅源也是其中之一：页面通过一个 `<link>` 标签链接了它，扩展会像收集样式表一样把它收集起来。
+
+<ProjectImage
+  src="/projects/code-extractor/zip-contents.webp"
+  alt="htmx.org.zip 的内容，53 个文件，2.4 MB：一个 htmx.org 文件夹，里面有 index.html；一个 buttons.github.io 文件夹，里面有 buttons.js；以及第二个 htmx.org 文件夹，里面有 atom.xml、favicon.svg、css/site.css、44 张图片和四个脚本"
+  caption="htmx.org 的 ZIP 里有什么。"
+  size="full"
+/>
+
+## 打开这份副本
+
+保存下来的 `index.html` 里，每一处对样式表、脚本和图片的引用都指向保存下来的文件，所以直接从文件夹打开页面，样式和图片都在原位。指向其他页面的链接保持原样，因为扩展一次只保存一个页面。
+
+<ProjectImage
+  src="/projects/code-extractor/saved-copy.webp"
+  alt="从解压后的文件夹里打开的已保存 htmx.org，滚动到快速入门代码块和带有 Hypermedia Systems 封面图的图书板块"
+  caption="已保存的 htmx.org，从文件夹里打开。"
+  size="full"
+/>
+
+## 实现方式
+
+这个扩展是基于 Manifest V3 的纯 JavaScript。一个带一个脚本的弹窗页面完成全部工作，压缩包由 JSZip 生成。
+
+### 读取页面当前的样子
+
+点击会通过 `chrome.scripting.executeScript` 在标签页内部运行一个小函数。Chrome 会把这个函数序列化后放到页面里运行，所以它无法访问弹窗里的任何东西，它交回的是普通字符串：根元素的 `outerHTML` 和 doctype。`outerHTML` 不含 doctype，而缺少 doctype 的页面在保存后会以怪异模式（quirks mode）打开，这是浏览器为标准出现之前写成的页面保留的旧渲染模式，所以 doctype 会单独序列化，再写回最前面。
+
+因此，保存下来的 HTML 是页面在标签页里此刻的样子，也就是脚本运行之后的结果。用 JavaScript 生成标记的页面，保存的是它生成之后的标记。
+
+### 改写链接
+
+回到弹窗里，`DOMParser` 把这段 HTML 变成一个保持惰性的文档：其中的脚本不会运行，图片也不会加载。然后弹窗遍历每一个 `<link href>`、`<script src>` 和 `<img src>`：
+
+<CodeBlock
+  code={`function resolveResourceLinks(doc, baseUrl) {
+      const resources = [];
+      const elements = doc.querySelectorAll('link[href], script[src], img[src]');
+      elements.forEach(element => {
+          let attr;
+          if (element.tagName === 'LINK') {
+              attr = 'href';
+          } else if (element.tagName === 'IMG' || element.tagName === 'SCRIPT') {
+              attr = 'src';
+          } else {
+              attr = element.hasAttribute('src') ? 'src' : 'href';
+          }
+          let url = element.getAttribute(attr);
+          if (url) {
+              if (!url.startsWith('http')) {
+                  url = new URL(url, baseUrl).href;
+              }
+              const urlObject = new URL(url);
+              let path = urlObject.hostname + urlObject.pathname;
+              path = path.startsWith('/') ? path.slice(1) : path;
+              path = path.replace(/\\/\\//g, '/');
+              resources.push({ url, path });
+              element.setAttribute(attr, path);
+          }
+      });
+      return resources;
+  }`}
+  fileName="popup.js"
+  lang="js"
+/>
+
+每处引用都会先按标签页的地址解析，所以不管原来怎么写，都会变成完整的 URL。这个 URL 的主机名和路径随后承担两项工作：它们是文件在压缩包里的路径，也会替换 HTML 里属性的值。以位于 `https://example.com/blog/post.html` 的页面为例：
+
+| 页面里的写法               | 解析为                             | 保存并链接为               |
+| -------------------------- | ---------------------------------- | -------------------------- |
+| `/css/site.css`            | `https://example.com/css/site.css` | `example.com/css/site.css` |
+| `../img/logo.png`          | `https://example.com/img/logo.png` | `example.com/img/logo.png` |
+| `//cdn.example.com/lib.js` | `https://cdn.example.com/lib.js`   | `cdn.example.com/lib.js`   |
+| `/app.js?v=3`              | `https://example.com/app.js?v=3`   | `example.com/app.js`       |
+
+保存下来的 `index.html` 位于网站文件夹的最上层，所以新的相对路径能指向保存下来的文件。查询字符串会在这个过程中被丢弃，因为用来强制刷新缓存的 `?v=3` 并不属于文件名。
+
+htmx.org 里的两个标签，先是服务器发来时的样子，然后是它们在保存下来的 `index.html` 里的样子，其中 `XMLSerializer` 会把它们以 XHTML 的风格写回：
+
+```text
+<link rel="stylesheet" href="/css/site.css">
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<link rel="stylesheet" href="htmx.org/css/site.css" />
+<script async="" defer="" src="buttons.github.io/buttons.js"></script>
+```
+
+### 从其他服务器获取
+
+从另一台服务器获取样式表，正是 CORS 会阻止普通网页去做的事。对于清单里 `host_permissions` 所列出的主机，扩展页面不受此限制，而这份清单一共申请了四项权限：
+
+| 权限                          | 用途                                       |
+| ----------------------------- | ------------------------------------------ |
+| `activeTab`                   | 访问打开的标签页，而且只在点击之后         |
+| `scripting`                   | 运行读取其 HTML 的函数                     |
+| `downloads`                   | 保存 ZIP                                   |
+| `http://*/*` 和 `https://*/*` | 从存放页面文件的任何一台服务器获取这些文件 |
+
+Chrome 在安装时会把最后一项显示为读取和更改所有网站上数据的权限，范围很广。扩展只用它做一件事：在弹窗里、且只在点击之后，获取打开的页面已经引用的那些文件。
+
+弹窗用 `Promise.all` 一次性把它们全部取回。某个获取失败时，会记入日志并跳过，所以少一张图片不会让整个压缩包作废。然后 JSZip 生成文件，`chrome.downloads.download` 负责保存，并先询问保存位置。
+
+<Safari
+  url="chromewebstore.google.com"
+  src="/projects/code-extractor/store-listing-desktop.webp"
+  alt="扩展在 Chrome 应用商店中的页面：文件夹图标、5 个评分中的 5.0 分、6000 名用户，以及作为第一张截图的弹窗"
+  caption="Chrome 应用商店中的详情页。"
+/>

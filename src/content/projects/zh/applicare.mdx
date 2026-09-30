@@ -1,0 +1,156 @@
+export const source = "b128c94d0c07";
+
+# 带 Spring Boot API 的求职申请追踪器
+
+[AppliCare](https://applicare.app) 用来跟踪求职申请：每一份申请进展到哪一步、随之而来的任务，以及整体求职进行得如何。我在 2024 年 12 月到 2025 年 2 月之间做了这两部分：一个基于 Ant Design 的 React 客户端，和一个把数据存进 MongoDB 的 Spring Boot API。
+
+<Safari
+  url="applicare.app/manage"
+  src="/projects/applicare/add.webp"
+  video="/projects/applicare/add.mp4"
+  alt="Manage 页面：New Application 打开一个表单，填入 Lakeside Systems、Frontend Developer、Zürich 和一个薪资，点击 Create 后表格新增一行，并向下滚动到这一行"
+  caption="添加一份申请，用的是演示账号。"
+/>
+
+## 申请
+
+每份申请都在 Manage 页面的同一张表里，带有公司、职位、状态和投递日期。添加一份申请需要公司、职位名称和状态；薪资、联系人、职位链接和备注则在你有的时候再填。搜索框会随着输入实时筛选，各列也可以排序和筛选。
+
+一份申请从已投递开始，经过面试走到录用，最终以接受或拒绝收尾。状态列是一个下拉菜单，选中即刻保存，颜色随阶段而变。
+
+<ProjectImage
+  src="/projects/applicare/status.webp"
+  video="/projects/applicare/status.mp4"
+  alt="Manage 表格：Clearwater Labs 的状态从 Pending 改为 Interviewing，Evergreen Energy 的状态从 Offer 改为 Accepted，每次改动后顶部都会弹出一条消息确认"
+  caption="每个状态一改就立即保存。"
+  size="full"
+/>
+
+## 仪表盘
+
+仪表盘用四个数字概括求职进展：
+
+| 数字         | 统计的内容                   |
+| ------------ | ---------------------------- |
+| Applications | 投出的每一份申请             |
+| In progress  | 处于筛选或面试阶段的申请     |
+| Success rate | 已接受的申请占全部申请的比例 |
+| Open         | 所有尚未被接受或拒绝的申请   |
+
+它们下方，一张图表按时间统计申请数量，一个分布图显示各个状态所占的份额。Tasks 标签页就在概览旁边。
+
+<ProjectImage
+  src="/projects/applicare/dashboard.webp"
+  video="/projects/applicare/dashboard.mp4"
+  alt="仪表盘：切换到 Tasks 标签页，再切回 Overview，随后按时间统计申请数量的图表在状态分布图旁边逐步绘出，一个提示框沿着图表跟随指针"
+  caption="概览和 Tasks 标签页。"
+  size="full"
+/>
+
+## 任务
+
+一项任务有标题、简短的描述、截止日期，以及高、中、低三档优先级，还可以关联到某一份申请，这份申请的公司就会以标签的形式显示出来。列表按截止日期排序，所以最先到期的事总是排在最上面。勾选一项任务，它就会被划掉。
+
+<ProjectImage
+  src="/projects/applicare/tasks.webp"
+  alt="Tasks 标签页：Send references、Prepare system design answers 等任务，每项都有到期日期、标明相关公司的标签、优先级徽标，以及编辑和删除按钮"
+  caption="任务，最近的截止日期排在最前。"
+  size="full"
+/>
+
+## 实现方式
+
+客户端是基于 Vite 的 React，使用 Ant Design 组件，并通过一个 Axios 实例与 API 通信。API 是 Spring Boot，搭配 Spring Security 和 Spring Data MongoDB，构建成 Docker 镜像。账号、申请和任务是三个 MongoDB 集合，每份申请和每项任务都带着它所属用户的 ID。
+
+### 状态有自己的接口
+
+在服务器上，状态只是 `JobApplication` 文档上的一个普通字符串，阶段列表放在客户端，所以新增一个阶段只需改动前端。修改状态走的是它自己的接口，与编辑申请分开：
+
+| 请求                                               | 发送方       | 修改的内容                         |
+| -------------------------------------------------- | ------------ | ---------------------------------- |
+| `PATCH /api/applications/{id}/status?status=OFFER` | 状态下拉菜单 | 状态和 `lastUpdated`，其他一概不动 |
+| `PUT /api/applications/{id}`                       | 编辑表单     | 整份申请                           |
+
+仪表盘按组读取同一个字段。Accepted 和 Rejected 是终态，所以其他每个阶段都算作未完结。Screening 和 Interviewing 算作进行中，成功率就是已接受的申请占全部申请的比例。这一切都由浏览器在一个 `useMemo` 里对 API 返回的列表算出，第二个则把投递日期变成图表背后的累计总数。
+
+### 用令牌登录
+
+登录时会把密码与其 BCrypt 哈希做比对，并返回一个 JSON Web Token，也就是客户端在每次请求时都会带回的一段签名字符串。AppliCare 的令牌用 HS256 签名，以用户名作为 subject，以用户 ID 作为 `userId` 声明，并在设定的时间后过期。客户端把它保存在 `localStorage` 里，Axios 拦截器会把它以 `Authorization: Bearer …` 的形式加到每个请求上。
+
+安全配置是无状态的：`/api/auth/**` 对所有人开放，其他每条路由都需要经过认证的请求。让一个请求成为已认证请求的，是一个每个请求只运行一次、排在 Spring 自带的用户名密码过滤器之前的过滤器：
+
+<CodeBlock
+  code={`public class JwtAuthenticationFilter extends OncePerRequestFilter {
+      private final JwtUtil jwtUtil;
+      public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+          this.jwtUtil = jwtUtil;
+      }
+      @Override
+      protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+              throws ServletException, IOException {
+          String authHeader = request.getHeader("Authorization");
+          if (authHeader != null && authHeader.startsWith("Bearer ")) {
+              String token = authHeader.substring(7);
+              if (jwtUtil.validateToken(token)) {
+                  String username = jwtUtil.getUsernameFromToken(token);
+                  UsernamePasswordAuthenticationToken authentication =
+                      new UsernamePasswordAuthenticationToken(username, null, new ArrayList<>());
+                  SecurityContextHolder.getContext().setAuthentication(authentication);
+              }
+          }
+          filterChain.doFilter(request, response);
+      }
+  }`}
+  fileName="filter/JwtAuthenticationFilter.java"
+  lang="java"
+/>
+
+这个过滤器自己从不拒绝请求。令牌缺失或无效时，安全上下文就保持为空，由 Spring Security 在链条更靠后的位置把请求拒之门外。`validateToken` 用签名密钥解析令牌，一次调用就同时检查了签名和过期时间，所以伪造的令牌和过期的令牌会以同样的方式失败。在客户端，Axios 的响应拦截器把 401 或 403 当作会话已过期：它清除保存的用户，并把浏览器送到登录页，所以会话过期在一处就能为所有页面处理好。
+
+### 每一次读写都归其所有者
+
+令牌说明了调用者是谁，而服务层决定这个调用者可以碰哪些数据。控制器从同一个请求头里读出 `userId` 声明并向下传递，没有任何一个服务会从请求体里取所有者。创建申请时，会把调用者的 ID 盖在它上面。读取、更新、删除一份申请以及修改它的状态，都会先加载已存储的文档，再把它的所有者与调用者比对：
+
+<CodeBlock
+  code={`public JobApplication updateApplication(String id, JobApplication application, String userId) {
+      JobApplication existingApp = jobApplicationRepository.findById(id)
+          .orElseThrow(() -> new RuntimeException("Application not found"));
+      if (!existingApp.getUserId().equals(userId)) {
+          throw new RuntimeException("Not authorized to update this application");
+      }
+      application.setId(existingApp.getId());
+      application.setUserId(userId);
+      application.setAppliedDate(existingApp.getAppliedDate());
+      application.setLastUpdated(LocalDateTime.now());
+      return jobApplicationRepository.save(application);
+  }`}
+  fileName="service/JobApplicationService.java"
+  lang="java"
+/>
+
+更新时还会从已存储的文档里复制 ID 和原来的投递日期，所以请求体既不能把一份申请转给另一个用户，也不能改动它的投递时间。列表按调用者的 ID 查询，编辑、完成和删除任务时也是同样的检查。删除账号时，会先删除该用户的任务和申请，最后才删除用户记录本身。
+
+<ProjectGallery
+  images={[
+    {
+      src: "/projects/applicare/login.webp",
+      frame: "safari",
+      url: "applicare.app/login",
+      alt: "AppliCare 的登录页：一张卡片，里面有用户名或邮箱地址和密码的输入框，以及注册和重置密码的链接",
+      caption: "登录。",
+    },
+    {
+      src: "/projects/applicare/dashboard-mobile.webp",
+      frame: "iphone",
+      alt: "手机上的仪表盘：四个数字排成两行两列，位于按时间统计申请数量的图表上方",
+      caption: "仪表盘。",
+    },
+    {
+      src: "/projects/applicare/manage-mobile.webp",
+      frame: "iphone",
+      alt: "手机上的 Manage 页面：搜索框、New Application 按钮，以及公司和职位的表格",
+      caption: "Manage 页面。",
+    },
+  ]}
+  columns={3}
+/>
