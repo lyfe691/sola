@@ -13,6 +13,8 @@ import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
+import { useCommandMenu } from "@/hooks/use-command-menu";
+import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { SearchToggle } from "./search-toggle";
@@ -241,8 +243,22 @@ const MobileNav = () => {
   const t = useTranslation();
   const location = useLocation();
   const scrolled = useScrolled();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const menuOpen = useMobileMenu((state) => state.isOpen);
+  const setMenuOpen = useMobileMenu((state) => state.setOpen);
   useWindowScrollLock(menuOpen);
+
+  // the palette takes over the screen: the menu gives way to it rather than
+  // trapping its focus and touches underneath
+  useEffect(
+    () =>
+      useCommandMenu.subscribe((state) => {
+        if (state.isOpen) setMenuOpen(false);
+      }),
+    [setMenuOpen],
+  );
+  // the store outlives the bar (code view unmounts it): a menu that is gone
+  // is a closed one, or it would keep the page locked
+  useEffect(() => () => setMenuOpen(false), [setMenuOpen]);
 
   const links = [
     { label: t.common.home, path: "/" },
@@ -263,7 +279,7 @@ const MobileNav = () => {
   const barRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
 
-  const close = useCallback(() => setMenuOpen(false), []);
+  const close = useCallback(() => setMenuOpen(false), [setMenuOpen]);
 
   // while open: block page scroll (touch + wheel, but let the menu scroll if it
   // overflows), move focus into the menu, keep Tab cycling inside the menu +
@@ -299,7 +315,9 @@ const MobileNav = () => {
           Array.from(
             el.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
           ),
-        );
+        )
+        // the bar's own toggles are hidden while the menu is open
+        .filter((el) => getComputedStyle(el).visibility !== "hidden");
       if (focusables.length === 0) return;
       const active = document.activeElement as HTMLElement | null;
       const index = active ? focusables.indexOf(active) : -1;
@@ -333,7 +351,7 @@ const MobileNav = () => {
       window.removeEventListener("wheel", blockScroll);
       window.removeEventListener("keydown", onKey);
     };
-  }, [menuOpen]);
+  }, [menuOpen, setMenuOpen]);
 
   return (
     <>
@@ -357,7 +375,7 @@ const MobileNav = () => {
             <button
               ref={triggerRef}
               type="button"
-              onClick={() => setMenuOpen((open) => !open)}
+              onClick={() => setMenuOpen(!menuOpen)}
               aria-label={
                 menuOpen ? t.common.a11y.closeMenu : t.common.a11y.openMenu
               }
@@ -367,7 +385,14 @@ const MobileNav = () => {
               <MenuGlyph open={menuOpen} />
             </button>
 
-            <ToggleGroup gap="normal" />
+            {/* the open menu is the links and the way out, nothing else */}
+            <ToggleGroup
+              gap="normal"
+              className={cn(
+                "transition-[opacity,visibility] duration-200 ease-out",
+                menuOpen && "invisible opacity-0",
+              )}
+            />
           </motion.div>
         </div>
       </header>

@@ -26,6 +26,8 @@ import {
   getWelcomePresetLabels,
 } from "@/config/welcome-preset";
 import { useTranslation } from "@/lib/language-provider";
+import { useCommandMenu } from "@/hooks/use-command-menu";
+import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import { tailEdge, tailFill } from "@/lib/tail-path";
 
 const APPEAR_DELAY = 1200;
@@ -58,7 +60,6 @@ const OVERLAY_SELECTOR = [
   '[data-slot="alert-dialog-content"]',
   '[data-slot="popover-content"]',
   '[data-slot="select-content"]',
-  ".mobile-menu",
 ].join(", ");
 
 // the toggle is mounted twice (desktop nav + mobile bar); pick the visible one
@@ -151,6 +152,10 @@ export function ThemeCallout() {
     }
   });
   const [pos, setPos] = useState<Position | null>(null);
+  // the phone menu hides the toggle it points at, and the palette covers it
+  const menuOpen = useMobileMenu((state) => state.isOpen);
+  const paletteOpen = useCommandMenu((state) => state.isOpen);
+  const yielding = menuOpen || paletteOpen;
 
   const dismiss = useCallback(() => {
     try {
@@ -227,9 +232,10 @@ export function ThemeCallout() {
     };
   }, [open]);
 
-  // opening the toggle is the dismissal; Esc works too
+  // opening the toggle is the dismissal; Esc works too, but not an Esc that
+  // closes whatever it is yielding to
   useEffect(() => {
-    if (!open) return;
+    if (!open || yielding) return;
     const onDown = (e: PointerEvent) => {
       if ((e.target as Element | null)?.closest("[data-callout='theme']"))
         dismiss();
@@ -243,11 +249,11 @@ export function ThemeCallout() {
       document.removeEventListener("pointerdown", onDown);
       window.removeEventListener("keydown", onKey);
     };
-  }, [open, dismiss]);
+  }, [open, yielding, dismiss]);
 
   return createPortal(
     <AnimatePresence>
-      {open && pos && (
+      {open && pos && !yielding && (
         <motion.div
           role="status"
           initial={
