@@ -155,6 +155,11 @@ export const es = {
     previousImage: "Imagen anterior",
     nextImage: "Imagen siguiente",
     imageOf: "Imagen {current} de {total}",
+    expandVideo: "Ampliar vídeo",
+    expandVideoNamed: "Ampliar vídeo: {alt}",
+    play: "Reproducir",
+    pause: "Pausar",
+    videoPosition: "Posición de reproducción",
     moreOnGithub: "Más en GitHub",
     view: "Ver",
     update: {

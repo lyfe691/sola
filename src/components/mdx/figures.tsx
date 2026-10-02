@@ -33,7 +33,6 @@ import {
   isPortrait,
 } from "./figure-layout";
 import { DeviceFrame, SCREEN_RADIUS } from "./frames";
-import { InlineVideo } from "./InlineVideo";
 
 type FigureImage = {
   src: string;
@@ -91,20 +90,13 @@ export function FigureCaption({
 }
 
 function FigureMedia({ figure }: { figure: FigureImage }) {
-  const radius = figure.frame ? SCREEN_RADIUS[figure.frame] : undefined;
-  const media = figure.video ? (
-    <InlineVideo
-      src={figure.video}
-      poster={figure.src}
-      label={figure.alt}
-      radius={radius}
-    />
-  ) : (
+  const media = (
     <ExpandableImage
       src={figure.src}
+      video={figure.video}
       alt={figure.alt}
       caption={figure.caption}
-      radius={radius}
+      radius={figure.frame ? SCREEN_RADIUS[figure.frame] : undefined}
     />
   );
   if (!figure.frame) return media;

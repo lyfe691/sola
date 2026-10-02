@@ -21,6 +21,10 @@
  * closing poses it back over the thumbnail of whichever image is showing.
  * It stays above the backdrop for the whole trip, so it is solid while
  * everything around it fades.
+ *
+ * A clip travels the same way, held on the frame its thumbnail was showing:
+ * it plays once it has landed and stops before it flies home, so no video
+ * decodes on the flight's frames, and the page's copy picks up where it left.
  */
 
 import {
@@ -46,13 +50,15 @@ import {
   AnimatePresence,
   animate,
   motion,
+  useDragControls,
   useMotionValue,
   useReducedMotion,
   type MotionStyle,
 } from "motion/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
-import { useTranslation } from "@/lib/language-provider";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
+import { Slider } from "@/components/ui/slider";
 import {
   EASE_OUT,
   FLIGHT_BACK,
@@ -95,7 +101,21 @@ const PAGE_SCROLL_KEYS = new Set([
   "Home",
   "End",
 ]);
-const FOCUSABLE = "button:not([disabled])";
+const FOCUSABLE = 'button:not([disabled]), input[type="range"]';
+
+/** How long a clip may take to show its frame before the flight leaves
+ *  anyway, and how long its controls stay up after the pointer stops. */
+const CUE_TIMEOUT = 400;
+const CONTROLS_IDLE = 2000;
+/** What a clip's control bar takes under the picture: its gap and height. */
+const BAR_SPACE = 52;
+/** How the scrubber speaks its value: "3 seconds". */
+const SECONDS = {
+  style: "unit",
+  unit: "second",
+  unitDisplay: "long",
+  maximumFractionDigits: 0,
+} as const satisfies Intl.NumberFormatOptions;
 
 /** closed → docked (posed over the thumbnail) → open → returning → closed */
 type Phase = "closed" | "docked" | "open" | "returning";
@@ -359,6 +379,312 @@ function Filmstrip({
   );
 }
 
+/**
+ * Holds a clip on the frame its thumbnail shows (stopping the thumbnail
+ * there), and resolves once that frame is up, or after CUE_TIMEOUT whatever
+ * happens: the flight never waits on a network.
+ */
+function cue(clip: HTMLVideoElement, thumb: Element | null | undefined) {
+  let time = 0;
+  if (thumb instanceof HTMLVideoElement) {
+    thumb.pause();
+    time = thumb.currentTime;
+  }
+  return new Promise<void>((resolve) => {
+    const timer = window.setTimeout(resolve, CUE_TIMEOUT);
+    clip.addEventListener(
+      "seeked",
+      // seeked says the frame is decoded; the next frame paints it
+      () =>
+        requestAnimationFrame(() => {
+          window.clearTimeout(timer);
+          resolve();
+        }),
+      { once: true },
+    );
+    clip.currentTime = time;
+  });
+}
+
+/** 0:07. The clips are seconds long, so minutes never need padding. */
+const clock = (seconds: number) =>
+  `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
+
+/** Filled, as Apple draws them; the icon set only has outlines. */
+function PlayGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4 fill-current">
+      <path d="M7 5.1v13.8c0 1 1.1 1.6 1.9 1.1l10.6-6.9c.8-.5.8-1.7 0-2.2L8.9 4C8.1 3.5 7 4.1 7 5.1Z" />
+    </svg>
+  );
+}
+
+function PauseGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4 fill-current">
+      <rect x="6" y="4.5" width="4" height="15" rx="1.25" />
+      <rect x="14" y="4.5" width="4" height="15" rx="1.25" />
+    </svg>
+  );
+}
+
+/**
+ * A clip's controls, after Apple's player: one bar with play/pause, the time
+ * gone, a track to scrub and the time left. The clips are silent and already
+ * fill the screen, so there is no volume and no fullscreen. Where the stage
+ * leaves room under the picture (a wide clip on a phone) the bar sits there,
+ * a pill like the caption's, and stays. Otherwise it floats over the bottom
+ * of the picture and, while the clip plays, steps away once the pointer
+ * rests; paused, it stays.
+ */
+function ClipControls({
+  clipRef,
+  below,
+}: {
+  clipRef: RefObject<HTMLVideoElement | null>;
+  below: boolean;
+}) {
+  const t = useTranslation();
+  const { language } = useLanguage();
+  const labelId = useId();
+  const barRef = useRef<HTMLDivElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [awake, setAwake] = useState(true);
+  const [scrubbing, setScrubbing] = useState(false);
+  const [time, setTime] = useState({ at: 0, length: 0 });
+  /** Mid-drag (read by events that land before the next render), and
+   *  whether the clip was playing when the drag began. */
+  const held = useRef(false);
+  const resume = useRef(false);
+
+  // the clip's state, and a playhead that moves every frame rather than on
+  // timeupdate's four ticks a second, which on a clip this short is a stutter
+  useEffect(() => {
+    const clip = clipRef.current;
+    if (!clip) return;
+    let frame = 0;
+    const draw = () =>
+      setTime({ at: clip.currentTime, length: clip.duration || 0 });
+    const tick = () => {
+      draw();
+      frame = requestAnimationFrame(tick);
+    };
+    const sync = () => {
+      setPlaying(!clip.paused);
+      cancelAnimationFrame(frame);
+      if (clip.paused) draw();
+      else tick();
+    };
+    sync();
+    const events = ["play", "pause", "seeked", "loadedmetadata"] as const;
+    for (const name of events) clip.addEventListener(name, sync);
+    return () => {
+      cancelAnimationFrame(frame);
+      for (const name of events) clip.removeEventListener(name, sync);
+    };
+  }, [clipRef]);
+
+  // any pointer over the picture wakes the bar; resting lets it go
+  useEffect(() => {
+    const area = barRef.current?.parentElement;
+    if (!area) return;
+    let timer = 0;
+    const wake = () => {
+      setAwake(true);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => setAwake(false), CONTROLS_IDLE);
+    };
+    const leave = () => {
+      window.clearTimeout(timer);
+      setAwake(false);
+    };
+    wake();
+    area.addEventListener("pointermove", wake);
+    area.addEventListener("pointerdown", wake);
+    area.addEventListener("pointerleave", leave);
+    return () => {
+      window.clearTimeout(timer);
+      area.removeEventListener("pointermove", wake);
+      area.removeEventListener("pointerdown", wake);
+      area.removeEventListener("pointerleave", leave);
+    };
+  }, []);
+
+  const toggle = () => {
+    const clip = clipRef.current;
+    if (!clip) return;
+    if (clip.paused) clip.play().catch(() => {});
+    else clip.pause();
+  };
+
+  const total = Math.round(time.length);
+  const gone = Math.min(Math.floor(time.at), total);
+  const shown = below || !playing || awake || scrubbing;
+
+  return (
+    <div
+      ref={barRef}
+      className={cn(
+        "pointer-events-none absolute inset-x-0 flex justify-center",
+        below ? "top-full pt-3" : "bottom-0 p-3 sm:p-4",
+      )}
+    >
+      {/* Every colour inside is the text's. Over footage the bar is the
+          dark glass Apple uses, whatever the theme: a themed pill would
+          vanish on a light frame in the light theme. */}
+      <div
+        // its own presses: not a drag of the strip, not a click that closes
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
+        className={cn(
+          "flex h-10 w-full max-w-sm items-center gap-2.5 rounded-full py-1 pr-4 pl-1",
+          below
+            ? "bg-foreground/10 text-foreground/80"
+            : "bg-black/45 text-white shadow-lg ring-1 ring-white/10 backdrop-blur-xl backdrop-saturate-150",
+          "cursor-default transition-opacity duration-200 ease-out",
+          shown
+            ? "pointer-events-auto opacity-100"
+            : "opacity-0 focus-within:pointer-events-auto focus-within:opacity-100",
+        )}
+      >
+        <button
+          type="button"
+          aria-label={playing ? t.common.pause : t.common.play}
+          onClick={toggle}
+          className={cn(
+            "grid size-8 shrink-0 cursor-pointer place-items-center rounded-full",
+            "transition-[background-color,scale] duration-150 ease-out",
+            "hover:bg-current/15 active:scale-[0.96]",
+            "focus-visible:ring-2 focus-visible:ring-current/50 focus-visible:outline-none",
+          )}
+        >
+          {playing ? <PauseGlyph /> : <PlayGlyph />}
+        </button>
+        <span className="w-7 shrink-0 text-xs font-medium tabular-nums opacity-90">
+          {clock(gone)}
+        </span>
+        <span id={labelId} className="sr-only">
+          {t.common.videoPosition}
+        </span>
+        <Slider
+          aria-labelledby={labelId}
+          value={Math.min(time.at, time.length)}
+          max={time.length || 1}
+          step={0.1}
+          largeStep={1}
+          format={SECONDS}
+          locale={language}
+          onValueChange={(value, { reason }) => {
+            const clip = clipRef.current;
+            if (!clip || typeof value !== "number") return;
+            // a drag holds the clip still under the finger, then lets it go
+            // on as it was
+            if (reason !== "keyboard" && !held.current) {
+              held.current = true;
+              resume.current = !clip.paused;
+              clip.pause();
+              setScrubbing(true);
+            }
+            clip.currentTime = value;
+            setTime((last) => ({ ...last, at: value }));
+          }}
+          onValueCommitted={() => {
+            if (!held.current) return;
+            held.current = false;
+            setScrubbing(false);
+            if (resume.current) clipRef.current?.play().catch(() => {});
+          }}
+          onKeyDown={(e) => {
+            // the arrows here move the playhead, not the gallery
+            if (e.key === "ArrowLeft" || e.key === "ArrowRight")
+              e.stopPropagation();
+          }}
+          className="flex-1"
+        />
+        <span className="w-8 shrink-0 text-right text-xs font-medium tabular-nums opacity-60">
+          -{clock(total - gone)}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A clip on the strip. It plays only while it is the one showing and has
+ * come to rest there; the showing one also carries its controls.
+ */
+function StripClip({
+  entry,
+  showing,
+  play,
+  controls,
+  controlsBelow,
+  docked,
+  open,
+  mediaRef,
+  wasDragged,
+}: {
+  entry: FigureEntry;
+  showing: boolean;
+  play: boolean;
+  controls: boolean;
+  controlsBelow: boolean;
+  /** Posed over the thumbnail, waiting for its frame: the thumbnail shows. */
+  docked: boolean;
+  open: boolean;
+  mediaRef?: RefObject<HTMLImageElement | HTMLVideoElement | null>;
+  wasDragged: () => boolean;
+}) {
+  const clipRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const clip = clipRef.current;
+    if (!clip) return;
+    if (play) clip.play().catch(() => {});
+    else clip.pause();
+  }, [play]);
+
+  return (
+    <>
+      <video
+        ref={(node) => {
+          clipRef.current = node;
+          if (mediaRef) mediaRef.current = node;
+        }}
+        src={entry.video}
+        poster={entry.src}
+        aria-label={showing && open ? entry.alt : undefined}
+        aria-hidden={showing ? undefined : true}
+        muted
+        loop
+        playsInline
+        preload={showing ? "auto" : "metadata"}
+        onClick={
+          showing
+            ? (e) => {
+                // a press on the picture plays or pauses it, as in any player
+                e.stopPropagation();
+                const clip = clipRef.current;
+                if (!clip || !open || wasDragged()) return;
+                if (clip.paused) clip.play().catch(() => {});
+                else clip.pause();
+              }
+            : undefined
+        }
+        className={cn(
+          "relative block size-full rounded-[inherit]",
+          open && "ring-1 ring-border",
+          showing && open && "cursor-default",
+          docked && "opacity-0",
+        )}
+      />
+      {controls ? (
+        <ClipControls clipRef={clipRef} below={controlsBelow} />
+      ) : null}
+    </>
+  );
+}
+
 function Lightbox({
   view,
   flyerRef,
@@ -382,11 +708,14 @@ function Lightbox({
   const reducedMotion = useReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const showingRef = useRef<HTMLImageElement>(null);
+  const showingRef = useRef<HTMLImageElement | HTMLVideoElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const dragged = useRef(false);
+  const dragControls = useDragControls();
   const open = phase === "open";
   const many = items.length > 1;
+  /** The figure that has come to rest in the middle: a clip plays from then. */
+  const [settled, setSettled] = useState<string | null>(null);
 
   // Only three images are ever on screen — the one showing and the two that
   // peek in — so only those are mounted, at any point, and the window moves
@@ -436,9 +765,10 @@ function Lightbox({
   }, [strip, index, reducedMotion, x]);
 
   // Posed over the thumbnail, the image waits until it can paint, so the
-  // thumbnail is never swapped for a blank frame. The neighbours wait with
-  // it: they are mounted for the flight too, and a photograph decoding on
-  // its first frames is exactly what drops them.
+  // thumbnail is never swapped for a blank frame (a clip, until it holds the
+  // thumbnail's frame). The neighbours wait with it: they are mounted for the
+  // flight too, and a photograph decoding on its first frames is exactly what
+  // drops them.
   useEffect(() => {
     if (phase !== "docked" || !strip) return;
     let live = true;
@@ -452,8 +782,11 @@ function Lightbox({
         image.src = items[i].src;
         return image.decode().catch(() => {});
       });
+    const showing = showingRef.current;
     void Promise.all([
-      showingRef.current?.decode().catch(() => {}),
+      showing instanceof HTMLVideoElement
+        ? cue(showing, items[index].thumb())
+        : showing?.decode().catch(() => {}),
       ...neighbours,
     ]).then(leave, leave);
     return () => {
@@ -485,6 +818,16 @@ function Lightbox({
       } else if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
         e.preventDefault();
         onGo(index + (e.key === "ArrowRight" ? 1 : -1));
+      } else if (
+        e.key === " " &&
+        showingRef.current instanceof HTMLVideoElement
+      ) {
+        // Space plays and pauses, as in any player, wherever focus is: on
+        // the close button it would otherwise close the view
+        e.preventDefault();
+        const clip = showingRef.current;
+        if (clip.paused) clip.play().catch(() => {});
+        else clip.pause();
       } else if (e.key === "Tab") {
         const stops = Array.from(
           rootRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? [],
@@ -578,6 +921,13 @@ function Lightbox({
             } as MotionStyle
           }
           drag={open && many ? "x" : false}
+          // started by hand, so a press a clip's controls keep to
+          // themselves never becomes a drag
+          dragControls={dragControls}
+          dragListener={false}
+          onPointerDown={(e) => {
+            if (open && many) dragControls.start(e);
+          }}
           dragMomentum={false}
           dragDirectionLock
           onDragStart={() => {
@@ -655,7 +1005,10 @@ function Lightbox({
                 onAnimationComplete={() => {
                   if (!showing) return;
                   if (phase === "returning") onLanded();
-                  else if (open) setLanded(true);
+                  else if (open) {
+                    setLanded(true);
+                    setSettled(entry.id);
+                  }
                 }}
                 onClick={
                   showing
@@ -688,18 +1041,40 @@ function Lightbox({
                   transition={FADE}
                   className="absolute inset-0 rounded-[inherit] shadow-2xl"
                 />
-                <img
-                  ref={showing ? showingRef : undefined}
-                  src={entry.src}
-                  alt={showing && open ? entry.alt : ""}
-                  aria-hidden={showing ? undefined : true}
-                  draggable={false}
-                  decoding="async"
-                  className={cn(
-                    "relative block size-full rounded-[inherit]",
-                    open && "ring-1 ring-border",
-                  )}
-                />
+                {entry.video ? (
+                  <StripClip
+                    entry={entry}
+                    showing={showing}
+                    play={
+                      showing && open && settled === entry.id && !reducedMotion
+                    }
+                    controls={showing && open && settled === entry.id}
+                    controlsBelow={(stage.h - h) / 2 >= BAR_SPACE}
+                    docked={phase === "docked"}
+                    open={open}
+                    mediaRef={showing ? showingRef : undefined}
+                    wasDragged={() => dragged.current}
+                  />
+                ) : (
+                  <img
+                    ref={
+                      showing
+                        ? (node) => {
+                            showingRef.current = node;
+                          }
+                        : undefined
+                    }
+                    src={entry.src}
+                    alt={showing && open ? entry.alt : ""}
+                    aria-hidden={showing ? undefined : true}
+                    draggable={false}
+                    decoding="async"
+                    className={cn(
+                      "relative block size-full rounded-[inherit]",
+                      open && "ring-1 ring-border",
+                    )}
+                  />
+                )}
               </motion.div>
             );
           })}
@@ -868,6 +1243,13 @@ export function FigureLightboxProvider({ children }: { children: ReactNode }) {
     const v = current.current;
     if (v.phase !== "open") return;
     const thumb = v.items[v.index]?.thumb();
+    // a clip flies home still, and the page's copy goes on from that frame
+    const clip = flyer.current?.querySelector("video");
+    if (clip) {
+      clip.pause();
+      if (thumb instanceof HTMLVideoElement)
+        thumb.currentTime = clip.currentTime;
+    }
     // Browsing never moves what is behind the view. The page catches up only
     // now, and only if the image showing has no slot on screen to land in.
     const slot = boxOf(thumb);

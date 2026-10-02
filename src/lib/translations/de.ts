@@ -154,6 +154,11 @@ export const de = {
     previousImage: "Vorheriges Bild",
     nextImage: "Nächstes Bild",
     imageOf: "Bild {current} von {total}",
+    expandVideo: "Video vergrössern",
+    expandVideoNamed: "Video vergrössern: {alt}",
+    play: "Abspielen",
+    pause: "Pausieren",
+    videoPosition: "Wiedergabeposition",
     moreOnGithub: "Mehr auf GitHub",
     view: "Ansehen",
     update: {

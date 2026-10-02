@@ -144,6 +144,11 @@ export const zh = {
     previousImage: "上一张图片",
     nextImage: "下一张图片",
     imageOf: "第 {current} 张，共 {total} 张",
+    expandVideo: "放大视频",
+    expandVideoNamed: "放大视频：{alt}",
+    play: "播放",
+    pause: "暂停",
+    videoPosition: "播放位置",
     moreOnGithub: "在 GitHub 上查看更多",
     view: "查看",
     update: {

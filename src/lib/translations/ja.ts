@@ -150,6 +150,11 @@ export const ja = {
     previousImage: "前の画像",
     nextImage: "次の画像",
     imageOf: "画像 {current} / {total}",
+    expandVideo: "動画を拡大",
+    expandVideoNamed: "動画を拡大: {alt}",
+    play: "再生",
+    pause: "一時停止",
+    videoPosition: "再生位置",
     moreOnGithub: "GitHub で見る",
     view: "表示",
     update: {

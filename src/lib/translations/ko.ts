@@ -152,6 +152,11 @@ export const ko = {
     previousImage: "이전 이미지",
     nextImage: "다음 이미지",
     imageOf: "이미지 {current} / {total}",
+    expandVideo: "동영상 확대",
+    expandVideoNamed: "동영상 확대: {alt}",
+    play: "재생",
+    pause: "일시정지",
+    videoPosition: "재생 위치",
     moreOnGithub: "GitHub에서 더 보기",
     view: "보기",
     update: {

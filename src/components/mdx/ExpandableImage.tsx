@@ -5,10 +5,10 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Expandable project figure: the thumbnail half. At rest it is the image and
- * a hairline; hover adds one round expand chip and nothing else. A click
- * hands the image to the article's lightbox (figure-lightbox.tsx), which
- * flies it out of this slot and back.
+ * Expandable project figure: the thumbnail half. At rest it is the image (or
+ * its clip, playing) and a hairline; hover adds one round expand chip and
+ * nothing else. A click hands it to the article's lightbox
+ * (figure-lightbox.tsx), which flies it out of this slot and back.
  */
 
 import {
@@ -26,9 +26,13 @@ import { cn } from "@/lib/utils";
 import { RADIUS_INLINE } from "./figure-layout";
 import { FigureLightboxProvider } from "./figure-lightbox";
 import { FigureLightboxContext } from "./figure-lightbox-context";
+import { InlineVideo } from "./InlineVideo";
 
 type ExpandableImageProps = {
+  /** The image, or the clip's poster when there is a `video`. */
   src: string;
+  /** A clip that plays in the image's place. */
+  video?: string;
   alt: string;
   /** Shown with the image when it is open. */
   caption?: string;
@@ -39,6 +43,7 @@ type ExpandableImageProps = {
 
 function Thumbnail({
   src,
+  video,
   alt,
   caption,
   radius,
@@ -46,19 +51,38 @@ function Thumbnail({
 }: ExpandableImageProps) {
   const lightbox = useContext(FigureLightboxContext);
   const id = useId();
-  const thumbRef = useRef<HTMLImageElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const t = useTranslation();
   const away = lightbox?.awayId === id;
   const register = lightbox?.register;
 
   useEffect(
-    () => register?.({ id, src, alt, caption, thumb: () => thumbRef.current }),
-    [register, id, src, alt, caption],
+    () =>
+      register?.({
+        id,
+        src,
+        video,
+        alt,
+        caption,
+        thumb: () => imageRef.current ?? videoRef.current,
+      }),
+    [register, id, src, video, alt, caption],
   );
 
   const expandLabel = alt.trim()
-    ? t.common.expandImageNamed.replace("{alt}", alt.trim())
-    : t.common.expandImage;
+    ? (video ? t.common.expandVideoNamed : t.common.expandImageNamed).replace(
+        "{alt}",
+        alt.trim(),
+      )
+    : video
+      ? t.common.expandVideo
+      : t.common.expandImage;
+  const mediaClass = cn(
+    "block h-auto w-full rounded-(--corner)",
+    away && "invisible",
+  );
+  const corner = { "--corner": radius ?? RADIUS_INLINE } as CSSProperties;
 
   return (
     <button
@@ -84,22 +108,30 @@ function Thumbnail({
     >
       {/* width/height only carry the aspect ratio (the class still sizes
           the image): the box is reserved before a lazy image loads, so the
-          page does not grow under a reader or under a jump to a section */}
-      <img
-        ref={thumbRef}
-        src={src}
-        alt=""
-        width={PROJECT_IMAGE_SIZES[src]?.[0]}
-        height={PROJECT_IMAGE_SIZES[src]?.[1]}
-        style={{ "--corner": radius ?? RADIUS_INLINE } as CSSProperties}
-        // the lightbox's flyer is this image while it is away
-        className={cn(
-          "block h-auto w-full rounded-(--corner)",
-          away && "invisible",
-        )}
-        loading="lazy"
-        decoding="async"
-      />
+          page does not grow under a reader or under a jump to a section.
+          The lightbox's flyer is this image while it is away. */}
+      {video ? (
+        <InlineVideo
+          src={video}
+          poster={src}
+          held={lightbox?.awayId != null}
+          videoRef={videoRef}
+          style={corner}
+          className={mediaClass}
+        />
+      ) : (
+        <img
+          ref={imageRef}
+          src={src}
+          alt=""
+          width={PROJECT_IMAGE_SIZES[src]?.[0]}
+          height={PROJECT_IMAGE_SIZES[src]?.[1]}
+          style={corner}
+          className={mediaClass}
+          loading="lazy"
+          decoding="async"
+        />
+      )}
 
       <span
         aria-hidden="true"

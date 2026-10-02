@@ -12,11 +12,14 @@ import { createContext } from "react";
 
 export type FigureEntry = {
   id: string;
+  /** The image, or a clip's poster: what sizes it, and its filmstrip slice. */
   src: string;
+  /** A clip that plays in the image's place. */
+  video?: string;
   alt: string;
   caption?: string;
   /** The thumbnail in the page: where the image leaves from and lands. */
-  thumb: () => HTMLImageElement | null;
+  thumb: () => HTMLImageElement | HTMLVideoElement | null;
 };
 
 export type LightboxApi = {
