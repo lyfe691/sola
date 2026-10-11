@@ -37,6 +37,8 @@ type ExpandableImageProps = {
   caption?: string;
   /** Set by a frame: the corners it cuts the image to. The frame then lifts it. */
   radius?: string;
+  /** Handed the clip's element while it is mounted. */
+  onClip?: (clip: HTMLVideoElement | null) => void;
   className?: string;
 };
 
@@ -46,6 +48,7 @@ function Thumbnail({
   alt,
   caption,
   radius,
+  onClip,
   className,
 }: ExpandableImageProps) {
   const lightbox = useContext(FigureLightboxContext);
@@ -68,6 +71,12 @@ function Thumbnail({
       }),
     [register, id, src, video, alt, caption],
   );
+
+  useEffect(() => {
+    if (!video || !onClip) return;
+    onClip(videoRef.current);
+    return () => onClip(null);
+  }, [onClip, video]);
 
   const expandLabel = alt.trim()
     ? (video ? t.common.expandVideoNamed : t.common.expandImageNamed).replace(

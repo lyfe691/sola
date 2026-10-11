@@ -899,6 +899,58 @@
   text-decoration-color: var(--prose-strong);
 }
 
+/* ---------- device frames (mdx/frames.tsx) ---------- */
+/* The chrome is painted from the colours along the screen's top edge, one
+   stop per column of frame-edge.ts (EDGE_STOPS: keep the two in step), and
+   the ink that reads on them. Registered as colours so a playing clip's edge
+   glides from one reading to the next instead of stepping. */
+@property --frame-edge-0 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+@property --frame-edge-1 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+@property --frame-edge-2 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+@property --frame-edge-3 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+@property --frame-edge-4 {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+@property --frame-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: black;
+}
+
+.frame-edge {
+  --frame-ground: linear-gradient(
+    to right,
+    var(--frame-edge-0) 10%,
+    var(--frame-edge-1) 30%,
+    var(--frame-edge-2) 50%,
+    var(--frame-edge-3) 70%,
+    var(--frame-edge-4) 90%
+  );
+  transition-property:
+    --frame-edge-0, --frame-edge-1, --frame-edge-2, --frame-edge-3,
+    --frame-edge-4, --frame-ink;
+  transition-duration: 400ms;
+  transition-timing-function: var(--ease-out);
+}
+
 /* ---------- type band (deep-dive tech stack) ---------- */
 /* Geist is variable, so letters like t and L are overlapping shapes and a
    plain stroke outlines every overlap. The stroke is painted under a fill

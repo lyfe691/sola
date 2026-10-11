@@ -17,8 +17,8 @@
  * them all alike, by the footprint figure-layout.ts gives them.
  */
 
-import type { CSSProperties, ReactNode } from "react";
-import { PROJECT_IMAGE_TINTS } from "@/config/project-image-sizes";
+import { useState, type CSSProperties, type ReactNode } from "react";
+import { PROJECT_IMAGE_EDGES } from "@/config/project-image-sizes";
 import { Hint } from "@/components/ui/custom/hint";
 import { useTruncated } from "@/hooks/use-truncated";
 import { cn } from "@/lib/utils";
@@ -90,6 +90,7 @@ export function FigureCaption({
 }
 
 function FigureMedia({ figure }: { figure: FigureImage }) {
+  const [clip, setClip] = useState<HTMLVideoElement | null>(null);
   const media = (
     <ExpandableImage
       src={figure.src}
@@ -97,6 +98,7 @@ function FigureMedia({ figure }: { figure: FigureImage }) {
       alt={figure.alt}
       caption={figure.caption}
       radius={figure.frame ? SCREEN_RADIUS[figure.frame] : undefined}
+      onClip={figure.frame ? setClip : undefined}
     />
   );
   if (!figure.frame) return media;
@@ -104,7 +106,8 @@ function FigureMedia({ figure }: { figure: FigureImage }) {
     <DeviceFrame
       frame={figure.frame}
       url={figure.url}
-      tint={PROJECT_IMAGE_TINTS[figure.src]}
+      edge={PROJECT_IMAGE_EDGES[figure.src]}
+      clip={clip}
     >
       {media}
     </DeviceFrame>
