@@ -161,7 +161,7 @@ export const PROJECT_IMAGE_TINTS: Record<string, string> = {
   "/projects/fleetmap/de-tracking.webp": "#ffffff",
   "/projects/fleetmap/focus.webp": "#f4f4ec",
   "/projects/fleetmap/live.webp": "#f6f5ee",
-  "/projects/fleetmap/map.webp": "#eaf1e0",
+  "/projects/fleetmap/map.webp": "#eaf1e1",
   "/projects/fleetmap/replay.webp": "#fefefe",
   "/projects/fleetmap/tracking.webp": "#ffffff",
   "/projects/kinoa/ar-title.webp": "#1c110e",
