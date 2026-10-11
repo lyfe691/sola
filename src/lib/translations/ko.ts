@@ -457,7 +457,7 @@ export const ko = {
         title: "fleetmap",
         tagline: "차량 GPS를 사무실 화면으로 실시간 전송",
         description:
-          "fleetmap은 배송 차량의 실시간 지도입니다. 각 차량의 휴대폰이 위치를 보내면 사무실 화면에 모든 차량의 움직임이 정류지, ETA, 지연과 함께 표시됩니다. 지난 날의 운행도 기록된 경로로 다시 재생할 수 있습니다. Next.js, Supabase, MapLibre로 만들었습니다.",
+          "fleetmap은 배송 차량의 실시간 지도입니다. 각 차량의 휴대폰이 위치를 보내면 사무실 화면에 모든 차량의 움직임이 정류지, ETA, 지연과 함께 표시됩니다. 최근 30일 동안의 운행은 기록된 경로로 다시 재생할 수 있습니다. Next.js, Supabase, MapLibre로 만들었습니다.",
         overview:
           "저는 스위스의 한 배송 회사를 위해, 사무실 벽에 계속 띄워 두는 화면으로 fleetmap을 만들었습니다. Supabase 위에서 동작하는 Next.js 앱이며, 지도는 MapLibre로 그리고 도로 경로와 도착 시각은 OSRM이 계산합니다.",
       },

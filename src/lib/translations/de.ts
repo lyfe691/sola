@@ -463,7 +463,7 @@ export const de = {
         title: "fleetmap",
         tagline: "Vom Handy im Lieferwagen auf den Büro-Bildschirm",
         description:
-          "fleetmap ist eine Live-Karte einer Lieferflotte. Das Handy jedes Lieferwagens meldet seine Position, und ein Bildschirm im Büro zeigt jeden Wagen in Bewegung, mit Stopps, ETA und Verspätung. Jeder vergangene Tag lässt sich aus der aufgezeichneten Strecke wieder abspielen. Gebaut mit Next.js, Supabase und MapLibre.",
+          "fleetmap ist eine Live-Karte einer Lieferflotte. Das Handy jedes Lieferwagens meldet seine Position, und ein Bildschirm im Büro zeigt jeden Wagen in Bewegung, mit Stopps, ETA und Verspätung. Jeder Tag der letzten 30 Tage lässt sich aus der aufgezeichneten Strecke wieder abspielen. Gebaut mit Next.js, Supabase und MapLibre.",
         overview:
           "Ich habe fleetmap für ein Lieferunternehmen in der Schweiz gebaut, als Bildschirm, den das Büro an der Wand hängen hat. Es ist eine Next.js-App auf Supabase; die Karte zeichnet MapLibre, die Strassenrouten und Ankunftszeiten berechnet OSRM.",
       },

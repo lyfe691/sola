@@ -464,7 +464,7 @@ export const es = {
         title: "fleetmap",
         tagline: "GPS de cada furgoneta en la pantalla",
         description:
-          "fleetmap es un mapa en vivo de una flota de reparto. El teléfono de cada furgoneta informa su posición y una pantalla en la oficina muestra cada vehículo en movimiento, con sus paradas, su ETA y su retraso. Cualquier día pasado se puede reproducir a partir del recorrido grabado. Hecho con Next.js, Supabase y MapLibre.",
+          "fleetmap es un mapa en vivo de una flota de reparto. El teléfono de cada furgoneta informa su posición y una pantalla en la oficina muestra cada vehículo en movimiento, con sus paradas, su ETA y su retraso. Cualquier día de los últimos 30 se puede reproducir a partir del recorrido grabado. Hecho con Next.js, Supabase y MapLibre.",
         overview:
           "Construí fleetmap para una empresa de reparto en Suiza, como la pantalla que su oficina mantiene en la pared. Es una aplicación de Next.js sobre Supabase, con el mapa dibujado por MapLibre y las rutas por carretera y las horas de llegada calculadas por OSRM.",
       },

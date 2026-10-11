@@ -457,7 +457,7 @@ export const en = {
         title: "fleetmap",
         tagline: "Van phones stream GPS to an office TV",
         description:
-          "fleetmap is a live map of a delivery fleet. Each van's phone reports its position, and a screen in the office shows every van moving, with its stops, ETA and how late it is running. Any past day can be replayed from the recorded track. Built with Next.js, Supabase and MapLibre.",
+          "fleetmap is a live map of a delivery fleet. Each van's phone reports its position, and a screen in the office shows every van moving, with its stops, ETA and how late it is running. Any day from the last 30 can be replayed from the recorded track. Built with Next.js, Supabase and MapLibre.",
         overview:
           "I built fleetmap for a delivery company in Switzerland, as the screen its office keeps on the wall. It is a Next.js app on Supabase, with the map drawn by MapLibre and the road routes and arrival times worked out by OSRM.",
       },

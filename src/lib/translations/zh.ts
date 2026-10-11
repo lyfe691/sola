@@ -448,7 +448,7 @@ export const zh = {
         title: "fleetmap",
         tagline: "货车GPS实时投送到办公室大屏",
         description:
-          "fleetmap 是一张配送车队的实时地图。每辆货车的手机上报位置，办公室的大屏显示每辆车的移动，以及停靠点、ETA 和延误情况。任何一天的行程都可以根据记录的轨迹回放。使用 Next.js、Supabase 和 MapLibre 构建。",
+          "fleetmap 是一张配送车队的实时地图。每辆货车的手机上报位置，办公室的大屏显示每辆车的移动，以及停靠点、ETA 和延误情况。最近 30 天内任何一天的行程都可以根据记录的轨迹回放。使用 Next.js、Supabase 和 MapLibre 构建。",
         overview:
           "我为瑞士的一家配送公司做了 fleetmap，作为它办公室挂在墙上的那块屏幕。它是一个基于 Supabase 的 Next.js 应用，地图由 MapLibre 绘制，道路路线和到达时间由 OSRM 计算。",
       },

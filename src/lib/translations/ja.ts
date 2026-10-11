@@ -455,7 +455,7 @@ export const ja = {
         title: "fleetmap",
         tagline: "配送車のGPSを事務所のモニターへ",
         description:
-          "fleetmap は配送車両のライブマップです。各車両のスマートフォンが位置を送信し、オフィスの画面に全車両の動きが停車地・ETA・遅延とともに表示されます。過去の任意の日を、記録された走行データから再生できます。Next.js、Supabase、MapLibre で構築しました。",
+          "fleetmap は配送車両のライブマップです。各車両のスマートフォンが位置を送信し、オフィスの画面に全車両の動きが停車地・ETA・遅延とともに表示されます。過去30日間の任意の日を、記録された走行データから再生できます。Next.js、Supabase、MapLibre で構築しました。",
         overview:
           "fleetmap は、スイスのある配送会社のために、そのオフィスが壁に掛けている画面として私が作りました。Supabase 上で動く Next.js のアプリで、マップは MapLibre で描画し、道路のルートと到着時刻は OSRM で算出しています。",
       },
