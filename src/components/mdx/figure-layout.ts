@@ -70,9 +70,6 @@ export const rowShares = (figures: readonly FigureShape[]) => {
 export const STAGE_HEIGHT = 27;
 export const GAP = 1.25;
 
-/** Corner radius of a bare figure, in px; the lightbox's flyer lands on it. */
-export const RADIUS_INLINE = 12;
-
 /** The article column at desktop, in px — measured, not configured. */
 export const ARTICLE_COLUMN = 896;
 

@@ -16,7 +16,7 @@
  * cannot pile up and a drag can follow the finger.
  *
  * Opening never fades one picture into another. The image showing is posed
- * over its thumbnail (translate + scale, the corner radius divided by the
+ * over its thumbnail (translate + scale, each corner's radius divided by the
  * scale so it reads the same), then released to its place on the strip;
  * closing poses it back over the thumbnail of whichever image is showing.
  * It stays above the backdrop for the whole trip, so it is solid while
@@ -119,13 +119,28 @@ const SECONDS = {
 
 /** closed → docked (posed over the thumbnail) → open → returning → closed */
 type Phase = "closed" | "docked" | "open" | "returning";
-/** A thumbnail's place on screen and its corner: the flyer poses on both. */
+/** Corner radii in px, clockwise from the top left. */
+type Corners = readonly [number, number, number, number];
+const OPEN_CORNERS: Corners = [
+  RADIUS_OPEN,
+  RADIUS_OPEN,
+  RADIUS_OPEN,
+  RADIUS_OPEN,
+];
+/** As the flyer animates them: at `scale`, so they land at their size. */
+const cornersAt = ([tl, tr, br, bl]: Corners, scale = 1) => ({
+  borderTopLeftRadius: tl / scale,
+  borderTopRightRadius: tr / scale,
+  borderBottomRightRadius: br / scale,
+  borderBottomLeftRadius: bl / scale,
+});
+/** A thumbnail's place on screen and its corners: the flyer poses on both. */
 type Box = {
   top: number;
   left: number;
   width: number;
   height: number;
-  radius: number;
+  corners: Corners;
 };
 type View = {
   phase: Phase;
@@ -155,22 +170,20 @@ const boxOf = (node: Element | null | undefined): Box | null => {
   if (!node) return null;
   const rect = node.getBoundingClientRect();
   const style = getComputedStyle(node);
-  // the largest of the four: a framed screen is square where it meets the
-  // chrome and round where the frame's own corners are
-  const radius = Math.max(
-    ...[
-      style.borderTopLeftRadius,
-      style.borderTopRightRadius,
-      style.borderBottomRightRadius,
-      style.borderBottomLeftRadius,
-    ].map((corner) => parseFloat(corner) || 0),
-  );
+  // each on its own: a framed screen is square where it meets the chrome and
+  // round where the frame's own corners are
+  const corner = (radius: string) => parseFloat(radius) || 0;
   return {
     top: rect.top,
     left: rect.left,
     width: rect.width,
     height: rect.height,
-    radius,
+    corners: [
+      corner(style.borderTopLeftRadius),
+      corner(style.borderTopRightRadius),
+      corner(style.borderBottomRightRadius),
+      corner(style.borderBottomLeftRadius),
+    ],
   };
 };
 
@@ -959,7 +972,7 @@ function Lightbox({
                   y: 0,
                   scale: NEIGHBOUR_SCALE,
                   opacity: open ? NEIGHBOUR_OPACITY : 0,
-                  borderRadius: RADIUS_OPEN,
+                  ...cornersAt(OPEN_CORNERS),
                 }
               : open
                 ? {
@@ -967,14 +980,14 @@ function Lightbox({
                     y: 0,
                     scale: 1,
                     opacity: 1,
-                    borderRadius: RADIUS_OPEN,
+                    ...cornersAt(OPEN_CORNERS),
                   }
                 : {
                     x: dock.left + dock.width / 2 - stage.cx,
                     y: dock.top + dock.height / 2 - stage.cy,
                     scale,
                     opacity: 1,
-                    borderRadius: dock.radius / scale,
+                    ...cornersAt(dock.corners, scale),
                   };
             const flight = !open
               ? FLIGHT_BACK

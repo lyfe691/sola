@@ -11,7 +11,7 @@
  * there, on a press.
  */
 
-import { useEffect, useState, type CSSProperties, type RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
 import { useReducedMotion } from "motion/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 
@@ -20,7 +20,6 @@ export function InlineVideo({
   poster,
   held,
   videoRef,
-  style,
   className,
 }: {
   src: string;
@@ -30,7 +29,6 @@ export function InlineVideo({
   /** The lightbox is open: the page's clips wait behind it. */
   held: boolean;
   videoRef: RefObject<HTMLVideoElement | null>;
-  style?: CSSProperties;
   className?: string;
 }) {
   const [onScreen, setOnScreen] = useState(false);
@@ -69,7 +67,6 @@ export function InlineVideo({
       loop
       playsInline
       preload="metadata"
-      style={style}
       className={className}
     />
   );

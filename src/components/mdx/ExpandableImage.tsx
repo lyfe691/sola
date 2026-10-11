@@ -23,7 +23,6 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
-import { RADIUS_INLINE } from "./figure-layout";
 import { FigureLightboxProvider } from "./figure-lightbox";
 import { FigureLightboxContext } from "./figure-lightbox-context";
 import { InlineVideo } from "./InlineVideo";
@@ -79,10 +78,9 @@ function Thumbnail({
       ? t.common.expandVideo
       : t.common.expandImage;
   const mediaClass = cn(
-    "block h-auto w-full rounded-(--corner)",
+    "block h-auto w-full rounded-[inherit]",
     away && "invisible",
   );
-  const corner = { "--corner": radius ?? RADIUS_INLINE } as CSSProperties;
 
   return (
     <button
@@ -116,7 +114,6 @@ function Thumbnail({
           poster={src}
           held={lightbox?.awayId != null}
           videoRef={videoRef}
-          style={corner}
           className={mediaClass}
         />
       ) : (
@@ -126,7 +123,6 @@ function Thumbnail({
           alt=""
           width={PROJECT_IMAGE_SIZES[src]?.[0]}
           height={PROJECT_IMAGE_SIZES[src]?.[1]}
-          style={corner}
           className={mediaClass}
           loading="lazy"
           decoding="async"
