@@ -5,6 +5,31 @@
 @import "@fontsource-variable/geist";
 @import "@fontsource-variable/jetbrains-mono";
 
+/* the heading face: Mona Sans cut to the one width headings use, under the
+   name its licence asks a cut to take (scripts/heading-face.mjs) */
+@font-face {
+  font-family: "Sola Heading";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500 800;
+  src: url("./assets/fonts/sola-heading-latin-wght.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Sola Heading";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500 800;
+  src: url("./assets/fonts/sola-heading-latin-ext-wght.woff2") format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 /* scheme attr covers the custom dark themes (cyber, forest, …), which
    never carry the literal .dark class — theme-provider keeps it in sync */
 @custom-variant dark (&:is(.dark *, [data-scheme="dark"] *));
@@ -23,9 +48,15 @@
 }
 
 @theme inline {
-  /* same face today; kept apart so headings can take their own again */
-  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  /* --heading-face and --font-cjk sit inside the stacks because utilities
+     copy them in whole: a language that needs either sets it on <html>
+     ("heading face" and "CJK faces" below) */
+  --font-sans:
+    "Geist Variable", var(--font-cjk, ui-sans-serif), ui-sans-serif, system-ui,
+    sans-serif;
+  --font-heading:
+    var(--heading-face, "Sola Heading"), "Geist Variable",
+    var(--font-cjk, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     "JetBrains Mono Variable", ui-monospace, SFMono-Regular, monospace;
   /* faces load with the /a chunk only — the @fontsource imports live in that page */
@@ -547,6 +578,36 @@
     font-family: var(--font-heading);
   }
 
+  /* ---------- heading face ---------- */
+  /* Japanese, Korean and Chinese pages keep their headings in their own
+     sans: a wide Latin word beside full-width glyphs reads as another size */
+  html:is(:lang(ja), :lang(ko), :lang(zh)) {
+    --heading-face: "Geist Variable";
+  }
+
+  /* ---------- CJK faces ---------- */
+  /* Geist has no CJK glyphs. Apple's own faces come first (installed, so
+     nothing downloads), then Noto: Android's installed copy, else the
+     webfont the locale's chunk brings (translations/index.ts). Windows has
+     neither, and its defaults set Japanese thin and grey. Chinese keeps the
+     system's faces: its webfont measured 640-920 KB a page, for a page that
+     looked nearly the same in YaHei. */
+  html:lang(ja) {
+    --font-cjk:
+      "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans CJK JP",
+      "Noto Sans JP Variable";
+  }
+  html:lang(ko) {
+    --font-cjk:
+      "Apple SD Gothic Neo", "Noto Sans CJK KR", "Noto Sans KR Variable";
+  }
+
+  /* kana and punctuation set at their proportional widths: full-width
+     spacing reads as letterspaced at heading sizes */
+  :lang(ja) :is(h1, h2, h3, h4, h5, h6) {
+    font-feature-settings: "palt";
+  }
+
   button,
   [role="button"] {
     cursor: pointer;
@@ -897,6 +958,16 @@
 .mdx a.link:hover {
   color: var(--foreground);
   text-decoration-color: var(--prose-strong);
+}
+
+/* ---------- page titles in the heading face ---------- */
+/* Unlayered, so it wins over the title utilities, whose weight and spacing
+   were set for Geist. Only where the heading face is set (see base).
+   .page-title is a title drawn without an <h1>: the palette's deep-dive hero. */
+html:not(:lang(ja), :lang(ko), :lang(zh))
+  :is(h1:not(.font-mincho), .page-title) {
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
 /* ---------- device frames (mdx/frames.tsx) ---------- */

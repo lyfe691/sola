@@ -503,7 +503,7 @@ export const es = {
     built:
       "Es una app de [React](https://react.dev) en [TypeScript](https://www.typescriptlang.org), construida con [Vite](https://vite.dev) para que el camino del guardado a la pantalla no se note. El color y el espacio vienen de [Tailwind CSS](https://tailwindcss.com) y [shadcn/ui](https://ui.shadcn.com) — tokens, nunca una paleta cruda. Lo que se mueve es [Motion](https://motion.dev) para la interfaz y [GSAP](https://gsap.com) para los cielos; dos relojes, para que un botón no le pida prestado a un fondo.",
     faces:
-      "Las letras son [Geist](https://vercel.com/font) tanto para leer como para los nombres, [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) para el código y [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1) para tinta como esta. Vive en [Vercel](https://vercel.com); el código está en [GitHub](https://github.com/lyfe691/sola).",
+      "Las letras son [Geist](https://vercel.com/font) para leer, [Mona Sans](https://github.com/mona-sans) ancha para los nombres, [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) para el código y [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1) para tinta como esta. El japonés y el coreano se componen en [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP) y [Noto Sans KR](https://fonts.google.com/noto/specimen/Noto+Sans+KR). Vive en [Vercel](https://vercel.com); el código está en [GitHub](https://github.com/lyfe691/sola).",
     close: "Compuesto a mano en Zúrich. Gracias por la visita.",
     back: "Volver",
   },

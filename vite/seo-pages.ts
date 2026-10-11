@@ -442,6 +442,20 @@ function rewrite(
  */
 const MANAGED = "data-react-managed";
 
+/**
+ * The languages whose pages set their headings in their own sans (index.css,
+ * "heading face"): the heading face's preload would fetch a font they never
+ * use. font-preload.ts adds the link at build time, so a source without it
+ * (the tests' index.html) is fine.
+ */
+const OWN_SANS_HEADINGS = new Set<Language>(["ja", "ko", "zh"]);
+const dropHeadingPreload = (html: string) =>
+  html.replace(TAG, (match, _space: string, tag: string) =>
+    tag === "link" && attributesOf(match)["data-face"] === "heading"
+      ? ""
+      : match,
+  );
+
 /** index.html's head, with this page's tags in place of the home page's */
 export function renderPage(html: string, page: SeoPage): string {
   const url = pageUrl(page);
@@ -465,6 +479,7 @@ export function renderPage(html: string, page: SeoPage): string {
   if (!/<html lang="en">/.test(html))
     throw new Error('seo-pages: index.html has no <html lang="en">');
   html = html.replace(/<html lang="en">/, `<html lang="${page.language}">`);
+  if (OWN_SANS_HEADINGS.has(page.language)) html = dropHeadingPreload(html);
 
   setMeta("name", "description", page.description, true);
 

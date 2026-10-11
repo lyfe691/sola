@@ -27,7 +27,7 @@ import {
 import { JOB, LOCATION, ROLE, SITE_URL } from "./site.ts";
 
 /** Bump when the card's look changes: every card then gets a new URL. */
-export const OG_VERSION = 3;
+export const OG_VERSION = 4;
 
 /** A fact in the card's bottom row: a small label over its value. */
 export type OgCell = readonly [label: string, value: string];

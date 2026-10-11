@@ -34,7 +34,10 @@ export default defineConfig({
     deepDiveTranslations(),
     hugeiconsPerIcon(),
     routePreload(),
-    fontPreload("geist-latin-wght-normal"),
+    fontPreload({
+      body: "geist-latin-wght-normal",
+      heading: "sola-heading-latin-wght",
+    }),
     seoPages(),
     {
       enforce: "pre",

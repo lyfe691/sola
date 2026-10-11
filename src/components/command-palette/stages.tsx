@@ -91,7 +91,7 @@ function Hero({
         className="absolute inset-0"
       />
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 px-6 text-center text-white">
-        <span className="text-3xl leading-display font-extrabold tracking-display text-balance">
+        <span className="page-title font-heading text-3xl leading-display font-extrabold tracking-display text-balance">
           {title}
         </span>
         <span className="text-sm leading-display font-light tracking-display text-white/90">

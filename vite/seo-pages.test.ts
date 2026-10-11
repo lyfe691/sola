@@ -527,6 +527,26 @@ describe("languages", () => {
     );
   });
 
+  it("preload the heading face only where headings are set in it", () => {
+    const built = INDEX.replace(
+      "</head>",
+      '  <link rel="preload" href="/assets/heading.woff2" as="font" type="font/woff2" crossorigin="" data-face="heading">\n</head>',
+    );
+    const preloads = (code: Language) =>
+      count(
+        renderPage(
+          built,
+          EVERY.find((p) => p.language === code && p.route === "/about")!,
+        ),
+        "data-face",
+        "heading",
+      );
+    for (const code of ["en", "de", "es"] as const)
+      expect(preloads(code), code).toBe(1);
+    for (const code of ["ja", "ko", "zh"] as const)
+      expect(preloads(code), code).toBe(0);
+  });
+
   it("list every language version in the sitemap, and nothing kept out", () => {
     const xml = sitemapXml(EVERY);
     const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);

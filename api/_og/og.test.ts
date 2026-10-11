@@ -134,8 +134,8 @@ const contrast = (a: number[], b: number[]) => {
 describe("layout", () => {
   const surface = rgb(SURFACE);
   const { W, H, RULE, CELLS, CELL_W, PAD, CROP } = GRID;
-  const isTitle = (line: { face: { weight: number } }) =>
-    line.face.weight === 600;
+  const isTitle = (line: { face: { family: string } }) =>
+    line.face.family === "Sola Heading";
 
   it.each(KEYS)(
     "sets %s inside its band of the grid, clear of the rules and the crop",

@@ -496,7 +496,7 @@ export const ko = {
     built:
       "[React](https://react.dev)와 [TypeScript](https://www.typescriptlang.org)로 만든 앱이고, 저장에서 화면까지의 거리가 보이지 않게 [Vite](https://vite.dev)로 짓습니다. 색과 여백은 [Tailwind CSS](https://tailwindcss.com)와 [shadcn/ui](https://ui.shadcn.com) — 토큰만, 날것의 팔레트는 쓰지 않습니다. 움직이는 것은 인터페이스가 [Motion](https://motion.dev), 하늘이 [GSAP](https://gsap.com). 시계는 둘입니다. 버튼이 배경의 박자를 빌려 쓰지 않게.",
     faces:
-      "글자는 읽기에도 이름에도 [Geist](https://vercel.com/font), 코드용 [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono), 그리고 이런 먹색에는 [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1). [Vercel](https://vercel.com)에 살고, 원본은 [GitHub](https://github.com/lyfe691/sola)에 있습니다.",
+      "글자는 본문에 [Geist](https://vercel.com/font), 이름에 너비를 넓힌 [Mona Sans](https://github.com/mona-sans), 코드에 [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono), 그리고 이런 먹색에 [Shippori Mincho B1](https://fonts.google.com/specimen/Shippori+Mincho+B1). 한국어는 [Noto Sans KR](https://fonts.google.com/noto/specimen/Noto+Sans+KR), 일본어는 [Noto Sans JP](https://fonts.google.com/noto/specimen/Noto+Sans+JP)로 짭니다. [Vercel](https://vercel.com)에 살고, 원본은 [GitHub](https://github.com/lyfe691/sola)에 있습니다.",
     close: "취리히에서 손으로 짰습니다. 들러주셔서 감사합니다.",
     back: "돌아가기",
   },

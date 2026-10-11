@@ -23,6 +23,17 @@ const LOADERS: Record<Language, () => Promise<Translation>> = {
   zh: () => import("./zh").then((m) => m.zh),
 };
 
+/**
+ * The face for a language Geist has no glyphs for (index.css, "CJK faces"),
+ * fetched alongside its dictionary. Not awaited: the font files only swap in
+ * once the page uses their characters, so holding the first render for the
+ * rules would delay the text and change nothing.
+ */
+const FACES: Partial<Record<Language, () => Promise<unknown>>> = {
+  ja: () => import("@fontsource-variable/noto-sans-jp"),
+  ko: () => import("@fontsource-variable/noto-sans-kr"),
+};
+
 const loaded = new Map<Language, Translation>([["en", en]]);
 const pending = new Map<Language, Promise<Translation>>();
 
@@ -37,6 +48,8 @@ export const loadedTranslation = (language: Language) => loaded.get(language);
 export function loadTranslation(language: Language): Promise<Translation> {
   let promise = pending.get(language);
   if (!promise) {
+    // without it the system's own face sets the page, which is a fallback
+    FACES[language]?.().catch(() => {});
     promise = LOADERS[language]().then(
       (translation) => {
         loaded.set(language, translation);

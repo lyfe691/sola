@@ -61,8 +61,9 @@ const font = (url: URL) => {
   return { data, metrics: fontMetrics(data) };
 };
 // Satori takes static instances only (no variable fonts, no WOFF2): the
-// Latin subsets of the site's Geist and JetBrains Mono, as TTF
-const SEMIBOLD = font(new URL("./_fonts/Geist-SemiBold.ttf", import.meta.url));
+// Latin subsets of the site's faces as TTF, the heading face's bold cut by
+// scripts/heading-face.mjs
+const HEADING = font(new URL("./_fonts/SolaHeading-Bold.ttf", import.meta.url));
 const MEDIUM = font(new URL("./_fonts/Geist-Medium.ttf", import.meta.url));
 const REGULAR = font(new URL("./_fonts/Geist-Regular.ttf", import.meta.url));
 const MONO = font(
@@ -72,7 +73,7 @@ const MONO = font(
 // one array for the life of the instance: Satori keeps the parsed fonts
 // keyed by it, and a new array would parse them again on every card
 const FONTS: ImageResponseOptions["fonts"] = [
-  { name: "Geist", data: SEMIBOLD.data, weight: 600, style: "normal" },
+  { name: "Sola Heading", data: HEADING.data, weight: 700, style: "normal" },
   { name: "Geist", data: MEDIUM.data, weight: 500, style: "normal" },
   { name: "Geist", data: REGULAR.data, weight: 400, style: "normal" },
   { name: "Mono", data: MONO.data, weight: 500, style: "normal" },
@@ -90,8 +91,8 @@ const LEAF = (() => {
 })();
 
 interface Face {
-  family: "Geist" | "Mono";
-  weight: 400 | 500 | 600;
+  family: "Sola Heading" | "Geist" | "Mono";
+  weight: 400 | 500 | 700;
   metrics: FontMetrics;
   /** letter-spacing, em */
   tracking: number;
@@ -106,7 +107,7 @@ const face = (
   caps = false,
 ): Face => ({ family, weight, metrics, tracking, caps });
 
-const TITLE = face("Geist", 600, SEMIBOLD.metrics, -0.04);
+const TITLE = face("Sola Heading", 700, HEADING.metrics, -0.025);
 const LINE = face("Geist", 400, REGULAR.metrics, -0.012);
 const BYLINE = face("Geist", 500, MEDIUM.metrics, -0.01);
 const VALUE = face("Geist", 400, REGULAR.metrics, -0.01);
