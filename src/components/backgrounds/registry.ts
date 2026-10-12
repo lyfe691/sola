@@ -65,6 +65,11 @@ export const BACKGROUNDS: BackgroundDef[] = [
     label: "Liquid Ether",
     component: lazy(() => import("./liquid-ether/LiquidEtherBackground")),
   },
+  {
+    id: "cloud-atlas",
+    label: "Cloud Atlas",
+    component: lazy(() => import("./cloud-atlas/CloudAtlasBackground")),
+  },
 ];
 
 export type BackgroundOption = {
