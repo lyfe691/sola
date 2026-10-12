@@ -5,11 +5,10 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Related-project picker for the deep-dive footer. Every other deep-dive is
- * scored by IDF-weighted tech overlap — sharing a rare technology says more
- * than sharing React — and the day's picks rotate through the top of that
- * ranking on a date-seeded hash, so the pair changes daily without ever
- * showing an unrelated project while a related one exists.
+ * The deep-dive footer's picks: deep dives the reader hasn't opened yet, the
+ * most related first (IDF-weighted tech overlap, so a shared rare technology
+ * counts for more than a shared React); once every one has been opened, the
+ * ones opened longest ago.
  */
 
 import {
@@ -17,73 +16,76 @@ import {
   projectPagesConfig,
 } from "@/config/project-deep-dive";
 
-const normalize = (tech: string) => tech.toLowerCase();
+const SEEN_KEY = "sola-seen-projects";
 
-const hashString = (value: string): number => {
-  let hash = 0;
-  for (let i = 0; i < value.length; i++) {
-    hash = (hash * 31 + value.charCodeAt(i)) | 0;
+/** slug → when the reader last opened that deep dive (ms) */
+export type SeenProjects = Record<string, number>;
+
+export function readSeenProjects(): SeenProjects {
+  try {
+    const parsed: unknown = JSON.parse(localStorage.getItem(SEEN_KEY) ?? "{}");
+    if (!parsed || typeof parsed !== "object") return {};
+    return Object.fromEntries(
+      Object.entries(parsed).filter(
+        (entry): entry is [string, number] => typeof entry[1] === "number",
+      ),
+    );
+  } catch {
+    return {};
   }
-  return Math.abs(hash);
-};
+}
+
+export function markProjectSeen(slug: string) {
+  try {
+    const seen = readSeenProjects();
+    seen[slug] = Date.now();
+    localStorage.setItem(SEEN_KEY, JSON.stringify(seen));
+  } catch {
+    // storage blocked: the picks just stay relevance-ordered
+  }
+}
+
+const normalize = (tech: string) => tech.toLowerCase();
 
 export function getRelatedProjectSlugs(
   currentSlug: string,
   count: number,
+  seen: SeenProjects = {},
 ): string[] {
   const allSlugs = getAllProjectSlugs();
-  const current = projectPagesConfig[currentSlug];
-  if (!current) {
-    return allSlugs.filter((slug) => slug !== currentSlug).slice(0, count);
-  }
+  const techOf = (slug: string) =>
+    new Set(projectPagesConfig[slug].technologies.map(normalize));
 
-  // document frequency of each tech across all deep-dives, for the IDF weight
   const docFreq = new Map<string, number>();
   for (const slug of allSlugs) {
-    for (const tech of new Set(
-      projectPagesConfig[slug].technologies.map(normalize),
-    )) {
+    for (const tech of techOf(slug)) {
       docFreq.set(tech, (docFreq.get(tech) ?? 0) + 1);
     }
   }
   const idf = (tech: string) =>
     Math.log((allSlugs.length + 1) / ((docFreq.get(tech) ?? 0) + 1));
 
-  const currentTech = new Set(current.technologies.map(normalize));
-  const scored = allSlugs
+  const currentTech = projectPagesConfig[currentSlug]
+    ? techOf(currentSlug)
+    : new Set<string>();
+
+  return allSlugs
     .filter((slug) => slug !== currentSlug)
-    .map((slug) => {
-      const tech = new Set(
-        projectPagesConfig[slug].technologies.map(normalize),
-      );
+    .map((slug, order) => {
       let score = 0;
-      for (const shared of currentTech) {
-        if (tech.has(shared)) score += idf(shared);
+      for (const tech of techOf(slug)) {
+        if (currentTech.has(tech)) score += idf(tech);
       }
-      return { slug, score };
+      return { slug, order, score, seenAt: seen[slug] };
     })
-    .sort((a, b) => b.score - a.score);
-
-  // the daily window: top four overlapping projects (all of them only when
-  // nothing overlaps), entered at a date-seeded offset
-  const pool = (
-    scored.some((entry) => entry.score > 0)
-      ? scored.filter((entry) => entry.score > 0)
-      : scored
-  ).slice(0, 4);
-  const dayKey = new Date().toISOString().slice(0, 10);
-  const rotation = pool.length
-    ? hashString(dayKey + currentSlug) % pool.length
-    : 0;
-
-  const picks: string[] = [];
-  for (let i = 0; i < pool.length && picks.length < count; i++) {
-    picks.push(pool[(i + rotation) % pool.length].slug);
-  }
-  // backfill from the full ranking when the pool runs short
-  for (const entry of scored) {
-    if (picks.length >= count) break;
-    if (!picks.includes(entry.slug)) picks.push(entry.slug);
-  }
-  return picks;
+    .sort((a, b) => {
+      if (a.seenAt === undefined && b.seenAt !== undefined) return -1;
+      if (a.seenAt !== undefined && b.seenAt === undefined) return 1;
+      if (a.seenAt !== undefined && b.seenAt !== undefined) {
+        if (a.seenAt !== b.seenAt) return a.seenAt - b.seenAt;
+      }
+      return b.score - a.score || a.order - b.order;
+    })
+    .slice(0, count)
+    .map((entry) => entry.slug);
 }

@@ -10,7 +10,13 @@
  * Hero motion lives in ProjectDeepDive; this file is static markup only.
  */
 
-import { useEffect, useRef, useState, type ComponentType } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentType,
+} from "react";
 import { useLocation, useParams } from "react-router";
 import { useReducedMotion } from "motion/react";
 import {
@@ -41,7 +47,11 @@ import {
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { plainText } from "@/lib/plain-text";
-import { getRelatedProjectSlugs } from "@/lib/related-projects";
+import {
+  getRelatedProjectSlugs,
+  markProjectSeen,
+  readSeenProjects,
+} from "@/lib/related-projects";
 import { scrollToTarget } from "@/utils/scroll";
 import type { Translation } from "@/lib/translations";
 import { articleFor, isTranslated } from "./articles";
@@ -193,6 +203,17 @@ const ProjectDeepDiveRenderer = () => {
   }, [mdxReady, hash, slug, reducedMotion]);
 
   const config = slug ? getProjectConfig(slug) : undefined;
+
+  // picked once per project from what the reader had opened before it, so
+  // marking this page seen doesn't reshuffle its own footer
+  const relatedSlugs = useMemo(
+    () => (slug ? getRelatedProjectSlugs(slug, 2, readSeenProjects()) : []),
+    [slug],
+  );
+  useEffect(() => {
+    if (slug && config) markProjectSeen(slug);
+  }, [slug, config]);
+
   const MDXComponent = articleFor(slug, language)?.Component ?? null;
 
   if (!slug) {
@@ -328,7 +349,7 @@ const ProjectDeepDiveRenderer = () => {
             {t.common.moreProjects}
           </SectionHeading>
           <div className="grid gap-6 sm:grid-cols-2">
-            {getRelatedProjectSlugs(slug, 2).map((relatedSlug) => {
+            {relatedSlugs.map((relatedSlug) => {
               const related = projectPagesConfig[relatedSlug];
               const relatedCopy = t.projects.list[related.i18nKey];
               return (
