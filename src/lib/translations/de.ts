@@ -575,7 +575,7 @@ export const de = {
       },
     },
     testimonials: {
-      title: "Von Leuten, mit denen ich gearbeitet habe",
+      title: "Referenzen",
       link: "Mit mir arbeiten",
       viewMore: "Mehr anzeigen",
       visitWebsite: "Website besuchen",

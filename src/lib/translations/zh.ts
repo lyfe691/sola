@@ -559,7 +559,7 @@ export const zh = {
       },
     },
     testimonials: {
-      title: "一起工作过的人",
+      title: "推荐",
       link: "与我合作",
       viewMore: "查看更多",
       visitWebsite: "访问网站",

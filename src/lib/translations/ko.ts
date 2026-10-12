@@ -569,7 +569,7 @@ export const ko = {
       },
     },
     testimonials: {
-      title: "같이 일해본 사람들",
+      title: "추천사",
       link: "함께 일하기",
       viewMore: "더 보기",
       visitWebsite: "웹사이트 방문",

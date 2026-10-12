@@ -567,7 +567,7 @@ export const ja = {
       },
     },
     testimonials: {
-      title: "一緒に働いた人から",
+      title: "推薦の声",
       link: "一緒に働く",
       viewMore: "もっと見る",
       visitWebsite: "ウェブサイトを見る",

@@ -569,7 +569,7 @@ export const en = {
       },
     },
     testimonials: {
-      title: "From people I've worked with",
+      title: "Testimonials",
       link: "Work with me",
       viewMore: "View more",
       visitWebsite: "Visit Website",
