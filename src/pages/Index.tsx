@@ -8,7 +8,7 @@
 
 import { motion } from "motion/react";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
-import { CyclingTextEffect } from "@/components/ui/custom/text-effect-wrapper";
+import { CyclingText } from "@/components/ui/custom/cycling-text";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { SpecularButton } from "@/components/ui/custom/specular-button";
 import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
@@ -166,16 +166,7 @@ const Index = () => {
           variants={homeAnimations.description}
           className="mb-4 max-w-2xl text-base leading-relaxed text-foreground/70 sm:mb-5 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl"
         >
-          <CyclingTextEffect
-            key={language}
-            texts={descriptions}
-            per="char"
-            preset="blur"
-            delay={0.1}
-            speedReveal={4}
-            displayDuration={3000}
-            useCurve
-          />
+          <CyclingText key={language} texts={descriptions} />
         </motion.div>
 
         <motion.div
