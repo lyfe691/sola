@@ -173,13 +173,18 @@ const Index = () => {
           variants={homeAnimations.item}
           className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4"
         >
-          <Link to="/contact">
-            <SpecularButton size="md" autoAnimate>
+          <Link to="/contact" className="max-sm:flex-auto">
+            <SpecularButton size="md" autoAnimate className="max-sm:w-full">
               {t.index.contactMe}
             </SpecularButton>
           </Link>
-          <Link to="/projects">
-            <SpecularButton variant="secondary" size="md" autoAnimate>
+          <Link to="/projects" className="max-sm:flex-auto">
+            <SpecularButton
+              variant="secondary"
+              size="md"
+              autoAnimate
+              className="max-sm:w-full"
+            >
               {t.index.viewProjects}
             </SpecularButton>
           </Link>
