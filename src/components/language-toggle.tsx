@@ -31,6 +31,7 @@ export function LanguageMenuContent({ onClose }: { onClose: () => void }) {
             key={code}
             type="button"
             data-glide-row
+            aria-current={isSelected || undefined}
             onClick={() => {
               setLanguage(code);
               onClose();

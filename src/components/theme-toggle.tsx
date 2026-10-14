@@ -122,6 +122,7 @@ function TreeLeaf({
       {...props}
       type="button"
       data-glide-row
+      aria-current={isSelected || undefined}
       onClick={onClick}
       className="flex w-full items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
     >

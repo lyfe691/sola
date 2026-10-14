@@ -16,7 +16,7 @@
  * animated trigger icon and the `data-callout` hook are all preserved.
  */
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -80,6 +80,7 @@ export function AppearanceMenu() {
   });
   const popoverRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const surfaceId = useId();
 
   // anchor the surface under a trigger exactly like base-ui's positioner:
   // right edges aligned, 4px below, measured against the content width
@@ -104,7 +105,11 @@ export function AppearanceMenu() {
     setOpenId(id);
   };
 
-  const close = () => setOpenId(null);
+  const close = () => {
+    if (openId && popoverRef.current?.contains(document.activeElement))
+      buttons.current[openId]?.focus();
+    setOpenId(null);
+  };
 
   // the `d` shortcut can flip into the code view while we're open, and
   // Navigation unmounts us only after its 250ms exit fade — which would
@@ -172,12 +177,15 @@ export function AppearanceMenu() {
     };
   }, [openId]);
 
-  // lock page scrolling while open (no layout shift — the scrollbar stays);
-  // scrolling inside the menu is still allowed. a resize moves the anchor, so close.
+  // lock page scrolling while open; scrolling inside the menu is still
+  // allowed. a resize moves the anchor, so close.
   useEffect(() => {
     if (!openId) return;
+    const { body } = document;
+    const overflow = body.style.overflow;
+    body.style.overflow = "hidden";
 
-    const blockScroll = (e: Event) => {
+    const blockTouch = (e: TouchEvent) => {
       const el = scrollRef.current;
       if (
         el &&
@@ -190,12 +198,11 @@ export function AppearanceMenu() {
     };
     const onResize = () => setOpenId(null);
 
-    window.addEventListener("wheel", blockScroll, { passive: false });
-    window.addEventListener("touchmove", blockScroll, { passive: false });
+    window.addEventListener("touchmove", blockTouch, { passive: false });
     window.addEventListener("resize", onResize);
     return () => {
-      window.removeEventListener("wheel", blockScroll);
-      window.removeEventListener("touchmove", blockScroll);
+      body.style.overflow = overflow;
+      window.removeEventListener("touchmove", blockTouch);
       window.removeEventListener("resize", onResize);
     };
   }, [openId]);
@@ -227,8 +234,9 @@ export function AppearanceMenu() {
             variant="ghost"
             size="icon"
             onClick={() => toggle(id)}
-            aria-haspopup="menu"
+            aria-haspopup="dialog"
             aria-expanded={openId === id}
+            aria-controls={openId === id ? surfaceId : undefined}
             data-callout={isCallout ? "theme" : undefined}
           />
         }
@@ -262,6 +270,13 @@ export function AppearanceMenu() {
             <motion.div
               ref={popoverRef}
               key="appearance-popover"
+              id={surfaceId}
+              role="dialog"
+              aria-label={
+                openId === "theme"
+                  ? t.common.command.groups.theme
+                  : t.common.command.groups.language
+              }
               layout
               tabIndex={-1}
               onKeyDown={onSurfaceKeyDown}
