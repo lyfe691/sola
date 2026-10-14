@@ -154,10 +154,10 @@ const Index = () => {
 
         <motion.h1
           variants={homeAnimations.heading}
-          className="mb-3 text-4xl font-bold sm:mb-4 sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl"
+          className="mb-3 text-4xl font-bold break-keep text-balance sm:mb-4 sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl"
         >
           <NameMorpher
-            greeting={`${t.index.greeting}\u00A0`}
+            greeting={t.index.greeting}
             switchLabel={t.index.nameSwitch}
           />
         </motion.h1>

@@ -35,7 +35,19 @@ const letterVariants: Variants = {
   }),
 };
 
+/**
+ * The greeting, and its last word: after its last space, or, in a script
+ * written without spaces, after its last punctuation ("こんにちは、|私は").
+ */
+const splitGreeting = (greeting: string) => {
+  const text = greeting.trim();
+  const space = text.search(/\s\S*$/);
+  const cut = space >= 0 ? space + 1 : text.search(/[\p{P}][^\p{P}]*$/u) + 1;
+  return [text.slice(0, cut), text.slice(cut)] as const;
+};
+
 interface NameMorpherProps {
+  /** the words before the name */
   greeting: string;
   /** accessible hint appended to the identity list on the button label */
   switchLabel: string;
@@ -50,6 +62,7 @@ export const NameMorpher = ({
   const [index, setIndex] = useState(0);
   const [clock, setClock] = useState(0);
   const name = names[index];
+  const [lead, lastWord] = splitGreeting(greeting);
 
   // one clock for both the cycle and manual skips: pressing advances
   // immediately and bumps `clock`, so the next auto-swap counts from the press
@@ -64,41 +77,60 @@ export const NameMorpher = ({
 
   return (
     <>
-      <span className="text-foreground">{greeting}</span>
-      <motion.button
-        type="button"
-        // FLIP the plate to the next name's real width — no char-count math
-        layout
-        transition={{ layout: { duration: 0.6, ease: SMOOTH } }}
-        onClick={() => {
-          setIndex((i) => (i + 1) % names.length);
-          setClock((c) => c + 1);
-        }}
-        aria-label={`${names.join(" · ")} — ${switchLabel}`}
-        className="relative inline-flex cursor-pointer touch-manipulation rounded-[0.25em] bg-muted/65 p-[0.1em] align-baseline text-primary ring-1 ring-foreground/5 ring-inset [transition:scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-safe:active:scale-[0.97] active:duration-100 active:ease-out"
-      >
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.span
-            key={name}
-            aria-hidden="true"
-            className="inline-flex whitespace-nowrap"
+      <span className="text-foreground">{lead}</span>
+      <wbr />
+      <span className="whitespace-nowrap">
+        <span className="text-foreground">{lastWord} </span>
+        <span className="inline-grid">
+          {names.map((each) => (
+            <span
+              key={each}
+              aria-hidden="true"
+              className="invisible col-start-1 row-start-1 inline-flex p-[0.1em] whitespace-nowrap"
+            >
+              {each.split("").map((letter, i) => (
+                <span key={i} className="inline-block">
+                  {letter}
+                </span>
+              ))}
+            </span>
+          ))}
+          <motion.button
+            type="button"
+            // FLIP the plate to the next name's real width — no char-count math
+            layout
+            transition={{ layout: { duration: 0.6, ease: SMOOTH } }}
+            onClick={() => {
+              setIndex((i) => (i + 1) % names.length);
+              setClock((c) => c + 1);
+            }}
+            aria-label={`${names.join(" · ")} — ${switchLabel}`}
+            className="relative col-start-1 row-start-1 inline-flex cursor-pointer touch-manipulation justify-self-start rounded-[0.25em] bg-muted/65 p-[0.1em] text-primary ring-1 ring-foreground/5 ring-inset [transition:scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-safe:active:scale-[0.97] active:duration-100 active:ease-out"
           >
-            {name.split("").map((letter, i) => (
+            <AnimatePresence mode="popLayout" initial={false}>
               <motion.span
-                key={`${name}-${i}`}
-                custom={i}
-                variants={letterVariants}
-                initial="initial"
-                animate="animate"
-                exit="exit"
-                className="inline-block"
+                key={name}
+                aria-hidden="true"
+                className="inline-flex whitespace-nowrap"
               >
-                {letter}
+                {name.split("").map((letter, i) => (
+                  <motion.span
+                    key={`${name}-${i}`}
+                    custom={i}
+                    variants={letterVariants}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    className="inline-block"
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
               </motion.span>
-            ))}
-          </motion.span>
-        </AnimatePresence>
-      </motion.button>
+            </AnimatePresence>
+          </motion.button>
+        </span>
+      </span>
     </>
   );
 };
