@@ -26,9 +26,8 @@ export function tailFill(width: number, height: number, inset = 0) {
 /**
  * The same tail on a round end (a circle of `radius` whose top is the tail's
  * base line): the flanks leave the curve along it instead of a flat edge.
- * The fill closes across the circle, inside the surface it grows from.
  */
-export function tailDrop(width: number, height: number, radius: number) {
+export function tailDropEdge(width: number, height: number, radius: number) {
   const mid = width / 2;
   const spread = Math.min(mid, radius * 0.6);
   const rise = Math.sqrt(radius * radius - spread * spread);
@@ -37,5 +36,10 @@ export function tailDrop(width: number, height: number, radius: number) {
   const [dx, dy] = [rise / radius, spread / radius];
   const [pull, ease] = [(spread * 7) / 12, (spread * 2.5) / 12];
   const lift = foot - dy * pull;
-  return `M${mid - spread} ${foot} C${mid - spread + dx * pull} ${lift} ${mid - ease} 0 ${mid} 0 C${mid + ease} 0 ${mid + spread - dx * pull} ${lift} ${mid + spread} ${foot} Z`;
+  return `M${mid - spread} ${foot} C${mid - spread + dx * pull} ${lift} ${mid - ease} 0 ${mid} 0 C${mid + ease} 0 ${mid + spread - dx * pull} ${lift} ${mid + spread} ${foot}`;
+}
+
+/** The filled drop: it closes across the circle, inside the surface it grows from. */
+export function tailDrop(width: number, height: number, radius: number) {
+  return `${tailDropEdge(width, height, radius)} Z`;
 }

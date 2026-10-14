@@ -7,11 +7,10 @@
  *
  * React Bits' WarmTooltip behind shadcn's tooltip parts. A provider is a
  * group that shares one surface: the first hover waits out the delay and pops
- * it in; from there it springs from trigger to trigger, leaning into the
- * travel and resizing as it goes, while the label cross-fades in the
- * direction of travel. Reopening within the warm window skips both the delay
- * and the pop. `arrow` hangs the surface from the theme callout's tail, which
- * keeps pointing at the trigger when the viewport pushes the surface aside.
+ * it in; from there it springs from trigger to trigger, resizing as it goes,
+ * while the label cross-fades. Reopening within the warm window skips the
+ * delay. `arrow` hangs the surface from the theme callout's tail, which keeps
+ * pointing at the trigger when the viewport pushes the surface aside.
  */
 
 import {
@@ -32,23 +31,19 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import {
-  AnimatePresence,
   animate,
   motion,
   PresenceContext,
-  useIsPresent,
+  useAnimationControls,
   useMotionValue,
   useReducedMotion,
-  useSpring,
   useTransform,
-  useVelocity,
   type MotionStyle,
   type MotionValue,
-  type Variants,
 } from "motion/react";
 import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
-import { tailDrop, tailFill } from "@/lib/tail-path";
+import { tailDrop, tailDropEdge, tailEdge, tailFill } from "@/lib/tail-path";
 import { cn } from "@/lib/utils";
 import { EASE_EXPO } from "@/utils/transitions";
 
@@ -76,8 +71,6 @@ type Shown = {
   mode: Mode | "move";
   /** opened by keyboard focus, so it also closes without the fade */
   instant: boolean;
-  /** which way the label swaps: -1/1 along the row, 0 for no swap */
-  swap: { dir: number; across: boolean };
 };
 
 type Group = ReturnType<typeof createGroup>;
@@ -89,22 +82,17 @@ const MARGIN = 8;
 /** a leave waits this long (ms), so crossing between triggers doesn't close */
 const GRACE = 80;
 const GLIDE = { type: "spring", duration: 0.32, bounce: 0.1 } as const;
-const POP = { duration: 0.16, ease: EASE_EXPO };
-const UNPOP = { duration: 0.13, ease: EASE_EXPO };
+// The pop springs like the glide, so opening and travelling read as one
+// motion; opacity settles first so it never hangs half-visible.
+const POP = {
+  default: { type: "spring", duration: 0.25, bounce: 0.15 },
+  opacity: { duration: 0.12, ease: EASE_EXPO },
+} as const;
+// Leaving is quicker and quieter than arriving.
+const UNPOP = { duration: 0.1, ease: EASE_EXPO };
 const REPOP = { duration: 0.12, ease: EASE_EXPO };
 const SWAP = { duration: 0.14, ease: EASE_EXPO };
-const SWAP_SHIFT = 10;
-const RISE = 4;
-/** anchor speed (px/s) at which the surface leans its whole angle */
-const FULL_LEAN_SPEED = 1200;
-const LEAN_SPRING = { stiffness: 260, damping: 22, mass: 0.4 };
-/** per side, the turn that makes the surface trail its travel */
-const LEAN_SIGN: Record<Side, number> = {
-  top: 1,
-  bottom: -1,
-  left: -1,
-  right: 1,
-};
+const RISE = 3;
 const ARROW_W = 16;
 const ARROW_H = 6;
 /** how far short of the trigger the tail's tip stops */
@@ -112,6 +100,7 @@ const TIP_GAP = 3;
 /** rounded-2xl, the surface's corners away from a tail */
 const RADIUS = 18;
 const TAIL = tailFill(ARROW_W, ARROW_H);
+const TAIL_EDGE = tailEdge(ARROW_W, ARROW_H);
 /** per side, the way the tail points */
 const OUTWARD: Record<Side, [number, number]> = {
   top: [0, 1],
@@ -127,7 +116,7 @@ const EDGE_PIVOT: Record<Side, string> = {
   right: "0% 50%",
 };
 const LABEL =
-  "flex w-max max-w-xs shrink-0 items-center justify-center gap-1.5 px-2.5 py-1 text-center text-[13px] leading-5.5 font-semibold has-data-[slot=kbd]:pr-1 *:data-[slot=kbd]:rounded-full *:data-[slot=kbd]:px-2";
+  "flex w-max max-w-xs shrink-0 items-center justify-center gap-1.5 px-2.5 py-1 text-center text-[13px] leading-5.5 font-medium has-data-[slot=kbd]:pe-1 *:data-[slot=kbd]:rounded-full *:data-[slot=kbd]:px-2";
 
 const alongX = (side: Side) => side === "top" || side === "bottom";
 
@@ -211,21 +200,13 @@ function createGroup(tooltipId: string, render: (shown: Shown | null) => void) {
     clearTimeout(leaveTimer);
     const content = target.entry.content();
     if (!content) return;
-    const next = { target, side: content.side, arrow: content.arrow };
-    const prev = live;
-    const across = !alongX(next.side);
-    let dir = 0;
-    if (prev && prev.target.id !== target.id) {
-      const [px, py] = anchorOf(prev);
-      const [nx, ny] = anchorOf(next);
-      dir = Math.sign(across ? ny - py : nx - px) || 1;
-    }
     commit({
-      ...next,
+      target,
+      side: content.side,
+      arrow: content.arrow,
       phase: "open",
-      mode: prev && mode !== "instant" ? "move" : mode,
+      mode: live && mode !== "instant" ? "move" : mode,
       instant: mode === "instant",
-      swap: { dir, across },
     });
   };
 
@@ -313,33 +294,34 @@ function createGroup(tooltipId: string, render: (shown: Shown | null) => void) {
   };
 }
 
-/** Hidden, the surface sits smaller, blurred and nudged toward its trigger. */
-const POP_VARIANTS: Variants = {
-  hidden: (side: Side) => ({
+/**
+ * Arriving, the surface starts a touch smaller and nudged toward its trigger;
+ * leaving, it just fades with a slight shrink. Reduced motion keeps the fade.
+ */
+function arriving(side: Side, reduce: boolean) {
+  if (reduce) return { opacity: 0 };
+  return {
     opacity: 0,
-    scale: 0.94,
-    filter: "blur(4px)",
+    scale: 0.96,
     x: side === "left" ? RISE : side === "right" ? -RISE : 0,
     y: side === "top" ? RISE : side === "bottom" ? -RISE : 0,
-  }),
-  shown: { opacity: 1, scale: 1, filter: "blur(0px)", x: 0, y: 0 },
+  };
+}
+const leaving = (reduce: boolean) =>
+  reduce ? { opacity: 0 } : { opacity: 0, scale: 0.98 };
+const SHOWN = { opacity: 1, scale: 1, x: 0, y: 0, visibility: "visible" };
+const HIDDEN = { opacity: 0, visibility: "hidden" };
+const FRONT = { opacity: 1, visibility: "visible" };
+const BACK = { opacity: 0, transitionEnd: { visibility: "hidden" } };
+
+/** The surface's two label slots: the front one shows, the other fades out. */
+type Labels = {
+  front: 0 | 1;
+  targets: [Target | null, Target | null];
+  swap: boolean;
 };
 
-const LABEL_VARIANTS: Variants = {
-  enter: ({ dir, across }: Shown["swap"]) => ({
-    opacity: dir === 0 ? 1 : 0,
-    x: across ? 0 : SWAP_SHIFT * dir,
-    y: across ? SWAP_SHIFT * dir : 0,
-    filter: dir === 0 ? "blur(0px)" : "blur(3px)",
-  }),
-  show: { opacity: 1, x: 0, y: 0, filter: "blur(0px)" },
-  exit: ({ dir, across }: Shown["swap"]) => ({
-    opacity: 0,
-    x: across ? 0 : -SWAP_SHIFT * dir,
-    y: across ? -SWAP_SHIFT * dir : 0,
-    filter: "blur(3px)",
-  }),
-};
+const subscribeNothing = () => () => {};
 
 const GroupContext = createContext<Group | null>(null);
 
@@ -355,21 +337,34 @@ type TooltipProviderProps = {
   delay?: number;
   /** How long after a close the next hover opens at once, in ms. */
   warmWindow?: number;
-  /** Degrees the surface tilts as it glides at full speed; 0 keeps it level. */
-  lean?: number;
 };
 
 function TooltipProvider({
   children,
   delay = 400,
   warmWindow = 300,
-  lean = 16,
 }: TooltipProviderProps) {
   const tooltipId = useId();
+  const tailClipId = useId();
   const reduceMotion = useReducedMotion();
   const [shown, setShown] = useState<Shown | null>(null);
   const [group] = useState(() => createGroup(tooltipId, setShown));
   const labelRef = useRef<HTMLSpanElement | null>(null);
+  const surface = useAnimationControls();
+
+  const [labels, setLabels] = useState<Labels>({
+    front: 0,
+    targets: [null, null],
+    swap: false,
+  });
+  const frontTarget = labels.targets[labels.front];
+  if (shown && shown.target.id !== frontTarget?.id) {
+    const swap = shown.mode === "move" && frontTarget !== null;
+    const front = swap ? (labels.front === 0 ? 1 : 0) : labels.front;
+    const targets = [...labels.targets] as Labels["targets"];
+    targets[front] = shown.target;
+    setLabels({ front, targets, swap });
+  }
 
   useLayoutEffect(() => {
     group.configure(delay, warmWindow);
@@ -393,18 +388,6 @@ function TooltipProvider({
   const y = useTransform(() => corner()[1]);
   const w = useTransform(() => `${width.get()}px`);
   const h = useTransform(() => `${height.get()}px`);
-  // only a glide moves the anchor with velocity: opens and scroll-follows
-  // jump it, which zeroes the velocity, so the surface leans only in travel
-  const velocityX = useVelocity(anchorX);
-  const velocityY = useVelocity(anchorY);
-  const leanUnit = useSpring(
-    useTransform(() => {
-      const speed = alongX(side.get()) ? velocityX.get() : velocityY.get();
-      return -clamp(speed / FULL_LEAN_SPEED, -1, 1);
-    }),
-    LEAN_SPRING,
-  );
-  const tilt = useTransform(() => leanUnit.get() * LEAN_SIGN[side.get()]);
   // the tail sits across from the trigger's centre; where that leaves its
   // feet no flat edge, the corner beside it tightens (the theme callout's
   // rule). A pill's round end has no flat edge at all: there the tail grows
@@ -442,6 +425,12 @@ function TooltipProvider({
     const { round, far } = tail();
     return round ? tailDrop(ARROW_W, ARROW_H, far) : TAIL;
   });
+  // the surface's inset ring carries on along the tail's flanks: a 2px
+  // stroke clipped to the tail leaves the 1px inside it
+  const tailRing = useTransform(() => {
+    const { round, far } = tail();
+    return round ? tailDropEdge(ARROW_W, ARROW_H, far) : TAIL_EDGE;
+  });
   const tailX = useTransform(() => `${foot()[0] - ARROW_W / 2}px`);
   const tailY = useTransform(() => `${foot()[1] - ARROW_H}px`);
   const corners = useTransform(() => {
@@ -454,7 +443,7 @@ function TooltipProvider({
     if (s === "left") return `${f} ${a} ${b} ${f}`;
     return `${a} ${f} ${f} ${b}`;
   });
-  // a tailed surface pops from, and leans on, the tip of its tail
+  // a tailed surface pops from the tip of its tail
   const pivot = useTransform(() => {
     const [s, [fx, fy]] = [side.get(), foot()];
     if (!tailed.get()) return EDGE_PIVOT[s];
@@ -489,6 +478,24 @@ function TooltipProvider({
     resize.observe(label);
     return () => resize.disconnect();
   }, [shown, reduceMotion, anchorX, anchorY, width, height, side, tailed]);
+
+  useLayoutEffect(() => {
+    if (!shown) {
+      surface.set(HIDDEN);
+      return;
+    }
+    const reduce = !!reduceMotion;
+    if (shown.phase === "closing") {
+      surface.start(leaving(reduce), UNPOP).then(() => group.closed());
+    } else if (shown.instant) {
+      surface.set(SHOWN);
+    } else if (shown.mode === "move") {
+      surface.start(SHOWN, REPOP);
+    } else {
+      surface.set(arriving(shown.side, reduce));
+      surface.start(SHOWN, POP);
+    }
+  }, [shown, reduceMotion, surface, group]);
 
   const isShown = shown !== null;
   useEffect(() => {
@@ -526,101 +533,90 @@ function TooltipProvider({
   return (
     <GroupContext.Provider value={group}>
       {children}
-      {shown &&
-        createPortal(
-          // its own presence scope: under an AnimatePresence initial={false}
-          // (the nav's) motion would skip the pop
-          <PresenceContext.Provider value={null}>
+      {createPortal(
+        // its own presence scope: under an AnimatePresence initial={false}
+        // (the nav's) motion would skip the hidden start
+        <PresenceContext.Provider value={null}>
+          <motion.div
+            id={tooltipId}
+            role="tooltip"
+            data-slot="tooltip-content"
+            style={{ x, y, "--w": w, "--h": h } as MotionStyle}
+            className="pointer-events-none fixed top-0 left-0 z-60 h-(--h) w-(--w)"
+          >
             <motion.div
-              id={tooltipId}
-              role="tooltip"
-              data-slot="tooltip-content"
-              style={{ x, y, "--w": w, "--h": h } as MotionStyle}
-              className="pointer-events-none fixed top-0 left-0 z-50 h-(--h) w-(--w)"
+              style={{ "--pivot": pivot, "--corners": corners } as MotionStyle}
+              initial={HIDDEN}
+              animate={surface}
+              // Inverted; the inner line is the border.
+              className="absolute inset-0 origin-(--pivot) rounded-(--corners) bg-foreground text-background shadow-md inset-ring inset-ring-background/15"
             >
-              <motion.div
-                style={
-                  {
-                    "--tilt": tilt,
-                    "--lean": `${lean}deg`,
-                    "--pivot": pivot,
-                    "--corners": corners,
-                  } as MotionStyle
-                }
-                custom={shown.side}
-                variants={POP_VARIANTS}
-                initial={shown.mode === "cold" ? "hidden" : false}
-                animate={shown.phase === "open" ? "shown" : "hidden"}
-                transition={
-                  shown.phase === "closing"
-                    ? UNPOP
-                    : shown.mode === "move"
-                      ? REPOP
-                      : POP
-                }
-                onAnimationComplete={(definition) => {
-                  if (definition === "hidden") group.closed();
-                }}
-                className="absolute inset-0 origin-(--pivot) rotate-[calc(var(--tilt)*var(--lean))] rounded-(--corners) bg-foreground text-background shadow-sm motion-reduce:rotate-none"
-              >
-                <AnimatePresence initial={false} custom={shown.swap}>
-                  <motion.div
-                    key={shown.target.id}
-                    custom={shown.swap}
-                    variants={LABEL_VARIANTS}
-                    initial="enter"
-                    animate="show"
-                    exit="exit"
-                    transition={SWAP}
-                    className="absolute inset-0 flex items-center justify-center rounded-[inherit]"
+              {labels.targets.map((target, i) => (
+                <motion.div
+                  key={i}
+                  initial={false}
+                  animate={i === labels.front ? FRONT : BACK}
+                  transition={labels.swap ? SWAP : { duration: 0 }}
+                  className="absolute inset-0 flex items-center justify-center rounded-[inherit]"
+                >
+                  <Label
+                    entry={target?.entry ?? null}
+                    measureRef={i === labels.front ? labelRef : undefined}
+                  />
+                </motion.div>
+              ))}
+              {shown?.arrow && (
+                <motion.span
+                  aria-hidden="true"
+                  data-side={shown.side}
+                  style={
+                    { "--tail-x": tailX, "--tail-y": tailY } as MotionStyle
+                  }
+                  className="absolute top-0 left-0 flex origin-[50%_calc(100%-1px)] translate-x-(--tail-x) translate-y-(--tail-y) data-[side=left]:rotate-90 data-[side=right]:-rotate-90 data-[side=top]:rotate-180"
+                >
+                  <svg
+                    width={ARROW_W}
+                    height={ARROW_H + 1}
+                    viewBox={`0 0 ${ARROW_W} ${ARROW_H + 1}`}
+                    className="overflow-visible"
                   >
-                    <Label entry={shown.target.entry} measureRef={labelRef} />
-                  </motion.div>
-                </AnimatePresence>
-                {shown.arrow && (
-                  <motion.span
-                    aria-hidden="true"
-                    data-side={shown.side}
-                    style={
-                      { "--tail-x": tailX, "--tail-y": tailY } as MotionStyle
-                    }
-                    className="absolute top-0 left-0 flex origin-[50%_calc(100%-1px)] translate-x-(--tail-x) translate-y-(--tail-y) data-[side=left]:rotate-90 data-[side=right]:-rotate-90 data-[side=top]:rotate-180"
-                  >
-                    <svg
-                      width={ARROW_W}
-                      height={ARROW_H + 1}
-                      viewBox={`0 0 ${ARROW_W} ${ARROW_H + 1}`}
-                      className="overflow-visible fill-foreground"
-                    >
+                    <clipPath id={tailClipId}>
                       <motion.path d={tailPath} />
-                    </svg>
-                  </motion.span>
-                )}
-              </motion.div>
+                    </clipPath>
+                    <motion.path d={tailPath} className="fill-foreground" />
+                    <motion.path
+                      d={tailRing}
+                      clipPath={`url(#${tailClipId})`}
+                      fill="none"
+                      strokeWidth="2"
+                      className="stroke-background/15"
+                    />
+                  </svg>
+                </motion.span>
+              )}
             </motion.div>
-          </PresenceContext.Provider>,
-          document.body,
-        )}
+          </motion.div>
+        </PresenceContext.Provider>,
+        document.body,
+      )}
     </GroupContext.Provider>
   );
 }
 
-/** The measured label is always the entering one, never a leaving copy. */
 function Label({
   entry,
   measureRef,
 }: {
-  entry: Entry;
-  measureRef: RefObject<HTMLSpanElement | null>;
+  entry: Entry | null;
+  measureRef?: RefObject<HTMLSpanElement | null>;
 }) {
-  const present = useIsPresent();
-  const content = useSyncExternalStore(entry.subscribe, entry.content);
+  const content = useSyncExternalStore(
+    entry?.subscribe ?? subscribeNothing,
+    () => entry?.content() ?? null,
+  );
 
   return (
-    <span
-      ref={present ? measureRef : undefined}
-      className={cn(LABEL, content?.className)}
-    >
+    <span ref={measureRef} className={cn(LABEL, content?.className)}>
       {content?.children}
     </span>
   );
