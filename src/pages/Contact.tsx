@@ -34,24 +34,26 @@ const DIRECT_LINKS = [
 ] as const;
 
 const FieldError = ({ name, error }: { name: string; error?: string }) => (
-  <div className="min-h-6">
-    <AnimatePresence initial={false}>
-      {error && (
-        <motion.p
-          key={`${name}-error`}
-          initial={{ opacity: 0, y: -2 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -2 }}
-          transition={{ duration: 0.15, ease: EASE_OUT }}
+  <AnimatePresence initial={false}>
+    {error && (
+      <motion.div
+        key={`${name}-error`}
+        initial={{ height: 0, opacity: 0 }}
+        animate={{ height: "auto", opacity: 1 }}
+        exit={{ height: 0, opacity: 0 }}
+        transition={{ duration: 0.3, ease: EASE_OUT }}
+        className="overflow-hidden"
+      >
+        <p
           className="pt-1 text-sm leading-5 text-destructive/90"
           role="alert"
           aria-live="polite"
         >
           {error}
-        </motion.p>
-      )}
-    </AnimatePresence>
-  </div>
+        </p>
+      </motion.div>
+    )}
+  </AnimatePresence>
 );
 
 const Contact = () => {
