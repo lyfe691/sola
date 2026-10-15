@@ -47,6 +47,8 @@ export const zh = {
   },
   certifications: {
     title: "证书",
+    subtitle: "我完成的课程和通过的考试。打开证书即可查看全文。",
+    certificateAlt: "{issuer} 颁发的“{title}”证书",
     empty: "尚未发布任何证书。",
     verify: "验证",
     expired: "已过期",

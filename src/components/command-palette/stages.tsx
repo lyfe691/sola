@@ -11,7 +11,7 @@
  * page — and framed the way the deep-dive hero is.
  */
 
-import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useState, type ReactNode } from "react";
 import snapshot from "virtual:changelog-snapshot";
 import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import { Folder01Icon, SourceCodeIcon } from "@hugeicons/core-free-icons";
@@ -27,7 +27,6 @@ import { SOCIAL_LINKS, SOCIAL_ORDER_HERO } from "@/config/social";
 import type { Language } from "@/config/languages";
 import { TechMark } from "@/components/ui/custom/tech-mark";
 import { EDUCATION, WORK } from "@/lib/experience";
-import { loadPdf } from "@/lib/pdf";
 import {
   loadedTranslation,
   loadTranslation,
@@ -348,54 +347,6 @@ function LanguageStage({ language }: { language: Language }) {
   );
 }
 
-/** the first page of a PDF, drawn to fit the stage's width */
-function PdfPage({ url, fallback }: { url: string; fallback: ReactNode }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const [state, setState] = useState<"drawing" | "drawn" | "failed">("drawing");
-  useEffect(() => {
-    let cancelled = false;
-    let cancel: (() => void) | undefined;
-    loadPdf(url)
-      .then((pdf) => pdf.getPage(1))
-      .then((page) => {
-        const node = canvas.current;
-        if (cancelled || !node) return;
-        const width = node.parentElement?.clientWidth ?? 480;
-        const dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const viewport = page.getViewport({
-          scale: (width * dpr) / page.getViewport({ scale: 1 }).width,
-        });
-        node.width = Math.round(viewport.width);
-        node.height = Math.round(viewport.height);
-        const task = page.render({ canvas: node, viewport });
-        cancel = () => task.cancel();
-        return task.promise;
-      })
-      .then(
-        () => !cancelled && setState("drawn"),
-        () => !cancelled && setState("failed"),
-      );
-    return () => {
-      cancelled = true;
-      cancel?.();
-    };
-  }, [url]);
-
-  if (state === "failed") return fallback;
-  return (
-    <div className="size-full bg-paper">
-      <canvas
-        ref={canvas}
-        aria-hidden
-        className={cn(
-          "block w-full transition-opacity duration-300 ease-out",
-          state === "drawn" ? "opacity-100" : "opacity-0",
-        )}
-      />
-    </div>
-  );
-}
-
 export function Stage({ doc }: { doc: SiteDoc }) {
   const t = useTranslation();
   const greeting = `${t.index.greeting}Yanis`;
@@ -474,9 +425,7 @@ export function Stage({ doc }: { doc: SiteDoc }) {
       );
       return (
         <Frame>
-          {doc.document?.toLowerCase().endsWith(".pdf") ? (
-            <PdfPage url={doc.document} fallback={logo} />
-          ) : doc.document ? (
+          {doc.document ? (
             <img
               src={doc.document}
               alt=""

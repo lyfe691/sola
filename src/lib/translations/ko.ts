@@ -52,6 +52,9 @@ export const ko = {
   },
   certifications: {
     title: "인증",
+    subtitle:
+      "수료한 과정과 합격한 시험입니다. 인증서를 열면 전체 내용을 볼 수 있습니다.",
+    certificateAlt: "{issuer}의 {title} 인증서",
     empty: "아직 공개된 인증이 없습니다.",
     verify: "확인",
     expired: "만료됨",

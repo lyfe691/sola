@@ -50,6 +50,9 @@ export const ja = {
   },
   certifications: {
     title: "認定・資格",
+    subtitle:
+      "修了したコースと合格した試験です。証明書を開くと全文を読めます。",
+    certificateAlt: "{issuer}の証明書「{title}」",
     empty: "公開中の認定はまだありません。",
     verify: "検証",
     expired: "有効期限切れ",

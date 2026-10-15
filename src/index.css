@@ -915,6 +915,29 @@
   }
 }
 
+/* ---------- paper (/certifications) ---------- */
+/* a sheet lying on the page: a tight contact shadow and a wide soft one */
+:root {
+  --paper-lift:
+    0 0 0 1px color-mix(in oklab, black 4%, transparent),
+    0 1px 2px color-mix(in oklab, black 6%, transparent),
+    0 16px 28px -16px color-mix(in oklab, black 24%, transparent);
+  --paper-raised:
+    0 0 0 1px color-mix(in oklab, black 4%, transparent),
+    0 2px 4px color-mix(in oklab, black 6%, transparent),
+    0 28px 44px -20px color-mix(in oklab, black 30%, transparent);
+}
+
+.dark,
+[data-scheme="dark"] {
+  --paper-lift:
+    0 1px 3px color-mix(in oklab, black 50%, transparent),
+    0 18px 32px -14px color-mix(in oklab, black 80%, transparent);
+  --paper-raised:
+    0 2px 6px color-mix(in oklab, black 50%, transparent),
+    0 30px 48px -18px color-mix(in oklab, black 85%, transparent);
+}
+
 /* ---------- deep-dive prose ---------- */
 /* Emphasis steps from --muted-foreground toward --foreground. Mixes, not
    alpha: the two sit much closer together in the dark themes, so one fixed

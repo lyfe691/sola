@@ -16,8 +16,10 @@ export interface Certification {
   url?: string; // verification link
   skills?: string[];
   issuerLogo?: string; // small issuer logo path
-  certificateImage?: string; // certificate image preview
-  certificatePdf?: string; // certificate pdf link
+  /** The certificate, as an image, at its pixel size (a test checks it). */
+  image: { src: string; width: number; height: number };
+  /** The issuer's own document, linked when there is no page to verify on. */
+  pdf?: string;
 }
 
 // edit certs
@@ -31,7 +33,12 @@ export const certifications: Certification[] = [
     url: "https://www.coursera.org/account/accomplishments/verify/FKSD765VOYRE",
     skills: ["DevOps", "CI/CD", "Docker", "Kubernetes", "Git"],
     issuerLogo: "/certificates/issuer/ibm_logo.jpg",
-    certificateImage: "/certificates/IBM_DevOps_Yanis-Sebastian-Zürcher.pdf",
+    image: {
+      src: "/certificates/IBM_DevOps_Yanis-Sebastian-Zürcher.webp",
+      width: 2000,
+      height: 1545,
+    },
+    pdf: "/certificates/IBM_DevOps_Yanis-Sebastian-Zürcher.pdf",
   },
   {
     id: "ibm-intro-ai",
@@ -42,7 +49,12 @@ export const certifications: Certification[] = [
     url: "https://www.coursera.org/account/accomplishments/verify/1MXUZJ4Y79II",
     skills: ["Artificial Intelligence (AI)", "Generative AI", "NLP"],
     issuerLogo: "/certificates/issuer/ibm_logo.jpg",
-    certificateImage: "/certificates/IBM_AI_Yanis-Sebastian-Zürcher.pdf",
+    image: {
+      src: "/certificates/IBM_AI_Yanis-Sebastian-Zürcher.webp",
+      width: 2000,
+      height: 1545,
+    },
+    pdf: "/certificates/IBM_AI_Yanis-Sebastian-Zürcher.pdf",
   },
   {
     id: "ibm-ml-python",
@@ -59,7 +71,12 @@ export const certifications: Certification[] = [
       "Classification",
     ],
     issuerLogo: "/certificates/issuer/ibm_logo.jpg",
-    certificateImage: "/certificates/IBM_ML_Yanis-Sebastian-Zürcher.pdf",
+    image: {
+      src: "/certificates/IBM_ML_Yanis-Sebastian-Zürcher.webp",
+      width: 2000,
+      height: 1545,
+    },
+    pdf: "/certificates/IBM_ML_Yanis-Sebastian-Zürcher.pdf",
   },
   {
     id: "cambridge-b2-fce",
@@ -68,8 +85,12 @@ export const certifications: Certification[] = [
     issueDate: "2025-07-01",
     skills: ["English B2"],
     issuerLogo: "/certificates/issuer/cambridge_logo.jpg",
-    certificateImage:
-      "/certificates/b2-fce-cambridge_Yanis-Sebastian-Zürcher.pdf",
+    image: {
+      src: "/certificates/b2-fce-cambridge_Yanis-Sebastian-Zürcher.webp",
+      width: 1415,
+      height: 2000,
+    },
+    pdf: "/certificates/b2-fce-cambridge_Yanis-Sebastian-Zürcher.pdf",
   },
   {
     id: "fcc-js-algorithms-ds",
@@ -79,8 +100,11 @@ export const certifications: Certification[] = [
     url: "https://www.freecodecamp.org/certification/lyfe691/javascript-algorithms-and-data-structures-v8",
     skills: ["JavaScript", "Algorithms", "Data Structures"],
     issuerLogo: "/certificates/issuer/free_code_camp_logo.jpg",
-    certificateImage:
-      "/certificates/js-fcc_algorithms-ds_Yanis-Sebastian-Zürcher.webp",
+    image: {
+      src: "/certificates/js-fcc_algorithms-ds_Yanis-Sebastian-Zürcher.webp",
+      width: 1223,
+      height: 816,
+    },
   },
   {
     id: "mimo-fullstack",
@@ -91,7 +115,11 @@ export const certifications: Certification[] = [
     url: "https://www.virtualbadge.io/certificate-validator?credential=56c5227a-95c9-4b7f-a462-8bf34303d644",
     skills: ["Full-Stack", "Web Development"],
     issuerLogo: "/certificates/issuer/mimo_logo.png",
-    certificateImage: "/certificates/mimo_ft_Yanis-Sebastian-Zürcher.webp",
+    image: {
+      src: "/certificates/mimo_ft_Yanis-Sebastian-Zürcher.webp",
+      width: 2000,
+      height: 1545,
+    },
   },
 ];
 

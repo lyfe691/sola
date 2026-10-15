@@ -6,186 +6,194 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
-import { Reveal } from "@/components/Reveal";
-import { useLanguage, useTranslation } from "@/lib/language-provider";
-import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
+import {
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  type CSSProperties,
+} from "react";
+import {
+  ArrowExpandIcon,
+  ArrowUpRight01Icon,
+} from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { getAllCertifications, isExpired } from "@/config/certifications";
-import { IconButton } from "@/components/ui/custom/icon-button";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
+import { Reveal } from "@/components/Reveal";
+import { FigureLightboxProvider } from "@/components/mdx/figure-lightbox";
+import { FigureLightboxContext } from "@/components/mdx/figure-lightbox-context";
+import {
+  getAllCertifications,
+  isExpired,
+  type Certification,
+} from "@/config/certifications";
 import { INTL_LOCALE } from "@/lib/dates";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
+import { cn } from "@/lib/utils";
 
-const Certifications: React.FC = () => {
+/** The shape of the cell each sheet lies in: `aspect-9/7` below. */
+const DESK = 9 / 7;
+const TILTS = ["-1deg", "0.7deg", "-0.4deg", "0.9deg", "-0.7deg", "0.5deg"];
+
+function Certificate({ cert, tilt }: { cert: Certification; tilt: string }) {
   const { language } = useLanguage();
   const t = useTranslation();
-  const items = getAllCertifications();
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString(INTL_LOCALE[language], {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
+  const lightbox = useContext(FigureLightboxContext);
+  const id = useId();
+  const imageRef = useRef<HTMLImageElement>(null);
+  const { src, width, height } = cert.image;
+  const alt = t.certifications.certificateAlt
+    .replace("{title}", cert.title)
+    .replace("{issuer}", cert.issuer);
+  const away = lightbox?.awayId === id;
+  const register = lightbox?.register;
+
+  useEffect(
+    () =>
+      register?.({
+        id,
+        src,
+        size: [width, height],
+        alt,
+        caption: cert.title,
+        thumb: () => imageRef.current,
+      }),
+    [register, id, src, width, height, alt, cert.title],
+  );
+
+  const link = cert.url
+    ? { href: cert.url, label: t.certifications.verify }
+    : cert.pdf
+      ? { href: cert.pdf, label: t.certifications.viewPdf }
+      : null;
+  const issued = new Date(cert.issueDate).toLocaleDateString(
+    INTL_LOCALE[language],
+    { month: "short", year: "numeric", timeZone: "UTC" },
+  );
+  const ratio = width / height;
 
   return (
-    <div>
+    <article>
+      <div className="grid aspect-9/7 place-items-center">
+        <button
+          type="button"
+          onClick={() => lightbox?.open(id)}
+          aria-label={t.common.expandImageNamed.replace("{alt}", alt)}
+          style={
+            {
+              "--sheet-w": `${Math.min(1, ratio / DESK) * 100}%`,
+              "--sheet-ratio": ratio,
+              "--tilt": tilt,
+            } as CSSProperties
+          }
+          className={cn(
+            "group/sheet relative aspect-(--sheet-ratio) w-(--sheet-w) overflow-hidden rounded-[3px] bg-paper",
+            "rotate-(--tilt) shadow-(--paper-lift)",
+            "cursor-zoom-in outline-none select-none",
+            "transition-[rotate,translate,scale,box-shadow] duration-500 ease-out",
+            "can-hover:hover:-translate-y-1.5 can-hover:hover:rotate-0 can-hover:hover:shadow-(--paper-raised)",
+            "active:scale-99",
+            "focus-visible:rotate-0 focus-visible:ring-2 focus-visible:ring-ring/40",
+          )}
+        >
+          <img
+            ref={imageRef}
+            src={src}
+            alt=""
+            width={width}
+            height={height}
+            loading="lazy"
+            decoding="async"
+            className={cn("block size-full", away && "invisible")}
+          />
+          <span
+            aria-hidden="true"
+            className={cn(
+              "pointer-events-none absolute right-3 bottom-3",
+              "grid size-8 place-items-center rounded-full",
+              "bg-background/80 text-foreground shadow-sm backdrop-blur-md",
+              "scale-90 opacity-0 transition-[opacity,scale] duration-200 ease-out",
+              "can-hover:group-hover/sheet:scale-100 can-hover:group-hover/sheet:opacity-100",
+              "group-focus-visible/sheet:scale-100 group-focus-visible/sheet:opacity-100",
+              away && "hidden",
+            )}
+          >
+            <HugeiconsIcon
+              icon={ArrowExpandIcon}
+              strokeWidth={2}
+              className="size-3.5"
+            />
+          </span>
+        </button>
+      </div>
+
+      <div className="mt-6 flex items-start gap-3">
+        {cert.issuerLogo ? (
+          <img
+            src={cert.issuerLogo}
+            alt=""
+            className="size-8 shrink-0 rounded-lg object-cover ring-1 ring-border"
+            loading="lazy"
+          />
+        ) : null}
+        <div className="min-w-0 flex-1">
+          <h2 className="text-sm leading-snug font-medium text-pretty text-foreground">
+            {cert.title}
+          </h2>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            {cert.issuer} · <time dateTime={cert.issueDate}>{issued}</time>
+            {isExpired(cert) ? <> · {t.certifications.expired}</> : null}
+          </p>
+        </div>
+        {link ? (
+          <a
+            href={link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex shrink-0 items-center gap-1 pt-px text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            {link.label}
+            <HugeiconsIcon
+              icon={ArrowUpRight01Icon}
+              strokeWidth={2}
+              className="size-3.5"
+            />
+          </a>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+export default function Certifications() {
+  const t = useTranslation();
+  const items = getAllCertifications();
+
+  return (
+    <div className="flex w-full flex-col">
       <meta name="description" content={t.seo.certifications.description} />
 
-      <Reveal className="mb-16 text-center">
-        <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-4 tracking-tight text-wrap wrap-break-word shrink-0">
-          {t.certifications.title}
-        </h1>
+      <Reveal as="h1" className="mb-4 text-4xl font-bold">
+        {t.certifications.title}
+      </Reveal>
+      <Reveal as="p" className="mb-12 max-w-2xl text-muted-foreground sm:mb-16">
+        {t.certifications.subtitle}
       </Reveal>
 
-      <div className="max-w-4xl mx-auto">
-        {items.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            {t.certifications.empty}
-          </p>
-        ) : (
-          <div className="grid gap-4 sm:gap-6">
-            {items.map((c) => {
-              const expired = isExpired(c);
-              return (
-                <Reveal key={c.id}>
-                  <article className="group rounded-xl border bg-card/60 p-4 sm:p-5 md:p-6 transition-colors duration-300 hover:border-primary/20">
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-                      <div className="flex items-start gap-3 flex-1 min-w-0">
-                        {c.issuerLogo ? (
-                          <img
-                            src={c.issuerLogo}
-                            alt={`${c.issuer} logo`}
-                            className="w-10 h-10 rounded border border-border object-cover"
-                            loading="lazy"
-                          />
-                        ) : null}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between gap-2">
-                            <h2 className="text-lg font-medium text-foreground wrap-break-word">
-                              {c.title}
-                            </h2>
-                            {expired && (
-                              <span className="px-2 py-0.5 text-3xs rounded bg-destructive/10 border border-destructive/30 text-destructive shrink-0">
-                                {t.certifications.expired}
-                              </span>
-                            )}
-                          </div>
-                          <div className="mt-1 text-xs text-foreground/60 whitespace-normal">
-                            <span className="text-foreground/60">
-                              {c.issuer}
-                            </span>
-                            <span className="mx-1">•</span>
-                            <time>{formatDate(c.issueDate)}</time>
-                            {c.expirationDate ? (
-                              <>
-                                <span className="mx-1">•</span>
-                                <span>
-                                  {t.certifications.expires}:{" "}
-                                  {formatDate(c.expirationDate)}
-                                </span>
-                              </>
-                            ) : null}
-                            {c.credentialId ? (
-                              <>
-                                <span className="mx-1">•</span>
-                                <span>
-                                  {t.certifications.credentialId}:{" "}
-                                  {c.credentialId}
-                                </span>
-                              </>
-                            ) : null}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {(() => {
-                      const maybePdf =
-                        c.certificatePdf || c.certificateImage || undefined;
-                      const isPdf =
-                        typeof maybePdf === "string" &&
-                        maybePdf.toLowerCase().endsWith(".pdf");
-                      if (isPdf && maybePdf) {
-                        return (
-                          <div className="mt-4">
-                            <object
-                              data={maybePdf}
-                              type="application/pdf"
-                              className="w-full h-[420px] sm:h-[560px] rounded-lg border border-border"
-                            >
-                              <a
-                                href={maybePdf}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="link"
-                              >
-                                {t.certifications.viewPdf}
-                              </a>
-                            </object>
-                          </div>
-                        );
-                      }
-                      if (c.certificateImage && !isPdf) {
-                        return (
-                          <div className="mt-4">
-                            <img
-                              src={c.certificateImage}
-                              alt={`${c.title} certificate`}
-                              className="w-full rounded-lg border border-border"
-                              loading="lazy"
-                            />
-                          </div>
-                        );
-                      }
-                      return null;
-                    })()}
-
-                    {c.skills && c.skills.length > 0 ? (
-                      <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
-                        {c.skills.map((s, idx) => (
-                          <Badge key={idx} variant="chip">
-                            {s}
-                          </Badge>
-                        ))}
-                      </div>
-                    ) : null}
-                    {c.url ? (
-                      <>
-                        <Separator className="my-4" />
-                        <div className="grid grid-cols-1">
-                          <IconButton
-                            variant="default"
-                            size="lg"
-                            icon={
-                              <HugeiconsIcon
-                                icon={LinkSquare02Icon}
-                                strokeWidth={2}
-                              />
-                            }
-                            fullWidth
-                            onClick={() =>
-                              window.open(
-                                c.url!,
-                                "_blank",
-                                "noopener,noreferrer",
-                              )
-                            }
-                          >
-                            {t.certifications.verify}
-                          </IconButton>
-                        </div>
-                      </>
-                    ) : null}
-                  </article>
-                </Reveal>
-              );
-            })}
-          </div>
-        )}
-      </div>
+      {items.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          {t.certifications.empty}
+        </p>
+      ) : (
+        <FigureLightboxProvider>
+          <ul className="grid gap-x-10 gap-y-14 sm:grid-cols-2 sm:gap-y-16 lg:grid-cols-3">
+            {items.map((cert, i) => (
+              <Reveal as="li" key={cert.id}>
+                <Certificate cert={cert} tilt={TILTS[i % TILTS.length]} />
+              </Reveal>
+            ))}
+          </ul>
+        </FigureLightboxProvider>
+      )}
     </div>
   );
-};
-
-export default Certifications;
+}

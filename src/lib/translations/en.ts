@@ -52,6 +52,9 @@ export const en = {
   },
   certifications: {
     title: "Certifications",
+    subtitle:
+      "Courses and exams I've passed. Open a certificate to read it in full.",
+    certificateAlt: "{title} certificate from {issuer}",
     empty: "No certifications published yet.",
     verify: "Verify",
     expired: "Expired",

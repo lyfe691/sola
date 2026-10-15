@@ -78,7 +78,7 @@ export type SiteDoc = SearchDoc &
         kind: "certification";
         to: string;
         logo?: string;
-        /** the certificate itself, a PDF or an image */
+        /** the certificate itself, as an image */
         document?: string;
         skills: string[];
       }
@@ -267,7 +267,7 @@ export function buildSiteDocs(
       keywords: [t.certifications.title, ...(cert.skills ?? [])],
       to: "/certifications",
       logo: cert.issuerLogo,
-      document: cert.certificatePdf ?? cert.certificateImage,
+      document: cert.image.src,
       skills: cert.skills ?? [],
       boost: 0.5,
     });

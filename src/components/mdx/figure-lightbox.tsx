@@ -201,7 +201,7 @@ const inDocumentOrder = (a: FigureEntry, b: FigureEntry) => {
  *  own pixels), and where its centre sits when the first image's is at 0. */
 function layOut(items: FigureEntry[], stage: Stage) {
   const sizes = items.map((item) => {
-    const natural = PROJECT_IMAGE_SIZES[item.src];
+    const natural = item.size ?? PROJECT_IMAGE_SIZES[item.src];
     const ratio = natural ? natural[0] / natural[1] : 1.6;
     const w = Math.min(
       stage.w,
@@ -342,7 +342,7 @@ function Filmstrip({
       className="pointer-events-auto flex max-w-[calc(100%-2rem)] cursor-default items-center gap-0.5 overflow-x-auto rounded-[0.75rem] bg-foreground/10 p-1.5 [scrollbar-width:none]"
     >
       {items.map((item, i) => {
-        const size = PROJECT_IMAGE_SIZES[item.src];
+        const size = item.size ?? PROJECT_IMAGE_SIZES[item.src];
         const ratio = size ? size[0] / size[1] : 1.6;
         const showing = i === index;
         return (

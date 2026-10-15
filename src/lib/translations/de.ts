@@ -53,6 +53,9 @@ export const de = {
   },
   certifications: {
     title: "Zertifikate",
+    subtitle:
+      "Kurse und Prüfungen, die ich bestanden habe. Öffne ein Zertifikat, um es ganz zu lesen.",
+    certificateAlt: "Zertifikat „{title}“ von {issuer}",
     empty: "Noch keine Zertifikate veröffentlicht.",
     verify: "Prüfen",
     expired: "Abgelaufen",

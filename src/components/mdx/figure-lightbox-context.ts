@@ -14,6 +14,8 @@ export type FigureEntry = {
   id: string;
   /** The image, or a clip's poster: what sizes it, and its filmstrip slice. */
   src: string;
+  /** Its pixel size, for an image outside project-image-sizes.ts. */
+  size?: readonly [width: number, height: number];
   /** A clip that plays in the image's place. */
   video?: string;
   alt: string;
