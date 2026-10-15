@@ -132,7 +132,7 @@ async function buildPushActivity(
   base: Pick<ProcessedActivity, "id" | "repo" | "repoUrl" | "timestamp">,
   headers: Headers,
   budget: EnrichmentBudget,
-): Promise<ProcessedActivity> {
+): Promise<ProcessedActivity | null> {
   const commits = event.payload.commits ?? [];
   const branch = event.payload.ref?.replace("refs/heads/", "") || "main";
   const size =
@@ -163,9 +163,8 @@ async function buildPushActivity(
       undefined;
   }
   if (!description) {
-    description = event.payload.forced
-      ? "Branch history was rewritten"
-      : "Latest changes synchronized";
+    if (!event.payload.forced) return null;
+    description = "Branch history was rewritten";
   }
 
   const deleted = Boolean(event.payload.deleted);

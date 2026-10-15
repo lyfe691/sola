@@ -88,13 +88,13 @@ describe("getGitHubActivity", () => {
       if (url.includes("/events/public")) {
         return { ok: true, json: async () => events };
       }
-      // enrichment lookups find nothing -> static fallback descriptions
+      // enrichment lookups find nothing -> pushes with no message are dropped
       return { ok: true, json: async () => [] };
     });
     vi.stubGlobal("fetch", fetchMock);
     const { getGitHubActivity } = await load();
     const result = await getGitHubActivity("lyfe691");
-    expect(result).toHaveLength(20);
+    expect(result).toHaveLength(0);
     // 1 events fetch + at most 5 enrichment fetches
     expect(fetchMock).toHaveBeenCalledTimes(6);
   });
