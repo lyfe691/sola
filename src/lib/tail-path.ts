@@ -28,6 +28,8 @@ export function tailFill(width: number, height: number, inset = 0) {
  * base line): the flanks leave the curve along it instead of a flat edge.
  */
 export function tailDropEdge(width: number, height: number, radius: number) {
+  // no circle (a surface not measured yet): no direction to leave it along
+  if (radius <= 0) return tailEdge(width, height);
   const mid = width / 2;
   const spread = Math.min(mid, radius * 0.6);
   const rise = Math.sqrt(radius * radius - spread * spread);
