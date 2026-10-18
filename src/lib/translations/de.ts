@@ -526,6 +526,8 @@ export const de = {
     files: "{count} Dateien",
     expand: "Commit anzeigen",
     collapse: "Commit ausblenden",
+    showMore: "Mehr anzeigen",
+    showLess: "Weniger anzeigen",
     pr: "PR #{number}",
   },
   footer: {

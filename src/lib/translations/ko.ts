@@ -520,6 +520,8 @@ export const ko = {
     files: "{count}개 파일",
     expand: "커밋 표시",
     collapse: "커밋 숨기기",
+    showMore: "더 보기",
+    showLess: "접기",
     pr: "PR #{number}",
   },
   footer: {

@@ -96,7 +96,7 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
       ) : null}
 
       {selected?.patch ? (
-        <CommitPatch file={selected} />
+        <CommitPatch key={selected.filename} file={selected} />
       ) : selected ? (
         <p className="font-mono text-xs text-muted-foreground">
           {selected.filename} — {t.unavailable}

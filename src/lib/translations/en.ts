@@ -520,6 +520,8 @@ export const en = {
     files: "{count} files",
     expand: "Show commit",
     collapse: "Hide commit",
+    showMore: "Show more",
+    showLess: "Show less",
     pr: "PR #{number}",
   },
   footer: {

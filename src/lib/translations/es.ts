@@ -527,6 +527,8 @@ export const es = {
     files: "{count} archivos",
     expand: "Mostrar commit",
     collapse: "Ocultar commit",
+    showMore: "Mostrar más",
+    showLess: "Mostrar menos",
     pr: "PR #{number}",
   },
   footer: {

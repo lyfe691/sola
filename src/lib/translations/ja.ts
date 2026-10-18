@@ -518,6 +518,8 @@ export const ja = {
     files: "{count} ファイル",
     expand: "コミットを表示",
     collapse: "コミットを非表示",
+    showMore: "もっと見る",
+    showLess: "折りたたむ",
     pr: "PR #{number}",
   },
   footer: {

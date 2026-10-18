@@ -511,6 +511,8 @@ export const zh = {
     files: "{count} 个文件",
     expand: "显示提交",
     collapse: "隐藏提交",
+    showMore: "显示更多",
+    showLess: "收起",
     pr: "PR #{number}",
   },
   footer: {
