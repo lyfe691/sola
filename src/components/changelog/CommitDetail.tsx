@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CommitPatch } from "@/components/changelog/CommitPatch";
 import { FileTree } from "@/components/changelog/FileTree";
-import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
 import { commitDetailQuery, fileTree } from "@/lib/github-commits";
 import { useTranslation } from "@/lib/language-provider";
 
@@ -18,7 +17,6 @@ const MAX_FILES = 20;
 
 export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
   const t = useTranslation().changelog;
-  const isDark = useIsDarkScheme();
   const query = useQuery(commitDetailQuery(sha));
   const [active, setActive] = useState<string | null>(null);
 
@@ -55,7 +53,6 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
   const selected =
     shown.find((file) => file.filename === active) ?? shown[0] ?? null;
   const overflow = commit.files.length > MAX_FILES;
-  const scheme = isDark ? "dark" : "light";
   const body =
     lead && commit.body.startsWith(lead)
       ? commit.body.slice(lead.length).trim()
@@ -87,7 +84,7 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
       ) : null}
 
       {selected?.patch ? (
-        <CommitPatch file={selected} scheme={scheme} />
+        <CommitPatch file={selected} />
       ) : selected ? (
         <p className="font-mono text-xs text-muted-foreground">
           {selected.filename} — {t.unavailable}

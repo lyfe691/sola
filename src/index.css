@@ -1100,15 +1100,6 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
   filter: grayscale(0);
 }
 
-/* ---------- changelog diff surface ---------- */
-/* Derived from the site's own tokens instead of dedicated per-theme values:
-   the --code pair leans on the card pair (nudged toward foreground so it
-   lifts off same-color pages) — all 11 themes hold for free. */
-.code-block {
-  --code: color-mix(in oklab, var(--card) 97%, var(--foreground));
-  --code-foreground: var(--card-foreground);
-}
-
 /* ---------- GitHub contribution heatmap ---------- */
 .contribution-calendar {
   --contrib-0: color-mix(in oklab, var(--foreground) 6%, transparent);
