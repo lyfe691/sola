@@ -45,7 +45,7 @@ import { mergeProps } from "@base-ui/react/merge-props";
 import { useRender } from "@base-ui/react/use-render";
 import { tailDrop, tailDropEdge, tailEdge, tailFill } from "@/lib/tail-path";
 import { cn } from "@/lib/utils";
-import { EASE_EXPO } from "@/utils/transitions";
+import { EASE_EXPO, GLIDE, SWAP } from "@/utils/transitions";
 
 type Side = "top" | "right" | "bottom" | "left";
 
@@ -81,7 +81,6 @@ const GAP = 6;
 const MARGIN = 8;
 /** a leave waits this long (ms), so crossing between triggers doesn't close */
 const GRACE = 80;
-const GLIDE = { type: "spring", duration: 0.32, bounce: 0.1 } as const;
 // The pop springs like the glide, so opening and travelling read as one
 // motion; opacity settles first so it never hangs half-visible.
 const POP = {
@@ -91,7 +90,6 @@ const POP = {
 // Leaving is quicker and quieter than arriving.
 const UNPOP = { duration: 0.1, ease: EASE_EXPO };
 const REPOP = { duration: 0.12, ease: EASE_EXPO };
-const SWAP = { duration: 0.14, ease: EASE_EXPO };
 const RISE = 3;
 const ARROW_W = 16;
 const ARROW_H = 6;

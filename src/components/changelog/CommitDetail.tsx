@@ -10,8 +10,10 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CommitPatch } from "@/components/changelog/CommitPatch";
 import { FileTree } from "@/components/changelog/FileTree";
+import { useSwapIn } from "@/hooks/use-swap-in";
 import { commitDetailQuery, fileTree } from "@/lib/github-commits";
 import { useTranslation } from "@/lib/language-provider";
+import { cn } from "@/lib/utils";
 
 const MAX_FILES = 20;
 
@@ -19,9 +21,19 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
   const t = useTranslation().changelog;
   const query = useQuery(commitDetailQuery(sha));
   const [active, setActive] = useState<string | null>(null);
+  const swapIn = useSwapIn(!query.data && !query.isError);
 
   if (query.isError) {
-    return <p className="text-xs text-muted-foreground">{t.error}</p>;
+    return (
+      <p
+        className={cn(
+          "text-xs text-muted-foreground",
+          swapIn && "animate-swap-in",
+        )}
+      >
+        {t.error}
+      </p>
+    );
   }
 
   if (!query.data) {
@@ -59,7 +71,7 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
       : commit.body;
 
   return (
-    <div className="min-w-0 space-y-4">
+    <div className={cn("min-w-0 space-y-4", swapIn && "animate-swap-in")}>
       {body ? (
         <p className="max-w-prose text-sm leading-relaxed whitespace-pre-wrap text-foreground/65">
           {body}

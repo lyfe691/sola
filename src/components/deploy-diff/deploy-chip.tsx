@@ -19,11 +19,62 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useSwapIn } from "@/hooks/use-swap-in";
 import { INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
+import { cn } from "@/lib/utils";
 import { useCodeView } from "./code-view-provider";
 import { useIsDarkScheme } from "./use-scheme";
 import { DEPLOY_LABEL, usePageDiff } from "./use-page-diff";
+
+/** The commit in the tooltip: a skeleton while it loads, then its lines.
+ *  It mounts with each showing of the tooltip, so the lines swap in only
+ *  when that showing waited on the skeleton. */
+function CommitLines({
+  loading,
+  commit,
+  date,
+  scheme,
+}: {
+  loading: boolean;
+  commit: { subject: string; additions: number; deletions: number } | null;
+  date: string;
+  scheme: "light" | "dark";
+}) {
+  const swapIn = useSwapIn(loading);
+  if (loading) {
+    return (
+      <div className="space-y-1.5 py-1" aria-hidden="true">
+        <div className="h-2.5 w-full animate-pulse rounded-full bg-background/10" />
+        <div className="h-2.5 w-2/3 animate-pulse rounded-full bg-background/10" />
+      </div>
+    );
+  }
+  if (!commit) return null;
+  return (
+    <>
+      <p
+        className={cn(
+          "line-clamp-2 leading-relaxed",
+          swapIn && "animate-swap-in",
+        )}
+      >
+        {commit.subject}
+      </p>
+      <p
+        data-scheme={scheme}
+        className={cn(
+          "font-mono text-3xs font-normal text-background/60",
+          swapIn && "animate-swap-in",
+        )}
+      >
+        <span className="text-(--diff-add-fg)">+{commit.additions}</span>{" "}
+        <span className="text-(--diff-del-fg)">−{commit.deletions}</span>
+        {date && <> · {date}</>}
+      </p>
+    </>
+  );
+}
 
 export function DeployChip() {
   const { setActive: setCodeView } = useCodeView();
@@ -73,25 +124,12 @@ export function DeployChip() {
         {/* a command name, not copy — and the title the code view opens
             under, so the tooltip reads as its preview */}
         <p className="font-mono">git show</p>
-        {state.status === "loading" && (
-          <div className="space-y-1.5 py-1" aria-hidden="true">
-            <div className="h-2.5 w-full animate-pulse rounded-full bg-background/10" />
-            <div className="h-2.5 w-2/3 animate-pulse rounded-full bg-background/10" />
-          </div>
-        )}
-        {commit && (
-          <>
-            <p className="line-clamp-2 leading-relaxed">{commit.subject}</p>
-            <p
-              data-scheme={isDark ? "light" : "dark"}
-              className="font-mono text-3xs font-normal text-background/60"
-            >
-              <span className="text-(--diff-add-fg)">+{commit.additions}</span>{" "}
-              <span className="text-(--diff-del-fg)">−{commit.deletions}</span>
-              {formattedDate && <> · {formattedDate}</>}
-            </p>
-          </>
-        )}
+        <CommitLines
+          loading={state.status === "loading"}
+          commit={commit}
+          date={formattedDate}
+          scheme={isDark ? "light" : "dark"}
+        />
         <p className="pt-0.5 font-normal leading-relaxed text-background/70">
           {t.common.diff.deployed}
         </p>

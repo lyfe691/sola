@@ -145,6 +145,17 @@
   --animate-accordion-down: accordion-down 0.2s var(--ease-out);
   --animate-accordion-up: accordion-up 0.2s var(--ease-out);
   --animate-shine: shine 5s linear infinite;
+  /* content arriving where its skeleton stood (useSwapIn): opacity only, so
+     nothing moves into a place that was already held; backwards so it is
+     hidden from its first frame */
+  --animate-swap-in: swap-in 0.4s var(--ease-smooth) backwards;
+
+  /* 0.001, not 0: HIDDEN_OPACITY in transitions.ts says why */
+  @keyframes swap-in {
+    from {
+      opacity: 0.001;
+    }
+  }
 
   @keyframes shine {
     0% {
@@ -718,9 +729,7 @@
 /* The old frame holds still and the next theme arrives over it (skipped
    under reduced motion in theme-provider). pointer-events: none so clicks
    mid-transition — e.g. trying themes in an open menu — reach the page, not
-   the overlay. The resume morph (below) relies on it too: base-ui counts a
-   press on <html> as outside the dialog, so an overlay taking clicks would
-   close it. */
+   the overlay. */
 ::view-transition {
   pointer-events: none;
 }
@@ -747,107 +756,6 @@
 }
 
 @keyframes theme-dissolve {
-  from {
-    opacity: 0;
-  }
-}
-
-/* ---------- resume morph (view transitions api) ---------- */
-/* The desktop resume dialog turning from its card into its reader and back
-   (ResumeDialog.tsx). Its parts are named only while the root carries
-   data-resume-morph (the view the box is heading for), and the root itself
-   steps out: the page stays live underneath, and none of the theme wipe's
-   root rules above ever apply to it. */
-:root[data-resume-morph] {
-  view-transition-name: none;
-}
-
-:root[data-resume-morph] [data-morph-part="surface"] {
-  view-transition-name: resume-surface;
-}
-
-:root[data-resume-morph] [data-morph-part="content"] {
-  view-transition-name: resume-content;
-}
-
-:root[data-resume-morph]
-  [data-morph-part="surface"]
-  [data-slot="dialog-title"] {
-  view-transition-name: resume-title;
-}
-
-/* the close button the vendored popup renders as its last child */
-:root[data-resume-morph]
-  [data-morph-part="surface"]
-  > [data-slot="dialog-close"] {
-  view-transition-name: resume-close;
-}
-
-/* one spring for everything that moves (the component sets it) */
-::view-transition-group(resume-surface),
-::view-transition-group(resume-content),
-::view-transition-group(resume-title),
-::view-transition-group(resume-close) {
-  animation-duration: var(--morph-duration);
-  animation-timing-function: var(--morph-easing);
-}
-
-/* the box: its group is resized, not scaled, so it wears the dialog's own
-   surface (handed over by the component) and its corners, ring and shadow
-   are true at every size. Its own pictures would be stretched photos of
-   that surface, so they sit this one out. */
-::view-transition-group(resume-surface) {
-  border-radius: var(--morph-radius);
-  background-color: var(--morph-surface);
-  box-shadow: var(--morph-shadow);
-}
-
-::view-transition-old(resume-surface),
-::view-transition-new(resume-surface) {
-  display: none;
-}
-
-/* the content: the same box, clipped to its corners, with its two pictures
-   at their own size (a picture scaled to a moving box is a smear). The
-   card leads with its top-left corner, where its title is; the reader with
-   its top-right one, so its tools ride that corner beside the close button
-   instead of sliding under it while the box opens. */
-::view-transition-group(resume-content) {
-  border-radius: var(--morph-radius);
-  overflow: clip;
-}
-
-::view-transition-old(resume-content),
-::view-transition-new(resume-content),
-::view-transition-old(resume-title),
-::view-transition-new(resume-title) {
-  inline-size: auto;
-}
-
-:root[data-resume-morph="reader"]::view-transition-new(resume-content),
-:root[data-resume-morph="card"]::view-transition-old(resume-content) {
-  inset-inline-end: 0;
-}
-
-/* two different views, so a plain crossfade rather than the additive one:
-   the leaver goes first, the arrival follows on the UI clock */
-::view-transition-old(resume-content) {
-  mix-blend-mode: normal;
-  animation: resume-leave 180ms var(--ease-out) both;
-}
-
-::view-transition-new(resume-content) {
-  mix-blend-mode: normal;
-  animation: resume-arrive 260ms var(--ease-out) 90ms both;
-}
-
-@keyframes resume-leave {
-  to {
-    opacity: 0;
-  }
-}
-
-@keyframes resume-arrive {
   from {
     opacity: 0;
   }
@@ -1143,6 +1051,20 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
 
 .contribution-calendar .react-activity-calendar__calendar {
   display: block;
+}
+
+/* a day takes its colour the way content swaps in: a new square (data
+   landing, another year picked) from the empty shade, a loading square
+   from wherever its wave was. Only under data-swap (the calendar says
+   when): a cache hit's squares show as they are. */
+.contribution-calendar[data-swap] rect[data-level] {
+  transition: fill 0.4s var(--ease-smooth);
+}
+
+@starting-style {
+  .contribution-calendar[data-swap] rect[data-level] {
+    fill: var(--contrib-0);
+  }
 }
 
 .contribution-calendar .react-activity-calendar__legend-month text,

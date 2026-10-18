@@ -59,6 +59,7 @@ import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
+import { Morph } from "@/components/Morph";
 import {
   EASE_OUT,
   FLIGHT_BACK,
@@ -571,7 +572,9 @@ function ClipControls({
             "focus-visible:ring-2 focus-visible:ring-current/50 focus-visible:outline-none",
           )}
         >
-          {playing ? <PauseGlyph /> : <PlayGlyph />}
+          <Morph inline face={playing ? "pause" : "play"}>
+            {playing ? <PauseGlyph /> : <PlayGlyph />}
+          </Morph>
         </button>
         <span className="w-7 shrink-0 text-xs font-medium tabular-nums opacity-90">
           {clock(gone)}

@@ -17,6 +17,7 @@
 import {
   cloneElement,
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -40,6 +41,7 @@ import {
 } from "@/lib/github-contributions";
 import { GITHUB_USER } from "@/lib/github";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSwapIn } from "@/hooks/use-swap-in";
 import {
   Tooltip,
   TooltipContent,
@@ -97,6 +99,17 @@ const GitHubContributionCalendar = ({
     isPending: loading,
     isError: error,
   } = useQuery(githubContributionsQuery(GITHUB_USER, year));
+  const swapIn = useSwapIn(loading);
+  // squares ease into their colours where a placeholder stood, and once the
+  // calendar has painted (another year picked); a cache hit's first frame
+  // shows them as they are
+  const [painted, setPainted] = useState(false);
+  useEffect(() => {
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => setPainted(true));
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   const labels = useMemo(() => {
     const months = Array.from({ length: 12 }, (_, i) =>
@@ -214,6 +227,7 @@ const GitHubContributionCalendar = ({
     <div
       className={cn("contribution-calendar", className)}
       data-scheme={colorScheme}
+      data-swap={swapIn || painted || undefined}
     >
       <div
         ref={bodyRef}
@@ -264,9 +278,19 @@ const GitHubContributionCalendar = ({
           </>
         ) : (
           <>
-            <p className="contribution-calendar__count">{totalCountLabel}</p>
+            <p
+              className={cn(
+                "contribution-calendar__count",
+                swapIn && "animate-swap-in",
+              )}
+            >
+              {totalCountLabel}
+            </p>
             <div
-              className="contribution-calendar__legend"
+              className={cn(
+                "contribution-calendar__legend",
+                swapIn && "animate-swap-in",
+              )}
               aria-label={`${t.about.github.legendLess} – ${t.about.github.legendMore}`}
             >
               <span>{t.about.github.legendLess}</span>

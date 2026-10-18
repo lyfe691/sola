@@ -18,6 +18,7 @@ import {
 } from "react";
 import type { PDFPageProxy } from "pdfjs-dist";
 import { Spinner } from "@/components/ui/spinner";
+import { useSwapIn } from "@/hooks/use-swap-in";
 import { loadPdf } from "@/lib/pdf";
 import { cn } from "@/lib/utils";
 
@@ -28,9 +29,19 @@ type Pages =
   | { url: string; status: "ready"; pages: PDFPageProxy[] }
   | { url: string; status: "failed" };
 
+// a document stays open for the visit (lib/pdf), and so do its pages: a
+// reader opened again has them on its first frame instead of a spinner
+const fetched = new Map<string, PDFPageProxy[]>();
+
+const known = (url: string): Pages => {
+  const pages = fetched.get(url);
+  return pages ? { url, status: "ready", pages } : { url, status: "loading" };
+};
+
 function usePages(url: string): Pages {
-  const [pages, setPages] = useState<Pages>({ url, status: "loading" });
+  const [pages, setPages] = useState<Pages>(() => known(url));
   useEffect(() => {
+    if (fetched.has(url)) return;
     let live = true;
     loadPdf(url)
       .then((doc) =>
@@ -40,6 +51,7 @@ function usePages(url: string): Pages {
       )
       .then(
         (loaded) => {
+          fetched.set(url, loaded);
           if (live) setPages({ url, status: "ready", pages: loaded });
         },
         () => {
@@ -50,7 +62,7 @@ function usePages(url: string): Pages {
       live = false;
     };
   }, [url]);
-  return pages.url === url ? pages : { url, status: "loading" };
+  return pages.url === url ? pages : known(url);
 }
 
 function useColumnWidth() {
@@ -72,10 +84,12 @@ function Page({
   page,
   width,
   paused,
+  swapIn,
 }: {
   page: PDFPageProxy;
   width: number;
   paused: boolean;
+  swapIn: boolean;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [drawn, setDrawn] = useState(false);
@@ -100,7 +114,10 @@ function Page({
 
   return (
     <div
-      className="aspect-(--page-ratio) overflow-hidden rounded-md bg-paper shadow-md ring-1 ring-foreground/10"
+      className={cn(
+        "aspect-(--page-ratio) overflow-hidden rounded-md bg-paper shadow-md ring-1 ring-foreground/10",
+        swapIn && "animate-swap-in",
+      )}
       style={
         { "--page-ratio": `${baseWidth} / ${baseHeight}` } as CSSProperties
       }
@@ -134,6 +151,7 @@ export function PdfPages({
   className?: string;
 }) {
   const state = usePages(url);
+  const swapIn = useSwapIn(state.status === "loading");
   const { ref, width } = useColumnWidth();
 
   return (
@@ -157,6 +175,7 @@ export function PdfPages({
                 page={page}
                 width={width}
                 paused={paused}
+                swapIn={swapIn}
               />
             ))
           : null}
