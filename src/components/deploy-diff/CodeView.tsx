@@ -8,7 +8,8 @@
  * The code view: a full-bleed takeover rendered by PageShell in place of the
  * routed page (entering/leaving rides the site's page transition). Shows the
  * latest commit that touched THIS page's source (see page-sources.ts) —
- * whole and honest, page files sorted first; unmapped routes fall back to
+ * whole and honest, this page's files first and open, the rest behind
+ * their headers (CommitDiff); unmapped routes fall back to
  * the repo-wide latest commit. The only UI above it is the exit bubble,
  * a frosted circle tucked into the top-right corner.
  *
