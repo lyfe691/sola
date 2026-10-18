@@ -1,4 +1,4 @@
-export const source = "bedd8d1e47e6";
+export const source = "acf9f4700719";
 
 # 여러 제공업체의 모델을 내 API 키로 쓰는 AI 채팅
 
@@ -144,6 +144,7 @@ Luma는 React 19 기반의 Next.js 16 앱입니다. 답변은 Vercel AI SDK가 �
   }`}
   fileName="lib/chat-tree.ts"
   lang="ts"
+  highlight="5,8-10"
 />
 
 버전을 바꾸는 것은 서버 호출입니다. 서버는 다음 형제를 가져와 가장 최근에 생긴 자식을 따라 리프까지 내려간 다음, 그 리프를 활성 리프로 저장합니다. 이 설계의 대가는 채팅을 열 때 보고 있지 않은 분기까지 포함해 그 안의 모든 메시지를 읽는다는 점입니다. 그 대신 메시지는 채팅과 생성 시각에 걸린 인덱스를 통해 쿼리 한 번으로 도착하고, 트리 코드는 브라우저와 서버가 모두 임포트하는 순수한 TypeScript입니다.

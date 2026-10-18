@@ -11,6 +11,7 @@ import { useQueries, useQuery } from "@tanstack/react-query";
 import { CommitLog, CommitLogSkeleton } from "@/components/changelog/CommitLog";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { Morph } from "@/components/Morph";
 import { Reveal } from "@/components/Reveal";
 import { CHANGELOG_GITHUB, commitLogQuery } from "@/lib/github-commits";
 import { useTranslation } from "@/lib/language-provider";
@@ -82,10 +83,14 @@ export default function Changelog() {
       ) : (
         <>
           <CommitLog commits={commits} />
-          <Reveal className="mt-4 flex flex-col items-start gap-3">
-            {olderFailed ? (
-              <p className="text-sm text-muted-foreground">{copy.error}</p>
-            ) : null}
+          <Reveal className="mt-4">
+            <Morph>
+              {olderFailed ? (
+                <p className="pb-3 text-sm text-muted-foreground">
+                  {copy.error}
+                </p>
+              ) : null}
+            </Morph>
             <div className="flex flex-wrap items-center gap-3">
               {hasMore ? (
                 <Button
@@ -102,10 +107,22 @@ export default function Changelog() {
                     setPages((n) => n + 1);
                   }}
                 >
-                  {loadingMore ? (
-                    <Spinner className="size-3.5" aria-hidden />
-                  ) : null}
-                  {olderFailed ? copy.retry : copy.older}
+                  {/* the spinner opens a slot of its own beside the label,
+                      so the label slides over rather than fading out and in */}
+                  <span className="flex items-center">
+                    <Morph
+                      inline
+                      axis="width"
+                      face={loadingMore ? "loading" : "idle"}
+                    >
+                      {loadingMore ? (
+                        <Spinner className="me-1 size-3.5" aria-hidden />
+                      ) : null}
+                    </Morph>
+                    <Morph inline face={olderFailed ? "retry" : "older"}>
+                      {olderFailed ? copy.retry : copy.older}
+                    </Morph>
+                  </span>
                 </Button>
               ) : null}
               <a

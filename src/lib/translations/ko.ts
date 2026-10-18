@@ -95,6 +95,7 @@ export const ko = {
       truncated: "잘림 — GitHub에서 전체 차이점을 확인하세요.",
       file: "파일",
       files: "파일",
+      filesNav: "이 커밋의 파일",
     },
     backgroundHints: {
       section: "일부 배경은 어두운 모드에서 훨씬 더 좋아 보입니다.",
@@ -114,6 +115,7 @@ export const ko = {
     copied: "복사되었습니다.",
     copyCode: "코드 복사",
     copyFailed: "코드를 복사할 수 없습니다.",
+    wrapLines: "줄 바꿈",
     command: {
       placeholder: "사이트 검색 또는 명령 실행…",
       scopedPlaceholder: "검색…",
@@ -518,6 +520,8 @@ export const ko = {
     files: "{count}개 파일",
     expand: "커밋 표시",
     collapse: "커밋 숨기기",
+    showMore: "더 보기",
+    showLess: "접기",
     pr: "PR #{number}",
   },
   footer: {

@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import type { TranslationAny } from "@/lib/translations";
@@ -32,9 +31,11 @@ import {
 } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Morph } from "@/components/Morph";
+import { useSwapIn } from "@/hooks/use-swap-in";
 import { IconButton } from "./ui/custom/icon-button";
 import { INTL_LOCALE } from "@/lib/dates";
-import { EASE_OUT } from "@/utils/transitions";
+import { EASE_OUT, HIDDEN_OPACITY } from "@/utils/transitions";
 
 const VISIBLE_EVENTS = 6;
 // extra items that exist only to dissolve: the card doesn't end, it trails
@@ -314,7 +315,7 @@ const ActivityItem = ({
 
   return (
     <motion.div
-      initial={play ? { opacity: 0, y: 4 } : false}
+      initial={play ? { opacity: HIDDEN_OPACITY, y: 4 } : false}
       animate={{ opacity: 1, y: 0 }}
       transition={
         play
@@ -386,18 +387,34 @@ const ActivityItem = ({
   );
 };
 
+// an ActivityItem with its text taken out: every bar sits in a line box of
+// the type it stands for, so a row is as tall as the row that replaces it
 const ActivityFeedSkeleton = () => (
   <div
     className={`divide-y divide-foreground/6 overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${FEED_FADE}`}
     aria-hidden
   >
-    {Array.from({ length: 5 }).map((_, index) => (
+    {Array.from({ length: VISIBLE_EVENTS + FADE_TAIL }).map((_, index) => (
       <div key={index} className="flex items-start gap-3 px-4 py-3">
-        <Skeleton className="mt-1 size-7 shrink-0 rounded-lg" />
-        <div className="min-w-0 flex-1 space-y-2">
-          <Skeleton className="h-4 w-2/5 max-w-44" />
-          <Skeleton className="h-3.5 w-full max-w-md" />
-          <Skeleton className="h-3 w-28" />
+        <Skeleton className="mt-1 size-6.5 shrink-0 rounded-lg" />
+        <div className="min-w-0 flex-1 space-y-1">
+          <div className="text-sm leading-snug">
+            <Skeleton className="inline-block h-3 w-2/5 max-w-44 align-middle" />
+          </div>
+          {/* on a phone the description wraps onto a second line */}
+          <div className="text-sm leading-relaxed">
+            <Skeleton className="inline-block h-3 w-full max-w-md align-middle" />
+            <Skeleton className="hidden h-3 w-3/5 align-middle max-sm:inline-block" />
+          </div>
+          <div className="mt-2 flex">
+            <div className="relative w-12 py-0.5 text-2xs">
+              <Skeleton className="absolute inset-0 rounded-md" />
+              {" "}
+            </div>
+          </div>
+          <div className="pt-1 text-xs">
+            <Skeleton className="inline-block h-2.5 w-28 align-middle" />
+          </div>
         </div>
       </div>
     ))}
@@ -425,9 +442,9 @@ const ContributionActivityFeed = () => {
   );
 
   // entrance stagger only when items are already there on first paint (query
-  // cache hit); after a skeleton phase they appear in place instead of
-  // replaying the entrance on a later render
-  const [play] = React.useState(() => !loading);
+  // cache hit); after a skeleton phase the feed swaps in where it stood
+  const swapIn = useSwapIn(loading);
+  const swapClass = swapIn ? "animate-swap-in" : "";
 
   return (
     <div className="mt-6">
@@ -440,11 +457,13 @@ const ContributionActivityFeed = () => {
         </span>
       </div>
 
-      <div className="relative min-h-[18rem]">
+      <Morph contentClassName="relative min-h-[18rem]">
         {loading ? (
           <ActivityFeedSkeleton />
         ) : isError ? (
-          <div className="overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1">
+          <div
+            className={`overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${swapClass}`}
+          >
             <div className="p-12 text-center">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
                 <HugeiconsIcon
@@ -463,7 +482,7 @@ const ContributionActivityFeed = () => {
           <div
             className={`overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${
               hasTail ? FEED_FADE : ""
-            }`}
+            } ${swapClass}`}
           >
             {eventsToShow.length > 0 ? (
               <div className="divide-y divide-foreground/6">
@@ -474,7 +493,7 @@ const ContributionActivityFeed = () => {
                     index={index}
                     locale={locale}
                     t={t}
-                    play={play}
+                    play={!swapIn}
                     decorative={index >= VISIBLE_EVENTS}
                   />
                 ))}
@@ -496,7 +515,7 @@ const ContributionActivityFeed = () => {
             )}
           </div>
         )}
-      </div>
+      </Morph>
 
       {!loading && events.length > 0 ? (
         // with a tail the button rises into the dissolve — the paywall move:
@@ -504,7 +523,7 @@ const ContributionActivityFeed = () => {
         <div
           className={`relative z-10 flex justify-center ${
             hasTail ? "-mt-16" : "mt-6"
-          }`}
+          } ${swapClass}`}
         >
           <IconButton
             variant="default"

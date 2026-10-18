@@ -95,6 +95,7 @@ export const en = {
       truncated: "Truncated — view the full diff on GitHub.",
       file: "file",
       files: "files",
+      filesNav: "Files in this commit",
     },
     backgroundHints: {
       section: "Some backgrounds look significantly better in dark mode.",
@@ -114,6 +115,7 @@ export const en = {
     copied: "Copied.",
     copyCode: "Copy code",
     copyFailed: "Couldn't copy code.",
+    wrapLines: "Wrap lines",
     command: {
       placeholder: "Search the site or run a command…",
       scopedPlaceholder: "Search…",
@@ -518,6 +520,8 @@ export const en = {
     files: "{count} files",
     expand: "Show commit",
     collapse: "Hide commit",
+    showMore: "Show more",
+    showLess: "Show less",
     pr: "PR #{number}",
   },
   footer: {

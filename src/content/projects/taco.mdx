@@ -125,6 +125,7 @@ On a visit, the provider first checks `localStorage` for a language picked earli
   }`}
   fileName="lib/i18n/index.ts"
   lang="ts"
+  highlight="5,12-15"
 />
 
 `navigator.language` returns a tag like `es-MX`. The function keeps the part before the hyphen and uses it if the site has that language, English otherwise. All of this runs in the browser after the page has loaded, which keeps every page static: the HTML is prerendered once and the URLs are the same in every language.

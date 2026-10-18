@@ -89,6 +89,7 @@ export const zh = {
       truncated: "已截断——完整 diff 请在 GitHub 查看。",
       file: "个文件",
       files: "个文件",
+      filesNav: "此提交中的文件",
     },
     backgroundHints: {
       section: "部分背景在深色模式下效果更佳。",
@@ -107,6 +108,7 @@ export const zh = {
     copied: "已复制。",
     copyCode: "复制代码",
     copyFailed: "复制失败。",
+    wrapLines: "自动换行",
     command: {
       placeholder: "搜索网站或运行命令…",
       scopedPlaceholder: "搜索…",
@@ -509,6 +511,8 @@ export const zh = {
     files: "{count} 个文件",
     expand: "显示提交",
     collapse: "隐藏提交",
+    showMore: "显示更多",
+    showLess: "收起",
     pr: "PR #{number}",
   },
   footer: {

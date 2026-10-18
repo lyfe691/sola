@@ -18,6 +18,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
 import { useLocation } from "react-router";
 import { IconButton } from "@/components/ui/custom/icon-button";
+import { Morph } from "@/components/Morph";
 import { Reveal } from "@/components/Reveal";
 import { SOCIAL_LINKS } from "@/config/social";
 import { EASE_OUT } from "@/utils/transitions";
@@ -312,20 +313,26 @@ const Contact = () => {
                 disabled={isSubmitting}
                 iconPosition="left"
                 icon={
-                  isSubmitting ? (
-                    <Spinner />
-                  ) : (
-                    <HugeiconsIcon
-                      icon={SentIcon}
-                      strokeWidth={2}
-                      className="size-4"
-                    />
-                  )
+                  <Morph inline face={isSubmitting ? "sending" : "send"}>
+                    {isSubmitting ? (
+                      <Spinner />
+                    ) : (
+                      <HugeiconsIcon
+                        icon={SentIcon}
+                        strokeWidth={2}
+                        className="size-4"
+                      />
+                    )}
+                  </Morph>
                 }
                 variant="default"
                 size="lg"
                 className="mt-1 w-full"
-                label={isSubmitting ? t.contact.sending : t.contact.send}
+                label={
+                  <Morph inline face={isSubmitting ? "sending" : "send"}>
+                    {isSubmitting ? t.contact.sending : t.contact.send}
+                  </Morph>
+                }
               />
             </form>
           </Card>

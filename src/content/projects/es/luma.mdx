@@ -1,4 +1,4 @@
-export const source = "bedd8d1e47e6";
+export const source = "acf9f4700719";
 
 # Un chat de IA multiproveedor que funciona con tus propias claves de API
 
@@ -144,6 +144,7 @@ Cada mensaje es una fila con un `parent_id`, y un chat guarda un puntero más, `
   }`}
   fileName="lib/chat-tree.ts"
   lang="ts"
+  highlight="5,8-10"
 />
 
 Cambiar de versión es una llamada al servidor que toma el siguiente hermano, baja por el hijo más reciente hasta una hoja y guarda esa hoja como la activa. El coste de este diseño es que abrir un chat lee todos sus mensajes, incluidas las ramas que no estás mirando. A cambio, llegan en una sola consulta sobre un índice de chat y fecha de creación, y el código del árbol es TypeScript sin más, que importan tanto el navegador como el servidor.

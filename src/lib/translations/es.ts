@@ -98,6 +98,7 @@ export const es = {
       truncated: "Recortado: mira el diff completo en GitHub.",
       file: "archivo",
       files: "archivos",
+      filesNav: "Archivos de este commit",
     },
     backgroundHints: {
       section: "Algunos fondos se ven mucho mejor en modo oscuro.",
@@ -117,6 +118,7 @@ export const es = {
     copied: "Copiado.",
     copyCode: "Copiar código",
     copyFailed: "No se pudo copiar.",
+    wrapLines: "Ajustar líneas",
     command: {
       placeholder: "Busca en el sitio o ejecuta un comando…",
       scopedPlaceholder: "Buscar…",
@@ -525,6 +527,8 @@ export const es = {
     files: "{count} archivos",
     expand: "Mostrar commit",
     collapse: "Ocultar commit",
+    showMore: "Mostrar más",
+    showLess: "Mostrar menos",
     pr: "PR #{number}",
   },
   footer: {

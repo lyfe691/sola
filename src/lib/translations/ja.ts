@@ -93,6 +93,7 @@ export const ja = {
       truncated: "一部省略 — 完全な diff は GitHub で。",
       file: "ファイル",
       files: "ファイル",
+      filesNav: "このコミットのファイル",
     },
     backgroundHints: {
       section: "一部の背景はダークモードの方が見栄えが良いです。",
@@ -112,6 +113,7 @@ export const ja = {
     copied: "コピーしました。",
     copyCode: "コードをコピー",
     copyFailed: "コピーできませんでした。",
+    wrapLines: "行を折り返す",
     command: {
       placeholder: "サイトを検索、またはコマンドを実行…",
       scopedPlaceholder: "検索…",
@@ -516,6 +518,8 @@ export const ja = {
     files: "{count} ファイル",
     expand: "コミットを表示",
     collapse: "コミットを非表示",
+    showMore: "もっと見る",
+    showLess: "折りたたむ",
     pr: "PR #{number}",
   },
   footer: {

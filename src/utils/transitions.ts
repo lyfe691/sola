@@ -6,12 +6,6 @@
  * For permissions, contact yanis.sebastian.zuercher@gmail.com
  */
 
-import {
-  createGeneratorEasing,
-  generateLinearEasing,
-  spring,
-} from "motion/react";
-
 /**
  * Central motion system.
  *
@@ -64,36 +58,28 @@ export const FLIGHT_BACK = {
   bounce: 0,
 } as const;
 
-// ---- Size morph (a dialog changing size in place to fit what it shows) ----
-// A spring like the flights, with a little life; the bounce stays inside
-// the content's own padding.
-export const MORPH = {
-  type: "spring",
-  visualDuration: 0.42,
-  bounce: 0.18,
-} as const;
+// ---- Swap (one label or face giving way to another in the same spot) ----
+// Both fade at once, on one short curve: the tooltip's label layers and a
+// <Morph>'s faces.
+export const SWAP = { duration: 0.14, ease: EASE_EXPO } as const;
 
-/**
- * A spring as CSS timing, for motion the browser runs itself (a view
- * transition's pseudo-elements): the spring's full settle time, and a
- * linear() curve sampled from motion's own generator — the same spring as
- * the rest of the vocabulary, not a cubic-bezier guess at one.
- */
-export const cssSpring = ({
-  visualDuration,
-  bounce,
-}: {
-  visualDuration: number;
-  bounce: number;
-}) => {
-  const { ease, duration } = createGeneratorEasing(
-    { visualDuration, bounce },
-    100,
-    spring,
-  );
-  const ms = Math.round(duration * 1000);
-  return { duration: `${ms}ms`, easing: generateLinearEasing(ease, ms) };
-};
+// ---- Glide (a surface following what it holds, and moving with it) ----
+// The tooltip between triggers and labels.
+export const GLIDE = { type: "spring", duration: 0.32, bounce: 0.1 } as const;
+// GLIDE as physics: the same curve from rest (within 0.2px). motion starts
+// every retarget of a duration spring from rest, so a box taking a new size
+// mid-glide would stop dead and set off again; this one keeps its speed.
+// It is at rest within half a pixel and under 20px/s: the creep past that
+// is invisible, and kept a box clipped (and a PDF in it undrawn) for 150ms
+// more. A <Morph>'s box and its parts.
+export const GLIDE_SPRING = {
+  type: "spring",
+  stiffness: 702.4,
+  damping: 47.7,
+  mass: 1,
+  restDelta: 0.5,
+  restSpeed: 20,
+} as const;
 
 // ---- Gallery strip (moving between images inside the lightbox) ----
 // The images sit side by side on one strip and the strip moves; the same

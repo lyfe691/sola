@@ -15,6 +15,7 @@ import {
   ScopeChip,
   TypeChip,
 } from "@/components/changelog/CommitMeta";
+import { Morph } from "@/components/Morph";
 import { Reveal } from "@/components/Reveal";
 import { DEPLOY_LABEL } from "@/components/deploy-diff/use-page-diff";
 import { commitGraph, type GraphRow } from "@/lib/commit-graph";
@@ -117,6 +118,23 @@ function CommitRow({
 }) {
   const panelId = `commit-${commit.shortSha}`;
   const headline = commitHeadline(commit);
+  const panel = (
+    <div
+      id={panelId}
+      role="region"
+      aria-label={headline.text}
+      aria-hidden={!isOpen}
+      inert={!isOpen}
+      className="min-w-0 pt-2 pb-6 pl-3"
+    >
+      {mounted ? (
+        <CommitDetail
+          sha={commit.sha}
+          lead={headline.pr !== undefined ? headline.text : undefined}
+        />
+      ) : null}
+    </div>
+  );
 
   return (
     <li
@@ -191,21 +209,10 @@ function CommitRow({
           )}
         >
           <div className="min-h-0 min-w-0 overflow-hidden">
-            <div
-              id={panelId}
-              role="region"
-              aria-label={headline.text}
-              aria-hidden={!isOpen}
-              inert={!isOpen}
-              className="min-w-0 pt-2 pb-6 pl-3"
-            >
-              {mounted ? (
-                <CommitDetail
-                  sha={commit.sha}
-                  lead={headline.pr !== undefined ? headline.text : undefined}
-                />
-              ) : null}
-            </div>
+            {/* the morph arrives with the detail, so the panel opens on its
+                own curve and only later changes (the detail landing, another
+                file picked) glide */}
+            {mounted ? <Morph>{panel}</Morph> : panel}
           </div>
         </div>
       </Reveal>

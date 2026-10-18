@@ -1,4 +1,4 @@
-export const source = "b128c94d0c07";
+export const source = "abff582b82c3";
 
 # Ein Tracker für Bewerbungen mit einer Spring-Boot-API
 
@@ -103,6 +103,7 @@ Die Sicherheitskonfiguration ist zustandslos: `/api/auth/**` ist offen, und jede
   }`}
   fileName="filter/JwtAuthenticationFilter.java"
   lang="java"
+  highlight="16,19"
 />
 
 Der Filter lehnt nie selbst eine Anfrage ab. Fehlt das Token oder ist es ungültig, bleibt der Security-Kontext leer, und Spring Security weist die Anfrage weiter unten in der Kette ab. `validateToken` parst das Token mit dem Signaturschlüssel, was in einem Aufruf die Signatur und das Ablaufdatum prüft, sodass ein gefälschtes und ein abgelaufenes Token auf dieselbe Weise scheitern. Auf dem Client behandelt der Response-Interceptor von Axios eine 401- oder 403-Antwort als abgelaufene Sitzung: Er löscht den gespeicherten Benutzer und schickt den Browser auf die Anmeldeseite, sodass der Ablauf einer Sitzung für jede Seite an einer einzigen Stelle behandelt wird.

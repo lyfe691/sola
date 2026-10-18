@@ -8,7 +8,8 @@
  * The code view: a full-bleed takeover rendered by PageShell in place of the
  * routed page (entering/leaving rides the site's page transition). Shows the
  * latest commit that touched THIS page's source (see page-sources.ts) —
- * whole and honest, page files sorted first; unmapped routes fall back to
+ * whole and honest, this page's files first and open, the rest behind
+ * their headers (CommitDiff); unmapped routes fall back to
  * the repo-wide latest commit. The only UI above it is the exit bubble,
  * a frosted circle tucked into the top-right corner.
  *
@@ -42,7 +43,6 @@ import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { Caret } from "./caret";
 import { CommitDiff } from "./CommitDiff";
 import { useCodeView } from "./code-view-provider";
-import { useIsDarkScheme } from "./use-scheme";
 import { resolvePagePath } from "./page-sources";
 import { githubFallbackUrl, usePageDiff } from "./use-page-diff";
 
@@ -291,7 +291,6 @@ function formatCommitBody(body: string): string {
 export function CodeView() {
   const { language } = useLanguage();
   const t = useTranslation().common.diff;
-  const isDark = useIsDarkScheme();
   const location = useLocation();
   const { active, setActive } = useCodeView();
 
@@ -300,7 +299,6 @@ export function CodeView() {
 
   const commit = state.status === "ready" ? state.commit : null;
   const githubUrl = commit?.htmlUrl ?? githubFallbackUrl(pagePath);
-  const scheme = isDark ? "dark" : "light";
 
   // The command grows once the sha lands; typing continues into it, so the
   // ritual completes even when the response beats the typewriter (cache).
@@ -434,7 +432,7 @@ export function CodeView() {
                 </header>
 
                 <div className="flex flex-1 flex-col border-t border-border/60">
-                  <CommitDiff commit={commit} scheme={scheme} t={t} />
+                  <CommitDiff commit={commit} pagePath={pagePath} t={t} />
                 </div>
               </>
             )}

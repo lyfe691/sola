@@ -96,6 +96,7 @@ export const de = {
       truncated: "Gekürzt – vollständiger Diff auf GitHub.",
       file: "Datei",
       files: "Dateien",
+      filesNav: "Dateien in diesem Commit",
     },
     backgroundHints: {
       section: "Einige Hintergründe wirken deutlich besser im Dark Mode.",
@@ -115,6 +116,7 @@ export const de = {
     copied: "Kopiert.",
     copyCode: "Code kopieren",
     copyFailed: "Kopieren fehlgeschlagen.",
+    wrapLines: "Zeilen umbrechen",
     command: {
       placeholder: "Website durchsuchen oder Befehl ausführen…",
       scopedPlaceholder: "Suchen…",
@@ -524,6 +526,8 @@ export const de = {
     files: "{count} Dateien",
     expand: "Commit anzeigen",
     collapse: "Commit ausblenden",
+    showMore: "Mehr anzeigen",
+    showLess: "Weniger anzeigen",
     pr: "PR #{number}",
   },
   footer: {

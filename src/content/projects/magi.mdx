@@ -158,6 +158,7 @@ A /24 across ports 1 to 1024 is about 260,000 probes, and spawning a task for ea
   }`}
   fileName="src/scanner.rs"
   lang="rust"
+  highlight="7-10,12"
 />
 
 The optional rate cap is a tokio interval ticked before each spawn. The semaphore limits how many probes run at once and the interval limits how many start per second, and missed ticks are delayed, so a slow stretch never releases a burst of probes to catch up.

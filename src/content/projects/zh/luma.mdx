@@ -1,4 +1,4 @@
-export const source = "bedd8d1e47e6";
+export const source = "acf9f4700719";
 
 # 用自己的 API 密钥运行的多服务商 AI 聊天应用
 
@@ -144,6 +144,7 @@ Luma 是一个基于 React 19 的 Next.js 16 应用。回复由 Vercel AI SDK �
   }`}
   fileName="lib/chat-tree.ts"
   lang="ts"
+  highlight="5,8-10"
 />
 
 切换版本是一次服务端调用：取下一个兄弟节点，顺着最新的子节点一路走到叶子，再把这片叶子存为当前叶子。这种设计的代价是，打开一段对话就要读取其中的每一条消息，包括你没在看的那些分支。作为交换，这些消息通过一次查询就能全部取回，用的是建立在对话和创建时间上的索引，而这棵树的代码是浏览器和服务器共同导入的纯 TypeScript。

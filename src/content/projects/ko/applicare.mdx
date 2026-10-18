@@ -1,4 +1,4 @@
-export const source = "b128c94d0c07";
+export const source = "abff582b82c3";
 
 # Spring Boot API로 만든 입사 지원 트래커
 
@@ -103,6 +103,7 @@ export const source = "b128c94d0c07";
   }`}
   fileName="filter/JwtAuthenticationFilter.java"
   lang="java"
+  highlight="16,19"
 />
 
 이 필터는 스스로 요청을 거부하는 일이 없습니다. 토큰이 없거나 유효하지 않으면 보안 컨텍스트가 비어 있을 뿐이고, 요청을 돌려보내는 것은 체인 더 뒤쪽의 Spring Security입니다. `validateToken`은 서명 키로 토큰을 파싱하는데, 이 한 번의 호출로 서명과 만료일이 함께 검증되므로 위조된 토큰과 만료된 토큰은 똑같은 방식으로 실패합니다. 클라이언트에서는 Axios 응답 인터셉터가 401이나 403을 세션 만료로 취급합니다. 저장된 사용자를 지우고 브라우저를 로그인 페이지로 보내므로, 세션 만료는 모든 페이지에 대해 한 곳에서 처리됩니다.

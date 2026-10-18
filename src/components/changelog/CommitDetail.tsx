@@ -10,20 +10,30 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CommitPatch } from "@/components/changelog/CommitPatch";
 import { FileTree } from "@/components/changelog/FileTree";
-import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
+import { useSwapIn } from "@/hooks/use-swap-in";
 import { commitDetailQuery, fileTree } from "@/lib/github-commits";
 import { useTranslation } from "@/lib/language-provider";
+import { cn } from "@/lib/utils";
 
 const MAX_FILES = 20;
 
 export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
   const t = useTranslation().changelog;
-  const isDark = useIsDarkScheme();
   const query = useQuery(commitDetailQuery(sha));
   const [active, setActive] = useState<string | null>(null);
+  const swapIn = useSwapIn(!query.data && !query.isError);
 
   if (query.isError) {
-    return <p className="text-xs text-muted-foreground">{t.error}</p>;
+    return (
+      <p
+        className={cn(
+          "text-xs text-muted-foreground",
+          swapIn && "animate-swap-in",
+        )}
+      >
+        {t.error}
+      </p>
+    );
   }
 
   if (!query.data) {
@@ -55,14 +65,13 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
   const selected =
     shown.find((file) => file.filename === active) ?? shown[0] ?? null;
   const overflow = commit.files.length > MAX_FILES;
-  const scheme = isDark ? "dark" : "light";
   const body =
     lead && commit.body.startsWith(lead)
       ? commit.body.slice(lead.length).trim()
       : commit.body;
 
   return (
-    <div className="min-w-0 space-y-4">
+    <div className={cn("min-w-0 space-y-4", swapIn && "animate-swap-in")}>
       {body ? (
         <p className="max-w-prose text-sm leading-relaxed whitespace-pre-wrap text-foreground/65">
           {body}
@@ -87,7 +96,7 @@ export function CommitDetail({ sha, lead }: { sha: string; lead?: string }) {
       ) : null}
 
       {selected?.patch ? (
-        <CommitPatch file={selected} scheme={scheme} />
+        <CommitPatch key={selected.filename} file={selected} />
       ) : selected ? (
         <p className="font-mono text-xs text-muted-foreground">
           {selected.filename} — {t.unavailable}
