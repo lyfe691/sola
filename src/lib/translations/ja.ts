@@ -93,6 +93,7 @@ export const ja = {
       truncated: "一部省略 — 完全な diff は GitHub で。",
       file: "ファイル",
       files: "ファイル",
+      filesNav: "このコミットのファイル",
     },
     backgroundHints: {
       section: "一部の背景はダークモードの方が見栄えが良いです。",

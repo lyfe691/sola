@@ -96,6 +96,7 @@ export const de = {
       truncated: "Gekürzt – vollständiger Diff auf GitHub.",
       file: "Datei",
       files: "Dateien",
+      filesNav: "Dateien in diesem Commit",
     },
     backgroundHints: {
       section: "Einige Hintergründe wirken deutlich besser im Dark Mode.",

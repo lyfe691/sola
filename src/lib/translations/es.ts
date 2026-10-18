@@ -98,6 +98,7 @@ export const es = {
       truncated: "Recortado: mira el diff completo en GitHub.",
       file: "archivo",
       files: "archivos",
+      filesNav: "Archivos de este commit",
     },
     backgroundHints: {
       section: "Algunos fondos se ven mucho mejor en modo oscuro.",

@@ -42,7 +42,6 @@ import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { Caret } from "./caret";
 import { CommitDiff } from "./CommitDiff";
 import { useCodeView } from "./code-view-provider";
-import { useIsDarkScheme } from "./use-scheme";
 import { resolvePagePath } from "./page-sources";
 import { githubFallbackUrl, usePageDiff } from "./use-page-diff";
 
@@ -291,7 +290,6 @@ function formatCommitBody(body: string): string {
 export function CodeView() {
   const { language } = useLanguage();
   const t = useTranslation().common.diff;
-  const isDark = useIsDarkScheme();
   const location = useLocation();
   const { active, setActive } = useCodeView();
 
@@ -300,7 +298,6 @@ export function CodeView() {
 
   const commit = state.status === "ready" ? state.commit : null;
   const githubUrl = commit?.htmlUrl ?? githubFallbackUrl(pagePath);
-  const scheme = isDark ? "dark" : "light";
 
   // The command grows once the sha lands; typing continues into it, so the
   // ritual completes even when the response beats the typewriter (cache).
@@ -434,7 +431,7 @@ export function CodeView() {
                 </header>
 
                 <div className="flex flex-1 flex-col border-t border-border/60">
-                  <CommitDiff commit={commit} scheme={scheme} t={t} />
+                  <CommitDiff commit={commit} pagePath={pagePath} t={t} />
                 </div>
               </>
             )}

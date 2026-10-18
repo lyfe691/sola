@@ -89,6 +89,7 @@ export const zh = {
       truncated: "已截断——完整 diff 请在 GitHub 查看。",
       file: "个文件",
       files: "个文件",
+      filesNav: "此提交中的文件",
     },
     backgroundHints: {
       section: "部分背景在深色模式下效果更佳。",

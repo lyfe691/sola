@@ -95,6 +95,7 @@ export const en = {
       truncated: "Truncated — view the full diff on GitHub.",
       file: "file",
       files: "files",
+      filesNav: "Files in this commit",
     },
     backgroundHints: {
       section: "Some backgrounds look significantly better in dark mode.",

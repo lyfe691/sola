@@ -95,6 +95,7 @@ export const ko = {
       truncated: "잘림 — GitHub에서 전체 차이점을 확인하세요.",
       file: "파일",
       files: "파일",
+      filesNav: "이 커밋의 파일",
     },
     backgroundHints: {
       section: "일부 배경은 어두운 모드에서 훨씬 더 좋아 보입니다.",

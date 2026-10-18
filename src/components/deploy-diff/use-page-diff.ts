@@ -124,7 +124,8 @@ function mapCommit(data: GitHubCommitResponse): PageCommit {
   };
 }
 
-function matchesScope(file: PageCommitFile, path: string): boolean {
+/** whether a file belongs to the page at `path` (a file or a folder) */
+export function matchesScope(file: PageCommitFile, path: string): boolean {
   const inScope = (name?: string) =>
     !!name && (name === path || name.startsWith(`${path}/`));
   return inScope(file.filename) || inScope(file.previousFilename);
