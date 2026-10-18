@@ -142,6 +142,7 @@ Every message is a row with a `parent_id`, and a chat stores one more pointer, `
   }`}
   fileName="lib/chat-tree.ts"
   lang="ts"
+  highlight="5,8-10"
 />
 
 Switching versions is a server call that takes the next sibling, follows the newest child down to a leaf and saves that leaf as the active one. The cost of the design is that opening a chat reads every message in it, including the branches you aren't looking at. In exchange they arrive in one query on an index over chat and creation time, and the tree code is plain TypeScript that the browser and the server both import.

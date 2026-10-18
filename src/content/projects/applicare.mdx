@@ -101,6 +101,7 @@ The security configuration is stateless: `/api/auth/**` is open, and every other
   }`}
   fileName="filter/JwtAuthenticationFilter.java"
   lang="java"
+  highlight="16,19"
 />
 
 The filter never rejects a request itself. A missing or invalid token leaves the security context empty, and Spring Security turns the request away further down the chain. `validateToken` parses the token with the signing key, which checks the signature and the expiry date in one call, so a forged token and an expired one fail the same way. On the client, the Axios response interceptor treats a 401 or 403 as an expired session: it clears the stored user and sends the browser to the login page, so session expiry is handled in one place for every page.

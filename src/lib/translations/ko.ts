@@ -114,6 +114,7 @@ export const ko = {
     copied: "복사되었습니다.",
     copyCode: "코드 복사",
     copyFailed: "코드를 복사할 수 없습니다.",
+    wrapLines: "줄 바꿈",
     command: {
       placeholder: "사이트 검색 또는 명령 실행…",
       scopedPlaceholder: "검색…",

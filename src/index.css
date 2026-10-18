@@ -1100,67 +1100,13 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
   filter: grayscale(0);
 }
 
-/* ---------- code block (shiki) ---------- */
-/* Styles target Shiki's generated `pre.shiki > code > span.line` markup and the
-   plain-text fallback, which mirrors it. Unlayered so it wins over utilities. */
-/* Surface grammar ported from the shadcn docs code block, derived from the
-   site's own tokens instead of dedicated per-theme values: the --code pair
-   leans on the card pair (nudged toward foreground so it lifts off same-color
-   pages), the number color is mixed from it — all 11 themes hold for free. */
+/* ---------- changelog diff surface ---------- */
+/* Derived from the site's own tokens instead of dedicated per-theme values:
+   the --code pair leans on the card pair (nudged toward foreground so it
+   lifts off same-color pages) — all 11 themes hold for free. */
 .code-block {
   --code: color-mix(in oklab, var(--card) 97%, var(--foreground));
   --code-foreground: var(--card-foreground);
-  --code-number: color-mix(in oklab, var(--code-foreground) 45%, transparent);
-}
-
-.code-block .shiki {
-  margin: 0;
-  background-color: transparent;
-  font-family: var(--font-mono);
-  line-height: 1.6;
-  tab-size: 2;
-}
-
-/* one grid row per line — collapses Shiki's "\n" separators and aligns numbers */
-.code-block .shiki code {
-  display: grid;
-  counter-reset: sh-line;
-}
-
-.code-block .shiki .line {
-  counter-increment: sh-line;
-  padding-right: 1.25rem;
-}
-
-/* the number cell is sticky and paints its own --code ground, so code
-   slides underneath it on horizontal scroll (the shadcn-docs behavior).
-   The gap is padding, not margin: a margin is unpainted, so scrolled code
-   would show through it. --line-digits (set by CodeBlock) fits every cell
-   to the longest number, or wider numbers spill and stop right-aligning. */
-.code-block .shiki .line::before {
-  content: counter(sh-line);
-  position: sticky;
-  left: 0;
-  display: inline-block;
-  box-sizing: content-box;
-  width: calc(var(--line-digits) * 1ch);
-  padding-inline: 1rem 1.25rem;
-  text-align: right;
-  background-color: var(--code);
-  color: var(--code-number);
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* dual-theme token colors, switched by the block's resolved light/dark type */
-.code-block .shiki,
-.code-block .shiki span {
-  color: var(--shiki-light);
-}
-
-.code-block[data-code-theme="dark"] .shiki,
-.code-block[data-code-theme="dark"] .shiki span {
-  color: var(--shiki-dark);
 }
 
 /* ---------- GitHub contribution heatmap ---------- */

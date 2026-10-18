@@ -1,4 +1,4 @@
-export const source = "1af42e477052";
+export const source = "2dc3d1978a27";
 
 # Un sitio web para el perro de mi hermano, hecho para reutilizarlo
 
@@ -127,6 +127,7 @@ En cada visita, el proveedor comprueba primero en `localStorage` si hay un idiom
   }`}
   fileName="lib/i18n/index.ts"
   lang="ts"
+  highlight="5,12-15"
 />
 
 `navigator.language` devuelve una etiqueta como `es-MX`. La función se queda con la parte anterior al guion y la usa si el sitio tiene ese idioma, y si no, inglés. Todo esto se ejecuta en el navegador después de cargar la página, lo que mantiene estáticas todas las páginas: el HTML se prerrenderiza una vez y las URL son las mismas en todos los idiomas.

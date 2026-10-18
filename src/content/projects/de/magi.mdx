@@ -1,4 +1,4 @@
-export const source = "45a160716b8d";
+export const source = "3f1bdfac11c6";
 
 # Ein TCP- und UDP-Portscanner in Rust
 
@@ -160,6 +160,7 @@ Ein /24 über die Ports 1 bis 1024 sind rund 260'000 Proben, und für jede vorab
   }`}
   fileName="src/scanner.rs"
   lang="rust"
+  highlight="7-10,12"
 />
 
 Die optionale Ratenbegrenzung ist ein tokio-Intervall, das vor jedem Spawn getaktet wird. Der Semaphor begrenzt, wie viele Proben gleichzeitig laufen, und das Intervall, wie viele pro Sekunde starten, und verpasste Takte werden verzögert, sodass ein langsamer Abschnitt nie einen Schwall Proben zum Aufholen freigibt.

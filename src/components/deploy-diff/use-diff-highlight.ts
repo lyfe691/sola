@@ -5,13 +5,13 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * Shiki highlighting for diff lines — same engine and github light/dark
- * themes as the markdown code block (ui/code-block), loaded on demand so
+ * Shiki highlighting for diff lines — same github light/dark themes as the
+ * deep dives' code blocks (lib/highlighter.tsx), loaded on demand so
  * shiki never enters the eager bundle. Each hunk is tokenized as one block
  * (multi-line constructs inside a hunk highlight correctly); lines render
  * plain until tokens arrive, and on any failure they simply stay plain.
  *
- * Tokenized ONCE with both themes (the same trick as use-shiki.ts): each
+ * Tokenized ONCE with both themes (the same trick as lib/highlighter.tsx): each
  * token carries a light and a dark color, and the renderer picks per scheme
  * — flipping the site theme never re-runs the highlighter.
  */

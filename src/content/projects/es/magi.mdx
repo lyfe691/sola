@@ -1,4 +1,4 @@
-export const source = "45a160716b8d";
+export const source = "3f1bdfac11c6";
 
 # Un escáner de puertos TCP y UDP en Rust
 
@@ -160,6 +160,7 @@ Una /24 en los puertos del 1 al 1024 son unos 260 000 sondeos, y lanzar una tar
   }`}
   fileName="src/scanner.rs"
   lang="rust"
+  highlight="7-10,12"
 />
 
 El tope opcional de tasa es un intervalo de tokio que se hace avanzar antes de cada lanzamiento. El semáforo limita cuántos sondeos corren a la vez y el intervalo limita cuántos empiezan por segundo, y los ticks que se pierden se retrasan, así que un tramo lento nunca libera una ráfaga de sondeos para ponerse al día.

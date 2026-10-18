@@ -114,6 +114,7 @@ export const en = {
     copied: "Copied.",
     copyCode: "Copy code",
     copyFailed: "Couldn't copy code.",
+    wrapLines: "Wrap lines",
     command: {
       placeholder: "Search the site or run a command…",
       scopedPlaceholder: "Search…",

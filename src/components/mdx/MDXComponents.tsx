@@ -16,7 +16,6 @@ import {
 } from "react";
 import type { MDXComponents as MDXComponentsType } from "mdx/types";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
-import { CodeBlock, type CodeBlockLanguage } from "@/components/ui/code-block";
 import {
   Table,
   TableBody,
@@ -26,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { CodeBlock } from "./CodeBlock";
 import { ExpandableImage } from "./ExpandableImage";
 import {
   FigureCaption,
@@ -163,12 +163,7 @@ const html = {
   pre: ({ children, className }: MdxProps) => {
     const fenced = extractFencedCode(children);
     if (fenced) {
-      return (
-        <CodeBlock
-          code={fenced.code}
-          lang={fenced.language as CodeBlockLanguage}
-        />
-      );
+      return <CodeBlock code={fenced.code} lang={fenced.language} />;
     }
 
     return (

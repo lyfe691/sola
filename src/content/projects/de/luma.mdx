@@ -1,4 +1,4 @@
-export const source = "bedd8d1e47e6";
+export const source = "acf9f4700719";
 
 # Ein KI-Chat für mehrere Anbieter, der mit eigenen API-Keys läuft
 
@@ -144,6 +144,7 @@ Jede Nachricht ist eine Zeile mit einer `parent_id`, und ein Chat speichert eine
   }`}
   fileName="lib/chat-tree.ts"
   lang="ts"
+  highlight="5,8-10"
 />
 
 Das Wechseln der Version ist ein Serveraufruf, der das nächste Geschwister nimmt, dem jüngsten Kind bis zu einem Blatt folgt und dieses Blatt als aktives speichert. Der Preis dieses Entwurfs: Beim Öffnen eines Chats werden alle seine Nachrichten gelesen, auch die Zweige, die Sie gerade nicht ansehen. Dafür kommen sie in einer einzigen Abfrage über einen Index auf Chat und Erstellungszeit, und der Baumcode ist schlichtes TypeScript, das Browser und Server beide importieren.

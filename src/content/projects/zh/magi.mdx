@@ -1,4 +1,4 @@
-export const source = "45a160716b8d";
+export const source = "3f1bdfac11c6";
 
 # 一个用 Rust 写的 TCP 和 UDP 端口扫描器
 
@@ -160,6 +160,7 @@ magi 是一个小型库，外面只包着一层很薄的可执行程序。`main.
   }`}
   fileName="src/scanner.rs"
   lang="rust"
+  highlight="7-10,12"
 />
 
 可选的速率上限是一个 tokio interval，在每次创建探测之前触发一次。信号量限制同时运行的探测数，interval 限制每秒开始的探测数，并且错过的 tick 会被顺延，所以一段缓慢的时间之后，绝不会突然放出一批探测去追赶进度。

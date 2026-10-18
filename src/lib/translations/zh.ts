@@ -107,6 +107,7 @@ export const zh = {
     copied: "已复制。",
     copyCode: "复制代码",
     copyFailed: "复制失败。",
+    wrapLines: "自动换行",
     command: {
       placeholder: "搜索网站或运行命令…",
       scopedPlaceholder: "搜索…",

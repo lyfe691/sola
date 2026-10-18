@@ -1,4 +1,4 @@
-export const source = "b128c94d0c07";
+export const source = "abff582b82c3";
 
 # Un seguimiento de candidaturas de empleo con una API de Spring Boot
 
@@ -103,6 +103,7 @@ La configuración de seguridad no guarda estado: `/api/auth/**` es abierta, y cu
   }`}
   fileName="filter/JwtAuthenticationFilter.java"
   lang="java"
+  highlight="16,19"
 />
 
 El filtro nunca rechaza una solicitud por sí mismo. Un token ausente o no válido deja vacío el contexto de seguridad, y Spring Security rechaza la solicitud más adelante en la cadena. `validateToken` analiza el token con la clave de firma, lo que comprueba la firma y la fecha de caducidad en una sola llamada, así que un token falsificado y uno caducado fallan igual. En el cliente, el interceptor de respuestas de Axios trata un 401 o un 403 como una sesión caducada: borra el usuario guardado y lleva el navegador a la página de inicio de sesión, de modo que la caducidad de la sesión se gestiona en un solo lugar para todas las páginas.

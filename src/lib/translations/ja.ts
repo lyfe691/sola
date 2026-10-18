@@ -112,6 +112,7 @@ export const ja = {
     copied: "コピーしました。",
     copyCode: "コードをコピー",
     copyFailed: "コピーできませんでした。",
+    wrapLines: "行を折り返す",
     command: {
       placeholder: "サイトを検索、またはコマンドを実行…",
       scopedPlaceholder: "検索…",

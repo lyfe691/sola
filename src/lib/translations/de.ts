@@ -115,6 +115,7 @@ export const de = {
     copied: "Kopiert.",
     copyCode: "Code kopieren",
     copyFailed: "Kopieren fehlgeschlagen.",
+    wrapLines: "Zeilen umbrechen",
     command: {
       placeholder: "Website durchsuchen oder Befehl ausführen…",
       scopedPlaceholder: "Suchen…",

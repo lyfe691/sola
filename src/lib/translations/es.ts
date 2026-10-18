@@ -117,6 +117,7 @@ export const es = {
     copied: "Copiado.",
     copyCode: "Copiar código",
     copyFailed: "No se pudo copiar.",
+    wrapLines: "Ajustar líneas",
     command: {
       placeholder: "Busca en el sitio o ejecuta un comando…",
       scopedPlaceholder: "Buscar…",
