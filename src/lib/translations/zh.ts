@@ -366,7 +366,7 @@ export const zh = {
         description:
           "[Kinoa](https://kinoa.to) 是一个免费的电影和剧集流媒体网站。打开一部作品，在同一页面直接播放，无需账号；注册账号后还有公开的 @用户名主页、片单、动态、私信，以及跟随房主播放进度一起观看的 Watch Together 房间。作品信息来自 TMDB，视频由第三方托管站点的嵌入式播放器播放。",
         overview:
-          "Kinoa 是一个免费观看电影和剧集的网站，围绕播放器有一层社交功能：个人主页、动态、评论、私信和 Watch Together 房间。我从 2025 年 11 月开始做它，它是一个建在 Supabase 上的 Next.js 应用，每月约有 10000 人使用。",
+          "Kinoa 是一个免费观看电影和剧集的网站，围绕播放器有一层社交功能：个人主页、动态、评论、私信和 Watch Together 房间。我从 2025 年 11 月开始做它，它是一个建在 Supabase 上的 Next.js 应用，每月约有 30000 人使用。",
       },
       self: {
         title: "Self",

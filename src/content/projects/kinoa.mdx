@@ -4,53 +4,113 @@
 
 | People a month | Accounts     | Online since  |
 | -------------- | ------------ | ------------- |
-| Around 10,000  | Around 1,000 | November 2025 |
+| Around 30,000  | Around 1,000 | November 2025 |
 
 <Safari
   url="kinoa.to"
   src="/projects/kinoa/hero.webp"
   video="/projects/kinoa/hero.mp4"
-  alt="Kinoa's home page in the dark theme: the headline What do you want to watch? rises in, then typing spirited into the search box brings up Spirited Away and four other results, and the arrow keys move through them"
+  alt="Kinoa's home page in the dark theme: typing spirited into the search bar under the headline What do you want to watch? brings up Spirited Away and four other results, the arrow keys move a highlight down the list, and clearing the field makes the small white creature on the bar's edge tear up"
   caption="Search answers as you type."
 />
 
 ## Finding something to watch
 
-Everything starts from one search box. Results arrive while you type, each with its poster, year and rating, the rest of the most likely title is completed in grey, and the arrow keys move through the list. Below the search, the home page shows what you were watching and what everyone else is watching this week.
+The home page is a single headline and a search bar, with a small white creature peeking over the bar's edge. Results arrive while you type, and the rest of the first title that starts with what you typed is completed in grey. The creature follows the caret, looks puzzled when nothing matches and tears up when the field is cleared.
 
-Every card opens in place when you hover it: the poster widens into the title's artwork, with the synopsis and a button to start watching.
+A search palette opens from any page. It grows out of the search field in the sidebar and shrinks back into it when you're done. Search and a few other things work from the keyboard:
+
+| Shortcut                   | Does                                    |
+| -------------------------- | --------------------------------------- |
+| `Ctrl K`, or `⌘K` on a Mac | Open the search palette from any page   |
+| `↑` and `↓`                | Move through the results                |
+| `Tab`                      | Accept the grey completion              |
+| `Enter`                    | Open the highlighted result             |
+| `Esc`                      | Close the search                        |
+| `D`                        | Switch between the light and dark theme |
+| `S`                        | Show or hide the sidebar                |
+
+<ProjectImage
+  src="/projects/kinoa/palette.webp"
+  video="/projects/kinoa/palette.mp4"
+  alt="The Your Name page with the search palette opening out of the sidebar's search field: it lists this week's trending titles, typing dune replaces them with Dune: Part Three, Dune and three other results, and Escape shrinks it back into the field"
+  caption="Search from any page."
+  size="full"
+/>
+
+Below the search, the home page is a stack of shelves, starting with what you were watching and what everyone is watching this week. Hovering a card grows it over its neighbours into a preview with the synopsis, a button to start watching and quick actions.
 
 <ProjectImage
   src="/projects/kinoa/cards.webp"
   video="/projects/kinoa/cards.mp4"
-  alt="The home page's trending grid: as the pointer moves along the first row, each poster widens into a card with the title's backdrop, year, rating, synopsis, a Watch Now button and quick actions"
-  caption="Cards open into the title's artwork on hover."
+  alt="The Trending shelf on the home page: as the pointer moves along the row, each wide card grows over its neighbours into a preview with the title's artwork, rank, year, rating, synopsis, a Watch Now button and icons to watch together, share and save"
+  caption="Cards open into a preview on hover."
   size="full"
 />
 
-A title's page carries its artwork, rating, genres and cast, and the player sits right below. Catalogue data comes from TMDB, The Movie Database.
+## Browsing by genre and language
+
+The Discover page is for browsing when you don't have a title in mind. It opens on genre tiles, each holding three of the genre's posters that fan out when you point at it, with rows such as hidden gems and films coming to cinemas below. Picking a genre replaces the tiles with results on the same page. The filters above them live in the address (Science Fiction is `/discover?genre=878`), so Back steps through them and a shared link opens the same view. The language filter finds a language by its English name or its own, so "Korean" and "한국어" both work.
 
 <ProjectImage
-  src="/projects/kinoa/title-your-name.webp"
-  alt="The title page for Your Name: the film's artwork across the top, its poster, rating, year, runtime, genres and synopsis, and a Watch Together button"
-  caption="A title page."
+  src="/projects/kinoa/discover.webp"
+  video="/projects/kinoa/discover.mp4"
+  alt="The Discover page: the pointer passes over the genre tiles, each fanning out its three posters, and a click on Science Fiction replaces the tiles with a grid of science fiction films and series, with Science Fiction now set in the filter bar"
+  caption="Picking a genre on Discover."
+  size="full"
+/>
+
+## The anime guide
+
+The anime page is a guide to the current season. Its first screen cycles through shows on air now: the current poster stands at the front of a stack, the light behind it takes on its colours, and the Japanese title appears one character at a time under the English one. Below it come the week's schedule by day, then the highest-rated series and popular films.
+
+<ProjectImage
+  src="/projects/kinoa/anime.webp"
+  video="/projects/kinoa/anime.mp4"
+  alt="The anime guide's first screen: Tougen Anki's poster stands in front of a stack, with its Japanese title, synopsis and a Watch episode 3 button beside it, until the stack turns to Firefly Wedding and the light behind it changes colour"
+  caption="The season's shows, one at a time."
+  size="full"
+/>
+
+<ProjectImage
+  src="/projects/kinoa/anime-week.webp"
+  video="/projects/kinoa/anime-week.mp4"
+  alt="Clicking through the day chips in the anime page's This week section: the chosen day swells and nudges its neighbours aside, and that day's shows swap in below, their posters marked with the episode"
+  caption="The week's schedule."
   size="full"
 />
 
 ## Playing it
 
-Films and series play in players embedded from other sites, and not every one of them has every title. The row under the player names the current server and tags each with what it's good at, such as best quality or most reliable. When the default doesn't load, a hint offers the next one in a tap. On a phone, playback can switch straight into the device's own fullscreen player.
-
-A series gets an episode picker by season, with the episode you're on highlighted.
+A title's page leads with its artwork and synopsis, and the player sits right below.
 
 <ProjectImage
-  src="/projects/kinoa/episodes.webp"
-  alt="Below the player: the server row reading VidFast with a Best quality chip and a Try VidSrc hint, then the Episodes section with a season picker and stills for six episodes, the third highlighted"
-  caption="The server row and the episode picker."
+  src="/projects/kinoa/title-your-name.webp"
+  alt="The title page for Your Name: the film's artwork across the top, its poster in a frosted frame, rating, year, runtime, genres, synopsis and buttons to watch together, save and share, with the player starting below"
+  caption="A title page."
   size="full"
 />
 
-Kinoa remembers where you stopped. Continue Watching brings you back to the same minute of a film, or the same episode of a series, and it works without an account too. Signing in moves that history onto the account, next to a watchlist, so both follow you to other devices.
+Films and series play in players embedded from other sites, and not every one of them has every title. The bar under the player names the current server, and the server list tags each one with what it's good at, such as best quality or most reliable. A note under the bar offers the next server in one tap, for when the current one won't load or lags. Anime gets servers of its own, with a switch between subtitles and dubbing, and the regular servers are listed below them.
+
+<ProjectImage
+  src="/projects/kinoa/player.webp"
+  video="/projects/kinoa/player.mp4"
+  alt="The player on Your Name, an anime film: the bar under the video reads AnimePahe with an Alternative tag and a Sub and Dub switch, and the server list opens on Anime servers, then Other servers with VidFast marked Best quality and VidSrc Most reliable"
+  caption="The server list, on an anime film."
+  size="full"
+/>
+
+A series lists its episodes one season at a time, each as a row with a still and a short overview, and the episode you're on is highlighted. Picking another episode loads it in the player without moving the page.
+
+<ProjectImage
+  src="/projects/kinoa/episodes.webp"
+  alt="Below the player on Slow Horses: the server bar reading VidFast with a Best quality tag and a Try VidSrc hint, then the Episodes section with a Season 1 · 6 eps picker and six episode rows with stills, runtimes, air dates and overviews, the third highlighted, and the cast below"
+  caption="The server bar and the episode list."
+  size="full"
+/>
+
+Kinoa remembers where you stopped. Continue Watching brings you back to the same film or episode, and to the same minute on servers that can start from a given time. It works without an account, and signing in moves that history onto the account, so it follows you to other devices. The account also keeps a watchlist, shown as a grid or a list, which can be imported and exported.
 
 <ProjectImage
   src="/projects/kinoa/continue-watching.webp"
@@ -61,16 +121,16 @@ Kinoa remembers where you stopped. Continue Watching brings you back to the same
 
 ## Watching together
 
-A room is a link. The host picks a title and shares the room, and everyone who joins watches the same moment, with a chat beside the player. When the host pauses, skips ahead or switches episode, the room follows. The host also runs the room:
+A room is a link. The host picks a title and shares the room, and everyone who joins watches the same moment, with a chat beside the player. When the host pauses, skips ahead or switches episode, the room follows, and a guest who falls behind gets a Catch up button. The host also runs the room:
 
-- **Handing over.** Hosting can pass to anyone else in the room, and if the host's tab closes, the room gives it to someone who's still there.
-- **Moderation.** The host can remove people and ban them from coming back.
-- **Visibility.** A room can be listed in the public directory or kept to the people who have the link.
+- **Handing over.** The host can pass hosting to anyone in the room. If the host leaves, hosting passes to the next person at once, and if the host's tab closes without leaving, someone still in the room takes over after a couple of minutes.
+- **Moderation.** The host can remove people. The person who started the room can also ban them from coming back, while they're hosting.
+- **Visibility.** Public rooms are listed on the Watch Together page, and a private room can only be joined through its link.
 
 <ProjectImage
   src="/projects/kinoa/watch-together.webp"
   video="/projects/kinoa/watch-together.mp4"
-  alt="The Watch Together page: the headline Movie night, across the internet beside a dotted globe turning under orbiting arcs"
+  alt="The Watch Together page: the headline Movie night, across the internet and a Start a room button beside a turning globe of linked points with pulses running across it"
   caption="Movie night, across the internet."
   size="full"
 />
@@ -79,56 +139,67 @@ A room is a link. The host picks a title and shares the room, and everyone who j
 
 Around the player sits a small social network:
 
-- **Profiles.** Every account gets a handle and a public page at kinoa.to/@name, with favorites, a watchlist and what was watched recently. One switch makes the whole profile private.
-- **The feed.** People follow each other, like titles and comment on them, and the feed shows comments, favorites and follows from everyone on Kinoa, newest first.
+- **Profiles.** Claiming a handle gives an account a page at `kinoa.to/@name`, with a cover, a bio and tabs for its activity, favourites and watchlist. One switch makes the tabs private, while the name, bio and follower counts stay visible.
+- **Comments.** Every title has threaded comments, sorted by top or new, and a comment can be marked as a spoiler.
+- **The feed.** It shows new comments from everyone on Kinoa, and favourites and follows from public profiles, newest first. Signed in, a side panel adds release dates and new episodes for the titles on your watchlist.
 - **Messages.** Direct messages have reactions, editing and deleting, and blocking and reporting.
-- **Notifications.** A bell collects replies, mentions, likes and follows as they happen, and says when a title you follow comes out.
+- **Notifications.** A bell collects replies, mentions, follows and messages as they happen, and its Titles tab lists what's coming out from your watchlist.
 
 <ProjectImage
   src="/projects/kinoa/profile.webp"
-  alt="My profile at kinoa.to/@rei: a cover image, avatar and handle, follower counts and a short bio, and the Favorites tab open on Mr. Robot, Neon Genesis Evangelion, Death Note and Breaking Bad"
-  caption="My own profile, on the Favorites tab."
+  alt="My profile at kinoa.to/@rei as visitors see it: the cover, avatar, handle, follower counts and a short bio, with This account is private in place of the tabs"
+  caption="My own profile, set to private."
   size="full"
 />
 
 ## Sports
 
-The sports hub leads with what's live now and what starts next, across football, basketball, motor sports and more. Every match has its own page with the schedule and standings around it and one way to watch.
+The sports hub leads with whatever is live and what starts next, across football, basketball, motor sports and more. Every match has its own page with the score or kickoff time above a single player that can switch between streams.
 
 <ProjectImage
   src="/projects/kinoa/sports.webp"
-  alt="The Sports hub: category chips from football to cricket, then Live now with match cards for basketball and football fixtures, each marked Live"
+  alt="The Sports hub: category chips from All and football to cricket, then Live now with match cards, each marked Live"
   caption="Sports, led by what's live."
   size="full"
 />
 
 ## In your language
 
-Kinoa picks the visitor's language from the browser, and every part of the interface is translated. Arabic and Hebrew get the whole layout mirrored right to left. Titles, overviews and genres arrive in the visitor's language wherever TMDB has them, and so do the posters: the Arabic page for Your Name shows the Japanese original.
+Kinoa takes the language from the browser until you pick one, and every string in the interface is translated. Arabic and Hebrew get the whole layout mirrored right to left. Titles, overviews and genres arrive in the visitor's language wherever The Movie Database (TMDB) has them, and numbers and runtimes are written the way that language writes them. Here is how the top of Your Name's page reads in five languages:
+
+| Language | Title        | Votes    | Runtime      |
+| -------- | ------------ | -------- | ------------ |
+| English  | Your Name.   | 13K      | 1 hr 46 min  |
+| Spanish  | Your Name.   | 13 mil   | 1 h 46 min   |
+| Hindi    | आपका नाम.    | 13 हज़ार | 1 घं॰ 46 मि॰ |
+| Korean   | 너의 이름은. | 1.3만    | 1시간 46분   |
+| Chinese  | 你的名字。   | 1.3万    | 1小时 46分钟 |
+
+Posters come from TMDB the same way, so the Arabic page for Your Name gets the Japanese original instead of the English one.
 
 <ProjectImage
   src="/projects/kinoa/ar-title.webp"
-  alt="The Your Name page in Arabic: the layout mirrored right to left, the title and synopsis in Arabic, and the Japanese poster on the right"
+  alt="The Your Name page in Arabic: the layout mirrored right to left with the sidebar on the right, the title, synopsis, genres and runtime in Arabic, and the Japanese poster"
   caption="Your Name in Arabic, with its Japanese poster."
   size="full"
 />
 
 ## Design and motion
 
-Kinoa uses a warm palette of cream and espresso with a caramel accent, in a light and a dark theme that follow the system unless you pick one. It moves in small ways that confirm what happened:
+Kinoa's default look is a white page set into a grey frame, near-black in the dark theme, with blue kept for focus and selection. It follows the system's light or dark setting unless you pick one, and Settings adds other themes and lets you set your own colours and contrast. In the sidebar, the current page is drawn as a tab joined to the content panel, and the tab pours over to the row you pick. The rest of the motion is small and confirms what happened:
 
+- Menus and popovers grow out of what opened them, and menus frost the page behind.
+- Dialogs change size smoothly, and their buttons keep their place between steps.
 - Pages stream in, and each part appears where its placeholder stood.
-- The sidebar glides open and closed.
 - A rejected form shakes the field that's wrong.
-- Dialogs change size smoothly instead of jumping.
 
-All of it steps back for visitors who ask their system for reduced motion. Kinoa also installs as an app, from the browser on a computer or Android, or with a short guide on an iPhone.
+The motion steps back for visitors who ask their system for reduced motion. Kinoa also installs as an app, from the browser on a computer or Android, or with a short guide on an iPhone.
 
 <Safari
   url="kinoa.to"
   src="/projects/kinoa/theme.webp"
   video="/projects/kinoa/theme.mp4"
-  alt="The home page switching from the dark theme to the light theme and back from the controls at the bottom of the sidebar"
+  alt="The home page's Continue Watching and Trending shelves switching from the dark theme to the light theme and back, from the controls at the bottom of the sidebar"
   caption="The light and dark themes."
 />
 
@@ -171,30 +242,57 @@ The embedded players are the hard constraint: they can't be told to pause or jum
   highlight="14,19-20"
 />
 
-Reloads cost a buffer, so a guest only reloads after drifting several seconds for two checks in a row, and after a few tries it hands the decision to a Catch up button.
+Reloads cost a buffer, so the room only asks for one when it has to:
+
+| What happens                         | When                                                            |
+| ------------------------------------ | --------------------------------------------------------------- |
+| The host's player sends its position | Every 5 seconds, and on every play, pause and seek              |
+| Each guest measures its drift        | Every second                                                    |
+| The Catch up button appears          | More than 4 seconds off the host                                |
+| The guest reloads by itself          | Two checks in a row that far off, at most once every 20 seconds |
+| It stops reloading by itself         | After 3 reloads that don't bring it back                        |
+
+Rooms play on VidFast alone, because the trick needs a player that starts where it's told rather than where it last stopped.
+
+### Matching anime episodes by air date
+
+Everything in Kinoa, from links to watch history and comments, identifies a title by its TMDB id. The anime players take an id from AniList, an anime database, and an episode number instead, and the two catalogues cut shows differently. TMDB lists all 85 episodes of Re:Zero as one season, where AniList has an entry for each part:
+
+| AniList entry   | Episodes | TMDB season 1 | Aired   |
+| --------------- | -------- | ------------- | ------- |
+| Season 1        | 25       | 1–25          | 2016    |
+| Season 2        | 13       | 26–38         | 2020    |
+| Season 2 Part 2 | 12       | 39–50         | 2021    |
+| Season 3        | 16       | 51–66         | 2024–25 |
+| Season 4        | 19       | 67–85         | 2026    |
+
+So Kinoa looks up the AniList entries behind a TMDB id, then each entry's air dates, and pairs episodes by date, a day either way.
+
+An episode whose date doesn't line up is paired only when it sits next to a confirmed match and both catalogues have the same number of unmatched episodes there. Otherwise it stays unpaired and plays on the regular servers, since a wrong pair plays the wrong episode and a missing one only changes the server. Across 30 popular shows I checked, this pairs 99 to 100 percent of episodes.
 
 ### Rules the database enforces
 
-Two rules live in the database rather than the app, so they hold for any client:
+Three rules live in the database rather than the app, so they hold for any client:
 
-- **Only the host steers a room.** It's a row-level security policy on the room's control channel. An integration test signs in as a guest, sends every control command and checks that the host receives none of them.
-- **Handles are claimed in one place.** One database function owns every rule, from length and reserved names to moderation, and a unique index settles two people claiming the same name at once.
+- **Only the host steers a room.** It's a row-level security policy on the room's control channel. An integration test signs in as a guest, sends host commands such as kick and sync, and checks that the host receives none of them.
+- **A removed guest is cut off at once.** Supabase Realtime checks a private channel's policy when a client joins and has no call that drops one user from it. So each room's channel names carry a key that changes on every kick or ban: everyone else rejoins under the new key, and the removed client is left on a channel nothing writes to.
+- **Handles are claimed in one place.** One database function owns every rule, from length and reserved names to moderation and a 30-day wait between changes, and a unique index settles two people claiming the same name at once.
 
 ### Fewer round trips
 
 Three costs ran far more often than they needed to:
 
-| Work                                                  | Before                                                  | After                                         |
-| ----------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------- |
-| Checking who is signed in                             | 3 calls to Supabase Auth on a movie page, 4 on the feed | 1 per render, shared by every helper          |
-| Drawing a watchlist                                   | A TMDB request for every title on it                    | One database query: each row carries its card |
-| The version check each open tab makes every 5 minutes | A serverless function each time                         | Vercel's edge cache                           |
+| Work                                                  | Before                                                  | After                                       |
+| ----------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------- |
+| Checking who is signed in                             | 3 calls to Supabase Auth on a movie page, 4 on the feed | 1 per render, shared by every helper        |
+| Drawing a watchlist                                   | A TMDB request for every title on it                    | One query a page: each row carries its card |
+| The version check each open tab makes every 5 minutes | A serverless function each time                         | Vercel's edge cache                         |
 
 Checking a session isn't a local decode: it goes over the network, which is why doing it once per render mattered.
 
 ### Keeping the translations complete
 
-English is the source for every string. A check in CI compares every other language file against it and fails when a key is missing or left over, so a new feature can't ship half translated.
+English is the source for every string. A check in CI, `pnpm check:i18n`, compares the keys of every other language file against it and fails when one is missing or left over.
 
 <ProjectGallery
   images={[
@@ -202,20 +300,21 @@ English is the source for every string. A check in CI compares every other langu
       src: "/projects/kinoa/home-desktop.webp",
       frame: "safari",
       url: "kinoa.to",
-      alt: "Kinoa's home page in the light theme: the headline What do you want to watch? above the search box",
+      alt: "Kinoa's home page in the light theme: the headline What do you want to watch? above the search bar, with the creature peeking over its edge",
       caption: "The home page in the light theme.",
     },
     {
       src: "/projects/kinoa/title-mobile.webp",
       frame: "iphone",
-      alt: "The Slow Horses page on a phone: the poster over a dark backdrop, the title, rating, genres, synopsis and a Watch Together button",
+      alt: "The Slow Horses page on a phone: the poster in a frosted frame over the backdrop, the title, rating, genres, a shortened synopsis with More, and buttons to watch together, save and share",
       caption: "A series on a phone.",
     },
     {
       src: "/projects/kinoa/home-mobile.webp",
+      video: "/projects/kinoa/home-mobile.mp4",
       frame: "iphone",
-      alt: "The home page on a phone: Continue Watching with Spirited Away and Slow Horses, then the Trending row",
-      caption: "Home on a phone.",
+      alt: "The home page on a phone: typing spirited into the search bar brings up Spirited Away and three more results, and clearing the field makes the creature above the bar tear up",
+      caption: "Search on a phone.",
     },
   ]}
   columns={3}

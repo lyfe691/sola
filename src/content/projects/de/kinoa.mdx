@@ -1,4 +1,4 @@
-export const source = "d053b7c0b673";
+export const source = "55ab460ceee2";
 
 # Kostenlose Filme und Serien und ein Ort, um sie gemeinsam zu schauen
 
@@ -6,53 +6,113 @@ export const source = "d053b7c0b673";
 
 | Personen pro Monat | Konten    | Online seit   |
 | ------------------ | --------- | ------------- |
-| Rund 10'000        | Rund 1000 | November 2025 |
+| Rund 30'000        | Rund 1000 | November 2025 |
 
 <Safari
   url="kinoa.to"
   src="/projects/kinoa/hero.webp"
   video="/projects/kinoa/hero.mp4"
-  alt="Die Startseite von Kinoa im dunklen Design: Die Überschrift What do you want to watch? steigt ins Bild, dann bringt die Eingabe von spirited ins Suchfeld Spirited Away und vier weitere Ergebnisse hervor, und die Pfeiltasten bewegen sich durch sie"
+  alt="Die Startseite von Kinoa im dunklen Design: Die Eingabe von spirited in die Suchleiste unter der Überschrift What do you want to watch? bringt Spirited Away und vier weitere Ergebnisse hervor, die Pfeiltasten bewegen eine Markierung die Liste hinunter, und wird das Feld geleert, bekommt das kleine weisse Wesen am Rand der Leiste feuchte Augen"
   caption="Die Suche antwortet schon beim Tippen."
 />
 
 ## Etwas zum Schauen finden
 
-Alles beginnt bei einem einzigen Suchfeld. Die Ergebnisse erscheinen schon beim Tippen, jedes mit Poster, Jahr und Bewertung, der Rest des wahrscheinlichsten Titels wird grau ergänzt, und die Pfeiltasten führen durch die Liste. Unter der Suche zeigt die Startseite, was Sie gerade geschaut haben und was alle anderen diese Woche schauen.
+Die Startseite besteht aus einer einzigen Überschrift und einer Suchleiste, über deren Rand ein kleines weisses Wesen späht. Die Ergebnisse erscheinen schon beim Tippen, und der Rest des ersten Titels, der mit Ihrer Eingabe beginnt, wird grau ergänzt. Das Wesen folgt dem Textcursor, schaut ratlos, wenn nichts passt, und bekommt feuchte Augen, wenn das Feld geleert wird.
 
-Jede Kachel öffnet sich an Ort und Stelle, wenn Sie mit der Maus darüberfahren: Das Poster weitet sich zum Artwork des Titels, mit der Inhaltsangabe und einer Schaltfläche zum Losschauen.
+Von jeder Seite aus lässt sich eine Suchpalette öffnen. Sie wächst aus dem Suchfeld in der Seitenleiste heraus und schrumpft wieder hinein, wenn Sie fertig sind. Die Suche und einiges mehr lassen sich auch über die Tastatur bedienen:
+
+| Tastenkürzel               | Funktion                                    |
+| -------------------------- | ------------------------------------------- |
+| `Ctrl K`, auf dem Mac `⌘K` | Öffnet die Suchpalette von jeder Seite aus  |
+| `↑` und `↓`                | Bewegt die Markierung durch die Ergebnisse  |
+| `Tab`                      | Übernimmt die graue Ergänzung               |
+| `Enter`                    | Öffnet das markierte Ergebnis               |
+| `Esc`                      | Schliesst die Suche                         |
+| `D`                        | Wechselt zwischen hellem und dunklem Design |
+| `S`                        | Blendet die Seitenleiste ein oder aus       |
+
+<ProjectImage
+  src="/projects/kinoa/palette.webp"
+  video="/projects/kinoa/palette.mp4"
+  alt="Die Seite zu Your Name, während sich die Suchpalette aus dem Suchfeld der Seitenleiste öffnet: Sie listet die angesagten Titel dieser Woche, die Eingabe von dune ersetzt sie durch Dune: Part Three, Dune und drei weitere Ergebnisse, und Escape lässt sie wieder ins Feld schrumpfen"
+  caption="Suchen von jeder Seite aus."
+  size="full"
+/>
+
+Unter der Suche ist die Startseite ein Stapel von Reihen, angefangen mit dem, was Sie gerade geschaut haben, und dem, was diese Woche alle schauen. Fahren Sie mit der Maus über eine Kachel, wächst sie über ihre Nachbarn hinweg zu einer Vorschau mit der Inhaltsangabe, einer Schaltfläche zum Losschauen und Schnellaktionen.
 
 <ProjectImage
   src="/projects/kinoa/cards.webp"
   video="/projects/kinoa/cards.mp4"
-  alt="Das Trending-Raster der Startseite: Während der Mauszeiger an der ersten Reihe entlangfährt, weitet sich jedes Poster zu einer Kachel mit dem Hintergrundbild des Titels, Jahr, Bewertung, Inhaltsangabe, einer Watch-Now-Schaltfläche und Schnellaktionen"
-  caption="Kacheln öffnen sich beim Darüberfahren zum Artwork des Titels."
+  alt="Die Reihe Trending auf der Startseite: Während der Mauszeiger an ihr entlangfährt, wächst jede breite Kachel über ihre Nachbarn hinweg zu einer Vorschau mit dem Artwork des Titels, Rang, Jahr, Bewertung, Inhaltsangabe, einer Watch-Now-Schaltfläche und Symbolen zum gemeinsamen Schauen, Teilen und Speichern"
+  caption="Kacheln öffnen sich beim Darüberfahren zu einer Vorschau."
   size="full"
 />
 
-Die Seite eines Titels zeigt sein Artwork, die Bewertung, die Genres und die Besetzung, und direkt darunter sitzt der Player. Die Katalogdaten stammen von TMDB, The Movie Database.
+## Stöbern nach Genre und Sprache
+
+Die Seite Discover ist zum Stöbern da, wenn Sie keinen bestimmten Titel im Kopf haben. Sie beginnt mit Genre-Kacheln, jede mit drei Postern des Genres, die sich auffächern, wenn Sie auf die Kachel zeigen, und darunter folgen Reihen wie verborgene Perlen und Filme, die bald ins Kino kommen. Ein gewähltes Genre ersetzt die Kacheln auf derselben Seite durch Ergebnisse. Die Filter darüber stehen in der Adresse (Science Fiction ist `/discover?genre=878`), sodass Sie mit Zurück Schritt für Schritt durch sie gehen und ein geteilter Link dieselbe Ansicht öffnet. Der Sprachfilter findet eine Sprache unter ihrem englischen Namen oder unter ihrem eigenen, «Korean» funktioniert also ebenso wie «한국어».
 
 <ProjectImage
-  src="/projects/kinoa/title-your-name.webp"
-  alt="Die Titelseite von Your Name: das Artwork des Films über die ganze Breite oben, sein Poster, Bewertung, Jahr, Laufzeit, Genres und Inhaltsangabe sowie eine Schaltfläche Watch Together"
-  caption="Eine Titelseite."
+  src="/projects/kinoa/discover.webp"
+  video="/projects/kinoa/discover.mp4"
+  alt="Die Seite Discover: Der Mauszeiger fährt über die Genre-Kacheln, die jeweils ihre drei Poster auffächern, und ein Klick auf Science Fiction ersetzt die Kacheln durch ein Raster aus Science-Fiction-Filmen und -Serien, wobei in der Filterleiste nun Science Fiction gesetzt ist"
+  caption="Ein Genre auf Discover auswählen."
+  size="full"
+/>
+
+## Der Anime-Guide
+
+Die Anime-Seite ist ein Guide zur laufenden Saison. Ihr erster Bildschirm zeigt nacheinander Serien, die gerade ausgestrahlt werden: Das aktuelle Poster steht vorn auf einem Stapel, das Licht dahinter nimmt seine Farben an, und unter dem englischen Titel erscheint Zeichen für Zeichen der japanische. Darunter folgen der Wochenplan, nach Tagen geordnet, dann die bestbewerteten Serien und beliebte Filme.
+
+<ProjectImage
+  src="/projects/kinoa/anime.webp"
+  video="/projects/kinoa/anime.mp4"
+  alt="Der erste Bildschirm des Anime-Guides: Das Poster von Tougen Anki steht vor einem Stapel, daneben sein japanischer Titel, die Inhaltsangabe und eine Schaltfläche Watch episode 3, bis der Stapel zu Firefly Wedding weiterblättert und das Licht dahinter die Farbe wechselt"
+  caption="Die Serien der Saison, eine nach der anderen."
+  size="full"
+/>
+
+<ProjectImage
+  src="/projects/kinoa/anime-week.webp"
+  video="/projects/kinoa/anime-week.mp4"
+  alt="Die Tages-Chips im Abschnitt This week der Anime-Seite werden durchgeklickt: Der gewählte Tag wird grösser und schiebt seine Nachbarn ein Stück zur Seite, und darunter wechseln die Serien zu denen dieses Tages, ihre Poster mit der Folge markiert"
+  caption="Der Wochenplan."
   size="full"
 />
 
 ## Abspielen
 
-Filme und Serien laufen in Playern, die von anderen Seiten eingebettet sind, und nicht jeder von ihnen hat jeden Titel. Die Zeile unter dem Player nennt den aktuellen Server und kennzeichnet jeden mit dem, was er am besten kann, etwa beste Qualität oder grösste Zuverlässigkeit. Lädt der Standard nicht, bietet ein Hinweis mit einem Tipp den nächsten an. Auf dem Handy kann die Wiedergabe direkt in den Vollbild-Player des Geräts wechseln.
-
-Eine Serie bekommt eine Folgenauswahl nach Staffel, in der die Folge, bei der Sie gerade sind, hervorgehoben ist.
+Die Seite eines Titels beginnt mit seinem Artwork und der Inhaltsangabe, und direkt darunter sitzt der Player.
 
 <ProjectImage
-  src="/projects/kinoa/episodes.webp"
-  alt="Unter dem Player: die Serverzeile mit VidFast, einem Best-quality-Chip und einem Try-VidSrc-Hinweis, dann der Abschnitt Episodes mit einer Staffelauswahl und Standbildern von sechs Folgen, die dritte hervorgehoben"
-  caption="Die Serverzeile und die Folgenauswahl."
+  src="/projects/kinoa/title-your-name.webp"
+  alt="Die Titelseite von Your Name: das Artwork des Films über die ganze Breite oben, sein Poster in einem Milchglasrahmen, Bewertung, Jahr, Laufzeit, Genres, Inhaltsangabe und Schaltflächen zum gemeinsamen Schauen, Speichern und Teilen, darunter beginnt der Player"
+  caption="Eine Titelseite."
   size="full"
 />
 
-Kinoa merkt sich, wo Sie aufgehört haben. Continue Watching bringt Sie zurück zur selben Minute eines Films oder zur selben Folge einer Serie, und das geht auch ohne Konto. Mit der Anmeldung wandert dieser Verlauf auf das Konto, neben eine Watchlist, sodass beide Ihnen auf andere Geräte folgen.
+Filme und Serien laufen in Playern, die von anderen Seiten eingebettet sind, und nicht jeder von ihnen hat jeden Titel. Die Leiste unter dem Player nennt den aktuellen Server, und die Serverliste kennzeichnet jeden mit dem, was er am besten kann, etwa beste Qualität oder grösste Zuverlässigkeit. Lädt der aktuelle Server nicht oder stockt er, bietet ein Hinweis unter der Leiste mit einem Antippen den nächsten an. Für Anime gibt es eigene Server mit einem Schalter zwischen Untertiteln und Synchronfassung, und darunter stehen die regulären Server.
+
+<ProjectImage
+  src="/projects/kinoa/player.webp"
+  video="/projects/kinoa/player.mp4"
+  alt="Der Player bei Your Name, einem Anime-Film: Die Leiste unter dem Video zeigt AnimePahe mit einem Alternative-Etikett und einem Schalter für Sub und Dub, und die Serverliste beginnt mit Anime servers, dann folgen Other servers, wo VidFast als Best quality und VidSrc als Most reliable markiert ist"
+  caption="Die Serverliste bei einem Anime-Film."
+  size="full"
+/>
+
+Eine Serie listet ihre Folgen Staffel für Staffel auf, jede als Zeile mit einem Standbild und einer kurzen Inhaltsangabe, und die Folge, bei der Sie gerade sind, ist hervorgehoben. Wählen Sie eine andere Folge, lädt sie im Player, ohne dass sich die Seite bewegt.
+
+<ProjectImage
+  src="/projects/kinoa/episodes.webp"
+  alt="Unter dem Player bei Slow Horses: die Serverleiste mit VidFast, einem Best-quality-Etikett und einem Try-VidSrc-Hinweis, dann der Abschnitt Episodes mit einer Auswahl Season 1 · 6 eps und sechs Folgenzeilen mit Standbildern, Laufzeiten, Ausstrahlungsdaten und Inhaltsangaben, die dritte hervorgehoben, darunter die Besetzung"
+  caption="Die Serverleiste und die Folgenliste."
+  size="full"
+/>
+
+Kinoa merkt sich, wo Sie aufgehört haben. Continue Watching bringt Sie zurück zum selben Film oder zur selben Folge und auf Servern, die ab einer bestimmten Zeit starten können, auch zur selben Minute. Das funktioniert ohne Konto, und mit der Anmeldung wandert dieser Verlauf auf das Konto, sodass er Ihnen auf andere Geräte folgt. Ausserdem führt das Konto eine Watchlist, die sich als Raster oder als Liste anzeigen sowie importieren und exportieren lässt.
 
 <ProjectImage
   src="/projects/kinoa/continue-watching.webp"
@@ -63,16 +123,16 @@ Kinoa merkt sich, wo Sie aufgehört haben. Continue Watching bringt Sie zurück 
 
 ## Gemeinsam schauen
 
-Ein Raum ist ein Link. Der Host wählt einen Titel und teilt den Raum, und alle, die beitreten, sehen denselben Moment, mit einem Chat neben dem Player. Pausiert der Host, springt er vor oder wechselt er die Folge, folgt der Raum. Ausserdem führt der Host den Raum:
+Ein Raum ist ein Link. Der Host wählt einen Titel und teilt den Raum, und alle, die beitreten, sehen denselben Moment, mit einem Chat neben dem Player. Pausiert der Host, springt er vor oder wechselt er die Folge, folgt der Raum, und ein Gast, der zurückfällt, bekommt eine Schaltfläche Catch up. Ausserdem führt der Host den Raum:
 
-- **Übergabe.** Das Hosten kann an jede andere Person im Raum übergehen, und schliesst sich der Tab des Hosts, gibt der Raum es an jemanden weiter, der noch da ist.
-- **Moderation.** Der Host kann Leute entfernen und sie sperren, sodass sie nicht zurückkommen können.
-- **Sichtbarkeit.** Ein Raum kann im öffentlichen Verzeichnis aufgeführt werden oder denen vorbehalten bleiben, die den Link haben.
+- **Übergabe.** Der Host kann das Hosten an jede Person im Raum übergeben. Verlässt der Host den Raum, geht das Hosten sofort an die nächste Person, und schliesst sich sein Tab, ohne dass er den Raum verlassen hat, übernimmt nach ein paar Minuten jemand, der noch im Raum ist.
+- **Moderation.** Der Host kann Leute entfernen. Wer den Raum eröffnet hat, kann sie, solange er selbst hostet, auch sperren, sodass sie nicht zurückkommen können.
+- **Sichtbarkeit.** Öffentliche Räume stehen auf der Seite Watch Together, und ein privater Raum ist nur über seinen Link zugänglich.
 
 <ProjectImage
   src="/projects/kinoa/watch-together.webp"
   video="/projects/kinoa/watch-together.mp4"
-  alt="Die Seite Watch Together: die Überschrift Movie night, across the internet neben einem gepunkteten Globus, der sich unter kreisenden Bögen dreht"
+  alt="Die Seite Watch Together: die Überschrift Movie night, across the internet und eine Schaltfläche Start a room neben einem sich drehenden Globus aus verbundenen Punkten, über den Impulse laufen"
   caption="Movie night, across the internet."
   size="full"
 />
@@ -81,56 +141,67 @@ Ein Raum ist ein Link. Der Host wählt einen Titel und teilt den Raum, und alle,
 
 Rund um den Player sitzt ein kleines soziales Netzwerk:
 
-- **Profile.** Jedes Konto bekommt ein Handle und eine öffentliche Seite unter kinoa.to/@name, mit Favoriten, einer Watchlist und dem, was zuletzt geschaut wurde. Ein Schalter macht das ganze Profil privat.
-- **Der Feed.** Die Leute folgen einander, liken Titel und kommentieren sie, und der Feed zeigt Kommentare, Favoriten und wer wem folgt, von allen auf Kinoa, das Neueste zuerst.
+- **Profile.** Sobald ein Konto ein Handle beansprucht, bekommt es eine Seite unter `kinoa.to/@name`, mit Titelbild, Bio und Tabs für Aktivität, Favoriten und Watchlist. Ein Schalter macht die Tabs privat, während Name, Bio und Follower-Zahlen sichtbar bleiben.
+- **Kommentare.** Jeder Titel hat verschachtelte Kommentare, sortiert nach den besten oder den neuesten, und ein Kommentar lässt sich als Spoiler markieren.
+- **Der Feed.** Er zeigt neue Kommentare von allen auf Kinoa sowie Favoriten und Follows öffentlicher Profile, das Neueste zuerst. Wenn Sie angemeldet sind, ergänzt ein seitliches Panel Erscheinungstermine und neue Folgen der Titel auf Ihrer Watchlist.
 - **Nachrichten.** Direktnachrichten bieten Reaktionen, Bearbeiten und Löschen sowie Blockieren und Melden.
-- **Benachrichtigungen.** Eine Glocke sammelt Antworten, Erwähnungen, Likes und neue Follower, sobald sie passieren, und sagt Bescheid, wenn ein Titel erscheint, dem Sie folgen.
+- **Benachrichtigungen.** Eine Glocke sammelt Antworten, Erwähnungen, Follows und Nachrichten, sobald sie passieren, und ihr Tab Titles listet auf, was von Ihrer Watchlist demnächst erscheint.
 
 <ProjectImage
   src="/projects/kinoa/profile.webp"
-  alt="Mein Profil unter kinoa.to/@rei: ein Titelbild, Avatar und Handle, Follower-Zahlen und eine kurze Bio, dazu der geöffnete Tab Favorites mit Mr. Robot, Neon Genesis Evangelion, Death Note und Breaking Bad"
-  caption="Mein eigenes Profil, auf dem Tab Favorites."
+  alt="Mein Profil unter kinoa.to/@rei, wie Besucher es sehen: Titelbild, Avatar, Handle, Follower-Zahlen und eine kurze Bio, und anstelle der Tabs steht This account is private"
+  caption="Mein eigenes Profil, auf privat gestellt."
   size="full"
 />
 
 ## Sport
 
-Der Sport-Hub beginnt mit dem, was gerade live läuft und was als Nächstes startet, quer durch Fussball, Basketball, Motorsport und mehr. Jedes Spiel hat eine eigene Seite, um die herum Spielplan und Tabelle stehen, und einen Weg, es zu schauen.
+Der Sport-Hub beginnt mit allem, was gerade live läuft, und dem, was als Nächstes startet, quer durch Fussball, Basketball, Motorsport und mehr. Jedes Spiel hat eine eigene Seite mit dem Spielstand oder der Anstosszeit über einem einzigen Player, der zwischen Streams wechseln kann.
 
 <ProjectImage
   src="/projects/kinoa/sports.webp"
-  alt="Der Sport-Hub: Kategorie-Chips von Fussball bis Cricket, dann Live now mit Kacheln für Basketball- und Fussballpartien, jede als Live markiert"
+  alt="Der Sport-Hub: Kategorie-Chips von All und Fussball bis Cricket, dann Live now mit Spielkacheln, jede als Live markiert"
   caption="Sport, angeführt von dem, was live läuft."
   size="full"
 />
 
 ## In Ihrer Sprache
 
-Kinoa übernimmt die Sprache des Besuchers aus dem Browser, und die gesamte Oberfläche ist übersetzt. Bei Arabisch und Hebräisch wird das ganze Layout gespiegelt, von rechts nach links. Titel, Inhaltsangaben und Genres kommen in der Sprache des Besuchers, wo immer TMDB sie hat, und die Poster ebenso: Die arabische Seite zu Your Name zeigt das japanische Original.
+Kinoa übernimmt die Sprache aus dem Browser, bis Sie selbst eine wählen, und jeder Text der Oberfläche ist übersetzt. Bei Arabisch und Hebräisch wird das ganze Layout gespiegelt, von rechts nach links. Titel, Inhaltsangaben und Genres kommen in der Sprache des Besuchers, wo immer The Movie Database (TMDB) sie hat, und Zahlen und Laufzeiten stehen so, wie diese Sprache sie schreibt. So sieht der Anfang der Seite zu Your Name in fünf Sprachen aus:
+
+| Sprache    | Titel        | Bewertungen | Laufzeit     |
+| ---------- | ------------ | ----------- | ------------ |
+| Englisch   | Your Name.   | 13K         | 1 hr 46 min  |
+| Spanisch   | Your Name.   | 13 mil      | 1 h 46 min   |
+| Hindi      | आपका नाम.    | 13 हज़ार    | 1 घं॰ 46 मि॰ |
+| Koreanisch | 너의 이름은. | 1.3만       | 1시간 46분   |
+| Chinesisch | 你的名字。   | 1.3万       | 1小时 46分钟 |
+
+Auch die Poster kommen so von TMDB, sodass die arabische Seite zu Your Name das japanische Original statt des englischen bekommt.
 
 <ProjectImage
   src="/projects/kinoa/ar-title.webp"
-  alt="Die Seite zu Your Name auf Arabisch: das Layout von rechts nach links gespiegelt, Titel und Inhaltsangabe auf Arabisch und das japanische Poster rechts"
+  alt="Die Seite zu Your Name auf Arabisch: das Layout von rechts nach links gespiegelt, mit der Seitenleiste rechts, Titel, Inhaltsangabe, Genres und Laufzeit auf Arabisch und das japanische Poster"
   caption="Your Name auf Arabisch, mit seinem japanischen Poster."
   size="full"
 />
 
 ## Design und Bewegung
 
-Kinoa verwendet eine warme Palette aus Creme und Espresso mit einem Karamellakzent, in einem hellen und einem dunklen Design, die dem System folgen, solange Sie keines wählen. Kleine Bewegungen bestätigen, was passiert ist:
+Standardmässig ist Kinoa eine weisse Seite in einem grauen Rahmen, im dunklen Design fast schwarz, und Blau bleibt Fokus und Auswahl vorbehalten. Das Design folgt der hellen oder dunklen Einstellung des Systems, solange Sie keines wählen, und die Einstellungen bieten weitere Designs und lassen Sie eigene Farben und einen eigenen Kontrast festlegen. In der Seitenleiste ist die aktuelle Seite als Reiter gezeichnet, der mit dem Inhaltsbereich verbunden ist, und dieser Reiter fliesst zu der Zeile hinüber, die Sie wählen. Alle übrigen Bewegungen sind klein und bestätigen, was passiert ist:
 
+- Menüs und Popovers wachsen aus dem heraus, was sie geöffnet hat, und hinter einem Menü wird die Seite zu Milchglas.
+- Dialoge ändern ihre Grösse fliessend, und ihre Schaltflächen bleiben zwischen den Schritten an ihrem Platz.
 - Seiten werden gestreamt, und jeder Teil erscheint an der Stelle seines Platzhalters.
-- Die Seitenleiste gleitet auf und zu.
 - Bei einem abgelehnten Formular wackelt das Feld, das nicht stimmt.
-- Dialoge ändern ihre Grösse fliessend, statt zu springen.
 
-All das tritt zurück, wenn Besucher bei ihrem System reduzierte Bewegung eingestellt haben. Kinoa lässt sich ausserdem als App installieren, aus dem Browser auf einem Computer oder Android, oder auf dem iPhone mit einer kurzen Anleitung.
+Die Bewegung tritt zurück, wenn Besucher bei ihrem System reduzierte Bewegung eingestellt haben. Kinoa lässt sich ausserdem als App installieren, aus dem Browser auf einem Computer oder Android, oder auf dem iPhone mit einer kurzen Anleitung.
 
 <Safari
   url="kinoa.to"
   src="/projects/kinoa/theme.webp"
   video="/projects/kinoa/theme.mp4"
-  alt="Die Startseite wechselt über die Bedienelemente am unteren Rand der Seitenleiste vom dunklen ins helle Design und wieder zurück"
+  alt="Die Reihen Continue Watching und Trending der Startseite wechseln über die Bedienelemente am unteren Rand der Seitenleiste vom dunklen ins helle Design und wieder zurück"
   caption="Das helle und das dunkle Design."
 />
 
@@ -173,14 +244,41 @@ Die eingebetteten Player sind die harte Einschränkung: Man kann ihnen nicht sag
   highlight="14,19-20"
 />
 
-Ein Neuladen kostet den Puffer, deshalb lädt ein Gast erst neu, wenn er bei zwei Prüfungen hintereinander mehrere Sekunden abgedriftet ist, und nach ein paar Versuchen überlässt er die Entscheidung einer Schaltfläche Catch up.
+Ein Neuladen kostet den Puffer, deshalb verlangt der Raum nur dann eines, wenn es nötig ist:
+
+| Was passiert                               | Wann                                                                               |
+| ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Der Player des Hosts sendet seine Position | Alle 5 Sekunden und bei jedem Abspielen, Pausieren und Springen                    |
+| Jeder Gast misst seine Abweichung          | Jede Sekunde                                                                       |
+| Die Schaltfläche Catch up erscheint        | Bei mehr als 4 Sekunden Abstand zum Host                                           |
+| Der Gast lädt von selbst neu               | Nach zwei Prüfungen hintereinander mit so viel Abstand, höchstens alle 20 Sekunden |
+| Er hört auf, von selbst neu zu laden       | Nach 3 Neuladungen, die ihn nicht zurückbringen                                    |
+
+Räume laufen nur auf VidFast, denn der Trick braucht einen Player, der dort startet, wo man es ihm sagt, und nicht dort, wo er zuletzt stehen geblieben ist.
+
+### Anime-Folgen über das Ausstrahlungsdatum zuordnen
+
+Alles in Kinoa, von Links bis zu Wiedergabeverlauf und Kommentaren, erkennt einen Titel an seiner TMDB-ID. Die Anime-Player erwarten stattdessen eine ID von AniList, einer Anime-Datenbank, und eine Folgennummer, und die beiden Kataloge teilen Serien unterschiedlich ein. TMDB führt alle 85 Folgen von Re:Zero als eine Staffel, AniList dagegen hat für jeden Teil einen eigenen Eintrag:
+
+| AniList-Eintrag  | Folgen | TMDB-Staffel 1 | Ausgestrahlt |
+| ---------------- | ------ | -------------- | ------------ |
+| Staffel 1        | 25     | 1–25           | 2016         |
+| Staffel 2        | 13     | 26–38          | 2020         |
+| Staffel 2 Teil 2 | 12     | 39–50          | 2021         |
+| Staffel 3        | 16     | 51–66          | 2024–25      |
+| Staffel 4        | 19     | 67–85          | 2026         |
+
+Deshalb sucht Kinoa die AniList-Einträge hinter einer TMDB-ID heraus, dann die Ausstrahlungsdaten jedes Eintrags, und ordnet die Folgen nach Datum einander zu, mit einem Tag Spielraum in beide Richtungen.
+
+Eine Folge, deren Datum nicht passt, wird nur dann zugeordnet, wenn sie neben einem bestätigten Treffer liegt und beide Kataloge an dieser Stelle gleich viele nicht zugeordnete Folgen haben. Sonst bleibt sie ohne Zuordnung und läuft auf den regulären Servern, denn eine falsche Zuordnung spielt die falsche Folge ab, eine fehlende ändert nur den Server. Bei 30 beliebten Serien, die ich geprüft habe, werden so 99 bis 100 Prozent der Folgen zugeordnet.
 
 ### Regeln, die die Datenbank durchsetzt
 
-Zwei Regeln liegen in der Datenbank statt in der App, sie gelten also für jeden Client:
+Drei Regeln liegen in der Datenbank statt in der App, sie gelten also für jeden Client:
 
-- **Nur der Host steuert einen Raum.** Das ist eine Row-Level-Security-Policy auf dem Steuerkanal des Raums. Ein Integrationstest meldet sich als Gast an, sendet jeden Steuerbefehl und prüft, dass der Host keinen davon erhält.
-- **Handles werden an einer einzigen Stelle vergeben.** Eine Datenbankfunktion verantwortet alle Regeln, von der Länge über reservierte Namen bis zur Moderation, und ein Unique-Index entscheidet, wenn zwei Personen gleichzeitig denselben Namen beanspruchen.
+- **Nur der Host steuert einen Raum.** Das ist eine Row-Level-Security-Policy auf dem Steuerkanal des Raums. Ein Integrationstest meldet sich als Gast an, sendet Host-Befehle wie kick und sync und prüft, dass der Host keinen davon erhält.
+- **Ein entfernter Gast ist sofort abgeschnitten.** Supabase Realtime prüft die Policy eines privaten Kanals, wenn ein Client beitritt, und hat keinen Aufruf, der einen einzelnen Nutzer daraus entfernt. Deshalb tragen die Kanalnamen jedes Raums einen Schlüssel, der sich bei jedem Rauswurf und jeder Sperre ändert: Alle anderen treten unter dem neuen Schlüssel wieder bei, und der entfernte Client bleibt auf einem Kanal zurück, in den nichts mehr schreibt.
+- **Handles werden an einer einzigen Stelle vergeben.** Eine Datenbankfunktion verantwortet alle Regeln, von der Länge über reservierte Namen bis zur Moderation und einer Wartezeit von 30 Tagen zwischen zwei Änderungen, und ein Unique-Index entscheidet, wenn zwei Personen gleichzeitig denselben Namen beanspruchen.
 
 ### Weniger Roundtrips
 
@@ -189,14 +287,14 @@ Drei Aufgaben liefen weit öfter, als sie mussten:
 | Aufgabe                                                        | Vorher                                                         | Nachher                                                |
 | -------------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------ |
 | Prüfen, wer angemeldet ist                                     | 3 Aufrufe an Supabase Auth auf einer Filmseite, 4 auf dem Feed | 1 pro Rendervorgang, geteilt von allen Hilfsfunktionen |
-| Eine Watchlist darstellen                                      | Eine TMDB-Anfrage für jeden Titel darauf                       | Eine Datenbankabfrage: Jede Zeile trägt ihre Kachel    |
+| Eine Watchlist darstellen                                      | Eine TMDB-Anfrage für jeden Titel darauf                       | Eine Abfrage pro Seite: Jede Zeile trägt ihre Kachel   |
 | Die Versionsprüfung, die jeder offene Tab alle 5 Minuten macht | Jedes Mal eine Serverless-Funktion                             | Der Edge-Cache von Vercel                              |
 
 Eine Sitzung zu prüfen ist keine lokale Dekodierung: Es geht übers Netzwerk, deshalb fiel es ins Gewicht, sie nur einmal pro Rendervorgang zu prüfen.
 
 ### Die Übersetzungen vollständig halten
 
-Englisch ist die Quelle für jeden Text. Eine Prüfung in der CI vergleicht jede andere Sprachdatei damit und schlägt fehl, wenn ein Schlüssel fehlt oder übrig ist, sodass keine neue Funktion halb übersetzt ausgeliefert werden kann.
+Englisch ist die Quelle für jeden Text. Eine Prüfung in der CI, `pnpm check:i18n`, vergleicht die Schlüssel jeder anderen Sprachdatei damit und schlägt fehl, wenn einer fehlt oder übrig ist.
 
 <ProjectGallery
   images={[
@@ -204,20 +302,21 @@ Englisch ist die Quelle für jeden Text. Eine Prüfung in der CI vergleicht jede
       src: "/projects/kinoa/home-desktop.webp",
       frame: "safari",
       url: "kinoa.to",
-      alt: "Die Startseite von Kinoa im hellen Design: die Überschrift What do you want to watch? über dem Suchfeld",
+      alt: "Die Startseite von Kinoa im hellen Design: die Überschrift What do you want to watch? über der Suchleiste, über deren Rand das Wesen späht",
       caption: "Die Startseite im hellen Design.",
     },
     {
       src: "/projects/kinoa/title-mobile.webp",
       frame: "iphone",
-      alt: "Die Seite zu Slow Horses auf einem Handy: das Poster über einem dunklen Hintergrundbild, Titel, Bewertung, Genres, Inhaltsangabe und eine Schaltfläche Watch Together",
+      alt: "Die Seite zu Slow Horses auf einem Handy: das Poster in einem Milchglasrahmen über dem Hintergrundbild, Titel, Bewertung, Genres, eine gekürzte Inhaltsangabe mit More und Schaltflächen zum gemeinsamen Schauen, Speichern und Teilen",
       caption: "Eine Serie auf dem Handy.",
     },
     {
       src: "/projects/kinoa/home-mobile.webp",
+      video: "/projects/kinoa/home-mobile.mp4",
       frame: "iphone",
-      alt: "Die Startseite auf einem Handy: Continue Watching mit Spirited Away und Slow Horses, darunter die Reihe Trending",
-      caption: "Startseite auf dem Handy.",
+      alt: "Die Startseite auf einem Handy: Die Eingabe von spirited in die Suchleiste bringt Spirited Away und drei weitere Ergebnisse hervor, und wird das Feld geleert, bekommt das Wesen über der Leiste feuchte Augen",
+      caption: "Die Suche auf dem Handy.",
     },
   ]}
   columns={3}

@@ -376,7 +376,7 @@ export const en = {
         description:
           "[Kinoa](https://kinoa.to) is a free streaming site for films and series. Open a title and press play on the same page, no account needed; with an account you get a public @handle, a watchlist, a feed and messages, and Watch Together rooms where friends follow one host's playback. Titles come from TMDB, and the video plays in embedded players from third-party hosters.",
         overview:
-          "Kinoa is a free site for films and series with a social layer around the player: profiles, a feed, comments, messages and Watch Together rooms. I've built it since November 2025 as a Next.js app on Supabase, and around 10,000 people use it each month.",
+          "Kinoa is a free site for films and series with a social layer around the player: profiles, a feed, comments, messages and Watch Together rooms. I've built it since November 2025 as a Next.js app on Supabase, and around 30,000 people use it each month.",
       },
       self: {
         title: "Self",
