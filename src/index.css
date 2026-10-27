@@ -327,28 +327,28 @@
   }
 
   .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.19 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.21 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.245 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.245 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.255 0 0);
-    --accent-foreground: oklch(0.985 0 0);
+    --background: oklch(0.209 0 0);
+    --foreground: oklch(0.904 0 0);
+    --card: oklch(0.248 0 0);
+    --card-foreground: oklch(0.904 0 0);
+    --popover: oklch(0.277 0 0);
+    --popover-foreground: oklch(0.904 0 0);
+    --primary: oklch(0.904 0 0);
+    --primary-foreground: oklch(0.159 0 0);
+    --secondary: oklch(0.345 0 0);
+    --secondary-foreground: oklch(0.904 0 0);
+    --muted: oklch(0.309 0 0);
+    --muted-foreground: oklch(0.764 0 0);
+    --accent: oklch(0.345 0 0);
+    --accent-foreground: oklch(0.904 0 0);
     --destructive: oklch(0.704 0.191 22.2);
     --destructive-foreground: oklch(0.985 0 0);
-    --border: oklch(0.985 0 0 / 10%);
-    --input: oklch(0.985 0 0 / 15%);
+    --border: oklch(1 0 0 / 8%);
+    --input: oklch(1 0 0 / 16%);
     --ring: oklch(0.556 0 0);
-    --scrollbar-track: oklch(0.245 0 0);
-    --scrollbar-thumb: oklch(0.32 0 0);
-    --scrollbar-thumb-hover: oklch(0.4 0 0);
+    --scrollbar-track: oklch(0.309 0 0);
+    --scrollbar-thumb: oklch(0.385 0 0);
+    --scrollbar-thumb-hover: oklch(0.465 0 0);
   }
 
   /* solarpunk: a garden city at noon — cream, leaf green, solar gold */
