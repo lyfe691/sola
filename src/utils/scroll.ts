@@ -11,12 +11,12 @@ import type Lenis from "lenis";
 /**
  * Window scroll, owned through the root Lenis instance.
  *
- * Why not `window.scrollTo({ behavior: "smooth" })`? That is a fire-and-forget
- * browser animation. On a route change into a SHORT page (Home), the outgoing
- * tall page stays mounted through PageShell's exit, then unmounts — collapsing
- * the document height mid-animation. The native scroll gets clamped to the new
- * (tiny) max and stranded there. Lenis keeps interpolating toward target 0, so
- * a height collapse can't strand it.
+ * Lenis keeps its own idea of where the window is, so every programmatic
+ * scroll goes through it: a bare `window.scrollTo` moves the page and leaves
+ * Lenis behind, and the next wheel tick jumps back to where it thought it
+ * was. A page change never glides (PageShell jumps to the top once the old
+ * page is gone); the glide is for the scroll-to-top button and section
+ * links, where the reader watches the page travel.
  *
  * The instance is bound by LenisProvider. Call sites stay module-level because
  * there is exactly one window scroll.
@@ -74,13 +74,7 @@ export const snapScrollTo = (y: number) => {
   window.scrollTo(0, y);
 };
 
-/** Cancel an in-flight programmatic glide, leaving the scroll where it is. */
-export const stopScrollToTop = () => {
-  if (!lenis?.isScrolling) return;
-  lenis.scrollTo(lenis.scroll, { immediate: true });
-};
-
-/** Glide the window to the top, resilient to mid-flight document-height changes. */
+/** Glide the window to the top. */
 export const smoothScrollToTop = () => {
   if (typeof window === "undefined") return;
 

@@ -9,38 +9,38 @@
 /**
  * Central motion system.
  *
- * Three registers, deliberately different:
- *   - UI controls (dropdowns, tooltips, hover) want to feel RESPONSIVE -> short + EASE_OUT.
- *   - Scroll reveals: one shape for every block (<Reveal>, src/lib/reveal.ts),
- *     a fade and a short rise on the glide curve. Blocks never pick
- *     their own delays; one queue starts them in reading order, a beat
- *     apart, so order holds at any scroll speed.
- *   - The page transition (and the hero's load-in) keeps the longer glide ->
- *     SMOOTH/REVEAL with the blur-bridge.
+ * Two registers, deliberately different:
+ *   - UI controls (menus, tooltips, hover, press) answer at once: short, EASE_OUT.
+ *   - Content arrives on the glide: scroll reveals, load-ins and the page
+ *     change. Longer, on REVEAL, and only ever a fade and a short rise. No
+ *     blur and no scale: a page is too large a thing to bend.
  *
- * Easing curves mirror the CSS custom properties in src/index.css (@theme) — only curves
- * actually consumed from JS live here; CSS-only tokens (--ease-in-out, --ease-drawer,
- * --ease-pop) stay in index.css. In markup use the `ease-*` utilities; in JS import these
- * consts. Never inline a cubic-bezier or use a built-in "easeOut"/"easeInOut" string.
+ * Every curve mirrors the CSS token of the same name in src/index.css
+ * (@theme): EASE_OUT is --ease-out, REVEAL is --ease-reveal, and so on. Only
+ * curves JS consumes live here; CSS-only tokens (--ease-in-out, --ease-pop,
+ * --ease-out-quart) stay in index.css. In markup use the `ease-*` utilities;
+ * in JS import these consts. Never inline a cubic-bezier or use a built-in
+ * "easeOut"/"easeInOut" string.
  */
 
-// Custom easing curves
-// EASE_OUT is a gentle easeOutCubic (not a front-loaded quint) so short hover/UI
-// transitions glide instead of snapping. Mirrors --ease-out in index.css.
-export const EASE_OUT = [0.33, 1, 0.68, 1] as const; // responsive-but-smooth UI (dropdowns/hover)
-export const EASE_EXPO = [0.16, 1, 0.3, 1] as const; // lush hero entrances
-
-// Page transition: a punchy expo. The blur masks its front-loading, so it's fine here.
-export const SMOOTH = [0.16, 1, 0.3, 1] as const;
-// The glide curve: a symmetric ease-in-out (easeInOutQuad). Motion builds
-// and settles, so the travel is visible for its whole duration — this is
-// what "smooth" means to the owner's eye (out-curves read as pop-in).
-// Shared by scroll reveals and the load-in theater — hero, 404 terminal,
-// colophon, code-view beats. Mirrors --ease-smooth in index.css.
-export const REVEAL = [0.45, 0, 0.55, 1] as const;
-// Exit/consume: accelerate away (ease-in is correct for a leaving element collapsing in).
-// Exported for in-page elements that leave the way a page does (code view's command beat).
-export const CONSUME_IN = [0.5, 0, 0.75, 0] as const;
+// ---- Curves ----
+// UI controls. A gentle easeOutCubic (not a front-loaded quint), so a short
+// hover or menu transition glides instead of snapping.
+export const EASE_OUT = [0.33, 1, 0.68, 1] as const;
+// A small surface popping into place: tooltips, the toast, a swapped label.
+// Front-loaded, so only for things small enough to arrive in one step.
+export const EASE_EXPO = [0.16, 1, 0.3, 1] as const;
+// Something already on screen going from one state to another and back: a
+// symmetric ease-in-out, so the way there mirrors the way back (the caret's
+// breath; in CSS, the pills and chips that open and close).
+export const EASE_SMOOTH = [0.45, 0, 0.55, 1] as const;
+// Content arriving. It starts from rest, so nothing pops in, is half way
+// there in a third of its time, and spends the rest settling: the travel
+// shows for the whole duration but the block is readable early. A symmetric
+// curve held content back at the start and stopped it short at the end.
+export const REVEAL = [0.3, 0, 0.2, 1] as const;
+// Something leaving the screen for good: it accelerates away.
+export const EASE_IN = [0.5, 0, 0.75, 0] as const;
 
 // ---- Shared-element flight (a deep-dive image travelling to the lightbox) ----
 // A click moves an element that is already on screen, so it is a spring: an
@@ -100,26 +100,18 @@ export const GALLERY_SLIDE = {
 // Mirrored by the reveal's hidden state in index.css.
 export const HIDDEN_OPACITY = 0.001;
 
-// ---- Page (route) transition: "consumes itself" ----
-// The old page shrinks + blurs as it accelerates away (consumed inward); the new page
-// re-emerges from that same blurred, slightly-scaled state and settles. Because exit ends
-// exactly where enter begins (scale 0.96 / blur 8 / HIDDEN_OPACITY), the swap under
-// AnimatePresence mode="wait" reads as ONE continuous implode->reform, and the blur masks
-// the content change so it feels smooth, not like a hard cut.
+// ---- Page change ----
+// The page that leaves fades out where it stands. The next one takes its
+// place at the top of the window and fades in, and its first screen arrives
+// block by block through the reveal queue: the entrance is the same one a
+// scrolled-to block plays, so a page change adds no motion of its own.
+// Opacity only, and short: the shell is the whole page, and anything more
+// (it used to shrink and blur away, then grow and sharpen back) was felt as
+// weight on every click.
 export const pageTransitionVariants = {
-  initial: { opacity: HIDDEN_OPACITY, scale: 0.96, filter: "blur(8px)" },
-  animate: {
-    opacity: 1,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: { duration: 0.5, ease: SMOOTH },
-  },
-  exit: {
-    opacity: HIDDEN_OPACITY,
-    scale: 0.96,
-    filter: "blur(8px)",
-    transition: { duration: 0.32, ease: CONSUME_IN },
-  },
+  initial: { opacity: HIDDEN_OPACITY },
+  animate: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
+  exit: { opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } },
 };
 
 // ---- Scroll reveals ----
@@ -128,5 +120,5 @@ export const pageTransitionVariants = {
 // a beat apart in reading order, and the queue never runs further behind
 // than the lag cap — a whole first screen or a fling past many rows closes
 // its beats up rather than making the last block wait.
-export const REVEAL_STAGGER = 90;
-export const REVEAL_MAX_LAG = 360;
+export const REVEAL_STAGGER = 80;
+export const REVEAL_MAX_LAG = 320;

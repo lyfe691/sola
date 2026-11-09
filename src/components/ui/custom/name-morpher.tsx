@@ -13,7 +13,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { EASE_OUT, HIDDEN_OPACITY, SMOOTH } from "@/utils/transitions";
+import { EASE_EXPO, EASE_OUT, HIDDEN_OPACITY } from "@/utils/transitions";
 
 const CYCLE_MS = 5600;
 const ENTER_STAGGER = 0.032;
@@ -25,7 +25,7 @@ const letterVariants: Variants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.6, ease: SMOOTH, delay: i * ENTER_STAGGER },
+    transition: { duration: 0.6, ease: EASE_EXPO, delay: i * ENTER_STAGGER },
   }),
   exit: (i: number) => ({
     opacity: 0,
@@ -99,7 +99,7 @@ export const NameMorpher = ({
             type="button"
             // FLIP the plate to the next name's real width — no char-count math
             layout
-            transition={{ layout: { duration: 0.6, ease: SMOOTH } }}
+            transition={{ layout: { duration: 0.6, ease: EASE_EXPO } }}
             onClick={() => {
               setIndex((i) => (i + 1) % names.length);
               setClock((c) => c + 1);

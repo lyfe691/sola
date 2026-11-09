@@ -18,10 +18,8 @@ import {
 import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
 import { EASE_OUT } from "@/utils/transitions";
-import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
-import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { smoothScrollToTop } from "@/utils/scroll";
 import { useTranslation } from "@/lib/language-provider";
-import { useLocalePath } from "@/lib/locale-router";
 
 const SCROLL_THRESHOLD = 120;
 const TILE = 44;
@@ -83,8 +81,6 @@ function WaterFill() {
 }
 
 export default function ScrollToTop() {
-  // the page, not its URL: a language switch keeps the reader where they are
-  const { path: pathname } = useLocalePath();
   const [visible, setVisible] = useState(false);
   const t = useTranslation();
 
@@ -94,23 +90,13 @@ export default function ScrollToTop() {
   }, []);
   useLenis(onLenis);
 
-  const { active: codeViewActive } = useCodeView();
-  const codeViewRef = useRef(codeViewActive);
-  useEffect(() => {
-    codeViewRef.current = codeViewActive;
-  }, [codeViewActive]);
-
+  // a page change starts the next page at the top (PageShell), so the
+  // browser's own restoring would only fight it
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
   }, []);
-
-  useEffect(() => {
-    if (codeViewRef.current) return;
-    smoothScrollToTop();
-    return stopScrollToTop;
-  }, [pathname]);
 
   return (
     <AnimatePresence>

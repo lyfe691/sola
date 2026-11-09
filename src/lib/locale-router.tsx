@@ -24,6 +24,7 @@ import {
   type NavigateProps,
   type To,
 } from "react-router";
+import { preloadRoute } from "@/config/routes";
 import { useLanguage } from "./language-provider";
 import { localizeTo, splitLocale } from "./locale";
 
@@ -34,9 +35,32 @@ export function useLocalePath() {
   return { language, path: splitLocale(pathname).path };
 }
 
-export function Link({ to, ...props }: LinkProps) {
+/**
+ * A link also starts its page's chunk as soon as a click looks likely (the
+ * pointer arrives, a finger lands, focus moves onto it), so the page is in
+ * by the time the one before it has faded and its entrance plays on the
+ * content, not on an empty shell.
+ */
+export function Link({ to, onPointerEnter, onFocus, ...props }: LinkProps) {
   const { language } = useLanguage();
-  return <RouterLink to={localizeTo(to, language)} {...props} />;
+  const warm = () => {
+    const path = typeof to === "string" ? to.split(/[?#]/)[0] : to.pathname;
+    if (path?.startsWith("/")) preloadRoute(path);
+  };
+  return (
+    <RouterLink
+      to={localizeTo(to, language)}
+      onPointerEnter={(event) => {
+        warm();
+        onPointerEnter?.(event);
+      }}
+      onFocus={(event) => {
+        warm();
+        onFocus?.(event);
+      }}
+      {...props}
+    />
+  );
 }
 
 export function Navigate({ to, ...props }: NavigateProps) {

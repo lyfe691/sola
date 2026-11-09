@@ -19,13 +19,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router";
-import { motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Caret } from "@/components/deploy-diff/caret";
 import { useTranslation } from "@/lib/language-provider";
 import { APP_ROUTES } from "@/config/routes";
-import { REVEAL } from "@/utils/transitions";
 import { Link, useNavigate } from "@/lib/locale-router";
+import { Reveal } from "@/components/Reveal";
 
 const TYPING_SPEED = 50;
 const RESPONSE_DELAY = 450;
@@ -272,12 +272,7 @@ const NotFound = () => {
       <meta name="robots" content="noindex, nofollow" />
 
       {/* the terminal window — rises and settles, then the shell speaks */}
-      <motion.div
-        initial={{ opacity: 0, y: 16, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.7, ease: REVEAL }}
-        className="w-full max-w-2xl overflow-hidden rounded-xl bg-popover shadow-2xl ring-1 ring-foreground/5 dark:ring-foreground/10"
-      >
+      <Reveal className="w-full max-w-2xl overflow-hidden rounded-xl bg-popover shadow-2xl ring-1 ring-foreground/5 dark:ring-foreground/10">
         {/* window bar: traffic lights in the diff palette, macOS title */}
         <div className="relative flex h-10 items-center gap-2 border-b border-border/60 bg-muted/50 px-4">
           <span className="size-3 rounded-full bg-(--diff-del-fg)/90" />
@@ -371,14 +366,10 @@ const NotFound = () => {
             tabIndex={isDone ? 0 : -1}
           />
         </pre>
-      </motion.div>
+      </Reveal>
 
       {/* the localized way home — available early, never gated on typing */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.35, ease: REVEAL }}
-      >
+      <Reveal>
         <Button
           variant="default"
           className="mt-6"
@@ -387,7 +378,7 @@ const NotFound = () => {
         >
           {t.notFound.backHome}
         </Button>
-      </motion.div>
+      </Reveal>
     </div>
   );
 };

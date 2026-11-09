@@ -151,7 +151,7 @@ function CommitRow({
         live={live}
         pending={isPending}
         fadeOut={isLast && graph.outgoing}
-        className="transition-opacity duration-(--reveal-duration) ease-smooth group-has-[[data-reveal]:not([data-revealed])]/row:opacity-0"
+        className="transition-opacity duration-(--reveal-fade) ease-reveal group-has-[[data-reveal]:not([data-revealed])]/row:opacity-0"
       />
       <Reveal className="min-w-0">
         <button

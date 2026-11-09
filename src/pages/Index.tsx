@@ -6,7 +6,6 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { motion } from "motion/react";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { CyclingText } from "@/components/ui/custom/cycling-text";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
@@ -19,77 +18,20 @@ import {
   type SocialId,
 } from "@/config/social";
 import { cn } from "@/lib/utils";
-import { HIDDEN_OPACITY, REVEAL } from "@/utils/transitions";
 import { Link } from "@/lib/locale-router";
-
-const homeAnimations = {
-  container: {
-    hidden: { opacity: HIDDEN_OPACITY },
-    show: {
-      opacity: 1,
-      // delayChildren outlasts the 0.5s route blur so the first beat
-      // isn't already settled when the page sharpens
-      transition: { duration: 0.7, staggerChildren: 0.1, delayChildren: 0.14 },
-    },
-  },
-  // one child variant for the badge and the CTA row — they animate the same
-  item: {
-    hidden: { opacity: HIDDEN_OPACITY, y: 20, scale: 0.98 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.72, ease: REVEAL },
-    },
-  },
-  heading: {
-    hidden: { opacity: HIDDEN_OPACITY, y: 24, scale: 0.985 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.8, ease: REVEAL },
-    },
-  },
-  description: {
-    hidden: { opacity: HIDDEN_OPACITY, y: 22, scale: 0.99 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.76, ease: REVEAL },
-    },
-  },
-  socialsContainer: {
-    hidden: { opacity: HIDDEN_OPACITY },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.08, when: "beforeChildren" as const },
-    },
-  },
-  socialItem: {
-    hidden: { opacity: HIDDEN_OPACITY, y: 16, scale: 0.98 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.68, ease: REVEAL },
-    },
-  },
-} as const;
+import { Reveal } from "@/components/Reveal";
 
 function SocialLink({ id }: { id: SocialId }) {
   const social = SOCIAL_LINKS[id];
   const Icon = social.icon;
 
   return (
-    <motion.a
+    <a
       href={social.href}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={social.label}
       data-brand={id}
-      variants={homeAnimations.socialItem}
       className={cn(
         "group relative inline-flex items-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset outline-none transition-[color,background-color,border-color,scale] duration-200 ease-out will-change-transform transform-gpu active:scale-97",
         "md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-400 md:ease-smooth",
@@ -111,7 +53,7 @@ function SocialLink({ id }: { id: SocialId }) {
           </span>
         </span>
       </span>
-    </motion.a>
+    </a>
   );
 }
 
@@ -126,53 +68,45 @@ const Index = () => {
     t.index.description4,
   ];
 
+  // the hero arrives the way every page does: each block is a reveal, and
+  // the queue brings them in from the top
   return (
-    <motion.div
-      className="relative z-20 flex min-h-[calc(100vh-14rem)] flex-1 flex-col items-start justify-center pt-12 sm:pt-16 lg:pt-20"
-      variants={homeAnimations.container}
-      initial="hidden"
-      animate="show"
-    >
+    <div className="relative z-20 flex min-h-[calc(100vh-14rem)] flex-1 flex-col items-start justify-center pt-12 sm:pt-16 lg:pt-20">
       <meta name="description" content={t.seo.home.description} />
 
-      <motion.div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
-        <motion.a
-          variants={homeAnimations.item}
-          href="https://kinoa.to"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group relative z-30 mb-2 inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 transition-[background-color,box-shadow] duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:mb-3 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
-        >
-          <span className="text-2xs font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-xs-plus">
-            {t.index.currentlyWorkingOn}
-          </span>
-          <span className="bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-2xs font-semibold text-transparent [background-position:100%_0%] can-hover:group-hover:animate-shine sm:text-xs-plus">
-            Kinoa
-          </span>
-          <ChevronToArrowIcon className="size-3 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60 sm:size-3.5" />
-        </motion.a>
+      <div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
+        <Reveal className="relative z-30 mb-2 sm:mb-3">
+          <a
+            href="https://kinoa.to"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 transition-[background-color,box-shadow] duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
+          >
+            <span className="text-2xs font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-xs-plus">
+              {t.index.currentlyWorkingOn}
+            </span>
+            <span className="bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-2xs font-semibold text-transparent [background-position:100%_0%] can-hover:group-hover:animate-shine sm:text-xs-plus">
+              Kinoa
+            </span>
+            <ChevronToArrowIcon className="size-3 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60 sm:size-3.5" />
+          </a>
+        </Reveal>
 
-        <motion.h1
-          variants={homeAnimations.heading}
+        <Reveal
+          as="h1"
           className="mb-3 text-4xl font-bold break-keep text-balance sm:mb-4 sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl"
         >
           <NameMorpher
             greeting={t.index.greeting}
             switchLabel={t.index.nameSwitch}
           />
-        </motion.h1>
+        </Reveal>
 
-        <motion.div
-          variants={homeAnimations.description}
-          className="mb-4 max-w-2xl text-base leading-relaxed text-foreground/70 sm:mb-5 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl"
-        >
+        <Reveal className="mb-4 max-w-2xl text-base leading-relaxed text-foreground/70 sm:mb-5 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl">
           <CyclingText key={language} texts={descriptions} />
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          variants={homeAnimations.item}
-          className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4"
-        >
+        <Reveal className="mb-6 flex flex-wrap items-center gap-3 sm:mb-8 sm:gap-4">
           <Link to="/contact" className="max-sm:flex-auto">
             <SpecularButton size="md" autoAnimate className="max-sm:w-full">
               {t.index.contactMe}
@@ -188,18 +122,15 @@ const Index = () => {
               {t.index.viewProjects}
             </SpecularButton>
           </Link>
-        </motion.div>
+        </Reveal>
 
-        <motion.div
-          variants={homeAnimations.socialsContainer}
-          className="flex flex-wrap items-center gap-3 sm:gap-4"
-        >
+        <Reveal className="flex flex-wrap items-center gap-3 sm:gap-4">
           {SOCIAL_ORDER_HERO.map((id) => (
             <SocialLink key={id} id={id} />
           ))}
-        </motion.div>
-      </motion.div>
-    </motion.div>
+        </Reveal>
+      </div>
+    </div>
   );
 };
 
