@@ -71,7 +71,7 @@ const ExperienceItem = ({
     LOCATION_TYPE_ICON[entry.locationType] ?? LOCATION_TYPE_ICON.onsite;
 
   return (
-    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-muted/50 sm:-mx-4 sm:gap-5 sm:px-4">
+    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-muted sm:-mx-4 sm:gap-5 sm:px-4">
       <CompanyLogo
         company={entry.company}
         logo={entry.logo}

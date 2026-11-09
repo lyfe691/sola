@@ -86,7 +86,6 @@ const Services = () => {
         {servicesList.map((service) => (
           <Reveal key={service.key}>
             <Card
-              variant="translucent"
               lift
               className="group relative h-full gap-0 overflow-visible p-0"
             >
@@ -100,7 +99,7 @@ const Services = () => {
               <div className="flex h-full flex-col gap-4 p-5 sm:p-6">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="rounded-xl bg-linear-to-br from-accent/20 to-transparent p-2.5">
+                    <div className="rounded-xl bg-muted p-2.5">
                       <service.icon className="h-6 w-6 text-primary/80" />
                     </div>
                     <h2 className="truncate text-base font-medium text-foreground transition-colors group-hover:text-primary sm:text-lg">
@@ -137,7 +136,7 @@ const Services = () => {
                   )}
                 </ul>
 
-                <div className="flex items-center justify-center gap-2 rounded-xl bg-foreground/5 px-3 py-2 text-sm text-foreground/90 sm:hidden">
+                <div className="flex items-center justify-center gap-2 rounded-xl bg-muted px-3 py-2 text-sm text-foreground/90 sm:hidden">
                   <HugeiconsIcon
                     icon={SaleTag01Icon}
                     strokeWidth={2}

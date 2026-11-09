@@ -147,7 +147,7 @@ function RelatedProjectCard({
       to={`/projects/${slug}`}
       className="group block rounded-4xl focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring/40"
     >
-      <Card variant="translucent" lift className="h-full gap-2 p-4">
+      <Card lift className="h-full gap-2 p-4">
         <h3 className="font-medium text-foreground underline-offset-4 decoration-foreground/20 transition-colors duration-300 group-hover:underline">
           {title}
         </h3>

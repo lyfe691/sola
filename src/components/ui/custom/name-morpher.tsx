@@ -105,7 +105,7 @@ export const NameMorpher = ({
               setClock((c) => c + 1);
             }}
             aria-label={`${names.join(" · ")} — ${switchLabel}`}
-            className="relative col-start-1 row-start-1 inline-flex cursor-pointer touch-manipulation justify-self-start rounded-[0.25em] bg-muted/65 p-[0.1em] text-primary ring-1 ring-foreground/5 ring-inset [transition:scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-safe:active:scale-[0.97] active:duration-100 active:ease-out"
+            className="relative col-start-1 row-start-1 inline-flex cursor-pointer touch-manipulation justify-self-start rounded-[0.25em] bg-muted p-[0.1em] text-primary ring-1 ring-foreground/5 ring-inset [transition:scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-safe:active:scale-[0.97] active:duration-100 active:ease-out"
           >
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span

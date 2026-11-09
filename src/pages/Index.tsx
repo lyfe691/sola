@@ -33,8 +33,8 @@ function SocialLink({ id }: { id: SocialId }) {
       aria-label={social.label}
       data-brand={id}
       className={cn(
-        "group relative inline-flex items-center overflow-hidden rounded-xl bg-foreground/[0.07] text-foreground/60 ring-[1.5px] ring-foreground/8 ring-inset outline-none transition-[color,background-color,border-color,scale] duration-200 ease-out will-change-transform transform-gpu active:scale-97",
-        "md:rounded-full md:border md:border-foreground/10 md:bg-foreground/5 md:shadow-xs md:ring-0 md:duration-400 md:ease-smooth",
+        "group relative inline-flex items-center overflow-hidden rounded-xl bg-muted text-foreground/60 ring-[1.5px] ring-border ring-inset outline-none transition-[color,background-color,border-color,scale] duration-200 ease-out will-change-transform transform-gpu active:scale-97",
+        "md:rounded-full md:border md:border-border md:shadow-xs md:ring-0 md:duration-400 md:ease-smooth",
         "focus-visible:border-transparent focus-visible:bg-(--brand-fill) focus-visible:text-(--brand-ink) focus-visible:ring-2 focus-visible:ring-ring/50",
         SOCIAL_BRAND_FILL,
       )}
@@ -80,7 +80,7 @@ const Index = () => {
             href="https://kinoa.to"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex w-fit items-center gap-1.5 rounded-full bg-foreground/3 px-2.5 py-1 whitespace-nowrap ring-1 ring-foreground/4 transition-[background-color,box-shadow] duration-300 hover:bg-foreground/5 hover:ring-foreground/6 sm:px-3.5 sm:py-1.5 dark:bg-foreground/5 dark:ring-foreground/8 dark:hover:bg-foreground/8 dark:hover:ring-foreground/12"
+            className="group inline-flex w-fit items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 whitespace-nowrap ring-1 ring-border transition-colors duration-300 hover:bg-accent sm:px-3.5 sm:py-1.5"
           >
             <span className="text-2xs font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-xs-plus">
               {t.index.currentlyWorkingOn}

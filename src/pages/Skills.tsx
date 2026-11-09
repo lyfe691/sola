@@ -41,9 +41,9 @@ const ROW =
   "group flex w-full min-w-0 items-center gap-3 rounded-2xl px-2 py-2 text-left";
 // desktop rows only show the hover card; phone rows are tapped for the drawer
 const HOVERABLE =
-  "transition-colors duration-200 ease-out can-hover:hover:bg-muted/50 data-active:bg-muted/50";
+  "transition-colors duration-200 ease-out can-hover:hover:bg-muted data-active:bg-muted";
 const PRESSABLE =
-  "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out active:scale-[0.99] active:bg-muted/50";
+  "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out active:scale-[0.99] active:bg-muted";
 
 function SkillRowBody({
   skill,

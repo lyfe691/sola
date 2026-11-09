@@ -274,7 +274,7 @@ const NotFound = () => {
       {/* the terminal window — rises and settles, then the shell speaks */}
       <Reveal className="w-full max-w-2xl overflow-hidden rounded-xl bg-popover shadow-2xl ring-1 ring-foreground/5 dark:ring-foreground/10">
         {/* window bar: traffic lights in the diff palette, macOS title */}
-        <div className="relative flex h-10 items-center gap-2 border-b border-border/60 bg-muted/50 px-4">
+        <div className="relative flex h-10 items-center gap-2 border-b border-border/60 bg-muted px-4">
           <span className="size-3 rounded-full bg-(--diff-del-fg)/90" />
           <span className="size-3 rounded-full bg-(--diff-mod-fg)/90" />
           <span className="size-3 rounded-full bg-(--diff-add-fg)/90" />

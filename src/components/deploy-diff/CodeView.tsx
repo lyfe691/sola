@@ -11,7 +11,7 @@
  * whole and honest, this page's files first and open, the rest behind
  * their headers (CommitDiff); unmapped routes fall back to
  * the repo-wide latest commit. The only UI above it is the exit bubble,
- * a frosted circle tucked into the top-right corner.
+ * a circle tucked into the top-right corner.
  *
  * Loading is a terminal ritual, centered and full-size: the view types
  * `$ git show `, the caret blinks while the sha resolves, then the sha types
@@ -241,7 +241,7 @@ function ExitBubble({
               ref={buttonRef}
               type="button"
               onClick={onExit}
-              className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[translate,background-color] duration-200 ease-out can-hover:hover:-translate-x-1 can-hover:hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background shadow-lg shadow-black/5 outline-none transition-[translate,background-color] duration-200 ease-out can-hover:hover:-translate-x-1 can-hover:hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"
             />
           }
         >

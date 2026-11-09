@@ -253,7 +253,7 @@ const ProjectBody = ({ project, t }: { project: Project; t: Translation }) => (
 // cards only need to move
 const ProjectCard = memo(
   ({ project, t }: { project: Project; t: Translation }) => (
-    <Card variant="translucent" lift className={cardClassName}>
+    <Card lift className={cardClassName}>
       <div className="p-1.5 pb-0">
         <PaintedCover
           art={project.art}

@@ -90,7 +90,7 @@ function MediaFrame({
   return (
     <div
       className={cn(
-        "rounded-2xl bg-foreground/[0.03] p-1.5 shadow-xs ring-1 ring-foreground/10",
+        "rounded-2xl bg-card p-1.5 shadow-xs ring-1 ring-foreground/10",
         className,
       )}
     >
@@ -99,7 +99,7 @@ function MediaFrame({
   );
 }
 
-const MEDIA_INNER = "size-full overflow-hidden rounded-xl bg-muted/20";
+const MEDIA_INNER = "size-full overflow-hidden rounded-xl bg-muted";
 
 // -------------------------------- Portrait --------------------------------
 
@@ -173,9 +173,8 @@ function ApproachPanel({
           (individual cells would tear the frame apart mid-animation) */}
       <Reveal
         className={cn(
-          "grid overflow-hidden rounded-2xl border border-foreground/12",
-          "bg-linear-to-b from-foreground/[0.04] to-transparent",
-          "divide-y divide-foreground/10",
+          "grid overflow-hidden rounded-2xl border border-border bg-card",
+          "divide-y divide-border",
           "sm:grid-cols-3 sm:divide-x sm:divide-y-0",
         )}
       >
@@ -184,7 +183,7 @@ function ApproachPanel({
             key={label}
             className={cn(
               "flex flex-col gap-3 p-6 sm:min-h-[11.5rem] sm:p-7 lg:gap-4 lg:p-8",
-              "transition-colors duration-200 can-hover:hover:bg-foreground/[0.04]",
+              "transition-colors duration-200 can-hover:hover:bg-muted",
             )}
           >
             <h3 className="text-base font-semibold tracking-tight sm:text-lg">
@@ -289,7 +288,7 @@ const About = () => {
         </Reveal>
 
         <Reveal>
-          <Card variant="translucent" className="gap-0 overflow-hidden p-0">
+          <Card className="gap-0 overflow-hidden p-0">
             <Tabs
               value={contributionTab}
               onValueChange={setContributionTab}

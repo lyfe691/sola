@@ -109,6 +109,12 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   upstream style; don't reformat it.
 - `can-hover:` custom variant gates hover-_movement_ (touch taps fire
   phantom hovers). Color-only hovers don't need it.
+- Surfaces are solid: a fill is a whole token (`bg-card` for a card,
+  `bg-muted` for a chip, tile or well, `bg-accent` for its hover), never an
+  alpha step (`bg-card/40`, `bg-foreground/5`) and never `backdrop-blur`. A
+  background plays behind every page, and a see-through surface lets it
+  through its text. Alpha stays for hairlines, shadows, ink, and scrims over
+  media or behind a dialog.
 
 ## Motion
 

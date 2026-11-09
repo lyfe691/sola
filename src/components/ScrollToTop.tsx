@@ -118,7 +118,7 @@ export default function ScrollToTop() {
             transition: { duration: 0.1, ease: EASE_OUT },
           }}
           transition={{ duration: 0.28, ease: EASE_OUT }}
-          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background/70 text-foreground/80 ring-1 ring-foreground/10 backdrop-blur-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
+          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background text-foreground/80 ring-1 ring-foreground/10 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
         >
           <WaterFill />
           <HugeiconsIcon
