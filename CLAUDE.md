@@ -117,7 +117,8 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   media or behind a dialog.
 - A first visit is plain: system theme, no background
   (`src/config/welcome-preset.ts`). A background is something the visitor
-  picks.
+  picks, and on every page but home it steps back behind a veil of the page
+  colour (`BackgroundLayer`) so text set straight on the page stays readable.
 
 ## Motion
 
