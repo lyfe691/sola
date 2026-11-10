@@ -36,8 +36,10 @@ export function Reveal<T extends RevealTag = "div">({
     const node = ref.current;
     if (!node) return;
     return watchReveal(node, (delay) => {
-      node.style.setProperty("--reveal-delay", `${delay}ms`);
-      node.dataset.revealed = "";
+      if (delay !== null)
+        node.style.setProperty("--reveal-delay", `${delay}ms`);
+      // "past": the page opened below this block, so it shows without motion
+      node.dataset.revealed = delay === null ? "past" : "";
     });
   }, []);
 

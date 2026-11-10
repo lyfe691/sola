@@ -109,19 +109,43 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   upstream style; don't reformat it.
 - `can-hover:` custom variant gates hover-_movement_ (touch taps fire
   phantom hovers). Color-only hovers don't need it.
+- Surfaces are solid: a fill is a whole token (`bg-card` for a card,
+  `bg-muted` for a chip, tile or well, `bg-accent` for its hover), never an
+  alpha step (`bg-card/40`, `bg-foreground/5`) and never `backdrop-blur`. A
+  background plays behind every page, and a see-through surface lets it
+  through its text. Alpha stays for hairlines, shadows, ink, and scrims over
+  media or behind a dialog.
+- A first visit is plain: system theme, no background
+  (`src/config/welcome-preset.ts`). A background is something the visitor
+  picks, and on every page but home it steps back behind a veil of the page
+  colour (`BackgroundLayer`) so text set straight on the page stays readable.
 
 ## Motion
 
 - One vocabulary: curves live in `src/utils/transitions.ts` and mirror the
   `--ease-*` tokens in `src/index.css`. Never inline a cubic-bezier or use
   built-in `"easeOut"`-style strings.
-- Two registers: UI controls are short + `EASE_OUT`; content reveals and
-  page transitions glide (`REVEAL`/`SMOOTH`, longer). The owner prefers
-  smooth glide over snappy timing — don't "optimize" durations down.
+- Two registers: UI controls are short + `EASE_OUT`; content arriving
+  glides on `REVEAL`, longer. The owner prefers smooth glide over snappy
+  timing — don't "optimize" durations down.
+- A block or a page arriving only ever fades and rises a short way. No
+  blur, no scale, and nothing page-sized animates anything but opacity: that
+  weight was felt on every click. (Letter-level effects, like the hero's
+  name and tagline, are their own pieces.)
 - Scroll reveals: wrap each block that should arrive on its own in
   `<Reveal>` (`as="li"` etc.). Never pass delays or nest reveals — one
   queue (`src/lib/reveal.ts`) starts blocks in reading order, and one CSS
-  rule (index.css, "scroll reveals") animates them.
+  rule (index.css, "scroll reveals") animates them. A page's load-in is the
+  same thing (the home hero and the 404 are reveals): don't write a page its
+  own entrance.
+- Page changes belong to `PageShell`: the old page fades out where it
+  stands, the window jumps unseen to the top (or, going back or forward, to
+  where that page was left), the new page fades in and its reveals play.
+  Nothing else scrolls or animates on a route change. `Link` starts a
+  page's chunk on hover, touch or focus, so the entrance plays on content.
+- Scroll-linked motion is CSS scroll timelines only (`.parallax` in
+  index.css, About's interests): no scroll listeners moving things, and it
+  sits still under reduced motion or without timeline support.
 - Content entrances start from `HIDDEN_OPACITY` (0.001), never 0: Chrome's
   LCP skips a paint at opacity 0, so a fade from 0 adds its whole glide to
   LCP. Invisible either way; exits may still end at 0.

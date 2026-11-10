@@ -47,8 +47,10 @@ const Footer = () => {
   const e = "/a";
 
   return (
-    <footer className="relative w-full border-t border-foreground/5 bg-background/5">
-      <div className="relative mx-auto max-w-7xl px-6 sm:px-8 py-12">
+    // the same gutters and column as the page above (RootLayout's <main>),
+    // so the footer's left edge is the page's
+    <footer className="relative w-full border-t border-border px-5 sm:px-6 md:px-8 lg:px-12">
+      <div className="relative mx-auto max-w-7xl py-12">
         {/* main content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* brand section */}
@@ -221,7 +223,7 @@ const Footer = () => {
                     aria-label={label}
                     data-brand={id}
                     className={cn(
-                      "group rounded-lg border border-foreground/10 bg-foreground/5 p-2.5 text-foreground/60 transition-colors duration-200 ease-out",
+                      "group rounded-lg border border-border bg-muted p-2.5 text-foreground/60 transition-colors duration-200 ease-out",
                       SOCIAL_BRAND_FILL,
                     )}
                   >

@@ -120,17 +120,19 @@
 
   /* motion — custom easing curves; these override Tailwind's built-in ease-*
      utilities, so every `ease-out` / `ease-in-out` class uses the intended curve.
-     Mirror in src/utils/transitions.ts.
+     Each one a script also needs has a const of the same name in
+     src/utils/transitions.ts, which says what each is for.
      --ease-out is intentionally a gentle easeOutCubic (NOT a front-loaded quint):
-     short hover/UI transitions must glide, not snap. Content reveals + the page
-     transition use the separate SMOOTH (expo) curve in JS. */
+     short hover/UI transitions must glide, not snap. */
   --ease-out: cubic-bezier(0.33, 1, 0.68, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  /* gentle ease-in-out (matches the JS REVEAL curve) for on-screen morphs that should
-     glide rather than snap — nav scroll-pill, link highlight, etc. */
+  /* symmetric ease-in-out for something on screen that goes from one state
+     to another and back — a pill opening and closing, a highlight moving */
   --ease-smooth: cubic-bezier(0.45, 0, 0.55, 1);
+  /* content arriving (scroll reveals, load-ins): from rest, half way there
+     in a third of the time, the rest a long settle */
+  --ease-reveal: cubic-bezier(0.3, 0, 0.2, 1);
   /* micro-interaction pop: slight overshoot for press-release (name-morpher
      active scale). Reserve for tiny deltas (2-3%) — bigger ones turn cartoonish. */
   --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -680,25 +682,32 @@
 /* ---------- scroll reveals ---------- */
 /* <Reveal> (src/components/Reveal.tsx): a block waits hidden a short way
    down until the queue in src/lib/reveal.ts lets it in, then fades and
-   rises into place on the glide curve, after the delay the queue handed
-   it. transform rather than
-   translate, so a block's own translate and scale utilities compose with
-   it instead of being overridden. */
+   rises into place, after the delay the queue handed it. The fade is done
+   before the rise is, so the block is readable while it is still settling
+   and nothing comes to rest in the frame it becomes solid. transform rather
+   than translate, so a block's own translate and scale utilities compose
+   with it instead of being overridden. */
 :root {
-  --reveal-rise: 32px;
-  --reveal-duration: 0.7s;
+  --reveal-rise: 16px;
+  --reveal-duration: 0.8s;
+  --reveal-fade: 0.6s;
 }
 
 [data-reveal] {
   transition:
-    opacity var(--reveal-duration) var(--ease-smooth) var(--reveal-delay, 0ms),
-    transform var(--reveal-duration) var(--ease-smooth) var(--reveal-delay, 0ms);
+    opacity var(--reveal-fade) var(--ease-reveal) var(--reveal-delay, 0ms),
+    transform var(--reveal-duration) var(--ease-reveal) var(--reveal-delay, 0ms);
 }
 
 /* 0.001, not 0: HIDDEN_OPACITY in transitions.ts says why */
 [data-reveal]:not([data-revealed]) {
   opacity: 0.001;
   transform: translateY(var(--reveal-rise));
+}
+
+/* a block the page opened below (reveal.ts) has nothing to arrive into */
+[data-reveal][data-revealed="past"] {
+  transition: none;
 }
 
 /* reduced motion: blocks still arrive in order, but only fade (the global
@@ -722,6 +731,48 @@
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* ---------- parallax ---------- */
+/* A picture hung deeper than its frame (About's interests). The image is
+   taller than the frame by twice --parallax-depth and drifts that far
+   against the scroll while the frame crosses the viewport, so it moves a
+   little slower than the page around it. The frame's own view timeline
+   drives it: no script, and none of it on the main thread. Where there are
+   no scroll timelines, or the reader asked for less motion, the image sits
+   still, centred in its frame. */
+.parallax {
+  --parallax-depth: clamp(1.5rem, 4vw, 3rem);
+  position: relative;
+  overflow: hidden;
+  view-timeline: --parallax block;
+}
+
+.parallax > img {
+  position: absolute;
+  inset: calc(var(--parallax-depth) * -1) 0;
+  width: 100%;
+  height: calc(100% + var(--parallax-depth) * 2);
+  object-fit: cover;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax > img {
+      animation: parallax-drift linear both;
+      animation-timeline: --parallax;
+      will-change: transform;
+    }
+  }
+}
+
+@keyframes parallax-drift {
+  from {
+    transform: translateY(calc(var(--parallax-depth) * -1));
+  }
+  to {
+    transform: translateY(var(--parallax-depth));
   }
 }
 

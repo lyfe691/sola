@@ -18,10 +18,8 @@ import {
 import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
 import { EASE_OUT } from "@/utils/transitions";
-import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
-import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { smoothScrollToTop } from "@/utils/scroll";
 import { useTranslation } from "@/lib/language-provider";
-import { useLocalePath } from "@/lib/locale-router";
 
 const SCROLL_THRESHOLD = 120;
 const TILE = 44;
@@ -83,8 +81,6 @@ function WaterFill() {
 }
 
 export default function ScrollToTop() {
-  // the page, not its URL: a language switch keeps the reader where they are
-  const { path: pathname } = useLocalePath();
   const [visible, setVisible] = useState(false);
   const t = useTranslation();
 
@@ -94,23 +90,13 @@ export default function ScrollToTop() {
   }, []);
   useLenis(onLenis);
 
-  const { active: codeViewActive } = useCodeView();
-  const codeViewRef = useRef(codeViewActive);
-  useEffect(() => {
-    codeViewRef.current = codeViewActive;
-  }, [codeViewActive]);
-
+  // PageShell places every page itself (at the top, or where a history
+  // entry was left), so the browser's own restoring would only fight it
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
   }, []);
-
-  useEffect(() => {
-    if (codeViewRef.current) return;
-    smoothScrollToTop();
-    return stopScrollToTop;
-  }, [pathname]);
 
   return (
     <AnimatePresence>
@@ -132,7 +118,7 @@ export default function ScrollToTop() {
             transition: { duration: 0.1, ease: EASE_OUT },
           }}
           transition={{ duration: 0.28, ease: EASE_OUT }}
-          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background/70 text-foreground/80 ring-1 ring-foreground/10 backdrop-blur-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
+          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background text-foreground/80 ring-1 ring-foreground/10 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
         >
           <WaterFill />
           <HugeiconsIcon

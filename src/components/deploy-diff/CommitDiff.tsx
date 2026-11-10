@@ -203,8 +203,8 @@ function FileSection({
         aria-controls={bodyId}
         onClick={onToggle}
         className={cn(
-          "sticky top-0 z-10 flex w-full items-center gap-2 bg-background/95 py-2 pl-5 pr-20 text-left font-mono text-xs backdrop-blur-sm transition-colors duration-150 sm:pl-8 sm:pr-24",
-          "can-hover:hover:bg-muted/70",
+          "sticky top-0 z-10 flex w-full items-center gap-2 bg-background py-2 pl-5 pr-20 text-left font-mono text-xs transition-colors duration-150 sm:pl-8 sm:pr-24",
+          "can-hover:hover:bg-muted",
           open && "border-b border-border/60",
         )}
       >

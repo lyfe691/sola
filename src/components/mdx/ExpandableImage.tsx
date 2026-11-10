@@ -104,7 +104,7 @@ function Thumbnail({
         // are the frame's, and a ring outside the button would be clipped
         radius
           ? "focus-visible:ring-inset"
-          : "rounded-xl bg-muted/20 shadow-(--prose-figure-lift)",
+          : "rounded-xl bg-muted shadow-(--prose-figure-lift)",
         "cursor-zoom-in outline-none select-none",
         // v4: scale uses the `scale` property — transition `scale`, not transform
         "transition-[scale] duration-200 ease-out",
@@ -143,7 +143,7 @@ function Thumbnail({
         className={cn(
           "pointer-events-none absolute right-3 bottom-3",
           "grid size-8 place-items-center rounded-full",
-          "bg-background/80 text-foreground shadow-sm backdrop-blur-md",
+          "bg-background text-foreground shadow-sm",
           "scale-90 opacity-0 transition-[opacity,scale] duration-200 ease-out",
           "can-hover:group-hover/image:scale-100 can-hover:group-hover/image:opacity-100",
           "group-focus-visible/image:scale-100 group-focus-visible/image:opacity-100",

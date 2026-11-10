@@ -11,13 +11,13 @@
  * whole and honest, this page's files first and open, the rest behind
  * their headers (CommitDiff); unmapped routes fall back to
  * the repo-wide latest commit. The only UI above it is the exit bubble,
- * a frosted circle tucked into the top-right corner.
+ * a circle tucked into the top-right corner.
  *
  * Loading is a terminal ritual, centered and full-size: the view types
  * `$ git show `, the caret blinks while the sha resolves, then the sha types
  * in — the fetch completing the command is the payoff. The finished command
- * holds a beat, is consumed the way a leaving page is (fade + scale + blur,
- * CONSUME_IN), and the commit settles in beneath as its output. The ritual
+ * holds a beat, fades the way a leaving page does, and the commit settles in
+ * beneath as its output. The ritual
  * always plays to completion; a cached response replays it rather than
  * cutting it short. Reduced motion skips straight to the content.
  */
@@ -39,7 +39,7 @@ import { MenuHint } from "@/components/menu-hint";
 import { cn } from "@/lib/utils";
 import { INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
-import { CONSUME_IN, EASE_EXPO, EASE_OUT, REVEAL } from "@/utils/transitions";
+import { EASE_EXPO, EASE_IN, EASE_OUT, REVEAL } from "@/utils/transitions";
 import { Caret } from "./caret";
 import { CommitDiff } from "./CommitDiff";
 import { useCodeView } from "./code-view-provider";
@@ -58,18 +58,13 @@ const TYPE_DELETE_MS = 20;
 const TYPE_START_DELAY_MS = 240;
 const COMMAND_HOLD_MS = 450;
 
-// The command enters quietly under the page transition; once finished it is
-// consumed the way a leaving page is (see pageTransitionVariants), and the
-// content reforms beneath on the site's reveal curve.
+// The command enters quietly under the page transition; once finished it
+// leaves the way a page does (pageTransitionVariants' exit), and the content
+// arrives beneath on the site's reveal curve.
 const commandPhase = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
-  exit: {
-    opacity: 0,
-    scale: 0.98,
-    filter: "blur(6px)",
-    transition: { duration: 0.28, ease: CONSUME_IN },
-  },
+  exit: { opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } },
 };
 
 // Ready content settles in as ONE block on the site's reveal curve — header
@@ -196,14 +191,13 @@ function GitHubLink({
  * ~4px down-left of the circle's center.
  *
  * Motion all happens on that same diagonal: it slides in from behind the
- * corner (in step with the page reform; hardware-accelerated transform
- * string, since shiki is busy on the main thread right then), hover peeks
- * it out 4px, press recoils it to 2px, and exit tucks it back away faster
- * than it entered.
+ * corner (as the view fades in; hardware-accelerated transform string,
+ * since shiki is busy on the main thread right then), hover peeks it out
+ * 4px, press recoils it to 2px, and exit tucks it back away faster than it
+ * entered.
  *
- * Portaled to <body>: the page transition animates transform/filter on an
- * ancestor, which turns `fixed` into `absolute` — so this wrapper carries
- * both the fixed position and its own motion.
+ * Portaled to <body>, so it keeps that motion to itself: inside the page it
+ * would fade with it, and a bubble that fades has not tucked away.
  */
 function ExitBubble({
   active,
@@ -232,7 +226,7 @@ function ExitBubble({
       transition={
         active
           ? { duration: 0.5, ease: EASE_EXPO }
-          : { duration: 0.3, ease: CONSUME_IN }
+          : { duration: 0.3, ease: EASE_IN }
       }
       inert={!active}
       className={cn(
@@ -247,7 +241,7 @@ function ExitBubble({
               ref={buttonRef}
               type="button"
               onClick={onExit}
-              className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background/70 shadow-lg shadow-black/5 outline-none backdrop-blur-2xl transition-[translate,background-color] duration-200 ease-out can-hover:hover:-translate-x-1 can-hover:hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"
+              className="flex size-16 items-center justify-center rounded-full border border-foreground/10 bg-background shadow-lg shadow-black/5 outline-none transition-[translate,background-color] duration-200 ease-out can-hover:hover:-translate-x-1 can-hover:hover:translate-y-1 hover:bg-muted active:-translate-x-0.5 active:translate-y-0.5 focus-visible:ring-2 focus-visible:ring-ring/50"
             />
           }
         >

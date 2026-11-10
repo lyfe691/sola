@@ -142,8 +142,8 @@ const TICK_NEAR = [TICK_MAX, 20, 15];
  * one is longest. The ticks share one warm tooltip, so scrubbing down the
  * rail reads as one motion instead of a tooltip re-opening per tick.
  *
- * Portaled to <body>: the page-transition ancestor's transform demotes
- * `fixed`. useIsPresent still sees that ancestor, so the rail leaves with
+ * Portaled to <body>, so it slides on its own rather than fading with the
+ * page. useIsPresent still sees the page's shell, so the rail leaves with
  * the page instead of lingering over the next one. Pointer devices only:
  * the labels live on hover, and a touch screen has none.
  */

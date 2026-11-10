@@ -59,7 +59,7 @@ export function SkillTile({
     <span
       aria-hidden="true"
       className={cn(
-        "flex size-10 shrink-0 items-center justify-center rounded-xl bg-muted/60 ring-1 ring-foreground/5 ring-inset",
+        "flex size-10 shrink-0 items-center justify-center rounded-xl bg-muted ring-1 ring-foreground/5 ring-inset",
         className,
       )}
     >
@@ -116,7 +116,7 @@ function ProjectItem({
   const t = useTranslation();
   const { title, tagline } = t.projects.list[project.i18nKey];
   const className =
-    "flex min-w-0 flex-col gap-0.5 rounded-xl px-2.5 py-2 transition-colors can-hover:hover:bg-muted/60";
+    "flex min-w-0 flex-col gap-0.5 rounded-xl px-2.5 py-2 transition-colors can-hover:hover:bg-muted";
   const body = (
     <>
       <span className="flex min-w-0 items-baseline gap-3">

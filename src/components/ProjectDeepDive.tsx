@@ -19,13 +19,7 @@
  * Hero sequence: painted art settles → title FoldText → subtitle FoldText.
  */
 
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import {
   ArrowLeft02Icon,
   CodeXmlIcon,
@@ -54,7 +48,6 @@ import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useDeepDiveBarPinned } from "@/hooks/use-deep-dive-bar-pinned";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
-import { snapScrollTo } from "@/utils/scroll";
 import type { ProjectArt } from "@/config/projects";
 import { PaintedCover } from "@/components/painted-cover/PaintedCover";
 import { Link } from "@/lib/locale-router";
@@ -336,12 +329,6 @@ export function ProjectDeepDive({
 }: ProjectDeepDiveProps) {
   const docked = useDeepDiveBarPinned();
 
-  useLayoutEffect(() => {
-    snapScrollTo(0);
-  }, []);
-
-  // no page-shell opacity fade — it fought the painted art + FoldText GPU
-  // work and read as a mid-sequence hitch
   return (
     <div className="min-h-screen bg-background p-4 sm:p-6 lg:p-8">
       <meta name="description" content={description} />
