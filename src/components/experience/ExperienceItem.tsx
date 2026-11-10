@@ -58,7 +58,10 @@ const MetaItem = ({
 /**
  * One logo-led experience row. The role + company sit beside the logo, with a
  * single icon-led meta row beneath (type · dates · location · mode) that wraps
- * cleanly on small screens. On hover the whole row lifts onto a card: the
+ * cleanly on small screens. On a wide page the dates leave that row and stand
+ * at the entry's right edge, the way a résumé sets them: the entries then
+ * span the page instead of hugging its left half, and the dates read down
+ * one column. On hover the whole row lifts onto a card: the
  * card surface rather than a chip's fill, since the row is something to read,
  * not something to press.
  */
@@ -81,30 +84,42 @@ const ExperienceItem = ({
       />
 
       <div className="min-w-0 flex-1">
-        <h3 className="text-base font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary sm:text-lg">
-          {entry.role}
-        </h3>
+        <div className="flex items-start justify-between gap-8">
+          <div className="min-w-0">
+            <h3 className="text-base font-semibold tracking-tight text-foreground transition-colors duration-200 group-hover:text-primary sm:text-lg">
+              {entry.role}
+            </h3>
 
-        <LinkPreview
-          href={entry.companyLink}
-          aria-label={`${entry.company} (opens in a new tab)`}
-          className="group mt-1 flex w-fit items-center gap-1 text-sm text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
-        >
-          <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
-            {entry.company}
-          </span>
-          <HugeiconsIcon
-            icon={ArrowUpRight01Icon}
-            strokeWidth={2}
-            aria-hidden="true"
-            className="size-3.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          />
-        </LinkPreview>
+            <LinkPreview
+              href={entry.companyLink}
+              aria-label={`${entry.company} (opens in a new tab)`}
+              className="group mt-1 flex w-fit items-center gap-1 text-sm text-foreground/50 hover:text-primary transition-colors duration-300 ease-out"
+            >
+              <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
+                {entry.company}
+              </span>
+              <HugeiconsIcon
+                icon={ArrowUpRight01Icon}
+                strokeWidth={2}
+                aria-hidden="true"
+                className="size-3.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
+            </LinkPreview>
+          </div>
+
+          {/* the dates, set like the project cards' readout */}
+          <p className="hidden shrink-0 pt-1 text-right font-mono text-2xs leading-4 font-bold tracking-label whitespace-nowrap text-foreground uppercase lg:block">
+            {entry.period}
+            <span className="mt-0.5 block font-medium text-muted-foreground">
+              {duration}
+            </span>
+          </p>
+        </div>
 
         {/* meta — icon-led, wraps as whole units on small screens */}
         <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
           {isWork && <MetaItem icon={BriefcaseGlyph} label={employmentLabel} />}
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono lg:hidden">
             <HugeiconsIcon
               icon={CalendarDaysIcon}
               strokeWidth={2}
