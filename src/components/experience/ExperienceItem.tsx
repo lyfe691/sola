@@ -58,7 +58,9 @@ const MetaItem = ({
 /**
  * One logo-led experience row. The role + company sit beside the logo, with a
  * single icon-led meta row beneath (type · dates · location · mode) that wraps
- * cleanly on small screens. The whole row tints onto a muted panel on hover.
+ * cleanly on small screens. On hover the whole row lifts onto a card: the
+ * card surface rather than a chip's fill, since the row is something to read,
+ * not something to press.
  */
 const ExperienceItem = ({
   entry,
@@ -71,7 +73,7 @@ const ExperienceItem = ({
     LOCATION_TYPE_ICON[entry.locationType] ?? LOCATION_TYPE_ICON.onsite;
 
   return (
-    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-muted sm:-mx-4 sm:gap-5 sm:px-4">
+    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-card sm:-mx-4 sm:gap-5 sm:px-4">
       <CompanyLogo
         company={entry.company}
         logo={entry.logo}
