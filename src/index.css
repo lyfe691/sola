@@ -705,6 +705,11 @@
   transform: translateY(var(--reveal-rise));
 }
 
+/* a block the page opened below (reveal.ts) has nothing to arrive into */
+[data-reveal][data-revealed="past"] {
+  transition: none;
+}
+
 /* reduced motion: blocks still arrive in order, but only fade (the global
    rule above makes that fade near-instant) */
 @media (prefers-reduced-motion: reduce) {

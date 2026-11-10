@@ -17,8 +17,11 @@
 
 import { REVEAL_MAX_LAG, REVEAL_STAGGER } from "@/utils/transitions";
 
-/** called once, when the block is let in, with its start delay (ms) */
-type Release = (delay: number) => void;
+/**
+ * called once, when the block is let in, with its start delay (ms); or with
+ * null for a block the reader is already past, which is shown outright
+ */
+type Release = (delay: number | null) => void;
 
 // A block's top has to reach 90% of the viewport height, so the motion
 // plays where the eye already is rather than under the bottom edge.
@@ -52,6 +55,18 @@ export function schedule(count: number, now: number, nextStart: number) {
 }
 
 function letIn(entries: IntersectionObserverEntry[]) {
+  // A page can open part-way down (back or forward, the code view handing
+  // the page back). What is already above the window then has nothing to
+  // arrive into, and would otherwise sit hidden until the reader scrolled up
+  // and watched it rise the wrong way: it is simply there.
+  for (const entry of entries) {
+    if (entry.isIntersecting || entry.boundingClientRect.bottom >= 0) continue;
+    const release = waiting.get(entry.target);
+    waiting.delete(entry.target);
+    observer?.unobserve(entry.target);
+    release?.(null);
+  }
+
   const crossing = entries
     .filter((entry) => entry.isIntersecting && waiting.has(entry.target))
     .map((entry) => entry.target)
@@ -74,7 +89,8 @@ function letIn(entries: IntersectionObserverEntry[]) {
 
 /**
  * Hold `target` until it scrolls into view, then call `release` with the
- * delay its reveal should start after. Returns the cleanup for an effect.
+ * delay its reveal should start after (null: no reveal, it is already
+ * behind the reader). Returns the cleanup for an effect.
  */
 export function watchReveal(target: Element, release: Release) {
   observer ??= new IntersectionObserver(letIn, { rootMargin: TRIGGER_LINE });

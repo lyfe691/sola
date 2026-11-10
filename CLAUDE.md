@@ -139,10 +139,10 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   same thing (the home hero and the 404 are reveals): don't write a page its
   own entrance.
 - Page changes belong to `PageShell`: the old page fades out where it
-  stands, the window jumps to the top unseen, the new page fades in and its
-  reveals play. Nothing else scrolls or animates on a route change. `Link`
-  starts a page's chunk on hover, touch or focus, so the entrance plays on
-  content.
+  stands, the window jumps unseen to the top (or, going back or forward, to
+  where that page was left), the new page fades in and its reveals play.
+  Nothing else scrolls or animates on a route change. `Link` starts a
+  page's chunk on hover, touch or focus, so the entrance plays on content.
 - Scroll-linked motion is CSS scroll timelines only (`.parallax` in
   index.css, About's interests): no scroll listeners moving things, and it
   sits still under reduced motion or without timeline support.

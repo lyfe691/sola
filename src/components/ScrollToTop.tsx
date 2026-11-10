@@ -90,8 +90,8 @@ export default function ScrollToTop() {
   }, []);
   useLenis(onLenis);
 
-  // a page change starts the next page at the top (PageShell), so the
-  // browser's own restoring would only fight it
+  // PageShell places every page itself (at the top, or where a history
+  // entry was left), so the browser's own restoring would only fight it
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
