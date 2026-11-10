@@ -496,8 +496,6 @@ export const de = {
     projectCount: "{count} Projekte",
     projectCountOne: "1 Projekt",
     everyProject: "Jedes Projekt",
-    mostUsed: "Am häufigsten genutzt",
-    mostUsedNote: "Gezählt über die {count} Projekte auf dieser Website.",
   },
   notFound: {
     backHome: "Zurück zur Startseite",

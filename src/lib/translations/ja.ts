@@ -488,8 +488,6 @@ export const ja = {
     projectCount: "{count}件のプロジェクト",
     projectCountOne: "1件のプロジェクト",
     everyProject: "すべてのプロジェクト",
-    mostUsed: "よく使うもの",
-    mostUsedNote: "このサイトの{count}件のプロジェクトから集計。",
   },
   notFound: {
     backHome: "ホームに戻る",

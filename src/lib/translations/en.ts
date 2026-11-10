@@ -490,8 +490,6 @@ export const en = {
     projectCount: "{count} projects",
     projectCountOne: "1 project",
     everyProject: "Every project",
-    mostUsed: "Most used",
-    mostUsedNote: "Counted across the {count} projects on this site.",
   },
   notFound: {
     backHome: "Go back home",

@@ -490,8 +490,6 @@ export const ko = {
     projectCount: "프로젝트 {count}개",
     projectCountOne: "프로젝트 1개",
     everyProject: "모든 프로젝트",
-    mostUsed: "가장 많이 쓴 기술",
-    mostUsedNote: "이 사이트의 프로젝트 {count}개를 기준으로 집계했습니다.",
   },
   notFound: {
     backHome: "홈으로 돌아가기",
