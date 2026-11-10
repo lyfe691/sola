@@ -322,28 +322,36 @@ const About = () => {
         <Reveal>
           <SectionHeading>{about.interests.title}</SectionHeading>
         </Reveal>
-        <ul className="flex flex-col">
-          {INTERESTS.map(({ key, image }) => {
+        {/* each interest is a window onto its picture: the image hangs deeper
+            than its frame and drifts against the scroll (index.css,
+            "parallax"), and the rows trade sides on the way down */}
+        <ul className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
+          {INTERESTS.map(({ key, image }, index) => {
             const item = about.interests[key];
             return (
               <Reveal
                 key={key}
                 as="li"
-                className="grid grid-cols-1 gap-5 py-8 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-10"
+                className="grid grid-cols-1 items-center gap-5 md:grid-cols-12 md:gap-10 lg:gap-14"
               >
-                <MediaFrame className="sm:col-span-4">
-                  <img
-                    src={image}
-                    alt=""
-                    loading="lazy"
-                    className={cn(
-                      "aspect-[4/3] object-cover sm:aspect-[5/4]",
-                      MEDIA_INNER,
-                    )}
-                  />
+                <MediaFrame
+                  className={cn(
+                    "md:col-span-7",
+                    index % 2 === 1 && "md:order-last",
+                  )}
+                >
+                  <div className={cn("parallax aspect-video", MEDIA_INNER)}>
+                    <img src={image} alt="" loading="lazy" />
+                  </div>
                 </MediaFrame>
-                <div className="flex flex-col justify-center gap-2 sm:col-span-8">
-                  <h3 className="text-base font-medium sm:text-lg">
+                <div className="flex flex-col gap-2.5 md:col-span-5">
+                  <span
+                    aria-hidden
+                    className="font-mono text-2xs font-bold tracking-label text-muted-foreground"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">
                     {item.title}
                   </h3>
                   <p className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-sm-plus">

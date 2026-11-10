@@ -729,6 +729,48 @@
   }
 }
 
+/* ---------- parallax ---------- */
+/* A picture hung deeper than its frame (About's interests). The image is
+   taller than the frame by twice --parallax-depth and drifts that far
+   against the scroll while the frame crosses the viewport, so it moves a
+   little slower than the page around it. The frame's own view timeline
+   drives it: no script, and none of it on the main thread. Where there are
+   no scroll timelines, or the reader asked for less motion, the image sits
+   still, centred in its frame. */
+.parallax {
+  --parallax-depth: clamp(1.5rem, 4vw, 3rem);
+  position: relative;
+  overflow: hidden;
+  view-timeline: --parallax block;
+}
+
+.parallax > img {
+  position: absolute;
+  inset: calc(var(--parallax-depth) * -1) 0;
+  width: 100%;
+  height: calc(100% + var(--parallax-depth) * 2);
+  object-fit: cover;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .parallax > img {
+      animation: parallax-drift linear both;
+      animation-timeline: --parallax;
+      will-change: transform;
+    }
+  }
+}
+
+@keyframes parallax-drift {
+  from {
+    transform: translateY(calc(var(--parallax-depth) * -1));
+  }
+  to {
+    transform: translateY(var(--parallax-depth));
+  }
+}
+
 /* ---------- theme transition (view transitions api) ---------- */
 /* The old frame holds still and the next theme arrives over it (skipped
    under reduced motion in theme-provider). pointer-events: none so clicks

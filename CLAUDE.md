@@ -143,6 +143,9 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   reveals play. Nothing else scrolls or animates on a route change. `Link`
   starts a page's chunk on hover, touch or focus, so the entrance plays on
   content.
+- Scroll-linked motion is CSS scroll timelines only (`.parallax` in
+  index.css, About's interests): no scroll listeners moving things, and it
+  sits still under reduced motion or without timeline support.
 - Content entrances start from `HIDDEN_OPACITY` (0.001), never 0: Chrome's
   LCP skips a paint at opacity 0, so a fade from 0 adds its whole glide to
   LCP. Invisible either way; exits may still end at 0.
