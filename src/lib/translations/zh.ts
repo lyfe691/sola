@@ -480,6 +480,8 @@ export const zh = {
     projectCount: "{count} 个项目",
     projectCountOne: "1 个项目",
     everyProject: "所有项目",
+    mostUsed: "最常用",
+    mostUsedNote: "按本站的{count}个项目统计。",
   },
   notFound: {
     backHome: "返回首页",

@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState, type ReactNode } from "react";
+import { useState, type CSSProperties, type ReactNode } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { useTranslation } from "@/lib/language-provider";
@@ -18,6 +18,7 @@ import {
   type Skill,
   type SkillGroup,
 } from "@/config/skills";
+import { PROJECTS } from "@/config/projects";
 import { Reveal } from "@/components/Reveal";
 import {
   SkillCards,
@@ -29,12 +30,14 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { countLabel } from "@/lib/plural";
 import { cn } from "@/lib/utils";
 
+// the level word steps down in tone with the level, but never below what
+// small type needs to stay readable on the page
 const LEVEL_TONE: Record<Proficiency, string> = {
-  5: "text-foreground/80",
-  4: "text-foreground/65",
-  3: "text-foreground/50",
-  2: "text-foreground/40",
-  1: "text-foreground/35",
+  5: "text-foreground/90",
+  4: "text-foreground/78",
+  3: "text-foreground/66",
+  2: "text-foreground/56",
+  1: "text-foreground/50",
 };
 
 const ROW =
@@ -48,11 +51,14 @@ const PRESSABLE =
 function SkillRowBody({
   skill,
   usage,
-  openable,
+  tappable,
 }: {
   skill: Skill;
   usage: string | null;
-  openable: boolean;
+  /** a phone row opens the drawer: it carries the chevron that says so. A
+      desktop row only shows its card on hover, and a chevron on some rows
+      and not others read as a ragged column of arrows going nowhere */
+  tappable: boolean;
 }) {
   const t = useTranslation().skills;
 
@@ -70,12 +76,12 @@ function SkillRowBody({
           {usage ? ` · ${usage}` : null}
         </span>
       </span>
-      {openable ? (
+      {tappable ? (
         <HugeiconsIcon
           icon={ArrowRight01Icon}
           strokeWidth={2}
           aria-hidden="true"
-          className="size-4 shrink-0 text-muted-foreground/50 transition-[translate,color] duration-200 ease-out group-data-active:text-foreground can-hover:group-hover:translate-x-0.5 can-hover:group-hover:text-foreground"
+          className="size-4 shrink-0 text-muted-foreground/50"
         />
       ) : null}
     </>
@@ -100,7 +106,11 @@ function SkillRow({
       ? countLabel(count, t.projectCountOne, t.projectCount)
       : null;
   const body = (
-    <SkillRowBody skill={skill} usage={usage} openable={count > 0} />
+    <SkillRowBody
+      skill={skill}
+      usage={usage}
+      tappable={isMobile && count > 0}
+    />
   );
 
   let row: ReactNode;
@@ -131,6 +141,71 @@ function SkillRow({
   return <li className="min-w-0">{row}</li>;
 }
 
+const MOST_USED_COUNT = 8;
+
+// every skill some project uses, most used first. Skills in every project
+// (git) are left out: a bar that is always full says nothing
+const MOST_USED = SKILL_GROUPS.flatMap((group) => group.skills)
+  .filter((skill) => !EVERY_PROJECT.has(skill.name))
+  .map((skill) => ({ skill, count: projectsUsing(skill.name).length }))
+  .filter(({ count }) => count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, MOST_USED_COUNT);
+
+/**
+ * What the page opens on: the skills the projects on this site use most,
+ * ranked. It is counted from the projects themselves, so it is the one part
+ * of the page that is evidence rather than self-assessment, and it stays
+ * true as projects are added. Bars are scaled to the longest.
+ */
+function MostUsed() {
+  const t = useTranslation().skills;
+  const longest = MOST_USED[0]?.count ?? 1;
+
+  return (
+    <Reveal
+      as="section"
+      className="mb-12 rounded-4xl bg-card p-6 shadow-md ring-1 ring-foreground/5 sm:p-8 dark:ring-foreground/10"
+    >
+      <div className="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+        <h2 className="text-lg font-semibold">{t.mostUsed}</h2>
+        <p className="text-sm text-muted-foreground">
+          {t.mostUsedNote.replace("{count}", String(PROJECTS.length))}
+        </p>
+      </div>
+      <ol className="grid grid-flow-row grid-cols-1 gap-x-12 gap-y-4 md:grid-flow-col md:grid-cols-2 md:grid-rows-4">
+        {MOST_USED.map(({ skill, count }) => (
+          <li key={skill.name} className="flex min-w-0 items-center gap-3">
+            <SkillTile skill={skill} className="size-9 rounded-lg" />
+            <span className="w-28 shrink-0 truncate text-sm-plus font-medium sm:w-32">
+              {skill.name}
+            </span>
+            <span
+              aria-hidden="true"
+              className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-muted"
+            >
+              <span
+                className="block h-full w-(--share) rounded-full bg-primary"
+                style={
+                  {
+                    "--share": `${Math.round((count / longest) * 100)}%`,
+                  } as CSSProperties
+                }
+              />
+            </span>
+            <span className="w-6 shrink-0 text-right font-mono text-xs tabular-nums text-muted-foreground">
+              <span className="sr-only">
+                {countLabel(count, t.projectCountOne, t.projectCount)}
+              </span>
+              <span aria-hidden="true">{count}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+    </Reveal>
+  );
+}
+
 function SkillSection({
   group,
   title,
@@ -143,7 +218,7 @@ function SkillSection({
   onOpen: (skill: Skill) => void;
 }) {
   return (
-    <Reveal as="section" className="min-w-0">
+    <Reveal as="section" className="mb-12 min-w-0 break-inside-avoid">
       <h2 className="mb-3 flex items-baseline gap-3 text-lg font-semibold">
         {title}
         <span className="font-mono text-xs font-normal tabular-nums text-muted-foreground">
@@ -188,8 +263,13 @@ const Skills = () => {
         {t.skills.subtitle}
       </Reveal>
 
+      <MostUsed />
+
       <SkillCards enabled={!isMobile}>
-        <div className="grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2 xl:grid-cols-3">
+        {/* columns, not a grid: the groups differ in length, and a grid
+            row is as tall as its longest, which left holes under the short
+            ones. Flowed down balanced columns they pack */}
+        <div className="columns-1 gap-x-10 md:columns-2 xl:columns-3">
           {SKILL_GROUPS.map((group) => (
             <SkillSection
               key={group.id}
