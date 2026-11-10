@@ -101,11 +101,10 @@ export const en = {
       section: "Some backgrounds look significantly better in dark mode.",
     },
     callout: {
-      background: {
-        title: "Make it yours",
-        content:
-          "I picked {background} with the {theme} theme — open this menu to explore more.",
-      },
+      title: "Make it yours",
+      content:
+        "{themes} themes and {backgrounds} animated backgrounds, all in this menu.",
+      open: "Take a look",
       done: "Got it",
     },
     none: "None",

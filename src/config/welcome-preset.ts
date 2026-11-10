@@ -6,23 +6,34 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { BACKGROUNDS, isBackgroundId } from "@/components/backgrounds/registry";
-import { ALL_THEME_VALUES, THEMES, type Theme } from "@/config/themes";
+import {
+  isBackgroundId,
+  NONE_BACKGROUND,
+} from "@/components/backgrounds/registry";
+import { ALL_THEME_VALUES, type Theme } from "@/config/themes";
 
-/** Shown until the user dismisses the theme-menu callout. */
+/** Set once the visitor dismisses the welcome callout. */
 export const CALLOUT_STORAGE_KEY = "sola-theme-callout-v1";
 
-/** First-visit appearance defaults — applied while the callout is undismissed. */
-export const WELCOME_PRESET = {
-  theme: "system" as Theme,
-  background: "cloud-atlas",
-} as const;
+/**
+ * How the site looks on a first visit, until the visitor chooses for
+ * themselves: their system's light or dark, and a plain page. The
+ * backgrounds are something to find in the menu (the welcome callout points
+ * at it), not something every visitor is handed.
+ */
+export const WELCOME_PRESET: { theme: Theme; background: string } = {
+  theme: "system",
+  background: NONE_BACKGROUND,
+};
 
 if (!ALL_THEME_VALUES.includes(WELCOME_PRESET.theme)) {
   throw new Error(`Invalid welcome preset theme: ${WELCOME_PRESET.theme}`);
 }
 
-if (!isBackgroundId(WELCOME_PRESET.background)) {
+if (
+  WELCOME_PRESET.background !== NONE_BACKGROUND &&
+  !isBackgroundId(WELCOME_PRESET.background)
+) {
   throw new Error(
     `Invalid welcome preset background: ${WELCOME_PRESET.background}`,
   );
@@ -34,15 +45,4 @@ export const shouldApplyWelcomePreset = (): boolean => {
   } catch {
     return false;
   }
-};
-
-export const getWelcomePresetLabels = () => {
-  const themeLabel =
-    THEMES.find((t) => t.value === WELCOME_PRESET.theme)?.label ??
-    WELCOME_PRESET.theme;
-  const backgroundLabel =
-    BACKGROUNDS.find((b) => b.id === WELCOME_PRESET.background)?.label ??
-    WELCOME_PRESET.background;
-
-  return { themeLabel, backgroundLabel };
 };

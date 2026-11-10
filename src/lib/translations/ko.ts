@@ -101,11 +101,10 @@ export const ko = {
       section: "일부 배경은 어두운 모드에서 훨씬 더 좋아 보입니다.",
     },
     callout: {
-      background: {
-        title: "당신의 것으로 만드세요",
-        content:
-          "저는 {theme} 테마로 {background}를 선택했습니다. 이 메뉴를 열어 더 자세히 살펴보세요.",
-      },
+      title: "당신의 것으로 만드세요",
+      content:
+        "테마 {themes}가지와 애니메이션 배경 {backgrounds}가지를 이 메뉴에서 고를 수 있습니다.",
+      open: "살펴보기",
       done: "알았어요",
     },
     none: "없음",
