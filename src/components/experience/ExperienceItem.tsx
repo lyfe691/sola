@@ -61,9 +61,7 @@ const MetaItem = ({
  * cleanly on small screens. On a wide page the dates leave that row and stand
  * at the entry's right edge, the way a résumé sets them: the entries then
  * span the page instead of hugging its left half, and the dates read down
- * one column. On hover the whole row lifts onto a card: the
- * card surface rather than a chip's fill, since the row is something to read,
- * not something to press.
+ * one column. The section's hover wash rests on the row under the pointer.
  */
 const ExperienceItem = ({
   entry,
@@ -76,7 +74,10 @@ const ExperienceItem = ({
     LOCATION_TYPE_ICON[entry.locationType] ?? LOCATION_TYPE_ICON.onsite;
 
   return (
-    <article className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 transition-colors duration-200 hover:bg-card sm:-mx-4 sm:gap-5 sm:px-4">
+    <article
+      data-glide=""
+      className="group relative -mx-3 flex gap-4 rounded-2xl px-3 py-6 sm:-mx-4 sm:gap-5 sm:px-4"
+    >
       <CompanyLogo
         company={entry.company}
         logo={entry.logo}

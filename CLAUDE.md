@@ -115,6 +115,10 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   background plays behind every page, and a see-through surface lets it
   through its text. Alpha stays for hairlines, shadows, ink, and scrims over
   media or behind a dialog.
+- A list's row hover is one wash for the whole list (`<HoverGlide>`, rows
+  marked `data-glide`): a faint tint that glides from row to row. It is the
+  one fill that is not a whole token, because a solid row flashing on and
+  off over a background was the loudest thing on the page.
 - A first visit is plain: system theme, no background
   (`src/config/welcome-preset.ts`). A background is something the visitor
   picks, and on every page but home it steps back behind a veil of the page
