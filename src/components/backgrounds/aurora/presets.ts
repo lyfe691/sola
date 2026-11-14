@@ -10,26 +10,10 @@
  * (`<background>/presets.ts` + a `get<Background>Preset(theme)` helper).
  */
 
-import { type Theme } from "@/config/themes";
+import { type Theme, getThemeType } from "@/config/themes";
 import { resolveThemePreset } from "@/components/backgrounds/preset-utils";
 
-type BlendMode =
-  | "normal"
-  | "multiply"
-  | "screen"
-  | "overlay"
-  | "darken"
-  | "lighten"
-  | "color-dodge"
-  | "color-burn"
-  | "hard-light"
-  | "soft-light"
-  | "difference"
-  | "exclusion"
-  | "hue"
-  | "saturation"
-  | "color"
-  | "luminosity";
+type BlendMode = "soft-light" | "screen";
 
 export type AuroraPreset = {
   colorStops: [string, string, string];
@@ -37,11 +21,7 @@ export type AuroraPreset = {
   intensity: number; // overall brightness
   blend: number; // band width
   scale: number; // noise frequency
-  feather: number; // edge softness
-  alphaGamma: number; // alpha curve (higher = softer)
-  saturation: number; // color saturation boost
-  minAlpha: number; // baseline alpha floor
-  base: number; // vertical base position of the wave (0 bottom .. 1 top)
+  height: number; // how far up the page the glow reaches (0 bottom .. 1 top)
 };
 
 /** aurora presets */
@@ -52,11 +32,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.95,
     blend: 0.62,
     scale: 0.82,
-    feather: 0.48,
-    alphaGamma: 1.02,
-    saturation: 1.18,
-    minAlpha: 0.34,
-    base: 0.28,
+    height: 0.48,
   },
   dark: {
     colorStops: ["#A8CCFF", "#C2E0FF", "#DCF2FF"],
@@ -64,11 +40,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.62,
     blend: 0.58,
     scale: 0.9,
-    feather: 0.56,
-    alphaGamma: 1.18,
-    saturation: 1.06,
-    minAlpha: 0.06,
-    base: 0.26,
+    height: 0.46,
   },
   life: {
     // leaf green into solar gold
@@ -77,11 +49,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.88,
     blend: 0.6,
     scale: 0.9,
-    feather: 0.46,
-    alphaGamma: 1.04,
-    saturation: 1.14,
-    minAlpha: 0.3,
-    base: 0.27,
+    height: 0.47,
   },
   sakura: {
     // blossom pinks on washi
@@ -90,11 +58,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.88,
     blend: 0.6,
     scale: 0.9,
-    feather: 0.46,
-    alphaGamma: 1.04,
-    saturation: 1.14,
-    minAlpha: 0.3,
-    base: 0.27,
+    height: 0.47,
   },
   glacier: {
     // meltwater teal into frost
@@ -103,11 +67,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.88,
     blend: 0.6,
     scale: 0.9,
-    feather: 0.46,
-    alphaGamma: 1.04,
-    saturation: 1.14,
-    minAlpha: 0.3,
-    base: 0.27,
+    height: 0.47,
   },
   dune: {
     // terracotta into warm sand
@@ -116,11 +76,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.88,
     blend: 0.6,
     scale: 0.9,
-    feather: 0.46,
-    alphaGamma: 1.04,
-    saturation: 1.14,
-    minAlpha: 0.3,
-    base: 0.27,
+    height: 0.47,
   },
   cyber: {
     // neon signage: cyan into magenta; the acid yellow stays on the UI
@@ -129,11 +85,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.84,
     blend: 0.56,
     scale: 1.05,
-    feather: 0.24,
-    alphaGamma: 1.14,
-    saturation: 1.22,
-    minAlpha: 0.0,
-    base: 0.22,
+    height: 0.42,
   },
   forest: {
     // moss light with a firefly glint
@@ -142,11 +94,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.62,
     blend: 0.54,
     scale: 0.94,
-    feather: 0.44,
-    alphaGamma: 1.14,
-    saturation: 1.08,
-    minAlpha: 0.0,
-    base: 0.25,
+    height: 0.45,
   },
   amethyst: {
     // violet into orchid
@@ -155,11 +103,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.62,
     blend: 0.54,
     scale: 0.94,
-    feather: 0.44,
-    alphaGamma: 1.14,
-    saturation: 1.08,
-    minAlpha: 0.0,
-    base: 0.25,
+    height: 0.45,
   },
   ember: {
     // coals into flame
@@ -168,11 +112,7 @@ export const AURORA_PRESETS: Record<Exclude<Theme, "system">, AuroraPreset> = {
     intensity: 0.62,
     blend: 0.54,
     scale: 0.94,
-    feather: 0.44,
-    alphaGamma: 1.14,
-    saturation: 1.08,
-    minAlpha: 0.0,
-    base: 0.25,
+    height: 0.45,
   },
 };
 
@@ -185,3 +125,6 @@ export const AURORA_THEME_CLASS_KEYS = Object.keys(AURORA_PRESETS) as Exclude<
 /** resolve the preset for a theme (maps system -> light/dark) */
 export const getAuroraPreset = (theme: Theme): AuroraPreset =>
   resolveThemePreset(AURORA_PRESETS, theme);
+
+export const isAuroraLightTheme = (theme: Theme): boolean =>
+  getThemeType(theme) === "light";

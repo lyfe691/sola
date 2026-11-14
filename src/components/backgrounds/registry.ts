@@ -33,7 +33,7 @@ export const BACKGROUNDS: BackgroundDef[] = [
   {
     id: "aurora",
     label: "Aurora",
-    component: lazy(() => import("./aurora/Aurora")),
+    component: lazy(() => import("./aurora/AuroraBackground")),
   },
   {
     id: "side-rays",
