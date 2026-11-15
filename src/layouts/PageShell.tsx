@@ -142,8 +142,6 @@ const PageShell = ({ children }: { children: ReactNode }) => {
       (page) => page !== CODE_VIEW && resolveLayout(page) === "app",
     );
     changePage(() => setShown(asked.current), {
-      from: shown.id,
-      to: id,
       loaded: id === CODE_VIEW ? loadCodeView() : preloadRoute(id),
       framed,
       shell: shell.current,

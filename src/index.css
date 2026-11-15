@@ -888,6 +888,48 @@
   --page-clear: 240ms;
 }
 
+/* What page-change.ts puts on the root for the pictures. Registered so they
+   do not inherit: an inherited property set on the root restyles every
+   element of the page, three times a change. The pictures ask for them. */
+@property --page-bar {
+  syntax: "*";
+  inherits: false;
+}
+@property --page-title-from-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --page-title-from-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --page-title-to-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --page-title-to-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --page-title-scale {
+  syntax: "*";
+  inherits: false;
+}
+
+::view-transition,
+::view-transition-group(page),
+::view-transition-image-pair(page),
+::view-transition-old(page) {
+  --page-bar: inherit;
+}
+
+::view-transition,
+::view-transition-group(page-title) {
+  --page-title-to-x: inherit;
+  --page-title-to-y: inherit;
+  --page-title-scale: inherit;
+}
+
 :root[data-page-change="leave"] {
   view-transition-name: page;
 }
@@ -911,6 +953,19 @@
   to {
     opacity: 0;
   }
+}
+
+/* The page under the picture, once photographed. Visibility is inherited,
+   so anything on it that transitions every property (a badge, a switch)
+   would carry the change over its own duration and outstay the rest. */
+[data-page-left] {
+  visibility: hidden;
+}
+
+[data-page-left] *,
+[data-page-left] *::before,
+[data-page-left] *::after {
+  transition: none !important;
 }
 
 /* The page that arrives: whatever on it is not a reveal fades in as one, so
@@ -1001,54 +1056,6 @@
 @keyframes page-piece-in {
   from {
     opacity: 0.001;
-  }
-}
-
-/* The other thing carried across: a project's cover, between its card and
-   its deep dive's hero, the same way. The picture is scaled by width alone,
-   so nothing in it is bent; where the two shapes differ it shows only while
-   one of them is nearly clear. Opening a deep dive, the hero itself grows
-   out of the card's place under the picture. Going back, the card stays
-   where it is (it clips its cover) and the hero's picture shrinks onto it. */
-[data-page-cover="out"] {
-  view-transition-name: page-cover;
-}
-
-::view-transition-group(page-cover) {
-  transform-origin: 0 0;
-  animation: page-cover-leave 520ms var(--ease-out-quart) both paused;
-}
-
-::view-transition-old(page-cover) {
-  animation: page-piece-out 320ms var(--ease-out) 160ms both paused;
-}
-
-:root[data-page-change="build"]::view-transition-group(page-cover),
-:root[data-page-change="build"]::view-transition-old(page-cover) {
-  animation-play-state: running;
-}
-
-[data-page-cover="in"] {
-  transform-origin: 0 0;
-  animation:
-    page-cover-arrive 520ms var(--ease-out-quart) both,
-    page-piece-in 240ms var(--ease-out) both;
-}
-
-@keyframes page-cover-leave {
-  to {
-    transform: translate(var(--page-cover-to-x), var(--page-cover-to-y))
-      scale(var(--page-cover-scale));
-  }
-}
-
-@keyframes page-cover-arrive {
-  from {
-    transform: translate(
-        calc(var(--page-cover-from-x) - var(--page-cover-to-x)),
-        calc(var(--page-cover-from-y) - var(--page-cover-to-y))
-      )
-      scale(calc(1 / var(--page-cover-scale)));
   }
 }
 

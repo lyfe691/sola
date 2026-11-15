@@ -13,13 +13,11 @@
  * that leaves is ever a picture, so the one arriving answers from its first
  * frame.
  *
- * Two pieces are carried across, each lifted out of the picture to hold its
- * place over the fading page until the next page is in, then travelling to
- * where its successor stands while that one takes over:
- *   - the title, between two pages that share the site's frame (whose bar
- *     never changes with the page, so it is cut from the picture and stays
- *     live);
- *   - a project's cover, between its card and its deep dive's hero.
+ * One piece is carried across: the title, between two pages that share the
+ * site's frame (whose bar never changes with the page, so it is cut from the
+ * picture and stays live). It is lifted out of the picture to hold its place
+ * over the fading page until the next page is in, then travels to where its
+ * successor stands while that one takes over.
  */
 
 import { flushSync } from "react-dom";
@@ -41,9 +39,6 @@ type Change = {
 };
 
 type Leaving = {
-  /** the page on screen and the one asked for (site paths, or the code view) */
-  from: string;
-  to: string;
   /** both pages stand in the site's frame, under the same bar */
   framed: boolean;
   /** the element of the page on screen */
@@ -54,17 +49,11 @@ type Leaving = {
   loaded: Promise<unknown>;
 };
 
-/** a piece carried across: the data attribute that marks it, out and in */
-type Piece = "title" | "cover";
-const MARK = { title: "pageTitle", cover: "pageCover" } as const;
-
 const ROUTE = ["from-x", "from-y", "to-x", "to-y", "scale"];
 /** what a change puts on the root for the CSS, and takes off when it ends */
 const ROOT_PROPERTIES = [
   "--page-bar",
-  ...Object.keys(MARK).flatMap((piece) =>
-    ROUTE.map((part) => `--page-${piece}-${part}`),
-  ),
+  ...ROUTE.map((part) => `--page-title-${part}`),
 ];
 
 let running: Change | null = null;
@@ -97,60 +86,29 @@ function uncovered(title: HTMLElement) {
   return over !== null && title.contains(over);
 }
 
-/** The project whose deep dive is one side of the change, and which side. */
-function deepDive(from: string, to: string) {
-  const slug = (path: string) => /^\/projects\/([^/]+)$/.exec(path)?.[1];
-  const [leaving, arriving] = [slug(from), slug(to)];
-  if (arriving && !leaving) return { card: arriving, opens: true };
-  if (leaving && !arriving) return { card: leaving, opens: false };
-  return null;
-}
-
-/** A cover (a project's card, or "hero"), when some of it is in the window. */
-function coverInWindow(name: string) {
-  const cover = document.querySelector<HTMLElement>(
-    `[data-cover="${CSS.escape(name)}"]`,
-  );
-  if (!cover) return null;
-  const { top, bottom } = cover.getBoundingClientRect();
-  return bottom > 0 && top < window.innerHeight ? cover : null;
-}
-
-/** Where a piece sets off and where it lands, for the CSS that moves it. */
-function route(
-  on: HTMLElement,
-  piece: Piece,
-  from: DOMRect,
-  to: DOMRect,
-  scale: number,
-) {
+/** Where the title sets off and where it lands, for the CSS that moves it. */
+function route(on: HTMLElement, from: DOMRect, to: DOMRect, scale: number) {
   const values = [from.left, from.top, to.left, to.top].map((px) => `${px}px`);
   [...values, `${scale}`].forEach((value, index) =>
-    on.style.setProperty(`--page-${piece}-${ROUTE[index]}`, value),
+    on.style.setProperty(`--page-title-${ROUTE[index]}`, value),
   );
 }
 
 /**
- * The arriving piece itself sets off from where the old one stood. Its
+ * The arriving title itself sets off from where the old one stood. Its
  * route rides on the element: it outlives a change whose picture is gone
  * before the travel ends.
  */
-function arrive(
-  piece: Piece,
-  element: HTMLElement,
-  from: DOMRect,
-  to: DOMRect,
-  scale: number,
-) {
-  route(element, piece, from, to, scale);
-  element.dataset[MARK[piece]] = "in";
+function arrive(title: HTMLElement, from: DOMRect, to: DOMRect, scale: number) {
+  route(title, from, to, scale);
+  title.dataset.pageTitle = "in";
   const landed = () => {
-    delete element.dataset[MARK[piece]];
+    delete title.dataset.pageTitle;
     for (const part of ROUTE)
-      element.style.removeProperty(`--page-${piece}-${part}`);
+      title.style.removeProperty(`--page-title-${part}`);
   };
   Promise.allSettled(
-    element.getAnimations().map((animation) => animation.finished),
+    title.getAnimations().map((animation) => animation.finished),
   ).then(landed);
 }
 
@@ -186,13 +144,13 @@ function dissolve(show: () => void) {
 
 /**
  * The picture fades while the next page is rendered. `lifted`: the carried
- * pieces are pictures of their own, held over the page. Touch devices go
- * without (iOS WebKit draws a named snapshot offset): there the old piece
+ * title is a picture of its own, held over the page. Touch devices go
+ * without (iOS WebKit draws a named snapshot offset): there the old title
  * fades with its page and only the arriving one travels.
  */
 function clear(
   show: () => void,
-  { from, to, framed, shell, current, loaded }: Leaving,
+  { framed, shell, current, loaded }: Leaving,
   lifted: boolean,
 ) {
   const root = document.documentElement;
@@ -202,14 +160,8 @@ function clear(
   const oldTitle = framed ? titleInWindow() : null;
   const titleFrom =
     oldTitle && uncovered(oldTitle) ? oldTitle.getBoundingClientRect() : null;
-  const project = deepDive(from, to);
-  const oldCover =
-    project && coverInWindow(project.opens ? project.card : "hero");
-  const coverFrom = oldCover?.getBoundingClientRect() ?? null;
-  const pictures: [Piece, HTMLElement][] = [];
-  if (lifted && oldTitle && titleFrom) pictures.push(["title", oldTitle]);
-  if (lifted && oldCover) pictures.push(["cover", oldCover]);
-  for (const [piece, element] of pictures) element.dataset[MARK[piece]] = "out";
+  const picture = lifted && titleFrom ? oldTitle : null;
+  if (picture) picture.dataset.pageTitle = "out";
 
   const change: Change = {
     swappedAt: null,
@@ -217,15 +169,14 @@ function clear(
       // the root steps out, and the page under the picture goes dark: what
       // the picture uncovers before the next page is in is the bare frame
       root.dataset.pageChange = "clear";
-      if (shell) shell.style.visibility = "hidden";
-      // photographed: still named, a piece would be taken again as its own
+      if (shell) shell.dataset.pageLeft = "";
+      // photographed: still named, the title would be taken again as its own
       // successor, and the transition dropped when it unmounts
-      for (const [piece, element] of pictures)
-        delete element.dataset[MARK[piece]];
+      if (picture) delete picture.dataset.pageTitle;
     }),
   };
 
-  // the old pieces let go: with their successors, or alone when those are
+  // the old title lets go: with its successor, or alone when that one is
   // still not in after PAGE_CARRY_HOLD
   const release = () => {
     if (running === change && root.dataset.pageChange === "clear")
@@ -242,9 +193,9 @@ function clear(
     // Nor is a page mounted before its chunk is in: it would go in empty.
     // Neither for ever: something else may have moved the address
     if (!late && !(ready && current())) return;
-    // the old pieces are still there to take over from. Unlifted, they have
-    // gone with the picture, and the change may be over: the arriving ones
-    // set off from the old place for as long as a lifted piece would wait
+    // the old title is still there to take over from. Unlifted, it has
+    // gone with the picture, and the change may be over: the arriving one
+    // sets off from the old place for as long as a lifted title would wait
     const held = lifted
       ? running === change && root.dataset.pageChange === "clear"
       : (running === change || running === null) &&
@@ -252,7 +203,7 @@ function clear(
     flushSync(show);
     change.swappedAt = performance.now();
     // asked for and taken back before it went in: the page never left
-    if (shell?.isConnected) shell.style.visibility = "";
+    if (shell?.isConnected) delete shell.dataset.pageLeft;
 
     // hit-testing cannot say what lies over a page that has just gone in:
     // a title on a page that lands at its top is clear of the bar
@@ -270,23 +221,8 @@ function clear(
         Math.abs(rest.top - titleFrom.top) +
           Math.abs(rest.left - titleFrom.left) >
         1;
-      if (lifted) route(root, "title", titleFrom, rest, scale);
-      arrive("title", title, titleFrom, rest, scale);
-    }
-
-    const cover =
-      project && coverFrom && held
-        ? coverInWindow(project.opens ? "hero" : project.card)
-        : null;
-    if (project && coverFrom && cover) {
-      const block = cover.closest("[data-reveal]");
-      if (block) skipReveal(block);
-      const rest = cover.getBoundingClientRect();
-      const scale = rest.width / coverFrom.width;
-      if (lifted) route(root, "cover", coverFrom, rest, scale);
-      // a card clips its cover, so only the hero grows out of the old place:
-      // going back, the hero's picture alone shrinks onto the card
-      if (project.opens) arrive("cover", cover, coverFrom, rest, scale);
+      if (lifted) route(root, titleFrom, rest, scale);
+      arrive(title, titleFrom, rest, scale);
     }
 
     release();

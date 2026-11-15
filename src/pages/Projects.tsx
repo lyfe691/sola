@@ -257,7 +257,6 @@ const ProjectCard = memo(
       <div className="p-1.5 pb-0">
         <PaintedCover
           art={project.art}
-          name={project.slug}
           size="card"
           live={false}
           className={coverClassName}

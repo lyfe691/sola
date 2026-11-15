@@ -104,8 +104,7 @@ export const HIDDEN_OPACITY = 0.001;
 // ---- Page change ----
 // The motion is CSS (index.css, "page change"): a picture of the old page
 // fades where it stands while the next page builds under it through the
-// reveal queue, and the title (or a project's cover) travels from one to
-// the other. What runs it
+// reveal queue, and the title travels from one to the other. What runs it
 // (src/layouts/page-change.ts) keeps five times (ms).
 //
 // BEAT: the next page goes in this long after the picture starts to fade.
@@ -129,9 +128,9 @@ export const PAGE_HANDOVER = 120;
 // late, so it shows once the title is nearly in its place and not while it
 // crosses the block.
 export const PAGE_TITLE_LEAD = 100;
-// CARRY_HOLD: a carried piece (the title, a cover) waits this long for its
-// successor before it fades alone. Longer than the picture's fade: a heavy
-// page goes in after the picture is gone, and the piece is still carried.
+// CARRY_HOLD: the carried title waits this long for its successor before
+// it fades alone. Longer than the picture's fade: a heavy page goes in
+// after the picture is gone, and the title is still carried.
 export const PAGE_CARRY_HOLD = 600;
 
 // ---- Scroll reveals ----

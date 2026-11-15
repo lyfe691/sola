@@ -135,8 +135,8 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 - A block or a page arriving only ever fades and rises a short way. No
   blur, no scale, and nothing page-sized animates anything but opacity: that
   weight was felt on every click. (Letter-level effects, like the hero's
-  name and tagline, and the two pieces a page change carries across, are
-  their own pieces.)
+  name and tagline, and the title a page change carries across, are their
+  own pieces.)
 - Scroll reveals: wrap each block that should arrive on its own in
   `<Reveal>` (`as="li"` etc.). Never pass delays or nest reveals — one
   queue (`src/lib/reveal.ts`) starts blocks in reading order, and one CSS
@@ -148,12 +148,13 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   in it and the picture fades where it stands; the next page goes in under
   it a beat later, with the window already at the top (or, going back or
   forward, where that page was left), and builds through its reveals. Only
-  the old page is ever a picture: the arriving one is live. Two pieces are
+  the old page is ever a picture: the arriving one is live. One piece is
   carried across: the title between two app pages (the bar is cut from the
-  picture and stays live), and a project's cover between its card and its
-  deep dive's hero. Everything that moves is a transform or opacity on the
-  compositor, and nothing is mounted before the beat. Touch devices carry
-  only the arriving piece (iOS draws named snapshots offset); reduced
+  picture and stays live). Opening a project is a plain page change: its
+  cover does not travel (the owner found that too much). Everything that
+  moves is a transform or opacity on the compositor, and nothing is mounted
+  before the beat. Touch devices carry only the arriving title (iOS draws
+  named snapshots offset); reduced
   motion gets the theme switch's whole-window dissolve; without the API the
   page is swapped and fades in. Nothing else scrolls or animates on a route
   change. `Link` starts a page's chunk on hover, touch or focus, so the
