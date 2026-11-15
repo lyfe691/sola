@@ -245,7 +245,7 @@ const ActivityMetadata = ({
       {items.slice(0, 2).map((item) => (
         <span
           key={item}
-          className="rounded-md bg-foreground/5 px-2 py-0.5 text-2xs font-medium text-foreground/50"
+          className="rounded-md bg-muted px-2 py-0.5 text-2xs font-medium text-foreground/50"
         >
           {item}
         </span>
@@ -324,12 +324,12 @@ const ActivityItem = ({
       }
       inert={decorative}
       aria-hidden={decorative || undefined}
-      className={`group px-4 py-3 transition-colors duration-150 can-hover:hover:bg-foreground/2 ${
+      className={`group px-4 py-3 transition-colors duration-150 can-hover:hover:bg-muted ${
         decorative ? "pointer-events-none" : ""
       }`}
     >
       <div className="flex items-start gap-3">
-        <div className="mt-1 rounded-lg bg-foreground/4 p-1.5 transition-colors duration-200 can-hover:group-hover:bg-foreground/8">
+        <div className="mt-1 rounded-lg bg-muted p-1.5 transition-colors duration-200 can-hover:group-hover:bg-accent">
           <ActivityIcon activity={activity} />
         </div>
 
@@ -391,7 +391,7 @@ const ActivityItem = ({
 // the type it stands for, so a row is as tall as the row that replaces it
 const ActivityFeedSkeleton = () => (
   <div
-    className={`divide-y divide-foreground/6 overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${FEED_FADE}`}
+    className={`divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card ${FEED_FADE}`}
     aria-hidden
   >
     {Array.from({ length: VISIBLE_EVENTS + FADE_TAIL }).map((_, index) => (
@@ -452,7 +452,7 @@ const ContributionActivityFeed = () => {
         <h3 className="text-lg font-semibold text-foreground">
           {t.feed.recentActivity}
         </h3>
-        <span className="rounded-full bg-foreground/4 px-2.5 py-1 text-xs text-foreground/40">
+        <span className="rounded-full bg-muted px-2.5 py-1 text-xs text-foreground/40">
           {t.feed.lastEvents.replace("{count}", String(VISIBLE_EVENTS))}
         </span>
       </div>
@@ -462,10 +462,10 @@ const ContributionActivityFeed = () => {
           <ActivityFeedSkeleton />
         ) : isError ? (
           <div
-            className={`overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${swapClass}`}
+            className={`overflow-hidden rounded-2xl border border-border bg-card ${swapClass}`}
           >
             <div className="p-12 text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-muted">
                 <HugeiconsIcon
                   icon={AlertCircleIcon}
                   strokeWidth={2}
@@ -480,12 +480,12 @@ const ContributionActivityFeed = () => {
           </div>
         ) : (
           <div
-            className={`overflow-hidden rounded-2xl border border-foreground/8 bg-linear-to-b from-foreground/2 to-foreground/1 ${
+            className={`overflow-hidden rounded-2xl border border-border bg-card ${
               hasTail ? FEED_FADE : ""
             } ${swapClass}`}
           >
             {eventsToShow.length > 0 ? (
-              <div className="divide-y divide-foreground/6">
+              <div className="divide-y divide-border">
                 {eventsToShow.map((activity, index) => (
                   <ActivityItem
                     key={activity.id}
@@ -500,7 +500,7 @@ const ContributionActivityFeed = () => {
               </div>
             ) : (
               <div className="p-12 text-center">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/4">
+                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-muted">
                   <HugeiconsIcon
                     icon={GitCommitIcon}
                     strokeWidth={2}

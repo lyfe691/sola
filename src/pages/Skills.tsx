@@ -25,6 +25,7 @@ import {
   SkillDrawer,
   SkillTile,
 } from "@/components/skills/SkillProjects";
+import { HoverGlide } from "@/components/ui/custom/hover-glide";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { countLabel } from "@/lib/plural";
 import { cn } from "@/lib/utils";
@@ -40,10 +41,8 @@ const LEVEL_TONE: Record<Proficiency, string> = {
 const ROW =
   "group flex w-full min-w-0 items-center gap-3 rounded-2xl px-2 py-2 text-left";
 // desktop rows only show the hover card; phone rows are tapped for the drawer
-const HOVERABLE =
-  "transition-colors duration-200 ease-out can-hover:hover:bg-muted/50 data-active:bg-muted/50";
 const PRESSABLE =
-  "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out active:scale-[0.99] active:bg-muted/50";
+  "cursor-pointer touch-manipulation select-none transition-[background-color,scale] duration-200 ease-out active:scale-[0.99] active:bg-muted";
 
 function SkillRowBody({
   skill,
@@ -106,11 +105,7 @@ function SkillRow({
   let row: ReactNode;
   if (!isMobile) {
     row = (
-      <SkillCardTrigger
-        skill={skill}
-        openable={count > 0}
-        className={cn(ROW, count > 0 && HOVERABLE)}
-      >
+      <SkillCardTrigger skill={skill} openable={count > 0} className={ROW}>
         {body}
       </SkillCardTrigger>
     );
@@ -128,7 +123,11 @@ function SkillRow({
     );
   }
 
-  return <li className="min-w-0">{row}</li>;
+  return (
+    <li data-glide={count === 0 ? "none" : ""} className="min-w-0 rounded-2xl">
+      {row}
+    </li>
+  );
 }
 
 function SkillSection({
@@ -150,16 +149,18 @@ function SkillSection({
           {String(group.skills.length).padStart(2, "0")}
         </span>
       </h2>
-      <ul className="-mx-2 flex flex-col gap-0.5">
-        {group.skills.map((skill) => (
-          <SkillRow
-            key={skill.name}
-            skill={skill}
-            isMobile={isMobile}
-            onOpen={onOpen}
-          />
-        ))}
-      </ul>
+      <HoverGlide className="-mx-2">
+        <ul className="flex flex-col gap-0.5">
+          {group.skills.map((skill) => (
+            <SkillRow
+              key={skill.name}
+              skill={skill}
+              isMobile={isMobile}
+              onOpen={onOpen}
+            />
+          ))}
+        </ul>
+      </HoverGlide>
     </Reveal>
   );
 }

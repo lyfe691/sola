@@ -113,7 +113,7 @@ export function UpdateNotification() {
             "pb-[env(safe-area-inset-bottom)]",
           )}
         >
-          <div className="relative flex flex-col gap-3 rounded-2xl border bg-card/90 p-4 shadow-2xl backdrop-blur-xl">
+          <div className="relative flex flex-col gap-3 rounded-2xl border bg-popover p-4 shadow-2xl">
             <button
               type="button"
               onClick={dismiss}
@@ -128,7 +128,7 @@ export function UpdateNotification() {
             </button>
 
             <div className="flex items-start gap-3 pr-7">
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-foreground/5 text-foreground">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-muted text-foreground">
                 <CloudBackupIcon className="size-4" />
               </div>
               <div className="flex-1">

@@ -102,11 +102,10 @@ export const de = {
       section: "Einige Hintergründe wirken deutlich besser im Dark Mode.",
     },
     callout: {
-      background: {
-        title: "Machen Sie es zu Ihrem",
-        content:
-          "Ich habe {background} mit dem {theme}-Theme ausgewählt — in diesem Menü können Sie jederzeit wechseln.",
-      },
+      title: "Machen Sie es zu Ihrem",
+      content:
+        "{themes} Themes und {backgrounds} animierte Hintergründe, alle in diesem Menü.",
+      open: "Ansehen",
       done: "Alles klar",
     },
     none: "Keiner",

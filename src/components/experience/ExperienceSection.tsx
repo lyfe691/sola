@@ -7,6 +7,7 @@
  */
 
 import { Reveal } from "@/components/Reveal";
+import { HoverGlide } from "@/components/ui/custom/hover-glide";
 import ExperienceItem from "@/components/experience/ExperienceItem";
 import { INTL_LOCALE } from "@/lib/dates";
 import { formatDuration, type ExperienceEntry } from "@/lib/experience";
@@ -44,7 +45,7 @@ const ExperienceSection = ({
         </div>
       </Reveal>
 
-      <div className="flex flex-col">
+      <HoverGlide className="flex flex-col">
         {entries.map((entry) => (
           <Reveal key={entry.key}>
             <ExperienceItem
@@ -58,7 +59,7 @@ const ExperienceSection = ({
             />
           </Reveal>
         ))}
-      </div>
+      </HoverGlide>
     </section>
   );
 };

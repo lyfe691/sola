@@ -4,82 +4,84 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { LayoutGroup, motion, type Transition } from "motion/react"
 
 import { cn } from "@/lib/utils"
-
-const transitions = {
-  spring: { type: "spring", bounce: 0.25, duration: 0.45 },
-  smooth: { type: "spring", bounce: 0, duration: 0.3 },
-} satisfies Record<string, Transition>
+import { EASE_OUT } from "@/utils/transitions"
 
 const tabsListVariants = cva(
-  "relative inline-flex w-fit items-center text-muted-foreground data-vertical:flex-col data-vertical:items-stretch",
+  "relative isolate inline-flex w-fit items-center rounded-full text-sm font-medium",
   {
     variants: {
       variant: {
-        default: "rounded-full bg-muted p-1 data-vertical:rounded-2xl",
-        rail: "p-1 before:absolute before:inset-x-0 before:inset-y-2 before:rounded-full before:bg-muted data-vertical:before:inset-x-2 data-vertical:before:inset-y-0 data-vertical:before:rounded-2xl",
-        line: "gap-4 border-border data-horizontal:border-b data-vertical:gap-1 data-vertical:border-r",
+        default: "bg-muted p-1",
+        // the track sits a pixel inside the list, so the pill covers its rim
+        pill: "before:absolute before:inset-px before:-z-10 before:rounded-full before:bg-muted",
+      },
+      size: {
+        sm: "h-8",
+        default: "h-9",
       },
     },
-    defaultVariants: { variant: "default" },
+    defaultVariants: { variant: "default", size: "default" },
   }
 )
 
+// The pill reaches a spacing unit into each neighbour and stays flush at
+// either end of the track (tabsIndicatorVariants). An end tab's padding is
+// shifted by the same unit so its label stays centred under the pill.
 const tabsTriggerVariants = cva(
-  "relative isolate inline-flex items-center justify-center gap-1.5 text-sm font-medium whitespace-nowrap transition-colors outline-none select-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/30 data-disabled:pointer-events-none data-disabled:opacity-50 data-active:text-foreground data-vertical:justify-start [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "group/tab relative isolate inline-flex h-full items-center justify-center gap-1.5 rounded-full whitespace-nowrap text-muted-foreground outline-none select-none transition-colors duration-200 ease-out hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 data-active:text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
-      variant: {
-        default: "h-7 rounded-full px-3",
-        rail: "h-10 rounded-full px-3",
-        line: "h-9 rounded-md px-1 data-vertical:h-8 data-vertical:px-2",
-      },
+      variant: { default: "", pill: "" },
+      size: { sm: "", default: "" },
     },
-    defaultVariants: { variant: "default" },
+    compoundVariants: [
+      { variant: "default", size: "sm", className: "px-2.5" },
+      { variant: "default", size: "default", className: "px-3" },
+      {
+        variant: "pill",
+        size: "sm",
+        className:
+          "px-3.5 first:pr-2.5 first:pl-4.5 last:pr-4.5 last:pl-2.5 only:px-3.5",
+      },
+      {
+        variant: "pill",
+        size: "default",
+        className: "px-5 first:pr-4 first:pl-6 last:pr-6 last:pl-4 only:px-5",
+      },
+    ],
+    defaultVariants: { variant: "default", size: "default" },
   }
 )
 
-const tabsIndicatorVariants = cva("absolute -z-10", {
+const tabsIndicatorVariants = cva("absolute -z-10 rounded-full", {
   variants: {
     variant: {
       default:
-        "inset-0 rounded-full bg-background shadow-sm dark:border dark:border-input dark:bg-input/30",
-      rail: "inset-0 rounded-full border border-border bg-background shadow-sm dark:bg-input/30",
-      line: "rounded-full bg-foreground",
-    },
-    orientation: {
-      horizontal: "",
-      vertical: "",
+        "inset-0 bg-background shadow-sm dark:border dark:border-input dark:bg-input/30",
+      pill: "-inset-x-1 inset-y-0 border-[0.5px] border-border bg-background shadow-sm group-first/tab:-right-2 group-first/tab:left-0 group-last/tab:right-0 group-last/tab:-left-2 group-only/tab:inset-x-0 dark:bg-accent",
     },
   },
-  compoundVariants: [
-    {
-      variant: "line",
-      orientation: "horizontal",
-      className: "inset-x-0 -bottom-px h-0.5",
-    },
-    {
-      variant: "line",
-      orientation: "vertical",
-      className: "inset-y-0 -right-px w-0.5",
-    },
-  ],
-  defaultVariants: { variant: "default", orientation: "horizontal" },
+  defaultVariants: { variant: "default" },
 })
 
-type TabsListOptions = VariantProps<typeof tabsListVariants> & {
-  spring?: boolean
-}
+const indicatorTransitions = {
+  default: { type: "spring", bounce: 0.25, duration: 0.45 },
+  pill: { duration: 0.3, ease: EASE_OUT },
+} satisfies Record<string, Transition>
+
+type TabsListOptions = VariantProps<typeof tabsListVariants>
 
 const TabsListContext = createContext<TabsListOptions>({})
 
-function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
+// horizontal only: neither variant is styled for a vertical list
+function Tabs({
+  className,
+  ...props
+}: Omit<TabsPrimitive.Root.Props, "orientation">) {
   return (
     <TabsPrimitive.Root
       data-slot="tabs"
-      className={cn(
-        "flex gap-4 data-horizontal:flex-col data-vertical:items-start",
-        className
-      )}
+      className={cn("flex flex-col gap-4", className)}
       {...props}
     />
   )
@@ -88,7 +90,7 @@ function Tabs({ className, ...props }: TabsPrimitive.Root.Props) {
 function TabsList({
   className,
   variant = "default",
-  spring = true,
+  size = "default",
   children,
   ...props
 }: TabsPrimitive.List.Props & TabsListOptions) {
@@ -97,10 +99,10 @@ function TabsList({
     <TabsPrimitive.List
       data-slot="tabs-list"
       data-variant={variant}
-      className={cn(tabsListVariants({ variant }), className)}
+      className={cn(tabsListVariants({ variant, size }), className)}
       {...props}
     >
-      <TabsListContext value={{ variant, spring }}>
+      <TabsListContext value={{ variant, size }}>
         <LayoutGroup id={id}>{children}</LayoutGroup>
       </TabsListContext>
     </TabsPrimitive.List>
@@ -108,18 +110,19 @@ function TabsList({
 }
 
 function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
-  const { variant, spring } = useContext(TabsListContext)
+  const { variant, size } = useContext(TabsListContext)
   return (
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
-      className={cn(tabsTriggerVariants({ variant }), className)}
-      render={({ children, ...tabProps }, { active, orientation }) => (
+      className={cn(tabsTriggerVariants({ variant, size }), className)}
+      render={({ children, ...tabProps }, { active }) => (
         <button {...tabProps}>
           {active && (
             <motion.span
               layoutId="indicator"
-              transition={spring ? transitions.spring : transitions.smooth}
-              className={tabsIndicatorVariants({ variant, orientation })}
+              data-slot="tabs-indicator"
+              transition={indicatorTransitions[variant ?? "default"]}
+              className={tabsIndicatorVariants({ variant })}
             />
           )}
           {children}

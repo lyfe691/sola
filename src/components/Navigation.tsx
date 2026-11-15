@@ -207,7 +207,7 @@ const DesktopNav = () => {
               <span
                 ref={highlightRef}
                 aria-hidden
-                className="pointer-events-none absolute left-0 top-0 rounded-full bg-foreground/10 opacity-0 transition-[transform,translate,scale,rotate,width,height,opacity] duration-300 ease-out"
+                className="pointer-events-none absolute left-0 top-0 rounded-full bg-muted opacity-0 transition-[transform,translate,scale,rotate,width,height,opacity] duration-300 ease-out"
               />
               {links.map((link) => {
                 const active = isActive(link.path);

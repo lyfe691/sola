@@ -66,13 +66,12 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
     let resizeTimeout: ReturnType<typeof setTimeout>;
 
+    // the window, never the document: a canvas as tall as a long page is
+    // cleared and repainted whole on every frame of every click
     const resizeCanvas = () => {
-      const { width, height } = parent.getBoundingClientRect();
+      const { innerWidth: width, innerHeight: height } = window;
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
@@ -84,13 +83,12 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
       resizeTimeout = setTimeout(resizeCanvas, 100);
     };
 
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
+    window.addEventListener("resize", handleResize);
 
     resizeCanvas();
 
     return () => {
-      ro.disconnect();
+      window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimeout);
     };
   }, []);
@@ -179,11 +177,9 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     if (prefersReducedMotion.current) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    if (!canvasRef.current) return;
+    const x = e.clientX;
+    const y = e.clientY;
 
     const now = performance.now();
     const newSparks: Spark[] = Array.from({ length: sparkCount }, (_, i) => ({
@@ -204,7 +200,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     <div className="relative w-full h-full" onClick={handleClick}>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 pointer-events-none"
+        className="fixed inset-0 size-full pointer-events-none"
       />
       {children}
     </div>

@@ -18,56 +18,78 @@ import {
 import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
 import { EASE_OUT } from "@/utils/transitions";
-import { smoothScrollToTop, stopScrollToTop } from "@/utils/scroll";
-import { useCodeView } from "@/components/deploy-diff/code-view-provider";
+import { smoothScrollToTop } from "@/utils/scroll";
 import { useTranslation } from "@/lib/language-provider";
-import { useLocalePath } from "@/lib/locale-router";
 
 const SCROLL_THRESHOLD = 120;
 const TILE = 44;
 
-/** One slow cubic swell. Trough sits on the progress line so full = brim. */
-function waterBody(p: number, phase: number, amp: number, size: number) {
-  const y = size * (1 - p) - amp;
-  const a = Math.sin(phase) * amp;
-  const b = Math.sin(phase + Math.PI) * amp;
-  const mid = size / 2;
-  return `M0 ${size} L0 ${y} C ${mid * 0.5} ${y + a}, ${mid * 0.5} ${y + a}, ${mid} ${y} C ${mid * 1.5} ${y + b}, ${mid * 1.5} ${y + b}, ${size} ${y} L${size} ${size} Z`;
+const SAMPLES = 12;
+// surface height at rest, and what a fast scroll adds (px)
+const CALM = 1.1;
+const SLOSH = 2.4;
+// scroll speed (px/ms) at which the surface is at its roughest
+const FAST = 2.5;
+// The mean surface runs from the tile's floor to this far above its top, so
+// the roughest surface still covers a full tile, and the level never depends
+// on how rough the surface is.
+const HEADROOM = (CALM + SLOSH) * 1.5;
+
+function waterBody(level: number, time: number, amp: number, drift: number) {
+  const top = (TILE + HEADROOM) * (1 - level) - HEADROOM;
+  let d = `M0 ${TILE}`;
+  for (let i = 0; i <= SAMPLES; i++) {
+    const x = (i / SAMPLES) * TILE;
+    const y =
+      top +
+      amp * Math.sin((x / TILE) * Math.PI * 2 + time * drift) +
+      amp * 0.5 * Math.sin((x / TILE) * Math.PI * 3.4 - time * drift * 1.6);
+    d += ` L${x.toFixed(2)} ${y.toFixed(2)}`;
+  }
+  return `${d} L${TILE} ${TILE} Z`;
 }
 
 function WaterFill() {
   const reduceMotion = useReducedMotion();
-  const progressRef = useRef(0);
+  const page = useRef({ level: 0, scroll: 0 });
+  const water = useRef({ level: 0, amp: CALM, scroll: 0 });
   const backRef = useRef<SVGPathElement>(null);
   const frontRef = useRef<SVGPathElement>(null);
 
-  const paint = useCallback(
-    (p: number, time: number) => {
-      const phase = reduceMotion ? 0 : time * 0.0011;
-      const amp = reduceMotion ? 0 : 1.5;
-      backRef.current?.setAttribute(
-        "d",
-        waterBody(p, phase * 0.65 + 1, amp * 1.15, TILE),
-      );
-      frontRef.current?.setAttribute("d", waterBody(p, phase, amp, TILE));
-    },
-    [reduceMotion],
-  );
+  const paint = useCallback((level: number, time: number, amp: number) => {
+    backRef.current?.setAttribute(
+      "d",
+      waterBody(level, time + 1.7, amp * 1.2, -0.0013),
+    );
+    frontRef.current?.setAttribute("d", waterBody(level, time, amp, 0.0021));
+  }, []);
 
   const onLenis = useCallback(
     (instance: Lenis) => {
       const { scroll, limit } = instance;
-      progressRef.current =
-        limit - scroll < 8 ? 1 : scroll / Math.max(limit, 1);
-      if (reduceMotion) paint(progressRef.current, 0);
+      page.current = {
+        level: limit - scroll < 8 ? 1 : scroll / Math.max(limit, 1),
+        scroll,
+      };
+      if (reduceMotion) paint(page.current.level, 0, 0);
     },
     [paint, reduceMotion],
   );
   useLenis(onLenis);
 
-  useAnimationFrame((t) => {
-    if (reduceMotion) return;
-    paint(progressRef.current, t);
+  // every step is a rate per millisecond, never per frame: the level's lag
+  // and the surface's roughness must feel the same at 60 and 144 Hz
+  useAnimationFrame((time, delta) => {
+    if (reduceMotion || delta <= 0) return;
+    const now = water.current;
+    const { level, scroll } = page.current;
+    const speed = Math.abs(scroll - now.scroll) / delta;
+    now.scroll = scroll;
+    const rough = CALM + Math.min(speed / FAST, 1) * SLOSH;
+    now.level += (level - now.level) * (1 - Math.exp(-delta / 140));
+    now.amp +=
+      (rough - now.amp) * (1 - Math.exp(-delta / (rough > now.amp ? 90 : 520)));
+    paint(now.level, time, now.amp);
   });
 
   return (
@@ -76,15 +98,13 @@ function WaterFill() {
       viewBox={`0 0 ${TILE} ${TILE}`}
       className="pointer-events-none absolute inset-0 size-full"
     >
-      <path ref={backRef} fill="var(--primary)" fillOpacity="0.1" />
-      <path ref={frontRef} fill="var(--primary)" fillOpacity="0.18" />
+      <path ref={backRef} className="fill-muted" />
+      <path ref={frontRef} className="fill-accent" />
     </svg>
   );
 }
 
 export default function ScrollToTop() {
-  // the page, not its URL: a language switch keeps the reader where they are
-  const { path: pathname } = useLocalePath();
   const [visible, setVisible] = useState(false);
   const t = useTranslation();
 
@@ -94,23 +114,13 @@ export default function ScrollToTop() {
   }, []);
   useLenis(onLenis);
 
-  const { active: codeViewActive } = useCodeView();
-  const codeViewRef = useRef(codeViewActive);
-  useEffect(() => {
-    codeViewRef.current = codeViewActive;
-  }, [codeViewActive]);
-
+  // PageShell places every page itself (at the top, or where a history
+  // entry was left), so the browser's own restoring would only fight it
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
   }, []);
-
-  useEffect(() => {
-    if (codeViewRef.current) return;
-    smoothScrollToTop();
-    return stopScrollToTop;
-  }, [pathname]);
 
   return (
     <AnimatePresence>
@@ -132,7 +142,7 @@ export default function ScrollToTop() {
             transition: { duration: 0.1, ease: EASE_OUT },
           }}
           transition={{ duration: 0.28, ease: EASE_OUT }}
-          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background/70 text-foreground/80 ring-1 ring-foreground/10 backdrop-blur-xs outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
+          className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background text-foreground/80 ring-1 ring-foreground/10 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
         >
           <WaterFill />
           <HugeiconsIcon

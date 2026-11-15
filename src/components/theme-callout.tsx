@@ -21,14 +21,15 @@ import {
   type MotionStyle,
 } from "motion/react";
 import { Button } from "@/components/ui/button";
-import {
-  CALLOUT_STORAGE_KEY,
-  getWelcomePresetLabels,
-} from "@/config/welcome-preset";
+import { BACKGROUNDS } from "@/components/backgrounds/registry";
+import { THEMES } from "@/config/themes";
+import { CALLOUT_STORAGE_KEY } from "@/config/welcome-preset";
 import { useTranslation } from "@/lib/language-provider";
 import { useCommandMenu } from "@/hooks/use-command-menu";
 import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import { tailEdge, tailFill } from "@/lib/tail-path";
+import { cn } from "@/lib/utils";
+import { EASE_EXPO, EASE_OUT } from "@/utils/transitions";
 
 const APPEAR_DELAY = 1200;
 // the arrow's tip stops 3px short of whatever it points out of
@@ -101,47 +102,39 @@ const measure = (): Position | null => {
   };
 };
 
-const PRESET_TOKEN = /\{(background|theme)\}/g;
+// what the menu holds: every theme the visitor can pick ("system" is a way
+// of choosing between two of them, not one more), and every background.
+// Counted from the configs, so the copy can't go stale
+const PALETTES = THEMES.filter((theme) => theme.value !== "system");
+const COUNTS = {
+  themes: PALETTES.length,
+  backgrounds: BACKGROUNDS.length,
+} as const;
 
-const renderPresetContent = (
-  template: string,
-  background: string,
-  theme: string,
-): ReactNode[] => {
+const COUNT_TOKEN = /\{(themes|backgrounds)\}/g;
+
+/** The sentence with each {themes} / {backgrounds} set as its number. */
+const renderCounts = (template: string): ReactNode[] => {
   const nodes: ReactNode[] = [];
   let lastIndex = 0;
-  let key = 0;
 
-  for (const match of template.matchAll(PRESET_TOKEN)) {
+  for (const match of template.matchAll(COUNT_TOKEN)) {
     const index = match.index ?? 0;
-    if (index > lastIndex) {
-      nodes.push(template.slice(lastIndex, index));
-    }
-
-    const label = match[1] === "background" ? background : theme;
+    if (index > lastIndex) nodes.push(template.slice(lastIndex, index));
     nodes.push(
-      <strong key={key++} className="font-semibold text-foreground">
-        {label}
+      <strong key={index} className="font-semibold text-foreground">
+        {COUNTS[match[1] as keyof typeof COUNTS]}
       </strong>,
     );
     lastIndex = index + match[0].length;
   }
 
-  if (lastIndex < template.length) {
-    nodes.push(template.slice(lastIndex));
-  }
-
+  if (lastIndex < template.length) nodes.push(template.slice(lastIndex));
   return nodes;
 };
 
 export function ThemeCallout() {
   const t = useTranslation().common.callout;
-  const { themeLabel, backgroundLabel } = getWelcomePresetLabels();
-  const calloutContent = renderPresetContent(
-    t.background.content,
-    backgroundLabel,
-    themeLabel,
-  );
   const reduceMotion = useReducedMotion();
 
   const [open, setOpen] = useState(() => {
@@ -165,6 +158,14 @@ export function ThemeCallout() {
     }
     setOpen(false);
   }, []);
+
+  // the callout points at the menu, so its own button opens it. The toggle
+  // is found first: the callout it is measured from is about to leave
+  const explore = useCallback(() => {
+    const toggle = visibleToggle();
+    dismiss();
+    toggle?.click();
+  }, [dismiss]);
 
   // re-measure only on layout-affecting events (resize/scroll + toggle
   // resize from the nav's scroll morph and breakpoint swaps) instead of
@@ -256,17 +257,23 @@ export function ThemeCallout() {
       {open && pos && !yielding && (
         <motion.div
           role="status"
+          // a small surface popping out of what it points at, the way the
+          // toast does; it leaves the way a control does
           initial={
-            reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.96 }
+            reduceMotion ? { opacity: 0 } : { opacity: 0, y: -6, scale: 0.96 }
           }
-          animate={
-            reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }
-          }
-          exit={
-            reduceMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.97 }
-          }
-          transition={{ type: "spring", stiffness: 380, damping: 28 }}
-          className="fixed top-(--top) right-(--right) z-40 w-64 max-w-[calc(100vw-2rem)] origin-(--origin) rounded-2xl rounded-tr-(--corner) bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
+          animate={{
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            transition: { duration: 0.4, ease: EASE_EXPO },
+          }}
+          exit={{
+            opacity: 0,
+            ...(reduceMotion ? {} : { y: -4, scale: 0.98 }),
+            transition: { duration: 0.2, ease: EASE_OUT },
+          }}
+          className="fixed top-(--top) right-(--right) z-40 w-68 max-w-[calc(100vw-2rem)] origin-(--origin) rounded-2xl rounded-tr-(--corner) bg-popover p-4 text-popover-foreground shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10"
           style={
             {
               "--top": `${pos.top}px`,
@@ -299,14 +306,40 @@ export function ThemeCallout() {
           </svg>
 
           <p className="text-sm font-semibold leading-snug tracking-tight">
-            {t.background.title}
+            {t.title}
           </p>
           <p className="mt-1 text-xs-plus leading-relaxed text-muted-foreground">
-            {calloutContent}
+            {renderCounts(t.content)}
           </p>
-          <div className="mt-3 flex justify-end">
-            <Button type="button" size="sm" onClick={dismiss} className="h-7">
+
+          {/* the themes themselves, each chip wearing its own: a theme's
+              class carries its tokens onto any subtree */}
+          <div aria-hidden className="mt-3 flex items-center gap-1.5">
+            {PALETTES.map(({ value }) => (
+              <span
+                key={value}
+                className={cn(
+                  value,
+                  "flex size-4 items-center justify-center rounded-full bg-background ring-1 ring-foreground/15",
+                )}
+              >
+                <span className="size-1.5 rounded-full bg-primary" />
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-4 flex items-center justify-end gap-1.5">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={dismiss}
+              className="h-7"
+            >
               <span className="text-xs">{t.done}</span>
+            </Button>
+            <Button type="button" size="sm" onClick={explore} className="h-7">
+              <span className="text-xs">{t.open}</span>
             </Button>
           </div>
         </motion.div>

@@ -13,7 +13,7 @@
  */
 
 import { motion } from "motion/react";
-import { REVEAL } from "@/utils/transitions";
+import { EASE_SMOOTH } from "@/utils/transitions";
 
 export function Caret({ blinking }: { blinking: boolean }) {
   return (
@@ -23,7 +23,7 @@ export function Caret({ blinking }: { blinking: boolean }) {
       animate={blinking ? { opacity: [1, 0.15, 1] } : { opacity: 1 }}
       transition={
         blinking
-          ? { duration: 1.2, repeat: Infinity, ease: REVEAL }
+          ? { duration: 1.2, repeat: Infinity, ease: EASE_SMOOTH }
           : { duration: 0.1 }
       }
     />

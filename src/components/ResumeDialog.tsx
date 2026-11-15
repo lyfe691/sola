@@ -88,14 +88,9 @@ function LanguageTabs({
       value={value}
       onValueChange={(next) => onChange(next as ResumeLanguage)}
     >
-      <TabsList aria-label={label}>
+      <TabsList aria-label={label} size={compact ? "sm" : "default"}>
         {RESUME_LANGUAGES.map((language) => (
-          <TabsTrigger
-            key={language}
-            value={language}
-            // eslint-disable-next-line shadcn/no-restyle -- the compact switcher is a size smaller than any Tabs size
-            className={compact ? "h-6 px-2.5" : undefined}
-          >
+          <TabsTrigger key={language} value={language}>
             <span className="uppercase">{language}</span>
           </TabsTrigger>
         ))}

@@ -6,14 +6,22 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Suspense, useEffect, useRef, type ReactNode } from "react";
-import { useLocation } from "react-router";
-import { AnimatePresence, motion } from "motion/react";
-import { pageTransitionVariants } from "@/utils/transitions";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { useLocation, useNavigationType } from "react-router";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
-import { preloadRoute } from "@/config/routes";
+import { preloadRoute, resolveLayout } from "@/config/routes";
+import { splitLocale } from "@/lib/locale";
 import { preloadable } from "@/lib/preloadable";
 import { getLenis, snapScrollTo } from "@/utils/scroll";
+import { changePage, pageSettled } from "./page-change";
 
 // lazy like the route pages — the diff renderer (and shiki behind it) only
 // loads once someone actually flips the mode on
@@ -23,89 +31,146 @@ const { load: loadCodeView, Component: CodeView } = preloadable(() =>
   })),
 );
 
-// Code view replaces the routed page under the SAME AnimatePresence that
-// drives route transitions, so flipping the mode plays the exact page
-// transition (consume -> reform) instead of inventing a new one.
+const CODE_VIEW = "code-view";
+
+type Page = {
+  id: string;
+  node: ReactNode;
+  /** a change brought it: the page a visit opens on is simply there */
+  arrives?: boolean;
+};
+
+/** Lands its page: runs once the page is in the document, before it is painted. */
+function Arrival({
+  codeView,
+  land,
+}: {
+  codeView: boolean;
+  land: (codeView: boolean) => void;
+}) {
+  useLayoutEffect(() => land(codeView), [land, codeView]);
+  return null;
+}
+
+/** Sits behind the page in its Suspense: in the document once the page is. */
+function Settled() {
+  useLayoutEffect(pageSettled, []);
+  return null;
+}
+
+const scrollNow = () => getLenis()?.scroll ?? window.scrollY;
+
+// One shell for every page change: a route change and the code view taking
+// the page over (or handing it back) both swap the keyed child, so they are
+// the same transition. The shell keeps the page it has until changePage
+// swaps in the next one, and the window only moves in that same commit,
+// with the page that leaves already a picture over it: nothing is ever seen
+// scrolling away, and the next page is first seen where it belongs.
 const PageShell = ({ children }: { children: ReactNode }) => {
-  const location = useLocation();
+  const { pathname, key } = useLocation();
+  const returning = useNavigationType() === "POP";
   const { active, setActive } = useCodeView();
 
   useEffect(() => {
-    preloadRoute(location.pathname);
-  }, [location.pathname]);
+    void preloadRoute(pathname);
+  }, [pathname]);
   useEffect(() => {
     if (active) void loadCodeView();
   }, [active]);
 
-  // A route change underneath the mode (command palette, back/forward) exits
-  // it. The new page starts at the top, but only once the exit has finished —
-  // ScrollToTop skips its glide for this case (see there), so the snap in
-  // onExitComplete below is the single scroll for this path.
-  const prevPath = useRef(location.pathname);
-  const wasActive = useRef(false);
-  const routeExit = useRef(false);
+  // Where a page is put back, in two cases. `resume`: the page under the
+  // code view comes back where it was left, held from the moment the view
+  // opens. `left`: going back or forward returns each history entry to where
+  // it was left, for as long as the visit lasts (a reload starts at the top).
+  const resume = useRef<number | null>(null);
+  const left = useRef(new Map<string, number>());
+  const at = useRef({ pathname, key, active });
+  // the entry now arriving, and whether the history brought it back
+  const arriving = useRef({ key, returning });
   useEffect(() => {
-    if (location.pathname === prevPath.current) return;
-    prevPath.current = location.pathname;
-    if (active) {
-      routeExit.current = true;
-      setActive(false);
+    const from = at.current;
+    at.current = { pathname, key, active };
+    arriving.current = { key, returning };
+    if (pathname !== from.pathname) {
+      // the page that leaves is still on screen where it was left: the next
+      // one has not been swapped in yet. Under the code view that place is
+      // the one held for it. A route change under the view (palette,
+      // back/forward) leaves the view
+      left.current.set(
+        from.key,
+        from.active ? (resume.current ?? 0) : scrollNow(),
+      );
+      resume.current = null;
+      if (active) setActive(false);
+    } else if (active && !from.active) {
+      resume.current = scrollNow();
     }
-  }, [location.pathname, active, setActive]);
+  }, [pathname, key, returning, active, setActive]);
 
-  // Preserve the page's scroll position across the flip. The reset to top
-  // waits for the exit to finish — scrolling while the old page is still
-  // blurring out makes its content visibly jump mid-transition.
-  const savedScroll = useRef(0);
-  useEffect(() => {
-    if (active) {
-      savedScroll.current = getLenis()?.scroll ?? window.scrollY;
-      wasActive.current = true;
+  // Everything arrives at the top, except the page coming back from under
+  // the code view and a history entry coming back to where it was left.
+  // `resume` is read and left alone: it only goes stale by a route change,
+  // which clears it, or by the view opening again, which replaces it.
+  const land = useCallback((codeView: boolean) => {
+    const back = codeView ? null : resume.current;
+    if (back !== null) {
+      snapScrollTo(back);
+      // the toggle that opened the view lives in a long-closed menu — hand
+      // focus back to the page's main landmark instead
+      document.getElementById("main")?.focus({ preventScroll: true });
+      return;
     }
-  }, [active]);
+    const entry = arriving.current;
+    const place = !codeView && entry.returning && left.current.get(entry.key);
+    snapScrollTo(place || 0);
+  }, []);
+
+  // The page on screen, and the one asked for. They differ from a change
+  // until its swap; in between the shell keeps rendering the page it had.
+  const id = active ? CODE_VIEW : pathname;
+  const [shown, setShown] = useState<Page>({ id, node: children });
+  const asked = useRef<Page>(shown);
+  const shell = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    asked.current = { id, node: children, arrives: true };
+  });
+  useEffect(() => {
+    if (id === shown.id) return;
+    // app pages share the bar and set their title under it; the code view
+    // and the blank pages (a deep dive's title is its hero's) do not
+    const framed = [id, shown.id].every(
+      (page) => page !== CODE_VIEW && resolveLayout(page) === "app",
+    );
+    changePage(() => setShown(asked.current), {
+      from: shown.id,
+      to: id,
+      loaded: id === CODE_VIEW ? loadCodeView() : preloadRoute(id),
+      framed,
+      shell: shell.current,
+      current: () =>
+        splitLocale(window.location.pathname).path === at.current.pathname,
+    });
+  }, [id, shown.id]);
 
   return (
-    <AnimatePresence
-      mode="wait"
-      onExitComplete={() => {
-        if (routeExit.current) {
-          // navigated away while the mode was up — the diff has fully left,
-          // snap the new page to the top now
-          routeExit.current = false;
-          wasActive.current = false;
-          snapScrollTo(0);
-          return;
-        }
-        if (!wasActive.current) return;
-        if (active) {
-          snapScrollTo(0);
-        } else {
-          wasActive.current = false;
-          // rAF: the returning page may scroll itself to the top in a mount
-          // layout effect (ProjectDeepDive does) — those run pre-paint, so
-          // deferring one frame guarantees the restore lands last
-          requestAnimationFrame(() => {
-            snapScrollTo(savedScroll.current);
-            // the toggle that opened the mode lives in a long-closed menu —
-            // hand focus back to the page's main landmark instead
-            document.getElementById("main")?.focus({ preventScroll: true });
-          });
-        }
-      }}
+    <div
+      key={shown.id}
+      ref={shell}
+      data-page-arriving={shown.arrives ? "" : undefined}
+      className="flex flex-1 flex-col"
     >
-      <motion.div
-        key={active ? "code-view" : location.pathname}
-        variants={pageTransitionVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        className="flex flex-1 origin-[50%_42%] flex-col"
-      >
-        <Suspense fallback={<div className="flex-1" />}>
-          {active ? <CodeView /> : children}
-        </Suspense>
-      </motion.div>
-    </AnimatePresence>
+      <Arrival codeView={shown.id === CODE_VIEW} land={land} />
+      <Suspense fallback={<div className="flex-1" />}>
+        {shown.id === CODE_VIEW ? (
+          <CodeView />
+        ) : shown.id === id ? (
+          children
+        ) : (
+          shown.node
+        )}
+        <Settled />
+      </Suspense>
+    </div>
   );
 };
 

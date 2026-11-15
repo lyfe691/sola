@@ -235,7 +235,7 @@ const GitHubContributionCalendar = ({
         style={{ "--calendar-h": `${calendarMinHeight}px` } as CSSProperties}
       >
         {showError ? (
-          <div className="flex h-full min-h-[inherit] items-center justify-center rounded-lg border border-dashed border-foreground/12 bg-foreground/[0.02] px-4 py-8 text-center text-sm text-muted-foreground">
+          <div className="flex h-full min-h-[inherit] items-center justify-center rounded-lg border border-dashed border-border bg-background px-4 py-8 text-center text-sm text-muted-foreground">
             {t.about.github.loadError}
           </div>
         ) : showCalendar ? (

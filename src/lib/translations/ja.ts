@@ -99,11 +99,10 @@ export const ja = {
       section: "一部の背景はダークモードの方が見栄えが良いです。",
     },
     callout: {
-      background: {
-        title: "自分好みに",
-        content:
-          "{background}と{theme}テーマを選びました — このメニューからいつでも変更できます。",
-      },
+      title: "自分好みに",
+      content:
+        "{themes}種類のテーマと{backgrounds}種類のアニメーション背景を、このメニューから選べます。",
+      open: "見てみる",
       done: "了解",
     },
     none: "なし",

@@ -9,8 +9,6 @@ const cardVariants = cva(
     variants: {
       variant: {
         default: "",
-        translucent: "bg-card/40",
-        soft: "bg-card/60",
         highlight: "bg-linear-to-br from-primary/20 via-primary/10 to-card",
       },
       lift: {

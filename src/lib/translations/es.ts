@@ -104,11 +104,10 @@ export const es = {
       section: "Algunos fondos se ven mucho mejor en modo oscuro.",
     },
     callout: {
-      background: {
-        title: "Hazlo tuyo",
-        content:
-          "Elegí {background} con el tema {theme} — abre este menú para probar otras opciones.",
-      },
+      title: "Hazlo tuyo",
+      content:
+        "{themes} temas y {backgrounds} fondos animados, todos en este menú.",
+      open: "Explorar",
       done: "Entendido",
     },
     none: "Ninguno",

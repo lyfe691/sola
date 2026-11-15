@@ -88,7 +88,7 @@ const AuthorLinks = ({
             href={website}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded bg-foreground/5 px-1.5 py-0.5 text-xs transition-colors hover:bg-foreground/10"
+            className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs transition-colors hover:bg-accent"
           >
             <HugeiconsIcon
               icon={Globe02Icon}
@@ -103,7 +103,7 @@ const AuthorLinks = ({
             href={linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded bg-foreground/5 px-1.5 py-0.5 text-xs transition-colors hover:bg-foreground/10"
+            className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs transition-colors hover:bg-accent"
           >
             <HugeiconsIcon
               icon={Linkedin02Icon}
@@ -122,7 +122,7 @@ const AuthorLinks = ({
       {website ? (
         <LinkPreview
           href={website}
-          className="inline-flex items-center gap-1.5 rounded-md bg-foreground/5 px-2.5 py-1.5 text-sm transition-colors hover:bg-foreground/10"
+          className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2.5 py-1.5 text-sm transition-colors hover:bg-accent"
         >
           <HugeiconsIcon
             icon={Globe02Icon}
@@ -135,7 +135,7 @@ const AuthorLinks = ({
       {linkedin ? (
         <LinkPreview
           href={linkedin}
-          className="inline-flex items-center gap-1.5 rounded-md bg-foreground/5 px-2.5 py-1.5 text-sm transition-colors hover:bg-foreground/10"
+          className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2.5 py-1.5 text-sm transition-colors hover:bg-accent"
         >
           <HugeiconsIcon
             icon={Linkedin02Icon}
@@ -246,10 +246,7 @@ const TestimonialCard = ({
   );
 
   const cardContent = (
-    <Card
-      variant="translucent"
-      className="group relative flex h-full flex-col gap-4 overflow-hidden p-6"
-    >
+    <Card className="group relative flex h-full flex-col gap-4 overflow-hidden p-6">
       <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
         <HugeiconsIcon
           icon={QuoteDownIcon}
@@ -289,8 +286,6 @@ const TestimonialCard = ({
           compactLinks
         />
       </div>
-
-      <div className="absolute top-0 right-0 size-24 translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 opacity-50" />
     </Card>
   );
 

@@ -5,11 +5,10 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * One layout for every route. PageShell (and the AnimatePresence inside it)
- * must be a single instance ABOVE the app/blank split: with one shell per
- * layout, cross-layout navigations (project card -> deep dive, any page ->
- * 404) unmounted the exiting AnimatePresence itself, so the page hard-cut
- * instead of playing the consume->reform transition. Chrome (nav, callout,
+ * One layout for every route. PageShell must be a single instance ABOVE the
+ * app/blank split: with one shell per layout, cross-layout navigations
+ * (project card -> deep dive, any page -> 404) unmounted the shell and the
+ * page it was still showing, so the page hard-cut instead of fading out. Chrome (nav, callout,
  * footer) renders conditionally from the matched route's layout; the fixed
  * bars fade as a whole when the layout flips, and persist untouched across
  * same-layout navigations exactly as before.

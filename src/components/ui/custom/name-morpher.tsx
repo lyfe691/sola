@@ -13,7 +13,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, type Variants } from "motion/react";
-import { EASE_OUT, HIDDEN_OPACITY, SMOOTH } from "@/utils/transitions";
+import { EASE_EXPO, EASE_OUT, HIDDEN_OPACITY } from "@/utils/transitions";
 
 const CYCLE_MS = 5600;
 const ENTER_STAGGER = 0.032;
@@ -25,7 +25,7 @@ const letterVariants: Variants = {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.6, ease: SMOOTH, delay: i * ENTER_STAGGER },
+    transition: { duration: 0.6, ease: EASE_EXPO, delay: i * ENTER_STAGGER },
   }),
   exit: (i: number) => ({
     opacity: 0,
@@ -99,13 +99,13 @@ export const NameMorpher = ({
             type="button"
             // FLIP the plate to the next name's real width — no char-count math
             layout
-            transition={{ layout: { duration: 0.6, ease: SMOOTH } }}
+            transition={{ layout: { duration: 0.6, ease: EASE_EXPO } }}
             onClick={() => {
               setIndex((i) => (i + 1) % names.length);
               setClock((c) => c + 1);
             }}
             aria-label={`${names.join(" · ")} — ${switchLabel}`}
-            className="relative col-start-1 row-start-1 inline-flex cursor-pointer touch-manipulation justify-self-start rounded-[0.25em] bg-muted/65 p-[0.1em] text-primary ring-1 ring-foreground/5 ring-inset [transition:scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-safe:active:scale-[0.97] active:duration-100 active:ease-out"
+            className="relative col-start-1 row-start-1 inline-flex cursor-pointer touch-manipulation justify-self-start rounded-[0.25em] bg-muted p-[0.1em] text-primary ring-1 ring-foreground/5 ring-inset [transition:scale_200ms_var(--ease-pop)] outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/50 motion-safe:active:scale-[0.97] active:duration-100 active:ease-out"
           >
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.span

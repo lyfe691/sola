@@ -95,10 +95,9 @@ export const zh = {
       section: "部分背景在深色模式下效果更佳。",
     },
     callout: {
-      background: {
-        title: "打造你的风格",
-        content: "我选择了{background}和{theme}主题 — 随时可在此菜单中更换。",
-      },
+      title: "打造你的风格",
+      content: "{themes}款主题和{backgrounds}款动态背景，都在这个菜单里。",
+      open: "看看",
       done: "知道了",
     },
     none: "无",

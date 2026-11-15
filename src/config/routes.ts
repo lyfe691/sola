@@ -162,7 +162,7 @@ export function resolveLayout(pathname: string): RouteLayout {
 /** starts the chunk of the page at a location, ahead of the first render */
 export function preloadRoute(pathname: string) {
   const match = matchRoute(pathname);
-  if (!match) return;
-  void match.route.load();
+  if (!match) return Promise.resolve();
   match.route.preload?.(match.params);
+  return match.route.load();
 }

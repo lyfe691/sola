@@ -44,8 +44,8 @@ const readInitial = (storageKey: string, fallback: string): string => {
     const stored = localStorage.getItem(storageKey);
     if (stored !== null) {
       if (stored === NONE_BACKGROUND || isBackgroundId(stored)) return stored;
-      // a saved background that has since been removed: the visitor did ask
-      // for one, so they get the site's default look rather than nothing
+      // a saved background that has since been removed: the site's own
+      // first-visit look stands in for it
       return resolveBackground(WELCOME_PRESET.background);
     }
     // migrate the old aurora boolean: enabled -> aurora

@@ -90,7 +90,7 @@ function MediaFrame({
   return (
     <div
       className={cn(
-        "rounded-2xl bg-foreground/[0.03] p-1.5 shadow-xs ring-1 ring-foreground/10",
+        "rounded-2xl bg-card p-1.5 shadow-xs ring-1 ring-foreground/10",
         className,
       )}
     >
@@ -99,7 +99,7 @@ function MediaFrame({
   );
 }
 
-const MEDIA_INNER = "size-full overflow-hidden rounded-xl bg-muted/20";
+const MEDIA_INNER = "size-full overflow-hidden rounded-xl bg-muted";
 
 // -------------------------------- Portrait --------------------------------
 
@@ -173,9 +173,8 @@ function ApproachPanel({
           (individual cells would tear the frame apart mid-animation) */}
       <Reveal
         className={cn(
-          "grid overflow-hidden rounded-2xl border border-foreground/12",
-          "bg-linear-to-b from-foreground/[0.04] to-transparent",
-          "divide-y divide-foreground/10",
+          "grid overflow-hidden rounded-2xl border border-border bg-card",
+          "divide-y divide-border",
           "sm:grid-cols-3 sm:divide-x sm:divide-y-0",
         )}
       >
@@ -184,7 +183,7 @@ function ApproachPanel({
             key={label}
             className={cn(
               "flex flex-col gap-3 p-6 sm:min-h-[11.5rem] sm:p-7 lg:gap-4 lg:p-8",
-              "transition-colors duration-200 can-hover:hover:bg-foreground/[0.04]",
+              "transition-colors duration-200 can-hover:hover:bg-muted",
             )}
           >
             <h3 className="text-base font-semibold tracking-tight sm:text-lg">
@@ -289,7 +288,7 @@ const About = () => {
         </Reveal>
 
         <Reveal>
-          <Card variant="translucent" className="gap-0 overflow-hidden p-0">
+          <Card className="gap-0 overflow-hidden p-0">
             <Tabs
               value={contributionTab}
               onValueChange={setContributionTab}
@@ -323,28 +322,36 @@ const About = () => {
         <Reveal>
           <SectionHeading>{about.interests.title}</SectionHeading>
         </Reveal>
-        <ul className="flex flex-col">
-          {INTERESTS.map(({ key, image }) => {
+        {/* each interest is a window onto its picture: the image hangs deeper
+            than its frame and drifts against the scroll (index.css,
+            "parallax"), and the rows trade sides on the way down */}
+        <ul className="flex flex-col gap-12 sm:gap-16 lg:gap-20">
+          {INTERESTS.map(({ key, image }, index) => {
             const item = about.interests[key];
             return (
               <Reveal
                 key={key}
                 as="li"
-                className="grid grid-cols-1 gap-5 py-8 first:pt-0 sm:grid-cols-12 sm:gap-8 sm:py-10"
+                className="grid grid-cols-1 items-center gap-5 md:grid-cols-12 md:gap-10 lg:gap-14"
               >
-                <MediaFrame className="sm:col-span-4">
-                  <img
-                    src={image}
-                    alt=""
-                    loading="lazy"
-                    className={cn(
-                      "aspect-[4/3] object-cover sm:aspect-[5/4]",
-                      MEDIA_INNER,
-                    )}
-                  />
+                <MediaFrame
+                  className={cn(
+                    "md:col-span-7",
+                    index % 2 === 1 && "md:order-last",
+                  )}
+                >
+                  <div className={cn("parallax aspect-video", MEDIA_INNER)}>
+                    <img src={image} alt="" loading="lazy" />
+                  </div>
                 </MediaFrame>
-                <div className="flex flex-col justify-center gap-2 sm:col-span-8">
-                  <h3 className="text-base font-medium sm:text-lg">
+                <div className="flex flex-col gap-2.5 md:col-span-5">
+                  <span
+                    aria-hidden
+                    className="font-mono text-2xs font-bold tracking-label text-muted-foreground"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="text-xl font-semibold tracking-tight sm:text-2xl">
                     {item.title}
                   </h3>
                   <p className="max-w-prose text-sm leading-relaxed text-muted-foreground sm:text-sm-plus">

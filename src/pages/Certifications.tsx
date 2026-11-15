@@ -110,7 +110,7 @@ function Certificate({ cert, tilt }: { cert: Certification; tilt: string }) {
             className={cn(
               "pointer-events-none absolute right-3 bottom-3",
               "grid size-8 place-items-center rounded-full",
-              "bg-background/80 text-foreground shadow-sm backdrop-blur-md",
+              "bg-background text-foreground shadow-sm",
               "scale-90 opacity-0 transition-[opacity,scale] duration-200 ease-out",
               "can-hover:group-hover/sheet:scale-100 can-hover:group-hover/sheet:opacity-100",
               "group-focus-visible/sheet:scale-100 group-focus-visible/sheet:opacity-100",

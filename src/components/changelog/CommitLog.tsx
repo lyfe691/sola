@@ -151,7 +151,7 @@ function CommitRow({
         live={live}
         pending={isPending}
         fadeOut={isLast && graph.outgoing}
-        className="transition-opacity duration-(--reveal-duration) ease-smooth group-has-[[data-reveal]:not([data-revealed])]/row:opacity-0"
+        className="transition-opacity duration-(--reveal-fade) ease-reveal group-has-[[data-reveal]:not([data-revealed])]/row:opacity-0"
       />
       <Reveal className="min-w-0">
         <button
@@ -165,8 +165,8 @@ function CommitRow({
           className={cn(
             "flex w-full min-w-0 cursor-pointer flex-col gap-1.5 rounded-xl px-3 py-2.5 text-left touch-manipulation select-none",
             "transition-[background-color,scale] duration-200 ease-out active:scale-[0.99]",
-            "can-hover:hover:bg-muted/50",
-            isOpen && "bg-muted/40",
+            "can-hover:hover:bg-muted",
+            isOpen && "bg-muted",
           )}
         >
           <span className="sr-only">{isOpen ? t.collapse : t.expand}</span>
