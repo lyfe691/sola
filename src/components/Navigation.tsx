@@ -182,10 +182,10 @@ const DesktopNav = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: EASE_OUT }}
           className={cn(
-            "pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 transition-[max-width,margin,padding,border-radius,background-color,border-color,box-shadow] duration-200 ease-out",
+            "pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 rounded-full border transition-[max-width,margin,padding,background-color,border-color,box-shadow] duration-500 ease-out-quart",
             scrolled
-              ? "mt-3 max-w-7xl rounded-full border border-foreground/10 bg-background px-4 py-2 shadow-lg shadow-black/5"
-              : "mt-0 max-w-screen-2xl rounded-none border border-transparent bg-transparent px-6 py-5 lg:px-8",
+              ? "mt-3 max-w-7xl border-foreground/10 bg-background px-4 py-2 shadow-lg shadow-black/5"
+              : "mt-0 max-w-[min(100%,96rem)] border-transparent bg-transparent px-6 py-5 lg:px-8",
           )}
         >
           <div className="flex min-w-0 items-center gap-3">
@@ -366,10 +366,10 @@ const MobileNav = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: EASE_OUT }}
             className={cn(
-              "pointer-events-auto mx-auto flex items-center justify-between gap-2 transition-[margin,padding,border-radius,background-color,border-color,box-shadow] duration-200 ease-out",
+              "pointer-events-auto mx-auto flex items-center justify-between gap-2 rounded-full border transition-[margin,padding,background-color,border-color,box-shadow] duration-500 ease-out-quart",
               scrolled && !menuOpen
-                ? "mt-3 rounded-full border border-foreground/10 bg-background px-2 py-2 shadow-lg shadow-black/5"
-                : "mt-0 rounded-none border border-transparent bg-transparent px-1 py-4",
+                ? "mt-3 border-foreground/10 bg-background px-2 py-2 shadow-lg shadow-black/5"
+                : "mt-0 border-transparent bg-transparent px-1 py-4",
             )}
           >
             <button
