@@ -51,6 +51,8 @@ import { useNearViewport } from "./use-near-viewport";
 
 export interface PaintedCoverProps {
   art: ProjectArt;
+  /** What a page change carries this cover as (page-change.ts): a project's slug. */
+  name?: string;
   /** card: aspect 21/9, STEPS 5. hero: fills its box (pass className="absolute inset-0"), STEPS 6. */
   size: "card" | "hero";
   /** false: the static painting only, no canvas and no observers. Default true. */
@@ -239,6 +241,7 @@ function createCover(
 
 export function PaintedCover({
   art,
+  name,
   size,
   live = true,
   notch,
@@ -370,6 +373,7 @@ export function PaintedCover({
   return (
     <div
       ref={rootRef}
+      data-cover={name}
       className={cn(
         // isolate: the grain's blend mode stays inside the cover
         "relative isolate overflow-hidden",

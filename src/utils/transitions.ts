@@ -11,9 +11,10 @@
  *
  * Two registers, deliberately different:
  *   - UI controls (menus, tooltips, hover, press) answer at once: short, EASE_OUT.
- *   - Content arrives on the glide: scroll reveals, load-ins and the page
- *     change. Longer, on REVEAL, and only ever a fade and a short rise. No
- *     blur and no scale: a page is too large a thing to bend.
+ *   - Content arrives on the glide: scroll reveals and load-ins. Longer, on
+ *     REVEAL, and only ever a fade and a short rise. No blur and no scale:
+ *     a page is too large a thing to bend. The page change clears a picture
+ *     of the old page and leaves the arriving one to its reveals.
  *
  * Every curve mirrors the CSS token of the same name in src/index.css
  * (@theme): EASE_OUT is --ease-out, REVEAL is --ease-reveal, and so on. Only
@@ -101,18 +102,37 @@ export const GALLERY_SLIDE = {
 export const HIDDEN_OPACITY = 0.001;
 
 // ---- Page change ----
-// The page that leaves fades out where it stands. The next one takes its
-// place at the top of the window and fades in, and its first screen arrives
-// block by block through the reveal queue: the entrance is the same one a
-// scrolled-to block plays, so a page change adds no motion of its own.
-// Opacity only, and short: the shell is the whole page, and anything more
-// (it used to shrink and blur away, then grow and sharpen back) was felt as
-// weight on every click.
-export const pageTransitionVariants = {
-  initial: { opacity: HIDDEN_OPACITY },
-  animate: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
-  exit: { opacity: 0, transition: { duration: 0.2, ease: EASE_OUT } },
-};
+// The motion is CSS (index.css, "page change"): a picture of the old page
+// fades where it stands while the next page builds under it through the
+// reveal queue, and the title (or a project's cover) travels from one to
+// the other. What runs it
+// (src/layouts/page-change.ts) keeps five times (ms).
+//
+// BEAT: the next page goes in this long after the picture starts to fade.
+// Mounting a page (and unmounting one) is the heaviest thing the site does:
+// it blocks the main thread and then keeps the GPU busy, which is where
+// frames go missing. By now the picture is most of the way out, so the two
+// pages are never legible at once. A second click this soon also still decides
+// which page goes in, where mounting the first would hold it up.
+export const PAGE_BEAT = 120;
+// HOLD: the longest a change waits for what it has no hold on. Under the
+// whole-window dissolve the picture waits this long for a chunk still on
+// its way, about what the old fade gave a tap to load it; otherwise a page
+// whose chunk is still out, or that the address bar has already left, is
+// mounted after all.
+export const PAGE_HOLD = 320;
+// HANDOVER: a further change this soon after the next page went in
+// replaces that page under the picture, while its first block is under a
+// quarter of the way in. Later, the change starts over.
+export const PAGE_HANDOVER = 120;
+// TITLE_LEAD: under a title that travels, the first block starts this
+// late, so it shows once the title is nearly in its place and not while it
+// crosses the block.
+export const PAGE_TITLE_LEAD = 100;
+// CARRY_HOLD: a carried piece (the title, a cover) waits this long for its
+// successor before it fades alone. Longer than the picture's fade: a heavy
+// page goes in after the picture is gone, and the piece is still carried.
+export const PAGE_CARRY_HOLD = 600;
 
 // ---- Scroll reveals ----
 // The one reveal every block plays is CSS (index.css, "scroll reveals").

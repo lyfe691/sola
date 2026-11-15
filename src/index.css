@@ -874,6 +874,184 @@
   }
 }
 
+/* ---------- page change (view transitions api) ---------- */
+/* A route change, or the code view taking the page over (page-change.ts).
+   The window is photographed with the old page in it and the photograph
+   fades where it stands. The next page is rendered meanwhile and goes in
+   underneath, live: the root steps out once photographed, so only the page
+   that leaves is ever a picture. Only opacity moves, so the fade stays on
+   the compositor while the main thread renders the next page.
+
+   Touch devices and reduced motion keep the root in the transition and get
+   the theme transition's whole-window dissolve (above) instead. */
+:root {
+  --page-clear: 240ms;
+}
+
+:root[data-page-change="leave"] {
+  view-transition-name: page;
+}
+
+:root[data-page-change="clear"],
+:root[data-page-change="build"] {
+  view-transition-name: none;
+}
+
+::view-transition-group(page) {
+  animation: none;
+}
+
+/* the site's bar is cut from its top (--page-bar, page-change.ts) */
+::view-transition-old(page) {
+  clip-path: inset(var(--page-bar, 0px) 0 0 0);
+  animation: page-clear var(--page-clear) var(--ease-out) both;
+}
+
+@keyframes page-clear {
+  to {
+    opacity: 0;
+  }
+}
+
+/* The page that arrives: whatever on it is not a reveal fades in as one, so
+   nothing of it pops in under the fading picture. 0.001,
+   not 0: HIDDEN_OPACITY in transitions.ts says why. */
+[data-page-arriving] {
+  animation: page-arrive 300ms var(--ease-out) backwards;
+}
+
+@keyframes page-arrive {
+  from {
+    opacity: 0.001;
+  }
+}
+
+/* The one thing carried across: between two app pages, the old title
+   becomes the new one. The old title is lifted out of the picture and holds
+   its place over the clearing page until the next page is in ("build").
+   Then the two set off together, the old one's picture and the new title
+   itself, from where the old stood to where the new one stands and from the
+   old one's size to the new one's (page-change.ts measures both), trading
+   places on the way as a grid slot's cards do. The two paths are the same
+   path, so they stay on top of each other all the way.
+
+   The travel and the fades are transforms and opacity, on the compositor.
+   A blur cannot run there, so only the old title blurs, as an animation of
+   its own: late, it leaves that title sharp a moment longer. The new one
+   never blurs: it arrives as the next page mounts, and a blur held up by
+   that would sit on it at full strength. */
+[data-page-title="out"] {
+  view-transition-name: page-title;
+}
+
+::view-transition-group(page-title) {
+  transform-origin: 0 0;
+  animation: page-title-leave 480ms var(--ease-out-quart) both paused;
+}
+
+::view-transition-old(page-title) {
+  animation:
+    page-piece-out 240ms var(--ease-out) both paused,
+    page-title-blur 240ms var(--ease-out) both paused;
+}
+
+:root[data-page-change="build"]::view-transition-group(page-title),
+:root[data-page-change="build"]::view-transition-old(page-title) {
+  animation-play-state: running;
+}
+
+[data-page-title="in"] {
+  transform-origin: 0 0;
+  animation:
+    page-title-arrive 480ms var(--ease-out-quart) both,
+    page-piece-in 420ms var(--ease-out-quart) both;
+}
+
+/* without a successor the properties are not set, and the old title fades
+   where it stands */
+@keyframes page-title-leave {
+  to {
+    transform: translate(var(--page-title-to-x), var(--page-title-to-y))
+      scale(var(--page-title-scale));
+  }
+}
+
+@keyframes page-title-arrive {
+  from {
+    transform: translate(
+        calc(var(--page-title-from-x) - var(--page-title-to-x)),
+        calc(var(--page-title-from-y) - var(--page-title-to-y))
+      )
+      scale(calc(1 / var(--page-title-scale)));
+  }
+}
+
+@keyframes page-piece-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-title-blur {
+  to {
+    filter: blur(6px);
+  }
+}
+
+@keyframes page-piece-in {
+  from {
+    opacity: 0.001;
+  }
+}
+
+/* The other thing carried across: a project's cover, between its card and
+   its deep dive's hero, the same way. The picture is scaled by width alone,
+   so nothing in it is bent; where the two shapes differ it shows only while
+   one of them is nearly clear. Opening a deep dive, the hero itself grows
+   out of the card's place under the picture. Going back, the card stays
+   where it is (it clips its cover) and the hero's picture shrinks onto it. */
+[data-page-cover="out"] {
+  view-transition-name: page-cover;
+}
+
+::view-transition-group(page-cover) {
+  transform-origin: 0 0;
+  animation: page-cover-leave 520ms var(--ease-out-quart) both paused;
+}
+
+::view-transition-old(page-cover) {
+  animation: page-piece-out 320ms var(--ease-out) 160ms both paused;
+}
+
+:root[data-page-change="build"]::view-transition-group(page-cover),
+:root[data-page-change="build"]::view-transition-old(page-cover) {
+  animation-play-state: running;
+}
+
+[data-page-cover="in"] {
+  transform-origin: 0 0;
+  animation:
+    page-cover-arrive 520ms var(--ease-out-quart) both,
+    page-piece-in 240ms var(--ease-out) both;
+}
+
+@keyframes page-cover-leave {
+  to {
+    transform: translate(var(--page-cover-to-x), var(--page-cover-to-y))
+      scale(var(--page-cover-scale));
+  }
+}
+
+@keyframes page-cover-arrive {
+  from {
+    transform: translate(
+        calc(var(--page-cover-from-x) - var(--page-cover-to-x)),
+        calc(var(--page-cover-from-y) - var(--page-cover-to-y))
+      )
+      scale(calc(1 / var(--page-cover-scale)));
+  }
+}
+
 /* ---------- paper (/certifications) ---------- */
 /* a sheet lying on the page: a tight contact shadow and a wide soft one */
 :root {

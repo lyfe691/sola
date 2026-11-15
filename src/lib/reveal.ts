@@ -23,9 +23,17 @@ import { REVEAL_MAX_LAG, REVEAL_STAGGER } from "@/utils/transitions";
  */
 type Release = (delay: number | null) => void;
 
+/** what the queue needs to know of a block: an IntersectionObserverEntry's */
+type Sighting = {
+  target: Element;
+  isIntersecting: boolean;
+  boundingClientRect: DOMRectReadOnly;
+};
+
 // A block's top has to reach 90% of the viewport height, so the motion
 // plays where the eye already is rather than under the bottom edge.
-const TRIGGER_LINE = "0px 0px -10% 0px";
+const TRIGGER_INSET = 10;
+const TRIGGER_LINE = `0px 0px -${TRIGGER_INSET}% 0px`;
 
 const waiting = new Map<Element, Release>();
 let observer: IntersectionObserver | undefined;
@@ -54,7 +62,7 @@ export function schedule(count: number, now: number, nextStart: number) {
   return { delays, next: now + lead + (count - 1) * beat + REVEAL_STAGGER };
 }
 
-function letIn(entries: IntersectionObserverEntry[]) {
+function letIn(entries: Sighting[]) {
   // A page can open part-way down (back or forward, the code view handing
   // the page back). What is already above the window then has nothing to
   // arrive into, and would otherwise sit hidden until the reader scrolled up
@@ -100,4 +108,35 @@ export function watchReveal(target: Element, release: Release) {
     waiting.delete(target);
     observer?.unobserve(target);
   };
+}
+
+/**
+ * Let in, now, every waiting block the window already shows, the first of
+ * them `lead` ms from now. The observer reports a frame late, and later
+ * still while a page mounts: a page change calls this in the commit that
+ * puts the page in, so the first screen starts with the change and not
+ * after it.
+ */
+export function revealNow(lead = 0) {
+  const line = window.innerHeight * (1 - TRIGGER_INSET / 100);
+  nextStart = Math.max(nextStart, performance.now() + lead);
+  letIn(
+    [...waiting.keys()].map((target) => {
+      const boundingClientRect = target.getBoundingClientRect();
+      const { top, bottom } = boundingClientRect;
+      return {
+        target,
+        boundingClientRect,
+        isIntersecting: top < line && bottom > 0,
+      };
+    }),
+  );
+}
+
+/** Show a waiting block outright: something else is bringing it in. */
+export function skipReveal(target: Element) {
+  const release = waiting.get(target);
+  waiting.delete(target);
+  observer?.unobserve(target);
+  release?.(null);
 }

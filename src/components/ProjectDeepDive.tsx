@@ -229,7 +229,10 @@ function DeepDiveHero({
   }, []);
 
   return (
-    <div className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5">
+    <div
+      data-cover="hero"
+      className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5"
+    >
       <PaintedCover
         art={art}
         size="hero"

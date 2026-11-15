@@ -59,8 +59,7 @@ const TYPE_START_DELAY_MS = 240;
 const COMMAND_HOLD_MS = 450;
 
 // The command enters quietly under the page transition; once finished it
-// leaves the way a page does (pageTransitionVariants' exit), and the content
-// arrives beneath on the site's reveal curve.
+// fades out, and the content arrives beneath on the site's reveal curve.
 const commandPhase = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
