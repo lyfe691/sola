@@ -7,11 +7,10 @@
  */
 
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
 import { useReducedMotion } from "motion/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
+import { MorphArrow } from "@/components/ui/custom/morph-arrow";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ContributionActivityFeed from "@/components/ContributionActivityFeed";
 import GitHubContributionCalendar from "@/components/github/GitHubContributionCalendar";
@@ -370,17 +369,10 @@ const About = () => {
             trailing={
               <Link
                 to="/contact"
-                className="group inline-flex items-center gap-1 pb-0.5 text-sm text-muted-foreground transition-colors duration-300 ease-out hover:text-primary"
+                className="inline-flex items-center gap-1 text-sm font-medium text-foreground/60 transition-colors duration-200 ease-out hover:text-foreground"
               >
-                <span className="border-b border-dotted border-foreground/20 transition-colors duration-300 group-hover:border-primary">
-                  {about.testimonials.link}
-                </span>
-                <HugeiconsIcon
-                  icon={ArrowRight01Icon}
-                  strokeWidth={2}
-                  aria-hidden
-                  className="size-3.5 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:translate-x-0.5"
-                />
+                {about.testimonials.link}
+                <MorphArrow />
               </Link>
             }
           >
