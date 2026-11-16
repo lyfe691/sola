@@ -55,19 +55,13 @@ export const SHOWREEL: Shot[] = [
   { project: "fleetmap", image: "/projects/fleetmap/live.webp" },
 ];
 
-/** The captures set around the closing line, clockwise from the top left. */
-export const CLOSING: Shot[] = [
-  { project: "sola", image: "/projects/sola/hero.webp" },
-  { project: "fleetmap", image: "/projects/fleetmap/live.webp" },
-  { project: "montu", image: "/projects/montu/home-desktop.webp" },
-  { project: "qr", image: "/projects/qr/hero.webp" },
-];
+/** The project whose colours the closing line stands on: this site's own. */
+export const CLOSING_PROJECT = "sola";
 
 /** Every capture the page shows. */
 export const shots = (): Shot[] => [
   ...SHOWREEL,
   ...OFFERINGS.flatMap(({ proof }): readonly Shot[] => proof),
-  ...CLOSING,
 ];
 
 /** Pixel width of a capture's card-size copy (scripts/service-images.mjs). */

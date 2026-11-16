@@ -14,10 +14,11 @@ import { DepthTilt } from "@/components/services/depth-tilt";
 import { SkewedCarousel } from "@/components/services/skewed-carousel";
 import { Capture } from "@/components/services/capture";
 import { PaintedCover } from "@/components/painted-cover/PaintedCover";
+import { ArtField } from "@/components/stipple-gradient/ArtField";
 import { PROJECTS } from "@/config/projects";
 import { MorphArrow } from "@/components/ui/custom/morph-arrow";
 import {
-  CLOSING,
+  CLOSING_PROJECT,
   OFFERINGS,
   SHOWREEL,
   coverImage,
@@ -31,20 +32,11 @@ import { cn } from "@/lib/utils";
  *  and the wide heading face are the rest of the site's. */
 const DISPLAY = "font-sans font-normal tracking-tight text-balance";
 
-/** Where the closing's captures hang, clockwise from the top left. */
-const CLOSING_PLACES = [
-  "top-0 left-0 -rotate-6",
-  "top-6 right-0 rotate-6",
-  "right-6 bottom-0 -rotate-3",
-  "bottom-4 left-6 rotate-3",
-];
-
 /** How wide a capture is drawn in each place, for `<img sizes>`: they follow
- *  the carousel's card width, the offerings' grid and the closing's `w-60`. */
+ *  the carousel's card width and the offerings' grid. */
 const SIZES = {
   showreel: "(min-width: 600px) 440px, 74vw",
   proof: "(min-width: 1024px) 60vw, (min-width: 640px) 50vw, 100vw",
-  closing: "240px",
 };
 type Place = keyof typeof SIZES;
 
@@ -95,27 +87,34 @@ const Stage = ({
   );
 };
 
+const PILL = {
+  primary:
+    "h-12 gap-2 bg-primary pr-5 pl-6 text-lg text-primary-foreground hover:bg-primary/90",
+  quiet:
+    "h-10 gap-1.5 bg-muted pr-3.5 pl-4.5 text-sm text-foreground hover:bg-accent",
+  // on the closing's artwork, which is the same in every theme
+  art: "h-12 gap-2 bg-white pr-5 pl-6 text-lg text-black hover:bg-white/90",
+};
+
 /** The page's one button: a pill whose chevron becomes an arrow on hover. */
 const Pill = ({
   to,
-  quiet = false,
+  look = "primary",
   children,
 }: {
   to: string;
-  quiet?: boolean;
+  look?: keyof typeof PILL;
   children: ReactNode;
 }) => (
   <Link
     to={to}
     className={cn(
       "inline-flex items-center rounded-full outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring/50",
-      quiet
-        ? "h-10 gap-1.5 bg-muted pr-3.5 pl-4.5 text-sm text-foreground hover:bg-accent"
-        : "h-12 gap-2 bg-primary pr-5 pl-6 text-lg text-primary-foreground hover:bg-primary/90",
+      PILL[look],
     )}
   >
     {children}
-    <MorphArrow className={quiet ? "size-4" : "size-5"} />
+    <MorphArrow className={look === "quiet" ? "size-4" : "size-5"} />
   </Link>
 );
 
@@ -123,6 +122,7 @@ const Services = () => {
   const t = useTranslation();
   const page = t.services.page;
 
+  const closingArt = PROJECTS.find(({ id }) => id === CLOSING_PROJECT)?.art;
   const titles: Record<string, { title: string } | undefined> = t.projects.list;
 
   return (
@@ -178,7 +178,7 @@ const Services = () => {
                 {offering.line}
               </p>
               <div className="mt-8 flex items-center gap-5">
-                <Pill to={contactUrl(t, service)} quiet>
+                <Pill to={contactUrl(t, service)} look="quiet">
                   {t.services.getStarted}
                 </Pill>
                 <p className="text-base text-foreground/55">
@@ -216,40 +216,31 @@ const Services = () => {
         );
       })}
 
-      <section className="relative mt-32 mb-16 flex items-center justify-center sm:mt-44 sm:mb-24 lg:mt-56 xl:min-h-144">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 hidden xl:block"
-        >
-          {CLOSING.map((shot, index) => (
-            <Stage
-              key={shot.image}
-              shot={shot}
-              place="closing"
+      {/* the page ends on a field in the site's own colours, not on more
+          captures: the work has been shown by now */}
+      <Reveal className="mt-32 mb-8 sm:mt-44 lg:mt-56">
+        <section className="relative overflow-hidden rounded-3xl border-4 border-border">
+          {closingArt && <ArtField art={closingArt} />}
+          <div className="relative flex flex-col items-center gap-6 px-6 py-24 text-center text-white sm:py-32 lg:py-40">
+            <h2
               className={cn(
-                "absolute w-60 shadow-xl shadow-black/10",
-                CLOSING_PLACES[index],
+                DISPLAY,
+                "max-w-xl text-4xl leading-10 sm:text-6xl sm:leading-16",
               )}
-            />
-          ))}
-        </div>
-        <Reveal className="relative flex flex-col items-center gap-6 text-center">
-          <h2
-            className={cn(
-              DISPLAY,
-              "max-w-xl text-4xl leading-10 sm:text-6xl sm:leading-16",
-            )}
-          >
-            {page.closing.title}
-          </h2>
-          <p className="max-w-md text-xl leading-7 text-foreground/70">
-            {page.closing.line}
-          </p>
-          <div className="mt-2">
-            <Pill to="/contact">{page.cta}</Pill>
+            >
+              {page.closing.title}
+            </h2>
+            <p className="max-w-md text-xl leading-7 text-white/80">
+              {page.closing.line}
+            </p>
+            <div className="mt-2">
+              <Pill to="/contact" look="art">
+                {page.cta}
+              </Pill>
+            </div>
           </div>
-        </Reveal>
-      </section>
+        </section>
+      </Reveal>
     </div>
   );
 };
