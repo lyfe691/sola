@@ -8,7 +8,6 @@
 
 import type { CSSProperties, ReactNode } from "react";
 import { useTranslation } from "@/lib/language-provider";
-import type { Translation } from "@/lib/translations";
 import { Reveal } from "@/components/Reveal";
 import { BlurHighlight } from "@/components/services/blur-highlight";
 import { DepthTilt } from "@/components/services/depth-tilt";
@@ -24,10 +23,9 @@ import {
   coverImage,
   type Shot,
 } from "@/config/services";
+import { contactUrl } from "@/lib/contact-url";
 import { Link } from "@/lib/locale-router";
 import { cn } from "@/lib/utils";
-
-type ServiceKey = keyof Translation["services"]["services"];
 
 /** This page sets its type light and large, in the text face: the weight
  *  and the wide heading face are the rest of the site's. */
@@ -125,15 +123,6 @@ const Services = () => {
   const t = useTranslation();
   const page = t.services.page;
 
-  const contactUrl = (service: ServiceKey) => {
-    const { title, features } = t.services.services[service];
-    const ct = t.services.contactTemplate;
-    const list = features.map((feature) => `- ${feature}`).join("\n");
-    const subject = `${title} – ${ct.inquiry}`;
-    const message = `${ct.greeting}\n\n${ct.interested.replace("{service}", title)}\n\n${ct.discuss}\n${list}\n\n${ct.closing}`;
-    return `/contact?subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}`;
-  };
-
   const titles: Record<string, { title: string } | undefined> = t.projects.list;
 
   return (
@@ -189,7 +178,7 @@ const Services = () => {
                 {offering.line}
               </p>
               <div className="mt-8 flex items-center gap-5">
-                <Pill to={contactUrl(service)} quiet>
+                <Pill to={contactUrl(t, service)} quiet>
                   {t.services.getStarted}
                 </Pill>
                 <p className="text-base text-foreground/55">

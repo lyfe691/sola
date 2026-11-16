@@ -180,6 +180,7 @@ export const ja = {
     commits: "{count}件のコミット",
   },
   nav: {
+    viewAll: "すべて見る",
     about: "私について",
     experience: "経験",
     projects: "プロジェクト",

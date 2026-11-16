@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2026 Yanis Sebastian Zürcher
  *
- * Writes public/services: what the Services page's cards draw with. For each
- * project shown there, its cover painted once into `<project>/cover.webp`
+ * Writes public/services: what the Services page's cards and the bar's menu
+ * previews draw with. For each project shown there, its cover painted once into `<project>/cover.webp`
  * (inline, the painting is three large SVG blurs, and a phone draws them in
  * software for every card), and each capture at card width next to it under
  * the capture's own file name.
@@ -17,6 +17,7 @@ import { dirname } from "node:path";
 import sharp from "sharp";
 import { coverSvg } from "../src/components/painted-cover/artwork.ts";
 import { resolveArt } from "../src/components/painted-cover/presets.ts";
+import { NAV_PROJECTS } from "../src/config/nav-menu.ts";
 import { PROJECTS } from "../src/config/projects.ts";
 import {
   CARD_WIDTH,
@@ -35,7 +36,7 @@ const file = (src) => {
 
 const covers = new Set();
 const captures = new Set();
-for (const { project, image } of shots()) {
+for (const { project, image } of [...shots(), ...NAV_PROJECTS]) {
   covers.add(project);
   captures.add(image);
 }

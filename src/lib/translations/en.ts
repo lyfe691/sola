@@ -181,6 +181,7 @@ export const en = {
     commits: "{count} commits",
   },
   nav: {
+    viewAll: "View all",
     about: "About",
     experience: "Experience",
     projects: "Projects",

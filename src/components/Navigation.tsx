@@ -11,12 +11,18 @@ import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useEffect, useState, useCallback, useRef, memo } from "react";
 import { useLenis } from "lenis/react";
 import type Lenis from "lenis";
-import { useLanguage, useTranslation } from "@/lib/language-provider";
+import { useTranslation } from "@/lib/language-provider";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useCommandMenu } from "@/hooks/use-command-menu";
 import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
+import { NAV_MENUS, NAV_PANEL_WIDTH, type NavMenuKey } from "@/config/nav-menu";
+import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { useGlidePill } from "./ui/custom/glide-pill";
+import { ContactMenu } from "./contact-menu";
+import { NavPanel } from "./nav-menu";
 import { SearchToggle } from "./search-toggle";
 import { AppearanceMenu } from "./appearance-menu";
 import { useCodeView } from "./deploy-diff/code-view-provider";
@@ -120,125 +126,219 @@ const Logo = ({ label }: { label: string }) => (
 );
 
 const DesktopNav = () => {
-  const { language } = useLanguage();
   const t = useTranslation();
   const location = useLocation();
   const scrolled = useScrolled();
-  const linksRef = useRef<HTMLElement>(null);
-  const highlightRef = useRef<HTMLSpanElement>(null);
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [menu, setMenu] = useState<{ key: NavMenuKey; x: number } | null>(null);
+  const leaving = useRef<number | undefined>(undefined);
+  // one fill for the links, gliding to the one under the pointer; it waits
+  // on a link whose menu is open
+  const glide = useGlidePill();
+  const hidePill = glide.hide;
 
-  const links = MAIN_NAVIGATION.slice(1).map((item) => ({
-    label:
-      (t.nav[item.translationKey as keyof typeof t.nav] as string) || item.key,
-    path: item.path,
-  }));
+  // Contact is the bar's button, not one of its links
+  const links = MAIN_NAVIGATION.slice(1)
+    .filter((item) => item.key !== "contact")
+    .map((item) => ({
+      label:
+        (t.nav[item.translationKey as keyof typeof t.nav] as string) ||
+        item.key,
+      path: item.path,
+    }));
 
-  const isActive = useCallback(
-    (path: string) =>
-      location.pathname === path || location.pathname.startsWith(`${path}/`),
-    [location.pathname],
-  );
+  const isActive = (path: string) =>
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
 
-  const positionHighlight = useCallback((el: HTMLElement | null) => {
-    const highlight = highlightRef.current;
-    const container = linksRef.current;
-    if (!highlight || !container || !el) return;
-    const link = el.getBoundingClientRect();
-    const box = container.getBoundingClientRect();
-    highlight.style.width = `${link.width}px`;
-    highlight.style.height = `${link.height}px`;
-    highlight.style.transform = `translate(${link.left - box.left}px, ${link.top - box.top}px)`;
-    highlight.style.opacity = "1";
+  const close = useCallback(() => {
+    window.clearTimeout(leaving.current);
+    setMenu(null);
+    hidePill();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- hide only sets state
   }, []);
+  useEffect(() => () => window.clearTimeout(leaving.current), []);
 
-  const snapToActive = useCallback(() => {
-    const active = linksRef.current?.querySelector<HTMLElement>(
-      "[data-active='true']",
+  // under its link, moved left as far as it takes to stay inside the bar
+  const open = (key: NavMenuKey, link: HTMLElement) => {
+    const row = rowRef.current;
+    if (!row) return;
+    window.clearTimeout(leaving.current);
+    const offset =
+      link.getBoundingClientRect().left - row.getBoundingClientRect().left;
+    const x = Math.max(0, Math.min(offset, row.clientWidth - NAV_PANEL_WIDTH));
+    setMenu((current) =>
+      current?.key === key && current.x === x ? current : { key, x },
     );
-    if (active) positionHighlight(active);
-    else if (highlightRef.current) highlightRef.current.style.opacity = "0";
-  }, [positionHighlight]);
-
-  useEffect(() => {
-    const raf = requestAnimationFrame(snapToActive);
-    return () => cancelAnimationFrame(raf);
-  }, [location.pathname, language, snapToActive]);
-
-  useEffect(() => {
-    const nav = linksRef.current;
-    if (!nav) return;
-    const observer = new ResizeObserver(snapToActive);
-    observer.observe(nav);
-    return () => observer.disconnect();
-  }, [snapToActive]);
+  };
+  const hold = () => window.clearTimeout(leaving.current);
+  // a pointer on its way from the link to the panel leaves both for a moment
+  const closeSoon = () => {
+    window.clearTimeout(leaving.current);
+    leaving.current = window.setTimeout(() => {
+      setMenu(null);
+      hidePill();
+    }, 150);
+  };
+  // Tab walks from a link into its menu, and out of the menu's far end to
+  // whatever follows the link in the bar: the panel sits after the links in
+  // the document, so the browser's own order would visit it last
+  const menuLink = (key: NavMenuKey) =>
+    rowRef.current?.querySelector<HTMLElement>(`[data-nav-menu="${key}"] a`);
+  const tabOut = (key: NavMenuKey, forward: boolean) => {
+    const link = menuLink(key);
+    const row = rowRef.current;
+    if (!link || !row) return;
+    if (!forward) return link.focus();
+    const stops = Array.from(
+      row.querySelectorAll<HTMLElement>("a[href], button:not([disabled])"),
+    ).filter((stop) => !stop.closest("[data-nav-layer]"));
+    close();
+    stops[stops.indexOf(link) + 1]?.focus();
+  };
 
   return (
-    <header className="pointer-events-none fixed inset-x-0 top-0 z-40 hidden lg:block">
-      <div className="px-5 sm:px-6 md:px-8 lg:px-12">
-        <motion.div
-          data-nav-bar
-          data-docked={scrolled || undefined}
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: EASE_OUT }}
-          className={cn(
-            "pointer-events-auto mx-auto flex w-full items-center justify-between gap-6 rounded-full border transition-[max-width,margin,padding,background-color,border-color,box-shadow] duration-500 ease-out-quart",
-            scrolled
-              ? "mt-3 max-w-7xl border-foreground/10 bg-background px-4 py-2 shadow-lg shadow-black/5"
-              : "mt-0 max-w-[min(100%,96rem)] border-transparent bg-transparent px-6 py-5 lg:px-8",
-          )}
+    <header
+      className="fixed inset-x-0 top-0 z-40 hidden lg:block"
+      onKeyDown={(event) => {
+        if (event.key !== "Escape" || !menu) return;
+        menuLink(menu.key)?.focus();
+        close();
+      }}
+      onBlur={(event) => {
+        const next = event.relatedTarget;
+        if (!(next instanceof Element) || !next.closest("[data-nav-menu]"))
+          close();
+      }}
+    >
+      <motion.div
+        data-nav-bar
+        data-docked={scrolled || undefined}
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: EASE_OUT }}
+        className={cn(
+          "border-b px-12 transition-[background-color,border-color] duration-300 ease-out",
+          scrolled || menu
+            ? "border-foreground/10 bg-background"
+            : "border-transparent bg-transparent",
+        )}
+      >
+        <div
+          ref={rowRef}
+          className="relative mx-auto flex h-16 max-w-7xl items-center gap-6"
         >
-          <div className="flex min-w-0 items-center gap-3">
-            <Logo label={t.common.home} />
+          <Logo label={t.common.home} />
 
-            <span
-              aria-hidden
-              className="select-none text-lg text-foreground/25"
-            >
-              /
-            </span>
+          <span
+            aria-hidden="true"
+            className="h-5 w-px rotate-12 bg-foreground/20"
+          />
 
-            <nav
-              ref={linksRef}
-              aria-label={t.common.a11y.primaryNav}
-              onMouseLeave={snapToActive}
-              className="relative flex items-center"
-            >
-              <span
-                ref={highlightRef}
-                aria-hidden
-                className="pointer-events-none absolute left-0 top-0 rounded-full bg-muted opacity-0 transition-[transform,translate,scale,rotate,width,height,opacity] duration-300 ease-out"
-              />
-              {links.map((link) => {
-                const active = isActive(link.path);
+          <nav
+            aria-label={t.common.a11y.primaryNav}
+            className="relative isolate -ml-3 flex items-center"
+            onPointerOver={(event) => {
+              const link =
+                event.target instanceof Element
+                  ? event.target.closest<HTMLElement>("a")
+                  : null;
+              if (link && event.pointerType !== "touch") glide.moveTo(link);
+            }}
+            onPointerLeave={() => {
+              if (!menu) glide.hide();
+            }}
+          >
+            {glide.pill}
+            {links.map((link) => {
+              const active = isActive(link.path);
+              const key = NAV_MENUS[link.path];
+              const expanded = menu?.key === key;
+              const className = cn(
+                "flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring/50",
+                active || (key && expanded)
+                  ? "text-foreground"
+                  : "text-foreground/60 hover:text-foreground",
+              );
+              if (!key)
                 return (
                   <Link
                     key={link.path}
                     to={link.path}
-                    data-active={active}
                     aria-current={active ? "page" : undefined}
-                    onMouseEnter={(e) => positionHighlight(e.currentTarget)}
-                    className={cn(
-                      "relative z-10 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-300",
-                      active
-                        ? "text-foreground"
-                        : "text-foreground/60 hover:text-foreground",
-                    )}
+                    className={className}
                   >
                     {link.label}
                   </Link>
                 );
-              })}
-            </nav>
-          </div>
+              return (
+                <div
+                  key={link.path}
+                  data-nav-menu={key}
+                  onPointerEnter={(event) => {
+                    if (event.pointerType !== "touch")
+                      open(key, event.currentTarget);
+                  }}
+                  onPointerLeave={closeSoon}
+                  onFocus={(event) => {
+                    if (event.target.matches(":focus-visible"))
+                      open(key, event.currentTarget);
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Tab" || event.shiftKey || !expanded)
+                      return;
+                    const first = rowRef.current?.querySelector<HTMLElement>(
+                      `[data-nav-layer="${key}"] a`,
+                    );
+                    if (!first) return;
+                    event.preventDefault();
+                    first.focus();
+                  }}
+                >
+                  <Link
+                    to={link.path}
+                    onClick={close}
+                    aria-current={active ? "page" : undefined}
+                    aria-expanded={expanded}
+                    className={className}
+                  >
+                    {link.label}
+                    <HugeiconsIcon
+                      icon={ArrowDown01Icon}
+                      strokeWidth={2}
+                      aria-hidden="true"
+                      className={cn(
+                        "size-3.5 transition-transform duration-200 ease-out",
+                        expanded && "rotate-180",
+                      )}
+                    />
+                  </Link>
+                </div>
+              );
+            })}
+          </nav>
 
-          <ToggleGroup />
-        </motion.div>
-      </div>
+          <AnimatePresence>
+            {menu && (
+              <NavPanel
+                menu={menu.key}
+                x={menu.x}
+                onNavigate={close}
+                onTabOut={tabOut}
+                onPointerEnter={hold}
+                onPointerLeave={closeSoon}
+              />
+            )}
+          </AnimatePresence>
+
+          <div className="ml-auto flex items-center gap-3">
+            <ToggleGroup />
+            <ContactMenu />
+          </div>
+        </div>
+      </motion.div>
     </header>
   );
 };
-
 const MobileNav = () => {
   const t = useTranslation();
   const location = useLocation();

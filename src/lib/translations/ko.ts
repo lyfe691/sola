@@ -182,6 +182,7 @@ export const ko = {
     commits: "커밋 {count}개",
   },
   nav: {
+    viewAll: "모두 보기",
     about: "소개",
     experience: "경력",
     projects: "프로젝트",

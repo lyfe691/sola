@@ -173,6 +173,7 @@ export const zh = {
     commits: "{count} 次提交",
   },
   nav: {
+    viewAll: "查看全部",
     about: "关于我",
     experience: "经验",
     projects: "项目",

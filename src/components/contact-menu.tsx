@@ -1,0 +1,79 @@
+/**
+ * Copyright (c) 2026 Yanis Sebastian Zürcher
+ *
+ * This file is part of a proprietary software project.
+ * Unauthorized copying, modification, or distribution is strictly prohibited.
+ * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
+ *
+ * The bar's Contact button, as shadcn's button group pairs an action with
+ * its menu: the label goes to the contact page as it is, and the button
+ * beside it opens the offerings, each leading to the same page with its form
+ * already about that offering.
+ */
+
+import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { SERVICE_ICONS } from "@/components/command-palette/icons";
+import { Button } from "@/components/ui/button";
+import { ButtonGroup } from "@/components/ui/button-group";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MorphArrow } from "@/components/ui/custom/morph-arrow";
+import { OFFERINGS } from "@/config/services";
+import { contactUrl } from "@/lib/contact-url";
+import { useTranslation } from "@/lib/language-provider";
+import { Link } from "@/lib/locale-router";
+
+export function ContactMenu() {
+  const t = useTranslation();
+
+  return (
+    <ButtonGroup>
+      <Button nativeButton={false} render={<Link to="/contact" />}>
+        {t.nav.contact}
+      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button size="icon" aria-label={t.services.getStarted}>
+              <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end" sideOffset={8} className="w-80">
+          <DropdownMenuGroup>
+            {OFFERINGS.map(({ key, service }) => (
+              <DropdownMenuItem
+                key={key}
+                render={<Link to={contactUrl(t, service)} />}
+                className="items-start gap-3 py-2.5"
+              >
+                <HugeiconsIcon
+                  icon={SERVICE_ICONS[service]}
+                  strokeWidth={1.8}
+                  className="mt-0.5 size-4.5"
+                />
+                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  {t.services.page.offerings[key].name}
+                  {/* stays quiet under the highlight: the item would turn
+                      everything in it to full ink */}
+                  <span className="text-xs leading-snug font-normal text-muted-foreground!">
+                    {t.services.page.offerings[key].line}
+                  </span>
+                </span>
+                <span className="absolute top-3 right-3 opacity-0 transition-opacity duration-150 ease-out group-focus/dropdown-menu-item:opacity-100">
+                  <MorphArrow />
+                </span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </ButtonGroup>
+  );
+}
