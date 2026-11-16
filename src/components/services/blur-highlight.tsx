@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * After React Bits Pro's Blur Highlight, with its timings: a line of text
+ * A ported Blur Highlight, with its source's timings: a line of text
  * that blurs in once it is in view, then has its key phrases marked from
  * the left. The mark is not the source's inline background: at display
  * size that one ran into the next line's mark and over the comma after a

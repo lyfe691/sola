@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * React Bits' WarmTooltip behind shadcn's tooltip parts. A provider is a
+ * The WarmTooltip behind shadcn's tooltip parts. A provider is a
  * group that shares one surface: the first hover waits out the delay and pops
  * it in; from there it springs from trigger to trigger, resizing as it goes,
  * while the label cross-fades. Reopening within the warm window skips the

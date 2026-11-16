@@ -11,7 +11,7 @@ import { Mesh, Program, Renderer, Triangle } from "ogl";
 import { cn } from "@/lib/utils";
 
 /**
- * SpecularButton — the React Bits specular glass button: a tinted glass
+ * SpecularButton — the specular glass button: a tinted glass
  * surface with a floating shadow whose edge carries a soft shader-drawn rim
  * and a moving specular glint.
  *

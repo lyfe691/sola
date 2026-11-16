@@ -5,7 +5,7 @@ node_modules
 dist
 .agents/skills
 # vendored shadcn/base-ui keeps upstream style — but the first-party
-# subtree (custom/) and the tooltip (React Bits' WarmTooltip,
+# subtree (custom/) and the tooltip (the WarmTooltip,
 # no upstream code left) are ours and stay formatted
 src/components/ui/*
 !src/components/ui/custom

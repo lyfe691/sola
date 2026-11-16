@@ -1,6 +1,6 @@
 /**
  * SideRays — animated light rays (OGL/WebGL).
- * Source: React Bits (reactbits.dev/backgrounds/side-rays), prop-driven.
+ * A ported third-party background, made prop-driven.
  * Theme-awareness lives in the sibling `SideRays.tsx` wrapper.
  */
 

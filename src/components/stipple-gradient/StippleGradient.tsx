@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * React Bits Pro's Stipple Gradient, ported: two colours folded through a
+ * A ported Stipple Gradient: two colours folded through a
  * flowing field and drawn in a few stippled levels, in WebGL2. The shader,
  * the palette maths and every number are the source's. Changed from the
  * source: the root takes its size from its parent (no minimum height) and

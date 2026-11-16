@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import { useGlidePill } from "@/components/ui/custom/glide-pill"
 import { CaretDownIcon, CaretUpIcon, CheckIcon } from "@phosphor-icons/react";
 
-// React Bits' GlideSelect: one pill glides between the rows instead of each
+// The GlideSelect: one pill glides between the rows instead of each
 // row lighting its own background, and a value picked from the menu blurs
 // into the trigger
 const SelectContext = React.createContext<{

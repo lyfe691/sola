@@ -5,8 +5,8 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * The static cover painting, after the grainy-gradient cards React Bits
- * shows in its Gradient Carousel: a dark, saturated field with one soft
+ * The static cover painting, after the grainy-gradient cards of a
+ * gradient carousel: a dark, saturated field with one soft
  * curved band of light laid across it, a darker fold beside the band, a
  * faint echo on its other side, a leak of light where the band leaves the
  * frame, and a vignette. One small SVG per cover — a few blurred strokes,

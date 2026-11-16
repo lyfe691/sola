@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * React Bits Pro's Skewed Carousel, ported: a strip of cards where the one
+ * A ported Skewed Carousel: a strip of cards where the one
  * in focus faces the reader and the others turn away, more with each step.
  * The strip is one card wide and slides by whole cards, so the focused card
  * is always centred. Changed from the source: a slide is any node (a staged

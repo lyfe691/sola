@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * GPU particle field sampled from a source image (React Bits Particle Image).
+ * GPU particle field sampled from a source image.
  * Particles drift on a simplex flow and reassemble; pointer wake is optional.
  */
 

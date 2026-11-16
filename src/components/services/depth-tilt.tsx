@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * React Bits Pro's Depth Card, ported as a wrapper: its child leans toward
+ * A Depth Card, ported as a wrapper: its child leans toward
  * the pointer, and whatever inside reads --depth-x / --depth-y slides the
  * other way, so it sits nearer than the surface behind it. Both ease toward
  * the pointer a tenth of the way each frame, as the source does. Left out:

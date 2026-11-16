@@ -1,6 +1,5 @@
 /**
- * FoldText — React Bits (TypeScript + Tailwind / GSAP).
- * https://reactbits.dev/text-animations/fold-text
+ * FoldText, a ported text animation (TypeScript + Tailwind / GSAP).
  *
  * Perf notes (local): styles injected once; will-change cleared after the full
  * timeline (not per-glyph); optional onComplete for sequencing.

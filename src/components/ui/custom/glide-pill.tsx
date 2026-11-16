@@ -5,7 +5,7 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * React Bits' GlideSelect highlight: one pill that glides from row to row
+ * The GlideSelect highlight: one pill that glides from row to row
  * instead of each row lighting its own background. It lands in place when it
  * appears and takes each row's size and radius as it travels. Render `pill`
  * inside a `relative isolate` container of the rows; the consumer decides
