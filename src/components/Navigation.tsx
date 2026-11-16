@@ -127,7 +127,6 @@ const Logo = ({ label }: { label: string }) => (
 const DesktopNav = () => {
   const t = useTranslation();
   const location = useLocation();
-  const scrolled = useScrolled();
   const rowRef = useRef<HTMLDivElement>(null);
   const [menu, setMenu] = useState<{ key: NavMenuKey; x: number } | null>(null);
   const leaving = useRef<number | undefined>(undefined);
@@ -209,17 +208,19 @@ const DesktopNav = () => {
     >
       <motion.div
         data-nav-bar
-        data-docked={scrolled || undefined}
+        data-docked
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT }}
-        className={cn(
-          "border-b px-12 transition-[background-color,border-color] duration-300 ease-out",
-          scrolled || menu
-            ? "border-foreground/10 bg-background"
-            : "border-transparent bg-transparent",
-        )}
+        className="relative isolate px-12"
       >
+        {/* x.ai's backing: the page shows through, blurred. A layer of its
+            own, so the menu panel hanging from the bar is not blurred into
+            it and keeps its own solid surface */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 bg-background/85 backdrop-blur-md"
+        />
         <div
           ref={rowRef}
           className="relative mx-auto flex h-16 max-w-7xl items-center gap-6"

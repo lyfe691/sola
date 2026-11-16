@@ -141,7 +141,9 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   alpha step (`bg-card/40`, `bg-foreground/5`) and never `backdrop-blur`. A
   background plays behind every page, and a see-through surface lets it
   through its text. Alpha stays for hairlines, shadows, ink, and scrims over
-  media or behind a dialog.
+  media or behind a dialog. The one exception is the desktop bar's backing
+  (`bg-background/85` with a blur, after x.ai's, the owner's call): the page
+  passes under it; it does not sit on it. Its menu panel stays solid.
 - A list's row hover is one wash for the whole list (`<HoverGlide>`, rows
   marked `data-glide`): a faint tint that glides from row to row. It is the
   one fill that is not a whole token, because a solid row flashing on and
