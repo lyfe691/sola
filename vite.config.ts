@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { configDefaults, defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import mdx from "@mdx-js/rollup";
@@ -85,5 +85,10 @@ export default defineConfig({
       "react-activity-calendar",
       "pdfjs-dist/legacy/build/pdf.mjs",
     ],
+  },
+  test: {
+    // worktrees of other branches live under .claude/: their tests are not
+    // this checkout's, and they import packages it may not have
+    exclude: [...configDefaults.exclude, ".claude/**"],
   },
 });
