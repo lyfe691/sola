@@ -10,7 +10,10 @@ import { cardImage, coverImage, shots } from "./services";
 describe("the Services page's and the menu's images", () => {
   it("has a cover and a card-size capture on disk for every shot (run `bun run images:services` when this fails)", () => {
     const missing = [...shots(), ...NAV_PROJECTS]
-      .flatMap(({ project, image }) => [coverImage(project), cardImage(image)])
+      .flatMap((shot) => [
+        coverImage(shot.project),
+        ...("image" in shot ? [cardImage(shot.image)] : []),
+      ])
       .filter((src) => !existsSync(`public${src}`));
     expect(missing).toEqual([]);
   });

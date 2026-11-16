@@ -38,7 +38,8 @@ const covers = new Set();
 const captures = new Set();
 for (const { project, image } of [...shots(), ...NAV_PROJECTS]) {
   covers.add(project);
-  captures.add(image);
+  // a terminal session has no screenshot
+  if (image) captures.add(image);
 }
 
 for (const id of covers) {

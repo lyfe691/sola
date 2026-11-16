@@ -13,6 +13,7 @@
  */
 
 import {
+  Suspense,
   useLayoutEffect,
   useRef,
   useState,
@@ -29,7 +30,14 @@ import {
   type NavMenuKey,
 } from "@/config/nav-menu";
 import { PROJECTS } from "@/config/projects";
-import { OFFERINGS, cardImage, type Shot } from "@/config/services";
+import {
+  LazyShotWindow,
+  loadBrowserWindow,
+  loadShotWindow,
+  loadTerminalReplay,
+} from "@/components/windows/lazy";
+import { OFFERINGS, type Shot } from "@/config/services";
+import { whenIdle } from "@/lib/idle";
 import { useTranslation } from "@/lib/language-provider";
 import { Link } from "@/lib/locale-router";
 import { cn } from "@/lib/utils";
@@ -37,6 +45,25 @@ import { EASE_OUT } from "@/utils/transitions";
 
 /** The panel's one move: to a new link, and to that menu's size. */
 const MORPH = { duration: 0.25, ease: EASE_OUT } as const;
+
+// the previews' windows are chunks of their own: fetched once the page is
+// idle, they are in before a menu is first opened. Only where a menu can
+// open: a touch screen gets the bar without its panels
+if (
+  typeof window !== "undefined" &&
+  window.matchMedia("(hover: hover) and (pointer: fine)").matches
+)
+  whenIdle(() => {
+    void loadShotWindow();
+    void loadBrowserWindow();
+    void loadTerminalReplay();
+  });
+
+/** A preview is drawn about this wide, whatever the window. */
+const PREVIEW_SIZES = "420px";
+/** Drawn as a window this wide, in px: about the preview's own width, so
+ *  the bar and a terminal's text are close to their real size. */
+const PREVIEW_NOMINAL = 480;
 
 const MENU_PATHS = Object.entries(NAV_MENUS).flatMap(([path, key]) =>
   key ? [{ path, key }] : [],
@@ -162,21 +189,26 @@ function Menu({
         </Link>
       </div>
       <div className="flex min-h-76 flex-1 p-3 pl-1">
-        <div
-          aria-hidden="true"
-          className="relative flex-1 overflow-hidden rounded-xl bg-muted ring-1 ring-foreground/10"
-        >
+        <div aria-hidden="true" className="relative flex-1">
           {entries.map((entry, index) => (
-            <img
+            <div
               key={entry.key}
-              src={cardImage(entry.shot.image)}
-              alt=""
-              decoding="async"
               className={cn(
-                "absolute inset-0 size-full object-cover object-top-left transition-opacity duration-300 ease-out",
+                "absolute inset-0 transition-opacity duration-300 ease-out",
                 index === active ? "opacity-100" : "opacity-0",
               )}
-            />
+            >
+              <Suspense>
+                <LazyShotWindow
+                  shot={entry.shot}
+                  sizes={PREVIEW_SIZES}
+                  eager
+                  nominal={PREVIEW_NOMINAL}
+                  fill
+                  playing={shown && index === active}
+                />
+              </Suspense>
+            </div>
           ))}
         </div>
       </div>

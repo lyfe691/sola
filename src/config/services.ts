@@ -11,6 +11,8 @@
  * plain Node for the page's Markdown twin: no runtime `@/` imports here.
  */
 
+import type { TerminalSessionKey } from "./terminal-sessions.ts";
+
 export const OFFERINGS = [
   {
     key: "websites",
@@ -35,15 +37,17 @@ export const OFFERINGS = [
     key: "backend",
     service: "backend",
     proof: [
-      { project: "vault", image: "/projects/vault/api.webp", bare: true },
-      { project: "magi", image: "/projects/magi/scan.webp", bare: true },
+      { project: "vault", session: "vault-api" },
+      { project: "magi", session: "magi-scan" },
     ],
   },
 ] as const;
 
-/** A project's capture. `bare`: it is not a web page (a terminal), so it
- *  gets no browser toolbar. */
-export type Shot = { project: string; image: string; bare?: boolean };
+/** A project's capture: a screenshot of a web page, or, for a command-line
+ *  tool, one of its terminal sessions (terminal-sessions.ts). */
+export type Shot =
+  | { project: string; image: string }
+  | { project: string; session: TerminalSessionKey };
 
 /** The strip under the statement, in order. */
 export const SHOWREEL: Shot[] = [

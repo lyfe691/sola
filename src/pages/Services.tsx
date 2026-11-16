@@ -12,7 +12,7 @@ import { Reveal } from "@/components/Reveal";
 import { BlurHighlight } from "@/components/services/blur-highlight";
 import { DepthTilt } from "@/components/services/depth-tilt";
 import { SkewedCarousel } from "@/components/services/skewed-carousel";
-import { Capture } from "@/components/services/capture";
+import { ShotWindow } from "@/components/windows/shot-window";
 import { PaintedCover } from "@/components/painted-cover/PaintedCover";
 import { ArtField } from "@/components/stipple-gradient/ArtField";
 import { PROJECTS } from "@/config/projects";
@@ -76,9 +76,8 @@ const Stage = ({
         className="translate-x-(--depth-x) translate-y-(--depth-y) p-(--stage-pad)"
         style={{ "--stage-pad": "7cqw" } as CSSProperties}
       >
-        <Capture
-          image={shot.image}
-          browser={!shot.bare}
+        <ShotWindow
+          shot={shot}
           sizes={SIZES[place]}
           eager={place === "showreel"}
         />
@@ -152,7 +151,7 @@ const Services = () => {
           previousLabel={t.common.previousImage}
           nextLabel={t.common.nextImage}
           slides={SHOWREEL.map((shot) => ({
-            id: shot.image,
+            id: shot.project,
             title: titles[shot.project]?.title ?? shot.project,
             to: `/projects/${shot.project}`,
             node: <Stage shot={shot} place="showreel" />,
