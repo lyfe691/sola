@@ -1,10 +1,10 @@
-export const source = "245a5e4101fb";
+export const source = "56d1b382d4a4";
 
 # 一个带留言簿的写作网站
 
 [Thoughts](https://thoughts.ysz.life) 是我写那些放不进项目页的东西的地方。它是几页安静的文字：一个关于页、文章列表，以及一个任何人都可以留言的留言簿。它以 [Shu Ding 的网站](https://shud.in) 为蓝本。
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life"
   src="/projects/thoughts/hero.webp"
   video="/projects/thoughts/hero.mp4"
@@ -20,7 +20,7 @@ export const source = "245a5e4101fb";
 
 访问一个不存在的地址，会得到一小段诗句。
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/nope"
   src="/projects/thoughts/not-found.webp"
   alt="未找到页面：左侧是斜体链接 about、thoughts 和 guestbook，旁边是标题 not found，标题下面有两行字：“the page does not exist,”和“and you were never supposed to be here”"
@@ -31,7 +31,7 @@ export const source = "245a5e4101fb";
 
 任何人都可以在留言簿上留言，姓名可填可不填，留言最多 280 个字符，不需要账号。留言按从新到旧显示，附有日期和时间，每次十条，你自己写的那一条，悬停时会出现一个 Delete 链接。
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/guestbook"
   src="/projects/thoughts/guestbook-desktop.webp"
   alt="留言簿：一个单行表单，用来填写姓名和留言，表单下方是带日期的留言列表，所有姓名和留言都做了模糊处理"
@@ -125,7 +125,7 @@ Thoughts 是部署在 Vercel 上的 Next.js 应用。文章由 MDX 编译而成�
   images={[
     {
       src: "/projects/thoughts/about-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "thoughts.ysz.life",
       alt: "关于页：左侧是斜体链接 about、thoughts 和 guestbook，一小段介绍排成单栏文字",
       caption: "关于页。",

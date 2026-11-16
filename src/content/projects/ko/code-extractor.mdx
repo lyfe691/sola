@@ -1,10 +1,10 @@
-export const source = "a77520042728";
+export const source = "c3f81bfa87ad";
 
 # 페이지와 그 파일을 ZIP으로 저장하는 브라우저 확장 프로그램
 
 [Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm)는 현재 탭의 페이지를 ZIP 파일 하나로 내려받는 Chrome·Edge 확장 프로그램입니다. 압축 파일에는 HTML과 그 HTML이 참조하는 모든 스타일시트, 스크립트, 이미지가 원본 서버를 그대로 반영한 폴더 구조로 담기고, HTML의 링크는 저장된 사본을 가리키도록 다시 쓰입니다. 다른 사이트가 어떻게 만들어졌는지 공부하려고 2024년 8월에 만들었고, Chrome 웹 스토어에 따르면 지금은 약 6,000명이 쓰고 있습니다.
 
-<Safari
+<BrowserWindow
   url="htmx.org"
   src="/projects/code-extractor/hero.webp"
   video="/projects/code-extractor/hero.mp4"
@@ -123,7 +123,7 @@ Chrome은 설치할 때 마지막 권한을 모든 웹사이트의 데이터를 
 
 팝업은 `Promise.all`로 모든 파일을 한꺼번에 가져옵니다. 실패한 요청은 기록만 하고 건너뛰므로, 이미지 하나가 없다고 압축 파일 전체를 잃는 일은 없습니다. 그다음 JSZip이 파일을 만들고, `chrome.downloads.download`가 저장 위치를 먼저 물은 뒤 저장합니다.
 
-<Safari
+<BrowserWindow
   url="chromewebstore.google.com"
   src="/projects/code-extractor/store-listing-desktop.webp"
   alt="Chrome 웹 스토어의 확장 프로그램 페이지: 폴더 아이콘, 5.0점(평가 5개), 사용자 6,000명, 그리고 첫 번째 스크린샷으로 팝업"

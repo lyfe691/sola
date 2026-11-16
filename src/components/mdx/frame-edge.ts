@@ -55,21 +55,3 @@ export function edgeOf(
     return `#${hex(median(0))}${hex(median(1))}${hex(median(2))}`;
   });
 }
-
-const luminance = (colour: string) => {
-  const channel = (at: number) => {
-    const c = parseInt(colour.slice(at, at + 2), 16) / 255;
-    return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-  };
-  return 0.2126 * channel(1) + 0.7152 * channel(3) + 0.0722 * channel(5);
-};
-
-/**
- * Black or white, whichever reads on the edge. Chrome drawn on a shot's
- * colours cannot use the theme's ink: a pale screenshot keeps its pale
- * toolbar in the dark themes, where --foreground would be white on white.
- */
-export const inkOn = (edge: readonly string[]) =>
-  edge.reduce((sum, colour) => sum + luminance(colour), 0) / edge.length > 0.35
-    ? "#000"
-    : "#fff";

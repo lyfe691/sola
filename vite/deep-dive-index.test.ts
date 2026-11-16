@@ -13,7 +13,7 @@ const MDX = `# A chat app on your own keys
 
 [Luma](https://luma.ysz.life) is a **chat** app.
 
-<Safari
+<BrowserWindow
   url="luma.ysz.life"
   src="/projects/luma/home.webp"
   alt="not shown on the page"

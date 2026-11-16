@@ -1,15 +1,13 @@
-export const source = "3f1bdfac11c6";
+export const source = "f4d8ade9d5da";
 
 # Rust로 만든 TCP·UDP 포트 스캐너
 
 magi는 제가 Rust로 작성한 커맨드라인 포트 스캐너입니다. 연결 스캔 방식이라, 모든 프로브가 운영체제의 소켓으로 보내는 평범한 TCP 연결이나 UDP 데이터그램입니다. 그래서 Linux, macOS, Windows에서 일반 사용자 권한으로 실행됩니다. 포트는 실제로 관찰한 상태로만 보고하고, 테스트하지 못한 포트가 있으면 그렇다고 알려 줍니다.
 
-<ProjectImage
-  src="/projects/magi/scan.webp"
-  video="/projects/magi/scan.mp4"
+<Terminal
+  session="magi-scan"
   alt="터미널: magi 45.33.32.156 --banner를 입력해 실행하면 카운터가 프로브한 포트 1024개까지 올라가고, 결과에 22/tcp ssh(배너 SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13)와 80/tcp http가 나열됩니다"
   caption="scanme.nmap.org의 처음 1,024개 포트를 실제로 스캔한 결과."
-  size="full"
 />
 
 ## 호스트 스캔하기
@@ -49,12 +47,10 @@ magi에 대상과 프로브할 포트를 지정합니다. 열린 포트는 호�
 
 사람이 읽으라고 만든 출력은 모두 stderr로 나갑니다. 스캔을 시작할 때 나오는 한 줄, 카운터, 경고가 여기에 해당합니다. 카운터는 stderr가 터미널일 때만 나타납니다. `--json`을 쓰면 stdout에는 열린 포트의 주소, 프로토콜, 상태, 배너를 담은 JSON 배열이 나오므로, 결과를 jq나 다른 프로그램으로 바로 파이프할 수 있습니다.
 
-<ProjectImage
-  src="/projects/magi/json.webp"
-  video="/projects/magi/json.mp4"
+<Terminal
+  session="magi-json"
   alt="터미널: magi 45.33.32.156 -p 22,80,443 --banner --json의 출력을 jq로 파이프하면 스캔 줄이 나온 뒤 색이 입혀진 JSON 배열이 이어지고, 객체 두 개 중 22번 포트에는 SSH 배너가, 80번 포트에는 null 배너가 들어 있습니다"
   caption="stdout의 JSON을 jq로 파이프한 결과."
-  size="full"
 />
 
 ## UDP
@@ -69,12 +65,10 @@ magi에 대상과 프로브할 포트를 지정합니다. 열린 포트는 호�
 
 침묵은 모호합니다. 빈 데이터그램을 무시하는 열린 서비스와 그것을 버리는 방화벽은 밖에서 보면 똑같아 보이므로, magi는 어느 쪽인지 단정하지 않습니다. 이번 실행에서 53번과 161번은 닫힌 것으로 돌아와 결과에서 빠졌고, 123번은 1초 내내 아무 응답이 없었습니다.
 
-<ProjectImage
-  src="/projects/magi/udp.webp"
-  video="/projects/magi/udp.mp4"
+<Terminal
+  session="magi-udp"
   alt="터미널: magi 45.33.32.156 -p 53,123,161 --udp를 실행하고 1초 뒤, 결과에 open|filtered로 표시된 123/udp 포트 하나가 나열됩니다"
   caption="포트 세 개의 UDP 스캔."
-  size="full"
 />
 
 ## 테스트하지 못한 포트
@@ -90,12 +84,10 @@ TCP 프로브가 끝나는 방식은 네 가지이고, 그중 포트에 대해 �
 
 테스트하지 못한 포트는 닫힌 포트 수에 섞이지 않습니다. 스캔은 그런 포트가 몇 개였고 왜 그랬는지 알려 주는 경고로 끝나며, 원인이 파일 디스크립터 고갈이면 `--concurrency`를 낮추거나 열 수 있는 파일 수 한도를 높이라고 안내합니다. 아래 영상에서 scanme.nmap.org는 IPv4 주소와 IPv6 주소로 확인됩니다. IPv6 라우팅이 없는 네트워크에서는 IPv6 주소로의 연결이 아무것도 보내기 전에 “network unreachable”로 실패하므로, 그 주소의 포트 세 개는 테스트하지 못한 것으로 보고됩니다.
 
-<ProjectImage
-  src="/projects/magi/untestable.webp"
-  video="/projects/magi/untestable.mp4"
+<Terminal
+  session="magi-untestable"
   alt="터미널: magi scanme.nmap.org -p 22,80,443가 호스트 두 개를 보고하고, 45.33.32.156의 22/tcp ssh와 80/tcp http를 나열한 뒤 끝에 다음 경고가 나옵니다: warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete."
   caption="테스트하지 못한 것으로 보고된 스캔의 IPv6 쪽."
-  size="full"
 />
 
 ## 설치하기
@@ -110,7 +102,7 @@ TCP 프로브가 끝나는 방식은 네 가지이고, 그중 포트에 대해 �
 
 [magi.ysz.life](https://magi.ysz.life)는 방문자의 플랫폼에 맞는 명령을 맨 앞에 보여 주고, 메뉴로 다른 플랫폼으로 바꿀 수 있습니다. 안정(stable) 버전의 Rust 툴체인이 있으면 소스를 체크아웃한 상태에서 `cargo install --path .`로 빌드할 수도 있습니다.
 
-<Safari
+<BrowserWindow
   url="magi.ysz.life"
   src="/projects/magi/site.webp"
   video="/projects/magi/site.mp4"
@@ -195,7 +187,7 @@ ICMP port-unreachable을 보려면 보통 raw 소켓이 필요하고, raw 소켓
   images={[
     {
       src: "/projects/magi/site-dark.webp",
-      frame: "safari",
+      frame: "browser",
       url: "magi.ysz.life",
       alt: "다크 테마의 magi 사이트: 주황색 점 물결 위의 헤드라인 A port scanner built to be correct, 복사 버튼이 있는 PowerShell 설치 명령, scanme.nmap.org를 스캔하는 터미널 창",
       caption: "다크 테마의 사이트.",

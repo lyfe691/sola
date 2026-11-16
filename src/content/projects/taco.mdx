@@ -2,7 +2,7 @@
 
 Taco is my brother's Pomeranian, and [takitwo.vercel.app](https://takitwo.vercel.app) is his website. I built it as a base for the next small site of this kind. The colours live in theme classes and every interface string in one JSON file per language, so the next site means new content and new values in those files while the components stay as they are.
 
-<Safari
+<BrowserWindow
   url="takitwo.vercel.app"
   src="/projects/taco/themes.webp"
   video="/projects/taco/themes.mp4"
@@ -75,8 +75,12 @@ Taco is a Next.js app on the App Router, written in TypeScript. The components c
 
 shadcn/ui colours everything through tokens: classes like `bg-primary` and `border-border`. The Tailwind config maps each token to a CSS variable, so `primary` becomes `hsl(var(--primary))`, and a theme is a class that gives those variables different HSL values. Green sits on `:root`, and the other themes follow the same pattern as Sky, shown here abridged:
 
-<CodeBlock
-  code={`.theme-sky {
+<CodeMorph
+  steps={[
+    {
+      label: ".theme-sky",
+      file: "app/globals.css",
+      code: `.theme-sky {
     --background: 210 50% 98%;
     --foreground: 210 50% 16%;
     --primary: 210 80% 50%;
@@ -85,8 +89,37 @@ shadcn/ui colours everything through tokens: classes like `bg-primary` and `bord
     --muted-foreground: 210 5% 45%;
     --border: 210 20% 90%;
     --ring: 210 80% 50%;
-  }`}
-  fileName="app/globals.css"
+  }`,
+    },
+    {
+      label: ".theme-cherry-blossom",
+      file: "app/globals.css",
+      code: `.theme-cherry-blossom {
+    --background: 40 30% 98%;
+    --foreground: 336 10% 16%;
+    --primary: 336 80% 65%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 336 33% 96%;
+    --muted-foreground: 336 5% 45%;
+    --border: 336 20% 90%;
+    --ring: 336 80% 65%;
+  }`,
+    },
+    {
+      label: ".theme-gotham",
+      file: "app/globals.css",
+      code: `.theme-gotham {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
+    --primary: 0 0% 85%;
+    --primary-foreground: 0 0% 7%;
+    --secondary: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --border: 0 0% 20%;
+    --ring: 0 0% 80%;
+  }`,
+    },
+  ]}
   lang="css"
 />
 
@@ -142,7 +175,7 @@ The language menu is built from that list, so it needs no change of its own.
   images={[
     {
       src: "/projects/taco/home-cherry.webp",
-      frame: "safari",
+      frame: "browser",
       url: "takitwo.vercel.app",
       alt: "The Taco home page in the Cherry theme: the headline Meet Taco in pink beside a round photo of Taco with a dandelion held out to him",
       caption: "The home page in Cherry.",

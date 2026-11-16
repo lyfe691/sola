@@ -1183,9 +1183,9 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
 }
 
 /* ---------- device frames (mdx/frames.tsx) ---------- */
-/* The chrome is painted from the colours along the screen's top edge, one
-   stop per column of frame-edge.ts (EDGE_STOPS: keep the two in step), and
-   the ink that reads on them. Registered as colours so a playing clip's edge
+/* The phone's status bar is painted from the colours along the screen's top
+   edge, one stop per column of frame-edge.ts (EDGE_STOPS: keep the two in
+   step). Registered as colours so a playing clip's edge
    glides from one reading to the next instead of stepping. */
 @property --frame-edge-0 {
   syntax: "<color>";
@@ -1212,11 +1212,6 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
   inherits: true;
   initial-value: transparent;
 }
-@property --frame-ink {
-  syntax: "<color>";
-  inherits: true;
-  initial-value: black;
-}
 
 .frame-edge {
   --frame-ground: linear-gradient(
@@ -1229,7 +1224,7 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
   );
   transition-property:
     --frame-edge-0, --frame-edge-1, --frame-edge-2, --frame-edge-3,
-    --frame-edge-4, --frame-ink;
+    --frame-edge-4;
   transition-duration: 400ms;
   transition-timing-function: var(--ease-out);
 }
@@ -1408,4 +1403,199 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
 
 .contribution-calendar__legend-block[data-level="4"] {
   background: var(--contrib-4);
+}
+
+/* ---------- ported windows (components/windows) ---------- */
+/* The frame Terminal Replay, Code Morph and Browser Window share: a hairline
+   and the figure lift a deep dive gives its images (its own outside one). */
+.window-frame {
+  box-shadow:
+    0 0 0 1px var(--border),
+    var(
+      --prose-figure-lift,
+      0 14px 34px -14px color-mix(in oklab, black 18%, transparent)
+    );
+}
+
+.window-tabs {
+  scrollbar-width: none;
+}
+
+/* WindowScale: the window's own measures as shares of its box. --window-unit
+   is what one of the window's pixels comes to here; the spacing scale, the
+   corner radius and the type the windows are built from all follow it, so
+   nothing inside has to know it is being drawn small. */
+.window-scaled {
+  --window-unit: calc(100cqw / var(--window-nominal));
+  --window-radius: calc(var(--window-unit) * 10);
+  --spacing: calc(var(--window-unit) * 4);
+  --radius: var(--window-radius);
+  --text-xs: calc(var(--window-unit) * 12);
+  --terminal-size: calc(var(--window-unit) * 13);
+}
+/* The scale is for the window's chrome. What the window shows (a figure with
+   its lightbox badge and focus ring) keeps the site's measures, noted on the
+   way in. */
+.window-scale {
+  --site-spacing: var(--spacing);
+  --site-radius: var(--radius);
+  --site-text-xs: var(--text-xs);
+}
+.window-scaled .window-content {
+  --spacing: var(--site-spacing);
+  --radius: var(--site-radius);
+  --text-xs: var(--site-text-xs);
+}
+
+/* ---------- terminal replay ---------- */
+.terminal-replay {
+  font-size: var(--terminal-size, 0.8125rem);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* once the session has outgrown the window its top line fades out under
+   the bar instead of being cut */
+.terminal-body[data-scrolled] {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 10px,
+    black 38px
+  );
+}
+
+.terminal-copy {
+  top: calc(var(--terminal-lh) * 0.5em - 0.75rem);
+}
+
+.terminal-caret {
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 0.6em;
+  height: calc(var(--terminal-lh) * 0.86em);
+  background: var(--primary);
+  opacity: 0.85;
+}
+.terminal-caret[data-cursor="bar"] {
+  width: 2px;
+  height: calc(var(--terminal-lh) * 0.82em);
+  margin-left: 1px;
+  opacity: 1;
+}
+.terminal-caret[data-cursor="underline"] {
+  vertical-align: baseline;
+  height: 2px;
+  opacity: 1;
+}
+
+@keyframes terminal-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes terminal-rise {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .terminal-caret[data-blink] {
+    animation: terminal-blink 1060ms step-end infinite;
+  }
+  .terminal-rise {
+    animation: terminal-rise 220ms var(--ease-out);
+  }
+}
+
+/* ---------- browser window ---------- */
+.browser-caret {
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 1.5px;
+  height: 1.05em;
+  margin-left: 1px;
+}
+
+/* ---------- code morph ---------- */
+/* CodeMorph writes where each token stands (--x, --y) and what it is doing
+   (data-state); the travel, and the blur a token arrives and leaves through,
+   are here. --morph-time is one step's length; a new token waits out most
+   of it (--delay) so it arrives into a settled line. */
+.code-morph-glyph {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(var(--x), var(--y), 0);
+  transition:
+    transform var(--morph-time) var(--ease-smooth),
+    color var(--morph-time) var(--ease-out),
+    opacity var(--morph-fade) var(--ease-out) var(--delay, 0ms),
+    filter var(--morph-fade) var(--ease-out) var(--delay, 0ms);
+}
+.code-morph-glyph[data-dim] {
+  opacity: 0.32;
+}
+.code-morph-glyph[data-state="enter"],
+.code-morph-glyph[data-state="exit"] {
+  opacity: 0;
+  filter: blur(3px);
+}
+.code-morph-glyph[data-state="exit"] {
+  transition:
+    opacity var(--morph-exit) var(--ease-out),
+    filter var(--morph-exit) var(--ease-out);
+}
+
+.code-morph-number {
+  position: absolute;
+  top: var(--y);
+  left: 0;
+  text-align: right;
+  opacity: 0;
+  transition:
+    opacity var(--morph-exit) var(--ease-out),
+    color var(--morph-time) var(--ease-out);
+}
+.code-morph-number[data-shown] {
+  opacity: 1;
+  transition:
+    opacity var(--morph-fade) var(--ease-out) var(--morph-wait),
+    color var(--morph-time) var(--ease-out);
+}
+
+/* the lines a step is about: the tint a code block's highlighted line has,
+   with a rule in the accent down its left edge */
+.code-morph-band {
+  position: absolute;
+  top: var(--band-top);
+  right: 0;
+  left: 0;
+  height: var(--band-h);
+  background: color-mix(in oklab, var(--foreground) 5%, transparent);
+  box-shadow: inset 2px 0 0 var(--primary);
+  opacity: 0;
+  transition:
+    top var(--morph-time) var(--ease-smooth),
+    height var(--morph-time) var(--ease-smooth),
+    opacity var(--morph-fade) var(--ease-out);
+}
+.code-morph-band[data-shown] {
+  opacity: 1;
+}
+
+.code-morph[data-instant]
+  :is(.code-morph-glyph, .code-morph-number, .code-morph-band) {
+  transition: none;
+}
+
+/* the active tab fills with the time left before the next step */
+.code-morph-sweep {
+  transform: scaleX(var(--sweep, 0));
+  transform-origin: 0 50%;
+}
+
+/* code too wide for a window that does not scale it fades out at the right */
+.code-morph-body[data-clipped] {
+  mask-image: linear-gradient(to right, black calc(100% - 40px), transparent);
 }

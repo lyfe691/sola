@@ -1,10 +1,10 @@
-export const source = "7af9c8d1b6ea";
+export const source = "c18a99dfbed8";
 
 # Ein QR-Code-Generator mit Scan-Test
 
 [qr.ysz.life](https://qr.ysz.life) erzeugt QR-Codes im Browser. Sie tippen einen Link oder einen beliebigen Text ein, gestalten den Code und laden ihn herunter. Das Gestalten kann aber auch dafür sorgen, dass sich ein Code nicht mehr scannen lässt, deshalb sitzt in der Kopfzeile ein Scan-Test, der ein exportiertes Bild mit einem echten Decoder wieder einliest.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/hero.webp"
   video="/projects/qr/hero.mp4"
@@ -75,7 +75,7 @@ Der Scan-Test in der Kopfzeile nimmt ein exportiertes Bild und decodiert es. Bes
 
 Die Seite folgt dem Design des Systems, und die Taste d wechselt zwischen hell und dunkel. Die Vorschau behält in beiden Designs die eigene Hintergrundfarbe des Codes, sodass sie zeigt, wie die exportierte Datei aussehen wird.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/theme.webp"
   video="/projects/qr/theme.mp4"
@@ -154,7 +154,7 @@ Beim Wiederherstellen eines zuletzt erstellten Codes werden die gespeicherten Ei
   images={[
     {
       src: "/projects/qr/styled-dark-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "qr.ysz.life",
       alt: "Der Generator im dunklen Design mit geöffnetem Reiter Colors: ein runder Code mit einem Verlauf von Marineblau zu Orange und einem Blatt-Logo auf einer weissen Kachel",
       caption: "Das dunkle Design.",

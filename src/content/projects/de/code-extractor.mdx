@@ -1,10 +1,10 @@
-export const source = "a77520042728";
+export const source = "c3f81bfa87ad";
 
 # Eine Browser-Erweiterung, die eine Seite samt ihren Dateien als ZIP speichert
 
 [Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) ist eine Erweiterung für Chrome und Edge, die die Seite im aktuellen Tab als eine ZIP-Datei herunterlädt. Das Archiv enthält das HTML und jedes Stylesheet, jedes Skript und jedes Bild, auf die das HTML verweist, in Ordnern, die die Server spiegeln, von denen sie stammen, und die Links im HTML sind so umgeschrieben, dass sie auf die gespeicherten Kopien zeigen. Ich habe die Erweiterung im August 2024 gebaut, um zu studieren, wie andere Websites aufgebaut sind, und laut Chrome Web Store wird sie heute von rund 6000 Personen genutzt.
 
-<Safari
+<BrowserWindow
   url="htmx.org"
   src="/projects/code-extractor/hero.webp"
   video="/projects/code-extractor/hero.mp4"
@@ -123,7 +123,7 @@ Chrome zeigt die letzte Berechtigung bei der Installation als Erlaubnis an, Date
 
 Das Popup holt sie alle gleichzeitig mit `Promise.all`. Ein fehlgeschlagener Abruf wird protokolliert und übersprungen, sodass ein einzelnes fehlendes Bild nicht das ganze Archiv kostet. Danach baut JSZip die Datei, und `chrome.downloads.download` speichert sie, nachdem es gefragt hat, wohin.
 
-<Safari
+<BrowserWindow
   url="chromewebstore.google.com"
   src="/projects/code-extractor/store-listing-desktop.webp"
   alt="Die Seite der Erweiterung im Chrome Web Store: das Ordnersymbol, eine Bewertung von 5.0 aus 5 Bewertungen, 6,000 users und das Popup als erster Screenshot"

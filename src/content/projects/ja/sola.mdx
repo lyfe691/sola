@@ -1,10 +1,10 @@
-export const source = "f4f4a4e49fa7";
+export const source = "91329c31ef25";
 
 # いま読んでいるポートフォリオ
 
 Sola は私のポートフォリオで、いまご覧になっているのが [sola.ysz.life](https://sola.ysz.life) のサイトです。私のプロジェクト、使っているツール、これまで働いてきた場所、そして連絡先が載っていて、2025 年 2 月から作り続けています。作業時間の大半は、各ページの見た目と動きに費やしています。
 
-<Safari
+<BrowserWindow
   url="sola.ysz.life"
   src="/projects/sola/hero.webp"
   video="/projects/sola/hero.mp4"
@@ -52,7 +52,7 @@ Sola は私のポートフォリオで、いまご覧になっているのが [s
 
 ヘッダーがスクロールで見えなくなると、左端に並ぶ目盛りの列が各セクションを示し、ホバーするとセクション名が表示されます。スクリーンショットをクリックすると全画面で開き、記事のほかの画像も一緒に見られます。
 
-<Safari
+<BrowserWindow
   url="sola.ysz.life/projects/kinoa"
   src="/projects/sola/deep-dive.webp"
   video="/projects/sola/deep-dive.mp4"
@@ -97,7 +97,7 @@ Changelog は、このサイトの git 履歴を GitHub から読み込んだも
 
 メニューの「git diff を表示」スイッチを使うと、同じ履歴をどのページにも呼び出せます。ページが、そのページを最後に変更したコミットに入れ替わります。プロジェクトの記事では、ヘッダーのファイル名が同じ働きをします。
 
-<Safari
+<BrowserWindow
   url="sola.ysz.life"
   src="/projects/sola/git-diff.webp"
   alt="git diff に入れ替わったホームページ：コミット perf(motion): content counts as painted when its entrance starts、そのメッセージ、そして src/pages/Index.tsx の diff で、opacity 0 が HIDDEN_OPACITY に変わっています"
@@ -171,7 +171,7 @@ Sola は TypeScript で書かれた React アプリで、Vite でビルドし、
   images={[
     {
       src: "/projects/sola/home-dark-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "sola.ysz.life",
       alt: "ダークテーマで Aurora 背景の上に表示されたホームページ：あいさつ Hello, I'm Sebi と、Contact me、View projects のボタン",
       caption: "ダークテーマのホームページ。",

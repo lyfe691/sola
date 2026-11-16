@@ -1,10 +1,10 @@
-export const source = "7594425b3b8e";
+export const source = "30c343866d75";
 
 # 一个本地的 OpenID Connect 沙盒
 
 Vault 是一套在一台机器上运行的身份认证环境：Keycloak 作为 OpenID Connect 提供方，一个 FastAPI 后端负责验证它的令牌并检查角色，一个 Next.js 前端提供登录页和按角色限制的面板。OpenID Connect（OIDC）是建立在 OAuth 2.0 之上的身份层。我在 2025 年 5 月做了 Vault，为的是跟踪一个令牌，从 Keycloak 签发它的那一刻，到某个 API 接受或拒绝它的那一刻。
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/hero.webp"
   video="/projects/vault/hero.mp4"
@@ -18,7 +18,7 @@ Vault 是一套在一台机器上运行的身份认证环境：Keycloak 作为 O
 
 用这种授权方式，应用能看到用户的密码，这正是有真实用户的应用改为把浏览器送到提供方自己的登录页面的原因。对于只有一个演示用户的沙盒，重点就是让整个交换过程集中在一个看得懂的地方。
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/sign-in-refused.webp"
   alt="登录卡片里填着用户名 demo 和一个错误的密码，Sign in 按钮上方是红色的 Invalid user credentials 提示，角落里弹出 Login failed 提示"
@@ -29,7 +29,7 @@ Vault 是一套在一台机器上运行的身份认证环境：Keycloak 作为 O
 
 登录之后，前端会调用后端的 `/me`。这个 cookie 是 `HttpOnly` 的，所以页面自己的 JavaScript 读不到令牌：由后端验证它并返回其中的声明（claims），门户就根据这些声明渲染，包括用户名、每个 realm 角色对应的一个徽章，以及每个角色所开放的面板对应的一个按钮。演示用户同时拥有两个角色，登录后进入管理员面板。把 `admin` 拿掉，下一次登录就只会显示一个徽章和一个按钮，打开 `/admin` 则会转到用户面板。
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/portal-user-only.webp"
   alt="门户卡片向 demo 问好，只有一个 User 徽章、一个 User Dashboard 按钮和 Sign Out"
@@ -46,12 +46,10 @@ Vault 是一套在一台机器上运行的身份认证环境：Keycloak 作为 O
 | `/user`  | `user` 角色    | 403    |
 | `/admin` | `admin` 角色   | 403    |
 
-<ProjectImage
-  src="/projects/vault/api.webp"
-  video="/projects/vault/api.mp4"
+<Terminal
+  session="vault-api"
   alt="全屏的 PowerShell 窗口：curl 以 demo 登录，随后 GET /user 返回 HTTP 200 和 User access granted，角色列表里只有 user，而 GET /admin 返回 HTTP 403 Forbidden 和 Access denied. Required roles: admin"
   caption="没有 admin 时，/user 正常应答，/admin 则被拒绝。"
-  size="full"
 />
 
 ## 由 Terraform 配置的 Keycloak
@@ -75,7 +73,7 @@ Docker Compose 以开发模式运行 Keycloak 26.2，并配一个 PostgreSQL 16 
 
 随后，管理控制台会列出文件所要求的内容，以及文件给出的说明。
 
-<Safari
+<BrowserWindow
   url="localhost:8080/admin"
   src="/projects/vault/keycloak-roles.webp"
   alt="Keycloak 管理控制台里的 Vault Core Realm：Realm roles 页面列出了 admin（说明为 Administrator role）和 user（说明为 Regular user role），旁边是 Keycloak 的默认角色"
@@ -110,16 +108,33 @@ bearer 方案是用 `auto_error=False` 创建的，所以没有这个头的请�
 
 演示用户的整个角色列表都由 Terraform 掌管。`keycloak_user_roles` 是穷尽式的，所以该用户拥有的恰好就是 `role_ids` 里的角色，令牌的 `realm_access.roles` 也不会列出别的：
 
-<CodeBlock
-  code={`resource "keycloak_user_roles" "demo_user_roles" {
+<CodeMorph
+  steps={[
+    {
+      file: "terraform/main.tf",
+      highlight: "4-7",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
     realm_id = keycloak_realm.vault.id
     user_id  = keycloak_user.example_user.id
     role_ids = [
       keycloak_role.admin_role.id,
       keycloak_role.user_role.id,
     ]
-  }`}
-  fileName="terraform/main.tf"
+  }`,
+    },
+    {
+      file: "terraform/main.tf",
+      highlight: "4-6",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.user_role.id,
+    ]
+  }`,
+    },
+  ]}
+  chrome="window"
   lang="hcl"
 />
 

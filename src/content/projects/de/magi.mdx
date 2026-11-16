@@ -1,15 +1,13 @@
-export const source = "3f1bdfac11c6";
+export const source = "f4d8ade9d5da";
 
 # Ein TCP- und UDP-Portscanner in Rust
 
 magi ist ein Portscanner für die Kommandozeile, den ich in Rust geschrieben habe. Er scannt per Connect-Scan: Jede Probe ist eine gewöhnliche TCP-Verbindung oder ein UDP-Datagramm über die Sockets des Betriebssystems, deshalb läuft er unter Linux, macOS und Windows als normaler Benutzer. Er meldet einen Port nur in einem Zustand, den er tatsächlich beobachtet hat, und sagt es, wenn er einen nicht testen konnte.
 
-<ProjectImage
-  src="/projects/magi/scan.webp"
-  video="/projects/magi/scan.mp4"
+<Terminal
+  session="magi-scan"
   alt="Ein Terminal: magi 45.33.32.156 --banner wird eingetippt und ausgeführt, ein Zähler klettert durch 1024 geprüfte Ports, und das Ergebnis listet 22/tcp ssh mit dem Banner SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13 und 80/tcp http auf"
   caption="Ein echter Scan der ersten 1024 Ports von scanme.nmap.org."
-  size="full"
 />
 
 ## Einen Host scannen
@@ -49,12 +47,10 @@ Die Grenze von /16 gibt es, damit ein falsch getipptes Präfix nicht zu Millione
 
 Alles, was eine Person lesen soll, geht an stderr: die Zeile, die den Scan eröffnet, der Zähler und jede Warnung. Der Zähler erscheint nur, wenn stderr ein Terminal ist. Mit `--json` liefert stdout ein JSON-Array der offenen Ports mit Adresse, Protokoll, Zustand und Banner, sodass sich die Ergebnisse direkt per Pipe an jq oder ein anderes Programm übergeben lassen.
 
-<ProjectImage
-  src="/projects/magi/json.webp"
-  video="/projects/magi/json.mp4"
+<Terminal
+  session="magi-json"
   alt="Ein Terminal: magi 45.33.32.156 -p 22,80,443 --banner --json, an jq weitergeleitet, gibt die Scan-Zeile aus, dann ein farbiges JSON-Array mit zwei Objekten, Port 22 mit seinem SSH-Banner und Port 80 mit einem Banner von null"
   caption="JSON auf stdout, an jq weitergeleitet."
-  size="full"
 />
 
 ## UDP
@@ -69,12 +65,10 @@ Alles, was eine Person lesen soll, geht an stderr: die Zeile, die den Scan eröf
 
 Schweigen ist mehrdeutig: Ein offener Dienst, der ein leeres Datagramm ignoriert, und eine Firewall, die es verwirft, sehen von aussen gleich aus, deshalb entscheidet sich magi für keines von beiden. In diesem Lauf kamen 53 und 161 als geschlossen zurück und werden weggelassen, während 123 die ganze Sekunde lang schwieg.
 
-<ProjectImage
-  src="/projects/magi/udp.webp"
-  video="/projects/magi/udp.mp4"
+<Terminal
+  session="magi-udp"
   alt="Ein Terminal: magi 45.33.32.156 -p 53,123,161 --udp läuft, und nach einer Sekunde listet das Ergebnis einen Port auf, 123/udp, als open|filtered markiert"
   caption="Ein UDP-Scan von drei Ports."
-  size="full"
 />
 
 ## Ports, die er nicht testen konnte
@@ -90,12 +84,10 @@ Eine TCP-Probe kann auf vier Arten enden, und nur zwei davon sagen etwas über d
 
 Nicht getestete Ports werden nicht in die Zahl der geschlossenen eingerechnet. Der Scan endet mit einer Warnung, die sagt, wie viele es waren und warum, und wenn die Ursache fehlende Dateideskriptoren sind, rät sie, `--concurrency` zu senken oder das Limit für offene Dateien zu erhöhen. Im Clip unten löst scanme.nmap.org zu einer IPv4- und einer IPv6-Adresse auf. In einem Netz ohne IPv6-Routing scheitern die Verbindungen zur IPv6-Adresse mit «network unreachable», bevor etwas gesendet wird, sodass ihre drei Ports als nicht getestet gemeldet werden.
 
-<ProjectImage
-  src="/projects/magi/untestable.webp"
-  video="/projects/magi/untestable.mp4"
+<Terminal
+  session="magi-untestable"
   alt="Ein Terminal: magi scanme.nmap.org -p 22,80,443 meldet zwei Hosts, listet 22/tcp ssh und 80/tcp http auf 45.33.32.156 auf und endet mit der Zeile warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete."
   caption="Die IPv6-Hälfte des Scans, als nicht getestet gemeldet."
-  size="full"
 />
 
 ## Installation
@@ -110,7 +102,7 @@ Jede Version lässt sich mit einem Befehl installieren, der `magi` in Ihren `PAT
 
 [magi.ysz.life](https://magi.ysz.life) zeigt an erster Stelle den Befehl für die Plattform des Besuchers, mit einem Menü zum Wechseln. Mit einer stabilen Rust-Toolchain lässt sich magi auch aus einem Checkout bauen, mit `cargo install --path .`
 
-<Safari
+<BrowserWindow
   url="magi.ysz.life"
   src="/projects/magi/site.webp"
   video="/projects/magi/site.mp4"
@@ -195,7 +187,7 @@ Mit `--banner` liest magi bis zu 512 Bytes von jedem offenen Port und behält di
   images={[
     {
       src: "/projects/magi/site-dark.webp",
-      frame: "safari",
+      frame: "browser",
       url: "magi.ysz.life",
       alt: "Die magi-Website im dunklen Design: die Überschrift A port scanner built to be correct über orangefarbenen gepunkteten Wellen, der PowerShell-Installationsbefehl mit einem Button zum Kopieren und ein Terminalfenster mit einem Scan von scanme.nmap.org",
       caption: "Die Website im dunklen Design.",

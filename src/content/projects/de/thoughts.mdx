@@ -1,10 +1,10 @@
-export const source = "245a5e4101fb";
+export const source = "56d1b382d4a4";
 
 # Eine Schreibseite mit Gästebuch
 
 Auf [Thoughts](https://thoughts.ysz.life) schreibe ich das auf, was auf keine Projektseite passt. Es sind ein paar ruhige Textseiten: eine About-Seite, die Liste der Beiträge und ein Gästebuch, in dem jede Person eine Notiz hinterlassen kann. Die Seite basiert auf [Shu Dings Seite](https://shud.in).
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life"
   src="/projects/thoughts/hero.webp"
   video="/projects/thoughts/hero.mp4"
@@ -20,7 +20,7 @@ Jeder Beitrag ist eine MDX-Datei im Repository, die ihren Titel, ihr Datum und i
 
 Eine Adresse, die es nicht gibt, bekommt einen kurzen Vers.
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/nope"
   src="/projects/thoughts/not-found.webp"
   alt="Die Fehlerseite für unbekannte Adressen: links die kursiven Links about, thoughts und guestbook, daneben die Überschrift «not found» über den zwei Zeilen «the page does not exist» und «you were never supposed to be here»"
@@ -31,7 +31,7 @@ Eine Adresse, die es nicht gibt, bekommt einen kurzen Vers.
 
 Jede Person kann sich ohne Konto ins Gästebuch eintragen, mit einem optionalen Namen und einer Nachricht von höchstens 280 Zeichen. Die Einträge erscheinen mit dem neuesten zuerst, mit Datum und Uhrzeit, jeweils zehn auf einmal, und ein selbst geschriebener bekommt einen Link Delete, wenn Sie mit der Maus darüberfahren.
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/guestbook"
   src="/projects/thoughts/guestbook-desktop.webp"
   alt="Das Gästebuch: ein einzeiliges Formular für einen Namen und eine Nachricht über einer Liste datierter Einträge, wobei alle Namen und Nachrichten verwischt sind"
@@ -125,7 +125,7 @@ Besucher haben keine Konten, deshalb braucht die Seite einen anderen Weg, um zu 
   images={[
     {
       src: "/projects/thoughts/about-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "thoughts.ysz.life",
       alt: "Die About-Seite: links die kursiven Links about, thoughts und guestbook und daneben eine kurze Vorstellung in einer einzigen Textspalte",
       caption: "Die About-Seite.",

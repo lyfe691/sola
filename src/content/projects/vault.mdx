@@ -2,7 +2,7 @@
 
 Vault is an identity setup that runs on one machine: Keycloak as the OpenID Connect provider, a FastAPI backend that verifies its tokens and checks roles, and a Next.js frontend with a sign-in page and role-gated dashboards. OpenID Connect (OIDC) is the identity layer on top of OAuth 2.0. I built Vault in May 2025 to follow a token from the moment Keycloak issues it to the moment an API accepts or refuses it.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/hero.webp"
   video="/projects/vault/hero.mp4"
@@ -16,7 +16,7 @@ The sign-in form stays inside the app. The frontend posts the username and passw
 
 With this grant the app sees the user's password, which is why an app with real users sends the browser to the provider's own login page instead. For a sandbox with one demo user, having the whole exchange in one readable place was the point.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/sign-in-refused.webp"
   alt="The sign-in card with the username demo and a wrong password, a red Invalid user credentials alert above the Sign in button, and a Login failed toast in the corner"
@@ -27,7 +27,7 @@ With this grant the app sees the user's password, which is why an app with real 
 
 After signing in, the frontend calls the backend's `/me`. The cookie is `HttpOnly`, so the page's own JavaScript can't read the token: the backend verifies it and returns its claims, and the portal renders from those, with the user name, a badge for each realm role and a button for each dashboard the roles open. The demo user holds both roles and lands on the admin dashboard. Take `admin` away, and the next sign-in shows one badge and one button, and opening `/admin` leads to the user dashboard instead.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/portal-user-only.webp"
   alt="The portal card greeting demo with a single User badge, a User Dashboard button and Sign Out"
@@ -44,12 +44,10 @@ The buttons only mirror the roles. Every protected route in the API depends on `
 | `/user`  | The `user` role  | 403        |
 | `/admin` | The `admin` role | 403        |
 
-<ProjectImage
-  src="/projects/vault/api.webp"
-  video="/projects/vault/api.mp4"
+<Terminal
+  session="vault-api"
   alt="A full-screen PowerShell window: curl signs in as demo, then GET /user answers HTTP 200 with User access granted and the roles list holding only user, and GET /admin answers HTTP 403 Forbidden with Access denied. Required roles: admin"
   caption="Without admin, /user answers and /admin refuses."
-  size="full"
 />
 
 ## Keycloak, configured by Terraform
@@ -73,7 +71,7 @@ A changed setting shows up in a diff, and `terraform apply` brings the realm bac
 
 The admin console then lists what the file asked for, with the descriptions it gave.
 
-<Safari
+<BrowserWindow
   url="localhost:8080/admin"
   src="/projects/vault/keycloak-roles.webp"
   alt="Keycloak's admin console on the Vault Core Realm: the Realm roles page lists admin, described as Administrator role, and user, described as Regular user role, next to Keycloak's default roles"
@@ -108,16 +106,33 @@ The bearer scheme is created with `auto_error=False`, so a request without the h
 
 Terraform owns the demo user's whole role list. `keycloak_user_roles` is exhaustive, so the user holds exactly the roles in `role_ids`, and the token's `realm_access.roles` lists nothing else:
 
-<CodeBlock
-  code={`resource "keycloak_user_roles" "demo_user_roles" {
+<CodeMorph
+  steps={[
+    {
+      file: "terraform/main.tf",
+      highlight: "4-7",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
     realm_id = keycloak_realm.vault.id
     user_id  = keycloak_user.example_user.id
     role_ids = [
       keycloak_role.admin_role.id,
       keycloak_role.user_role.id,
     ]
-  }`}
-  fileName="terraform/main.tf"
+  }`,
+    },
+    {
+      file: "terraform/main.tf",
+      highlight: "4-6",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.user_role.id,
+    ]
+  }`,
+    },
+  ]}
+  chrome="window"
   lang="hcl"
 />
 

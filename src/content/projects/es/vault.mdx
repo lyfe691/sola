@@ -1,10 +1,10 @@
-export const source = "7594425b3b8e";
+export const source = "30c343866d75";
 
 # Un sandbox local de OpenID Connect
 
 Vault es una configuración de identidad que corre en una sola máquina: Keycloak como proveedor de OpenID Connect, un backend en FastAPI que verifica sus tokens y comprueba roles, y un frontend en Next.js con una página de inicio de sesión y paneles restringidos por rol. OpenID Connect (OIDC) es la capa de identidad sobre OAuth 2.0. Construí Vault en mayo de 2025 para seguir un token desde el momento en que Keycloak lo emite hasta el momento en que una API lo acepta o lo rechaza.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/hero.webp"
   video="/projects/vault/hero.mp4"
@@ -18,7 +18,7 @@ El formulario de inicio de sesión se queda dentro de la app. El frontend envía
 
 Con este flujo la app ve la contraseña del usuario, y por eso una app con usuarios reales envía en su lugar el navegador a la página de inicio de sesión del propio proveedor. Para un sandbox con un solo usuario demo, tener todo el intercambio en un solo lugar legible era el objetivo.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/sign-in-refused.webp"
   alt="La tarjeta de inicio de sesión con el usuario «demo» y una contraseña incorrecta, una alerta roja «Invalid user credentials» sobre el botón «Sign in», y un aviso «Login failed» en la esquina"
@@ -29,7 +29,7 @@ Con este flujo la app ve la contraseña del usuario, y por eso una app con usuar
 
 Tras iniciar sesión, el frontend llama al `/me` del backend. La cookie es `HttpOnly`, así que el JavaScript de la propia página no puede leer el token: el backend lo verifica y devuelve sus claims, y el portal se renderiza a partir de ellos, con el nombre de usuario, una insignia por cada rol del realm y un botón por cada panel que abren los roles. El usuario demo tiene ambos roles y llega al panel de administración. Si le quitas `admin`, el siguiente inicio de sesión muestra una insignia y un botón, y abrir `/admin` lleva en su lugar al panel de usuario.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/portal-user-only.webp"
   alt="La tarjeta del portal que saluda a «demo» con una sola insignia «User», un botón «User Dashboard» y «Sign Out»"
@@ -46,12 +46,10 @@ Los botones solo reflejan los roles. Cada ruta protegida de la API depende de `v
 | `/user`  | El rol `user`          | 403      |
 | `/admin` | El rol `admin`         | 403      |
 
-<ProjectImage
-  src="/projects/vault/api.webp"
-  video="/projects/vault/api.mp4"
+<Terminal
+  session="vault-api"
   alt="Una ventana de PowerShell a pantalla completa: curl inicia sesión como demo, luego GET /user responde HTTP 200 con «User access granted» y la lista de roles con solo user, y GET /admin responde HTTP 403 Forbidden con «Access denied. Required roles: admin»"
   caption="Sin admin, /user responde y /admin rechaza."
-  size="full"
 />
 
 ## Keycloak, configurado con Terraform
@@ -75,7 +73,7 @@ Un ajuste modificado aparece en un diff, y `terraform apply` devuelve el realm e
 
 La consola de administración lista entonces lo que pidió el archivo, con las descripciones que dio.
 
-<Safari
+<BrowserWindow
   url="localhost:8080/admin"
   src="/projects/vault/keycloak-roles.webp"
   alt="La consola de administración de Keycloak en el «Vault Core Realm»: la página «Realm roles» lista admin, descrito como «Administrator role», y user, descrito como «Regular user role», junto a los roles por defecto de Keycloak"
@@ -110,16 +108,33 @@ El esquema bearer se crea con `auto_error=False`, de modo que una petición sin 
 
 Terraform es dueño de toda la lista de roles del usuario demo. `keycloak_user_roles` es exhaustivo, así que el usuario tiene exactamente los roles de `role_ids`, y el `realm_access.roles` del token no lista nada más:
 
-<CodeBlock
-  code={`resource "keycloak_user_roles" "demo_user_roles" {
+<CodeMorph
+  steps={[
+    {
+      file: "terraform/main.tf",
+      highlight: "4-7",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
     realm_id = keycloak_realm.vault.id
     user_id  = keycloak_user.example_user.id
     role_ids = [
       keycloak_role.admin_role.id,
       keycloak_role.user_role.id,
     ]
-  }`}
-  fileName="terraform/main.tf"
+  }`,
+    },
+    {
+      file: "terraform/main.tf",
+      highlight: "4-6",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.user_role.id,
+    ]
+  }`,
+    },
+  ]}
+  chrome="window"
   lang="hcl"
 />
 

@@ -1,10 +1,10 @@
-export const source = "7af9c8d1b6ea";
+export const source = "c18a99dfbed8";
 
 # Un generador de códigos QR con prueba de escaneo
 
 [qr.ysz.life](https://qr.ysz.life) genera códigos QR en el navegador. Escribes un enlace o cualquier texto, das estilo al código y lo descargas. El estilo también es lo que impide que un código se pueda escanear, así que la cabecera tiene un Scan Test que lee de vuelta una imagen exportada con un decodificador real.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/hero.webp"
   video="/projects/qr/hero.mp4"
@@ -75,7 +75,7 @@ El Scan Test de la cabecera toma una imagen exportada y la decodifica. Si pasa, 
 
 El sitio sigue el tema del sistema, y la tecla d cambia entre claro y oscuro. La vista previa conserva el color de fondo propio del código en ambos, así que muestra cómo será el archivo exportado.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/theme.webp"
   video="/projects/qr/theme.mp4"
@@ -154,7 +154,7 @@ Restaurar un código reciente extiende los ajustes guardados sobre los valores p
   images={[
     {
       src: "/projects/qr/styled-dark-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "qr.ysz.life",
       alt: "El generador en su tema oscuro con la pestaña Colors abierta: un código circular con un degradado de azul marino a naranja y un logo de hoja sobre una tarjeta blanca",
       caption: "El tema oscuro.",

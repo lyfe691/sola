@@ -17,13 +17,17 @@
  * them all alike, by the footprint figure-layout.ts gives them.
  */
 
-import { useState, type CSSProperties, type ReactNode } from "react";
+import { Suspense, useState, type CSSProperties, type ReactNode } from "react";
+import { LazyBrowserWindow } from "@/components/windows/lazy";
+import { BROWSER_SCREEN_RADIUS } from "@/components/windows/measures";
+import { WINDOW_FRAME, WindowScale } from "@/components/windows/window";
 import { PROJECT_IMAGE_EDGES } from "@/config/project-image-sizes";
 import { Hint } from "@/components/ui/custom/hint";
 import { useTruncated } from "@/hooks/use-truncated";
 import { cn } from "@/lib/utils";
 import { ExpandableImage } from "./ExpandableImage";
 import {
+  BROWSER_WIDTH,
   type FigureFrame,
   figureRatio,
   GAP,
@@ -31,6 +35,7 @@ import {
   rowShares,
   STAGE_HEIGHT,
   isPortrait,
+  ratioOf,
 } from "./figure-layout";
 import { DeviceFrame, SCREEN_RADIUS } from "./frames";
 
@@ -41,7 +46,7 @@ type FigureImage = {
   /** A clip that plays in the figure's place; `src` is then its poster. */
   video?: string;
   frame?: FigureFrame;
-  /** What the Safari frame's address field reads. */
+  /** What the browser frame's address field reads. */
   url?: string;
 };
 type Columns = 2 | 3 | 4;
@@ -89,6 +94,12 @@ export function FigureCaption({
   );
 }
 
+/** The corners a frame cuts its screen to. */
+const SCREEN_CORNERS: Record<FigureFrame, string> = {
+  browser: BROWSER_SCREEN_RADIUS,
+  iphone: SCREEN_RADIUS,
+};
+
 function FigureMedia({ figure }: { figure: FigureImage }) {
   const [clip, setClip] = useState<HTMLVideoElement | null>(null);
   const media = (
@@ -97,21 +108,41 @@ function FigureMedia({ figure }: { figure: FigureImage }) {
       video={figure.video}
       alt={figure.alt}
       caption={figure.caption}
-      radius={figure.frame ? SCREEN_RADIUS[figure.frame] : undefined}
-      onClip={figure.frame ? setClip : undefined}
+      radius={figure.frame ? SCREEN_CORNERS[figure.frame] : undefined}
+      onClip={figure.frame === "iphone" ? setClip : undefined}
     />
   );
-  if (!figure.frame) return media;
-  return (
-    <DeviceFrame
-      frame={figure.frame}
-      url={figure.url}
-      edge={PROJECT_IMAGE_EDGES[figure.src]}
-      clip={clip}
-    >
-      {media}
-    </DeviceFrame>
-  );
+  if (figure.frame === "browser")
+    // drawn to scale, so the window's footprint is figureRatio at any width
+    // and the row's shared height holds
+    return (
+      <WindowScale nominal={BROWSER_WIDTH}>
+        <Suspense
+          fallback={
+            <div
+              aria-hidden="true"
+              className={cn(WINDOW_FRAME, "aspect-(--figure)")}
+              style={{ "--figure": figureRatio(figure) } as CSSProperties}
+            />
+          }
+        >
+          <LazyBrowserWindow
+            url={figure.url}
+            aspect={ratioOf(figure.src)}
+            layout="wide"
+          >
+            {media}
+          </LazyBrowserWindow>
+        </Suspense>
+      </WindowScale>
+    );
+  if (figure.frame === "iphone")
+    return (
+      <DeviceFrame edge={PROJECT_IMAGE_EDGES[figure.src]} clip={clip}>
+        {media}
+      </DeviceFrame>
+    );
+  return media;
 }
 
 // the row forms where its thumbnails stay legible; below that it stacks
@@ -222,14 +253,6 @@ export function ProjectImage({
       {figure.caption ? <FigureCaption>{figure.caption}</FigureCaption> : null}
     </figure>
   );
-}
-
-/** A figure in a Safari window; reads cleanest at the full column. */
-export function Safari({
-  size = "full",
-  ...props
-}: Omit<ProjectImageProps, "frame">) {
-  return <ProjectImage {...props} size={size} frame="safari" />;
 }
 
 /** A figure in an iPhone; a phone shot lands on the stage as it does bare. */

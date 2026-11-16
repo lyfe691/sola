@@ -1,15 +1,13 @@
-export const source = "3f1bdfac11c6";
+export const source = "f4d8ade9d5da";
 
 # 一个用 Rust 写的 TCP 和 UDP 端口扫描器
 
 magi 是我用 Rust 写的命令行端口扫描器。它做的是连接扫描：每一次探测都是通过操作系统的套接字发出的普通 TCP 连接或 UDP 数据报，所以在 Linux、macOS 和 Windows 上以普通用户身份就能运行。它只报告自己真正观察到的端口状态，遇到无法测试的端口时也会如实说明。
 
-<ProjectImage
-  src="/projects/magi/scan.webp"
-  video="/projects/magi/scan.mp4"
+<Terminal
+  session="magi-scan"
   alt="终端里：输入并运行 magi 45.33.32.156 --banner，计数器一路涨到 1024 个已探测的端口，结果列出了 22/tcp ssh（banner 为 SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13）和 80/tcp http"
   caption="对 scanme.nmap.org 前 1024 个端口的一次真实扫描。"
-  size="full"
 />
 
 ## 扫描一台主机
@@ -49,12 +47,10 @@ magi 是我用 Rust 写的命令行端口扫描器。它做的是连接扫描：
 
 所有给人看的内容都输出到 stderr：开启扫描的那一行、计数器和各种警告。只有当 stderr 是终端时才会出现计数器。加上 `--json` 后，stdout 输出的是开放端口的 JSON 数组，其中包含它们的地址、协议、状态和 banner，所以结果可以直接通过管道交给 jq 或其他程序。
 
-<ProjectImage
-  src="/projects/magi/json.webp"
-  video="/projects/magi/json.mp4"
+<Terminal
+  session="magi-json"
   alt="终端里：magi 45.33.32.156 -p 22,80,443 --banner --json 通过管道交给 jq，先打印出扫描的那一行，然后是带颜色的 JSON 数组，里面有两个对象，一个是带 SSH banner 的 22 端口，另一个是 banner 为 null 的 80 端口"
   caption="stdout 输出 JSON，通过管道交给 jq。"
-  size="full"
 />
 
 ## UDP
@@ -69,12 +65,10 @@ magi 是我用 Rust 写的命令行端口扫描器。它做的是连接扫描：
 
 沉默是有歧义的：一个忽略空数据报的开放服务，和一个把它丢弃的防火墙，从外面看没有区别，所以 magi 不会二选一。在这次运行中，53 和 161 返回了关闭，因此没有列出，而 123 在整整一秒里都保持沉默。
 
-<ProjectImage
-  src="/projects/magi/udp.webp"
-  video="/projects/magi/udp.mp4"
+<Terminal
+  session="magi-udp"
   alt="终端里：运行 magi 45.33.32.156 -p 53,123,161 --udp，一秒后结果只列出一个端口 123/udp，标记为 open|filtered"
   caption="对三个端口的一次 UDP 扫描。"
-  size="full"
 />
 
 ## 无法测试的端口
@@ -90,12 +84,10 @@ magi 是我用 Rust 写的命令行端口扫描器。它做的是连接扫描：
 
 未测试的端口不会被并入“关闭”的计数。扫描结束时会给出一条警告，说明有多少个这样的端口以及原因；如果原因是文件描述符用完，它会提示调低 `--concurrency` 或调高打开文件数的上限。在下面的视频里，scanme.nmap.org 解析出一个 IPv4 地址和一个 IPv6 地址。在没有 IPv6 路由的网络上，发往 IPv6 地址的连接会在什么都没发出之前就以“network unreachable”失败，所以它的三个端口被报告为未测试。
 
-<ProjectImage
-  src="/projects/magi/untestable.webp"
-  video="/projects/magi/untestable.mp4"
+<Terminal
+  session="magi-untestable"
   alt="终端里：magi scanme.nmap.org -p 22,80,443 报告了两台主机，在 45.33.32.156 上列出 22/tcp ssh 和 80/tcp http，最后以 warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete. 结束"
   caption="扫描中属于 IPv6 的那一半，被报告为未测试。"
-  size="full"
 />
 
 ## 安装
@@ -110,7 +102,7 @@ magi 是我用 Rust 写的命令行端口扫描器。它做的是连接扫描：
 
 [magi.ysz.life](https://magi.ysz.life) 首先展示适合访客所用平台的命令，并带有一个可以切换的菜单。有了稳定版 Rust 工具链，也可以从检出的源码构建，命令是 `cargo install --path .`。
 
-<Safari
+<BrowserWindow
   url="magi.ysz.life"
   src="/projects/magi/site.webp"
   video="/projects/magi/site.mp4"
@@ -195,7 +187,7 @@ magi 是一个小型库，外面只包着一层很薄的可执行程序。`main.
   images={[
     {
       src: "/projects/magi/site-dark.webp",
-      frame: "safari",
+      frame: "browser",
       url: "magi.ysz.life",
       alt: "深色主题下的 magi 网站：橙色点阵波浪之上是标题 A port scanner built to be correct，下面是带复制按钮的 PowerShell 安装命令，以及一个扫描 scanme.nmap.org 的终端窗口",
       caption: "深色主题下的网站。",

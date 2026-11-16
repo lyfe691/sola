@@ -1,10 +1,10 @@
-export const source = "a77520042728";
+export const source = "c3f81bfa87ad";
 
 # 把页面及其文件保存为 ZIP 的浏览器扩展
 
 [Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) 是一款 Chrome 和 Edge 扩展，可以把当前标签页里的页面下载为一个 ZIP 文件。压缩包里有 HTML，以及它引用的每一个样式表、脚本和图片，文件夹结构对应它们各自来自的服务器，HTML 里的链接也被改写为指向这些保存下来的副本。我在 2024 年 8 月做了它，用来研究其他网站是怎么搭起来的，据 Chrome 应用商店显示，现在约有 6000 人在使用它。
 
-<Safari
+<BrowserWindow
   url="htmx.org"
   src="/projects/code-extractor/hero.webp"
   video="/projects/code-extractor/hero.mp4"
@@ -123,7 +123,7 @@ Chrome 在安装时会把最后一项显示为读取和更改所有网站上数�
 
 弹窗用 `Promise.all` 一次性把它们全部取回。某个获取失败时，会记入日志并跳过，所以少一张图片不会让整个压缩包作废。然后 JSZip 生成文件，`chrome.downloads.download` 负责保存，并先询问保存位置。
 
-<Safari
+<BrowserWindow
   url="chromewebstore.google.com"
   src="/projects/code-extractor/store-listing-desktop.webp"
   alt="扩展在 Chrome 应用商店中的页面：文件夹图标、5 个评分中的 5.0 分、6000 名用户，以及作为第一张截图的弹窗"

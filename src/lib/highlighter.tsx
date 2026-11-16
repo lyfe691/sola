@@ -88,6 +88,23 @@ export async function loadHighlighter(language: string) {
   }
 
   return {
+    // The same colours as `highlight`, as data: for a caller that lays the
+    // tokens out itself (CodeMorph).
+    tokens(code: string) {
+      return shiki
+        .codeToTokens(code, {
+          lang,
+          themes: { light: "github-light", dark: "github-dark" },
+          defaultColor: false,
+        })
+        .tokens.map((line) =>
+          line.map((token) => ({
+            text: token.content,
+            light: token.htmlStyle?.["--shiki-light"],
+            dark: token.htmlStyle?.["--shiki-dark"],
+          })),
+        );
+    },
     // Returns one React node per line, and the grammar state after the last
     // line. Pass that state back to continue where the code left off.
     highlight(code: string, state?: GrammarState) {

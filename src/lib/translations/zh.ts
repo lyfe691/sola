@@ -71,6 +71,12 @@ export const zh = {
       commandPaletteHint: "搜索命令…",
       scrollToTop: "回到顶部",
       terminal: "终端",
+      browserBack: "后退",
+      browserForward: "前进",
+      browserReload: "重新加载",
+      browserWindow: "显示 {url} 的浏览器窗口",
+      browserPages: "页面",
+      codeSteps: "代码步骤",
     },
     menu: {
       themes: "主题",

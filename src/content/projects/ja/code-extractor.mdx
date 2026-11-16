@@ -1,10 +1,10 @@
-export const source = "a77520042728";
+export const source = "c3f81bfa87ad";
 
 # ページとそのファイルを ZIP として保存するブラウザー拡張機能
 
 [Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) は、現在のタブのページを 1 つの ZIP ファイルとしてダウンロードする、Chrome と Edge の拡張機能です。アーカイブには、HTML と、それが参照するすべてのスタイルシート、スクリプト、画像が入り、取得元のサーバーを写したフォルダ構成になっていて、HTML のリンクは保存したコピーを指すように書き換えられます。ほかのサイトがどう作られているかを調べるために、2024 年 8 月に作りました。Chrome ウェブストアによると、現在は約 6000 人が使っています。
 
-<Safari
+<BrowserWindow
   url="htmx.org"
   src="/projects/code-extractor/hero.webp"
   video="/projects/code-extractor/hero.mp4"
@@ -123,7 +123,7 @@ Chrome はインストール時に、最後の権限を、すべてのウェブ�
 
 ポップアップは、`Promise.all` ですべてを一度に取得します。取得に失敗したものは、ログに記録してスキップされるので、画像が 1 枚欠けてもアーカイブ全体が失われることはありません。そのあと JSZip がファイルを作り、`chrome.downloads.download` が、先に保存先を尋ねてから保存します。
 
-<Safari
+<BrowserWindow
   url="chromewebstore.google.com"
   src="/projects/code-extractor/store-listing-desktop.webp"
   alt="Chrome ウェブストアにある拡張機能のページ：フォルダのアイコン、評価 5.0（5 件の評価）、6000 人のユーザー、そして最初のスクリーンショットとしてポップアップ"

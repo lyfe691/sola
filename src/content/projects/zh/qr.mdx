@@ -1,10 +1,10 @@
-export const source = "7af9c8d1b6ea";
+export const source = "c18a99dfbed8";
 
 # 一个带扫描测试的 QR 码生成器
 
 [qr.ysz.life](https://qr.ysz.life) 在浏览器里生成 QR 码。你输入一个链接或任意文字，设置好码的样式，然后下载。样式也正是让 QR 码扫不出来的原因，所以页头有一个 Scan Test，用真正的解码器把导出的图片读回来。
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/hero.webp"
   video="/projects/qr/hero.mp4"
@@ -75,7 +75,7 @@ QR 码可以下载为 PNG、SVG、JPEG 或 WebP，也可以作为 PNG 复制到�
 
 网站跟随系统主题，按 d 键可以在浅色和深色之间切换。预览在两种主题下都保留 QR 码自己的背景色，所以它显示的就是导出文件的样子。
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/theme.webp"
   video="/projects/qr/theme.mp4"
@@ -154,7 +154,7 @@ QR 码在存储数据的同时，还存储 Reed–Solomon 纠错码字，共有�
   images={[
     {
       src: "/projects/qr/styled-dark-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "qr.ysz.life",
       alt: "深色主题下打开了 Colors 标签页的生成器：白色卡片上是一个圆形 QR 码，带深蓝到橙色的渐变和叶子形 logo",
       caption: "深色主题。",

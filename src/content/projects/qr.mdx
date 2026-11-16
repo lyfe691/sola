@@ -2,7 +2,7 @@
 
 [qr.ysz.life](https://qr.ysz.life) makes QR codes in the browser. You type a link or any text, style the code and download it. Styling is also what stops a code from scanning, so the header has a Scan Test that reads an exported image back with a real decoder.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/hero.webp"
   video="/projects/qr/hero.mp4"
@@ -73,7 +73,7 @@ The Scan Test in the header takes an exported image and decodes it. A pass shows
 
 The site follows the system theme, and the d key switches between light and dark. The preview keeps the code's own background colour in both, so it shows what the exported file will look like.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/theme.webp"
   video="/projects/qr/theme.mp4"
@@ -152,7 +152,7 @@ Restoring a recent code spreads the saved settings over the current defaults, so
   images={[
     {
       src: "/projects/qr/styled-dark-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "qr.ysz.life",
       alt: "The generator in its dark theme with the Colors tab open: a circular code with a navy-to-orange gradient and a leaf logo on a white card",
       caption: "The dark theme.",

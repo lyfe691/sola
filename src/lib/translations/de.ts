@@ -78,6 +78,12 @@ export const de = {
       commandPaletteHint: "Befehl suchen…",
       scrollToTop: "Nach oben scrollen",
       terminal: "Terminal",
+      browserBack: "Zurück",
+      browserForward: "Vorwärts",
+      browserReload: "Neu laden",
+      browserWindow: "Browserfenster mit {url}",
+      browserPages: "Seiten",
+      codeSteps: "Code-Schritte",
     },
     menu: {
       themes: "Designs",

@@ -75,6 +75,12 @@ export const ja = {
       commandPaletteHint: "コマンドを検索…",
       scrollToTop: "トップへ戻る",
       terminal: "ターミナル",
+      browserBack: "戻る",
+      browserForward: "進む",
+      browserReload: "再読み込み",
+      browserWindow: "{url} を表示しているブラウザウィンドウ",
+      browserPages: "ページ",
+      codeSteps: "コードのステップ",
     },
     menu: {
       themes: "テーマ",

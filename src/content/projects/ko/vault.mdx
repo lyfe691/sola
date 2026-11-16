@@ -1,10 +1,10 @@
-export const source = "7594425b3b8e";
+export const source = "30c343866d75";
 
 # 로컬 OpenID Connect 샌드박스
 
 Vault는 한 대의 컴퓨터에서 돌아가는 ID 구성입니다. Keycloak을 OpenID Connect 제공자로 쓰고, 그 토큰을 검증하고 역할을 확인하는 FastAPI 백엔드와, 로그인 페이지 및 역할별로 제한된 대시보드를 갖춘 Next.js 프런트엔드로 이루어집니다. OpenID Connect(OIDC)는 OAuth 2.0 위에 얹힌 ID 계층입니다. 저는 2025년 5월에 Vault를 만들어, 토큰이 Keycloak에서 발급되는 순간부터 API가 그 토큰을 받아들이거나 거부하는 순간까지 따라가 보았습니다.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/hero.webp"
   video="/projects/vault/hero.mp4"
@@ -18,7 +18,7 @@ Vault는 한 대의 컴퓨터에서 돌아가는 ID 구성입니다. Keycloak을
 
 이 그랜트를 쓰면 앱이 사용자의 비밀번호를 보게 되므로, 실제 사용자가 있는 앱은 대신 브라우저를 제공자의 로그인 페이지로 보냅니다. 데모 사용자 한 명뿐인 샌드박스에서는 교환 과정 전체를 읽기 쉬운 한곳에 두는 것이 목적이었습니다.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/sign-in-refused.webp"
   alt="사용자 이름 demo와 틀린 비밀번호가 입력된 로그인 카드: Sign in 버튼 위에 빨간 Invalid user credentials 경고가 있고, 모서리에 Login failed 토스트가 나타나 있습니다"
@@ -29,7 +29,7 @@ Vault는 한 대의 컴퓨터에서 돌아가는 ID 구성입니다. Keycloak을
 
 로그인한 뒤 프런트엔드는 백엔드의 `/me`를 호출합니다. 쿠키가 `HttpOnly`이므로 페이지의 JavaScript는 토큰을 읽을 수 없습니다. 대신 백엔드가 토큰을 검증하고 그 클레임을 돌려주며, 포털은 그 클레임으로 렌더링되어 사용자 이름, realm 역할마다 배지 하나, 그 역할이 여는 대시보드마다 버튼 하나를 보여 줍니다. demo 사용자는 두 역할을 모두 가지고 있어 관리자 대시보드로 들어갑니다. `admin`을 빼면 다음 로그인에는 배지 하나와 버튼 하나만 보이고, `/admin`을 열면 대신 사용자 대시보드로 이동합니다.
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/portal-user-only.webp"
   alt="demo에게 인사하는 포털 카드: User 배지 하나와 User Dashboard 버튼, Sign Out 버튼이 있습니다"
@@ -46,12 +46,10 @@ Vault는 한 대의 컴퓨터에서 돌아가는 ID 구성입니다. Keycloak을
 | `/user`  | `user` 역할              | 403     |
 | `/admin` | `admin` 역할             | 403     |
 
-<ProjectImage
-  src="/projects/vault/api.webp"
-  video="/projects/vault/api.mp4"
+<Terminal
+  session="vault-api"
   alt="전체 화면 PowerShell 창: curl이 demo로 로그인한 뒤 GET /user는 User access granted와 user만 담긴 역할 목록과 함께 HTTP 200으로 응답하고, GET /admin은 Access denied. Required roles: admin과 함께 HTTP 403 Forbidden으로 응답합니다"
   caption="admin이 없으면 /user는 응답하고 /admin은 거부합니다."
-  size="full"
 />
 
 ## Terraform으로 구성한 Keycloak
@@ -75,7 +73,7 @@ Docker Compose가 Keycloak 26.2를 개발 모드로 실행하고, 그 상태를 
 
 그러면 관리 콘솔에 파일이 요청한 것이 파일이 붙인 설명과 함께 나열됩니다.
 
-<Safari
+<BrowserWindow
   url="localhost:8080/admin"
   src="/projects/vault/keycloak-roles.webp"
   alt="Vault Core Realm의 Keycloak 관리 콘솔: Realm roles 페이지에 Keycloak의 기본 역할과 함께 Administrator role이라고 설명된 admin과 Regular user role이라고 설명된 user가 나열되어 있습니다"
@@ -110,16 +108,33 @@ Bearer 스킴은 `auto_error=False`로 만들어지므로, 헤더가 없는 요�
 
 데모 사용자의 역할 목록 전체는 Terraform이 관리합니다. `keycloak_user_roles`는 목록에 없는 역할을 허용하지 않으므로, 사용자는 `role_ids`에 있는 역할만 정확히 가지며, 토큰의 `realm_access.roles`에도 그 외의 것은 나오지 않습니다.
 
-<CodeBlock
-  code={`resource "keycloak_user_roles" "demo_user_roles" {
+<CodeMorph
+  steps={[
+    {
+      file: "terraform/main.tf",
+      highlight: "4-7",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
     realm_id = keycloak_realm.vault.id
     user_id  = keycloak_user.example_user.id
     role_ids = [
       keycloak_role.admin_role.id,
       keycloak_role.user_role.id,
     ]
-  }`}
-  fileName="terraform/main.tf"
+  }`,
+    },
+    {
+      file: "terraform/main.tf",
+      highlight: "4-6",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.user_role.id,
+    ]
+  }`,
+    },
+  ]}
+  chrome="window"
   lang="hcl"
 />
 

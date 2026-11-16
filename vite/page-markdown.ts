@@ -28,6 +28,11 @@ import { PROJECTS, type ProjectMeta } from "../src/config/projects.ts";
 import { OWNER, ROLE, SITE_URL } from "../src/config/site.ts";
 import { OFFERINGS } from "../src/config/services.ts";
 import { SKILL_GROUPS } from "../src/config/skills.ts";
+import {
+  TERMINAL_SESSIONS,
+  transcript,
+  type TerminalSessionKey,
+} from "../src/config/terminal-sessions.ts";
 import { testimonials } from "../src/config/testimonials.ts";
 import { formatProjectDate } from "../src/lib/dates.ts";
 import { EDUCATION, resolveEntries, WORK } from "../src/lib/experience.ts";
@@ -82,10 +87,73 @@ function codeBlock(source: string): string {
     .join("\n");
   const lang = prop(source, "lang", "=") ?? "";
   const file = prop(source, "fileName", "=");
+  return [file && `\`${file}\``, fenced(code, lang)]
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+/** The JavaScript a `name={…}` attribute holds, evaluated. */
+function attribute<T>(source: string, name: string): T | null {
+  const open = source.indexOf(`${name}={`);
+  if (open < 0) return null;
+  const start = open + name.length + 2;
+  let depth = 1;
+  let quote: string | null = null;
+  for (let i = start; i < source.length; i++) {
+    const ch = source[i];
+    if (quote) {
+      if (ch === "\\") i++;
+      else if (ch === quote) quote = null;
+    } else if (ch === '"' || ch === "'" || ch === "`") quote = ch;
+    else if (ch === "{") depth++;
+    else if (ch === "}" && --depth === 0)
+      return new Function(`return (${source.slice(start, i)});`)() as T;
+  }
+  return null;
+}
+
+const fenced = (code: string, lang: string) => {
   const run = Math.max(0, ...(code.match(/`+/g) ?? []).map((m) => m.length));
   const fence = "`".repeat(Math.max(3, run + 1));
-  return [file && `\`${file}\``, `${fence}${lang}\n${code}\n${fence}`]
+  return `${fence}${lang}\n${code}\n${fence}`;
+};
+
+/** A Terminal's session as the text it printed. */
+function terminal(source: string): string {
+  const name = prop(source, "session", "=");
+  const session =
+    name && name in TERMINAL_SESSIONS
+      ? TERMINAL_SESSIONS[name as TerminalSessionKey]
+      : null;
+  if (!session) return "";
+  const caption = prop(source, "caption", "=");
+  return [fenced(transcript(session), "console"), caption && `*${caption}*`]
     .filter(Boolean)
+    .join("\n");
+}
+
+/** A CodeMorph's steps, each as the code block it stands on. */
+function codeMorph(source: string): string {
+  const steps = attribute<{ code: string; label?: string; file?: string }[]>(
+    source,
+    "steps",
+  );
+  if (!steps) return "";
+  const lang = prop(source, "lang", "=") ?? "";
+  return steps
+    .map((step) => {
+      // the two spaces MDX strips from a literal's later lines, as codeBlock
+      const code = step.code
+        .split("\n")
+        .map((line, i) =>
+          i > 0 && line.startsWith("  ") ? line.slice(2) : line,
+        )
+        .join("\n");
+      const name = [step.file && `\`${step.file}\``, step.label]
+        .filter(Boolean)
+        .join(", ");
+      return [name, fenced(code, lang)].filter(Boolean).join("\n\n");
+    })
     .join("\n\n");
 }
 
@@ -115,7 +183,12 @@ export function mdxToMarkdown(source: string): string {
       const block = lines.slice(i, end + 1).join("\n");
       i = end;
       if (component[1] === "CodeBlock") out.push(codeBlock(block));
-      else if (component[1] === "ProjectGallery")
+      else if (component[1] === "Terminal") out.push(terminal(block));
+      else if (component[1] === "CodeMorph") out.push(codeMorph(block));
+      else if (
+        component[1] === "ProjectGallery" ||
+        (component[1] === "BrowserWindow" && block.includes("pages={"))
+      )
         out.push(
           (block.match(/\{[^{}]*\}/g) ?? [])
             .map((image) => figure(image, ":"))

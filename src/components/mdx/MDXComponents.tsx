@@ -27,15 +27,10 @@ import {
 import { cn } from "@/lib/utils";
 import { CodeBlock } from "./CodeBlock";
 import { ExpandableImage } from "./ExpandableImage";
-import {
-  FigureCaption,
-  IPhone,
-  ProjectGallery,
-  ProjectImage,
-  Safari,
-} from "./figures";
+import { FigureCaption, IPhone, ProjectGallery, ProjectImage } from "./figures";
 import { MDXHeading } from "./Heading";
 import { TechStack } from "./TechStack";
+import { BrowserWindow, CodeMorph, Terminal } from "./windows";
 import { Link } from "@/lib/locale-router";
 
 /** Props MDX actually passes — avoid full HTML* bags. */
@@ -285,12 +280,14 @@ const html = {
 } satisfies MDXComponentsType;
 
 const shortcodes = {
+  BrowserWindow,
   CodeBlock,
+  CodeMorph,
   IPhone,
   ProjectImage,
   ProjectGallery,
-  Safari,
   TechStack,
+  Terminal,
 };
 
 export const MDXComponents = {

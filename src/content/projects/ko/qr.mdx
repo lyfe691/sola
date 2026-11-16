@@ -1,10 +1,10 @@
-export const source = "7af9c8d1b6ea";
+export const source = "c18a99dfbed8";
 
 # 스캔 테스트가 있는 QR 코드 생성기
 
 [qr.ysz.life](https://qr.ysz.life)는 브라우저에서 QR 코드를 만듭니다. 링크나 아무 텍스트를 입력하고, 코드를 꾸민 다음 내려받으면 됩니다. 그런데 꾸미기는 코드가 스캔되지 않게 만드는 원인이기도 하므로, 헤더에는 내보낸 이미지를 실제 디코더로 다시 읽어 보는 Scan Test가 있습니다.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/hero.webp"
   video="/projects/qr/hero.mp4"
@@ -75,7 +75,7 @@ Style 탭은 코드를 어떻게 그릴지 정합니다. 모듈은 QR 코드를 
 
 사이트는 시스템 테마를 따르고, d 키로 라이트와 다크를 전환할 수 있습니다. 미리보기는 두 테마 모두에서 코드 자체의 배경색을 유지하므로, 내보낸 파일이 어떻게 보일지를 그대로 보여 줍니다.
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/theme.webp"
   video="/projects/qr/theme.mp4"
@@ -154,7 +154,7 @@ QR 코드는 데이터를 Reed–Solomon 오류 정정 코드워드와 함께 �
   images={[
     {
       src: "/projects/qr/styled-dark-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "qr.ysz.life",
       alt: "Colors 탭이 열린 다크 테마의 생성기: 흰색 카드 위에 남색에서 주황색으로 이어지는 그라데이션과 나뭇잎 로고가 있는 원형 코드",
       caption: "다크 테마.",

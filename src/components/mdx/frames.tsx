@@ -5,14 +5,13 @@
  * Unauthorized copying, modification, or distribution is strictly prohibited.
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  *
- * The device frames a figure can sit in: a Safari window and an iPhone. Each
- * is drawn in its own units with every length a share of the frame's width,
- * so the drawing scales with the figure and the footprint figure-layout.ts
- * computes from the same numbers holds at any size.
+ * The iPhone a figure can sit in. It is drawn in its own units with every
+ * length a share of the frame's width, so the drawing scales with the figure
+ * and the footprint figure-layout.ts computes from the same numbers holds at
+ * any size. (A browser figure sits in the Browser Window: figures.tsx.)
  *
- * The chrome takes the screen's own colours, the way Safari tints its window
- * from the page it shows: a gradient of the shot's top edge (frame-edge.ts),
- * which follows a clip while it plays.
+ * The status bar takes the screen's own colours: a gradient of the shot's
+ * top edge (frame-edge.ts), which follows a clip while it plays.
  */
 
 import {
@@ -22,20 +21,15 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { LockIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
-import { type FigureFrame, PHONE, SAFARI } from "./figure-layout";
-import { EDGE_BAND, EDGE_STOPS, edgeOf, inkOn } from "./frame-edge";
+import { PHONE } from "./figure-layout";
+import { EDGE_BAND, EDGE_STOPS, edgeOf } from "./frame-edge";
 
 const share = (units: number, width: number) => `${(units / width) * 100}cqw`;
-const su = (units: number) => share(units, SAFARI.width);
 const pu = (units: number) => share(units, PHONE.width);
 
-/** The screen's corners inside each frame: what the image or clip is cut to. */
-export const SCREEN_RADIUS: Record<FigureFrame, string> = {
-  safari: "0 0 var(--radius-xl) var(--radius-xl)",
-  iphone: `0 0 ${pu(PHONE.screenRadius)} ${pu(PHONE.screenRadius)}`,
-};
+/** The screen's corners inside the phone: what the image or clip is cut to. */
+export const SCREEN_RADIUS = `0 0 ${pu(PHONE.screenRadius)} ${pu(PHONE.screenRadius)}`;
 
 /**
  * The colours the chrome reads (index.css, "device frames"). A shot outside
@@ -46,7 +40,6 @@ const edgeVars = (edge?: readonly string[]): Record<string, string> =>
     ...(edge ?? Array<string>(EDGE_STOPS).fill("var(--muted)")).map(
       (colour, i) => [`--frame-edge-${i}`, colour],
     ),
-    ["--frame-ink", edge ? inkOn(edge) : "var(--foreground)"],
   ]);
 
 /** How often a playing clip's edge is read, in ms; the glide fills between. */
@@ -95,66 +88,6 @@ function useClipEdge(
     });
     return () => clip.cancelVideoFrameCallback(handle);
   }, [clip, rootRef]);
-}
-
-/** The toolbar: three lights, and an address field centred on the window. */
-const LIGHT = { size: 12, inset: 21, gap: 8 } as const;
-const FIELD = {
-  width: 666,
-  height: 30,
-  radius: 6,
-  inset: 10,
-  gap: 6,
-  icon: 12,
-  text: 13,
-} as const;
-
-function SafariFrame({ url, children }: { url?: string; children: ReactNode }) {
-  return (
-    <div
-      className="@container"
-      style={
-        {
-          "--bar": su(SAFARI.bar),
-          "--light": su(LIGHT.size),
-          "--light-inset": su(LIGHT.inset),
-          "--light-gap": su(LIGHT.gap),
-          "--field-w": su(FIELD.width),
-          "--field-h": su(FIELD.height),
-          "--field-inset": su(FIELD.inset),
-          "--field-radius": su(FIELD.radius),
-          "--field-gap": su(FIELD.gap),
-          "--field-icon": su(FIELD.icon),
-          "--field-text": su(FIELD.text),
-        } as CSSProperties
-      }
-    >
-      <div className="overflow-hidden rounded-xl bg-(image:--frame-ground) shadow-(--prose-figure-lift) ring-1 ring-border">
-        <div
-          aria-hidden="true"
-          className="grid h-(--bar) grid-cols-[1fr_auto_1fr] items-center border-b border-(--frame-ink)/10 bg-(--frame-ink)/5 px-(--light-inset)"
-        >
-          <span className="flex gap-(--light-gap)">
-            {[0, 1, 2].map((light) => (
-              <span
-                key={light}
-                className="size-(--light) rounded-full bg-(--frame-ink)/12"
-              />
-            ))}
-          </span>
-          <span className="flex h-(--field-h) w-(--field-w) items-center justify-center gap-(--field-gap) rounded-(--field-radius) bg-(--frame-ink)/9 px-(--field-inset) text-(length:--field-text) leading-none text-(--frame-ink)/55">
-            {url ? (
-              <>
-                <LockIcon className="size-(--field-icon) shrink-0" />
-                <span className="min-w-0 truncate">{url}</span>
-              </>
-            ) : null}
-          </span>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
 }
 
 /** The island in its status bar with the camera at its right, and the buttons. */
@@ -226,7 +159,7 @@ function IPhoneFrame({ children }: { children: ReactNode }) {
           <div className="rounded-(--bezel-radius) bg-black p-(--bezel)">
             {/* the screen's own ground, not a token: with the shot away in
                 the lightbox the frame keeps its depth instead of showing a
-                themed hole — the same as the Safari window's interior */}
+                themed hole */}
             <div className="relative overflow-hidden rounded-(--screen-radius) bg-(image:--frame-ground)">
               {/* the screenshots are bare viewport captures with content at
                   y=0, so the island cannot sit over them without covering a
@@ -246,15 +179,10 @@ function IPhoneFrame({ children }: { children: ReactNode }) {
 }
 
 export function DeviceFrame({
-  frame,
-  url,
   edge,
   clip,
   children,
 }: {
-  frame: FigureFrame;
-  /** What the Safari address field reads. */
-  url?: string;
   /** The colours along the screenshot's top, left to right. */
   edge?: readonly string[];
   /** The clip playing on the screen, once mounted: the chrome follows it. */
@@ -271,11 +199,7 @@ export function DeviceFrame({
       // eslint-disable-next-line shadcn/no-inline-styles -- edgeVars builds custom properties only, the same ones useClipEdge writes
       style={edgeVars(edge) as CSSProperties}
     >
-      {frame === "safari" ? (
-        <SafariFrame url={url}>{children}</SafariFrame>
-      ) : (
-        <IPhoneFrame>{children}</IPhoneFrame>
-      )}
+      <IPhoneFrame>{children}</IPhoneFrame>
     </div>
   );
 }

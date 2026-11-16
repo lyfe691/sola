@@ -1,10 +1,10 @@
-export const source = "2dc3d1978a27";
+export const source = "2b6bc69beb94";
 
 # 给我哥哥的狗做的网站，为复用而建
 
 Taco 是我哥哥的博美犬，[takitwo.vercel.app](https://takitwo.vercel.app) 就是他的网站。我把它做成了下一个同类小网站的基础。颜色放在主题类里，每种语言的全部界面字符串放在一个 JSON 文件里，所以做下一个网站，只需要在这些文件里换上新的内容和新的值，组件本身保持不变。
 
-<Safari
+<BrowserWindow
   url="takitwo.vercel.app"
   src="/projects/taco/themes.webp"
   video="/projects/taco/themes.mp4"
@@ -77,8 +77,12 @@ Taco 是一个使用 App Router 的 Next.js 应用，用 TypeScript 编写。组
 
 shadcn/ui 通过设计令牌给一切上色：也就是 `bg-primary` 和 `border-border` 这样的类。Tailwind 配置把每个令牌映射到一个 CSS 变量，于是 `primary` 变成 `hsl(var(--primary))`，而主题就是一个给这些变量赋以不同 HSL 值的类。Green 放在 `:root` 上，其他主题的写法都和 Sky 一样，这里展示的是节选：
 
-<CodeBlock
-  code={`.theme-sky {
+<CodeMorph
+  steps={[
+    {
+      label: ".theme-sky",
+      file: "app/globals.css",
+      code: `.theme-sky {
     --background: 210 50% 98%;
     --foreground: 210 50% 16%;
     --primary: 210 80% 50%;
@@ -87,8 +91,37 @@ shadcn/ui 通过设计令牌给一切上色：也就是 `bg-primary` 和 `border
     --muted-foreground: 210 5% 45%;
     --border: 210 20% 90%;
     --ring: 210 80% 50%;
-  }`}
-  fileName="app/globals.css"
+  }`,
+    },
+    {
+      label: ".theme-cherry-blossom",
+      file: "app/globals.css",
+      code: `.theme-cherry-blossom {
+    --background: 40 30% 98%;
+    --foreground: 336 10% 16%;
+    --primary: 336 80% 65%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 336 33% 96%;
+    --muted-foreground: 336 5% 45%;
+    --border: 336 20% 90%;
+    --ring: 336 80% 65%;
+  }`,
+    },
+    {
+      label: ".theme-gotham",
+      file: "app/globals.css",
+      code: `.theme-gotham {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
+    --primary: 0 0% 85%;
+    --primary-foreground: 0 0% 7%;
+    --secondary: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --border: 0 0% 20%;
+    --ring: 0 0% 80%;
+  }`,
+    },
+  ]}
   lang="css"
 />
 
@@ -144,7 +177,7 @@ shadcn/ui 通过设计令牌给一切上色：也就是 `bg-primary` 和 `border
   images={[
     {
       src: "/projects/taco/home-cherry.webp",
-      frame: "safari",
+      frame: "browser",
       url: "takitwo.vercel.app",
       alt: "Cherry 主题下的 Taco 首页：粉色的标题 Meet Taco，旁边是一张圆形照片，一只手把蒲公英递到 Taco 面前",
       caption: "Cherry 主题下的首页。",

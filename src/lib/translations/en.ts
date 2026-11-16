@@ -77,6 +77,12 @@ export const en = {
       commandPaletteHint: "Search for a command to run…",
       scrollToTop: "Scroll to top",
       terminal: "Terminal",
+      browserBack: "Back",
+      browserForward: "Forward",
+      browserReload: "Reload",
+      browserWindow: "Browser window showing {url}",
+      browserPages: "Pages",
+      codeSteps: "Code steps",
     },
     menu: {
       themes: "Themes",

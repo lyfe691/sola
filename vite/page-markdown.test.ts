@@ -49,7 +49,7 @@ describe("mdxToMarkdown", () => {
     "",
     "<ProjectGallery",
     "  images={[",
-    '    { src: "/projects/x/b.webp", frame: "safari", alt: "B", caption: "Bee." },',
+    '    { src: "/projects/x/b.webp", frame: "browser", alt: "B", caption: "Bee." },',
     '    { src: "/projects/x/c.webp", frame: "iphone", alt: "C" },',
     "  ]}",
     "  columns={2}",
@@ -59,6 +59,38 @@ describe("mdxToMarkdown", () => {
     '<Safari url="not a component here" />',
     "# not a heading",
     "```",
+    "",
+    "<Terminal",
+    '  session="magi-udp"',
+    '  alt="A terminal"',
+    '  caption="A run."',
+    "/>",
+    "",
+    "<CodeMorph",
+    "  steps={[",
+    "    {",
+    '      file: "a.tf",',
+    "      code: `a = [",
+    "    1,",
+    "  ]`,",
+    "    },",
+    '    { file: "a.tf", label: "Empty", code: `a = []` },',
+    "  ]}",
+    '  lang="hcl"',
+    "/>",
+    "",
+    "<BrowserWindow",
+    '  url="x.dev"',
+    '  src="/projects/x/d.webp"',
+    '  alt="D"',
+    '  caption="Dee."',
+    "/>",
+    "",
+    "<BrowserWindow",
+    "  pages={[",
+    '    { url: "x.dev/e", src: "/projects/x/e.webp", alt: "E" },',
+    "  ]}",
+    "/>",
     "",
     "<Unknown thing />",
   ].join("\n");
@@ -86,6 +118,22 @@ describe("mdxToMarkdown", () => {
     expect(out).toContain(`![B](${SITE_URL}/projects/x/b.webp)\n*Bee.*`);
     expect(out).toContain(`![C](${SITE_URL}/projects/x/c.webp)`);
     expect(out).not.toMatch(/Unknown|columns/);
+  });
+
+  it("writes a terminal session as what it prints", () => {
+    expect(out).toContain(
+      "```console\n$ magi 45.33.32.156 -p 53,123,161 --udp\nscanning 45.33.32.156 — 3 port(s), up to 512 at a time\n\n1 open port(s):\n\n45.33.32.156\n    123/udp  -           open|filtered\n```\n*A run.*",
+    );
+  });
+
+  it("writes each state of a code morph as a code block", () => {
+    expect(out).toContain("`a.tf`\n\n```hcl\na = [\n  1,\n]\n```");
+    expect(out).toContain("`a.tf`, Empty\n\n```hcl\na = []\n```");
+  });
+
+  it("turns a browser window into its shot, or its pages", () => {
+    expect(out).toContain(`![D](${SITE_URL}/projects/x/d.webp)\n*Dee.*`);
+    expect(out).toContain(`![E](${SITE_URL}/projects/x/e.webp)`);
   });
 
   it("leaves a fenced block exactly as written", () => {

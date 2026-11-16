@@ -1,10 +1,10 @@
-export const source = "245a5e4101fb";
+export const source = "56d1b382d4a4";
 
 # ゲストブックのある文章のサイト
 
 [Thoughts](https://thoughts.ysz.life) は、プロジェクトのページに収まらないことを書く場所です。静かなテキストのページが数ページあるだけで、自己紹介のページ、記事の一覧、誰でもメモを残せるゲストブックからなります。[Shu Ding](https://shud.in) さんのサイトをもとにしています。
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life"
   src="/projects/thoughts/hero.webp"
   video="/projects/thoughts/hero.mp4"
@@ -20,7 +20,7 @@ export const source = "245a5e4101fb";
 
 存在しないアドレスには、短い詩が表示されます。
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/nope"
   src="/projects/thoughts/not-found.webp"
   alt="not found のページ。左にイタリックのリンク about、thoughts、guestbook があり、その隣に、見出し not found の下に 2 行、「the page does not exist」と「you were never supposed to be here」が並んでいます"
@@ -31,7 +31,7 @@ export const source = "245a5e4101fb";
 
 ゲストブックには誰でも、アカウントなしで、任意の名前と 280 文字までのメッセージを書き込めます。投稿は新しいものから順に、日付と時刻とともに 10 件ずつ表示され、自分で書いた投稿には、ポインターを重ねると Delete のリンクが現れます。
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/guestbook"
   src="/projects/thoughts/guestbook-desktop.webp"
   alt="ゲストブック。名前とメッセージ用の 1 行のフォームが、日付の付いた投稿の一覧の上にあり、名前もメッセージもすべてぼかしてあります"
@@ -125,7 +125,7 @@ Thoughts は、Vercel 上の Next.js アプリです。記事は MDX からコ�
   images={[
     {
       src: "/projects/thoughts/about-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "thoughts.ysz.life",
       alt: "自己紹介のページ。左にイタリックのリンク about、thoughts、guestbook があり、短い紹介文が 1 段の文章で並んでいます",
       caption: "自己紹介のページ。",

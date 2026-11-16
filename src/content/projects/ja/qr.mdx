@@ -1,10 +1,10 @@
-export const source = "7af9c8d1b6ea";
+export const source = "c18a99dfbed8";
 
 # スキャンテスト付きの QR コードジェネレーター
 
 [qr.ysz.life](https://qr.ysz.life) は、ブラウザ内で QR コードを作ります。リンクや好きなテキストを入力し、コードのスタイルを整えて、ダウンロードします。ただ、スタイルを凝らすことは、コードが読み取れなくなる原因にもなります。そのためヘッダーには Scan Test があり、書き出した画像を本物のデコーダーで読み取り直します。
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/hero.webp"
   video="/projects/qr/hero.mp4"
@@ -75,7 +75,7 @@ Style タブは、コードをどう描くかを決めます。モジュール�
 
 サイトはシステムのテーマに従い、d キーでライトとダークを切り替えられます。プレビューは、どちらのテーマでもコード自身の背景色を保つので、書き出したファイルがどう見えるかをそのまま示します。
 
-<Safari
+<BrowserWindow
   url="qr.ysz.life"
   src="/projects/qr/theme.webp"
   video="/projects/qr/theme.mp4"
@@ -154,7 +154,7 @@ QR コードは、データをリード・ソロモン誤り訂正コードワ�
   images={[
     {
       src: "/projects/qr/styled-dark-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "qr.ysz.life",
       alt: "ダークテーマのジェネレーターで Colors タブが開いています：白いカードの上に、ネイビーからオレンジへのグラデーションの円形のコードと、葉のロゴ",
       caption: "ダークテーマ。",

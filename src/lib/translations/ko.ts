@@ -77,6 +77,12 @@ export const ko = {
       commandPaletteHint: "명령 검색…",
       scrollToTop: "맨 위로",
       terminal: "터미널",
+      browserBack: "뒤로",
+      browserForward: "앞으로",
+      browserReload: "새로고침",
+      browserWindow: "{url} 페이지를 보여 주는 브라우저 창",
+      browserPages: "페이지",
+      codeSteps: "코드 단계",
     },
     menu: {
       themes: "테마",

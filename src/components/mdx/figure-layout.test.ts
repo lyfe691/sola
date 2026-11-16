@@ -17,7 +17,7 @@ const phone = "/projects/perspectas/home-mobile.webp";
 describe("figureRatio", () => {
   it("a frame only ever adds height", () => {
     for (const src of [desktop, phone]) {
-      expect(figureRatio({ src, frame: "safari" })).toBeLessThan(ratioOf(src));
+      expect(figureRatio({ src, frame: "browser" })).toBeLessThan(ratioOf(src));
       expect(figureRatio({ src, frame: "iphone" })).toBeLessThan(ratioOf(src));
     }
   });
@@ -33,7 +33,7 @@ describe("figureRatio", () => {
   });
 
   it("keeps a desktop shot landscape and a phone shot portrait", () => {
-    expect(isPortrait({ src: desktop, frame: "safari" })).toBe(false);
+    expect(isPortrait({ src: desktop, frame: "browser" })).toBe(false);
     expect(isPortrait({ src: phone, frame: "iphone" })).toBe(true);
   });
 });

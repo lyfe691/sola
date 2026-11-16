@@ -2,7 +2,7 @@
 
 [Website Code Extractor](https://chromewebstore.google.com/detail/website-code-extractor/foppgeakfpkdghmmmflmblcidoofpohm) is a Chrome and Edge extension that downloads the page in the current tab as one ZIP file. The archive holds the HTML and every stylesheet, script and image it references, in folders that mirror the servers they came from, and the HTML's links are rewritten to point at the saved copies. I built it in August 2024 to study how other sites are put together, and around 6,000 people use it now, according to the Chrome Web Store.
 
-<Safari
+<BrowserWindow
   url="htmx.org"
   src="/projects/code-extractor/hero.webp"
   video="/projects/code-extractor/hero.mp4"
@@ -121,7 +121,7 @@ Chrome presents the last one at install time as permission to read and change da
 
 The popup fetches them all at once with `Promise.all`. A fetch that fails is logged and skipped, so one missing image doesn't cost the whole archive. JSZip then builds the file, and `chrome.downloads.download` saves it, asking where first.
 
-<Safari
+<BrowserWindow
   url="chromewebstore.google.com"
   src="/projects/code-extractor/store-listing-desktop.webp"
   alt="The extension's page on the Chrome Web Store: the folder icon, a rating of 5.0 from 5 ratings, 6,000 users, and the popup as the first screenshot"

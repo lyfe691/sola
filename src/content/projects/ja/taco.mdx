@@ -1,10 +1,10 @@
-export const source = "2dc3d1978a27";
+export const source = "2b6bc69beb94";
 
 # 再利用できるように作った、兄の犬のウェブサイト
 
 Taco は兄のポメラニアンで、[takitwo.vercel.app](https://takitwo.vercel.app) がそのウェブサイトです。この種の小さなサイトを次に作るときの土台になるように作りました。色はテーマのクラスに、インターフェースの文字列はすべて言語ごとに JSON ファイル 1 つにまとまっているので、次のサイトで変えるのは、これらのファイルの中身と値だけで、コンポーネントはそのままです。
 
-<Safari
+<BrowserWindow
   url="takitwo.vercel.app"
   src="/projects/taco/themes.webp"
   video="/projects/taco/themes.mp4"
@@ -77,8 +77,12 @@ Taco は、App Router を使った Next.js のアプリで、TypeScript で書�
 
 shadcn/ui はあらゆる色をトークン経由で指定します。`bg-primary` や `border-border` のようなクラスです。Tailwind の設定は各トークンを CSS 変数に対応させるので、`primary` は `hsl(var(--primary))` になり、テーマとは、それらの変数に別の HSL 値を与えるクラスです。Green は `:root` にあり、ほかのテーマも Sky と同じ形に従っています。Sky の例を、ここでは省略して示します。
 
-<CodeBlock
-  code={`.theme-sky {
+<CodeMorph
+  steps={[
+    {
+      label: ".theme-sky",
+      file: "app/globals.css",
+      code: `.theme-sky {
     --background: 210 50% 98%;
     --foreground: 210 50% 16%;
     --primary: 210 80% 50%;
@@ -87,8 +91,37 @@ shadcn/ui はあらゆる色をトークン経由で指定します。`bg-primar
     --muted-foreground: 210 5% 45%;
     --border: 210 20% 90%;
     --ring: 210 80% 50%;
-  }`}
-  fileName="app/globals.css"
+  }`,
+    },
+    {
+      label: ".theme-cherry-blossom",
+      file: "app/globals.css",
+      code: `.theme-cherry-blossom {
+    --background: 40 30% 98%;
+    --foreground: 336 10% 16%;
+    --primary: 336 80% 65%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 336 33% 96%;
+    --muted-foreground: 336 5% 45%;
+    --border: 336 20% 90%;
+    --ring: 336 80% 65%;
+  }`,
+    },
+    {
+      label: ".theme-gotham",
+      file: "app/globals.css",
+      code: `.theme-gotham {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
+    --primary: 0 0% 85%;
+    --primary-foreground: 0 0% 7%;
+    --secondary: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --border: 0 0% 20%;
+    --ring: 0 0% 80%;
+  }`,
+    },
+  ]}
   lang="css"
 />
 
@@ -144,7 +177,7 @@ shadcn/ui はあらゆる色をトークン経由で指定します。`bg-primar
   images={[
     {
       src: "/projects/taco/home-cherry.webp",
-      frame: "safari",
+      frame: "browser",
       url: "takitwo.vercel.app",
       alt: "Cherry テーマの Taco のホームページ：ピンクの見出し Meet Taco が、人の手がタンポポを差し出している Taco の丸い写真の横に並んでいます",
       caption: "Cherry のホームページ。",

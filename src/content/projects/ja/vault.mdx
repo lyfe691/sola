@@ -1,10 +1,10 @@
-export const source = "7594425b3b8e";
+export const source = "30c343866d75";
 
 # ローカルで動く OpenID Connect のサンドボックス
 
 Vault は、1 台のマシンで動く ID 管理の構成です。OpenID Connect プロバイダーとしての Keycloak、そのトークンを検証してロールを確認する FastAPI のバックエンド、サインインページとロールで制限されたダッシュボードを持つ Next.js のフロントエンドからなります。OpenID Connect（OIDC）は、OAuth 2.0 の上に載る ID のレイヤーです。Vault は 2025 年 5 月に、Keycloak がトークンを発行した瞬間から、API がそれを受け入れるか拒否するかの瞬間まで、トークンを追いかけるために作りました。
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/hero.webp"
   video="/projects/vault/hero.mp4"
@@ -18,7 +18,7 @@ Vault は、1 台のマシンで動く ID 管理の構成です。OpenID Connect
 
 このグラントでは、アプリがユーザーのパスワードを目にします。実際のユーザーがいるアプリが、代わりにブラウザをプロバイダー自身のログインページへ送るのは、そのためです。デモユーザーが 1 人のサンドボックスでは、やり取りの全体を 1 か所で読めるようにすることが狙いでした。
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/sign-in-refused.webp"
   alt="ユーザー名 demo と誤ったパスワードが入力されたサインインカード。Sign in ボタンの上に赤い Invalid user credentials の警告が出て、隅に Login failed のトーストが表示されています"
@@ -29,7 +29,7 @@ Vault は、1 台のマシンで動く ID 管理の構成です。OpenID Connect
 
 サインインすると、フロントエンドはバックエンドの `/me` を呼びます。Cookie は `HttpOnly` なので、ページ自身の JavaScript はトークンを読めません。バックエンドがトークンを検証してそのクレームを返し、ポータルはそれをもとに、ユーザー名、レルムロールごとのバッジ、ロールで開くダッシュボードごとのボタンを描画します。デモユーザーは両方のロールを持っているので、admin ダッシュボードに移ります。`admin` を外すと、次のサインインではバッジもボタンも 1 つになり、`/admin` を開いても、代わりにユーザーダッシュボードへ移動します。
 
-<Safari
+<BrowserWindow
   url="localhost:3000"
   src="/projects/vault/portal-user-only.webp"
   alt="demo に挨拶するポータルカード。User のバッジが 1 つ、User Dashboard のボタンと Sign Out があります"
@@ -46,12 +46,10 @@ Vault は、1 台のマシンで動く ID 管理の構成です。OpenID Connect
 | `/user`  | `user` ロール              | 403      |
 | `/admin` | `admin` ロール             | 403      |
 
-<ProjectImage
-  src="/projects/vault/api.webp"
-  video="/projects/vault/api.mp4"
+<Terminal
+  session="vault-api"
   alt="フルスクリーンの PowerShell ウィンドウ。curl で demo としてサインインし、続けて GET /user が HTTP 200 と User access granted を返し、ロールのリストには user だけが入っています。GET /admin は HTTP 403 Forbidden と Access denied. Required roles: admin を返します"
   caption="admin がなければ、/user は応答し、/admin は拒否される。"
-  size="full"
 />
 
 ## Terraform で設定する Keycloak
@@ -75,7 +73,7 @@ Docker Compose が、開発モードの Keycloak 26.2 を、状態を保存す�
 
 管理コンソールには、ファイルが求めたものが、ファイルが付けた説明とともに一覧表示されます。
 
-<Safari
+<BrowserWindow
   url="localhost:8080/admin"
   src="/projects/vault/keycloak-roles.webp"
   alt="Vault Core Realm の Keycloak の管理コンソール。Realm roles のページに、Administrator role と説明された admin、Regular user role と説明された user が、Keycloak のデフォルトのロールと並んで表示されています"
@@ -110,16 +108,33 @@ Bearer スキームは `auto_error=False` で作成されるので、ヘッダ�
 
 デモユーザーのロールのリスト全体は、Terraform が管理します。`keycloak_user_roles` は網羅的なので、ユーザーが持つのは `role_ids` にあるロールだけで、トークンの `realm_access.roles` にも、それ以外は載りません。
 
-<CodeBlock
-  code={`resource "keycloak_user_roles" "demo_user_roles" {
+<CodeMorph
+  steps={[
+    {
+      file: "terraform/main.tf",
+      highlight: "4-7",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
     realm_id = keycloak_realm.vault.id
     user_id  = keycloak_user.example_user.id
     role_ids = [
       keycloak_role.admin_role.id,
       keycloak_role.user_role.id,
     ]
-  }`}
-  fileName="terraform/main.tf"
+  }`,
+    },
+    {
+      file: "terraform/main.tf",
+      highlight: "4-6",
+      code: `resource "keycloak_user_roles" "demo_user_roles" {
+    realm_id = keycloak_realm.vault.id
+    user_id  = keycloak_user.example_user.id
+    role_ids = [
+      keycloak_role.user_role.id,
+    ]
+  }`,
+    },
+  ]}
+  chrome="window"
   lang="hcl"
 />
 

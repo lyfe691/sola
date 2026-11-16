@@ -2,12 +2,10 @@
 
 magi is a command-line port scanner I wrote in Rust. It does connect scanning: every probe is an ordinary TCP connection or UDP datagram made through the operating system's sockets, so it runs as a normal user on Linux, macOS and Windows. It reports a port only in a state it actually observed, and says so when it couldn't test one.
 
-<ProjectImage
-  src="/projects/magi/scan.webp"
-  video="/projects/magi/scan.mp4"
+<Terminal
+  session="magi-scan"
   alt="A terminal: magi 45.33.32.156 --banner is typed and run, a counter climbs through 1024 probed ports, and the result lists 22/tcp ssh with the banner SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13 and 80/tcp http"
   caption="A real scan of scanme.nmap.org's first 1,024 ports."
-  size="full"
 />
 
 ## Scanning a host
@@ -47,12 +45,10 @@ The /16 limit is there so a mistyped prefix can't turn into millions of probes. 
 
 Everything meant for a person goes to stderr: the line that opens the scan, the counter and any warning. The counter only appears when stderr is a terminal. With `--json`, stdout carries a JSON array of the open ports with their address, protocol, state and banner, so the results pipe straight into jq or another program.
 
-<ProjectImage
-  src="/projects/magi/json.webp"
-  video="/projects/magi/json.mp4"
+<Terminal
+  session="magi-json"
   alt="A terminal: magi 45.33.32.156 -p 22,80,443 --banner --json piped into jq prints the scan line, then a coloured JSON array with two objects, port 22 with its SSH banner and port 80 with a null banner"
   caption="JSON on stdout, piped into jq."
-  size="full"
 />
 
 ## UDP
@@ -67,12 +63,10 @@ Everything meant for a person goes to stderr: the line that opens the scan, the 
 
 Silence is ambiguous: an open service that ignores an empty datagram and a firewall that drops it look the same from outside, so magi doesn't pick one. In this run 53 and 161 came back closed and are left out, while 123 stayed silent for the whole second.
 
-<ProjectImage
-  src="/projects/magi/udp.webp"
-  video="/projects/magi/udp.mp4"
+<Terminal
+  session="magi-udp"
   alt="A terminal: magi 45.33.32.156 -p 53,123,161 --udp runs, and after a second the result lists one port, 123/udp, marked open|filtered"
   caption="A UDP scan of three ports."
-  size="full"
 />
 
 ## Ports it couldn't test
@@ -88,12 +82,10 @@ A TCP probe can end four ways, and only two of them say anything about the port:
 
 Untested ports aren't folded into the closed count. The scan ends with a warning that says how many there were and why, and when the cause is running out of file descriptors it says to lower `--concurrency` or raise the open-file limit. In the clip below, scanme.nmap.org resolves to an IPv4 and an IPv6 address. On a network without IPv6 routing, the connections to the IPv6 address fail with "network unreachable" before anything is sent, so its three ports are reported as untested.
 
-<ProjectImage
-  src="/projects/magi/untestable.webp"
-  video="/projects/magi/untestable.mp4"
+<Terminal
+  session="magi-untestable"
   alt="A terminal: magi scanme.nmap.org -p 22,80,443 reports two hosts, lists 22/tcp ssh and 80/tcp http on 45.33.32.156, and ends with warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete."
   caption="The IPv6 half of the scan, reported as untested."
-  size="full"
 />
 
 ## Installing it
@@ -108,7 +100,7 @@ Each release installs with one command that puts `magi` on your `PATH`:
 
 [magi.ysz.life](https://magi.ysz.life) leads with the command for the visitor's platform, with a menu to switch. With a stable Rust toolchain it also builds from a checkout, with `cargo install --path .`
 
-<Safari
+<BrowserWindow
   url="magi.ysz.life"
   src="/projects/magi/site.webp"
   video="/projects/magi/site.mp4"
@@ -193,7 +185,7 @@ With `--banner`, magi reads up to 512 bytes from each open port and keeps the fi
   images={[
     {
       src: "/projects/magi/site-dark.webp",
-      frame: "safari",
+      frame: "browser",
       url: "magi.ysz.life",
       alt: "The magi site in the dark theme: the headline A port scanner built to be correct over orange dotted waves, the PowerShell install command with a copy button, and a terminal window with a scan of scanme.nmap.org",
       caption: "The site in the dark theme.",

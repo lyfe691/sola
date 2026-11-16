@@ -1,10 +1,10 @@
-export const source = "2dc3d1978a27";
+export const source = "2b6bc69beb94";
 
 # Eine Website für den Hund meines Bruders, gebaut zur Wiederverwendung
 
 Taco ist der Zwergspitz meines Bruders, und [takitwo.vercel.app](https://takitwo.vercel.app) ist seine Website. Ich habe sie als Grundlage für die nächste kleine Website dieser Art gebaut. Die Farben liegen in Design-Klassen und jeder Text der Oberfläche in einer JSON-Datei pro Sprache. Für die nächste Website braucht es also neue Inhalte und neue Werte in diesen Dateien, die Komponenten bleiben, wie sie sind.
 
-<Safari
+<BrowserWindow
   url="takitwo.vercel.app"
   src="/projects/taco/themes.webp"
   video="/projects/taco/themes.mp4"
@@ -77,8 +77,12 @@ Taco ist eine Next.js-App auf dem App Router, geschrieben in TypeScript. Die Kom
 
 shadcn/ui färbt alles über Tokens ein: Klassen wie `bg-primary` und `border-border`. Die Tailwind-Konfiguration bildet jedes Token auf eine CSS-Variable ab, aus `primary` wird also `hsl(var(--primary))`, und ein Design ist eine Klasse, die diesen Variablen andere HSL-Werte gibt. Green liegt auf `:root`, und die übrigen Designs folgen demselben Muster wie Sky, hier gekürzt gezeigt:
 
-<CodeBlock
-  code={`.theme-sky {
+<CodeMorph
+  steps={[
+    {
+      label: ".theme-sky",
+      file: "app/globals.css",
+      code: `.theme-sky {
     --background: 210 50% 98%;
     --foreground: 210 50% 16%;
     --primary: 210 80% 50%;
@@ -87,8 +91,37 @@ shadcn/ui färbt alles über Tokens ein: Klassen wie `bg-primary` und `border-bo
     --muted-foreground: 210 5% 45%;
     --border: 210 20% 90%;
     --ring: 210 80% 50%;
-  }`}
-  fileName="app/globals.css"
+  }`,
+    },
+    {
+      label: ".theme-cherry-blossom",
+      file: "app/globals.css",
+      code: `.theme-cherry-blossom {
+    --background: 40 30% 98%;
+    --foreground: 336 10% 16%;
+    --primary: 336 80% 65%;
+    --primary-foreground: 355 100% 100%;
+    --secondary: 336 33% 96%;
+    --muted-foreground: 336 5% 45%;
+    --border: 336 20% 90%;
+    --ring: 336 80% 65%;
+  }`,
+    },
+    {
+      label: ".theme-gotham",
+      file: "app/globals.css",
+      code: `.theme-gotham {
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
+    --primary: 0 0% 85%;
+    --primary-foreground: 0 0% 7%;
+    --secondary: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --border: 0 0% 20%;
+    --ring: 0 0% 80%;
+  }`,
+    },
+  ]}
   lang="css"
 />
 
@@ -144,7 +177,7 @@ Das Sprachmenü wird aus dieser Liste gebaut, braucht also keine eigene Änderun
   images={[
     {
       src: "/projects/taco/home-cherry.webp",
-      frame: "safari",
+      frame: "browser",
       url: "takitwo.vercel.app",
       alt: "Die Taco-Startseite im Cherry-Design: die Überschrift Meet Taco in Pink neben einem runden Foto von Taco, dem eine Hand eine Pusteblume hinhält",
       caption: "Die Startseite in Cherry.",

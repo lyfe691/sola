@@ -1,15 +1,13 @@
-export const source = "3f1bdfac11c6";
+export const source = "f4d8ade9d5da";
 
 # Un escáner de puertos TCP y UDP en Rust
 
 magi es un escáner de puertos de línea de comandos que escribí en Rust. Hace un escaneo por conexión: cada sondeo es una conexión TCP o un datagrama UDP normal, hecho a través de los sockets del sistema operativo, así que se ejecuta como usuario normal en Linux, macOS y Windows. Solo informa de un puerto en un estado que realmente observó, y avisa cuando no pudo probar uno.
 
-<ProjectImage
-  src="/projects/magi/scan.webp"
-  video="/projects/magi/scan.mp4"
+<Terminal
+  session="magi-scan"
   alt="Una terminal: se escribe y se ejecuta «magi 45.33.32.156 --banner», un contador sube hasta los 1024 puertos sondeados, y el resultado lista 22/tcp ssh con el banner «SSH-2.0-OpenSSH_6.6.1p1 Ubuntu-2ubuntu2.13» y 80/tcp http"
   caption="Un escaneo real de los primeros 1024 puertos de scanme.nmap.org."
-  size="full"
 />
 
 ## Escanear un host
@@ -49,12 +47,10 @@ El límite de /16 está para que un prefijo mal escrito no se convierta en millo
 
 Todo lo pensado para una persona va a stderr: la línea que abre el escaneo, el contador y cualquier aviso. El contador solo aparece cuando stderr es una terminal. Con `--json`, stdout lleva un array JSON con los puertos abiertos y su dirección, protocolo, estado y banner, de modo que los resultados pasan directamente por una tubería a jq o a otro programa.
 
-<ProjectImage
-  src="/projects/magi/json.webp"
-  video="/projects/magi/json.mp4"
+<Terminal
+  session="magi-json"
   alt="Una terminal: «magi 45.33.32.156 -p 22,80,443 --banner --json» canalizado a jq imprime la línea del escaneo y después un array JSON coloreado con dos objetos, el puerto 22 con su banner SSH y el puerto 80 con un banner null"
   caption="JSON en stdout, canalizado a jq."
-  size="full"
 />
 
 ## UDP
@@ -69,12 +65,10 @@ Todo lo pensado para una persona va a stderr: la línea que abre el escaneo, el 
 
 El silencio es ambiguo: un servicio abierto que ignora un datagrama vacío y un firewall que lo descarta se ven igual desde fuera, así que magi no elige uno. En esta ejecución, 53 y 161 volvieron cerrados y quedan fuera, mientras que 123 guardó silencio durante todo el segundo.
 
-<ProjectImage
-  src="/projects/magi/udp.webp"
-  video="/projects/magi/udp.mp4"
+<Terminal
+  session="magi-udp"
   alt="Una terminal: se ejecuta «magi 45.33.32.156 -p 53,123,161 --udp» y, tras un segundo, el resultado lista un puerto, 123/udp, marcado como open|filtered"
   caption="Un escaneo UDP de tres puertos."
-  size="full"
 />
 
 ## Puertos que no pudo probar
@@ -90,12 +84,10 @@ Un sondeo TCP puede terminar de cuatro maneras, y solo dos dicen algo sobre el p
 
 Los puertos sin probar no se suman al recuento de cerrados. El escaneo termina con un aviso que dice cuántos hubo y por qué, y cuando la causa es quedarse sin descriptores de archivo, indica que hay que bajar `--concurrency` o subir el límite de archivos abiertos. En el clip de abajo, scanme.nmap.org se resuelve en una dirección IPv4 y una IPv6. En una red sin enrutamiento IPv6, las conexiones a la dirección IPv6 fallan con «network unreachable» antes de que se envíe nada, así que sus tres puertos se informan como sin probar.
 
-<ProjectImage
-  src="/projects/magi/untestable.webp"
-  video="/projects/magi/untestable.mp4"
+<Terminal
+  session="magi-untestable"
   alt="Una terminal: «magi scanme.nmap.org -p 22,80,443» informa de dos hosts, lista 22/tcp ssh y 80/tcp http en 45.33.32.156, y termina con «warning: 3 port(s) could not be tested (network or host unreachable); results may be incomplete.»"
   caption="La mitad IPv6 del escaneo, informada como sin probar."
-  size="full"
 />
 
 ## Instalarlo
@@ -110,7 +102,7 @@ Cada versión se instala con un solo comando que pone `magi` en tu `PATH`:
 
 [magi.ysz.life](https://magi.ysz.life) empieza con el comando para la plataforma del visitante, con un menú para cambiarla. Con una toolchain estable de Rust también se compila desde un checkout, con `cargo install --path .`
 
-<Safari
+<BrowserWindow
   url="magi.ysz.life"
   src="/projects/magi/site.webp"
   video="/projects/magi/site.mp4"
@@ -195,7 +187,7 @@ Con `--banner`, magi lee hasta 512 bytes de cada puerto abierto y se queda con l
   images={[
     {
       src: "/projects/magi/site-dark.webp",
-      frame: "safari",
+      frame: "browser",
       url: "magi.ysz.life",
       alt: "El sitio de magi en el tema oscuro: el titular «A port scanner built to be correct» sobre ondas de puntos naranjas, el comando de instalación de PowerShell con un botón de copiar y una ventana de terminal con un escaneo de scanme.nmap.org",
       caption: "El sitio en el tema oscuro.",

@@ -1,10 +1,10 @@
-export const source = "245a5e4101fb";
+export const source = "56d1b382d4a4";
 
 # Un sitio de escritura con libro de visitas
 
 [Thoughts](https://thoughts.ysz.life) es donde escribo las cosas que no caben en una página de proyecto. Son unas pocas páginas tranquilas de texto: una página sobre mí, la lista de entradas y un libro de visitas donde cualquiera puede dejar una nota. Está basado en [el sitio de Shu Ding](https://shud.in).
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life"
   src="/projects/thoughts/hero.webp"
   video="/projects/thoughts/hero.mp4"
@@ -20,7 +20,7 @@ Cada entrada es un archivo MDX del repositorio que exporta su título, fecha y d
 
 Una dirección que no existe recibe un verso corto.
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/nope"
   src="/projects/thoughts/not-found.webp"
   alt="La página «not found»: los enlaces en cursiva «about», «thoughts» y «guestbook» a la izquierda, y a su lado el encabezado «not found» sobre dos líneas, «the page does not exist» y «you were never supposed to be here»"
@@ -31,7 +31,7 @@ Una dirección que no existe recibe un verso corto.
 
 Cualquiera puede firmar el libro de visitas con un nombre opcional y un mensaje de hasta 280 caracteres, sin cuenta. Las entradas aparecen de la más reciente a la más antigua con su fecha y hora, de diez en diez, y una que hayas escrito tú recibe un enlace «Delete» al pasar el puntero por encima.
 
-<Safari
+<BrowserWindow
   url="thoughts.ysz.life/guestbook"
   src="/projects/thoughts/guestbook-desktop.webp"
   alt="El libro de visitas: un formulario de una línea para un nombre y un mensaje sobre una lista de entradas fechadas, con cada nombre y mensaje difuminados"
@@ -125,7 +125,7 @@ Los visitantes no tienen cuentas, así que el sitio necesita otra manera de sabe
   images={[
     {
       src: "/projects/thoughts/about-desktop.webp",
-      frame: "safari",
+      frame: "browser",
       url: "thoughts.ysz.life",
       alt: "La página sobre mí: los enlaces en cursiva «about», «thoughts» y «guestbook» a la izquierda, y una breve presentación en una sola columna de texto",
       caption: "La página sobre mí.",

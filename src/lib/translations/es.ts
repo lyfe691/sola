@@ -80,6 +80,12 @@ export const es = {
       commandPaletteHint: "Busca un comando…",
       scrollToTop: "Volver arriba",
       terminal: "Terminal",
+      browserBack: "Atrás",
+      browserForward: "Adelante",
+      browserReload: "Recargar",
+      browserWindow: "Ventana del navegador con {url}",
+      browserPages: "Páginas",
+      codeSteps: "Pasos del código",
     },
     menu: {
       themes: "Temas",

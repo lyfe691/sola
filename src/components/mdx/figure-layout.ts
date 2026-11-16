@@ -10,6 +10,7 @@
  * (frames.tsx) is part of a figure's footprint, so its measures live here.
  */
 
+import { browserWindowRatio } from "@/components/windows/measures";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 
 /** Width over height; a screenshot outside the size list counts as 16:10. */
@@ -18,15 +19,17 @@ export const ratioOf = (src: string) => {
   return size ? size[0] / size[1] : 1.6;
 };
 
-export type FigureFrame = "safari" | "iphone";
+export type FigureFrame = "browser" | "iphone";
 /** What sets a figure's footprint: the screenshot, and the device around it. */
 export type FigureShape = { src: string; frame?: FigureFrame };
 
+/** The width, in px, a gallery's Browser Window is drawn to scale from
+ *  (figures.tsx), so its footprint is one ratio at any size. */
+export const BROWSER_WIDTH = 896;
 /**
- * The frames in their own units, every length a share of the frame's width:
+ * The phone in its own units, every length a share of the frame's width:
  * frames.tsx draws from these same numbers, so the drawing and the row agree.
  */
-export const SAFARI = { width: 1202, bar: 52 } as const;
 export const PHONE = {
   width: 433,
   /** Either side of the body, where the buttons stand proud. */
@@ -43,7 +46,7 @@ export const PHONE_SCREEN =
 /** Width over height of the whole figure, frame included. */
 export const figureRatio = ({ src, frame }: FigureShape) => {
   const ratio = ratioOf(src);
-  if (frame === "safari") return 1 / (1 / ratio + SAFARI.bar / SAFARI.width);
+  if (frame === "browser") return browserWindowRatio(ratio, BROWSER_WIDTH);
   if (frame === "iphone")
     return (
       PHONE.width /
