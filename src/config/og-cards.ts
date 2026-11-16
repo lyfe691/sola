@@ -80,7 +80,7 @@ const PAGES: Record<string, { title: string; line: string }> = {
   },
   services: {
     title: t.services.title,
-    line: "Development and technical consulting",
+    line: "Websites, web apps and backends",
   },
   privacy: {
     title: t.footer.privacy,

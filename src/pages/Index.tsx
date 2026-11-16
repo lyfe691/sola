@@ -10,7 +10,7 @@ import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { CyclingText } from "@/components/ui/custom/cycling-text";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { SpecularButton } from "@/components/ui/custom/specular-button";
-import { ChevronToArrowIcon } from "@/components/ui/custom/chevron-to-arrow";
+import { MorphArrow } from "@/components/ui/custom/morph-arrow";
 import {
   SOCIAL_BRAND_FILL,
   SOCIAL_LINKS,
@@ -88,7 +88,9 @@ const Index = () => {
             <span className="bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-2xs font-semibold text-transparent [background-position:100%_0%] can-hover:group-hover:animate-shine sm:text-xs-plus">
               Kinoa
             </span>
-            <ChevronToArrowIcon className="size-3 text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60 sm:size-3.5" />
+            <span className="flex text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60">
+              <MorphArrow className="size-3 sm:size-3.5" />
+            </span>
           </a>
         </Reveal>
 

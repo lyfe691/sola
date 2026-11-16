@@ -26,6 +26,7 @@ import {
 } from "../src/config/project-deep-dive.ts";
 import { PROJECTS, type ProjectMeta } from "../src/config/projects.ts";
 import { OWNER, ROLE, SITE_URL } from "../src/config/site.ts";
+import { OFFERINGS } from "../src/config/services.ts";
 import { SKILL_GROUPS } from "../src/config/skills.ts";
 import { testimonials } from "../src/config/testimonials.ts";
 import { formatProjectDate } from "../src/lib/dates.ts";
@@ -285,17 +286,21 @@ const PAGES: Record<string, () => string> = {
     return doc(
       s.title,
       `${SITE_URL}/services`,
-      s.subtitle,
-      ...Object.values(s.services).map((service) =>
+      s.page.statement,
+      ...OFFERINGS.map(({ key, service, proof }) =>
         [
-          `## ${service.title}`,
-          service.description,
-          `Price: ${service.price}`,
-          list(service.features),
+          `## ${s.page.offerings[key].name}`,
+          s.page.offerings[key].line,
+          `Price: ${s.services[service].price}`,
+          list(s.services[service].features),
+          list(
+            proof.map(
+              ({ project }) =>
+                `[${t.projects.list[project].title}](${deepDiveUrl(project)}): ${t.projects.list[project].tagline}`,
+            ),
+          ),
         ].join("\n\n"),
       ),
-      `## ${s.customRequirements.title}`,
-      s.customRequirements.description,
     );
   },
   "/certifications": () => {

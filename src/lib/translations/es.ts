@@ -35,7 +35,7 @@ export const es = {
     },
     services: {
       description:
-        "Desarrollo full‑stack, frontend, backend y consultoría técnica a medida.",
+        "Sitios web, aplicaciones web y los backends que hay detrás, hechos en Zúrich.",
     },
     privacy: {
       description:
@@ -677,18 +677,11 @@ export const es = {
     },
   },
   services: {
-    badges: {
-      mostPopular: "Más popular",
-    },
     title: "Servicios",
-    subtitle:
-      "Servicios integrales de desarrollo de software adaptados a sus necesidades, entregados con experiencia y precisión.",
     getStarted: "Comenzar",
     services: {
       fullstack: {
         title: "Desarrollo Full Stack",
-        description:
-          "Desarrollo integral de aplicaciones web utilizando tecnologías modernas como React, Spring Boot y MongoDB.",
         price: "desde CHF 75/h",
         features: [
           "Aplicaciones web responsivas",
@@ -699,8 +692,6 @@ export const es = {
       },
       frontend: {
         title: "Desarrollo Frontend",
-        description:
-          "Creación de interfaces atractivas, responsivas y fáciles de usar con marcos y sistemas de diseño modernos.",
         price: "desde CHF 65/h",
         features: [
           "Desarrollo con React",
@@ -711,7 +702,6 @@ export const es = {
       },
       backend: {
         title: "Desarrollo Backend",
-        description: "Soluciones del lado del servidor robustas y escalables.",
         price: "desde CHF 70/h",
         features: [
           "Arquitectura de API",
@@ -720,16 +710,29 @@ export const es = {
           "Implementación de seguridad",
         ],
       },
-      consulting: {
-        title: "Consultoría Técnica",
-        description: "Orientación experta para sus decisiones técnicas.",
-        price: "desde CHF 60/h",
-        features: [
-          "Planificación de arquitectura",
-          "Selección de pila tecnológica",
-          "Auditoría de rendimiento",
-          "Evaluación de seguridad",
-        ],
+    },
+    page: {
+      statement:
+        "Sitios web, aplicaciones web y los backends que hay detrás, hechos en Zúrich.",
+      offeringsLabel: "Qué hago",
+      offerings: {
+        websites: {
+          name: "Sitios web",
+          line: "Sitios de empresa y de producto que cargan rápido y se leen bien en cualquier pantalla.",
+        },
+        apps: {
+          name: "Aplicaciones web",
+          line: "Productos en los que la gente inicia sesión y que usa a diario, de la primera pantalla a la base de datos.",
+        },
+        backend: {
+          name: "Backends",
+          line: "APIs, bases de datos, inicio de sesión y la infraestructura sobre la que corren.",
+        },
+      },
+      cta: "Contáctame",
+      closing: {
+        title: "¿Tiene algo que construir?",
+        line: "Escríbame unas líneas y le diré si soy la persona adecuada para hacerlo.",
       },
     },
     contactTemplate: {
@@ -738,15 +741,6 @@ export const es = {
       interested: "Estoy interesado en sus servicios de {service}.",
       discuss: "Me gustaría hablar sobre:",
       closing: "¡Espero su respuesta!",
-    },
-    customRequirements: {
-      title: "¿Tienes requisitos personalizados?",
-      description:
-        "¿Tienes un proyecto específico en mente? Te puedo ayudar a hacer tu visión realidad. Hagamos una reunión para discutir tus requisitos y crear una solución personalizada para tus necesidades.",
-      button: "Contáctame",
-      subject: "Requisitos de desarrollo a medida",
-      message:
-        "Hola Yanis:\n\nTengo requisitos específicos que no encajan en las categorías de servicio estándar. Me gustaría hablar de una solución a medida.\n\nDetalles del proyecto:\n- \n- \n- \n\n¡Espero poder hablarlo contigo!",
     },
   },
   errorBoundary: {

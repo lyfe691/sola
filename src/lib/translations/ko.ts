@@ -34,7 +34,7 @@ export const ko = {
     },
     services: {
       description:
-        "귀하의 요구에 맞는 풀스택, 프런트엔드, 백엔드 개발 및 기술 컨설팅을 제공합니다.",
+        "웹사이트, 웹 앱, 그리고 그 뒤의 백엔드를 취리히에서 만듭니다.",
     },
     privacy: {
       description:
@@ -668,16 +668,11 @@ export const ko = {
     },
   },
   services: {
-    badges: {
-      mostPopular: "가장 인기 있음",
-    },
     title: "서비스",
-    subtitle: "귀하의 요구에 맞는 포괄적인 소프트웨어 개발 서비스입니다.",
     getStarted: "시작하기",
     services: {
       fullstack: {
         title: "풀스택 개발",
-        description: "최신 기술을 사용한 엔드투엔드 웹 애플리케이션 개발.",
         price: "CHF 75/시간부터",
         features: [
           "반응형 웹 애플리케이션",
@@ -688,8 +683,6 @@ export const ko = {
       },
       frontend: {
         title: "프론트엔드 개발",
-        description:
-          "아름답고 반응성이 뛰어나며 사용자 친화적인 인터페이스를 만듭니다.",
         price: "CHF 65/시간부터",
         features: [
           "React 개발",
@@ -700,7 +693,6 @@ export const ko = {
       },
       backend: {
         title: "백엔드 개발",
-        description: "강력하고 확장 가능한 서버측 솔루션.",
         price: "CHF 70/시간부터",
         features: [
           "API 아키텍처",
@@ -709,11 +701,29 @@ export const ko = {
           "보안 구현",
         ],
       },
-      consulting: {
-        title: "기술 컨설팅",
-        description: "기술적인 결정을 위한 전문가의 안내.",
-        price: "CHF 60/시간부터",
-        features: ["아키텍처 설계", "기술 스택 선택", "성능 감사", "보안 평가"],
+    },
+    page: {
+      statement:
+        "웹사이트, 웹 앱, 그리고 그 뒤의 백엔드를 취리히에서 만듭니다.",
+      offeringsLabel: "하는 일",
+      offerings: {
+        websites: {
+          name: "웹사이트",
+          line: "빠르게 열리고 어떤 화면에서도 잘 읽히는 기업 및 제품 사이트.",
+        },
+        apps: {
+          name: "웹 앱",
+          line: "로그인해서 매일 쓰는 제품을 첫 화면부터 데이터베이스까지.",
+        },
+        backend: {
+          name: "백엔드",
+          line: "API, 데이터베이스, 로그인, 그리고 이들이 돌아가는 인프라.",
+        },
+      },
+      cta: "문의하기",
+      closing: {
+        title: "만들고 싶은 것이 있나요?",
+        line: "몇 줄로 알려 주세요. 제가 맞는 사람인지 말씀드리겠습니다.",
       },
     },
     contactTemplate: {
@@ -722,15 +732,6 @@ export const ko = {
       interested: "귀하의 {service} 서비스에 관심이 있습니다.",
       discuss: "다음 내용을 논의하고 싶습니다:",
       closing: "답변 기다리겠습니다!",
-    },
-    customRequirements: {
-      title: "맞춤 요구 사항이 있으신가요?",
-      description:
-        "특정 프로젝트를 염두에 두고 있나요? 나는 당신의 비전을 현실로 바꾸는 데 도움을 주기 위해 왔습니다. 귀하의 요구 사항에 대해 논의하고 귀하의 필요에 맞는 맞춤형 솔루션을 만들어 보겠습니다.",
-      button: "문의하기",
-      subject: "맞춤 개발 문의",
-      message:
-        "안녕하세요 Yanis님,\n\n표준 서비스 카테고리에 맞지 않는 특별한 요구 사항이 있어 맞춤 솔루션에 대해 논의하고 싶습니다.\n\n프로젝트 세부 정보:\n- \n- \n- \n\n연락 기다리겠습니다!",
     },
   },
   errorBoundary: {

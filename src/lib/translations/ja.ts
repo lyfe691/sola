@@ -32,7 +32,7 @@ export const ja = {
     },
     services: {
       description:
-        "フルスタック/フロントエンド/バックエンド開発、技術コンサルティング。",
+        "ウェブサイト、ウェブアプリ、そしてそれを支えるバックエンドを、チューリッヒで作っています。",
     },
     privacy: {
       description: "ホスティング、分析、処理者、ユーザーの権利に関する詳細。",
@@ -668,16 +668,11 @@ export const ja = {
     },
   },
   services: {
-    badges: {
-      mostPopular: "一番人気",
-    },
     title: "サービス",
-    subtitle: "お客様のニーズに合わせた包括的なソフトウェア開発サービス。",
     getStarted: "今すぐ始める",
     services: {
       fullstack: {
         title: "フルスタック開発",
-        description: "最新技術を使用したエンドツーエンドのWeb開発。",
         price: "CHF 75/時〜",
         features: [
           "レスポンシブWebアプリケーション",
@@ -688,7 +683,6 @@ export const ja = {
       },
       frontend: {
         title: "フロントエンド開発",
-        description: "美しく使いやすいインターフェースの作成。",
         price: "CHF 65/時〜",
         features: [
           "React開発",
@@ -699,7 +693,6 @@ export const ja = {
       },
       backend: {
         title: "バックエンド開発",
-        description: "堅牢でスケーラブルなサーバーサイドソリューション。",
         price: "CHF 70/時〜",
         features: [
           "API設計",
@@ -708,16 +701,29 @@ export const ja = {
           "セキュリティ実装",
         ],
       },
-      consulting: {
-        title: "技術コンサルティング",
-        description: "技術的な意思決定のための専門家によるガイダンス。",
-        price: "CHF 60/時〜",
-        features: [
-          "アーキテクチャ計画",
-          "技術スタックの選定",
-          "パフォーマンス監査",
-          "セキュリティ評価",
-        ],
+    },
+    page: {
+      statement:
+        "ウェブサイト、ウェブアプリ、そしてそれを支えるバックエンドを、チューリッヒで作っています。",
+      offeringsLabel: "できること",
+      offerings: {
+        websites: {
+          name: "ウェブサイト",
+          line: "読み込みが速く、どの画面でも読みやすい企業サイトや製品サイト。",
+        },
+        apps: {
+          name: "ウェブアプリ",
+          line: "ログインして毎日使うプロダクトを、最初の画面からデータベースまで。",
+        },
+        backend: {
+          name: "バックエンド",
+          line: "API、データベース、認証、そしてそれらが動くインフラ。",
+        },
+      },
+      cta: "お問い合わせ",
+      closing: {
+        title: "作りたいものはありますか？",
+        line: "数行で概要を送ってください。お役に立てるかどうかをお伝えします。",
       },
     },
     contactTemplate: {
@@ -726,15 +732,6 @@ export const ja = {
       interested: "{service}サービスに興味があります。",
       discuss: "以下について相談したいです：",
       closing: "お返事をお待ちしております！",
-    },
-    customRequirements: {
-      title: "カスタム要件をお持ちですか？",
-      description:
-        "具体的なプロジェクトをお考えですか？あなたのビジョンを実現するお手伝いをさせていただきます。ご要件についてご相談させていただき、ニーズに合わせたソリューションを作成いたしましょう。",
-      button: "お問い合わせ",
-      subject: "カスタム開発のご相談",
-      message:
-        "Yanisさん\n\n標準のサービスカテゴリに当てはまらない特別な要件があります。カスタムソリューションについてご相談したいです。\n\nプロジェクトの詳細:\n- \n- \n- \n\nご連絡をお待ちしています。",
     },
   },
   errorBoundary: {

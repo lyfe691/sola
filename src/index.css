@@ -1059,6 +1059,51 @@
   }
 }
 
+/* ---------- depth tilt (/services) ---------- */
+/* DepthTilt writes the angles every frame while a tile follows the pointer,
+   so there is no transition here to fight it. */
+.depth-tilt {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+}
+
+/* ---------- morph arrow ---------- */
+/* MorphArrow: at rest a chevron; under the pointer or the keyboard its head
+   moves three units on and the shaft grows from the head's side. The shaft
+   is drawn where it ends up, so it scales from its right end. */
+.morph-arrow-shaft {
+  transform-box: fill-box;
+  transform-origin: right center;
+  transform: scaleX(0);
+  opacity: 0;
+  transition:
+    transform 200ms var(--ease-out),
+    opacity 200ms var(--ease-out);
+}
+
+.morph-arrow-head {
+  transition: transform 200ms var(--ease-out);
+}
+
+:is(a, button):focus-visible .morph-arrow-shaft {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+:is(a, button):focus-visible .morph-arrow-head {
+  transform: translateX(3px);
+}
+
+@media (hover: hover) {
+  :is(a, button):hover .morph-arrow-shaft {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  :is(a, button):hover .morph-arrow-head {
+    transform: translateX(3px);
+  }
+}
+
 /* ---------- paper (/certifications) ---------- */
 /* a sheet lying on the page: a tight contact shadow and a wide soft one */
 :root {

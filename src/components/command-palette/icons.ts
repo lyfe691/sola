@@ -15,7 +15,6 @@ import {
   HomeIcon,
   Layers01Icon,
   Mail01Icon,
-  Message01Icon,
   PackageIcon,
   PaintBoardIcon,
   ServerStack01Icon,
@@ -41,5 +40,4 @@ export const SERVICE_ICONS: Record<string, IconSvgElement> = {
   fullstack: Layers01Icon,
   frontend: PaintBoardIcon,
   backend: ServerStack01Icon,
-  consulting: Message01Icon,
 };

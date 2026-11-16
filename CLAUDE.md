@@ -79,6 +79,19 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   editing an English deep dive outdates its translations on purpose.
 - **Content** is config-driven: `src/config/{projects,certifications,...}.ts`
   plus MDX deep dives in `src/content/projects/`.
+- **Services page**: deliberately its own look (the text face at regular
+  weight, no eyebrow labels, no dividers between offerings). What it offers
+  is `src/config/services.ts`: each offering is billed as one of the hourly
+  services in `t.services.services` and backed by two projects with a deep
+  dive; site search and the page's Markdown twin read the same list. A
+  screenshot there is always a `Stage` (the project's still cover, the whole
+  window, the same margin on every side) around a `Capture`, never the deep
+  dives' device frames: their corner radius is fixed and swallows the
+  toolbar at card size. The carousel, the statement's highlight and the
+  tiles' tilt are React Bits Pro components ported into
+  `src/components/services/`. Their source comes from the registry JSON with
+  `REACTBITS_LICENSE_KEY` (`.env.local`), never through `shadcn add`, which
+  overwrites `button.tsx`.
 - **MDX code blocks**: inside `<CodeBlock code={`…`}>` write every line after
   the first with two extra spaces (MDX strips the attribute's indent at
   compile time, so the code would render two spaces short), and never leave a
@@ -135,8 +148,8 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
 - A block or a page arriving only ever fades and rises a short way. No
   blur, no scale, and nothing page-sized animates anything but opacity: that
   weight was felt on every click. (Letter-level effects, like the hero's
-  name and tagline, and the title a page change carries across, are their
-  own pieces.)
+  name and tagline and the Services statement, and the title a page change
+  carries across, are their own pieces.)
 - Scroll reveals: wrap each block that should arrive on its own in
   `<Reveal>` (`as="li"` etc.). Never pass delays or nest reveals — one
   queue (`src/lib/reveal.ts`) starts blocks in reading order, and one CSS

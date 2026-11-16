@@ -16,6 +16,7 @@ import type { Language } from "@/config/languages";
 import { LANGUAGES } from "@/config/languages";
 import { MAIN_NAVIGATION, FOOTER_NAVIGATION } from "@/config/navigation";
 import { PROJECTS, type ProjectArt } from "@/config/projects";
+import { OFFERINGS } from "@/config/services";
 import {
   SKILL_GROUPS,
   SKILL_ALIASES,
@@ -273,17 +274,21 @@ export function buildSiteDocs(
     });
   }
 
-  for (const [key, service] of Object.entries(t.services.services)) {
+  // what the Services page offers, under the names it uses; the hourly
+  // service each is billed as lends its price, features and old name
+  for (const { key, service } of OFFERINGS) {
+    const offering = t.services.page.offerings[key];
+    const billed = t.services.services[service];
     docs.push({
       kind: "service",
-      id: `service:${key}`,
-      title: service.title,
-      context: service.price,
-      body: service.description,
+      id: `service:${service}`,
+      title: offering.name,
+      context: billed.price,
+      body: offering.line,
       to: "/services",
-      keywords: [t.nav.services, ...service.features],
-      service: key,
-      features: service.features,
+      keywords: [t.nav.services, billed.title, ...billed.features],
+      service,
+      features: billed.features,
       boost: 0.5,
     });
   }

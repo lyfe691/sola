@@ -34,7 +34,7 @@ export const de = {
     },
     services: {
       description:
-        "Full‑Stack‑, Frontend‑, Backend‑Entwicklung sowie technologische Beratung nach Bedarf.",
+        "Websites, Web-Apps und die Backends dahinter, gebaut in Zürich.",
     },
     privacy: {
       description:
@@ -676,17 +676,11 @@ export const de = {
     },
   },
   services: {
-    badges: {
-      mostPopular: "Am beliebtesten",
-    },
     title: "Dienstleistungen",
-    subtitle:
-      "Umfassende Softwareentwicklungsdienste, angepasst an Ihre Bedürfnisse.",
     getStarted: "Jetzt starten",
     services: {
       fullstack: {
         title: "Full-Stack-Entwicklung",
-        description: "Ganzheitliche Webentwicklung mit modernen Technologien.",
         price: "ab CHF 75/h",
         features: [
           "Responsive Webanwendungen",
@@ -697,7 +691,6 @@ export const de = {
       },
       frontend: {
         title: "Frontend-Entwicklung",
-        description: "Erstellung schöner und benutzerfreundlicher Oberflächen.",
         price: "ab CHF 65/h",
         features: [
           "React-Entwicklung",
@@ -708,7 +701,6 @@ export const de = {
       },
       backend: {
         title: "Backend-Entwicklung",
-        description: "Robuste und skalierbare Server-Lösungen.",
         price: "ab CHF 70/h",
         features: [
           "API-Architektur",
@@ -717,16 +709,29 @@ export const de = {
           "Sicherheitsmassnahmen",
         ],
       },
-      consulting: {
-        title: "Technische Beratung",
-        description: "Expertenhilfe bei technischen Entscheidungen.",
-        price: "ab CHF 60/h",
-        features: [
-          "Architekturplanung",
-          "Technologiestack-Auswahl",
-          "Leistungsanalyse",
-          "Sicherheitsbewertung",
-        ],
+    },
+    page: {
+      statement:
+        "Websites, Web-Apps und die Backends dahinter, gebaut in Zürich.",
+      offeringsLabel: "Was ich mache",
+      offerings: {
+        websites: {
+          name: "Websites",
+          line: "Firmen- und Produktseiten, die schnell laden und sich auf jedem Bildschirm gut lesen.",
+        },
+        apps: {
+          name: "Web-Apps",
+          line: "Produkte, bei denen sich Menschen anmelden und die sie täglich nutzen, vom ersten Bildschirm bis zur Datenbank.",
+        },
+        backend: {
+          name: "Backends",
+          line: "APIs, Datenbanken, Anmeldung und die Infrastruktur, auf der sie laufen.",
+        },
+      },
+      cta: "Kontaktieren Sie mich",
+      closing: {
+        title: "Etwas, das gebaut werden soll?",
+        line: "Schreiben Sie mir ein paar Zeilen dazu, und ich sage Ihnen, ob ich die richtige Person dafür bin.",
       },
     },
     contactTemplate: {
@@ -735,15 +740,6 @@ export const de = {
       interested: "Ich interessiere mich für Ihre {service}-Dienstleistungen.",
       discuss: "Ich möchte Folgendes besprechen:",
       closing: "Ich freue mich auf Ihre Antwort!",
-    },
-    customRequirements: {
-      title: "Spezielle Anforderungen?",
-      description:
-        "Haben Sie ein bestimmtes Projekt im Sinn? Ich helfe Ihnen dabei, Ihre Vision Wirklichkeit werden zu lassen. Lassen Sie uns Ihre Anforderungen besprechen und eine passende Lösung entwickeln.",
-      button: "Kontaktieren Sie mich",
-      subject: "Individuelle Entwicklungsanforderungen",
-      message:
-        "Hallo Yanis,\n\nich habe spezielle Anforderungen, die nicht in die üblichen Service-Kategorien passen, und würde gerne eine individuelle Lösung besprechen.\n\nProjektdetails:\n- \n- \n- \n\nIch freue mich auf Ihre Rückmeldung!",
     },
   },
   errorBoundary: {

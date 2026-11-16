@@ -30,7 +30,7 @@ export const zh = {
       description: "关于项目、合作或机会，欢迎联系。",
     },
     services: {
-      description: "按需提供全栈、前端、后端开发与技术咨询。",
+      description: "网站、Web 应用以及背后的后端，在苏黎世完成。",
     },
     privacy: {
       description: "关于托管、分析、数据处理方与您的权利的隐私信息。",
@@ -657,16 +657,11 @@ export const zh = {
     },
   },
   services: {
-    badges: {
-      mostPopular: "最受欢迎",
-    },
     title: "服务",
-    subtitle: "根据您的需求定制的全面软件开发服务。",
     getStarted: "开始",
     services: {
       fullstack: {
         title: "全栈开发",
-        description: "使用现代技术进行端到端的Web开发。",
         price: "CHF 75/小时起",
         features: [
           "响应式Web应用",
@@ -677,21 +672,36 @@ export const zh = {
       },
       frontend: {
         title: "前端开发",
-        description: "创建美观、响应式和用户友好的界面。",
         price: "CHF 65/小时起",
         features: ["React开发", "UI/UX实现", "动画和交互", "移动优先设计"],
       },
       backend: {
         title: "后端开发",
-        description: "强大且可扩展的服务器端解决方案。",
         price: "CHF 70/小时起",
         features: ["API设计", "数据库管理", "服务器优化", "安全实现"],
       },
-      consulting: {
-        title: "技术咨询",
-        description: "为您的技术决策提供专业指导。",
-        price: "CHF 60/小时起",
-        features: ["架构规划", "技术栈选择", "性能审计", "安全评估"],
+    },
+    page: {
+      statement: "网站、Web 应用以及背后的后端，在苏黎世完成。",
+      offeringsLabel: "我做什么",
+      offerings: {
+        websites: {
+          name: "网站",
+          line: "加载快、在任何屏幕上都好读的企业和产品网站。",
+        },
+        apps: {
+          name: "Web 应用",
+          line: "人们每天登录使用的产品，从第一个界面到数据库。",
+        },
+        backend: {
+          name: "后端",
+          line: "API、数据库、登录，以及它们运行其上的基础设施。",
+        },
+      },
+      cta: "联系我",
+      closing: {
+        title: "有想做的东西吗？",
+        line: "给我写几行说明，我会告诉你我是否适合这份工作。",
       },
     },
     contactTemplate: {
@@ -700,15 +710,6 @@ export const zh = {
       interested: "我对您的{service}服务感兴趣。",
       discuss: "我想讨论以下内容：",
       closing: "期待您的回复！",
-    },
-    customRequirements: {
-      title: "有特定需求？",
-      description:
-        "有特定项目想法？我可以帮助您实现愿景。让我们讨论您的需求，为您创建量身定制的解决方案。",
-      button: "联系我",
-      subject: "定制开发需求",
-      message:
-        "你好 Yanis，\n\n我有一些不属于标准服务类别的特殊需求，想讨论一个定制方案。\n\n项目详情：\n- \n- \n- \n\n期待与你进一步沟通！",
     },
   },
   errorBoundary: {

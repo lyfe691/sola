@@ -33,7 +33,7 @@ export const en = {
     },
     services: {
       description:
-        "Full‑stack, frontend, backend development and technical consulting tailored to your needs.",
+        "Websites, web apps and the backends behind them, built in Zürich.",
     },
     privacy: {
       description:
@@ -669,18 +669,11 @@ export const en = {
     },
   },
   services: {
-    badges: {
-      mostPopular: "Most Popular",
-    },
     title: "Services",
-    subtitle:
-      "Comprehensive software development services tailored to your needs.",
     getStarted: "Get Started",
     services: {
       fullstack: {
         title: "Full Stack Development",
-        description:
-          "End-to-end web application development using modern technologies.",
         price: "from CHF 75/h",
         features: [
           "Responsive web applications",
@@ -691,8 +684,6 @@ export const en = {
       },
       frontend: {
         title: "Frontend Development",
-        description:
-          "Creating beautiful, responsive, and user-friendly interfaces.",
         price: "from CHF 65/h",
         features: [
           "React development",
@@ -703,7 +694,6 @@ export const en = {
       },
       backend: {
         title: "Backend Development",
-        description: "Robust and scalable server-side solutions.",
         price: "from CHF 70/h",
         features: [
           "API architecture",
@@ -712,16 +702,29 @@ export const en = {
           "Security implementation",
         ],
       },
-      consulting: {
-        title: "Technical Consulting",
-        description: "Expert guidance for your technical decisions.",
-        price: "from CHF 60/h",
-        features: [
-          "Architecture planning",
-          "Technology stack selection",
-          "Performance auditing",
-          "Security assessment",
-        ],
+    },
+    page: {
+      statement:
+        "Websites, web apps and the backends behind them, built in Zürich.",
+      offeringsLabel: "What I do",
+      offerings: {
+        websites: {
+          name: "Websites",
+          line: "Company and product sites that load fast and read well on any screen.",
+        },
+        apps: {
+          name: "Web apps",
+          line: "Products people sign in to and use every day, from the first screen to the database.",
+        },
+        backend: {
+          name: "Backends",
+          line: "APIs, databases, sign-in and the infrastructure they run on.",
+        },
+      },
+      cta: "Get in touch",
+      closing: {
+        title: "Have something to build?",
+        line: "Send me a few lines about it and I'll tell you whether I'm the right person for the job.",
       },
     },
     contactTemplate: {
@@ -730,15 +733,6 @@ export const en = {
       interested: "I'm interested in your {service} services.",
       discuss: "I'd like to discuss:",
       closing: "Looking forward to hearing from you!",
-    },
-    customRequirements: {
-      title: "Custom Requirements?",
-      description:
-        "Have a specific project in mind? I'm here to help turn your vision into reality. Let's discuss your requirements and create a tailored solution for your needs.",
-      button: "Get in touch",
-      subject: "Custom Development Requirements",
-      message:
-        "Hi Yanis,\n\nI have specific requirements that don't fit standard service categories. I'd like to discuss a custom solution.\n\nProject details:\n- \n- \n- \n\nLooking forward to discussing this further!",
     },
   },
   errorBoundary: {
