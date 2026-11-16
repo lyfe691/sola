@@ -12,6 +12,7 @@
  */
 
 import { CaretDownIcon } from "@phosphor-icons/react";
+import { useLocation } from "react-router";
 import { SERVICE_ICONS } from "@/components/command-palette/icons";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -30,10 +31,15 @@ import { Link } from "@/lib/locale-router";
 
 export function ContactMenu() {
   const t = useTranslation();
+  const { pathname } = useLocation();
 
   return (
     <ButtonGroup>
-      <Button nativeButton={false} render={<Link to="/contact" />}>
+      <Button
+        nativeButton={false}
+        render={<Link to="/contact" />}
+        aria-current={pathname === "/contact" ? "page" : undefined}
+      >
         {t.nav.contact}
       </Button>
       <DropdownMenu>
@@ -46,15 +52,16 @@ export function ContactMenu() {
         />
         <DropdownMenuContent align="end" sideOffset={8} className="w-80">
           <DropdownMenuGroup>
-            {OFFERINGS.map(({ key, service }) => {
+            {OFFERINGS.map((offering) => {
+              const { key, service } = offering;
               const ServiceIcon = SERVICE_ICONS[service];
               return (
                 <DropdownMenuItem
                   key={key}
-                  render={<Link to={contactUrl(t, service)} />}
+                  render={<Link to={contactUrl(t, offering)} />}
                   className="items-start gap-3 py-2.5"
                 >
-                  <ServiceIcon className="mt-0.5 size-4.5" />
+                  {ServiceIcon && <ServiceIcon className="mt-0.5 size-4.5" />}
                   <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                     {t.services.page.offerings[key].name}
                     {/* stays quiet under the highlight: the item would turn

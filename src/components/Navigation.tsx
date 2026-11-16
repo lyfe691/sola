@@ -130,12 +130,10 @@ const DesktopNav = () => {
   const rowRef = useRef<HTMLDivElement>(null);
   const [menu, setMenu] = useState<{ key: NavMenuKey; x: number } | null>(null);
   const leaving = useRef<number | undefined>(undefined);
-  // one fill for the links, gliding to the one under the pointer; it waits
-  // on a link whose menu is open
   const glide = useGlidePill();
   const linksRef = useRef<HTMLElement>(null);
 
-  // Contact is the bar's button, not one of its links
+  // without Contact: the bar's button leads there
   const links = MAIN_NAVIGATION.slice(1)
     .filter((item) => item.key !== "contact")
     .map((item) => ({
@@ -156,6 +154,15 @@ const DesktopNav = () => {
     if (!linksRef.current?.matches(":hover")) glide.hide();
   };
   useEffect(() => () => window.clearTimeout(leaving.current), []);
+  // a panel is placed from its link once, when it opens: when the window
+  // changes size under it, it closes rather than stand in the wrong place
+  const isOpen = menu !== null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const shut = () => setMenu(null);
+    window.addEventListener("resize", shut);
+    return () => window.removeEventListener("resize", shut);
+  }, [isOpen]);
 
   // under its link, moved left as far as it takes to stay inside the bar
   const open = (key: NavMenuKey, link: HTMLElement) => {

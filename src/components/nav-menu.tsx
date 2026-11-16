@@ -213,19 +213,24 @@ export function NavPanel({
       `[data-nav-layer="${menu}"]`,
     );
     if (!layer) return;
+    const box = surface.current;
     const from = last.current;
     last.current = { menu, height: layer.offsetHeight };
-    if (!from) return;
+    if (!from || !box) return;
     const moves = [animate(left, x, MORPH)];
-    const box = surface.current;
-    if (box && from.menu !== menu) {
+    if (from.menu !== menu) {
       // the height is the menu's own until it has to move: then it is
-      // written to the element frame by frame, and handed back at the end
+      // written to the element frame by frame, and handed back at the end.
+      // A move cut short leaves its last height written, and the next one
+      // starts from there, not from the full height of the menu it left
       const write = (value: number) =>
         box.style.setProperty("--surface-h", `${value}px`);
-      write(from.height);
+      const start = box.style.getPropertyValue("--surface-h")
+        ? box.offsetHeight
+        : from.height;
+      write(start);
       moves.push(
-        animate(from.height, layer.offsetHeight, {
+        animate(start, layer.offsetHeight, {
           ...MORPH,
           onUpdate: write,
           onComplete: () => box.style.removeProperty("--surface-h"),

@@ -161,7 +161,8 @@ const Services = () => {
       </Reveal>
       <h2 className="sr-only">{page.offeringsLabel}</h2>
 
-      {OFFERINGS.map(({ key, service, proof }) => {
+      {OFFERINGS.map((entry) => {
+        const { key, service, proof } = entry;
         const offering = page.offerings[key];
         return (
           <section
@@ -178,7 +179,7 @@ const Services = () => {
                 {offering.line}
               </p>
               <div className="mt-8 flex items-center gap-5">
-                <Pill to={contactUrl(t, service)} look="quiet">
+                <Pill to={contactUrl(t, entry)} look="quiet">
                   {t.services.getStarted}
                 </Pill>
                 <p className="text-base text-foreground/55">
