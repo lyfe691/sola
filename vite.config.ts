@@ -11,6 +11,7 @@ import {
   deepDiveTranslations,
   remarkSourceHeadingIds,
 } from "./vite/deep-dive-i18n.ts";
+import { phosphorWeights } from "./vite/phosphor-weights.ts";
 import { routePreload } from "./vite/route-preload.ts";
 import { fontPreload } from "./vite/font-preload.ts";
 import { seoPages } from "./vite/seo-pages.ts";
@@ -31,6 +32,7 @@ export default defineConfig({
     changelogSnapshotPlugin(),
     deepDiveIndexPlugin(),
     deepDiveTranslations(),
+    phosphorWeights(),
     routePreload(),
     fontPreload({
       body: "geist-latin-wght-normal",
