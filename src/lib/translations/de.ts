@@ -70,6 +70,7 @@ export const de = {
     a11y: {
       openMenu: "Menü öffnen",
       closeMenu: "Menü schliessen",
+      contactTopics: "Thema wählen",
       primaryNav: "Hauptnavigation",
       toggleLanguage: "Sprache wechseln",
       toggleTheme: "Design wechseln",

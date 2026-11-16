@@ -49,7 +49,7 @@ export function ContactMenu() {
           openOnHover
           delay={0}
           render={
-            <Button size="icon" aria-label={t.services.getStarted}>
+            <Button size="icon" aria-label={t.common.a11y.contactTopics}>
               {/* x.ai's 8 and 12: in a button whose right end is round, a chevron
                   in the true middle looks pushed right */}
               <FlipChevron open={open} className="mr-1" />

@@ -72,6 +72,7 @@ export const es = {
     a11y: {
       openMenu: "Abrir menú",
       closeMenu: "Cerrar menú",
+      contactTopics: "Elegir el tema",
       primaryNav: "Navegación principal",
       toggleLanguage: "Cambiar idioma",
       toggleTheme: "Cambiar tema",

@@ -69,6 +69,7 @@ export const ko = {
     a11y: {
       openMenu: "메뉴 열기",
       closeMenu: "메뉴 닫기",
+      contactTopics: "문의 내용 선택",
       primaryNav: "기본 내비게이션",
       toggleLanguage: "언어 전환",
       toggleTheme: "테마 전환",

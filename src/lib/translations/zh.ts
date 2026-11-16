@@ -63,6 +63,7 @@ export const zh = {
     a11y: {
       openMenu: "打开菜单",
       closeMenu: "关闭菜单",
+      contactTopics: "选择咨询内容",
       primaryNav: "主导航",
       toggleLanguage: "切换语言",
       toggleTheme: "切换主题",

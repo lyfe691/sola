@@ -67,6 +67,7 @@ export const ja = {
     a11y: {
       openMenu: "メニューを開く",
       closeMenu: "メニューを閉じる",
+      contactTopics: "ご用件を選ぶ",
       primaryNav: "メインナビゲーション",
       toggleLanguage: "言語を切り替える",
       toggleTheme: "テーマを切り替える",
