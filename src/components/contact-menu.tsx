@@ -44,9 +44,11 @@ export function ContactMenu() {
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger
+          openOnHover
+          delay={0}
           render={
             <Button size="icon" aria-label={t.services.getStarted}>
-              <CaretDownIcon />
+              <CaretDownIcon className="transition-transform duration-200 ease-out group-data-popup-open/button:rotate-180" />
             </Button>
           }
         />
