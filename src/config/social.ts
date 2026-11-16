@@ -4,7 +4,7 @@
  */
 
 import type { ComponentType } from "react";
-import { Mail01Icon } from "@hugeicons/core-free-icons";
+import { EnvelopeSimpleIcon } from "@phosphor-icons/react";
 import {
   ChessMark,
   GithubMark,
@@ -13,7 +13,6 @@ import {
   LinkedinMark,
   TiktokMark,
 } from "@/components/icons/brand-marks";
-import { hugeIcon } from "@/lib/huge-icon";
 
 export type SocialId =
   | "github"
@@ -46,7 +45,7 @@ export const SOCIAL_LINKS: Record<SocialId, SocialLink> = {
     id: "email",
     label: "Email",
     href: "mailto:yanis.sebastian.zuercher@gmail.com",
-    icon: hugeIcon(Mail01Icon),
+    icon: EnvelopeSimpleIcon,
   },
   linkedin: {
     id: "linkedin",

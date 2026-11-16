@@ -8,17 +8,17 @@
 
 import { memo, useMemo, useRef, useState, type ReactNode } from "react";
 import {
-  ArrowUpRight01Icon,
-  Calendar03Icon,
-  Calendar04Icon,
-  FileSearchIcon,
-  Folder01Icon,
-  Github01Icon,
-  ArrowDownAZIcon,
-  SortByDown01Icon,
+  ArrowUpRightIcon,
+  ArrowsDownUpIcon,
+  CalendarBlankIcon,
+  CalendarDotsIcon,
+  FileMagnifyingGlassIcon,
+  FolderIcon,
+  GithubLogoIcon,
+  SortAscendingIcon,
   StarIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+  type Icon,
+} from "@phosphor-icons/react";
 import type { Language } from "@/config/languages";
 import { formatProjectDate, INTL_LOCALE } from "@/lib/dates";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
@@ -81,19 +81,22 @@ type SortOptionItem = {
   icon: ReactNode;
 };
 
-const SORT_ICONS: Record<ProjectSortOption, IconSvgElement> = {
+const SORT_ICONS: Record<ProjectSortOption, Icon> = {
   featured: StarIcon,
-  newest: Calendar03Icon,
-  oldest: Calendar04Icon,
-  name: ArrowDownAZIcon,
+  newest: CalendarDotsIcon,
+  oldest: CalendarBlankIcon,
+  name: SortAscendingIcon,
 };
 
 const buildSortOptions = (t: Translation): SortOptionItem[] =>
-  PROJECT_SORT_OPTIONS.map((value) => ({
-    value,
-    label: t.projects.sortOptions[value],
-    icon: <HugeiconsIcon icon={SORT_ICONS[value]} strokeWidth={2} />,
-  }));
+  PROJECT_SORT_OPTIONS.map((value) => {
+    const SortIcon = SORT_ICONS[value];
+    return {
+      value,
+      label: t.projects.sortOptions[value],
+      icon: <SortIcon />,
+    };
+  });
 
 const localizeProjects = (t: Translation, language: Language): Project[] => {
   const locale = INTL_LOCALE[language];
@@ -138,13 +141,7 @@ const ProjectActions = ({
           nativeButton={false}
           render={<Link to={`/projects/${project.slug}`} />}
           label={t.projects.viewDetails}
-          icon={
-            <HugeiconsIcon
-              icon={FileSearchIcon}
-              strokeWidth={2}
-              className="size-4"
-            />
-          }
+          icon={<FileMagnifyingGlassIcon className="size-4" />}
           size="lg"
           fullWidth
         />
@@ -163,12 +160,7 @@ const ProjectActions = ({
                 />
               }
             >
-              <HugeiconsIcon
-                icon={Github01Icon}
-                strokeWidth={2}
-                className="size-4"
-                aria-hidden="true"
-              />
+              <GithubLogoIcon className="size-4" aria-hidden="true" />
               {t.projects.viewGithub}
             </Button>
           )}
@@ -180,14 +172,7 @@ const ProjectActions = ({
                   ? t.common.sourcePrivateClient
                   : t.common.sourcePrivate
               }
-              icon={
-                <HugeiconsIcon
-                  icon={Github01Icon}
-                  strokeWidth={2}
-                  className="size-4"
-                  aria-hidden="true"
-                />
-              }
+              icon={<GithubLogoIcon className="size-4" aria-hidden="true" />}
               variant="default"
               className="flex-1"
             />
@@ -200,14 +185,7 @@ const ProjectActions = ({
                   ? t.common.linkPrivateClient
                   : t.common.linkPrivate
               }
-              icon={
-                <HugeiconsIcon
-                  icon={ArrowUpRight01Icon}
-                  strokeWidth={2}
-                  className="size-4"
-                  aria-hidden="true"
-                />
-              }
+              icon={<ArrowUpRightIcon className="size-4" aria-hidden="true" />}
               variant="default"
               className="flex-1"
             />
@@ -225,11 +203,7 @@ const ProjectActions = ({
                 />
               }
             >
-              <HugeiconsIcon
-                icon={ArrowUpRight01Icon}
-                strokeWidth={2}
-                className="size-4"
-              />
+              <ArrowUpRightIcon className="size-4" />
               {t.projects.visitProject}
             </Button>
           )}
@@ -360,11 +334,7 @@ const Projects = () => {
             aria-label={t.projects.sortBy}
             className="w-full sm:w-44"
           >
-            <HugeiconsIcon
-              icon={SortByDown01Icon}
-              strokeWidth={2}
-              aria-hidden="true"
-            />
+            <ArrowsDownUpIcon aria-hidden="true" />
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -393,7 +363,7 @@ const Projects = () => {
             <Empty className="border border-dashed">
               <EmptyHeader>
                 <EmptyMedia variant="icon">
-                  <HugeiconsIcon icon={Folder01Icon} strokeWidth={2} />
+                  <FolderIcon />
                 </EmptyMedia>
                 <EmptyTitle>{t.projects.empty}</EmptyTitle>
                 <EmptyDescription>

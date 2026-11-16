@@ -7,12 +7,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Copy01Icon,
-  TextWrapIcon,
-  Tick02Icon,
-} from "@hugeicons/core-free-icons";
+import { ArrowUDownLeftIcon, CheckIcon, CopyIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   CodeBlock as CodeBlockRoot,
@@ -58,10 +53,7 @@ function CopyButton({ value }: { value: string }) {
         aria-label={copied ? t.common.copied : t.common.copyCode}
         onClick={onCopy}
       >
-        <HugeiconsIcon
-          icon={copied ? Tick02Icon : Copy01Icon}
-          strokeWidth={2}
-        />
+        {copied ? <CheckIcon /> : <CopyIcon />}
       </Button>
       <span aria-live="polite" className="sr-only">
         {copied ? t.common.copied : ""}
@@ -124,7 +116,7 @@ export function CodeBlock({
           className="aria-pressed:text-foreground"
           onClick={() => setWrap(!wrap)}
         >
-          <HugeiconsIcon icon={TextWrapIcon} strokeWidth={2} />
+          <ArrowUDownLeftIcon />
         </Button>
       ) : null}
       <CopyButton value={value} />

@@ -9,8 +9,7 @@
  * desktop, popover on touch. Clicks never reach the row it decorates.
  */
 
-import { InformationCircleIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { InfoIcon } from "@phosphor-icons/react";
 import { Hint } from "@/components/ui/custom/hint";
 
 type MenuHintProps = {
@@ -32,11 +31,7 @@ export function MenuHint({ text }: MenuHintProps) {
           onPointerDown={(event) => event.stopPropagation()}
           aria-label={text}
         >
-          <HugeiconsIcon
-            icon={InformationCircleIcon}
-            strokeWidth={2}
-            className="size-3"
-          />
+          <InfoIcon className="size-3" />
         </button>
       }
     >

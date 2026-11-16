@@ -7,37 +7,37 @@
  */
 
 import {
-  Briefcase01Icon,
-  Certificate01Icon,
-  CodeIcon,
-  Folder01Icon,
+  BriefcaseIcon,
+  CertificateIcon,
+  CodeSimpleIcon,
+  EnvelopeSimpleIcon,
+  FolderIcon,
   GitCommitIcon,
-  HomeIcon,
-  Layers01Icon,
-  Mail01Icon,
+  HardDrivesIcon,
+  HouseIcon,
   PackageIcon,
-  PaintBoardIcon,
-  ServerStack01Icon,
-  Shield01Icon,
+  PaletteIcon,
+  ShieldIcon,
+  StackIcon,
   UserIcon,
-} from "@hugeicons/core-free-icons";
-import type { IconSvgElement } from "@hugeicons/react";
+  type Icon,
+} from "@phosphor-icons/react";
 
-export const PAGE_ICONS: Record<string, IconSvgElement> = {
-  "/": HomeIcon,
+export const PAGE_ICONS: Record<string, Icon> = {
+  "/": HouseIcon,
   "/about": UserIcon,
-  "/experience": Briefcase01Icon,
-  "/projects": Folder01Icon,
-  "/skills": CodeIcon,
+  "/experience": BriefcaseIcon,
+  "/projects": FolderIcon,
+  "/skills": CodeSimpleIcon,
   "/services": PackageIcon,
-  "/contact": Mail01Icon,
-  "/privacy": Shield01Icon,
-  "/certifications": Certificate01Icon,
+  "/contact": EnvelopeSimpleIcon,
+  "/privacy": ShieldIcon,
+  "/certifications": CertificateIcon,
   "/changelog": GitCommitIcon,
 };
 
-export const SERVICE_ICONS: Record<string, IconSvgElement> = {
-  fullstack: Layers01Icon,
-  frontend: PaintBoardIcon,
-  backend: ServerStack01Icon,
+export const SERVICE_ICONS: Record<string, Icon> = {
+  fullstack: StackIcon,
+  frontend: PaletteIcon,
+  backend: HardDrivesIcon,
 };

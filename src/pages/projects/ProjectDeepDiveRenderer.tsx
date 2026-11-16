@@ -20,13 +20,11 @@ import {
 import { useLocation, useParams } from "react-router";
 import { useReducedMotion } from "motion/react";
 import {
-  Github01Icon,
-  Globe02Icon,
-  LinkSquare02Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
-import { hugeIcon } from "@/lib/huge-icon";
+  ArrowSquareOutIcon,
+  GithubLogoIcon,
+  GlobeIcon,
+  TranslateIcon,
+} from "@phosphor-icons/react";
 import {
   DeepDiveSectionMenu,
   DeepDiveSectionRail,
@@ -84,14 +82,14 @@ function getLinkActions(
     actions.push({
       href: links.live,
       label: isChromeStore ? t.common.chromeStore : t.common.visitSite,
-      Icon: isChromeStore ? hugeIcon(Globe02Icon) : hugeIcon(LinkSquare02Icon),
+      Icon: isChromeStore ? GlobeIcon : ArrowSquareOutIcon,
       variant: "default",
     });
   } else if (linkPrivate) {
     actions.push({
       href: "#link-private",
       label: t.common.visitSite,
-      Icon: hugeIcon(LinkSquare02Icon),
+      Icon: ArrowSquareOutIcon,
       variant: "default",
       disabledReason:
         kind === "commercial"
@@ -103,14 +101,14 @@ function getLinkActions(
     actions.push({
       href: links.github,
       label: t.common.sourceCode,
-      Icon: hugeIcon(Github01Icon),
+      Icon: GithubLogoIcon,
       variant: "outline",
     });
   } else if (sourcePrivate) {
     actions.push({
       href: "#source-private",
       label: t.common.sourceCode,
-      Icon: hugeIcon(Github01Icon),
+      Icon: GithubLogoIcon,
       variant: "outline",
       disabledReason:
         kind === "commercial"
@@ -122,7 +120,7 @@ function getLinkActions(
     actions.push({
       href: links.demo,
       label: t.common.demo,
-      Icon: hugeIcon(LinkSquare02Icon),
+      Icon: ArrowSquareOutIcon,
       variant: "outline",
     });
   }
@@ -324,12 +322,7 @@ const ProjectDeepDiveRenderer = () => {
         <div>
           {!isTranslated(slug, language) && (
             <p className="mb-8 flex items-center gap-2 text-xs text-muted-foreground">
-              <HugeiconsIcon
-                icon={AiTranslateIcon}
-                strokeWidth={2}
-                className="size-4 shrink-0"
-                aria-hidden
-              />
+              <TranslateIcon className="size-4 shrink-0" aria-hidden />
               {t.common.onlyInEnglish}
             </p>
           )}

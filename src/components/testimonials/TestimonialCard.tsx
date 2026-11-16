@@ -8,12 +8,11 @@
 
 import { useRef, useState } from "react";
 import {
-  Globe02Icon,
-  Linkedin02Icon,
-  QuoteDownIcon,
+  GlobeIcon,
+  LinkedinLogoIcon,
+  QuotesIcon,
   StarIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+} from "@phosphor-icons/react";
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "@/lib/language-provider";
 import type { Translation } from "@/lib/translations";
@@ -53,15 +52,10 @@ type TestimonialCardProps = {
 const StarRating = ({ rating }: { rating: number }) => (
   <div className="flex gap-1">
     {Array.from({ length: 5 }).map((_, i) => (
-      <HugeiconsIcon
+      <StarIcon
         key={i}
-        icon={StarIcon}
-        strokeWidth={2}
-        className={`size-4 ${
-          i < rating
-            ? "fill-primary text-primary [&_path]:fill-primary"
-            : "text-foreground/20"
-        }`}
+        weight={i < rating ? "fill" : undefined}
+        className={`size-4 ${i < rating ? "text-primary" : "text-foreground/20"}`}
       />
     ))}
   </div>
@@ -90,11 +84,7 @@ const AuthorLinks = ({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs transition-colors hover:bg-accent"
           >
-            <HugeiconsIcon
-              icon={Globe02Icon}
-              strokeWidth={2}
-              className="size-2.5"
-            />
+            <GlobeIcon className="size-2.5" />
             {t.about.testimonials.website}
           </a>
         ) : null}
@@ -105,11 +95,7 @@ const AuthorLinks = ({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 rounded bg-muted px-1.5 py-0.5 text-xs transition-colors hover:bg-accent"
           >
-            <HugeiconsIcon
-              icon={Linkedin02Icon}
-              strokeWidth={2}
-              className="size-2.5"
-            />
+            <LinkedinLogoIcon className="size-2.5" />
             LinkedIn
           </a>
         ) : null}
@@ -124,11 +110,7 @@ const AuthorLinks = ({
           href={website}
           className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2.5 py-1.5 text-sm transition-colors hover:bg-accent"
         >
-          <HugeiconsIcon
-            icon={Globe02Icon}
-            strokeWidth={2}
-            className="size-3.5"
-          />
+          <GlobeIcon className="size-3.5" />
           {t.about.testimonials.visitWebsite}
         </LinkPreview>
       ) : null}
@@ -137,11 +119,7 @@ const AuthorLinks = ({
           href={linkedin}
           className="inline-flex items-center gap-1.5 rounded-md bg-muted px-2.5 py-1.5 text-sm transition-colors hover:bg-accent"
         >
-          <HugeiconsIcon
-            icon={Linkedin02Icon}
-            strokeWidth={2}
-            className="size-3.5"
-          />
+          <LinkedinLogoIcon className="size-3.5" />
           {t.about.testimonials.viewLinkedIn}
         </LinkPreview>
       ) : null}
@@ -248,11 +226,7 @@ const TestimonialCard = ({
   const cardContent = (
     <Card className="group relative flex h-full flex-col gap-4 overflow-hidden p-6">
       <div className="flex size-8 items-center justify-center rounded-lg bg-primary/10">
-        <HugeiconsIcon
-          icon={QuoteDownIcon}
-          strokeWidth={2}
-          className="size-4 text-primary"
-        />
+        <QuotesIcon className="size-4 text-primary" />
       </div>
 
       <StarRating rating={rating} />

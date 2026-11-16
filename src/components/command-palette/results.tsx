@@ -8,15 +8,15 @@
 
 import { useState } from "react";
 import {
-  Certificate01Icon,
-  Folder01Icon,
-  Image01Icon,
-  ImageNotFound01Icon,
+  CertificateIcon,
+  CodeIcon,
+  FolderIcon,
+  ImageBrokenIcon,
+  ImageIcon,
   PackageIcon,
-  SourceCodeIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import { AiTranslateIcon } from "@/components/ui/icons/AiTranslateIcon";
+  TranslateIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import { TechMark } from "@/components/ui/custom/tech-mark";
 import { NONE_BACKGROUND } from "@/components/backgrounds/registry";
 import type { ProjectArt } from "@/config/projects";
@@ -116,14 +116,14 @@ export function LogoTile({
   );
 }
 
-const iconTile = (icon: IconSvgElement, box: string, iconSize: string) => (
+const iconTile = (Glyph: Icon, box: string, iconSize: string) => (
   <span
     className={cn(
       box,
       "relative grid place-items-center bg-muted text-muted-foreground",
     )}
   >
-    <HugeiconsIcon icon={icon} strokeWidth={1.8} className={iconSize} />
+    <Glyph weight="regular" className={iconSize} />
     <Edge />
   </span>
 );
@@ -196,13 +196,7 @@ export function ResultTile({
         <LogoTile
           src={doc.logo}
           className={box}
-          fallback={
-            <HugeiconsIcon
-              icon={Certificate01Icon}
-              strokeWidth={1.8}
-              className={iconSize}
-            />
-          }
+          fallback={<CertificateIcon weight="regular" className={iconSize} />}
         />
       );
     case "theme": {
@@ -241,19 +235,19 @@ export function ResultTile({
       );
     }
     case "language":
-      return iconTile(AiTranslateIcon, box, iconSize);
+      return iconTile(TranslateIcon, box, iconSize);
     case "background":
       return iconTile(
-        doc.value === NONE_BACKGROUND ? ImageNotFound01Icon : Image01Icon,
+        doc.value === NONE_BACKGROUND ? ImageBrokenIcon : ImageIcon,
         box,
         iconSize,
       );
     case "service":
       return iconTile(SERVICE_ICONS[doc.service] ?? PackageIcon, box, iconSize);
     case "action":
-      return iconTile(SourceCodeIcon, box, iconSize);
+      return iconTile(CodeIcon, box, iconSize);
     case "page":
-      return iconTile(PAGE_ICONS[doc.to] ?? Folder01Icon, box, iconSize);
+      return iconTile(PAGE_ICONS[doc.to] ?? FolderIcon, box, iconSize);
   }
 }
 

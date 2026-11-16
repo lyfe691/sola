@@ -7,8 +7,7 @@
  */
 
 import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import { useReducedMotion } from "motion/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
@@ -375,9 +374,7 @@ const About = () => {
                 <span className="border-b border-dotted border-foreground/20 transition-colors duration-300 group-hover:border-primary">
                   {about.testimonials.link}
                 </span>
-                <HugeiconsIcon
-                  icon={ArrowRight01Icon}
-                  strokeWidth={2}
+                <CaretRightIcon
                   aria-hidden
                   className="size-3.5 shrink-0 transition-transform duration-300 ease-out can-hover:group-hover:translate-x-0.5"
                 />

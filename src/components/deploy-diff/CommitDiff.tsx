@@ -20,8 +20,7 @@ import {
   type CSSProperties,
 } from "react";
 import type { ThemedTokenWithVariants } from "shiki";
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import { FileTree } from "@/components/changelog/FileTree";
 import { Morph } from "@/components/Morph";
 import { fileTree } from "@/lib/github-commits";
@@ -208,9 +207,7 @@ function FileSection({
           open && "border-b border-border/60",
         )}
       >
-        <HugeiconsIcon
-          icon={ArrowRight01Icon}
-          strokeWidth={2}
+        <CaretRightIcon
           className={cn(
             "size-3.5 shrink-0 text-muted-foreground transition-transform duration-200",
             open && "rotate-90",

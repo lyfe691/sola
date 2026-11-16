@@ -7,8 +7,7 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { ArrowUpIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretUpIcon } from "@phosphor-icons/react";
 import {
   motion,
   AnimatePresence,
@@ -145,9 +144,8 @@ export default function ScrollToTop() {
           className="fixed right-5 bottom-5 z-50 flex size-11 items-center justify-center overflow-hidden rounded-2xl bg-background text-foreground/80 ring-1 ring-foreground/10 outline-none focus-visible:ring-2 focus-visible:ring-ring/50 sm:right-6 sm:bottom-6"
         >
           <WaterFill />
-          <HugeiconsIcon
-            icon={ArrowUpIcon}
-            strokeWidth={1.5}
+          <CaretUpIcon
+            weight="regular"
             aria-hidden
             className="relative size-3.5"
           />

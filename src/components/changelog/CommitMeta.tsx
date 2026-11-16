@@ -6,53 +6,50 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
 import {
-  BookOpen01Icon,
+  ArrowCounterClockwiseIcon,
+  BookOpenIcon,
+  FlaskIcon,
+  GearIcon,
   GitCommitIcon,
-  Note01Icon,
+  LightningIcon,
+  NotepadIcon,
   PackageIcon,
-  PaintBoardIcon,
+  PaletteIcon,
   RepeatIcon,
-  Settings01Icon,
-  SparklesIcon,
-  TestTube01Icon,
-  Undo02Icon,
-  WorkflowSquare01Icon,
-  Wrench01Icon,
-  ZapIcon,
-} from "@hugeicons/core-free-icons";
+  SparkleIcon,
+  TreeStructureIcon,
+  WrenchIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import { Badge } from "@/components/ui/badge";
 import { techIconForFile } from "@/config/tech-icons";
 import type { ChangelogStats } from "@/lib/github-commits";
 import { cn } from "@/lib/utils";
 
-const TYPE_ICON: Record<string, IconSvgElement> = {
-  feat: SparklesIcon,
-  fix: Wrench01Icon,
-  perf: ZapIcon,
-  style: PaintBoardIcon,
-  content: Note01Icon,
-  docs: BookOpen01Icon,
+const TYPE_ICON: Record<string, Icon> = {
+  feat: SparkleIcon,
+  fix: WrenchIcon,
+  perf: LightningIcon,
+  style: PaletteIcon,
+  content: NotepadIcon,
+  docs: BookOpenIcon,
   refactor: RepeatIcon,
-  test: TestTube01Icon,
+  test: FlaskIcon,
   build: PackageIcon,
-  chore: Settings01Icon,
-  ci: WorkflowSquare01Icon,
-  revert: Undo02Icon,
+  chore: GearIcon,
+  ci: TreeStructureIcon,
+  revert: ArrowCounterClockwiseIcon,
 };
 
 const BLOCKS = 5;
 const MAX_MARKS = 3;
 
 export function TypeChip({ type }: { type: string }) {
+  const TypeIcon = TYPE_ICON[type] ?? GitCommitIcon;
   return (
     <Badge variant="chip">
-      <HugeiconsIcon
-        icon={TYPE_ICON[type] ?? GitCommitIcon}
-        strokeWidth={2}
-        aria-hidden="true"
-      />
+      <TypeIcon aria-hidden="true" />
       {type}
     </Badge>
   );

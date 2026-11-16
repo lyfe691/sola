@@ -7,8 +7,7 @@
  */
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { SearchRemoveIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import {
   Command,
   CommandDialog,
@@ -248,11 +247,7 @@ function Palette({ mobile }: { mobile: boolean }) {
     <div className={cn("grid place-items-center px-6", height)}>
       <div className="flex max-w-sm flex-col items-center gap-4 text-center">
         <span className="grid size-12 place-items-center rounded-2xl bg-muted text-muted-foreground ring-1 ring-foreground/10">
-          <HugeiconsIcon
-            icon={SearchRemoveIcon}
-            strokeWidth={1.8}
-            className="size-5"
-          />
+          <MagnifyingGlassIcon weight="regular" className="size-5" />
         </span>
         <div className="flex flex-col gap-1">
           <p className="text-sm font-medium text-foreground">

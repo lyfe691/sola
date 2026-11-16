@@ -7,8 +7,7 @@
  */
 
 import { useState, useRef } from "react";
-import { SentIcon, Tick02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckIcon, PaperPlaneTiltIcon } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslation } from "@/lib/language-provider";
 import { Input } from "@/components/ui/input";
@@ -191,11 +190,7 @@ const Contact = () => {
                     className="flex items-start gap-3 text-sm text-foreground/70"
                   >
                     <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                      <HugeiconsIcon
-                        icon={Tick02Icon}
-                        strokeWidth={3}
-                        className="size-3 text-primary"
-                      />
+                      <CheckIcon className="size-3 text-primary" />
                     </span>
                     {item}
                   </Reveal>
@@ -317,11 +312,7 @@ const Contact = () => {
                     {isSubmitting ? (
                       <Spinner />
                     ) : (
-                      <HugeiconsIcon
-                        icon={SentIcon}
-                        strokeWidth={2}
-                        className="size-4"
-                      />
+                      <PaperPlaneTiltIcon className="size-4" />
                     )}
                   </Morph>
                 }

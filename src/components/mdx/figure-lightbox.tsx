@@ -41,11 +41,11 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import {
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  Cancel01Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+  CaretLeftIcon,
+  CaretRightIcon,
+  XIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import {
   AnimatePresence,
   animate,
@@ -250,14 +250,14 @@ function useStage(ref: RefObject<HTMLDivElement | null>) {
 }
 
 function RoundButton({
-  icon,
+  icon: Glyph,
   label,
   onPress,
   className,
   style,
   buttonRef,
 }: {
-  icon: IconSvgElement;
+  icon: Icon;
   label: string;
   onPress: () => void;
   className?: string;
@@ -284,12 +284,7 @@ function RoundButton({
         className,
       )}
     >
-      <HugeiconsIcon
-        icon={icon}
-        strokeWidth={2}
-        className="size-4.5"
-        aria-hidden="true"
-      />
+      <Glyph className="size-4.5" aria-hidden="true" />
     </button>
   );
 }
@@ -1117,7 +1112,7 @@ function Lightbox({
 
             <RoundButton
               buttonRef={closeRef}
-              icon={Cancel01Icon}
+              icon={XIcon}
               label={t.common.close}
               onPress={onClose}
               className="top-4 right-4 sm:top-6 sm:right-6"
@@ -1125,7 +1120,7 @@ function Lightbox({
             {many ? (
               <>
                 <RoundButton
-                  icon={ArrowLeft01Icon}
+                  icon={CaretLeftIcon}
                   label={t.common.previousImage}
                   onPress={() => onGo(index - 1)}
                   style={arrowAt}
@@ -1135,7 +1130,7 @@ function Lightbox({
                   )}
                 />
                 <RoundButton
-                  icon={ArrowRight01Icon}
+                  icon={CaretRightIcon}
                   label={t.common.nextImage}
                   onPress={() => onGo(index + 1)}
                   style={arrowAt}

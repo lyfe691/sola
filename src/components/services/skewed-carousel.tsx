@@ -24,8 +24,7 @@ import {
   type ReactNode,
 } from "react";
 import { motion, useInView, type PanInfo } from "motion/react";
-import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "@/lib/locale-router";
 import { cn } from "@/lib/utils";
@@ -205,7 +204,7 @@ export function SkewedCarousel({
           onClick={() => step(-1)}
           aria-label={previousLabel}
         >
-          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} />
+          <CaretLeftIcon />
         </Button>
         <div className="flex w-44 items-center gap-1.5 sm:w-56">
           {slides.map((slide, index) => (
@@ -233,7 +232,7 @@ export function SkewedCarousel({
           onClick={() => step(1)}
           aria-label={nextLabel}
         >
-          <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+          <CaretRightIcon />
         </Button>
       </div>
     </div>

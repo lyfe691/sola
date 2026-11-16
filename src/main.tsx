@@ -11,6 +11,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import { Analytics } from "@vercel/analytics/react";
+import { IconContext, type IconProps } from "@phosphor-icons/react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { preloadRoute } from "@/config/routes";
 import { preferredLanguage, readLanguage } from "@/lib/language-provider";
@@ -97,15 +98,22 @@ if (!rootElement) {
 preloadRoute(window.location.pathname);
 await loadTranslation(readLanguage()).catch(() => undefined);
 
+// The site was drawn with 2px strokes on a 24px icon: Phosphor's bold is the
+// weight that matches (regular reads light), and an icon with no size class
+// keeps that 24px box. Lighter call sites ask for weight="regular".
+const ICON_DEFAULTS: IconProps = { weight: "bold", size: 24 };
+
 // create root
 const root = createRoot(rootElement);
 
 // render app with strict mode
 root.render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <App />
-      <Analytics />
-    </ErrorBoundary>
+    <IconContext.Provider value={ICON_DEFAULTS}>
+      <ErrorBoundary>
+        <App />
+        <Analytics />
+      </ErrorBoundary>
+    </IconContext.Provider>
   </React.StrictMode>,
 );
