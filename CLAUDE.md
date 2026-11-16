@@ -85,9 +85,12 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   services in `t.services.services` and backed by two projects with a deep
   dive; site search and the page's Markdown twin read the same list. A
   screenshot there is always a `Stage` (the project's still cover, the whole
-  window, the same margin on every side) around a `Capture`, never the deep
-  dives' device frames: their corner radius is fixed and swallows the
-  toolbar at card size. A stage draws from files in `public/services/`: the
+  window, the same margin on every side) around a `ShotWindow`
+  (`src/components/windows/shot-window.tsx`): a web page in a browser
+  window, a command-line project as a terminal replaying one of its
+  sessions, drawn to scale and inert so it can sit inside a link. The bar's
+  menu previews are the same thing. A stage draws from files in
+  `public/services/`: the
   cover painted once (inline, its SVG blurs made the cards lag on phones)
   and the capture at card width. After changing a shot or a project's art
   run `bun run images:services` (a test fails when a file is missing). The
@@ -114,11 +117,17 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   stale). The size list also drives the figure layout: a gallery row shares
   one height with widths from each image's aspect ratio, and phone-only rows
   sit on a stage, so phone shots need no flag. `columns` = figures per row.
-- **Device frames**: `<Safari url="…" />` and `<IPhone />` are `<ProjectImage>`
-  with a frame (same props; Safari defaults to `size="full"`); in a gallery
-  give an image `frame: "safari" | "iphone"`. `video="/projects/<slug>/x.mp4"`
-  on any figure plays a muted clip in place: `src` is then its poster WebP
-  (in the size list — it reserves the box), and clips don't open the lightbox.
+- **Windows**: a deep dive frames a web page with `<BrowserWindow url="…"
+src="…" />`, a command-line run with `<Terminal session="…" alt="…" />` and
+  code that changes with `<CodeMorph steps={…} />`
+  (`src/components/mdx/windows.tsx` over the ports in
+  `src/components/windows/`, which load with the first article that shows
+  one). `<IPhone />` is a `<ProjectImage>` with a phone frame; in a gallery
+  give an image `frame: "browser" | "iphone"`. A terminal session lives in
+  `src/config/terminal-sessions.ts` and is a transcript of a real run: never
+  write one by hand to look right. `video="/projects/<slug>/x.mp4"` on a
+  figure plays a muted clip in place: `src` is then its poster WebP (in the
+  size list — it reserves the box), and clips don't open the lightbox.
 
 ## Styling
 
