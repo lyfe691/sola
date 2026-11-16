@@ -48,7 +48,7 @@ import { useDeepDiveBarPinned } from "@/hooks/use-deep-dive-bar-pinned";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import type { ProjectArt } from "@/config/projects";
-import { PaintedCover } from "@/components/painted-cover/PaintedCover";
+import { ArtField } from "@/components/stipple-gradient/ArtField";
 import { Link } from "@/lib/locale-router";
 
 /**
@@ -179,7 +179,7 @@ const BG_TO_TITLE_MS = 400;
 
 /**
  * Hero sequence (one GPU job at a time):
- *   1. base gradient → painted art fades in (WebGL free to run)
+ *   1. the stipple field reveals itself over its ground (WebGL free to run)
  *   2. freeze the art, then FoldText title (word panels)
  *   3. FoldText subtitle after title completes
  *   4. unfreeze the art
@@ -219,14 +219,7 @@ function DeepDiveHero({
 
   return (
     <div className="relative mb-6 h-[60vh] min-h-[400px] overflow-hidden rounded-3xl border-4 border-border shadow-lg shadow-black/5">
-      <PaintedCover
-        art={art}
-        size="hero"
-        scrim="dim"
-        paused={folding}
-        onReady={onArtReady}
-        className="absolute inset-0"
-      />
+      <ArtField art={art} paused={folding} onReady={onArtReady} />
 
       <div className="absolute inset-x-0 top-0 z-10 px-5 pt-4 sm:px-7 sm:pt-5">
         <DeepDiveTrail title={title} tone="hero" />

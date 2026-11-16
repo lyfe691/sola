@@ -96,6 +96,12 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   `src/components/services/`. Their source comes from the registry JSON with
   `REACTBITS_LICENSE_KEY` (`.env.local`), never through `shadcn add`, which
   overwrites `button.tsx`.
+- **Art fields**: a deep dive's hero and the Services page's closing stand on
+  `<ArtField art>` (`src/components/stipple-gradient/`): a project's colours as
+  React Bits Pro's Stipple Gradient, ported with its shader and numbers
+  untouched. It is WebGL on three, so `ArtField` loads it lazily; never import
+  `StippleGradient` statically. Its intro takes 2.8 seconds of drawn frames:
+  in a headless browser that is far longer, so wait before judging a capture.
 - **MDX code blocks**: inside `<CodeBlock code={`…`}>` write every line after
   the first with two extra spaces (MDX strips the attribute's indent at
   compile time, so the code would render two spaces short), and never leave a
