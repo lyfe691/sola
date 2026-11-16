@@ -1022,8 +1022,8 @@
     page-piece-in 420ms var(--ease-out-quart) both;
 }
 
-/* without a successor the properties are not set, and the old title fades
-   where it stands */
+/* without a successor the route ends where it starts (page-change.ts), and
+   the old title fades where it stands */
 @keyframes page-title-leave {
   to {
     transform: translate(var(--page-title-to-x), var(--page-title-to-y))

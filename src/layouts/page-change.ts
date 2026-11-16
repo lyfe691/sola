@@ -71,11 +71,16 @@ const barEdge = () =>
     ),
   );
 
-/** The page's title, when all of it stands in the window. */
+/**
+ * The page's title, when all of it stands in the window. A title that is
+ * read and not shown (sr-only) takes no room, and is nothing to carry: its
+ * neighbour's title would fly to that point and shrink away.
+ */
 function titleInWindow() {
   const title = document.querySelector<HTMLElement>("#main h1");
   if (!title?.innerText.trim()) return null;
-  const { top, bottom } = title.getBoundingClientRect();
+  const { top, bottom, width, height } = title.getBoundingClientRect();
+  if (width <= 1 || height <= 1) return null;
   return top >= 0 && bottom <= window.innerHeight ? title : null;
 }
 
@@ -161,7 +166,13 @@ function clear(
   const titleFrom =
     oldTitle && uncovered(oldTitle) ? oldTitle.getBoundingClientRect() : null;
   const picture = lifted && titleFrom ? oldTitle : null;
-  if (picture) picture.dataset.pageTitle = "out";
+  if (picture && titleFrom) {
+    picture.dataset.pageTitle = "out";
+    // until a successor is measured the picture's route ends where it
+    // starts: left unset, the travel's last keyframe has no transform and
+    // the picture slides to the window's corner as it fades
+    route(root, titleFrom, titleFrom, 1);
+  }
 
   const change: Change = {
     swappedAt: null,
