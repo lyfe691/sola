@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Tick02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckIcon } from "@phosphor-icons/react";
 import { TagRow } from "@/components/ui/custom/tag-row";
 import { excerpt, type SearchHit } from "@/lib/search/engine";
 import type { SiteDoc } from "@/lib/search/sources";
@@ -107,11 +106,7 @@ function Details({ doc }: { doc: SiteDoc }) {
               key={feature}
               className="flex min-w-0 items-center gap-1.5 text-xs text-foreground"
             >
-              <HugeiconsIcon
-                icon={Tick02Icon}
-                strokeWidth={2}
-                className="size-3.5 shrink-0 text-muted-foreground"
-              />
+              <CheckIcon className="size-3.5 shrink-0 text-muted-foreground" />
               <span className="truncate">{feature}</span>
             </li>
           ))}

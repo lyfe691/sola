@@ -18,8 +18,7 @@ import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { NAV_MENUS, NAV_PANEL_WIDTH, type NavMenuKey } from "@/config/nav-menu";
-import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { useGlidePill } from "./ui/custom/glide-pill";
 import { ContactMenu } from "./contact-menu";
 import { NavPanel } from "./nav-menu";
@@ -302,9 +301,7 @@ const DesktopNav = () => {
                     className={className}
                   >
                     {link.label}
-                    <HugeiconsIcon
-                      icon={ArrowDown01Icon}
-                      strokeWidth={2}
+                    <CaretDownIcon
                       aria-hidden="true"
                       className={cn(
                         "size-3.5 transition-transform duration-200 ease-out",

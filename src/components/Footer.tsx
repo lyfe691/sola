@@ -8,12 +8,11 @@
 
 import { useTranslation } from "@/lib/language-provider";
 import {
-  ArrowRight01Icon,
-  ArrowUpRight01Icon,
-  InformationCircleIcon,
-  Mail01Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+  ArrowUpRightIcon,
+  CaretRightIcon,
+  EnvelopeSimpleIcon,
+  InfoIcon,
+} from "@phosphor-icons/react";
 import {
   SOCIAL_BRAND_FILL,
   SOCIAL_LINKS,
@@ -61,11 +60,7 @@ const Footer = () => {
                 className="group inline-flex items-center space-x-2 font-heading text-2xl font-bold text-foreground transition-colors duration-200 ease-out hover:text-foreground/60"
               >
                 <span>YSZ</span>
-                <HugeiconsIcon
-                  icon={ArrowUpRight01Icon}
-                  strokeWidth={2}
-                  className="size-4 opacity-0 transition-opacity group-hover:opacity-100"
-                />
+                <ArrowUpRightIcon className="size-4 opacity-0 transition-opacity group-hover:opacity-100" />
               </Link>
               <p className="text-sm text-foreground/70 leading-relaxed">
                 {t.footer.madeWith} <span className="text-primary">♥</span>{" "}
@@ -82,11 +77,7 @@ const Footer = () => {
                 "group flex items-center gap-2 text-xs",
               )}
             >
-              <HugeiconsIcon
-                icon={InformationCircleIcon}
-                strokeWidth={2}
-                className="size-3.5 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover:rotate-12"
-              />
+              <InfoIcon className="size-3.5 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover:rotate-12" />
               <span className="border-b border-dotted border-current/40">
                 {t.footer.atw}
               </span>
@@ -101,11 +92,7 @@ const Footer = () => {
                 <div
                   className={`shrink-0 transition-transform duration-200 ease-out ${isLegalExpanded ? "rotate-90" : ""}`}
                 >
-                  <HugeiconsIcon
-                    icon={ArrowRight01Icon}
-                    strokeWidth={2}
-                    className="size-3.5"
-                  />
+                  <CaretRightIcon className="size-3.5" />
                 </div>
                 <span className="font-medium">{t.footer.legal}</span>
               </button>
@@ -123,11 +110,7 @@ const Footer = () => {
                       )}
                     >
                       {t.footer.privacy}
-                      <HugeiconsIcon
-                        icon={ArrowUpRight01Icon}
-                        strokeWidth={2}
-                        className="size-2.5 shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-                      />
+                      <ArrowUpRightIcon className="size-2.5 shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
                     </Link>
                   </div>
                 </div>
@@ -178,11 +161,7 @@ const Footer = () => {
                   "group flex w-full items-center gap-2 text-sm hover:cursor-copy",
                 )}
               >
-                <HugeiconsIcon
-                  icon={Mail01Icon}
-                  strokeWidth={2}
-                  className="size-4 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover:scale-110"
-                />
+                <EnvelopeSimpleIcon className="size-4 shrink-0 transition-transform duration-200 ease-out can-hover:group-hover:scale-110" />
                 {/* wider than this column between lg and ~1200px; the click
                     copies all of it either way, and the title shows the rest */}
                 <span
@@ -197,11 +176,7 @@ const Footer = () => {
                 className={cn(FOOTER_LINK, "flex items-center gap-1 text-sm")}
               >
                 {t.footer.contactForm}
-                <HugeiconsIcon
-                  icon={ArrowUpRight01Icon}
-                  strokeWidth={2}
-                  className="size-3 shrink-0"
-                />
+                <ArrowUpRightIcon className="size-3 shrink-0" />
               </Link>
             </div>
           </div>

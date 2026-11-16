@@ -11,8 +11,9 @@
  *   - brand marks: devicons-react first, colored by the brand; simple-icons
  *     (react-icons/si) where devicons has no mark or draws one that fails at
  *     tile size, in its brand colour via brand(); Motion's own mark, which
- *     no set ships yet
- *   - hugeicons — semantic glyphs for concept tags (i18n, CLI, Teamwork,
+ *     no set ships yet; Tabler's Office mark (react-icons/tb), the one
+ *     set that draws it
+ *   - Phosphor — semantic glyphs for concept tags (i18n, CLI, Teamwork,
  *     …); they inherit the chip's muted text color, so brands read colored
  *     and concepts read quiet
  * Anything unmapped falls back to the Tag glyph (TECH_ICON_FALLBACK) — add
@@ -22,35 +23,35 @@
 import { createElement, type ComponentProps, type ComponentType } from "react";
 import {
   AppWindowIcon,
-  BookOpen02Icon,
-  CableIcon,
-  CheckListIcon,
-  Chemistry01Icon,
-  ComputerTerminal01Icon,
+  BookOpenTextIcon,
   CpuIcon,
   CubeIcon,
   FileCodeIcon,
   FileZipIcon,
-  Folder01Icon,
-  FolderTreeIcon,
+  FolderIcon,
   GraduationCapIcon,
   HighlighterIcon,
-  Key01Icon,
+  KeyIcon,
+  LightningIcon,
+  ListChecksIcon,
+  MagnifyingGlassIcon,
+  PackageIcon,
+  PlugsIcon,
+  ShieldIcon,
+  SwordIcon,
+  TagIcon,
+  TargetIcon,
+  TerminalWindowIcon,
+  TestTubeIcon,
+  TextAaIcon,
   TranslateIcon,
-  Office365Icon,
-  Package01Icon,
-  RadarIcon,
-  SaleTag01Icon,
-  SearchIcon,
-  Shield01Icon,
-  Sword01Icon,
-  TextFontIcon,
-  UserGroupIcon,
-  Wifi01Icon,
-  WorkflowSquare01Icon,
-  ZapIcon,
-} from "@hugeicons/core-free-icons";
+  TreeStructureIcon,
+  TreeViewIcon,
+  UsersIcon,
+  WifiHighIcon,
+} from "@phosphor-icons/react";
 import { FaAws } from "react-icons/fa6";
+import { TbBrandOffice } from "react-icons/tb";
 import {
   SiBaseui,
   SiBurpsuite,
@@ -74,7 +75,6 @@ import {
   SiWireshark,
   SiZod,
 } from "react-icons/si";
-import { hugeIcon } from "@/lib/huge-icon";
 import { cn } from "@/lib/utils";
 import AntdesignOriginal from "devicons-react/icons/AntdesignOriginal";
 import BunOriginal from "devicons-react/icons/BunOriginal";
@@ -225,6 +225,7 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   Notion: NotionOriginal,
   npm: NpmOriginal,
   Obsidian: brand(SiObsidian, "#7C3AED"),
+  "Office 365": TbBrandOffice,
   OWASP: SiOwasp,
   PostgreSQL: PostgresqlOriginal,
   Postman: PostmanOriginal,
@@ -255,49 +256,48 @@ export const TECH_ICONS: Record<string, TechIcon> = {
   Zod: brand(SiZod, "#408AFF"),
   tokio: RustMark,
 
-  // ---- concept tags (hugeicons, monochrome) ----
-  "ASCII Art": hugeIcon(TextFontIcon),
-  "Active Directory": hugeIcon(FolderTreeIcon),
-  Async: hugeIcon(ZapIcon),
-  Automation: hugeIcon(WorkflowSquare01Icon),
-  CLI: hugeIcon(ComputerTerminal01Icon),
-  "Command Line Interface": hugeIcon(ComputerTerminal01Icon),
-  Detection: hugeIcon(RadarIcon),
-  Documentation: hugeIcon(BookOpen02Icon),
-  English: hugeIcon(TranslateIcon),
-  "Ethical Hacking": hugeIcon(Shield01Icon),
-  French: hugeIcon(TranslateIcon),
-  German: hugeIcon(TranslateIcon),
-  "Identity & Access Management (IAM)": hugeIcon(Key01Icon),
-  JSZip: hugeIcon(FileZipIcon),
-  MINT: hugeIcon(Chemistry01Icon),
-  Networking: hugeIcon(Wifi01Icon),
+  // ---- concept tags (Phosphor, monochrome) ----
+  "ASCII Art": TextAaIcon,
+  "Active Directory": TreeViewIcon,
+  Async: LightningIcon,
+  Automation: TreeStructureIcon,
+  CLI: TerminalWindowIcon,
+  "Command Line Interface": TerminalWindowIcon,
+  Detection: TargetIcon,
+  Documentation: BookOpenTextIcon,
+  English: TranslateIcon,
+  "Ethical Hacking": ShieldIcon,
+  French: TranslateIcon,
+  German: TranslateIcon,
+  "Identity & Access Management (IAM)": KeyIcon,
+  JSZip: FileZipIcon,
+  MINT: TestTubeIcon,
+  Networking: WifiHighIcon,
   // no vector mark exists at icon size (nmap.org ships a raster wordmark)
-  Nmap: hugeIcon(RadarIcon),
-  OSINT: hugeIcon(SearchIcon),
-  "Office 365": hugeIcon(Office365Icon),
-  OverTheWire: hugeIcon(Sword01Icon),
-  "Package Management": hugeIcon(Package01Icon),
-  "Project Management": hugeIcon(CheckListIcon),
-  SEO: hugeIcon(SearchIcon),
-  Shiki: hugeIcon(HighlighterIcon),
-  "System Information": hugeIcon(CpuIcon),
-  "TCP/UDP": hugeIcon(Wifi01Icon),
-  Teamwork: hugeIcon(UserGroupIcon),
-  Tutorial: hugeIcon(GraduationCapIcon),
-  "Virtual Machine": hugeIcon(CubeIcon),
-  WebSocket: hugeIcon(CableIcon),
-  "Windows API": hugeIcon(AppWindowIcon),
-  "cargo-dist": hugeIcon(Package01Icon),
-  i18n: hugeIcon(TranslateIcon),
+  Nmap: TargetIcon,
+  OSINT: MagnifyingGlassIcon,
+  OverTheWire: SwordIcon,
+  "Package Management": PackageIcon,
+  "Project Management": ListChecksIcon,
+  SEO: MagnifyingGlassIcon,
+  Shiki: HighlighterIcon,
+  "System Information": CpuIcon,
+  "TCP/UDP": WifiHighIcon,
+  Teamwork: UsersIcon,
+  Tutorial: GraduationCapIcon,
+  "Virtual Machine": CubeIcon,
+  WebSocket: PlugsIcon,
+  "Windows API": AppWindowIcon,
+  "cargo-dist": PackageIcon,
+  i18n: TranslateIcon,
   "shadcn/ui": SiShadcnui,
 };
 
 /** last-resort glyph so no chip is ever icon-less */
-export const TECH_ICON_FALLBACK: TechIcon = hugeIcon(SaleTag01Icon);
+export const TECH_ICON_FALLBACK: TechIcon = TagIcon;
 
-export const FOLDER_ICON: TechIcon = hugeIcon(Folder01Icon);
-const FILE_ICON: TechIcon = hugeIcon(FileCodeIcon);
+export const FOLDER_ICON: TechIcon = FolderIcon;
+const FILE_ICON: TechIcon = FileCodeIcon;
 
 const FILE_TECH: Record<string, string> = {
   ts: "TypeScript",

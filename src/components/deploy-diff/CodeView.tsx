@@ -26,8 +26,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation } from "react-router";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRightIcon, XIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -167,12 +166,7 @@ function GitHubLink({
       )}
     >
       {label}
-      <HugeiconsIcon
-        icon={ArrowUpRight01Icon}
-        strokeWidth={2}
-        className="size-3.5"
-        aria-hidden="true"
-      />
+      <ArrowUpRightIcon className="size-3.5" aria-hidden="true" />
     </a>
   );
 }
@@ -244,9 +238,7 @@ function ExitBubble({
             />
           }
         >
-          <HugeiconsIcon
-            icon={Cancel01Icon}
-            strokeWidth={2}
+          <XIcon
             className="size-4 -translate-x-1 translate-y-1"
             aria-hidden="true"
           />

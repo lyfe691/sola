@@ -8,8 +8,7 @@
 
 import { useRef } from "react";
 import { Command as CommandPrimitive } from "cmdk";
-import { Cancel01Icon, SearchIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { MagnifyingGlassIcon, XIcon } from "@phosphor-icons/react";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import { cn } from "@/lib/utils";
 
@@ -61,11 +60,7 @@ export function PaletteInput({
           )}
         />
         <InputGroupAddon>
-          <HugeiconsIcon
-            icon={SearchIcon}
-            strokeWidth={2}
-            className="size-4 shrink-0 opacity-50"
-          />
+          <MagnifyingGlassIcon className="size-4 shrink-0 opacity-50" />
           {scope && (
             <span className="flex h-6 shrink-0 items-center gap-1 rounded-full bg-background pr-0.5 pl-2.5 text-xs font-medium text-foreground shadow-xs ring-1 ring-foreground/5">
               {scope}
@@ -75,11 +70,7 @@ export function PaletteInput({
                 aria-label={clearScopeLabel}
                 className="relative grid size-5 cursor-pointer place-items-center rounded-full bg-muted-foreground/15 text-muted-foreground transition-colors after:absolute after:-inset-2 hover:bg-muted-foreground/25 hover:text-foreground"
               >
-                <HugeiconsIcon
-                  icon={Cancel01Icon}
-                  strokeWidth={2.5}
-                  className="size-2.5"
-                />
+                <XIcon className="size-2.5" />
               </button>
             </span>
           )}

@@ -11,12 +11,12 @@
 
 import { useRef, useState } from "react";
 import {
-  ArrowLeft01Icon,
-  Download01Icon,
-  Download04Icon,
-  LinkSquare02Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+  ArrowSquareOutIcon,
+  CaretLeftIcon,
+  DownloadIcon,
+  DownloadSimpleIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import { RichText } from "@/components/i18n/RichText";
 import { Morph, MorphSlot } from "@/components/Morph";
 import { PdfPages } from "@/components/pdf-pages";
@@ -100,11 +100,11 @@ function LanguageTabs({
 }
 
 function IconAction({
-  icon,
+  icon: Glyph,
   label,
   onClick,
 }: {
-  icon: IconSvgElement;
+  icon: Icon;
   label: string;
   onClick: () => void;
 }) {
@@ -120,7 +120,7 @@ function IconAction({
           />
         }
       >
-        <HugeiconsIcon icon={icon} strokeWidth={2} />
+        <Glyph />
       </TooltipTrigger>
       <TooltipContent side="bottom">{label}</TooltipContent>
     </Tooltip>
@@ -256,7 +256,7 @@ function ReaderView({
           autoFocus
           onClick={onBack}
         >
-          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} />
+          <CaretLeftIcon />
         </Button>
         <MorphSlot name="title" />
         <div className="ml-auto flex items-center gap-1.5">
@@ -267,12 +267,12 @@ function ReaderView({
             compact
           />
           <IconAction
-            icon={Download04Icon}
+            icon={DownloadIcon}
             label={copy.download}
             onClick={() => downloadResume(language)}
           />
           <IconAction
-            icon={LinkSquare02Icon}
+            icon={ArrowSquareOutIcon}
             label={copy.open}
             onClick={() => openResume(language)}
           />
@@ -315,13 +315,7 @@ export default function ResumeDialog() {
       size="lg"
       rim
       className="w-full sm:w-auto"
-      icon={
-        <HugeiconsIcon
-          icon={Download01Icon}
-          strokeWidth={2}
-          className="size-4"
-        />
-      }
+      icon={<DownloadSimpleIcon className="size-4" />}
       iconPosition="left"
       label={copy.buttonLabel}
       onClick={openDialog}

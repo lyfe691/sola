@@ -22,8 +22,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
-import { SquareLock02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { LockIcon } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { type FigureFrame, PHONE, SAFARI } from "./figure-layout";
 import { EDGE_BAND, EDGE_STOPS, edgeOf, inkOn } from "./frame-edge";
@@ -146,11 +145,7 @@ function SafariFrame({ url, children }: { url?: string; children: ReactNode }) {
           <span className="flex h-(--field-h) w-(--field-w) items-center justify-center gap-(--field-gap) rounded-(--field-radius) bg-(--frame-ink)/9 px-(--field-inset) text-(length:--field-text) leading-none text-(--frame-ink)/55">
             {url ? (
               <>
-                <HugeiconsIcon
-                  icon={SquareLock02Icon}
-                  strokeWidth={2}
-                  className="size-(--field-icon) shrink-0"
-                />
+                <LockIcon className="size-(--field-icon) shrink-0" />
                 <span className="min-w-0 truncate">{url}</span>
               </>
             ) : null}

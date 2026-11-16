@@ -13,11 +13,7 @@ import {
   useRef,
   type CSSProperties,
 } from "react";
-import {
-  ArrowExpandIcon,
-  ArrowUpRight01Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRightIcon, ArrowsOutSimpleIcon } from "@phosphor-icons/react";
 import { Reveal } from "@/components/Reveal";
 import { FigureLightboxProvider } from "@/components/mdx/figure-lightbox";
 import { FigureLightboxContext } from "@/components/mdx/figure-lightbox-context";
@@ -117,11 +113,7 @@ function Certificate({ cert, tilt }: { cert: Certification; tilt: string }) {
               away && "hidden",
             )}
           >
-            <HugeiconsIcon
-              icon={ArrowExpandIcon}
-              strokeWidth={2}
-              className="size-3.5"
-            />
+            <ArrowsOutSimpleIcon className="size-3.5" />
           </span>
         </button>
       </div>
@@ -152,11 +144,7 @@ function Certificate({ cert, tilt }: { cert: Certification; tilt: string }) {
             className="flex shrink-0 items-center gap-1 pt-px text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             {link.label}
-            <HugeiconsIcon
-              icon={ArrowUpRight01Icon}
-              strokeWidth={2}
-              className="size-3.5"
-            />
+            <ArrowUpRightIcon className="size-3.5" />
           </a>
         ) : null}
       </div>

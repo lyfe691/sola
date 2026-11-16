@@ -5,8 +5,7 @@ import { Select as SelectPrimitive } from "@base-ui/react/select"
 
 import { cn } from "@/lib/utils"
 import { useGlidePill } from "@/components/ui/custom/glide-pill"
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowDown01Icon, Tick02Icon, ArrowUp01Icon } from "@hugeicons/core-free-icons";
+import { CaretDownIcon, CaretUpIcon, CheckIcon } from "@phosphor-icons/react";
 
 // React Bits' GlideSelect: one pill glides between the rows instead of each
 // row lighting its own background, and a value picked from the menu blurs
@@ -108,7 +107,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon
         render={
-          <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} className="pointer-events-none size-4 text-muted-foreground transition-transform duration-200 ease-out data-popup-open:rotate-180 motion-reduce:transition-none" />
+          <CaretDownIcon className="pointer-events-none size-4 text-muted-foreground transition-transform duration-200 ease-out data-popup-open:rotate-180 motion-reduce:transition-none" />
         }
       />
     </SelectPrimitive.Trigger>
@@ -204,7 +203,7 @@ function SelectItem({
           <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
         }
       >
-        <HugeiconsIcon icon={Tick02Icon} strokeWidth={2} className="pointer-events-none" />
+        <CheckIcon className="pointer-events-none" />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   )
@@ -239,7 +238,7 @@ function SelectScrollUpButton({
       )}
       {...props}
     >
-      <HugeiconsIcon icon={ArrowUp01Icon} strokeWidth={2} />
+      <CaretUpIcon />
     </SelectPrimitive.ScrollUpArrow>
   )
 }
@@ -257,7 +256,7 @@ function SelectScrollDownButton({
       )}
       {...props}
     >
-      <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
+      <CaretDownIcon />
     </SelectPrimitive.ScrollDownArrow>
   )
 }

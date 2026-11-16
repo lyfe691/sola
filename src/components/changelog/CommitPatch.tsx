@@ -8,8 +8,7 @@
 
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import type { ThemedTokenWithVariants } from "shiki";
-import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { Morph } from "@/components/Morph";
 import { Button } from "@/components/ui/button";
 import {
@@ -159,11 +158,7 @@ export function CommitPatch({ file }: { file: ChangelogFile }) {
             aria-controls={contentId}
             onClick={toggle}
           >
-            <HugeiconsIcon
-              icon={ArrowDown01Icon}
-              strokeWidth={2}
-              className="transition-transform in-aria-expanded:rotate-180"
-            />
+            <CaretDownIcon className="transition-transform in-aria-expanded:rotate-180" />
             {expanded ? t.showLess : t.showMore}
           </Button>
         </CodeBlockFooter>

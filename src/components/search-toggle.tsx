@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { SearchIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { Button } from "./ui/button";
 import { Kbd } from "./ui/kbd";
 import { loadCommandMenu, useCommandMenu } from "@/hooks/use-command-menu";
@@ -36,7 +35,7 @@ export function SearchToggle() {
           />
         }
       >
-        <HugeiconsIcon icon={SearchIcon} strokeWidth={2} />
+        <MagnifyingGlassIcon />
       </TooltipTrigger>
       <TooltipContent side="bottom">
         {t.common.search}

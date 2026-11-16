@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { Tick02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckIcon } from "@phosphor-icons/react";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { LANGUAGES } from "@/config/languages";
 import { cn } from "@/lib/utils";
@@ -47,11 +46,7 @@ export function LanguageMenuContent({ onClose }: { onClose: () => void }) {
               {label}
             </span>
             {isSelected && (
-              <HugeiconsIcon
-                icon={Tick02Icon}
-                strokeWidth={2}
-                className="size-4 shrink-0 text-muted-foreground"
-              />
+              <CheckIcon className="size-4 shrink-0 text-muted-foreground" />
             )}
           </button>
         );

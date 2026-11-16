@@ -9,8 +9,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "motion/react";
-import { Cancel01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { XIcon } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/lib/language-provider";
@@ -120,11 +119,7 @@ export function UpdateNotification() {
               aria-label={t.dismiss}
               className="absolute top-2 right-2 flex size-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             >
-              <HugeiconsIcon
-                icon={Cancel01Icon}
-                strokeWidth={2}
-                className="size-3.5"
-              />
+              <XIcon className="size-3.5" />
             </button>
 
             <div className="flex items-start gap-3 pr-7">

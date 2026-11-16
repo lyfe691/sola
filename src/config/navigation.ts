@@ -6,8 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { HomeIcon } from "@hugeicons/core-free-icons";
-import { hugeIcon } from "@/lib/huge-icon";
+import { HouseIcon } from "@phosphor-icons/react";
 import type { ElementType } from "react";
 import { type Translation } from "@/lib/translations";
 
@@ -24,7 +23,7 @@ export const MAIN_NAVIGATION: NavigationItem[] = [
   {
     key: "home",
     path: "/",
-    icon: hugeIcon(HomeIcon),
+    icon: HouseIcon,
     translationKey: "home",
   },
   {

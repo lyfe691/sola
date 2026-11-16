@@ -2,8 +2,8 @@
 
 Vite 8 + React 19 + TypeScript strict + Tailwind v4, deployed on Vercel.
 `api/` holds Vercel serverless functions (GitHub activity proxy, version).
-`vite/` holds the build plugins: dev API proxy, changelog snapshot, per-icon
-Hugeicons imports, the route + font preloads written into index.html
+`vite/` holds the build plugins: dev API proxy, changelog snapshot, the
+route + font preloads written into index.html
 (route-preload reads `src/config/routes.ts`: keep each route's `path` before
 its page `import`, or the build fails and says so), and seo-pages (one baked
 HTML file per page, the sitemap and 404.html; see Structure rules).
@@ -124,6 +124,10 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   amethyst) trigger it. Never gate on `.dark` directly.
 - `src/components/ui/` is vendored shadcn/base-ui: prettier-ignored, keeps
   upstream style; don't reformat it.
+- Icons are Phosphor (`@phosphor-icons/react`, imported by name). `main.tsx`
+  sets the defaults through `IconContext`: bold, the weight of the site's
+  2px-on-24 strokes, and a 24px box for an icon with no size class. A call
+  site passes `weight="regular"` only where it wants the lighter line.
 - `can-hover:` custom variant gates hover-_movement_ (touch taps fire
   phantom hovers). Color-only hovers don't need it.
 - Surfaces are solid: a fill is a whole token (`bg-card` for a card,

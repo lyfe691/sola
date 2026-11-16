@@ -11,8 +11,7 @@
  * already about that offering.
  */
 
-import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import { SERVICE_ICONS } from "@/components/command-palette/icons";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -41,36 +40,35 @@ export function ContactMenu() {
         <DropdownMenuTrigger
           render={
             <Button size="icon" aria-label={t.services.getStarted}>
-              <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
+              <CaretDownIcon />
             </Button>
           }
         />
         <DropdownMenuContent align="end" sideOffset={8} className="w-80">
           <DropdownMenuGroup>
-            {OFFERINGS.map(({ key, service }) => (
-              <DropdownMenuItem
-                key={key}
-                render={<Link to={contactUrl(t, service)} />}
-                className="items-start gap-3 py-2.5"
-              >
-                <HugeiconsIcon
-                  icon={SERVICE_ICONS[service]}
-                  strokeWidth={1.8}
-                  className="mt-0.5 size-4.5"
-                />
-                <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                  {t.services.page.offerings[key].name}
-                  {/* stays quiet under the highlight: the item would turn
+            {OFFERINGS.map(({ key, service }) => {
+              const ServiceIcon = SERVICE_ICONS[service];
+              return (
+                <DropdownMenuItem
+                  key={key}
+                  render={<Link to={contactUrl(t, service)} />}
+                  className="items-start gap-3 py-2.5"
+                >
+                  <ServiceIcon className="mt-0.5 size-4.5" />
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    {t.services.page.offerings[key].name}
+                    {/* stays quiet under the highlight: the item would turn
                       everything in it to full ink */}
-                  <span className="text-xs leading-snug font-normal text-muted-foreground!">
-                    {t.services.page.offerings[key].line}
+                    <span className="text-xs leading-snug font-normal text-muted-foreground!">
+                      {t.services.page.offerings[key].line}
+                    </span>
                   </span>
-                </span>
-                <span className="absolute top-3 right-3 opacity-0 transition-opacity duration-150 ease-out group-focus/dropdown-menu-item:opacity-100">
-                  <MorphArrow />
-                </span>
-              </DropdownMenuItem>
-            ))}
+                  <span className="absolute top-3 right-3 opacity-0 transition-opacity duration-150 ease-out group-focus/dropdown-menu-item:opacity-100">
+                    <MorphArrow />
+                  </span>
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

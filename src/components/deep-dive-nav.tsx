@@ -18,8 +18,7 @@
 import { useEffect, useState, type CSSProperties, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { motion, useIsPresent } from "motion/react";
-import { ArrowDown01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { CaretDownIcon } from "@phosphor-icons/react";
 import {
   Tooltip,
   TooltipContent,
@@ -269,9 +268,7 @@ export function DeepDiveSectionMenu({ sections, activeId }: SectionNavProps) {
           <span className="min-w-0 truncate px-6 font-medium text-foreground">
             {current?.label ?? t.common.onThisPage}
           </span>
-          <HugeiconsIcon
-            icon={ArrowDown01Icon}
-            strokeWidth={2}
+          <CaretDownIcon
             aria-hidden="true"
             className={cn(
               "absolute right-0 size-4 shrink-0 text-muted-foreground transition-transform duration-300 ease-out",

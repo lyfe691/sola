@@ -21,11 +21,10 @@
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import {
-  ArrowLeft02Icon,
-  CodeXmlIcon,
-  SearchIcon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+  ArrowLeftIcon,
+  CodeIcon,
+  MagnifyingGlassIcon,
+} from "@phosphor-icons/react";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -79,12 +78,7 @@ function DeepDiveTrail({
               hero && "hover:text-white",
             )}
           >
-            <HugeiconsIcon
-              icon={ArrowLeft02Icon}
-              strokeWidth={2}
-              className="size-3.5"
-              aria-hidden="true"
-            />
+            <ArrowLeftIcon className="size-3.5" aria-hidden="true" />
             {t.nav.projects}
           </BreadcrumbLink>
         </BreadcrumbItem>
@@ -130,12 +124,7 @@ function CodeViewChip({ source }: { source: string }) {
           />
         }
       >
-        <HugeiconsIcon
-          icon={CodeXmlIcon}
-          strokeWidth={2}
-          className="size-3.5"
-          aria-hidden="true"
-        />
+        <CodeIcon className="size-3.5" aria-hidden="true" />
         <span className="font-mono">{source}</span>
         <span className="sr-only">{t.common.diff.showDiff}</span>
       </HoverCardTrigger>
@@ -161,7 +150,7 @@ function SearchField() {
   return (
     <InputGroup className="h-8 w-32 shrink-0 sm:w-56 lg:w-64">
       <InputGroupAddon>
-        <HugeiconsIcon icon={SearchIcon} strokeWidth={2} aria-hidden="true" />
+        <MagnifyingGlassIcon aria-hidden="true" />
       </InputGroupAddon>
       <InputGroupText className="min-w-0 flex-1">
         <span className="truncate pl-1.5">

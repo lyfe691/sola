@@ -18,8 +18,7 @@ import {
   useRef,
   type CSSProperties,
 } from "react";
-import { ArrowExpandIcon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowsOutSimpleIcon } from "@phosphor-icons/react";
 import { PROJECT_IMAGE_SIZES } from "@/config/project-image-sizes";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
@@ -150,11 +149,7 @@ function Thumbnail({
           away && "hidden",
         )}
       >
-        <HugeiconsIcon
-          icon={ArrowExpandIcon}
-          strokeWidth={2}
-          className="size-3.5"
-        />
+        <ArrowsOutSimpleIcon className="size-3.5" />
       </span>
     </button>
   );

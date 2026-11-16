@@ -13,8 +13,7 @@
 
 import { Suspense, useEffect, useState, type ReactNode } from "react";
 import snapshot from "virtual:changelog-snapshot";
-import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
-import { Folder01Icon, SourceCodeIcon } from "@hugeicons/core-free-icons";
+import { CodeIcon, FolderIcon, type Icon } from "@phosphor-icons/react";
 import {
   BACKGROUNDS,
   NONE_BACKGROUND,
@@ -65,9 +64,9 @@ const Centered = ({ children }: { children: ReactNode }) => (
   </div>
 );
 
-const BigIcon = ({ icon }: { icon: IconSvgElement }) => (
+const BigIcon = ({ icon: Glyph }: { icon: Icon }) => (
   <span className="grid size-14 place-items-center rounded-2xl bg-background text-foreground shadow-sm ring-1 ring-foreground/10">
-    <HugeiconsIcon icon={icon} strokeWidth={1.6} className="size-6" />
+    <Glyph weight="regular" className="size-6" />
   </span>
 );
 
@@ -258,7 +257,7 @@ function PageStage({ to }: { to: string }) {
   }
   return (
     <Centered>
-      <BigIcon icon={PAGE_ICONS[to] ?? Folder01Icon} />
+      <BigIcon icon={PAGE_ICONS[to] ?? FolderIcon} />
     </Centered>
   );
 }
@@ -443,7 +442,7 @@ export function Stage({ doc }: { doc: SiteDoc }) {
       return (
         <Frame>
           <Centered>
-            <BigIcon icon={SERVICE_ICONS[doc.service] ?? Folder01Icon} />
+            <BigIcon icon={SERVICE_ICONS[doc.service] ?? FolderIcon} />
             <span className="text-sm font-medium text-foreground">
               {doc.context}
             </span>
@@ -487,7 +486,7 @@ export function Stage({ doc }: { doc: SiteDoc }) {
       return (
         <Frame>
           <Centered>
-            <BigIcon icon={SourceCodeIcon} />
+            <BigIcon icon={CodeIcon} />
           </Centered>
         </Frame>
       );

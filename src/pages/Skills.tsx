@@ -7,8 +7,7 @@
  */
 
 import { useState, type ReactNode } from "react";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { CaretRightIcon } from "@phosphor-icons/react";
 import { useTranslation } from "@/lib/language-provider";
 import {
   EVERY_PROJECT,
@@ -70,9 +69,7 @@ function SkillRowBody({
         </span>
       </span>
       {openable ? (
-        <HugeiconsIcon
-          icon={ArrowRight01Icon}
-          strokeWidth={2}
+        <CaretRightIcon
           aria-hidden="true"
           className="size-4 shrink-0 text-muted-foreground/50 transition-[translate,color] duration-200 ease-out group-data-active:text-foreground can-hover:group-hover:translate-x-0.5 can-hover:group-hover:text-foreground"
         />

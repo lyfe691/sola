@@ -9,17 +9,15 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
-  ArrowRight01Icon,
-  CodeXmlIcon,
-  Image01Icon,
-  PaintBoardIcon,
-  SparklesIcon,
-  Tick02Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+  CaretRightIcon,
+  CheckIcon,
+  CodeIcon,
+  ImageIcon,
+  PaletteIcon,
+  SparkleIcon,
+} from "@phosphor-icons/react";
 import { useTheme } from "./theme-provider";
 import { THEMES, type Theme, type ThemeIcon } from "@/config/themes";
-import { hugeIcon } from "@/lib/huge-icon";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { MenuHint } from "@/components/menu-hint";
@@ -33,9 +31,6 @@ import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 
 const iconClass = "size-4 shrink-0 text-muted-foreground";
-const ThemesBranchIcon = hugeIcon(PaintBoardIcon);
-const CustomThemesBranchIcon = hugeIcon(SparklesIcon);
-const BackgroundBranchIcon = hugeIcon(Image01Icon);
 
 /**
  * An expandable tree node: a header that toggles an indented list of children.
@@ -70,9 +65,7 @@ function TreeBranch({
           onClick={onToggle}
           className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
         >
-          <HugeiconsIcon
-            icon={ArrowRight01Icon}
-            strokeWidth={2}
+          <CaretRightIcon
             className={cn(
               "size-3.5 shrink-0 text-muted-foreground transition-transform duration-200",
               isOpen && "rotate-90",
@@ -135,13 +128,7 @@ function TreeLeaf({
         {Icon && <Icon className={iconClass} aria-hidden="true" />}
         <span className="truncate">{label}</span>
       </span>
-      {isSelected && (
-        <HugeiconsIcon
-          icon={Tick02Icon}
-          strokeWidth={2}
-          className={iconClass}
-        />
-      )}
+      {isSelected && <CheckIcon className={iconClass} />}
     </button>
   );
 }
@@ -320,7 +307,7 @@ export function ThemeMenuContent({
         }}
       >
         <TreeBranch
-          icon={ThemesBranchIcon}
+          icon={PaletteIcon}
           label={t.common.menu.themes}
           isOpen={isExpanded("themes")}
           onToggle={() => toggleBranch("themes")}
@@ -330,7 +317,7 @@ export function ThemeMenuContent({
           {THEMES.filter((o) => !o.isCustom).map(renderThemeLeaf)}
 
           <TreeBranch
-            icon={CustomThemesBranchIcon}
+            icon={SparkleIcon}
             label={t.common.menu.customThemes}
             isOpen={isExpanded("custom")}
             onToggle={() => toggleBranch("custom")}
@@ -367,7 +354,7 @@ export function ThemeMenuContent({
       </div>
 
       <TreeBranch
-        icon={BackgroundBranchIcon}
+        icon={ImageIcon}
         label={t.common.menu.background}
         accessory={<MenuHint text={t.common.backgroundHints.section} />}
         isOpen={isExpanded("background")}
@@ -399,12 +386,7 @@ export function ThemeMenuContent({
             />
           }
         >
-          <HugeiconsIcon
-            icon={CodeXmlIcon}
-            strokeWidth={2}
-            className={iconClass}
-            aria-hidden="true"
-          />
+          <CodeIcon className={iconClass} aria-hidden="true" />
           <span className="min-w-0 flex-1 truncate text-left">
             {t.common.diff.showDiff}
           </span>

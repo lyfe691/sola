@@ -7,16 +7,15 @@
  */
 
 import {
-  ArrowUpRight01Icon,
-  BlendIcon,
-  Briefcase01Icon,
-  Building02Icon,
-  CalendarDaysIcon,
-  Home03Icon,
-  Location01Icon,
-} from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { hugeIcon, type HugeGlyph } from "@/lib/huge-icon";
+  ArrowUpRightIcon,
+  BriefcaseIcon,
+  BuildingIcon,
+  CalendarDotsIcon,
+  HouseIcon,
+  IntersectIcon,
+  MapPinIcon,
+  type Icon as PhosphorIcon,
+} from "@phosphor-icons/react";
 import CompanyLogo from "@/components/experience/CompanyLogo";
 import { TagRow } from "@/components/ui/custom/tag-row";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
@@ -32,13 +31,10 @@ interface ExperienceItemProps {
   locationLabel: string;
 }
 
-const BriefcaseGlyph = hugeIcon(Briefcase01Icon);
-const MapPinGlyph = hugeIcon(Location01Icon);
-
-const LOCATION_TYPE_ICON: Record<LocationType, HugeGlyph> = {
-  onsite: hugeIcon(Building02Icon),
-  remote: hugeIcon(Home03Icon),
-  hybrid: hugeIcon(BlendIcon),
+const LOCATION_TYPE_ICON: Record<LocationType, PhosphorIcon> = {
+  onsite: BuildingIcon,
+  remote: HouseIcon,
+  hybrid: IntersectIcon,
 };
 
 /** A small muted icon + label pair used across the meta row. */
@@ -46,7 +42,7 @@ const MetaItem = ({
   icon: Icon,
   label,
 }: {
-  icon: HugeGlyph;
+  icon: PhosphorIcon;
   label: string;
 }) => (
   <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
@@ -99,9 +95,7 @@ const ExperienceItem = ({
               <span className="border-b border-dotted border-foreground/20 group-hover:border-primary transition-colors duration-300">
                 {entry.company}
               </span>
-              <HugeiconsIcon
-                icon={ArrowUpRight01Icon}
-                strokeWidth={2}
+              <ArrowUpRightIcon
                 aria-hidden="true"
                 className="size-3.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
               />
@@ -119,13 +113,9 @@ const ExperienceItem = ({
 
         {/* meta — icon-led, wraps as whole units on small screens */}
         <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-          {isWork && <MetaItem icon={BriefcaseGlyph} label={employmentLabel} />}
+          {isWork && <MetaItem icon={BriefcaseIcon} label={employmentLabel} />}
           <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono lg:hidden">
-            <HugeiconsIcon
-              icon={CalendarDaysIcon}
-              strokeWidth={2}
-              className="size-3.5 shrink-0 text-muted-foreground/70"
-            />
+            <CalendarDotsIcon className="size-3.5 shrink-0 text-muted-foreground/70" />
             <span>
               {entry.period}
               <span className="text-muted-foreground/60">
@@ -134,7 +124,7 @@ const ExperienceItem = ({
               </span>
             </span>
           </span>
-          <MetaItem icon={MapPinGlyph} label={entry.location} />
+          <MetaItem icon={MapPinIcon} label={entry.location} />
           {isWork && <MetaItem icon={ModeIcon} label={locationLabel} />}
         </div>
 

@@ -7,22 +7,21 @@
  */
 
 import {
+  DiamondIcon,
   FireIcon,
-  GemIcon,
-  HologramIcon,
+  FlowerIcon,
   LaptopIcon,
-  Moon02Icon,
-  PineTreeIcon,
-  Plant02Icon,
-  SakuraIcon,
-  SnowIcon,
-  Sun03Icon,
-  SunsetIcon,
-} from "@hugeicons/core-free-icons";
-import { hugeIcon } from "@/lib/huge-icon";
+  MoonIcon,
+  PlantIcon,
+  SnowflakeIcon,
+  SunHorizonIcon,
+  SunIcon,
+  TreeEvergreenIcon,
+  UserFocusIcon,
+} from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 
-// the prop surface of a hugeIcon glyph; a concrete type keeps
+// the prop surface of a Phosphor glyph; a concrete type keeps
 // <Icon className/aria-hidden> call sites type-checkable
 export type ThemeIcon = ComponentType<{
   className?: string;
@@ -43,77 +42,77 @@ export const THEMES = [
   {
     value: "light",
     label: "Light",
-    icon: hugeIcon(Sun03Icon),
+    icon: SunIcon,
     isCustom: false,
     type: "light",
   },
   {
     value: "dark",
     label: "Dark",
-    icon: hugeIcon(Moon02Icon),
+    icon: MoonIcon,
     isCustom: false,
     type: "dark",
   },
   {
     value: "system",
     label: "System",
-    icon: hugeIcon(LaptopIcon),
+    icon: LaptopIcon,
     isCustom: false,
     type: "light",
   }, // system handled via getThemeType
   {
     value: "life",
     label: "Solarpunk",
-    icon: hugeIcon(Plant02Icon),
+    icon: PlantIcon,
     isCustom: true,
     type: "light",
   },
   {
     value: "sakura",
     label: "Sakura",
-    icon: hugeIcon(SakuraIcon),
+    icon: FlowerIcon,
     isCustom: true,
     type: "light",
   },
   {
     value: "glacier",
     label: "Glacier",
-    icon: hugeIcon(SnowIcon),
+    icon: SnowflakeIcon,
     isCustom: true,
     type: "light",
   },
   {
     value: "dune",
     label: "Dune",
-    icon: hugeIcon(SunsetIcon),
+    icon: SunHorizonIcon,
     isCustom: true,
     type: "light",
   },
   {
     value: "cyber",
     label: "Cyberpunk",
-    icon: hugeIcon(HologramIcon),
+    icon: UserFocusIcon,
     isCustom: true,
     type: "dark",
   },
   {
     value: "forest",
     label: "Forest",
-    icon: hugeIcon(PineTreeIcon),
+    icon: TreeEvergreenIcon,
     isCustom: true,
     type: "dark",
   },
   {
     value: "amethyst",
     label: "Amethyst",
-    icon: hugeIcon(GemIcon),
+    icon: DiamondIcon,
     isCustom: true,
     type: "dark",
   },
   {
     value: "ember",
     label: "Ember",
-    icon: hugeIcon(FireIcon),
+    icon: FireIcon,
     isCustom: true,
     type: "dark",
   },

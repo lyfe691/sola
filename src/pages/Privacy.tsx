@@ -21,8 +21,7 @@ import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { INTL_LOCALE } from "@/lib/dates";
 import { LinkPreview } from "@/components/ui/custom/link-preview";
 import { IconButton } from "@/components/ui/custom/icon-button";
-import { ArrowLeft02Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/card";
 import { Link, useNavigate } from "@/lib/locale-router";
 
@@ -1034,13 +1033,7 @@ const Privacy = () => {
 
         <Reveal className="mt-16">
           <IconButton
-            icon={
-              <HugeiconsIcon
-                icon={ArrowLeft02Icon}
-                strokeWidth={2}
-                className="size-4"
-              />
-            }
+            icon={<ArrowLeftIcon className="size-4" />}
             variant="ghost"
             size="sm"
             iconPosition="left"

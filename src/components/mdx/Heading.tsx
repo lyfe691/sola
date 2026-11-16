@@ -15,8 +15,7 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from "react";
-import { Link01Icon } from "@hugeicons/core-free-icons";
-import { HugeiconsIcon } from "@hugeicons/react";
+import { LinkIcon } from "@phosphor-icons/react";
 import { useTranslation } from "@/lib/language-provider";
 import { slugify } from "@/lib/slug";
 import { cn } from "@/lib/utils";
@@ -84,12 +83,7 @@ export function HeadingLink({ id, children }: HeadingLinkProps) {
           "focus-visible:ring-2 focus-visible:ring-ring/40",
         )}
       >
-        <HugeiconsIcon
-          icon={Link01Icon}
-          strokeWidth={2.25}
-          className="size-[0.75em]"
-          aria-hidden="true"
-        />
+        <LinkIcon className="size-[0.75em]" aria-hidden="true" />
       </a>
     </>
   );
