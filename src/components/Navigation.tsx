@@ -134,7 +134,7 @@ const DesktopNav = () => {
   // one fill for the links, gliding to the one under the pointer; it waits
   // on a link whose menu is open
   const glide = useGlidePill();
-  const hidePill = glide.hide;
+  const linksRef = useRef<HTMLElement>(null);
 
   // Contact is the bar's button, not one of its links
   const links = MAIN_NAVIGATION.slice(1)
@@ -149,12 +149,13 @@ const DesktopNav = () => {
   const isActive = (path: string) =>
     location.pathname === path || location.pathname.startsWith(`${path}/`);
 
-  const close = useCallback(() => {
+  // the fill follows the pointer: a menu closing takes it away only once the
+  // pointer has left the links, not when it has moved on to the next one
+  const close = () => {
     window.clearTimeout(leaving.current);
     setMenu(null);
-    hidePill();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- hide only sets state
-  }, []);
+    if (!linksRef.current?.matches(":hover")) glide.hide();
+  };
   useEffect(() => () => window.clearTimeout(leaving.current), []);
 
   // under its link, moved left as far as it takes to stay inside the bar
@@ -173,10 +174,7 @@ const DesktopNav = () => {
   // a pointer on its way from the link to the panel leaves both for a moment
   const closeSoon = () => {
     window.clearTimeout(leaving.current);
-    leaving.current = window.setTimeout(() => {
-      setMenu(null);
-      hidePill();
-    }, 150);
+    leaving.current = window.setTimeout(close, 150);
   };
   // Tab walks from a link into its menu, and out of the menu's far end to
   // whatever follows the link in the bar: the panel sits after the links in
@@ -234,6 +232,7 @@ const DesktopNav = () => {
           />
 
           <nav
+            ref={linksRef}
             aria-label={t.common.a11y.primaryNav}
             className="relative isolate -ml-3 flex items-center"
             onPointerOver={(event) => {
