@@ -18,7 +18,7 @@ import { useMobileMenu } from "@/hooks/use-mobile-menu";
 import { cn } from "@/lib/utils";
 import { MAIN_NAVIGATION } from "@/config/navigation";
 import { NAV_MENUS, NAV_PANEL_WIDTH, type NavMenuKey } from "@/config/nav-menu";
-import { CaretDownIcon } from "@phosphor-icons/react";
+import { FlipChevron } from "./ui/custom/flip-chevron";
 import { useGlidePill } from "./ui/custom/glide-pill";
 import { ContactMenu } from "./contact-menu";
 import { NavPanel } from "./nav-menu";
@@ -308,13 +308,7 @@ const DesktopNav = () => {
                     className={className}
                   >
                     {link.label}
-                    <CaretDownIcon
-                      aria-hidden="true"
-                      className={cn(
-                        "size-3.5 transition-transform duration-200 ease-out",
-                        expanded && "rotate-180",
-                      )}
-                    />
+                    <FlipChevron open={expanded} className="size-3.5" />
                   </Link>
                 </div>
               );

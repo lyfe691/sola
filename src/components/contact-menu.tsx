@@ -11,7 +11,7 @@
  * already about that offering.
  */
 
-import { CaretDownIcon } from "@phosphor-icons/react";
+import { useState } from "react";
 import { useLocation } from "react-router";
 import { SERVICE_ICONS } from "@/components/command-palette/icons";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { FlipChevron } from "@/components/ui/custom/flip-chevron";
 import { MorphArrow } from "@/components/ui/custom/morph-arrow";
 import { OFFERINGS } from "@/config/services";
 import { contactUrl } from "@/lib/contact-url";
@@ -32,6 +33,7 @@ import { Link } from "@/lib/locale-router";
 export function ContactMenu() {
   const t = useTranslation();
   const { pathname } = useLocation();
+  const [open, setOpen] = useState(false);
 
   return (
     <ButtonGroup>
@@ -42,13 +44,13 @@ export function ContactMenu() {
       >
         {t.nav.contact}
       </Button>
-      <DropdownMenu>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger
           openOnHover
           delay={0}
           render={
             <Button size="icon" aria-label={t.services.getStarted}>
-              <CaretDownIcon className="transition-transform duration-200 ease-out group-data-popup-open/button:rotate-180" />
+              <FlipChevron open={open} />
             </Button>
           }
         />
