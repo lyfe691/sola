@@ -87,7 +87,11 @@ Package manager is bun — use `bun install`/`bun run <script>`, not npm/npx.
   screenshot there is always a `Stage` (the project's still cover, the whole
   window, the same margin on every side) around a `Capture`, never the deep
   dives' device frames: their corner radius is fixed and swallows the
-  toolbar at card size. The carousel, the statement's highlight and the
+  toolbar at card size. A stage draws from files in `public/services/`: the
+  cover painted once (inline, its SVG blurs made the cards lag on phones)
+  and the capture at card width. After changing a shot or a project's art
+  run `bun run images:services` (a test fails when a file is missing). The
+  carousel, the statement's highlight and the
   tiles' tilt are React Bits Pro components ported into
   `src/components/services/`. Their source comes from the registry JSON with
   `REACTBITS_LICENSE_KEY` (`.env.local`), never through `shadcn add`, which

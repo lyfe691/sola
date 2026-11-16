@@ -88,6 +88,16 @@ export function baseGradient({
 }
 
 /**
+ * The same grain with no blend mode: the noise is black or white ink whose
+ * alpha is its distance from mid grey, so laid on plainly it darkens and
+ * lightens like the overlay does. For a cover inside a moving 3D layer, where
+ * iOS flickers a blended one.
+ */
+export const GRAIN_FLAT = `url("data:image/svg+xml,${encodeURIComponent(
+  "<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0'/><feComponentTransfer><feFuncR type='discrete' tableValues='0 1'/><feFuncG type='discrete' tableValues='0 1'/><feFuncB type='discrete' tableValues='0 1'/><feFuncA type='table' tableValues='1 0 1'/></feComponentTransfer></filter><rect width='100%' height='100%' filter='url(#g)'/></svg>",
+)}")`;
+
+/**
  * Film grain for a static cover: fine fractal noise tiled small, laid over
  * the painting with overlay blending. Strong enough to read as grain, the
  * way the reference cards do, not a texture hint.

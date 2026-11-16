@@ -41,6 +41,7 @@ import { mountQueue } from "./mount-queue";
 import { notchedOutline } from "./notch";
 import {
   GRAIN,
+  GRAIN_FLAT,
   baseGradient,
   resolveArt,
   type ProjectArt,
@@ -55,6 +56,8 @@ export interface PaintedCoverProps {
   size: "card" | "hero";
   /** false: the static painting only, no canvas and no observers. Default true. */
   live?: boolean;
+  /** A static cover's painting as a file, drawn in place of the inline SVG. */
+  still?: string;
   /**
    * Content set into a notch cut from the painting's top-left corner, so
    * it sits on the surface the cover is mounted on. Sized to the content;
@@ -241,6 +244,7 @@ export function PaintedCover({
   art,
   size,
   live = true,
+  still,
   notch,
   scrim = "caption",
   paused = false,
@@ -257,12 +261,13 @@ export function PaintedCover({
   // is the painting itself, inline SVG with its ids scoped to this cover
   const id = useId().replace(/[^\w-]/g, "");
   const gradient = useMemo(
-    () => (live ? baseGradient(resolved) : undefined),
-    [live, resolved],
+    () => (live || still ? baseGradient(resolved) : undefined),
+    [live, still, resolved],
   );
   const artwork = useMemo(
-    () => (live ? undefined : { __html: coverSvg(resolved, `${id}-`) }),
-    [live, resolved, id],
+    () =>
+      live || still ? undefined : { __html: coverSvg(resolved, `${id}-`) },
+    [live, still, resolved, id],
   );
   const [controller, setController] = useState<CoverController | null>(null);
 
@@ -402,11 +407,25 @@ export function PaintedCover({
           }
           dangerouslySetInnerHTML={artwork}
           aria-hidden="true"
-        />
+        >
+          {!live && still && (
+            // an element, decoded with the frame it is drawn in: as a CSS
+            // background iOS dropped it whenever the layer was redrawn
+            <img
+              src={still}
+              alt=""
+              decoding="sync"
+              className="block size-full object-cover"
+            />
+          )}
+        </div>
         {!live && (
           <div
-            className="pointer-events-none absolute inset-0 bg-(image:--grain) bg-size-[160px_160px] opacity-30 mix-blend-overlay"
-            style={{ "--grain": GRAIN } as CSSProperties}
+            className={cn(
+              "pointer-events-none absolute inset-0 bg-(image:--grain) bg-size-[160px_160px]",
+              still ? "opacity-10" : "opacity-30 mix-blend-overlay",
+            )}
+            style={{ "--grain": still ? GRAIN_FLAT : GRAIN } as CSSProperties}
             aria-hidden="true"
           />
         )}

@@ -20,6 +20,7 @@ import {
   PROJECT_IMAGE_EDGES,
   PROJECT_IMAGE_SIZES,
 } from "@/config/project-image-sizes";
+import { CARD_WIDTH, cardImage } from "@/config/services";
 
 /** Lengths as shares of the window's width. */
 const DRAWING = {
@@ -35,11 +36,19 @@ const DRAWING = {
 export function Capture({
   image,
   browser,
+  sizes,
+  eager = false,
 }: {
   image: string;
   browser: boolean;
+  /** How wide the capture is drawn, as the `<img sizes>` it is passed to. */
+  sizes: string;
+  /** Loaded with the page, not when it nears the window: a card waiting
+   *  sideways in the carousel is never near it until it is already turning in. */
+  eager?: boolean;
 }) {
-  const [width, height] = PROJECT_IMAGE_SIZES[image] ?? [16, 10];
+  const size = PROJECT_IMAGE_SIZES[image];
+  const [width, height] = size ?? [16, 10];
   const edge = PROJECT_IMAGE_EDGES[image];
   const middle = edge?.[Math.floor(edge.length / 2)];
   return (
@@ -72,10 +81,14 @@ export function Capture({
         )}
         <img
           src={image}
+          srcSet={
+            size && `${cardImage(image)} ${CARD_WIDTH}w, ${image} ${width}w`
+          }
+          sizes={sizes}
           alt=""
           width={width}
           height={height}
-          loading="lazy"
+          loading={eager ? "eager" : "lazy"}
           decoding="async"
           className="block h-auto w-full"
         />

@@ -62,3 +62,21 @@ export const CLOSING: Shot[] = [
   { project: "montu", image: "/projects/montu/home-desktop.webp" },
   { project: "qr", image: "/projects/qr/hero.webp" },
 ];
+
+/** Every capture the page shows. */
+export const shots = (): Shot[] => [
+  ...SHOWREEL,
+  ...OFFERINGS.flatMap(({ proof }): readonly Shot[] => proof),
+  ...CLOSING,
+];
+
+/** Pixel width of a capture's card-size copy (scripts/service-images.mjs). */
+export const CARD_WIDTH = 1200;
+
+/** A capture's card-size copy. */
+export const cardImage = (image: string) =>
+  image.replace("/projects/", "/services/");
+
+/** A project's cover, painted once into a file. */
+export const coverImage = (project: string) =>
+  `/services/${project}/cover.webp`;

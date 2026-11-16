@@ -17,7 +17,13 @@ import { Capture } from "@/components/services/capture";
 import { PaintedCover } from "@/components/painted-cover/PaintedCover";
 import { PROJECTS } from "@/config/projects";
 import { MorphArrow } from "@/components/ui/custom/morph-arrow";
-import { CLOSING, OFFERINGS, SHOWREEL, type Shot } from "@/config/services";
+import {
+  CLOSING,
+  OFFERINGS,
+  SHOWREEL,
+  coverImage,
+  type Shot,
+} from "@/config/services";
 import { Link } from "@/lib/locale-router";
 import { cn } from "@/lib/utils";
 
@@ -35,13 +41,30 @@ const CLOSING_PLACES = [
   "bottom-4 left-6 rotate-3",
 ];
 
+/** How wide a capture is drawn in each place, for `<img sizes>`: they follow
+ *  the carousel's card width, the offerings' grid and the closing's `w-60`. */
+const SIZES = {
+  showreel: "(min-width: 600px) 440px, 74vw",
+  proof: "(min-width: 1024px) 60vw, (min-width: 640px) 50vw, 100vw",
+  closing: "240px",
+};
+type Place = keyof typeof SIZES;
+
 /**
  * A capture as an object on a stage: the project's own still cover behind,
  * the whole window in front, with the same margin on every side. The stage
  * takes its height from the window, so nothing is cropped and nothing floats
  * in spare room. Every stage on the page is this one.
  */
-const Stage = ({ shot, className }: { shot: Shot; className?: string }) => {
+const Stage = ({
+  shot,
+  place,
+  className,
+}: {
+  shot: Shot;
+  place: Place;
+  className?: string;
+}) => {
   const project = PROJECTS.find(({ id }) => id === shot.project);
   if (!project) return null;
   return (
@@ -55,6 +78,7 @@ const Stage = ({ shot, className }: { shot: Shot; className?: string }) => {
         art={project.art}
         size="hero"
         live={false}
+        still={coverImage(shot.project)}
         scrim="none"
         className="absolute inset-0 -z-10"
       />
@@ -62,7 +86,12 @@ const Stage = ({ shot, className }: { shot: Shot; className?: string }) => {
         className="translate-x-(--depth-x) translate-y-(--depth-y) p-(--stage-pad)"
         style={{ "--stage-pad": "7cqw" } as CSSProperties}
       >
-        <Capture image={shot.image} browser={!shot.bare} />
+        <Capture
+          image={shot.image}
+          browser={!shot.bare}
+          sizes={SIZES[place]}
+          eager={place === "showreel"}
+        />
       </div>
     </div>
   );
@@ -137,7 +166,7 @@ const Services = () => {
             id: shot.image,
             title: titles[shot.project]?.title ?? shot.project,
             to: `/projects/${shot.project}`,
-            node: <Stage shot={shot} />,
+            node: <Stage shot={shot} place="showreel" />,
           }))}
         />
       </Reveal>
@@ -179,7 +208,7 @@ const Services = () => {
                       className="group flex flex-col gap-4 rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-ring/40"
                     >
                       <DepthTilt>
-                        <Stage shot={shot} />
+                        <Stage shot={shot} place="proof" />
                       </DepthTilt>
                       <div className="flex flex-col gap-1.5">
                         <h4 className="font-sans text-lg font-normal text-foreground">
@@ -207,6 +236,7 @@ const Services = () => {
             <Stage
               key={shot.image}
               shot={shot}
+              place="closing"
               className={cn(
                 "absolute w-60 shadow-xl shadow-black/10",
                 CLOSING_PLACES[index],
