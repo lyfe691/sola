@@ -47,6 +47,9 @@ const PERSPECTIVE = 800;
 const FLICK_DISTANCE = 45;
 const FLICK_WEIGHT = 0.08;
 const AUTOPLAY_MS = 3600;
+/** A card's width, in CSS: measured in script it was one size on the first
+ *  paint and another after it, and the page jumped. */
+const CARD_WIDTH = "min(440px, 74cqw)";
 /** The source's springs: the strip, a card turning, the rail's marker. */
 const STRIP = { type: "spring", bounce: 0.2, duration: 0.8 } as const;
 const CARD = { type: "spring", bounce: 0.1, duration: 1 } as const;
@@ -72,25 +75,13 @@ export function SkewedCarousel({
   const token = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const [focused, setFocused] = useState(Math.floor(count / 2));
-  const [cardWidth, setCardWidth] = useState(440);
+
   const [resting, setResting] = useState(false);
   const inView = useInView(rootRef, { amount: 0.3 });
   const navigate = useNavigate();
   // a drag ends in a click on whatever card is under the pointer: that
   // click must not undo the step the drag just made
   const dragged = useRef(false);
-
-  // the strip slides by whole cards, so the card's width is a number
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const measure = () =>
-      setCardWidth(Math.round(Math.min(440, root.clientWidth * 0.74)));
-    const observer = new ResizeObserver(measure);
-    observer.observe(root);
-    measure();
-    return () => observer.disconnect();
-  }, []);
 
   const step = useCallback(
     (delta: number) => setFocused((from) => wrap(from + delta, count)),
@@ -134,17 +125,18 @@ export function SkewedCarousel({
         // clipped sideways only: a turned card's near edge stands taller than
         // the strip, and clipping it there cuts its border. The card's width
         // is capped so the side cards end inside the strip
-        "relative flex w-full flex-col items-center overflow-x-clip rounded-3xl outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        "@container relative flex w-full flex-col items-center overflow-x-clip rounded-3xl outline-none select-none focus-visible:ring-2 focus-visible:ring-ring/40",
         className,
       )}
     >
       <div
         className="w-(--card) py-2"
-        style={{ "--card": `${cardWidth}px` } as CSSProperties}
+        style={{ "--card": CARD_WIDTH } as CSSProperties}
       >
         <motion.div
           className="flex w-fit touch-pan-y"
-          animate={{ x: -focused * cardWidth }}
+          initial={false}
+          animate={{ x: `${(-focused * 100) / count}%` }}
           transition={STRIP}
           onPan={(_, info) => {
             if (Math.abs(info.offset.x) > 5) dragged.current = true;
