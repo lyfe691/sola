@@ -285,7 +285,7 @@ export function buildSiteDocs(
       title: offering.name,
       context: billed.price,
       body: offering.line,
-      to: "/services",
+      to: `/services#${key}`,
       keywords: [t.nav.services, billed.title, ...billed.features],
       service,
       features: billed.features,
