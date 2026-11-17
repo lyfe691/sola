@@ -6,7 +6,9 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
+import { useLocation } from "react-router";
+import { useReducedMotion } from "motion/react";
 import { useTranslation } from "@/lib/language-provider";
 import { Reveal } from "@/components/Reveal";
 import { BlurHighlight } from "@/components/services/blur-highlight";
@@ -27,6 +29,7 @@ import {
 import { contactUrl } from "@/lib/contact-url";
 import { Link } from "@/lib/locale-router";
 import { cn } from "@/lib/utils";
+import { scrollToTarget } from "@/utils/scroll";
 
 /** This page sets its type light and large, in the text face: the weight
  *  and the wide heading face are the rest of the site's. */
@@ -124,6 +127,21 @@ const Services = () => {
   const closingArt = PROJECTS.find(({ id }) => id === CLOSING_PROJECT)?.art;
   const titles: Record<string, { title: string } | undefined> = t.projects.list;
 
+  // a link to an offering lands on it: at once when the page has just
+  // opened, gliding when the reader is already on it. `key` changes with
+  // every click, so the same link works twice
+  const { hash, key: visit } = useLocation();
+  const reducedMotion = useReducedMotion();
+  const opened = useRef(false);
+  useEffect(() => {
+    const opening = !opened.current;
+    opened.current = true;
+    const offering = OFFERINGS.find(({ key }) => `#${key}` === hash);
+    const target = offering && document.getElementById(offering.key);
+    if (target)
+      scrollToTarget(target, { immediate: opening || !!reducedMotion });
+  }, [hash, visit, reducedMotion]);
+
   return (
     <div className="flex w-full flex-col">
       <meta name="description" content={t.seo.services.description} />
@@ -166,7 +184,8 @@ const Services = () => {
         return (
           <section
             key={key}
-            className="mt-24 grid gap-x-12 gap-y-10 sm:mt-32 lg:mt-44 lg:grid-cols-12"
+            id={key}
+            className="scroll-mt-24 mt-24 grid lg:scroll-mt-32 gap-x-12 gap-y-10 sm:mt-32 lg:mt-44 lg:grid-cols-12"
           >
             {/* beside its captures on a wide window, and it stays in view
                 while they pass; above them on a narrow one */}

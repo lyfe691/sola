@@ -82,7 +82,7 @@ function useEntries(menu: NavMenuKey): Entry[] {
   if (menu === "services")
     return OFFERINGS.map(({ key, proof }) => ({
       key,
-      to: "/services",
+      to: `/services#${key}`,
       title: t.services.page.offerings[key].name,
       line: t.services.page.offerings[key].line,
       shot: proof[0],
