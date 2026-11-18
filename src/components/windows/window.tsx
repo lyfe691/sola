@@ -15,13 +15,13 @@
 import type { CSSProperties, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/** The outer frame; `window-frame` (index.css) is its hairline and lift. */
+/** The outer frame; `window-frame` (index.css) is its corner, hairline and lift. */
 export const WINDOW_FRAME =
-  "window-frame relative isolate flex w-full flex-col overflow-hidden rounded-2xl bg-muted text-foreground";
+  "window-frame relative isolate flex w-full flex-col overflow-hidden bg-muted text-foreground";
 
-/** The panel inside it, under the bar. */
+/** The panel inside it, under the bar; `window-panel` keeps its corner concentric. */
 export const WINDOW_PANEL =
-  "relative mx-1 mb-1 overflow-hidden rounded-xl bg-card ring-1 ring-border";
+  "window-panel relative mx-1 mb-1 overflow-hidden bg-card ring-1 ring-border";
 
 /**
  * Draws the window inside it to scale: every length the window is built

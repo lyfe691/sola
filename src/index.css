@@ -1409,12 +1409,21 @@ html:not(:lang(ja), :lang(ko), :lang(zh))
 /* The frame Terminal Replay, Code Morph and Browser Window share: a hairline
    and the figure lift a deep dive gives its images (its own outside one). */
 .window-frame {
+  /* a box holding the window just inside its own rounded edge sets
+     --window-fit to the corner that leaves an even gap */
+  --window-corner: var(--window-fit, calc(var(--radius) * 1.8));
+  border-radius: var(--window-corner);
   box-shadow:
     0 0 0 1px var(--border),
     var(
       --prose-figure-lift,
       0 14px 34px -14px color-mix(in oklab, black 18%, transparent)
     );
+}
+
+/* inset one step (mx-1 mb-1) */
+.window-panel {
+  border-radius: calc(var(--window-corner) - var(--spacing));
 }
 
 .window-tabs {

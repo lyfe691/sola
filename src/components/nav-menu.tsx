@@ -188,7 +188,8 @@ function Menu({
           <MorphArrow />
         </Link>
       </div>
-      <div className="flex min-h-76 flex-1 p-3 pl-1">
+      {/* the surface's rounded-2xl less this p-2: the window's corner */}
+      <div className="flex min-h-76 flex-1 p-2 pl-0 [--window-fit:calc(var(--radius)*1.8_-_var(--spacing)*2)]">
         <div aria-hidden="true" className="relative flex-1">
           {entries.map((entry, index) => (
             <div
