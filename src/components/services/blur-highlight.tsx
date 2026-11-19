@@ -70,7 +70,8 @@ export function BlurHighlight({
             <Phrase order={order} active={active}>
               {part}
             </Phrase>
-            {mark}
+            {/* the mark's overhang, or the mark runs under the punctuation */}
+            {mark && <span className="ml-1.5">{mark}</span>}
           </span>
         );
       })}
