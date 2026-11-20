@@ -54,7 +54,7 @@ export function LanguageToggle() {
         </TooltipContent>
       </Tooltip>
 
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" glide>
         <DropdownMenuGroup>
           <DropdownMenuLabel>
             {t.common.command.groups.language}
@@ -62,7 +62,12 @@ export function LanguageToggle() {
           <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
             {LANGUAGES.map(({ code, label }) => (
               <DropdownMenuRadioItem key={code} value={code} closeOnClick>
-                {label}
+                <span className="flex size-6 items-center justify-center rounded-lg bg-muted text-2xs font-medium text-muted-foreground! uppercase ring-1 ring-foreground/10">
+                  {code}
+                </span>
+                <span className="font-normal in-data-checked:text-muted-foreground!">
+                  {label}
+                </span>
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuRadioGroup>

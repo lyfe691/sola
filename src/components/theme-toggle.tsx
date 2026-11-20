@@ -46,7 +46,9 @@ import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { EASE_OUT } from "@/utils/transitions";
 
-const ICON = "text-muted-foreground";
+// a highlighted row inks everything in it: an icon keeps its own colour
+const ICON = "text-muted-foreground! **:text-muted-foreground!";
+const LABEL = "font-normal in-data-checked:text-muted-foreground!";
 
 /**
  * A row that folds its rows away. A folded panel is unmounted, so the menu's
@@ -75,7 +77,12 @@ function Branch({
             <DropdownMenuItem closeOnClick={false} className="min-w-0 flex-1" />
           }
         >
-          <CaretRightIcon className="size-3.5 text-muted-foreground transition-transform duration-200 ease-out group-data-panel-open/dropdown-menu-item:rotate-90" />
+          <CaretRightIcon
+            className={cn(
+              ICON,
+              "size-3.5 transition-transform duration-200 ease-out group-data-panel-open/dropdown-menu-item:rotate-90",
+            )}
+          />
           <Icon className={ICON} aria-hidden="true" />
           <span className="truncate">{label}</span>
         </Collapsible.Trigger>
@@ -83,7 +90,7 @@ function Branch({
       </div>
 
       <Collapsible.Panel className="h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0">
-        <div className="ml-[1.4rem] flex flex-col gap-0.5 border-l border-border/60 pt-0.5 pb-1 pl-1.5">
+        <div className="ml-4.5 flex flex-col gap-0.5 border-l border-border/60 pt-0.5 pb-1 pl-1.5">
           {children}
         </div>
       </Collapsible.Panel>
@@ -189,8 +196,18 @@ function ThemeMenu() {
       closeOnClick={false}
       data-preview={value}
     >
-      <Icon className={ICON} aria-hidden="true" />
-      {label}
+      <span
+        className={cn(
+          value === "system" ? "bg-muted" : [value, "bg-background"],
+          "flex size-6 items-center justify-center rounded-lg ring-1 ring-foreground/10",
+        )}
+      >
+        <Icon
+          className="size-3.5 text-primary! **:text-primary!"
+          aria-hidden="true"
+        />
+      </span>
+      <span className={LABEL}>{label}</span>
     </DropdownMenuRadioItem>
   );
 
@@ -232,7 +249,7 @@ function ThemeMenu() {
         >
           {buildBackgroundOptions(t.common.none).map(({ id, label }) => (
             <DropdownMenuRadioItem key={id} value={id} closeOnClick={false}>
-              {label}
+              <span className={LABEL}>{label}</span>
             </DropdownMenuRadioItem>
           ))}
         </Branch>
@@ -321,6 +338,7 @@ export function ThemeToggle() {
 
       <DropdownMenuContent
         align="end"
+        glide
         className="min-w-56"
         // `d` is the code view's shortcut everywhere, and the diff row's card
         // says so: it must not become the menu's type-to-find for "Dark"
