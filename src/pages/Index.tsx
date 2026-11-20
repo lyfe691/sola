@@ -71,11 +71,11 @@ const Index = () => {
   // the hero arrives the way every page does: each block is a reveal, and
   // the queue brings them in from the top
   return (
-    <div className="relative z-20 flex min-h-[calc(100vh-14rem)] flex-1 flex-col items-start justify-center pt-12 sm:pt-16 lg:pt-20">
+    <div className="relative z-20 flex min-h-[calc(100vh-14rem)] flex-1 flex-col items-start justify-center">
       <meta name="description" content={t.seo.home.description} />
 
       <div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
-        <Reveal className="relative z-30 mb-2 sm:mb-3">
+        <Reveal className="relative z-30 mb-3 sm:mb-4 md:mb-5">
           <a
             href="https://kinoa.to"
             target="_blank"
@@ -96,7 +96,7 @@ const Index = () => {
 
         <Reveal
           as="h1"
-          className="mb-3 text-4xl font-bold break-keep text-balance sm:mb-4 sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl"
+          className="mb-4 text-4xl font-bold break-keep text-balance sm:text-5xl md:mb-6 md:text-6xl lg:text-7xl"
         >
           <NameMorpher
             greeting={t.index.greeting}
@@ -104,7 +104,7 @@ const Index = () => {
           />
         </Reveal>
 
-        <Reveal className="mb-4 max-w-2xl text-base leading-relaxed text-foreground/70 sm:mb-5 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl">
+        <Reveal className="mb-6 max-w-2xl text-base leading-relaxed text-foreground/70 sm:text-lg md:mb-8 md:max-w-3xl md:text-xl lg:max-w-4xl">
           <CyclingText key={language} texts={descriptions} />
         </Reveal>
 
