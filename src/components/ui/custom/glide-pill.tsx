@@ -12,7 +12,7 @@
  * which row is highlighted.
  */
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useCallback, useRef, useState, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 type Pill = {
@@ -36,11 +36,12 @@ const HIDDEN: Pill = {
   glide: false,
 };
 
-export function useGlidePill() {
+/** `fill`: the pill's surface, for a container that is not the page's colour. */
+export function useGlidePill(fill = "bg-accent") {
   const ref = useRef<HTMLSpanElement>(null);
   const [pill, setPill] = useState(HIDDEN);
 
-  const moveTo = (row: HTMLElement) => {
+  const moveTo = useCallback((row: HTMLElement) => {
     const el = ref.current;
     const box = el?.offsetParent;
     if (!el || !(box instanceof HTMLElement)) return;
@@ -61,10 +62,12 @@ export function useGlidePill() {
       // on, and a pointer crossing a gap between rows doesn't make it jump
       glide: getComputedStyle(el).opacity !== "0",
     });
-  };
+  }, []);
 
-  const hide = () =>
-    setPill((prev) => (prev.shown ? { ...prev, shown: false } : prev));
+  const hide = useCallback(
+    () => setPill((prev) => (prev.shown ? { ...prev, shown: false } : prev)),
+    [],
+  );
 
   const element = (
     <span
@@ -80,7 +83,8 @@ export function useGlidePill() {
         } as CSSProperties
       }
       className={cn(
-        "pointer-events-none absolute top-0 left-0 -z-10 h-(--pill-h) w-(--pill-w) translate-x-(--pill-x) translate-y-(--pill-y) rounded-(--pill-r) bg-accent transition-opacity duration-150 ease-out",
+        "pointer-events-none absolute top-0 left-0 -z-10 h-(--pill-h) w-(--pill-w) translate-x-(--pill-x) translate-y-(--pill-y) rounded-(--pill-r) transition-opacity duration-150 ease-out",
+        fill,
         !pill.shown && "opacity-0",
         pill.glide &&
           "motion-safe:transition-[translate,width,height,border-radius,opacity] motion-safe:duration-220 motion-safe:ease-expo",

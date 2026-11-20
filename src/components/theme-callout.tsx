@@ -73,13 +73,6 @@ const measure = (): Position | null => {
   const el = visibleToggle();
   if (!el) return null;
   const r = el.getBoundingClientRect();
-  // a docked nav is a capsule whose edge sits below the toggle: point out of
-  // the capsule, not into it
-  const bar = el.closest<HTMLElement>("[data-nav-bar]");
-  const from =
-    bar?.dataset.docked === undefined
-      ? r.bottom
-      : bar.getBoundingClientRect().bottom;
   // the fixed header spans exactly the box a fixed `right` resolves against;
   // documentElement.clientWidth still counts the page's scrollbar gutter
   const vw =
@@ -95,7 +88,7 @@ const measure = (): Position | null => {
   );
   const arrowRight = vw - right - center - ARROW_W / 2;
   return {
-    top: from + GAP,
+    top: r.bottom + GAP,
     right,
     arrowRight,
     corner: Math.max(0, Math.min(CARD_RADIUS, arrowRight)),
@@ -167,9 +160,8 @@ export function ThemeCallout() {
     toggle?.click();
   }, [dismiss]);
 
-  // re-measure only on layout-affecting events (resize/scroll + toggle
-  // resize from the nav's scroll morph and breakpoint swaps) instead of
-  // every frame; coalesced into a single rAF
+  // re-measure only on layout-affecting events (resize/scroll + breakpoint
+  // swaps) instead of every frame; coalesced into a single rAF
   useEffect(() => {
     if (!open) return;
     let raf = 0;
@@ -208,9 +200,6 @@ export function ThemeCallout() {
       if (el && el !== observed) {
         ro.disconnect();
         ro.observe(el);
-        // the bar resizes through its dock morph, which the toggle doesn't
-        const bar = el.closest<HTMLElement>("[data-nav-bar]");
-        if (bar) ro.observe(bar);
         observed = el;
       }
     };
