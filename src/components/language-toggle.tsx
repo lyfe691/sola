@@ -7,6 +7,7 @@
  */
 
 import { TranslateIcon } from "@phosphor-icons/react";
+import { barButton } from "@/components/bar-button";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -26,7 +27,7 @@ import {
 import { LANGUAGES } from "@/config/languages";
 import { useLanguage, useTranslation } from "@/lib/language-provider";
 
-export function LanguageToggle() {
+export function LanguageToggle({ floating }: { floating?: boolean }) {
   const { language, setLanguage, detectedLanguage, detectedLanguageCode } =
     useLanguage();
   const t = useTranslation();
@@ -39,8 +40,7 @@ export function LanguageToggle() {
             <DropdownMenuTrigger
               render={
                 <Button
-                  variant="ghost"
-                  size="icon"
+                  {...barButton(floating)}
                   aria-label={t.common.a11y.toggleLanguage}
                 />
               }

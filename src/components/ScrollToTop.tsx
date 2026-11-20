@@ -19,6 +19,7 @@ import type Lenis from "lenis";
 import { EASE_OUT } from "@/utils/transitions";
 import { smoothScrollToTop } from "@/utils/scroll";
 import { useTranslation } from "@/lib/language-provider";
+import { useMobileMenu } from "@/hooks/use-mobile-menu";
 
 const SCROLL_THRESHOLD = 120;
 const TILE = 44;
@@ -106,6 +107,8 @@ function WaterFill() {
 export default function ScrollToTop() {
   const [visible, setVisible] = useState(false);
   const t = useTranslation();
+  // the phone menu takes the screen: nothing of the page stays on top of it
+  const menuOpen = useMobileMenu((state) => state.isOpen);
 
   const onLenis = useCallback((instance: Lenis) => {
     const next = instance.scroll > SCROLL_THRESHOLD;
@@ -123,7 +126,7 @@ export default function ScrollToTop() {
 
   return (
     <AnimatePresence>
-      {visible && (
+      {visible && !menuOpen && (
         <motion.button
           key="scroll-to-top"
           type="button"

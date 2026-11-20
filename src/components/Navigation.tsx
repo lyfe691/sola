@@ -9,8 +9,6 @@
 import { useLocation } from "react-router";
 import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useEffect, useState, useCallback, useRef, memo } from "react";
-import { useLenis } from "lenis/react";
-import type Lenis from "lenis";
 import { useTranslation } from "@/lib/language-provider";
 import { useWindowScrollLock } from "@/hooks/use-window-scroll-lock";
 import { useCommandMenu } from "@/hooks/use-command-menu";
@@ -20,6 +18,8 @@ import { MAIN_NAVIGATION } from "@/config/navigation";
 import { NAV_MENUS, NAV_PANEL_WIDTH, type NavMenuKey } from "@/config/nav-menu";
 import { FlipChevron } from "./ui/custom/flip-chevron";
 import { useGlidePill } from "./ui/custom/glide-pill";
+import { Button } from "./ui/button";
+import { barButton } from "./bar-button";
 import { ContactMenu } from "./contact-menu";
 import { NavPanel } from "./nav-menu";
 import { SearchToggle } from "./search-toggle";
@@ -56,21 +56,22 @@ const menuItemVariants = {
 
 interface ToggleGroupProps {
   className?: string;
-  gap?: "tight" | "normal";
+  /** each button a filled circle of its own, for the phone bar */
+  floating?: boolean;
 }
 
-const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
+const ToggleGroup = memo(({ className, floating }: ToggleGroupProps) => {
   return (
     <div
       className={cn(
         "flex items-center",
-        gap === "tight" ? "gap-1" : "gap-2",
+        floating ? "gap-2" : "gap-1",
         className,
       )}
     >
-      <SearchToggle />
-      <LanguageToggle />
-      <ThemeToggle />
+      <SearchToggle floating={floating} />
+      <LanguageToggle floating={floating} />
+      <ThemeToggle floating={floating} />
     </div>
   );
 });
@@ -101,16 +102,6 @@ const MenuGlyph = ({ open }: { open: boolean }) => (
     </div>
   </div>
 );
-
-const useScrolled = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const onLenis = useCallback((instance: Lenis) => {
-    const next = instance.scroll > 24;
-    setScrolled((current) => (current === next ? current : next));
-  }, []);
-  useLenis(onLenis);
-  return scrolled;
-};
 
 const Logo = ({ label }: { label: string }) => (
   <Link
@@ -342,7 +333,6 @@ const DesktopNav = () => {
 const MobileNav = () => {
   const t = useTranslation();
   const location = useLocation();
-  const scrolled = useScrolled();
   const menuOpen = useMobileMenu((state) => state.isOpen);
   const setMenuOpen = useMobileMenu((state) => state.setOpen);
   useWindowScrollLock(menuOpen);
@@ -457,44 +447,38 @@ const MobileNav = () => {
     <>
       {/* the bar stays above the overlay so its trigger doubles as the close (X) */}
       <header className="pointer-events-none fixed inset-x-0 top-0 z-50 lg:hidden">
-        <div className="px-3 sm:px-5">
-          <motion.div
-            ref={barRef}
-            data-nav-bar
-            data-docked={(scrolled && !menuOpen) || undefined}
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: EASE_OUT }}
-            className={cn(
-              "pointer-events-auto mx-auto flex items-center justify-between gap-2 rounded-full border transition-[margin,padding,background-color,border-color,box-shadow] duration-500 ease-out-quart",
-              scrolled && !menuOpen
-                ? "mt-3 border-foreground/10 bg-background px-2 py-2 shadow-lg shadow-black/5"
-                : "mt-0 border-transparent bg-transparent px-1 py-4",
-            )}
-          >
-            <button
+        <motion.div
+          ref={barRef}
+          data-nav-bar
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: EASE_OUT }}
+          className="flex items-center justify-between px-5 pt-3 sm:px-6 md:px-8"
+        >
+          <div className="pointer-events-auto flex">
+            <Button
               ref={triggerRef}
-              type="button"
+              {...barButton(true)}
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={
                 menuOpen ? t.common.a11y.closeMenu : t.common.a11y.openMenu
               }
               aria-expanded={menuOpen}
-              className="flex size-9 shrink-0 items-center justify-center rounded-full text-foreground transition-colors hover:bg-muted"
             >
               <MenuGlyph open={menuOpen} />
-            </button>
+            </Button>
+          </div>
 
-            {/* the open menu is the links and the way out, nothing else */}
-            <ToggleGroup
-              gap="normal"
-              className={cn(
-                "transition-[opacity,visibility] duration-200 ease-out",
-                menuOpen && "invisible opacity-0",
-              )}
-            />
-          </motion.div>
-        </div>
+          {/* the open menu is the links and the way out, nothing else */}
+          <div
+            className={cn(
+              "pointer-events-auto transition-[opacity,visibility] duration-200 ease-out",
+              menuOpen && "invisible opacity-0",
+            )}
+          >
+            <ToggleGroup floating />
+          </div>
+        </motion.div>
       </header>
 
       <AnimatePresence>

@@ -25,6 +25,7 @@ import { MenuHint } from "@/components/menu-hint";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
+import { barButton } from "@/components/bar-button";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -305,7 +306,7 @@ function ThemeTriggerIcon() {
   );
 }
 
-export function ThemeToggle() {
+export function ThemeToggle({ floating }: { floating?: boolean }) {
   const t = useTranslation();
   const [open, setOpen] = useState(false);
   const { active: codeView } = useCodeView();
@@ -320,8 +321,7 @@ export function ThemeToggle() {
             <DropdownMenuTrigger
               render={
                 <Button
-                  variant="ghost"
-                  size="icon"
+                  {...barButton(floating)}
                   aria-label={t.common.a11y.toggleTheme}
                   data-callout="theme"
                 />

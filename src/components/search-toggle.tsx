@@ -7,6 +7,7 @@
  */
 
 import { MagnifyingGlassIcon } from "@phosphor-icons/react";
+import { barButton } from "./bar-button";
 import { Button } from "./ui/button";
 import { Kbd } from "./ui/kbd";
 import { loadCommandMenu, useCommandMenu } from "@/hooks/use-command-menu";
@@ -17,7 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useTranslation } from "@/lib/language-provider";
 
-export function SearchToggle() {
+export function SearchToggle({ floating }: { floating?: boolean }) {
   const { toggleCommandMenu } = useCommandMenu();
   const t = useTranslation();
 
@@ -26,8 +27,7 @@ export function SearchToggle() {
       <TooltipTrigger
         render={
           <Button
-            variant="ghost"
-            size="icon"
+            {...barButton(floating)}
             onClick={toggleCommandMenu}
             onPointerEnter={() => void loadCommandMenu()}
             onFocus={() => void loadCommandMenu()}
