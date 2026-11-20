@@ -23,7 +23,8 @@ import { useGlidePill } from "./ui/custom/glide-pill";
 import { ContactMenu } from "./contact-menu";
 import { NavPanel } from "./nav-menu";
 import { SearchToggle } from "./search-toggle";
-import { AppearanceMenu } from "./appearance-menu";
+import { LanguageToggle } from "./language-toggle";
+import { ThemeToggle } from "./theme-toggle";
 import { useCodeView } from "./deploy-diff/code-view-provider";
 import { EASE_OUT } from "@/utils/transitions";
 import { Link } from "@/lib/locale-router";
@@ -68,7 +69,8 @@ const ToggleGroup = memo(({ className, gap = "tight" }: ToggleGroupProps) => {
       )}
     >
       <SearchToggle />
-      <AppearanceMenu />
+      <LanguageToggle />
+      <ThemeToggle />
     </div>
   );
 });

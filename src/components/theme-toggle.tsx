@@ -6,143 +6,95 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { Collapsible } from "@base-ui/react/collapsible";
 import {
   CaretRightIcon,
-  CheckIcon,
   CodeIcon,
   ImageIcon,
   PaletteIcon,
   SparkleIcon,
 } from "@phosphor-icons/react";
+import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { useTheme } from "./theme-provider";
-import { THEMES, type Theme, type ThemeIcon } from "@/config/themes";
+import { THEMES, type ThemeIcon } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { MenuHint } from "@/components/menu-hint";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
-import { Switch } from "@/components/ui/switch";
+import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
-import { AnimatePresence, motion, type MotionStyle } from "motion/react";
-import { EASE_OUT } from "@/utils/transitions";
+import { Switch } from "@/components/ui/switch";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
+import { EASE_OUT } from "@/utils/transitions";
 
-const iconClass = "size-4 shrink-0 text-muted-foreground";
+const ICON = "text-muted-foreground";
 
 /**
- * An expandable tree node: a header that toggles an indented list of children.
- * The list collapses by animating grid rows from 0fr → 1fr, which stays smooth
- * (no height jump) and nests cleanly. Children always render so the collapse
- * can animate; `inert` keeps them out of tab order while closed.
+ * A row that folds its rows away. A folded panel is unmounted, so the menu's
+ * arrow keys never land on a row that is not showing.
  */
-function TreeBranch({
+function Branch({
   icon: Icon,
   label,
-  accessory,
-  isOpen,
-  onToggle,
+  hint,
+  defaultOpen,
   children,
-  ...props
 }: {
   icon: ThemeIcon;
   label: string;
-  accessory?: React.ReactNode;
-  isOpen: boolean;
-  onToggle: () => void;
-  children: React.ReactNode;
-} & Omit<React.ComponentProps<"button">, "onClick">) {
+  hint?: ReactNode;
+  defaultOpen?: boolean;
+  children: ReactNode;
+}) {
   return (
-    <div>
+    <Collapsible.Root defaultOpen={defaultOpen}>
       <div className="flex items-center">
-        <button
-          {...props}
-          type="button"
-          data-glide-row
-          aria-expanded={isOpen}
-          onClick={onToggle}
-          className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
+        <Collapsible.Trigger
+          nativeButton={false}
+          role="menuitem"
+          render={
+            <DropdownMenuItem closeOnClick={false} className="min-w-0 flex-1" />
+          }
         >
-          <CaretRightIcon
-            className={cn(
-              "size-3.5 shrink-0 text-muted-foreground transition-transform duration-200",
-              isOpen && "rotate-90",
-            )}
-          />
-          <Icon className={iconClass} />
+          <CaretRightIcon className="size-3.5 text-muted-foreground transition-transform duration-200 ease-out group-data-panel-open/dropdown-menu-item:rotate-90" />
+          <Icon className={ICON} aria-hidden="true" />
           <span className="truncate">{label}</span>
-        </button>
-        {accessory && <span className="px-1.5">{accessory}</span>}
+        </Collapsible.Trigger>
+        {hint && <span className="flex px-2">{hint}</span>}
       </div>
 
-      <div
-        className={cn(
-          "grid transition-[grid-template-rows] duration-200 ease-out",
-          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
-        )}
-      >
-        <div className="overflow-hidden" inert={!isOpen}>
-          <div className="ml-[1.4rem] flex flex-col gap-0.5 border-l border-border/60 pt-0.5 pb-1 pl-1.5">
-            {children}
-          </div>
+      <Collapsible.Panel className="h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0">
+        <div className="ml-[1.4rem] flex flex-col gap-0.5 border-l border-border/60 pt-0.5 pb-1 pl-1.5">
+          {children}
         </div>
-      </div>
-    </div>
+      </Collapsible.Panel>
+    </Collapsible.Root>
   );
 }
 
 /**
- * A selectable leaf row, marked with a check when active. Rest props (and
- * React 19's ref-as-prop) spread onto the button so the row composes with
- * render-prop primitives like HoverCardTrigger.
- */
-function TreeLeaf({
-  icon: Icon,
-  label,
-  isSelected,
-  onClick,
-  ...props
-}: {
-  icon?: ThemeIcon;
-  label: string;
-  isSelected: boolean;
-  onClick: (event: React.MouseEvent) => void;
-} & Omit<React.ComponentProps<"button">, "onClick">) {
-  return (
-    <button
-      {...props}
-      type="button"
-      data-glide-row
-      aria-current={isSelected || undefined}
-      onClick={onClick}
-      className="flex w-full items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
-    >
-      <span
-        className={cn(
-          "flex min-w-0 flex-1 items-center gap-2",
-          isSelected && "text-muted-foreground",
-        )}
-      >
-        {Icon && <Icon className={iconClass} aria-hidden="true" />}
-        <span className="truncate">{label}</span>
-      </span>
-      {isSelected && <CheckIcon className={iconClass} />}
-    </button>
-  );
-}
-
-type BranchId = "themes" | "custom" | "background";
-
-/**
- * Mini page mock that WEARS a theme's class, so every color resolves to that
- * theme's real tokens (the classes in index.css define --background,
- * --primary, … — no duplicated palette data anywhere). The class is
- * required: the hover-card portal inherits the ACTIVE theme's tokens from
- * <html>, so even "light" must re-scope itself (the `.light` class shares
- * :root's block in index.css). Borders stay token-relative (foreground/10)
- * so they read correctly inside any theme.
+ * A miniature page wearing a theme's class, so every colour is that theme's
+ * own token. The class is required even for light: the preview is portaled
+ * under <html>, which carries the active theme.
  */
 function ThemeSwatch({
   themeClass,
@@ -155,11 +107,7 @@ function ThemeSwatch({
     <div
       className={cn(
         themeClass,
-        // rounded-2xl: concentric with the hover card (rounded-3xl − p-1).
-        // transition-colors everywhere: the swatch DOM is stable across
-        // hovers and only its theme class swaps, so palettes MORPH from one
-        // theme to the next instead of remount-flashing.
-        "min-w-0 flex-1 rounded-2xl border border-foreground/10 bg-background p-2.5 transition-colors",
+        "w-[136px] flex-none rounded-2xl border border-foreground/10 bg-background p-2.5 transition-colors",
         className,
       )}
     >
@@ -177,281 +125,211 @@ function ThemeSwatch({
   );
 }
 
+type Preview = { value: string; top: number; right: number };
+
 /**
- * Hover preview for one theme row. One STABLE swatch pair: the left swatch
- * always renders (wearing the hovered theme's class, or light for system),
- * and the dark half slides open via animated flex-grow only for "system".
- * No remounts anywhere — colors morph, the split glides.
+ * One preview for the whole theme tree: it glides to the row it is about and
+ * its swatch changes theme in place. System shows light and dark side by
+ * side. It hangs outside the menu, which clips, so it is portaled.
  */
-function ThemePreview({ value }: { value: string }) {
-  const isSystem = value === "system";
-  // ONE owner for the split geometry: the wrapper animates its own width
-  // and the card shell simply sizes to content — pairing a shell width
-  // tween with a flex split needed pixel-exact agreement and cropped the
-  // dark card on any rounding. 136px matches the single-swatch width, so
-  // the system split is symmetric halves.
-  return (
-    <div className="flex">
-      <ThemeSwatch
-        themeClass={isSystem ? "light" : value}
-        className="w-[136px] flex-none"
-      />
-      <div
-        className={cn(
-          "overflow-hidden transition-[width,opacity]",
-          isSystem ? "w-[140px] opacity-100" : "w-0 opacity-0",
-        )}
-        aria-hidden={!isSystem}
-      >
-        {/* fixed width + left inset so the dark half CLIPS while sliding
-            shut instead of squishing its contents */}
-        <ThemeSwatch themeClass="dark" className="ml-1 w-[136px] flex-none" />
-      </div>
-    </div>
+function ThemePreview({ preview }: { preview: Preview | null }) {
+  const isSystem = preview?.value === "system";
+
+  return createPortal(
+    <AnimatePresence>
+      {preview && (
+        <motion.div
+          initial={{ opacity: 0, x: 6, y: preview.top }}
+          animate={{ opacity: 1, x: 0, y: preview.top }}
+          exit={{ opacity: 0, x: 6 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
+          style={{ "--right": `${preview.right}px` } as MotionStyle}
+          className="pointer-events-none fixed top-0 right-(--right) z-50"
+        >
+          <div className="flex w-max -translate-y-1/2 rounded-3xl bg-popover p-1 shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10">
+            <ThemeSwatch themeClass={isSystem ? "light" : preview.value} />
+            <div
+              className={cn(
+                "overflow-hidden transition-[width,opacity]",
+                isSystem ? "w-[140px] opacity-100" : "w-0 opacity-0",
+              )}
+            >
+              <ThemeSwatch themeClass="dark" className="ml-1" />
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body,
   );
 }
 
-/** The theme/background picker tree — the content of the appearance menu. */
-export function ThemeMenuContent({
-  onClose,
-}: {
-  /** called when a selection warrants closing the menu (the code-view flip) */
-  onClose?: () => void;
-}) {
+function ThemeMenu() {
   const { theme, setTheme } = useTheme();
-  const { active: activeBackground, setActive: setBackground } =
-    useBackground();
+  const { active: background, setActive: setBackground } = useBackground();
   const { active: codeView, setActive: setCodeView } = useCodeView();
   const t = useTranslation();
+  const [preview, setPreview] = useState<Preview | null>(null);
 
-  const [expanded, setExpanded] = useState<Set<BranchId>>(
-    () => new Set(["themes"]),
-  );
-
-  const isExpanded = (id: BranchId) => expanded.has(id);
-
-  const toggleBranch = (id: BranchId) =>
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-
-  // apply the theme but keep the menu open so themes can be tried in place
-  const selectTheme = (value: string) => () => setTheme(value as Theme);
-
-  // ONE shared preview panel for the whole theme tree — per-row hover cards
-  // at zero delay stack up while the outgoing ones exit; a single panel
-  // makes overlap structurally impossible. Rows only report themselves;
-  // the panel glides to the hovered row and crossfades its palette.
-  // viewport coords: the panel renders in a body portal, because the menu
-  // popover clips (overflow-hidden for its rounding, overflow-x-hidden on
-  // its scroll wrapper) — anything hanging outside the menu box vanishes
-  const [preview, setPreview] = useState<{
-    value: string;
-    top: number;
-    right: number;
-  } | null>(null);
-  const themeTreeRef = useRef<HTMLDivElement>(null);
-
-  const showPreview = (value: string, row: HTMLElement) => {
-    const tree = themeTreeRef.current;
-    if (!tree) return;
+  const previewRowOf = (target: Element, tree: HTMLElement) => {
+    const row = target.closest<HTMLElement>("[data-preview]");
+    if (!row?.dataset.preview) return setPreview(null);
     const box = row.getBoundingClientRect();
     setPreview({
-      value,
+      value: row.dataset.preview,
       top: box.top + box.height / 2,
       right: window.innerWidth - tree.getBoundingClientRect().left + 12,
     });
   };
 
-  // the preview is a hover affordance: a tap on a touch screen fires an
-  // emulated hover and a focus, which flashed the panel on every pick. Only
-  // a real mouse, or keyboard focus, opens it (base-ui's hover cards are
-  // mouse-only for the same reason).
-  const renderThemeLeaf = (option: (typeof THEMES)[number]) => (
-    <TreeLeaf
-      key={option.value}
-      icon={option.icon}
-      label={option.label}
-      isSelected={theme === option.value}
-      onClick={selectTheme(option.value)}
-      onPointerEnter={(event) => {
-        if (event.pointerType === "mouse") {
-          showPreview(option.value, event.currentTarget);
-        }
-      }}
-      onFocus={(event) => {
-        if (event.currentTarget.matches(":focus-visible")) {
-          showPreview(option.value, event.currentTarget);
-        }
-      }}
-    />
+  const themeRow = ({ value, label, icon: Icon }: (typeof THEMES)[number]) => (
+    <DropdownMenuRadioItem
+      key={value}
+      value={value}
+      closeOnClick={false}
+      data-preview={value}
+    >
+      <Icon className={ICON} aria-hidden="true" />
+      {label}
+    </DropdownMenuRadioItem>
   );
 
   return (
-    <div className="min-w-[212px]">
-      {/* relative wrapper OUTSIDE the branches: the collapse containers are
-          overflow-hidden, so the panel must be their sibling to escape.
-          Leaving the themes subtree (to Backgrounds, or out of the menu)
-          dismisses the panel. */}
+    <>
+      {/* a tap fires an emulated hover and a focus, which flashed the preview
+          on every pick: only a real mouse or keyboard focus opens it */}
       <div
-        ref={themeTreeRef}
-        className="relative"
-        onMouseLeave={() => setPreview(null)}
+        onPointerOver={(event) => {
+          if (event.pointerType === "mouse")
+            previewRowOf(event.target as Element, event.currentTarget);
+        }}
+        onPointerLeave={() => setPreview(null)}
+        onFocus={(event) => {
+          if (event.target.matches(":focus-visible"))
+            previewRowOf(event.target, event.currentTarget);
+        }}
         onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+          if (!event.currentTarget.contains(event.relatedTarget))
             setPreview(null);
-          }
         }}
       >
-        <TreeBranch
-          icon={PaletteIcon}
-          label={t.common.menu.themes}
-          isOpen={isExpanded("themes")}
-          onToggle={() => toggleBranch("themes")}
-          onMouseEnter={() => setPreview(null)}
-          onFocus={() => setPreview(null)}
-        >
-          {THEMES.filter((o) => !o.isCustom).map(renderThemeLeaf)}
-
-          <TreeBranch
-            icon={SparkleIcon}
-            label={t.common.menu.customThemes}
-            isOpen={isExpanded("custom")}
-            onToggle={() => toggleBranch("custom")}
-            onMouseEnter={() => setPreview(null)}
-            onFocus={() => setPreview(null)}
-          >
-            {THEMES.filter((o) => o.isCustom).map(renderThemeLeaf)}
-          </TreeBranch>
-        </TreeBranch>
-
-        {createPortal(
-          <AnimatePresence>
-            {preview && (
-              <motion.div
-                key="theme-preview"
-                initial={{ opacity: 0, x: 6, y: preview.top }}
-                animate={{ opacity: 1, x: 0, y: preview.top }}
-                exit={{ opacity: 0, x: 6 }}
-                transition={{ duration: 0.2, ease: EASE_OUT }}
-                style={{ "--right": `${preview.right}px` } as MotionStyle}
-                className="pointer-events-none fixed top-0 right-(--right) z-50"
-              >
-                {/* card shell mirrors HoverCardContent; -translate-y-1/2
-                    centers it on the hovered row (outer element owns the
-                    motion transform, so the static one lives here) */}
-                <div className="w-max -translate-y-1/2 rounded-3xl bg-popover p-1 shadow-lg ring-1 ring-foreground/5 dark:ring-foreground/10">
-                  <ThemePreview value={preview.value} />
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>,
-          document.body,
-        )}
+        <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+          <Branch icon={PaletteIcon} label={t.common.menu.themes} defaultOpen>
+            {THEMES.filter((option) => !option.isCustom).map(themeRow)}
+            <Branch icon={SparkleIcon} label={t.common.menu.customThemes}>
+              {THEMES.filter((option) => option.isCustom).map(themeRow)}
+            </Branch>
+          </Branch>
+        </DropdownMenuRadioGroup>
+        <ThemePreview preview={preview} />
       </div>
 
-      <TreeBranch
-        icon={ImageIcon}
-        label={t.common.menu.background}
-        accessory={<MenuHint text={t.common.backgroundHints.section} />}
-        isOpen={isExpanded("background")}
-        onToggle={() => toggleBranch("background")}
-      >
-        {buildBackgroundOptions(t.common.none).map((option) => (
-          <TreeLeaf
-            key={option.id}
-            label={option.label}
-            isSelected={activeBackground === option.id}
-            onClick={() => setBackground(option.id)}
-          />
-        ))}
-      </TreeBranch>
+      <DropdownMenuRadioGroup value={background} onValueChange={setBackground}>
+        <Branch
+          icon={ImageIcon}
+          label={t.common.menu.background}
+          hint={<MenuHint text={t.common.backgroundHints.section} />}
+        >
+          {buildBackgroundOptions(t.common.none).map(({ id, label }) => (
+            <DropdownMenuRadioItem key={id} value={id} closeOnClick={false}>
+              {label}
+            </DropdownMenuRadioItem>
+          ))}
+        </Branch>
+      </DropdownMenuRadioGroup>
 
-      <div className="mx-2 my-1 h-px bg-border/60" />
+      <DropdownMenuSeparator />
 
-      {/* flips the whole page into the code view; the label wraps the switch
-          so the row itself is clickable. Closing the menu lets the page
-          transition play unobstructed. Lingering on the row grows a hint card
-          with a miniature of the mode and the one-line explanation. */}
       <HoverCard>
         <HoverCardTrigger
           delay={250}
           render={
-            <label
-              data-glide-row
-              className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium transition-colors hover:text-accent-foreground"
+            <DropdownMenuItem
+              role="menuitemcheckbox"
+              aria-checked={codeView}
+              onClick={() => setCodeView(!codeView)}
             />
           }
         >
-          <CodeIcon className={iconClass} aria-hidden="true" />
-          <span className="min-w-0 flex-1 truncate text-left">
+          <CodeIcon className={ICON} aria-hidden="true" />
+          <span className="min-w-0 flex-1 truncate">
             {t.common.diff.showDiff}
           </span>
-          <Switch
-            size="sm"
-            checked={codeView}
-            onCheckedChange={(checked) => {
-              setCodeView(checked);
-              onClose?.();
-            }}
-          />
+          {/* the row is the control: the switch only shows its state */}
+          <span inert className="flex">
+            <Switch size="sm" checked={codeView} />
+          </span>
         </HoverCardTrigger>
-        {/* a hair more air than the default — the card hangs off a raised
-            menu panel, not a bare control */}
         <DiffHintContent side="left" sideOffset={8} />
       </HoverCard>
-    </div>
+    </>
   );
 }
 
-/**
- * The animated sun/moon glyph for the appearance-menu trigger. Crossfades
- * between the active light/dark icon; the system preference is read
- * synchronously at first render so it never flashes the wrong state.
- */
-export function ThemeTriggerIcon() {
+/** The sun or moon of the scheme in use, turning from one into the other. */
+function ThemeTriggerIcon() {
   const { theme } = useTheme();
-  // no SSR here, so the initial value can be read synchronously — no mounted
-  // guard, no wrong-state flash
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">(() =>
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light",
+  const isDark = useIsDarkScheme();
+  const shown = theme === "system" ? (isDark ? "dark" : "light") : theme;
+
+  return THEMES.map(({ value, icon: Icon }) =>
+    value === "system" ? null : (
+      <Icon
+        key={value}
+        aria-hidden="true"
+        className={cn(
+          "absolute size-4 transition-[rotate,scale,opacity] duration-200",
+          value === shown
+            ? "scale-100 rotate-0 opacity-100"
+            : "scale-90 rotate-90 opacity-0",
+        )}
+      />
+    ),
   );
+}
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = (e: MediaQueryListEvent) =>
-      setSystemTheme(e.matches ? "dark" : "light");
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, []);
+export function ThemeToggle() {
+  const t = useTranslation();
+  const [open, setOpen] = useState(false);
+  const { active: codeView } = useCodeView();
 
-  const resolvedTheme = theme === "system" ? systemTheme : theme;
-
+  // the bar leaves for the code view only after its own fade, so the menu
+  // closes with the flip and not with the bar
   return (
-    <>
-      {THEMES.map((option) => {
-        // "system" isn't a visual state itself — it resolves to light/dark.
-        if (option.value === "system") return null;
+    <DropdownMenu open={open && !codeView} onOpenChange={setOpen}>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={t.common.a11y.toggleTheme}
+                  data-callout="theme"
+                />
+              }
+            />
+          }
+        >
+          <ThemeTriggerIcon />
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          {t.common.command.groups.theme}
+        </TooltipContent>
+      </Tooltip>
 
-        const Icon = option.icon;
-        const isVisible =
-          theme === "system"
-            ? option.value === resolvedTheme
-            : theme === option.value;
-
-        return (
-          <Icon
-            key={option.value}
-            aria-hidden="true"
-            className={`absolute h-4 w-4 transition-[transform,translate,scale,rotate,opacity] duration-200 ${isVisible ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-90 opacity-0"}`}
-          />
-        );
-      })}
-    </>
+      <DropdownMenuContent
+        align="end"
+        className="min-w-56"
+        // `d` is the code view's shortcut everywhere, and the diff row's card
+        // says so: it must not become the menu's type-to-find for "Dark"
+        onKeyDown={(event) => {
+          if (event.key.toLowerCase() === "d") event.preventBaseUIHandler();
+        }}
+      >
+        <ThemeMenu />
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

@@ -6,60 +6,77 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { CheckIcon } from "@phosphor-icons/react";
-import { useLanguage, useTranslation } from "@/lib/language-provider";
+import { TranslateIcon } from "@phosphor-icons/react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { LANGUAGES } from "@/config/languages";
-import { cn } from "@/lib/utils";
+import { useLanguage, useTranslation } from "@/lib/language-provider";
 
-/** The language picker — the content of the appearance menu. */
-export function LanguageMenuContent({ onClose }: { onClose: () => void }) {
+export function LanguageToggle() {
   const { language, setLanguage, detectedLanguage, detectedLanguageCode } =
     useLanguage();
   const t = useTranslation();
 
   return (
-    <div className="min-w-[168px]">
-      <div className="px-3 py-2 text-xs text-muted-foreground">
-        {t.common.command.groups.language}
-      </div>
+    <DropdownMenu>
+      <Tooltip>
+        <TooltipTrigger
+          render={
+            <DropdownMenuTrigger
+              render={
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={t.common.a11y.toggleLanguage}
+                />
+              }
+            />
+          }
+        >
+          <TranslateIcon />
+        </TooltipTrigger>
+        <TooltipContent side="bottom">
+          {t.common.command.groups.language}
+        </TooltipContent>
+      </Tooltip>
 
-      {LANGUAGES.map(({ code, label }) => {
-        const isSelected = language === code;
-        return (
-          <button
-            key={code}
-            type="button"
-            data-glide-row
-            aria-current={isSelected || undefined}
-            onClick={() => {
-              setLanguage(code);
-              onClose();
-            }}
-            className="flex w-full items-center gap-2 rounded-2xl px-3 py-2 text-sm font-medium outline-hidden transition-colors hover:text-accent-foreground focus-visible:text-accent-foreground"
-          >
-            <span
-              className={cn(
-                "min-w-0 flex-1 truncate text-left",
-                isSelected && "text-muted-foreground",
-              )}
-            >
-              {label}
-            </span>
-            {isSelected && (
-              <CheckIcon className="size-4 shrink-0 text-muted-foreground" />
-            )}
-          </button>
-        );
-      })}
+      <DropdownMenuContent align="end">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>
+            {t.common.command.groups.language}
+          </DropdownMenuLabel>
+          <DropdownMenuRadioGroup value={language} onValueChange={setLanguage}>
+            {LANGUAGES.map(({ code, label }) => (
+              <DropdownMenuRadioItem key={code} value={code} closeOnClick>
+                {label}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuRadioGroup>
+        </DropdownMenuGroup>
 
-      <div className="my-1.5 h-px bg-border/50" />
+        <DropdownMenuSeparator />
 
-      <div className="px-3 py-1.5 text-xs text-muted-foreground/70">
-        {t.i18n?.detectedNote.replace(
-          "{lang}",
-          detectedLanguageCode || detectedLanguage,
-        )}
-      </div>
-    </div>
+        <p className="px-3 py-1.5 text-xs text-muted-foreground/70">
+          {t.i18n.detectedNote.replace(
+            "{lang}",
+            detectedLanguageCode || detectedLanguage,
+          )}
+        </p>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

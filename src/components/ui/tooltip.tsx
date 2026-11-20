@@ -479,6 +479,8 @@ function TooltipProvider({
 
   useLayoutEffect(() => {
     if (!shown) {
+      // a pop still running would carry on and leave the label showing
+      surface.stop();
       surface.set(HIDDEN);
       return;
     }
