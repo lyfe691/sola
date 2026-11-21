@@ -22,7 +22,7 @@ import { Button } from "./ui/button";
 import { barButton } from "./bar-button";
 import { ContactMenu } from "./contact-menu";
 import { NavPanel } from "./nav-menu";
-import { SearchToggle } from "./search-toggle";
+import { SearchField, SearchToggle } from "./search-toggle";
 import { LanguageToggle } from "./language-toggle";
 import { ThemeToggle } from "./theme-toggle";
 import { useCodeView } from "./deploy-diff/code-view-provider";
@@ -69,7 +69,11 @@ const ToggleGroup = memo(({ className, floating }: ToggleGroupProps) => {
         className,
       )}
     >
-      <SearchToggle floating={floating} />
+      {/* in the desktop bar search is a field where there is room for one */}
+      {!floating && <SearchField className="mr-1 hidden w-48 xl:flex" />}
+      <div className={cn("flex", !floating && "xl:hidden")}>
+        <SearchToggle floating={floating} />
+      </div>
       <LanguageToggle floating={floating} />
       <ThemeToggle floating={floating} />
     </div>
@@ -123,6 +127,9 @@ const DesktopNav = () => {
   const rowRef = useRef<HTMLDivElement>(null);
   const [menu, setMenu] = useState<{ key: NavMenuKey; x: number } | null>(null);
   const leaving = useRef<number | undefined>(undefined);
+  // the menu of a link that was just followed: it stays shut until the
+  // pointer has left that link
+  const followed = useRef<NavMenuKey | null>(null);
   const glide = useGlidePill();
   const linksRef = useRef<HTMLElement>(null);
 
@@ -160,7 +167,7 @@ const DesktopNav = () => {
   // under its link, moved left as far as it takes to stay inside the bar
   const open = (key: NavMenuKey, link: HTMLElement) => {
     const row = rowRef.current;
-    if (!row) return;
+    if (!row || followed.current === key) return;
     window.clearTimeout(leaving.current);
     const offset =
       link.getBoundingClientRect().left - row.getBoundingClientRect().left;
@@ -277,7 +284,13 @@ const DesktopNav = () => {
                     if (event.pointerType !== "touch")
                       open(key, event.currentTarget);
                   }}
-                  onPointerLeave={closeSoon}
+                  // a page change takes the pointer off the bar and hands it
+                  // back, without the visitor moving it: that is not leaving
+                  onPointerLeave={() => {
+                    if (!document.documentElement.dataset.pageChange)
+                      followed.current = null;
+                    closeSoon();
+                  }}
                   onFocus={(event) => {
                     if (event.target.matches(":focus-visible"))
                       open(key, event.currentTarget);
@@ -295,7 +308,10 @@ const DesktopNav = () => {
                 >
                   <Link
                     to={link.path}
-                    onClick={close}
+                    onClick={() => {
+                      followed.current = key;
+                      close();
+                    }}
                     aria-current={active ? "page" : undefined}
                     aria-expanded={expanded}
                     className={className}
