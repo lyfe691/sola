@@ -43,20 +43,38 @@ export interface PaintedPreset {
   scale: number;
   /** Drift speed; 0.3 matches the page background. */
   speed: number;
+  /**
+   * The second colour of a deep dive's hero field, where the pale wash is
+   * only a lighter tone of the deep one: two tones of one hue leave the
+   * field a single colour, and it is there to show two meeting.
+   */
+  counter?: string;
 }
 
+const FIELD = { scale: 1.35, speed: 0.3 };
+
 export const PRESETS: Record<ArtPreset, PaintedPreset> = {
-  night: { colors: ["#0b1022", "#9fb3dc"], scale: 1.35, speed: 0.3 },
-  midnight: { colors: ["#161f52", "#a9b8f0"], scale: 1.35, speed: 0.3 },
-  cobalt: { colors: ["#12306b", "#6f97d6"], scale: 1.35, speed: 0.3 },
-  caramel: { colors: ["#a5652b", "#f4dab4"], scale: 1.3, speed: 0.3 },
-  starry: { colors: ["#243b7a", "#f4e4b0"], scale: 1.35, speed: 0.3 },
-  irises: { colors: ["#4b3f8f", "#efe5c2"], scale: 1.35, speed: 0.3 },
-  almond: { colors: ["#4fa3a5", "#f3efe4"], scale: 1.35, speed: 0.3 },
-  wheat: { colors: ["#b8862b", "#fff0c4"], scale: 1.4, speed: 0.3 },
-  moss: { colors: ["#3a7d44", "#cfe8c4"], scale: 1.35, speed: 0.3 },
-  poison: { colors: ["#143a1d", "#6fe35a"], scale: 1.35, speed: 0.3 },
-  slate: { colors: ["#334155", "#d6e0ea"], scale: 1.35, speed: 0.3 },
+  night: { colors: ["#0b1022", "#9fb3dc"], ...FIELD, counter: "#f2c79a" },
+  midnight: { colors: ["#161f52", "#a9b8f0"], ...FIELD, counter: "#f0a8c8" },
+  cobalt: { colors: ["#12306b", "#6f97d6"], ...FIELD, counter: "#ffb08a" },
+  caramel: {
+    colors: ["#a5652b", "#f4dab4"],
+    scale: 1.3,
+    speed: 0.3,
+    counter: "#a9c6ee",
+  },
+  starry: { colors: ["#243b7a", "#f4e4b0"], ...FIELD },
+  irises: { colors: ["#4b3f8f", "#efe5c2"], ...FIELD },
+  almond: { colors: ["#4fa3a5", "#f3efe4"], ...FIELD, counter: "#f6c3c0" },
+  wheat: {
+    colors: ["#b8862b", "#fff0c4"],
+    scale: 1.4,
+    speed: 0.3,
+    counter: "#a8cdf0",
+  },
+  moss: { colors: ["#3a7d44", "#cfe8c4"], ...FIELD, counter: "#f1e2a0" },
+  poison: { colors: ["#143a1d", "#6fe35a"], ...FIELD },
+  slate: { colors: ["#334155", "#d6e0ea"], ...FIELD, counter: "#f0cdb0" },
 };
 
 export interface ResolvedArt extends PaintedPreset {

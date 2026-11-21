@@ -48,12 +48,13 @@ export function ArtField({
   onReady?: () => void;
 }) {
   // the cover's own tones: a preset's pair is a near-black and a wash, and
-  // the field needs two colours with light in them over a ground of its hue
+  // the field needs two colours with light in them over a ground of its hue.
+  // Where the wash is the deep colour's own hue, the preset names another
   const { colors, ground, seed } = useMemo(() => {
     const resolved = resolveArt(art);
     const { vivid, pale, dusk } = coverPalette(resolved);
     return {
-      colors: [vivid, pale] as [string, string],
+      colors: [vivid, resolved.counter ?? pale] as [string, string],
       ground: dusk,
       seed: resolved.seed,
     };
