@@ -146,7 +146,7 @@ function PaletteDisc({ value, label }: (typeof THEMES)[number]) {
           )}
         />
       </span>
-      <span className="max-w-full truncate text-xs text-muted-foreground transition-colors group-data-checked/disc:font-medium group-data-checked/disc:text-foreground">
+      <span className="max-w-full truncate text-xs text-muted-foreground transition-colors group-data-checked/disc:text-foreground">
         {label}
       </span>
     </Radio.Root>
@@ -233,7 +233,7 @@ export function ThemeDrawer({
             value={background}
             onValueChange={setBackground}
             aria-label={t.common.menu.background}
-            className="no-scrollbar scroll-fade-x -mx-4 -my-1 flex scroll-px-4 gap-2 overflow-x-auto px-4 py-1"
+            className="no-scrollbar scroll-fade-x -mx-4 -my-1 flex scroll-px-10 gap-2 overflow-x-auto px-4 py-1"
           >
             {buildBackgroundOptions(t.common.none).map(({ id, label }) => (
               <Radio.Root
