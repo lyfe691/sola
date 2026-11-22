@@ -86,7 +86,6 @@ export const ja = {
       appearance: "外観",
       themes: "テーマ",
       customThemes: "カスタムテーマ",
-      custom: "カスタム",
       background: "背景",
     },
     diff: {

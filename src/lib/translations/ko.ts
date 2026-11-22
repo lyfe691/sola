@@ -88,7 +88,6 @@ export const ko = {
       appearance: "모양",
       themes: "테마",
       customThemes: "맞춤 테마",
-      custom: "맞춤",
       background: "배경",
     },
     diff: {
