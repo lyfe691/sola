@@ -85,6 +85,7 @@ export const ko = {
       codeSteps: "코드 단계",
     },
     menu: {
+      appearance: "모양",
       themes: "테마",
       customThemes: "맞춤 테마",
       background: "배경",

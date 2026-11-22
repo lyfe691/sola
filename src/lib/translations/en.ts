@@ -85,6 +85,7 @@ export const en = {
       codeSteps: "Code steps",
     },
     menu: {
+      appearance: "Appearance",
       themes: "Themes",
       customThemes: "Custom themes",
       background: "Backgrounds",

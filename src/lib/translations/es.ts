@@ -88,6 +88,7 @@ export const es = {
       codeSteps: "Pasos del código",
     },
     menu: {
+      appearance: "Apariencia",
       themes: "Temas",
       customThemes: "Temas personalizados",
       background: "Fondos",
