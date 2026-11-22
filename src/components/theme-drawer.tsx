@@ -7,6 +7,7 @@
  */
 
 import {
+  useId,
   useState,
   type CSSProperties,
   type ReactElement,
@@ -108,7 +109,7 @@ function ModeControl({
             <Radio.Root
               key={value}
               value={value}
-              className="flex h-10 min-w-0 cursor-pointer items-center justify-center gap-1 rounded-full text-sm font-medium text-muted-foreground outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30 data-checked:text-foreground"
+              className="flex h-11 min-w-0 cursor-pointer items-center justify-center gap-1 rounded-full text-sm font-medium text-muted-foreground outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30 data-checked:text-foreground"
             >
               <Icon
                 className="size-4 shrink-0 @max-[19rem]:hidden"
@@ -158,19 +159,29 @@ function PaletteDisc({ value, label }: (typeof THEMES)[number]) {
  * colours, the backgrounds as a row to swipe along. Every pick repaints the
  * site behind the open sheet, so the visitor can try one after another.
  */
-export function ThemeDrawer({ trigger }: { trigger: ReactElement }) {
+export function ThemeDrawer({
+  trigger,
+  open,
+  onOpenChange,
+}: {
+  trigger: ReactElement;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}) {
   const t = useTranslation();
   const { theme, setTheme } = useTheme();
   const { active: background, setActive: setBackground } = useBackground();
   const { active: codeView, setActive: setCodeView } = useCodeView();
-  const [open, setOpen] = useState(false);
+  const diffTitleId = useId();
+  const diffHintId = useId();
   // the custom segment brings back the last custom theme worn, or the first
   const [lastPalette, setLastPalette] = useState<Theme>(() =>
     isPalette(theme) ? theme : (PALETTES[0].value as Theme),
   );
   if (isPalette(theme) && theme !== lastPalette) setLastPalette(theme);
   // the code view takes the whole bar away, this sheet with it: the switch
-  // shuts the sheet first and the code view opens once it is down
+  // shuts the sheet first and the code view opens once it is down. Opened
+  // again on its way down, the sheet forgets the flip
   const [toCodeView, setToCodeView] = useState(false);
 
   return (
@@ -178,7 +189,10 @@ export function ThemeDrawer({ trigger }: { trigger: ReactElement }) {
       trigger={trigger}
       title={t.common.menu.appearance}
       open={open && !codeView}
-      onOpenChange={setOpen}
+      onOpenChange={(next) => {
+        if (next) setToCodeView(false);
+        onOpenChange(next);
+      }}
       onOpenChangeComplete={(isOpen) => {
         if (isOpen || !toCodeView) return;
         setToCodeView(false);
@@ -219,13 +233,16 @@ export function ThemeDrawer({ trigger }: { trigger: ReactElement }) {
             value={background}
             onValueChange={setBackground}
             aria-label={t.common.menu.background}
-            className="no-scrollbar scroll-fade-x -mx-4 flex gap-2 overflow-x-auto px-4"
+            className="no-scrollbar scroll-fade-x -mx-4 -my-1 flex scroll-px-4 gap-2 overflow-x-auto px-4 py-1"
           >
             {buildBackgroundOptions(t.common.none).map(({ id, label }) => (
               <Radio.Root
                 key={id}
                 value={id}
-                className="inline-flex h-9 shrink-0 cursor-pointer items-center rounded-full bg-muted px-4 text-sm whitespace-nowrap text-foreground outline-none transition-colors not-data-checked:hover:bg-accent focus-visible:ring-3 focus-visible:ring-ring/30 focus-visible:ring-inset data-checked:bg-primary data-checked:text-primary-foreground"
+                // an outline, not a ring: a custom theme's ring is its
+                // primary, the very fill of the chosen chip. The after box
+                // makes the 36px chip a 44px target
+                className="relative inline-flex h-9 shrink-0 cursor-pointer items-center rounded-full bg-muted px-4 text-sm whitespace-nowrap text-foreground outline-offset-2 transition-colors not-data-checked:hover:bg-accent after:absolute after:inset-x-0 after:-inset-y-1 focus-visible:outline-2 focus-visible:outline-ring data-checked:bg-primary data-checked:text-primary-foreground"
               >
                 {label}
               </Radio.Root>
@@ -239,18 +256,25 @@ export function ThemeDrawer({ trigger }: { trigger: ReactElement }) {
             aria-hidden="true"
           />
           <span className="min-w-0 flex-1">
-            <span className="block text-sm font-medium">
+            <span id={diffTitleId} className="block text-sm font-medium">
               {t.common.diff.showDiff}
             </span>
-            <span className="block text-xs text-muted-foreground">
+            <span
+              id={diffHintId}
+              className="block text-xs text-muted-foreground"
+            >
               {t.common.diff.hint}
             </span>
           </span>
+          {/* named by its title and described by the hint, not named by the
+              whole label: the row still toggles it on a tap */}
           <Switch
+            aria-labelledby={diffTitleId}
+            aria-describedby={diffHintId}
             checked={codeView || toCodeView}
             onCheckedChange={(on) => {
               setToCodeView(on);
-              if (on) setOpen(false);
+              if (on) onOpenChange(false);
             }}
           />
         </label>

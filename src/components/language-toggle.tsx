@@ -6,7 +6,7 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { lazy, Suspense, type ReactElement } from "react";
+import { lazy, Suspense, useState, type ReactElement } from "react";
 import { TranslateIcon } from "@phosphor-icons/react";
 import { barButton } from "@/components/bar-button";
 import { Button } from "@/components/ui/button";
@@ -87,22 +87,33 @@ export function LanguageToggle({ floating }: { floating?: boolean }) {
   const { detectedLanguage, detectedLanguageCode } = useLanguage();
   const t = useTranslation();
   const isMobile = useIsMobile();
+  // the sheet's open state sits above its chunk, so a press on the button
+  // before the chunk is in still opens the sheet once it is
+  const [sheetOpen, setSheetOpen] = useState(false);
   const note = t.i18n.detectedNote.replace(
     "{lang}",
     detectedLanguageCode || detectedLanguage,
   );
-  const trigger = (
-    <Button {...barButton(floating)} aria-label={t.common.a11y.toggleLanguage}>
+  const button = (onClick?: () => void) => (
+    <Button
+      {...barButton(floating)}
+      aria-label={t.common.a11y.toggleLanguage}
+      onClick={onClick}
+    >
       <TranslateIcon />
     </Button>
   );
 
-  // until the sheet's chunk is in, the button stands without it
   return isMobile ? (
-    <Suspense fallback={trigger}>
-      <LanguageDrawer trigger={trigger} note={note} />
+    <Suspense fallback={button(() => setSheetOpen(true))}>
+      <LanguageDrawer
+        trigger={button()}
+        note={note}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+      />
     </Suspense>
   ) : (
-    <LanguageDropdown trigger={trigger} note={note} />
+    <LanguageDropdown trigger={button()} note={note} />
   );
 }

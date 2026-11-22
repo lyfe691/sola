@@ -356,22 +356,30 @@ function ThemeDropdown({ trigger }: { trigger: ReactElement }) {
 export function ThemeToggle({ floating }: { floating?: boolean }) {
   const t = useTranslation();
   const isMobile = useIsMobile();
-  const trigger = (
+  // the sheet's open state sits above its chunk, so a press on the button
+  // before the chunk is in (the callout's own included) still opens the
+  // sheet once it is
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const button = (onClick?: () => void) => (
     <Button
       {...barButton(floating)}
       aria-label={t.common.a11y.toggleTheme}
       data-callout="theme"
+      onClick={onClick}
     >
       <ThemeTriggerIcon />
     </Button>
   );
 
-  // until the sheet's chunk is in, the button stands without it
   return isMobile ? (
-    <Suspense fallback={trigger}>
-      <ThemeDrawer trigger={trigger} />
+    <Suspense fallback={button(() => setSheetOpen(true))}>
+      <ThemeDrawer
+        trigger={button()}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+      />
     </Suspense>
   ) : (
-    <ThemeDropdown trigger={trigger} />
+    <ThemeDropdown trigger={button()} />
   );
 }

@@ -91,7 +91,7 @@ export const es = {
       appearance: "Apariencia",
       themes: "Temas",
       customThemes: "Temas personalizados",
-      custom: "Temas",
+      custom: "Propios",
       background: "Fondos",
     },
     diff: {
