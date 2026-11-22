@@ -53,7 +53,10 @@ export function LanguageDrawer({
               data-glide=""
               className="group/row flex h-13 cursor-pointer items-center gap-3 rounded-2xl px-3 outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
             >
-              <span className="flex size-8 items-center justify-center rounded-xl bg-muted text-xs font-medium text-muted-foreground uppercase ring-1 ring-foreground/10">
+              <span
+                aria-hidden="true"
+                className="flex size-8 items-center justify-center rounded-xl bg-muted text-xs font-medium text-muted-foreground uppercase ring-1 ring-foreground/10"
+              >
                 {code}
               </span>
               {/* the chosen row reads as chosen the way the dropdown's does */}

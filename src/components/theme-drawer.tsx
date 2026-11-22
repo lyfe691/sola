@@ -59,7 +59,11 @@ function ThemeTile({ value, label }: (typeof THEMES)[number]) {
       value={value}
       className="group/tile flex min-w-0 cursor-pointer flex-col items-center gap-2 rounded-2xl outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
     >
-      <span className="block w-full rounded-2xl ring-offset-2 ring-offset-popover transition-shadow duration-200 group-data-checked/tile:ring-2 group-data-checked/tile:ring-primary">
+      {/* the picture is the preview; the name below names the radio */}
+      <span
+        aria-hidden="true"
+        className="block w-full rounded-2xl ring-offset-2 ring-offset-popover transition-shadow duration-200 group-data-checked/tile:ring-2 group-data-checked/tile:ring-primary"
+      >
         {value === "system" ? (
           <SystemSwatch />
         ) : (
