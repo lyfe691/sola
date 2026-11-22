@@ -6,7 +6,13 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState, type ReactNode } from "react";
+import {
+  lazy,
+  Suspense,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { Collapsible } from "@base-ui/react/collapsible";
 import {
@@ -18,6 +24,7 @@ import {
 } from "@phosphor-icons/react";
 import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { useTheme } from "./theme-provider";
+import { ThemeSwatch } from "./theme-swatch";
 import { THEMES, type ThemeIcon } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
@@ -25,6 +32,7 @@ import { MenuHint } from "@/components/menu-hint";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { barButton } from "@/components/bar-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,6 +54,13 @@ import {
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { EASE_OUT } from "@/utils/transitions";
+
+// a phone's sheet is its own chunk: wider screens never load it
+const ThemeDrawer = lazy(() =>
+  import("./theme-drawer").then((module) => ({
+    default: module.ThemeDrawer,
+  })),
+);
 
 // a highlighted row inks everything in it: an icon keeps its own colour
 const ICON = "text-muted-foreground! **:text-muted-foreground!";
@@ -96,40 +111,6 @@ function Branch({
         </div>
       </Collapsible.Panel>
     </Collapsible.Root>
-  );
-}
-
-/**
- * A miniature page wearing a theme's class, so every colour is that theme's
- * own token. The class is required even for light: the preview is portaled
- * under <html>, which carries the active theme.
- */
-function ThemeSwatch({
-  themeClass,
-  className,
-}: {
-  themeClass: string;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        themeClass,
-        "w-[136px] flex-none rounded-2xl border border-foreground/10 bg-background p-2.5 transition-colors",
-        className,
-      )}
-    >
-      <p className="font-heading text-sm font-semibold text-foreground transition-colors">
-        Aa
-      </p>
-      <div className="mt-1.5 h-1 w-3/4 rounded-full bg-muted-foreground/40 transition-colors" />
-      <div className="mt-1 h-1 w-1/2 rounded-full bg-muted-foreground/25 transition-colors" />
-      <div className="mt-2.5 flex items-center gap-1">
-        <span className="h-3.5 flex-1 rounded-md bg-primary transition-colors" />
-        <span className="h-3.5 w-5 rounded-md border border-foreground/10 bg-accent transition-colors" />
-        <span className="size-3.5 rounded-full border border-foreground/10 bg-secondary transition-colors" />
-      </div>
-    </div>
   );
 }
 
@@ -306,7 +287,8 @@ function ThemeTriggerIcon() {
   );
 }
 
-export function ThemeToggle({ floating }: { floating?: boolean }) {
+/** Wider screens: a dropdown under the bar, a preview beside each theme. */
+function ThemeDropdown({ trigger }: { trigger: ReactElement }) {
   const t = useTranslation();
   const [open, setOpen] = useState(false);
   const { active: codeView } = useCodeView();
@@ -316,21 +298,7 @@ export function ThemeToggle({ floating }: { floating?: boolean }) {
   return (
     <DropdownMenu open={open && !codeView} onOpenChange={setOpen}>
       <Tooltip>
-        <TooltipTrigger
-          render={
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  {...barButton(floating)}
-                  aria-label={t.common.a11y.toggleTheme}
-                  data-callout="theme"
-                />
-              }
-            />
-          }
-        >
-          <ThemeTriggerIcon />
-        </TooltipTrigger>
+        <TooltipTrigger render={<DropdownMenuTrigger render={trigger} />} />
         <TooltipContent side="bottom">
           {t.common.command.groups.theme}
         </TooltipContent>
@@ -349,5 +317,28 @@ export function ThemeToggle({ floating }: { floating?: boolean }) {
         <ThemeMenu />
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+export function ThemeToggle({ floating }: { floating?: boolean }) {
+  const t = useTranslation();
+  const isMobile = useIsMobile();
+  const trigger = (
+    <Button
+      {...barButton(floating)}
+      aria-label={t.common.a11y.toggleTheme}
+      data-callout="theme"
+    >
+      <ThemeTriggerIcon />
+    </Button>
+  );
+
+  // until the sheet's chunk is in, the button stands without it
+  return isMobile ? (
+    <Suspense fallback={trigger}>
+      <ThemeDrawer trigger={trigger} />
+    </Suspense>
+  ) : (
+    <ThemeDropdown trigger={trigger} />
   );
 }

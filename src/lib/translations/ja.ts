@@ -83,6 +83,7 @@ export const ja = {
       codeSteps: "コードのステップ",
     },
     menu: {
+      appearance: "外観",
       themes: "テーマ",
       customThemes: "カスタムテーマ",
       background: "背景",
