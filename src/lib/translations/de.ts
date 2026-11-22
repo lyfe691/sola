@@ -89,6 +89,7 @@ export const de = {
       appearance: "Darstellung",
       themes: "Designs",
       customThemes: "Eigene Designs",
+      custom: "Eigene",
       background: "Hintergründe",
     },
     diff: {

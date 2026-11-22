@@ -18,6 +18,7 @@ import {
   CircleHalfIcon,
   CodeIcon,
   MoonIcon,
+  SparkleIcon,
   SunIcon,
 } from "@phosphor-icons/react";
 import { useTheme } from "./theme-provider";
@@ -27,18 +28,24 @@ import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { Switch } from "@/components/ui/switch";
-import { THEMES, type ThemeIcon } from "@/config/themes";
+import { THEMES, toTheme, type Theme, type ThemeIcon } from "@/config/themes";
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
+
+const PALETTES = THEMES.filter((option) => option.isCustom);
+const isPalette = (theme: string) =>
+  PALETTES.some((palette) => palette.value === theme);
+
+// the control's fourth segment: whichever custom theme was worn last
+const CUSTOM = "custom";
 
 // on a phone the system's scheme is not a laptop: it is half of each
 const MODE_ICONS: Record<string, ThemeIcon> = {
   light: SunIcon,
   dark: MoonIcon,
   system: CircleHalfIcon,
+  [CUSTOM]: SparkleIcon,
 };
-const MODES = THEMES.filter((option) => !option.isCustom);
-const PALETTES = THEMES.filter((option) => option.isCustom);
 
 /** A section's name over its options. */
 function Section({
@@ -62,41 +69,57 @@ function Section({
 }
 
 /**
- * Light, dark or the system's: one control of three, its thumb gliding to
- * the one in use. On a palette none of the three is, and the thumb steps
- * out where it last stood, so it comes back from there.
+ * Light, dark, the system's or a custom theme: one control of four, its
+ * thumb gliding to the one in use. A segmented control always has one
+ * segment on, so a custom theme has a segment of its own rather than leaving
+ * the other three all off.
  */
-function ModeControl({ theme }: { theme: string }) {
-  const index = MODES.findIndex((mode) => mode.value === theme);
-  const [lastIndex, setLastIndex] = useState(Math.max(index, 0));
-  if (index >= 0 && index !== lastIndex) setLastIndex(index);
+function ModeControl({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const t = useTranslation();
+  const segments = [
+    ...THEMES.filter((option) => !option.isCustom),
+    { value: CUSTOM, label: t.common.menu.custom },
+  ];
+  const index = segments.findIndex((segment) => segment.value === value);
 
   return (
-    <div className="rounded-full bg-muted p-1">
-      <div className="relative isolate grid grid-cols-3">
+    <RadioGroup
+      value={value}
+      onValueChange={onChange}
+      aria-label={t.common.menu.themes}
+      className="rounded-full bg-muted p-1"
+    >
+      {/* a container, so the glyphs step aside before a label would clip */}
+      <div className="@container relative isolate grid grid-cols-4">
         <span
           aria-hidden="true"
-          style={{ "--mode-x": `${lastIndex * 100}%` } as CSSProperties}
-          className={cn(
-            "absolute inset-y-0 left-0 -z-10 w-1/3 translate-x-(--mode-x) rounded-full bg-background shadow-sm ring-1 ring-foreground/5 motion-safe:transition-[translate,opacity] motion-safe:duration-220 motion-safe:ease-expo",
-            index < 0 && "opacity-0",
-          )}
+          style={{ "--mode-x": `${index * 100}%` } as CSSProperties}
+          className="absolute inset-y-0 left-0 -z-10 w-1/4 translate-x-(--mode-x) rounded-full bg-background shadow-sm ring-1 ring-foreground/5 motion-safe:transition-[translate] motion-safe:duration-220 motion-safe:ease-expo"
         />
-        {MODES.map(({ value, label }) => {
+        {segments.map(({ value, label }) => {
           const Icon = MODE_ICONS[value];
           return (
             <Radio.Root
               key={value}
               value={value}
-              className="flex h-10 cursor-pointer items-center justify-center gap-1.5 rounded-full text-sm font-medium text-muted-foreground outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30 data-checked:text-foreground"
+              className="flex h-10 min-w-0 cursor-pointer items-center justify-center gap-1 rounded-full text-sm font-medium text-muted-foreground outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30 data-checked:text-foreground"
             >
-              <Icon className="size-4" aria-hidden="true" />
-              {label}
+              <Icon
+                className="size-4 shrink-0 @max-[19rem]:hidden"
+                aria-hidden="true"
+              />
+              <span className="truncate">{label}</span>
             </Radio.Root>
           );
         })}
       </div>
-    </div>
+    </RadioGroup>
   );
 }
 
@@ -131,7 +154,7 @@ function PaletteDisc({ value, label }: (typeof THEMES)[number]) {
 
 /**
  * The theme menu on a phone, made for a thumb rather than taken from the
- * dropdown: the scheme as one control, the palettes as discs of their
+ * dropdown: the scheme as one control, the custom themes as discs of their
  * colours, the backgrounds as a row to swipe along. Every pick repaints the
  * site behind the open sheet, so the visitor can try one after another.
  */
@@ -141,6 +164,11 @@ export function ThemeDrawer({ trigger }: { trigger: ReactElement }) {
   const { active: background, setActive: setBackground } = useBackground();
   const { active: codeView, setActive: setCodeView } = useCodeView();
   const [open, setOpen] = useState(false);
+  // the custom segment brings back the last custom theme worn, or the first
+  const [lastPalette, setLastPalette] = useState<Theme>(() =>
+    isPalette(theme) ? theme : (PALETTES[0].value as Theme),
+  );
+  if (isPalette(theme) && theme !== lastPalette) setLastPalette(theme);
   // the code view takes the whole bar away, this sheet with it: the switch
   // shuts the sheet first and the code view opens once it is down
   const [toCodeView, setToCodeView] = useState(false);
@@ -158,22 +186,28 @@ export function ThemeDrawer({ trigger }: { trigger: ReactElement }) {
       }}
     >
       <div className="flex flex-col gap-6">
-        {/* one choice across the modes and the palettes */}
-        <RadioGroup
-          value={theme}
-          onValueChange={setTheme}
-          aria-label={t.common.menu.themes}
-          className="flex flex-col gap-6"
-        >
-          <ModeControl theme={theme} />
-          <Section label={t.common.menu.customThemes}>
-            <div className="grid grid-cols-4 gap-x-2 gap-y-3">
-              {PALETTES.map((option) => (
-                <PaletteDisc key={option.value} {...option} />
-              ))}
-            </div>
-          </Section>
-        </RadioGroup>
+        <ModeControl
+          value={isPalette(theme) ? CUSTOM : theme}
+          onChange={(value) => {
+            const next = value === CUSTOM ? lastPalette : toTheme(value);
+            if (next) setTheme(next);
+          }}
+        />
+        <Section label={t.common.menu.customThemes}>
+          <RadioGroup
+            // null, not undefined: still controlled, with no disc on
+            value={isPalette(theme) ? theme : null}
+            onValueChange={(value: Theme | null) => {
+              if (value) setTheme(value);
+            }}
+            aria-label={t.common.menu.customThemes}
+            className="grid grid-cols-4 gap-x-2 gap-y-3"
+          >
+            {PALETTES.map((option) => (
+              <PaletteDisc key={option.value} {...option} />
+            ))}
+          </RadioGroup>
+        </Section>
 
         <Section
           label={t.common.menu.background}

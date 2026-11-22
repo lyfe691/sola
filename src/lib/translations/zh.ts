@@ -82,6 +82,7 @@ export const zh = {
       appearance: "外观",
       themes: "主题",
       customThemes: "自定义主题",
+      custom: "自定义",
       background: "背景",
     },
     diff: {
