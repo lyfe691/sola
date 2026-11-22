@@ -24,7 +24,6 @@ import {
 } from "@phosphor-icons/react";
 import { AnimatePresence, motion, type MotionStyle } from "motion/react";
 import { useTheme } from "./theme-provider";
-import { ThemeSwatch } from "./theme-swatch";
 import { THEMES, type ThemeIcon } from "@/config/themes";
 import { useBackground } from "@/components/backgrounds/background-provider";
 import { buildBackgroundOptions } from "@/components/backgrounds/registry";
@@ -111,6 +110,40 @@ function Branch({
         </div>
       </Collapsible.Panel>
     </Collapsible.Root>
+  );
+}
+
+/**
+ * A miniature page wearing a theme's class, so every colour is that theme's
+ * own token. The class is required even for light: the preview is portaled
+ * under <html>, which carries the active theme.
+ */
+function ThemeSwatch({
+  themeClass,
+  className,
+}: {
+  themeClass: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        themeClass,
+        "w-[136px] flex-none rounded-2xl border border-foreground/10 bg-background p-2.5 transition-colors",
+        className,
+      )}
+    >
+      <p className="font-heading text-sm font-semibold text-foreground transition-colors">
+        Aa
+      </p>
+      <div className="mt-1.5 h-1 w-3/4 rounded-full bg-muted-foreground/40 transition-colors" />
+      <div className="mt-1 h-1 w-1/2 rounded-full bg-muted-foreground/25 transition-colors" />
+      <div className="mt-2.5 flex items-center gap-1">
+        <span className="h-3.5 flex-1 rounded-md bg-primary transition-colors" />
+        <span className="h-3.5 w-5 rounded-md border border-foreground/10 bg-accent transition-colors" />
+        <span className="size-3.5 rounded-full border border-foreground/10 bg-secondary transition-colors" />
+      </div>
+    </div>
   );
 }
 
