@@ -10,7 +10,7 @@ import { useLanguage, useTranslation } from "@/lib/language-provider";
 import { CyclingText } from "@/components/ui/custom/cycling-text";
 import { NameMorpher } from "@/components/ui/custom/name-morpher";
 import { SpecularButton } from "@/components/ui/custom/specular-button";
-import { MorphArrow } from "@/components/ui/custom/morph-arrow";
+import { CurrentProjects } from "@/components/current-projects";
 import {
   SOCIAL_BRAND_FILL,
   SOCIAL_LINKS,
@@ -75,24 +75,7 @@ const Index = () => {
       <meta name="description" content={t.seo.home.description} />
 
       <div className="flex w-full max-w-3xl flex-col md:max-w-4xl lg:max-w-5xl">
-        <Reveal className="relative z-30 mb-3 sm:mb-4 md:mb-5">
-          <a
-            href="https://kinoa.to"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex w-fit items-center gap-1.5 rounded-full bg-muted px-2.5 py-1 whitespace-nowrap ring-1 ring-border transition-colors duration-300 hover:bg-accent sm:px-3.5 sm:py-1.5"
-          >
-            <span className="text-2xs font-medium text-foreground/50 transition-colors duration-300 group-hover:text-foreground/60 sm:text-xs-plus">
-              {t.index.currentlyWorkingOn}
-            </span>
-            <span className="bg-linear-to-r from-foreground/50 via-foreground to-foreground/50 bg-size-[200%_100%] bg-clip-text text-2xs font-semibold text-transparent [background-position:100%_0%] can-hover:group-hover:animate-shine sm:text-xs-plus">
-              Kinoa
-            </span>
-            <span className="flex text-foreground/40 transition-colors duration-300 group-hover:text-foreground/60">
-              <MorphArrow className="size-3 sm:size-3.5" />
-            </span>
-          </a>
-        </Reveal>
+        <CurrentProjects />
 
         <Reveal
           as="h1"
