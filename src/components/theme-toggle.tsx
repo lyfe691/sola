@@ -6,7 +6,13 @@
  * Refer to LICENSE for details or contact yanis.sebastian.zuercher@gmail.com for permissions.
  */
 
-import { useState, type ReactNode } from "react";
+import {
+  lazy,
+  Suspense,
+  useState,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 import { Collapsible } from "@base-ui/react/collapsible";
 import {
@@ -25,6 +31,7 @@ import { MenuHint } from "@/components/menu-hint";
 import { useCodeView } from "@/components/deploy-diff/code-view-provider";
 import { DiffHintContent } from "@/components/deploy-diff/diff-hint";
 import { useIsDarkScheme } from "@/components/deploy-diff/use-scheme";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { barButton } from "@/components/bar-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -46,6 +53,13 @@ import {
 import { useTranslation } from "@/lib/language-provider";
 import { cn } from "@/lib/utils";
 import { EASE_OUT } from "@/utils/transitions";
+
+// a phone's sheet is its own chunk: wider screens never load it
+const ThemeDrawer = lazy(() =>
+  import("./theme-drawer").then((module) => ({
+    default: module.ThemeDrawer,
+  })),
+);
 
 // a highlighted row inks everything in it: an icon keeps its own colour
 const ICON = "text-muted-foreground! **:text-muted-foreground!";
@@ -306,7 +320,8 @@ function ThemeTriggerIcon() {
   );
 }
 
-export function ThemeToggle({ floating }: { floating?: boolean }) {
+/** Wider screens: a dropdown under the bar, a preview beside each theme. */
+function ThemeDropdown({ trigger }: { trigger: ReactElement }) {
   const t = useTranslation();
   const [open, setOpen] = useState(false);
   const { active: codeView } = useCodeView();
@@ -316,21 +331,7 @@ export function ThemeToggle({ floating }: { floating?: boolean }) {
   return (
     <DropdownMenu open={open && !codeView} onOpenChange={setOpen}>
       <Tooltip>
-        <TooltipTrigger
-          render={
-            <DropdownMenuTrigger
-              render={
-                <Button
-                  {...barButton(floating)}
-                  aria-label={t.common.a11y.toggleTheme}
-                  data-callout="theme"
-                />
-              }
-            />
-          }
-        >
-          <ThemeTriggerIcon />
-        </TooltipTrigger>
+        <TooltipTrigger render={<DropdownMenuTrigger render={trigger} />} />
         <TooltipContent side="bottom">
           {t.common.command.groups.theme}
         </TooltipContent>
@@ -349,5 +350,44 @@ export function ThemeToggle({ floating }: { floating?: boolean }) {
         <ThemeMenu />
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function MobileThemeToggle({
+  button,
+}: {
+  button: (onClick?: () => void) => ReactElement;
+}) {
+  // Keep an early press while the chunk loads. Leaving phone layout resets it.
+  const [sheetOpen, setSheetOpen] = useState(false);
+  return (
+    <Suspense fallback={button(() => setSheetOpen(true))}>
+      <ThemeDrawer
+        trigger={button()}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+      />
+    </Suspense>
+  );
+}
+
+export function ThemeToggle({ floating }: { floating?: boolean }) {
+  const t = useTranslation();
+  const isMobile = useIsMobile();
+  const button = (onClick?: () => void) => (
+    <Button
+      {...barButton(floating)}
+      aria-label={t.common.a11y.toggleTheme}
+      data-callout="theme"
+      onClick={onClick}
+    >
+      <ThemeTriggerIcon />
+    </Button>
+  );
+
+  return isMobile ? (
+    <MobileThemeToggle button={button} />
+  ) : (
+    <ThemeDropdown trigger={button()} />
   );
 }

@@ -9,6 +9,13 @@
 import { create } from "zustand";
 import { useEffect } from "react";
 
+/** The palette's shortcut, key by key, as this visitor's keyboard prints it. */
+export const SEARCH_KEYS =
+  typeof navigator !== "undefined" &&
+  /Mac|iPhone|iPad|iPod/.test(navigator.userAgent)
+    ? ["⌘", "K"]
+    : ["Ctrl", "K"];
+
 /** what the palette searches when it opens: everything, or projects only */
 export type CommandMenuScope = "all" | "projects";
 

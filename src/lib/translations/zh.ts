@@ -79,6 +79,7 @@ export const zh = {
       codeSteps: "代码步骤",
     },
     menu: {
+      appearance: "外观",
       themes: "主题",
       customThemes: "自定义主题",
       background: "背景",

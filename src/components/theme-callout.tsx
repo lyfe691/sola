@@ -58,6 +58,7 @@ type Position = {
 const OVERLAY_SELECTOR = [
   '[data-slot="dropdown-menu-content"]',
   '[data-slot="dialog-content"]',
+  '[data-slot="drawer-popup"]',
   '[data-slot="alert-dialog-content"]',
   '[data-slot="popover-content"]',
   '[data-slot="select-content"]',

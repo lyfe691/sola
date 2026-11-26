@@ -86,6 +86,7 @@ export const de = {
       codeSteps: "Code-Schritte",
     },
     menu: {
+      appearance: "Darstellung",
       themes: "Designs",
       customThemes: "Eigene Designs",
       background: "Hintergründe",

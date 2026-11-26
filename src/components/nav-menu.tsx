@@ -20,7 +20,12 @@ import {
   type CSSProperties,
   type KeyboardEvent,
 } from "react";
-import { animate, motion, useMotionValue } from "motion/react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+} from "motion/react";
 import { useGlidePill } from "@/components/ui/custom/glide-pill";
 import { MorphArrow } from "@/components/ui/custom/morph-arrow";
 import {
@@ -145,12 +150,13 @@ function Menu({
 
   return (
     <div
+      id={`desktop-nav-${menu}`}
       data-nav-layer={menu}
       inert={!shown}
       onKeyDown={onKeyDown}
       className={cn(
         // the menu on show is in the flow and gives the panel its height
-        "top-0 left-0 flex w-(--panel-w) transition-opacity duration-200 ease-out",
+        "top-0 left-0 flex max-h-(--nav-menu-max-h) w-(--panel-w) transition-opacity duration-200 ease-out",
         shown
           ? "relative opacity-100"
           : "pointer-events-none absolute opacity-0",
@@ -158,44 +164,55 @@ function Menu({
       style={{ "--panel-w": `${NAV_PANEL_WIDTH}px` } as CSSProperties}
     >
       <div
-        ref={list}
-        className="relative isolate flex w-60 shrink-0 flex-col p-2"
+        data-lenis-prevent
+        className="w-64 shrink-0 overflow-y-auto overscroll-contain"
       >
-        {glide.pill}
-        {entries.map((entry, index) => (
-          <Link
-            key={entry.key}
-            to={entry.to}
-            onClick={onNavigate}
-            onPointerEnter={(event) => pick(index, event.currentTarget)}
-            onFocus={(event) => pick(index, event.currentTarget)}
-            className="flex flex-col gap-1 rounded-xl px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
-          >
-            <span className="truncate text-sm font-medium text-foreground">
-              {entry.title}
-            </span>
-            <span className="line-clamp-2 text-xs leading-snug text-foreground/60">
-              {entry.line}
-            </span>
-          </Link>
-        ))}
-        <Link
-          to={to}
-          onClick={onNavigate}
-          className="mt-auto flex items-center gap-1 rounded-xl px-4 py-3 text-sm font-medium text-foreground/60 outline-none transition-colors duration-200 ease-out hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
+        <div
+          ref={list}
+          className="relative isolate flex min-h-full flex-col p-2.5"
         >
-          {t.nav.viewAll}
-          <MorphArrow />
-        </Link>
+          {glide.pill}
+          <p className="px-3.5 pt-2 pb-3 text-xs font-medium text-muted-foreground">
+            {t.nav[menu]}
+          </p>
+          {entries.map((entry, index) => (
+            <Link
+              key={entry.key}
+              to={entry.to}
+              onClick={onNavigate}
+              onPointerEnter={(event) => pick(index, event.currentTarget)}
+              onFocus={(event) => pick(index, event.currentTarget)}
+              className="flex flex-col gap-1.5 rounded-xl px-3.5 py-3 outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              <span className="truncate text-sm font-medium text-foreground">
+                {entry.title}
+              </span>
+              <span className="line-clamp-2 text-xs leading-relaxed text-foreground/60">
+                {entry.line}
+              </span>
+            </Link>
+          ))}
+          <div className="mt-auto pt-2">
+            <div aria-hidden="true" className="mx-3.5 mb-2 h-px bg-border/70" />
+            <Link
+              to={to}
+              onClick={onNavigate}
+              className="flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-foreground/70 outline-none transition-colors duration-150 ease-out hover:bg-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
+            >
+              {t.nav.viewAll}
+              <MorphArrow />
+            </Link>
+          </div>
+        </div>
       </div>
-      {/* the surface's rounded-2xl less this p-2: the window's corner */}
-      <div className="flex min-h-76 flex-1 p-2 pl-0 [--window-fit:calc(var(--radius)*1.8_-_var(--spacing)*2)]">
+      {/* Subtract the preview inset from the menu radius to align the corners. */}
+      <div className="flex min-h-(--nav-menu-preview-min-h) flex-1 p-2 pl-0 [--nav-menu-preview-min-h:min(var(--spacing)*80,var(--nav-menu-max-h))] [--window-fit:calc(var(--radius)*1.8_-_var(--spacing)*2)]">
         <div aria-hidden="true" className="relative flex-1">
           {entries.map((entry, index) => (
             <div
               key={entry.key}
               className={cn(
-                "absolute inset-0 transition-opacity duration-300 ease-out",
+                "absolute inset-0 transition-opacity duration-200 ease-out",
                 index === active ? "opacity-100" : "opacity-0",
               )}
             >
@@ -233,6 +250,7 @@ export function NavPanel({
   onPointerEnter: () => void;
   onPointerLeave: () => void;
 }) {
+  const reducedMotion = useReducedMotion();
   const surface = useRef<HTMLDivElement>(null);
   const left = useMotionValue(x);
   const last = useRef<{ menu: NavMenuKey; height: number } | null>(null);
@@ -249,7 +267,13 @@ export function NavPanel({
     const box = surface.current;
     const from = last.current;
     last.current = { menu, height: layer.offsetHeight };
-    if (!from || !box) return;
+    if (!box) return;
+    if (reducedMotion) {
+      left.set(x);
+      box.style.removeProperty("--surface-h");
+      return;
+    }
+    if (!from) return;
     const moves = [animate(left, x, MORPH)];
     if (from.menu !== menu) {
       // the height is the menu's own until it has to move: then it is
@@ -271,24 +295,24 @@ export function NavPanel({
       );
     }
     return () => moves.forEach((move) => move.stop());
-  }, [menu, x, left]);
+  }, [menu, x, left, reducedMotion]);
 
   return (
     <motion.div
       data-nav-menu
       onPointerEnter={onPointerEnter}
       onPointerLeave={onPointerLeave}
-      // from the links' foot, so the pointer crosses no gap on its way down
-      className="absolute top-12 left-0 z-10 pt-2"
+      // Bridge the gap from the links to the panel and leave the same gap below it.
+      className="pointer-events-auto absolute top-(--nav-menu-top) left-0 z-10 pt-(--nav-menu-gap) [--nav-menu-gap:--spacing(3)] [--nav-menu-max-h:max(0px,calc(100dvh_-_var(--nav-menu-top)_-_2*var(--nav-menu-gap)))] [--nav-menu-top:--spacing(12)]"
       style={{ x: left }}
     >
       <motion.div
         ref={surface}
-        initial={{ opacity: 0, scale: 0.96 }}
+        initial={{ opacity: 0, scale: reducedMotion ? 1 : 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.98 }}
+        exit={{ opacity: 0, scale: reducedMotion ? 1 : 0.99 }}
         transition={{ duration: 0.15, ease: EASE_OUT }}
-        className="relative h-(--surface-h) origin-top-left overflow-hidden rounded-2xl bg-background shadow-2xl ring-1 shadow-black/15 ring-foreground/10"
+        className="relative h-(--surface-h) max-h-(--nav-menu-max-h) origin-top-left overflow-hidden rounded-2xl bg-background shadow-2xl ring-1 shadow-black/15 ring-foreground/10"
       >
         {MENU_PATHS.filter(({ key }) => seen.includes(key)).map(
           ({ path, key }) => (

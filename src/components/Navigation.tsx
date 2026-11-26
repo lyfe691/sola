@@ -22,7 +22,7 @@ import { Button } from "./ui/button";
 import { barButton } from "./bar-button";
 import { ContactMenu } from "./contact-menu";
 import { NavPanel } from "./nav-menu";
-import { SearchToggle } from "./search-toggle";
+import { SearchField, SearchToggle } from "./search-toggle";
 import { LanguageToggle } from "./language-toggle";
 import { ThemeToggle } from "./theme-toggle";
 import { useCodeView } from "./deploy-diff/code-view-provider";
@@ -54,24 +54,15 @@ const menuItemVariants = {
   },
 };
 
-interface ToggleGroupProps {
-  className?: string;
-  /** each button a filled circle of its own, for the phone bar */
-  floating?: boolean;
-}
-
-const ToggleGroup = memo(({ className, floating }: ToggleGroupProps) => {
+const ToggleGroup = memo(({ desktop }: { desktop?: boolean }) => {
   return (
-    <div
-      className={cn(
-        "flex items-center",
-        floating ? "gap-2" : "gap-1",
-        className,
-      )}
-    >
-      <SearchToggle floating={floating} />
-      <LanguageToggle floating={floating} />
-      <ThemeToggle floating={floating} />
+    <div className="flex items-center gap-2">
+      {desktop && <SearchField className="hidden w-48 xl:inline-flex" />}
+      <div className={cn("flex", desktop && "xl:hidden")}>
+        <SearchToggle floating />
+      </div>
+      <LanguageToggle floating />
+      <ThemeToggle floating />
     </div>
   );
 });
@@ -126,6 +117,8 @@ const DesktopNav = () => {
   const rowRef = useRef<HTMLDivElement>(null);
   const [menu, setMenu] = useState<{ key: NavMenuKey; x: number } | null>(null);
   const leaving = useRef<number | undefined>(undefined);
+  // Keep the hovered menu closed after following its top-level link.
+  const followed = useRef<NavMenuKey | null>(null);
   const { pill, moveTo, hide } = useGlidePill("bg-background shadow-xs");
   const linksRef = useRef<HTMLElement>(null);
 
@@ -217,7 +210,7 @@ const DesktopNav = () => {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-40 hidden lg:block"
+      className="pointer-events-none fixed inset-x-0 top-0 z-40 hidden lg:block"
       onKeyDown={(event) => {
         if (event.key !== "Escape" || !menu) return;
         menuLink(menu.key)?.focus();
@@ -242,14 +235,16 @@ const DesktopNav = () => {
           ref={rowRef}
           className="relative mx-auto flex h-16 max-w-7xl items-center gap-2"
         >
-          <Logo label={t.common.home} />
+          <div className="pointer-events-auto flex">
+            <Logo label={t.common.home} />
+          </div>
 
           {/* the glass Button's surface, as a track: the pill on it is the
               page's colour, like a tab's */}
           <nav
             ref={linksRef}
             aria-label={t.common.a11y.primaryNav}
-            className="relative isolate flex h-10 items-center rounded-full border border-foreground/10 bg-muted/85 p-1 shadow-sm shadow-black/5 backdrop-blur-xl"
+            className="pointer-events-auto relative isolate flex h-10 items-center rounded-full border border-foreground/10 bg-muted/85 p-1 shadow-sm shadow-black/5 backdrop-blur-xl"
             onPointerOver={(event) => {
               const link =
                 event.target instanceof Element
@@ -267,7 +262,7 @@ const DesktopNav = () => {
               const key = NAV_MENUS[link.path];
               const expanded = menu?.key === key;
               const className = cn(
-                "flex items-center gap-1 rounded-full px-3 py-1 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring/50",
+                "flex h-full items-center gap-1 rounded-full px-3 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring/50",
                 active || (key && expanded)
                   ? "text-foreground"
                   : "text-foreground/60 hover:text-foreground",
@@ -287,11 +282,24 @@ const DesktopNav = () => {
                 <div
                   key={link.path}
                   data-nav-menu={key}
+                  className="h-full"
                   onPointerEnter={(event) => {
-                    if (event.pointerType !== "touch")
+                    if (
+                      event.pointerType !== "touch" &&
+                      followed.current !== key
+                    )
                       open(key, event.currentTarget);
                   }}
-                  onPointerLeave={closeSoon}
+                  onPointerLeave={() => {
+                    // During a page transition the bar briefly leaves hit testing.
+                    if (
+                      followed.current === key &&
+                      !document.documentElement.dataset.pageChange
+                    ) {
+                      followed.current = null;
+                    }
+                    closeSoon();
+                  }}
                   onFocus={(event) => {
                     if (event.target.matches(":focus-visible"))
                       open(key, event.currentTarget);
@@ -309,9 +317,13 @@ const DesktopNav = () => {
                 >
                   <Link
                     to={link.path}
-                    onClick={close}
+                    onClick={() => {
+                      followed.current = key;
+                      close();
+                    }}
                     aria-current={active ? "page" : undefined}
                     aria-expanded={expanded}
+                    aria-controls={expanded ? `desktop-nav-${key}` : undefined}
                     className={className}
                   >
                     {link.label}
@@ -335,8 +347,8 @@ const DesktopNav = () => {
             )}
           </AnimatePresence>
 
-          <div className="ml-auto flex items-center gap-2">
-            <ToggleGroup floating />
+          <div className="ml-auto flex items-center gap-2 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
+            <ToggleGroup desktop />
             <ContactMenu />
           </div>
         </div>
@@ -490,7 +502,7 @@ const MobileNav = () => {
               menuOpen && "invisible opacity-0",
             )}
           >
-            <ToggleGroup floating />
+            <ToggleGroup />
           </div>
         </motion.div>
       </header>

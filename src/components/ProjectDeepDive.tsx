@@ -34,7 +34,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
-import { Kbd } from "@/components/ui/kbd";
+import { SearchKeys } from "@/components/search-toggle";
 import {
   InputGroup,
   InputGroupAddon,
@@ -133,10 +133,6 @@ function CodeViewChip({ source }: { source: string }) {
   );
 }
 
-const MAC =
-  typeof navigator !== "undefined" &&
-  /Mac|iPhone|iPad|iPod/.test(navigator.userAgent);
-
 /**
  * The docked bar hides the site navigation and its search button, so the
  * bar carries search itself: the palette's own input group, shortcut at its
@@ -158,8 +154,12 @@ function SearchField() {
           <span className="hidden sm:inline">{t.common.searchProjects}</span>
         </span>
       </InputGroupText>
-      <InputGroupAddon align="inline-end" className="hidden sm:flex">
-        <Kbd>{MAC ? "⌘K" : "Ctrl K"}</Kbd>
+      <InputGroupAddon
+        align="inline-end"
+        className="hidden sm:flex"
+        data-project-search-keys=""
+      >
+        <SearchKeys />
       </InputGroupAddon>
       <button
         type="button"
