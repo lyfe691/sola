@@ -150,9 +150,10 @@ src="…" />`, a command-line run with `<Terminal session="…" alt="…" />` an
   alpha step (`bg-card/40`, `bg-foreground/5`) and never `backdrop-blur`. A
   background plays behind every page, and a see-through surface lets it
   through its text. Alpha stays for hairlines, shadows, ink, and scrims over
-  media or behind a dialog. The one exception is the desktop bar's backing
-  (`bg-background/85` with a blur, after x.ai's, the owner's call): the page
-  passes under it; it does not sit on it. Its menu panel stays solid.
+  media or behind a dialog. The one exception is the site's bar, which is
+  not a bar: its pieces float over the page on glass (Button's `glass`
+  variant, `bg-muted/85` with a blur, the owner's call), because the page
+  passes under them; it does not sit on them. Its menu panels stay solid.
 - A list's row hover is one wash for the whole list (`<HoverGlide>`, rows
   marked `data-glide`): a faint tint that glides from row to row. It is the
   one fill that is not a whole token, because a solid row flashing on and

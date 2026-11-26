@@ -83,13 +83,31 @@ function LanguageDropdown({
   );
 }
 
+function MobileLanguageToggle({
+  button,
+  note,
+}: {
+  button: (onClick?: () => void) => ReactElement;
+  note: string;
+}) {
+  // Keep an early press while the chunk loads. Leaving phone layout resets it.
+  const [sheetOpen, setSheetOpen] = useState(false);
+  return (
+    <Suspense fallback={button(() => setSheetOpen(true))}>
+      <LanguageDrawer
+        trigger={button()}
+        note={note}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+      />
+    </Suspense>
+  );
+}
+
 export function LanguageToggle({ floating }: { floating?: boolean }) {
   const { detectedLanguage, detectedLanguageCode } = useLanguage();
   const t = useTranslation();
   const isMobile = useIsMobile();
-  // the sheet's open state sits above its chunk, so a press on the button
-  // before the chunk is in still opens the sheet once it is
-  const [sheetOpen, setSheetOpen] = useState(false);
   const note = t.i18n.detectedNote.replace(
     "{lang}",
     detectedLanguageCode || detectedLanguage,
@@ -105,14 +123,7 @@ export function LanguageToggle({ floating }: { floating?: boolean }) {
   );
 
   return isMobile ? (
-    <Suspense fallback={button(() => setSheetOpen(true))}>
-      <LanguageDrawer
-        trigger={button()}
-        note={note}
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-      />
-    </Suspense>
+    <MobileLanguageToggle button={button} note={note} />
   ) : (
     <LanguageDropdown trigger={button()} note={note} />
   );

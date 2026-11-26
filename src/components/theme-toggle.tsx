@@ -353,13 +353,27 @@ function ThemeDropdown({ trigger }: { trigger: ReactElement }) {
   );
 }
 
+function MobileThemeToggle({
+  button,
+}: {
+  button: (onClick?: () => void) => ReactElement;
+}) {
+  // Keep an early press while the chunk loads. Leaving phone layout resets it.
+  const [sheetOpen, setSheetOpen] = useState(false);
+  return (
+    <Suspense fallback={button(() => setSheetOpen(true))}>
+      <ThemeDrawer
+        trigger={button()}
+        open={sheetOpen}
+        onOpenChange={setSheetOpen}
+      />
+    </Suspense>
+  );
+}
+
 export function ThemeToggle({ floating }: { floating?: boolean }) {
   const t = useTranslation();
   const isMobile = useIsMobile();
-  // the sheet's open state sits above its chunk, so a press on the button
-  // before the chunk is in (the callout's own included) still opens the
-  // sheet once it is
-  const [sheetOpen, setSheetOpen] = useState(false);
   const button = (onClick?: () => void) => (
     <Button
       {...barButton(floating)}
@@ -372,13 +386,7 @@ export function ThemeToggle({ floating }: { floating?: boolean }) {
   );
 
   return isMobile ? (
-    <Suspense fallback={button(() => setSheetOpen(true))}>
-      <ThemeDrawer
-        trigger={button()}
-        open={sheetOpen}
-        onOpenChange={setSheetOpen}
-      />
-    </Suspense>
+    <MobileThemeToggle button={button} />
   ) : (
     <ThemeDropdown trigger={button()} />
   );

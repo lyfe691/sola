@@ -1,0 +1,16 @@
+[data-nav-search] {
+  padding-inline-end: calc(var(--spacing) * 2);
+}
+
+[data-nav-search] [data-slot="kbd"] {
+  border-radius: calc(var(--radius) * 2.2);
+  background-color: color-mix(
+    in oklab,
+    var(--muted-foreground) 10%,
+    transparent
+  );
+}
+
+[data-project-search-keys] {
+  padding-inline-end: calc(var(--spacing) * 2);
+}

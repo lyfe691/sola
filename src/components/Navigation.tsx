@@ -54,28 +54,15 @@ const menuItemVariants = {
   },
 };
 
-interface ToggleGroupProps {
-  className?: string;
-  /** each button a filled circle of its own, for the phone bar */
-  floating?: boolean;
-}
-
-const ToggleGroup = memo(({ className, floating }: ToggleGroupProps) => {
+const ToggleGroup = memo(({ desktop }: { desktop?: boolean }) => {
   return (
-    <div
-      className={cn(
-        "flex items-center",
-        floating ? "gap-2" : "gap-1",
-        className,
-      )}
-    >
-      {/* in the desktop bar search is a field where there is room for one */}
-      {!floating && <SearchField className="mr-1 hidden w-48 xl:flex" />}
-      <div className={cn("flex", !floating && "xl:hidden")}>
-        <SearchToggle floating={floating} />
+    <div className="flex items-center gap-2">
+      {desktop && <SearchField className="hidden w-48 xl:inline-flex" />}
+      <div className={cn("flex", desktop && "xl:hidden")}>
+        <SearchToggle floating />
       </div>
-      <LanguageToggle floating={floating} />
-      <ThemeToggle floating={floating} />
+      <LanguageToggle floating />
+      <ThemeToggle floating />
     </div>
   );
 });
@@ -108,17 +95,20 @@ const MenuGlyph = ({ open }: { open: boolean }) => (
 );
 
 const Logo = ({ label }: { label: string }) => (
-  <Link
-    to="/"
-    aria-label={label}
-    className="flex shrink-0 items-center gap-2 text-foreground transition-opacity hover:opacity-80"
+  <Button
+    variant="glass"
+    size="lg"
+    nativeButton={false}
+    render={<Link to="/" aria-label={label} />}
   >
     <span
       aria-hidden
-      className="size-6 shrink-0 bg-foreground mask-[url(/apple-touch-icon.png)] mask-contain mask-center mask-no-repeat"
+      className="size-5 shrink-0 bg-foreground mask-[url(/apple-touch-icon.png)] mask-contain mask-center mask-no-repeat"
     />
-    <span className="font-heading text-lg font-bold tracking-tight">Sola</span>
-  </Link>
+    <span className="font-heading text-base font-bold tracking-tight">
+      Sola
+    </span>
+  </Button>
 );
 
 const DesktopNav = () => {
@@ -127,11 +117,30 @@ const DesktopNav = () => {
   const rowRef = useRef<HTMLDivElement>(null);
   const [menu, setMenu] = useState<{ key: NavMenuKey; x: number } | null>(null);
   const leaving = useRef<number | undefined>(undefined);
-  // the menu of a link that was just followed: it stays shut until the
-  // pointer has left that link
+  // Keep the hovered menu closed after following its top-level link.
   const followed = useRef<NavMenuKey | null>(null);
-  const glide = useGlidePill();
+  const { pill, moveTo, hide } = useGlidePill("bg-background shadow-xs");
   const linksRef = useRef<HTMLElement>(null);
+
+  // the pill rests on the page being read, the way a tab's does, and is
+  // gone on a page the links don't name
+  const rest = useCallback(() => {
+    const current = linksRef.current?.querySelector<HTMLElement>(
+      'a[aria-current="page"]',
+    );
+    if (current) moveTo(current);
+    else hide();
+  }, [moveTo, hide]);
+  useEffect(rest, [rest, location.pathname]);
+  // a label that changes width (a font arriving, another language) moves
+  // every link after it
+  useEffect(() => {
+    const links = linksRef.current;
+    if (!links) return;
+    const resized = new ResizeObserver(rest);
+    resized.observe(links);
+    return () => resized.disconnect();
+  }, [rest]);
 
   // without Contact: the bar's button leads there
   const links = MAIN_NAVIGATION.slice(1)
@@ -146,12 +155,12 @@ const DesktopNav = () => {
   const isActive = (path: string) =>
     location.pathname === path || location.pathname.startsWith(`${path}/`);
 
-  // the fill follows the pointer: a menu closing takes it away only once the
+  // the fill follows the pointer: a menu closing sends it back only once the
   // pointer has left the links, not when it has moved on to the next one
   const close = () => {
     window.clearTimeout(leaving.current);
     setMenu(null);
-    if (!linksRef.current?.matches(":hover")) glide.hide();
+    if (!linksRef.current?.matches(":hover")) rest();
   };
   useEffect(() => () => window.clearTimeout(leaving.current), []);
   // a panel is placed from its link once, when it opens: when the window
@@ -167,7 +176,7 @@ const DesktopNav = () => {
   // under its link, moved left as far as it takes to stay inside the bar
   const open = (key: NavMenuKey, link: HTMLElement) => {
     const row = rowRef.current;
-    if (!row || followed.current === key) return;
+    if (!row) return;
     window.clearTimeout(leaving.current);
     const offset =
       link.getBoundingClientRect().left - row.getBoundingClientRect().left;
@@ -201,7 +210,7 @@ const DesktopNav = () => {
 
   return (
     <header
-      className="fixed inset-x-0 top-0 z-40 hidden lg:block"
+      className="pointer-events-none fixed inset-x-0 top-0 z-40 hidden lg:block"
       onKeyDown={(event) => {
         if (event.key !== "Escape" || !menu) return;
         menuLink(menu.key)?.focus();
@@ -213,54 +222,47 @@ const DesktopNav = () => {
           close();
       }}
     >
+      {/* no bar: each piece floats over the page on its own glass, as the
+          phone's buttons do */}
       <motion.div
         data-nav-bar
-        data-docked
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_OUT }}
-        className="relative isolate px-12"
+        className="px-12"
       >
-        {/* x.ai's backing: the page shows through, blurred. A layer of its
-            own, so the menu panel hanging from the bar is not blurred into
-            it and keeps its own solid surface */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 bg-background/85 backdrop-blur-md"
-        />
         <div
           ref={rowRef}
-          className="relative mx-auto flex h-16 max-w-7xl items-center gap-6"
+          className="relative mx-auto flex h-16 max-w-7xl items-center gap-2"
         >
-          <Logo label={t.common.home} />
+          <div className="pointer-events-auto flex">
+            <Logo label={t.common.home} />
+          </div>
 
-          <span
-            aria-hidden="true"
-            className="h-5 w-px rotate-12 bg-foreground/20"
-          />
-
+          {/* the glass Button's surface, as a track: the pill on it is the
+              page's colour, like a tab's */}
           <nav
             ref={linksRef}
             aria-label={t.common.a11y.primaryNav}
-            className="relative isolate -ml-3 flex items-center"
+            className="pointer-events-auto relative isolate flex h-10 items-center rounded-full border border-foreground/10 bg-muted/85 p-1 shadow-sm shadow-black/5 backdrop-blur-xl"
             onPointerOver={(event) => {
               const link =
                 event.target instanceof Element
                   ? event.target.closest<HTMLElement>("a")
                   : null;
-              if (link && event.pointerType !== "touch") glide.moveTo(link);
+              if (link && event.pointerType !== "touch") moveTo(link);
             }}
             onPointerLeave={() => {
-              if (!menu) glide.hide();
+              if (!menu) rest();
             }}
           >
-            {glide.pill}
+            {pill}
             {links.map((link) => {
               const active = isActive(link.path);
               const key = NAV_MENUS[link.path];
               const expanded = menu?.key === key;
               const className = cn(
-                "flex items-center gap-1 rounded-full px-3 py-1.5 text-sm font-medium outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring/50",
+                "flex h-full items-center gap-1 rounded-full px-3 text-sm font-medium whitespace-nowrap outline-none transition-colors duration-200 ease-out focus-visible:ring-2 focus-visible:ring-ring/50",
                 active || (key && expanded)
                   ? "text-foreground"
                   : "text-foreground/60 hover:text-foreground",
@@ -280,15 +282,22 @@ const DesktopNav = () => {
                 <div
                   key={link.path}
                   data-nav-menu={key}
+                  className="h-full"
                   onPointerEnter={(event) => {
-                    if (event.pointerType !== "touch")
+                    if (
+                      event.pointerType !== "touch" &&
+                      followed.current !== key
+                    )
                       open(key, event.currentTarget);
                   }}
-                  // a page change takes the pointer off the bar and hands it
-                  // back, without the visitor moving it: that is not leaving
                   onPointerLeave={() => {
-                    if (!document.documentElement.dataset.pageChange)
+                    // During a page transition the bar briefly leaves hit testing.
+                    if (
+                      followed.current === key &&
+                      !document.documentElement.dataset.pageChange
+                    ) {
                       followed.current = null;
+                    }
                     closeSoon();
                   }}
                   onFocus={(event) => {
@@ -314,6 +323,7 @@ const DesktopNav = () => {
                     }}
                     aria-current={active ? "page" : undefined}
                     aria-expanded={expanded}
+                    aria-controls={expanded ? `desktop-nav-${key}` : undefined}
                     className={className}
                   >
                     {link.label}
@@ -337,8 +347,8 @@ const DesktopNav = () => {
             )}
           </AnimatePresence>
 
-          <div className="ml-auto flex items-center gap-3">
-            <ToggleGroup />
+          <div className="ml-auto flex items-center gap-2 [&_a]:pointer-events-auto [&_button]:pointer-events-auto">
+            <ToggleGroup desktop />
             <ContactMenu />
           </div>
         </div>
@@ -492,7 +502,7 @@ const MobileNav = () => {
               menuOpen && "invisible opacity-0",
             )}
           >
-            <ToggleGroup floating />
+            <ToggleGroup />
           </div>
         </motion.div>
       </header>

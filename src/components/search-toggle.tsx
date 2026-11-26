@@ -20,12 +20,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-} from "@/components/ui/input-group";
 import { useTranslation } from "@/lib/language-provider";
+import { cn } from "@/lib/utils";
+import "./search-field.css";
 
 /** The palette's shortcut, one key cap for each key. */
 export function SearchKeys() {
@@ -38,41 +35,38 @@ export function SearchKeys() {
   );
 }
 
-/**
- * Search as a field standing in the bar, where the bar has the room: the
- * palette's own input group with one button laid over the whole of it. The
- * button is the group's control, so the group draws its focus ring.
- */
+/** A field-shaped trigger for the command palette in the floating bar. */
 export function SearchField({ className }: { className?: string }) {
-  const { toggleCommandMenu } = useCommandMenu();
+  const toggleCommandMenu = useCommandMenu((state) => state.toggleCommandMenu);
   const t = useTranslation();
 
   return (
-    <InputGroup className={className}>
-      <InputGroupAddon>
-        <MagnifyingGlassIcon aria-hidden="true" />
-      </InputGroupAddon>
-      <InputGroupText className="min-w-0 flex-1">
-        <span className="truncate pl-1.5">{t.common.search}</span>
-      </InputGroupText>
-      <InputGroupAddon align="inline-end">
-        <SearchKeys />
-      </InputGroupAddon>
-      <button
-        type="button"
-        data-slot="input-group-control"
-        aria-label={t.common.search}
-        onClick={toggleCommandMenu}
-        onPointerEnter={() => void loadCommandMenu()}
-        onFocus={() => void loadCommandMenu()}
-        className="absolute inset-0 cursor-pointer rounded-[inherit] outline-none transition-colors hover:bg-foreground/5"
+    <Button
+      variant="glass"
+      size="lg"
+      data-nav-search=""
+      aria-label={t.common.search}
+      aria-haspopup="dialog"
+      onClick={toggleCommandMenu}
+      onPointerEnter={() => void loadCommandMenu()}
+      onFocus={() => void loadCommandMenu()}
+      className={cn("justify-start", className)}
+    >
+      <MagnifyingGlassIcon
+        aria-hidden="true"
+        data-icon="inline-start"
+        className="text-muted-foreground"
       />
-    </InputGroup>
+      <span className="min-w-0 flex-1 truncate text-left text-muted-foreground">
+        {t.common.search}
+      </span>
+      <SearchKeys />
+    </Button>
   );
 }
 
 export function SearchToggle({ floating }: { floating?: boolean }) {
-  const { toggleCommandMenu } = useCommandMenu();
+  const toggleCommandMenu = useCommandMenu((state) => state.toggleCommandMenu);
   const t = useTranslation();
 
   return (
@@ -85,6 +79,7 @@ export function SearchToggle({ floating }: { floating?: boolean }) {
             onPointerEnter={() => void loadCommandMenu()}
             onFocus={() => void loadCommandMenu()}
             aria-label={t.common.search}
+            aria-haspopup="dialog"
           />
         }
       >

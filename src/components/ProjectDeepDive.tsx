@@ -154,7 +154,11 @@ function SearchField() {
           <span className="hidden sm:inline">{t.common.searchProjects}</span>
         </span>
       </InputGroupText>
-      <InputGroupAddon align="inline-end" className="hidden sm:flex">
+      <InputGroupAddon
+        align="inline-end"
+        className="hidden sm:flex"
+        data-project-search-keys=""
+      >
         <SearchKeys />
       </InputGroupAddon>
       <button
