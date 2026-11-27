@@ -12,7 +12,6 @@ import { BarDrawer } from "@/components/bar-drawer";
 import { PaintedCover } from "@/components/painted-cover/PaintedCover";
 import { Reveal } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
-import { HoverGlide } from "@/components/ui/custom/hover-glide";
 import {
   Dialog,
   DialogContent,
@@ -42,46 +41,43 @@ function ProjectPicker({ trigger }: { trigger: ReactElement }) {
   useWindowScrollLock(open && !mobile);
 
   const list = (
-    <HoverGlide>
-      <ul className="grid gap-2">
-        {currentProjects.map((project) => {
-          const { title, tagline } = t.projects.list[project.i18nKey];
-          return (
-            <li key={project.id}>
-              <Link
-                data-glide=""
-                to={project.to}
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3.5 rounded-2xl p-2.5 outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <PaintedCover
-                  art={project.art}
-                  size="hero"
-                  live={false}
-                  scrim="none"
-                  className="aspect-[4/3] w-20 shrink-0 rounded-xl"
-                />
-                <div className="min-w-0 flex-1">
-                  <span className="text-base leading-tight font-semibold tracking-tight">
-                    {title}
-                  </span>
-                  <p className="mt-0.5 text-xs-plus leading-snug text-foreground/80">
-                    {tagline}
-                  </p>
-                  <p className="mt-1.5 text-xs text-muted-foreground">
-                    {formatProjectDate(
-                      INTL_LOCALE[language],
-                      project.date,
-                      t.common.present,
-                    )}
-                  </p>
-                </div>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </HoverGlide>
+    <ul className="grid gap-2">
+      {currentProjects.map((project) => {
+        const { title, tagline } = t.projects.list[project.i18nKey];
+        return (
+          <li key={project.id}>
+            <Link
+              to={project.to}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3.5 rounded-2xl p-2.5 outline-none transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <PaintedCover
+                art={project.art}
+                size="hero"
+                live={false}
+                scrim="none"
+                className="aspect-[4/3] w-20 shrink-0 rounded-xl"
+              />
+              <div className="min-w-0 flex-1">
+                <span className="text-base leading-tight font-semibold tracking-tight">
+                  {title}
+                </span>
+                <p className="mt-0.5 text-xs-plus leading-snug text-foreground/80">
+                  {tagline}
+                </p>
+                <p className="mt-1.5 text-xs text-muted-foreground">
+                  {formatProjectDate(
+                    INTL_LOCALE[language],
+                    project.date,
+                    t.common.present,
+                  )}
+                </p>
+              </div>
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
   );
 
   return mobile ? (
@@ -127,12 +123,13 @@ export function CurrentProjects() {
   const pill = (
     <Button
       variant="glass"
+      size="sm"
       data-current-projects=""
       nativeButton={!single}
       render={single ? <Link to={single.to} /> : undefined}
-      className="h-auto min-h-9 max-w-full"
+      className="max-w-full"
     >
-      <span className="flex min-w-0 items-baseline py-1.5 text-left text-xs leading-snug font-normal text-muted-foreground sm:text-xs-plus">
+      <span className="flex min-w-0 items-baseline text-left text-xs leading-snug font-normal text-muted-foreground sm:text-xs-plus">
         <span className="truncate">{prefix}</span>
         <span className="max-w-full shrink-0 truncate whitespace-pre">
           {space}
