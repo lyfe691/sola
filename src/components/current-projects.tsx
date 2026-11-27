@@ -127,9 +127,10 @@ export function CurrentProjects() {
       data-current-projects=""
       nativeButton={!single}
       render={single ? <Link to={single.to} /> : undefined}
-      className="max-w-full"
+      // eslint-disable-next-line shadcn/no-restyle -- the nav track's rim: the glass shows under its hairline; a phone's pill is a size down
+      className="max-w-full bg-clip-border max-sm:h-7 max-sm:pl-2.5"
     >
-      <span className="flex min-w-0 items-baseline text-left text-xs leading-snug font-normal text-muted-foreground sm:text-xs-plus">
+      <span className="flex min-w-0 items-baseline text-left text-2xs leading-snug font-normal text-muted-foreground sm:text-xs-plus">
         <span className="truncate">{prefix}</span>
         <span className="max-w-full shrink-0 truncate whitespace-pre">
           {space}
@@ -148,9 +149,11 @@ export function CurrentProjects() {
       <span
         aria-hidden="true"
         data-icon="inline-end"
-        className="-mr-1 ml-1 flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-foreground"
+        // the button's pr-2 less this margin, plus its hairline, is the
+        // circle's inset above and below: the circle stays concentric
+        className="-mr-1.25 ml-1 flex size-5 shrink-0 items-center justify-center rounded-full bg-foreground/10 text-foreground sm:size-6"
       >
-        <CaretRightIcon className="size-3.5" aria-hidden="true" />
+        <CaretRightIcon className="size-3 sm:size-3.5" aria-hidden="true" />
       </span>
     </Button>
   );
